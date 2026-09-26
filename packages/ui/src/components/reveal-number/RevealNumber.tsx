@@ -1,4 +1,5 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useLocale } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 import { prefersReducedMotion } from '../../internal/media'
 
@@ -7,7 +8,7 @@ export interface RevealNumberProps {
   from?: number
   /** Final value. */
   to: number
-  /** Fixed decimals of the default formatter. */
+  /** Fixed decimals of the default formatter (Intl, in the provider's locale and numbering system). */
   decimals?: number
   /** Formatter for every intermediate value. */
   format?: (n: number) => string
@@ -43,7 +44,9 @@ export function RevealNumber(props: RevealNumberProps) {
   const start = props.from ?? 0
   const end = props.to
   const places = props.decimals ?? 0
-  const show = props.format ?? ((n: number) => n.toFixed(places))
+  const { locale } = useLocale()
+  const localeDigits = useMemo(() => new Intl.NumberFormat(locale, { minimumFractionDigits: places, maximumFractionDigits: places, useGrouping: false }), [locale, places])
+  const show = props.format ?? ((n: number) => localeDigits.format(n))
   const repeat = props.once === false
   const host = useRef<HTMLSpanElement>(null)
   // null = not yet on the client: render the final value (server output, no-script pages).

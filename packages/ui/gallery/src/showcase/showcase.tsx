@@ -68,7 +68,7 @@ export function ShowcaseShowcase({ scope }: { scope: string }) {
           </RuledGridRow>
           <RuledGridRow columns="2fr 1fr">
             <RuledGridCell>
-              Plain count: <RevealNumber to={1234} format={(n) => Math.round(n).toLocaleString('en-US')} />
+              Plain count: <RevealNumber to={1234} />
             </RuledGridCell>
             <RuledGridCell>
               <HighlightStat value={3} label="editions" surface="raised" />
