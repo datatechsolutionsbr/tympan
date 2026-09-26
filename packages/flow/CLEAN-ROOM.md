@@ -53,6 +53,11 @@ direction and recorded in `PROVENANCE.md`.
    implementer did not need them (see `THIRD_PARTY_NOTICES.md`).
 8. `@dagrejs/dagre` public API documentation (MIT) for `autoLayout`.
 9. The public ICU MessageFormat syntax description, for the label templates.
+10. The project's own canvas storyboards (rendered PNGs and their HTML
+    sources: F2, Q2–Q6 for the flow editor; Proveniência, P2–P6 for
+    provenance), authored for this project and supplied by the coordinator
+    as the visual spec. Only measurements, colours and hierarchy were taken
+    from them; no code was copied (they are static inline-styled mocks).
 
 ## Process
 

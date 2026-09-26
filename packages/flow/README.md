@@ -39,6 +39,16 @@ import { ProvenanceGraph, FlowEditor } from '@fakhir/flow-canvas'
   proof-state border styles and the person/agent/system actor language of the
   design direction (§2.11); an APG tree view synced with the canvas, so the
   canvas is never the only way in.
+- **Research steps** (`StepPalette`, `AddStepPicker`, `StepCard`,
+  `IssueBar`, `FlowSidePanel`, `StepListView`, `ShapeChip`, `stepToolItems`,
+  typed wiring helpers): steps shelved by research verb (input, prepare,
+  analyse, decide, output; engine primitives on a folded "advanced" shelf),
+  each with typed ports (records, table, number, chart, decision). A step is
+  added after a step ("+" under it or the A key), inside a link ("+" on the
+  link), from the palette (tap, Enter or drag) or from the dock; every way
+  links and lays the flow out. Mismatched links are marked on the step and in
+  a status bar with a one-press repair (swap the step, insert a bridge, or
+  unlink). The list view is the keyboard view of the canvas.
 - **Editor** (`FlowEditor`, `FlowEditorProvider`, `AutosaveController`,
   `CanvasCommandBar`, `CanvasContextMenus`, `NodePalette`, `FlowOutline`,
   `FlowPreview`, `FlowSwitcherBar`, `SaveStatus`, `RunControls`, editor
@@ -69,7 +79,10 @@ onZoomReset, onFit, onAutoLayout, onToggleListView, onSearch, locale })`
 returns the canvas tools as dock items (select, pan, zoom out, zoom level as a
 percentage, zoom in, fit, auto-layout, list view, find a node), each with a
 label, icon, toggle state and `aria-keyshortcuts`. Hand them to the design
-system's bottom dock, or render them with `CanvasToolbar`.
+system's bottom dock, or render them with `CanvasToolbar`. The flow editor
+uses `stepToolItems` instead: select, move | add a step (A), rearrange, fit |
+show as list, find a step; `FlowEditor` passes them to `renderTools`, so a host
+can place the dock at sheet level.
 
 ## Languages and direction
 

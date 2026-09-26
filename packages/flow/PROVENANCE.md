@@ -81,8 +81,11 @@ variants and the `[data-tone]` mapping; `--fk-flow-connector`, `-active`,
 `--fk-flow-plane`, `--fk-flow-grid-dot`, `--fk-flow-guide`,
 `--fk-flow-marquee`; provenance bands `--fk-flow-band` (96px),
 `--fk-flow-band-label` (130px), `--fk-flow-node-h` (72px), `--fk-flow-node-w`
-(236px), `--fk-flow-col-gap` (56px). All are defined in `src/tokens.css` on existing `--fk-*`
-roles.
+(236px), `--fk-flow-col-gap` (56px); research steps `--fk-flow-step-w`
+(250px), `--fk-flow-step-h` (86px) and the data shape colours
+`--fk-flow-shape-records` (accent), `-table` (categorical-1), `-number`
+(warning), `-chart` (categorical-8), `-decision` (danger). All are defined in
+`src/tokens.css` on existing `--fk-*` roles.
 
 ## Gallery data
 
@@ -106,3 +109,31 @@ rewind dialog moved its logic to `rewindPlan.ts`; ExpressionBuilder moved its
 levels into `expressions/builder/`; ComputeNodeForm into `computeDraft`,
 `ComputeInsertPanel` and `ComputeTrial`; VariableListEditor into
 `nameListModel` and a parts table. Behaviour and tests unchanged.
+
+## Storyboard alignment (DAG editor)
+
+The canvas storyboards (our own designs F2, Q2–Q6) are the visual spec.
+The gallery renders the editor inside a research shell stand-in
+(`gallery/src/shell/`: rail, sheet, header, sheet-level dock) at 1440×960,
+with the storyboard states reachable as `#/editor?state=canvas|picker|drag|
+search|mismatch|list|selected` (`&lang=` for the locale). Measurements come
+from the storyboards' inline styles. Side-by-side comparisons (reference |
+implementation) were made for each state.
+
+Deliberate differences:
+
+- The whole flow is fitted (about 85% zoom) instead of clipping the right
+  branch at the canvas edge, and input chips sit on a 14px top padding so they
+  no longer overlap the kind label (both known issues of the storyboards).
+- The status bar for a mismatched link is laid out as one sentence with the
+  shape chips and the repair button, instead of the storyboard's overlapping
+  columns; the chart branch is also flagged when it receives the wrong shape.
+- A visible "Dados de exemplo" tag sits in the header actions (project rule:
+  no invented research data); "Filtrar: tipo = case" is shown as "Filtrar"
+  (the filter condition is not a known value).
+- Interaction mocks are shown only while interacting: the "+" on links
+  appears on hover or focus, and the dragged palette entry is highlighted by
+  the browser drag, not in a still frame.
+- The design system's select trigger is 48px with its value at the top; the
+  side panel scopes it to 40px with the value centred (to be fixed upstream).
+- Picker descriptions reuse the palette's (slightly longer) descriptions.

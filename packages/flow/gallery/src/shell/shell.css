@@ -311,3 +311,40 @@
   position: static;
   margin: 0;
 }
+/* Narrow screens: the rail becomes the host's drawer (not drawn here) and the sheet flows. */
+@media (max-width: 1023px) {
+  .fk-shell {
+    block-size: auto;
+    min-block-size: 100dvh;
+    overflow: visible;
+  }
+  .fk-shell__rail {
+    display: none;
+  }
+  .fk-shell__sheet {
+    margin: 0;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+  }
+  .fk-shell__head {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 12px;
+    padding-block: 20px 16px;
+    padding-inline: 16px;
+  }
+  .fk-shell__titles {
+    flex-basis: 100%;
+  }
+  .fk-shell__title {
+    font-size: 26px;
+  }
+  .fk-shell__body {
+    min-block-size: 70dvh;
+  }
+  .fk-shell__dock {
+    position: fixed;
+    inset-block-end: 12px;
+  }
+}
