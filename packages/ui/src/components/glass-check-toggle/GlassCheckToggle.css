@@ -1,0 +1,91 @@
+/* GlassCheckToggle (spec: wave-4/glass-check-toggle.md; design direction §2.5). Developer only. */
+@layer fakhir.components {
+  :root {
+    /* Reserved test colour: deliberately loud and outside the palette. */
+    --fk-debug-glass-check: oklch(0.7 0.3 330);
+  }
+
+  :root[data-fk-glass-check],
+  :root[data-fk-glass-check] [data-fk-theme],
+  :root[data-fk-glass-check] [data-fk-mode] {
+    --fk-bg: var(--fk-debug-glass-check);
+  }
+  :root[data-fk-glass-check] body {
+    background: transparent;
+  }
+  :root[data-fk-glass-check] {
+    background: var(--fk-debug-glass-check);
+  }
+
+  .fk-glass-check {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fk-space-1);
+    min-block-size: var(--fk-control-height-compact);
+    padding-inline: var(--fk-space-2);
+    border: 1px dashed var(--fk-line-strong);
+    border-radius: var(--fk-radius-pill);
+    background: transparent;
+    color: var(--fk-ink-2);
+    font: inherit;
+    font-size: var(--fk-font-size-meta);
+    font-weight: var(--fk-font-weight-semibold);
+    cursor: pointer;
+    outline: none;
+  }
+  .fk-glass-check::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: max(100%, var(--fk-control-target));
+    block-size: max(100%, var(--fk-control-target));
+    transform: translate(-50%, -50%);
+  }
+  .fk-glass-check__icon {
+    inline-size: 1em;
+    block-size: 1em;
+  }
+  .fk-glass-check[data-selected] {
+    border-style: solid;
+    border-color: var(--fk-accent);
+    background: var(--fk-accent-soft);
+    color: var(--fk-on-accent-soft);
+  }
+  .fk-glass-check[data-focus-visible] {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+  .fk-glass-check__tip {
+    max-inline-size: 32ch;
+    padding: var(--fk-space-2) var(--fk-space-3);
+    border-radius: var(--fk-radius-control);
+    background: var(--fk-surface-raised-solid);
+    box-shadow: var(--fk-shadow-floating);
+    color: var(--fk-ink-2);
+    font-size: var(--fk-font-size-meta);
+  }
+
+  /* No animation on switching. */
+  @media (prefers-reduced-motion: reduce) {
+    .fk-glass-check {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-glass-check {
+      border: 1px solid ButtonText;
+      color: ButtonText;
+    }
+    .fk-glass-check[data-selected] {
+      border-color: Highlight;
+      background: Highlight;
+      color: HighlightText;
+    }
+    .fk-glass-check__tip {
+      border: 1px solid CanvasText;
+    }
+  }
+}

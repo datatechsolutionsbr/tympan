@@ -1,0 +1,66 @@
+/* EdgeSwipeBack (spec: wave-2/edge-swipe-back.md; design direction §2.5, §2.7). */
+@layer fakhir.components {
+  .fk-edge-back {
+    --fk-edge-travel: calc(var(--fk-edge-progress, 0) * var(--fk-space-7));
+    position: fixed;
+    inset-block-start: 50%;
+    z-index: var(--fk-z-toast);
+    display: grid;
+    place-items: center;
+    inline-size: var(--fk-control-target);
+    block-size: var(--fk-control-target);
+    border: 1px solid var(--fk-line);
+    border-radius: 50%;
+    background: var(--fk-surface-raised);
+    box-shadow: var(--fk-shadow-floating);
+    color: var(--fk-ink-2);
+    opacity: calc(0.4 + var(--fk-edge-progress, 0) * 0.6);
+    pointer-events: none;
+    backdrop-filter: blur(var(--fk-glass-blur-floating));
+    -webkit-backdrop-filter: blur(var(--fk-glass-blur-floating));
+  }
+  .fk-edge-back[data-side='left'] {
+    /* physical: data-side is already resolved from the reading direction in JS */
+    left: 0;
+    translate: calc(var(--fk-edge-travel) - 50%) -50%;
+  }
+  .fk-edge-back[data-side='right'] {
+    /* physical: data-side is already resolved from the reading direction in JS */
+    right: 0;
+    translate: calc(50% - var(--fk-edge-travel)) -50%;
+  }
+  .fk-edge-back[data-ready] {
+    border-color: var(--fk-accent);
+    color: var(--fk-accent);
+  }
+  .fk-edge-back__arrow {
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+  }
+
+  /* Reduced motion: the cue appears in place without sliding. */
+  @media (prefers-reduced-motion: reduce) {
+    .fk-edge-back[data-side='left'] {
+      translate: 0 -50%;
+    }
+    .fk-edge-back[data-side='right'] {
+      translate: 0 -50%;
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .fk-edge-back {
+      background: var(--fk-surface-raised-solid);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-edge-back {
+      border: 1px solid CanvasText;
+      background: Canvas;
+      color: CanvasText;
+    }
+  }
+}

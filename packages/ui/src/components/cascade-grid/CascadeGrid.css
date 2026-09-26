@@ -1,0 +1,31 @@
+/* CascadeGrid (spec: wave-4/cascade-grid.md; design direction §2.7: off by default). */
+@layer fakhir.components {
+  /* The host passes columns and gaps through `style` or its own class. */
+  .fk-cascade-grid {
+    display: grid;
+  }
+  /* Wrappers are the grid cells and add no layout of their own. */
+  .fk-cascade-grid__cell {
+    min-inline-size: 0;
+  }
+  .fk-cascade-grid__cell[data-entering] {
+    --fk-cascade-rise: 8px;
+    animation: fk-cascade-in var(--fk-dur-base) var(--fk-ease) both;
+    animation-delay: var(--fk-cascade-delay, 0ms);
+  }
+  .fk-cascade-grid[data-distance='none'] .fk-cascade-grid__cell[data-entering] {
+    --fk-cascade-rise: 0px;
+  }
+  @keyframes fk-cascade-in {
+    from {
+      opacity: 0;
+      translate: 0 var(--fk-cascade-rise);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-cascade-grid__cell[data-entering] {
+      animation: none;
+    }
+  }
+}
