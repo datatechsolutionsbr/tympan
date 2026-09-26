@@ -5,6 +5,8 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { MarkdownView } from './MarkdownView'
 import { readBlocks } from './parse'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 describe('MarkdownView', () => {
   it('offsets a level-1 heading to the base level', () => {
@@ -92,5 +94,14 @@ describe('MarkdownView', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('MarkdownView in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<MarkdownView text={'# عنوان\n\nفقرة مع **تأكيد**.\n\n- بند'} />)
+    // Each block takes its direction from its own text (bidi-safe mixed documents).
+    for (const el of container.querySelectorAll('p, li, h3')) expect(el).toHaveAttribute('dir', 'auto')
+    await axeRtl(container)
   })
 })

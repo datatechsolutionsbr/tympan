@@ -23,7 +23,7 @@
     font-family: var(--fk-font-mono);
     font-size: var(--fk-font-size-body);
     font-variant-numeric: tabular-nums;
-    letter-spacing: 0.08em;
+    letter-spacing: var(--fk-font-tracking-eyebrow);
     user-select: all;
   }
   .fk-recovery-codes__code::marker {

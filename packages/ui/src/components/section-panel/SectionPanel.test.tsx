@@ -8,6 +8,9 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { Button } from '../button/Button'
 import { SectionPanel } from './SectionPanel'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 describe('SectionPanel', () => {
   it('is a section named by its heading at the requested level', () => {
@@ -107,5 +110,13 @@ describe('SectionPanel', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('SectionPanel in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<SectionPanel title="المصادر والمسار" eyebrow="جمع"><p>نص</p></SectionPanel>)
+    expect(rtlDom.screen.getByRole('heading', { name: /المصادر والمسار/ })).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

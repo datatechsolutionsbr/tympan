@@ -9,6 +9,10 @@ import { defaultMessages } from '../../internal/messages'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { ToastProvider, useToast } from '../toast/Toast'
 import { NotificationCenter, NotificationCenterProvider, relativeNoticeTime, useNotificationCenter } from './NotificationCenter'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+import { cssOf as cssOfRtl } from '../../../test/css'
 
 function Raise({ titles }: { titles: string[] }) {
   const toast = useToast()
@@ -123,5 +127,14 @@ describe('NotificationCenter', () => {
       await expectNoAxeViolations(document.body, ['region'])
       unmount()
     }
+  })
+})
+
+describe('NotificationCenter in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<ToastProvider><NotificationCenterProvider><NotificationCenter /></NotificationCenterProvider></ToastProvider>)
+    expect(rtlDom.screen.getByRole('button')).toBeInTheDocument()
+    expect(cssOfRtl('components/notification-center/NotificationCenter.css')).toMatch(/animation-name:\s*fk-notification-center-in-rtl/)
+    await axeRtl(container)
   })
 })

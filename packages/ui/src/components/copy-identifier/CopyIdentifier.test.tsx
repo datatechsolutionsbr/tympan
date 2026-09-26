@@ -5,6 +5,8 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { COPY_CONFIRMATION_MS, CopyIdentifier } from './CopyIdentifier'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 const long = '0f3c9a2e-5b1d-4e7a-9c8b-2d6f1a0e4b3c'
 
@@ -17,7 +19,9 @@ describe('CopyIdentifier', () => {
     render(<CopyIdentifier value={long} />)
     expect(long).toHaveLength(36)
     const button = screen.getByRole('button', { name: `Copy: ${long}` })
-    expect(button).toHaveTextContent(`${long.slice(0, 8)}…`)
+    // The whole value is in the tree; CSS elides it after about eight character widths.
+    expect(button).toHaveTextContent(long)
+    expect(button.querySelector('[data-elided]')).toHaveStyle({ '--fk-copy-visible': '8' })
   })
 
   it('shows a short value whole', () => {
@@ -86,5 +90,14 @@ describe('CopyIdentifier', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('CopyIdentifier in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<CopyIdentifier value="ae-tamm-4-0-9f2c7d1e3b5a" />)
+    // A machine identifier reads left to right inside right-to-left text.
+    expect(container.querySelector('[data-elided]')).toHaveAttribute('dir', 'ltr')
+    await axeRtl(container)
   })
 })

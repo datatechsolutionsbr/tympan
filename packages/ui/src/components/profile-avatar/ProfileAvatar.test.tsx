@@ -4,6 +4,8 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { ProfileAvatar } from './ProfileAvatar'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 describe('ProfileAvatar', () => {
   it('shows the picture with the name as alternative text', () => {
@@ -62,5 +64,15 @@ describe('ProfileAvatar', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('ProfileAvatar in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<><ProfileAvatar name="نور" size="sm" /><ProfileAvatar name={'e\u0301mile'} size="sm" /></>)
+    // Initials are whole grapheme clusters.
+    expect(container.textContent).toContain('ن')
+    expect(container.textContent).toContain('E\u0301')
+    await axeRtl(container)
   })
 })

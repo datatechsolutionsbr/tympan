@@ -2,6 +2,15 @@
 // identifiers and markdown. One namespace per component, English and
 // Brazilian Portuguese. Merged into `Messages` by ../messages.ts.
 
+import { speaker } from './plural'
+
+const en = speaker('en')
+const pt = speaker('pt-BR')
+const es = speaker('es')
+
+/** "n units ago" in the catalogue's language (Intl.RelativeTimeFormat). */
+const ago = (language: string, unit: Intl.RelativeTimeFormatUnit) => (n: number) => new Intl.RelativeTimeFormat(language, { numeric: 'auto' }).format(-n, unit)
+
 export interface PluralNoun {
   one: string
   other: string
@@ -57,11 +66,11 @@ export const dataAEn: DataAMessages = {
   listRow: { current: 'Current' },
   countBadge: {
     item: { one: 'item', other: 'items' },
-    describe: (n, noun) => `${n} ${noun}`,
+    describe: (n, noun) => `${en.n(n)} ${noun}`,
   },
   notificationCenter: {
     bell: 'Notifications',
-    bellUnseen: (label, n) => `${label}, ${n} unread`,
+    bellUnseen: (label, n) => `${label}, ${en.n(n)} unread`,
     title: 'Notifications',
     clearAll: 'Clear all',
     cleared: 'Notifications cleared',
@@ -70,9 +79,9 @@ export const dataAEn: DataAMessages = {
     tone: { success: 'Success', error: 'Error', warning: 'Warning', info: 'Information' },
     time: {
       justNow: 'just now',
-      minutes: (n) => (n === 1 ? '1 minute ago' : `${n} minutes ago`),
-      hours: (n) => (n === 1 ? '1 hour ago' : `${n} hours ago`),
-      days: (n) => (n === 1 ? '1 day ago' : `${n} days ago`),
+      minutes: ago('en', 'minute'),
+      hours: ago('en', 'hour'),
+      days: ago('en', 'day'),
     },
   },
   profileAvatar: { profile: 'Profile' },
@@ -102,11 +111,11 @@ export const dataAPtBR: DataAMessages = {
   listRow: { current: 'Atual' },
   countBadge: {
     item: { one: 'item', other: 'itens' },
-    describe: (n, noun) => `${n} ${noun}`,
+    describe: (n, noun) => `${pt.n(n)} ${noun}`,
   },
   notificationCenter: {
     bell: 'Notificações',
-    bellUnseen: (label, n) => `${label}, ${n} não ${n === 1 ? 'lida' : 'lidas'}`,
+    bellUnseen: (label, n) => `${label}, ${pt.n(n)} ${pt.word(n, { one: 'não lida', other: 'não lidas' })}`,
     title: 'Notificações',
     clearAll: 'Limpar tudo',
     cleared: 'Notificações apagadas',
@@ -115,9 +124,9 @@ export const dataAPtBR: DataAMessages = {
     tone: { success: 'Sucesso', error: 'Erro', warning: 'Atenção', info: 'Informação' },
     time: {
       justNow: 'agora mesmo',
-      minutes: (n) => (n === 1 ? 'há 1 minuto' : `há ${n} minutos`),
-      hours: (n) => (n === 1 ? 'há 1 hora' : `há ${n} horas`),
-      days: (n) => (n === 1 ? 'há 1 dia' : `há ${n} dias`),
+      minutes: ago('pt-BR', 'minute'),
+      hours: ago('pt-BR', 'hour'),
+      days: ago('pt-BR', 'day'),
     },
   },
   profileAvatar: { profile: 'Perfil' },
@@ -143,5 +152,48 @@ export const dataAPtBR: DataAMessages = {
   markdown: { codeBlock: (lang) => (lang ? `Bloco de código, ${lang}` : 'Bloco de código') },
 }
 
-/** Spanish (placeholder until translated: falls back to English). */
-export const dataAEs: DataAMessages = dataAEn
+/** Spanish (neutral Latin American). */
+export const dataAEs: DataAMessages = {
+  listRow: { current: 'Actual' },
+  countBadge: {
+    item: { one: 'elemento', other: 'elementos' },
+    describe: (n, noun) => `${es.n(n)} ${noun}`,
+  },
+  notificationCenter: {
+    bell: 'Notificaciones',
+    bellUnseen: (label, n) => `${label}, ${es.n(n)} ${es.word(n, { one: 'sin leer', other: 'sin leer' })}`,
+    title: 'Notificaciones',
+    clearAll: 'Borrar todo',
+    cleared: 'Notificaciones borradas',
+    empty: 'No hay notificaciones en esta sesión.',
+    dismiss: (title) => `Descartar, ${title}`,
+    tone: { success: 'Éxito', error: 'Error', warning: 'Atención', info: 'Información' },
+    time: {
+      justNow: 'ahora mismo',
+      minutes: ago('es', 'minute'),
+      hours: ago('es', 'hour'),
+      days: ago('es', 'day'),
+    },
+  },
+  profileAvatar: { profile: 'Perfil' },
+  copyIdentifier: {
+    copy: 'Copiar',
+    copied: 'copiado',
+    copiedStatus: (v) => `${v} copiado`,
+    failed: 'No se pudo copiar. Seleccione el texto para copiarlo a mano.',
+  },
+  recoveryCodes: {
+    hidden: 'Los códigos de recuperación están ocultos.',
+    reveal: 'Mostrar códigos',
+    copyAll: 'Copiar todos',
+    copied: 'Copiados',
+    copyFailed: 'El portapapeles no está disponible. Seleccione los códigos para copiarlos.',
+    download: 'Descargar',
+    fileTitle: 'Códigos de recuperación',
+    generatedAt: (iso) => `Generados el ${iso}`,
+    keepSafe: 'Guarde estos códigos en un lugar seguro. Cada código funciona una sola vez.',
+    fileName: 'codigos-de-recuperacion.txt',
+    listLabel: 'Códigos de recuperación',
+  },
+  markdown: { codeBlock: (lang) => (lang ? `Bloque de código, ${lang}` : 'Bloque de código') },
+}

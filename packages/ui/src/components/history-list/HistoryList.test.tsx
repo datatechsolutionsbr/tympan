@@ -5,6 +5,8 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { HistoryList, type HistoryEntry } from './HistoryList'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 const entries: HistoryEntry[] = [
   { id: 'a', start: 'Ana · 23 Sep', summary: 'Coded the value', details: 'Detail A' },
@@ -74,5 +76,13 @@ describe('HistoryList', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('HistoryList in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<HistoryList loadingLabel="تحميل" emptyLabel="لا يوجد سجل" items={[{ id: 'h', start: <span>مراجع</span>, summary: 'تحقق من سنة الإطلاق.', details: <p>تفاصيل</p> }]} />)
+    for (const svg of container.querySelectorAll('.fk-history-list__chevron')) expect(svg).toHaveClass('fk-mirror-rtl')
+    await axeRtl(container)
   })
 })

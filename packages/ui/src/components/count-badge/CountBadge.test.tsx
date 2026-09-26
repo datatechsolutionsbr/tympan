@@ -7,6 +7,8 @@ import { politeAnnouncement } from '../../internal/data-a/announce'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { Button } from '../button/Button'
 import { CountBadge } from './CountBadge'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 const noun = { one: 'notification', other: 'notifications' }
 
@@ -66,5 +68,14 @@ describe('CountBadge', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('CountBadge in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<CountBadge count={150} />, { locale: 'ar-EG' })
+    // The cap and the count use the locale's digits.
+    expect(container.querySelector('.fk-count-badge__value')).toHaveTextContent('٩٩+')
+    await axeRtl(container)
   })
 })

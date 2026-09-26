@@ -5,6 +5,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { SummaryRow } from './SummaryRow'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 describe('SummaryRow', () => {
   it('exposes metadata as a description list of terms and definitions', () => {
@@ -62,5 +65,13 @@ describe('SummaryRow', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('SummaryRow in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<SummaryRow title="تعداد المساعدات الحكومية" subtitle="المالك" />)
+    expect(rtlDom.screen.getByText('تعداد المساعدات الحكومية')).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

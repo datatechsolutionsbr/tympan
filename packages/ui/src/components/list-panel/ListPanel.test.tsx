@@ -7,6 +7,8 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { Button } from '../button/Button'
 import { ListPanel, ListPanelRow } from './ListPanel'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 describe('ListPanel', () => {
   it('renders static rows as a list of items with nothing focusable', async () => {
@@ -113,5 +115,14 @@ describe('ListPanel', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('ListPanel in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<ListPanel label="إعدادات المشروع"><ListPanelRow onAction={() => {}}>عام</ListPanelRow></ListPanel>)
+    // Row chevrons point towards the inline end.
+    for (const svg of container.querySelectorAll('.fk-list-panel__chevron')) expect(svg).toHaveClass('fk-mirror-rtl')
+    await axeRtl(container)
   })
 })

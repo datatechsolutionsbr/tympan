@@ -1,5 +1,6 @@
 import { UserRound } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useLocale } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 import { useMessages } from '../../internal/provider'
 
@@ -20,11 +21,13 @@ export interface ProfileAvatarProps {
 type Face = { kind: 'picture'; url: string } | { kind: 'letter'; letter: string } | { kind: 'glyph' }
 
 /** Chooses what the disc shows, in order: picture, initial, neutral glyph. */
-function pickFace(name: string | null | undefined, email: string | null | undefined, url: string | null | undefined, broken: boolean): Face {
+function pickFace(name: string | null | undefined, email: string | null | undefined, url: string | null | undefined, broken: boolean, locale?: string): Face {
   if (url && !broken) return { kind: 'picture', url }
   const source = [name, email].map((s) => s?.trim()).find(Boolean)
-  const first = source ? Array.from(source)[0] : undefined
-  return first ? { kind: 'letter', letter: first.toLocaleUpperCase() } : { kind: 'glyph' }
+  // The first grapheme cluster (so marks and emoji stay whole), upper-cased with the locale's rules.
+  const Seg = (Intl as { Segmenter?: typeof Intl.Segmenter }).Segmenter
+  const first = source ? (Seg ? new Seg(locale, { granularity: 'grapheme' }).segment(source)[Symbol.iterator]().next().value?.segment : Array.from(source)[0]) : undefined
+  return first ? { kind: 'letter', letter: first.toLocaleUpperCase(locale) } : { kind: 'glyph' }
 }
 
 /** The signed-in person as picture or initial on a disc (spec: wave-2/profile-avatar.md). */
@@ -33,7 +36,8 @@ export function ProfileAvatar(props: ProfileAvatarProps) {
   const [broken, setBroken] = useState(false)
   useEffect(() => setBroken(false), [props.pictureUrl])
 
-  const face = pickFace(props.name, props.email, props.pictureUrl, broken)
+  const { locale } = useLocale()
+  const face = pickFace(props.name, props.email, props.pictureUrl, broken, locale)
   const label = props.label ?? (props.name?.trim() || props.email?.trim() || fallbackLabel)
   const hidden = props.decorative === true
   const a11y = hidden ? { 'aria-hidden': true as const } : face.kind === 'picture' ? {} : { role: 'img', 'aria-label': label }

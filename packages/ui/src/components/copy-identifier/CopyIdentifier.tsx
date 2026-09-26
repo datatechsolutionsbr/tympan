@@ -1,5 +1,5 @@
 import { Check, Copy } from 'lucide-react'
-import { useEffect, useReducer, useRef, type SyntheticEvent } from 'react'
+import { useEffect, useReducer, useRef, type SyntheticEvent, type CSSProperties } from 'react'
 import { Button, Tooltip, TooltipTrigger } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 import { writeClipboard } from '../../internal/data-a/clipboard'
@@ -29,10 +29,15 @@ function phaseReducer(_: Phase, event: PhaseEvent): Phase {
   return event.ok ? 'copied' : 'failed'
 }
 
-/** First `n` characters and an ellipsis, or the whole value when it is short enough. */
+/**
+ * First `n` grapheme clusters and an ellipsis, for plain-text contexts (file
+ * names, logs). The component itself never cuts text: it shows the whole
+ * value and lets CSS elide it at `visibleLength` character widths.
+ */
 export function shortenIdentifier(value: string, n: number): string {
-  const chars = Array.from(value)
-  return chars.length <= n ? value : `${chars.slice(0, n).join('')}…`
+  const Seg = (Intl as { Segmenter?: typeof Intl.Segmenter }).Segmenter
+  const units = Seg ? Array.from(new Seg(undefined, { granularity: 'grapheme' }).segment(value), (g) => g.segment) : Array.from(value)
+  return units.length <= n ? value : `${units.slice(0, n).join('')}…`
 }
 
 const stop = (e: SyntheticEvent) => e.stopPropagation()
@@ -62,8 +67,14 @@ export function CopyIdentifier({ value, copyValue, label, visibleLength = 8, onC
       <TooltipTrigger delay={300}>
         <Button className="fk-copy-identifier__trigger" aria-label={`${label ?? copy.copy}: ${value}`} onPress={() => void run()}>
           <Icon className="fk-icon" aria-hidden="true" focusable="false" />
-          <span className="fk-copy-identifier__text" aria-hidden="true">
-            {phase === 'copied' ? copy.copied : shortenIdentifier(value, visibleLength)}
+          <span
+            className="fk-copy-identifier__text"
+            aria-hidden="true"
+            dir={phase === 'copied' ? undefined : 'ltr'}
+            data-elided={phase === 'copied' ? undefined : ''}
+            style={{ '--fk-copy-visible': visibleLength } as CSSProperties}
+          >
+            {phase === 'copied' ? copy.copied : value}
           </span>
         </Button>
         <Tooltip className="fk-copy-identifier__tooltip" offset={6}>

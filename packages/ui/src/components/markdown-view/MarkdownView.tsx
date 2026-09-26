@@ -53,7 +53,7 @@ function CodeBlock({ language, value }: { language?: string; value: string }) {
           {language}
         </span>
       ) : null}
-      <pre ref={preRef} className="fk-markdown__pre" data-language={language} {...(overflows ? { tabIndex: 0, role: 'region', 'aria-label': label } : {})}>
+      <pre ref={preRef} dir="ltr" className="fk-markdown__pre" data-language={language} {...(overflows ? { tabIndex: 0, role: 'region', 'aria-label': label } : {})}>
         <code>{value}</code>
       </pre>
     </div>
@@ -63,18 +63,22 @@ function CodeBlock({ language, value }: { language?: string; value: string }) {
 function drawBlock(block: Block, key: number, base: number): ReactNode {
   if (block.kind === 'heading') {
     const level = Math.min(6, base + block.depth - 1)
-    return createElement(`h${level}`, { key, className: 'fk-markdown__heading', 'data-depth': block.depth }, drawInline(block.content))
+    return createElement(`h${level}`, { key, className: 'fk-markdown__heading', 'data-depth': block.depth, dir: 'auto' }, drawInline(block.content))
   }
   if (block.kind === 'list') {
     return createElement(
       block.ordered ? 'ol' : 'ul',
       { key, className: 'fk-markdown__list' },
-      block.items.map((item, i) => <li key={i}>{drawInline(item)}</li>),
+      block.items.map((item, i) => (
+        <li key={i} dir="auto">
+          {drawInline(item)}
+        </li>
+      )),
     )
   }
   if (block.kind === 'code') return <CodeBlock key={key} language={block.language} value={block.value} />
   return (
-    <p key={key} className="fk-markdown__paragraph">
+    <p key={key} className="fk-markdown__paragraph" dir="auto">
       {drawInline(block.content)}
     </p>
   )

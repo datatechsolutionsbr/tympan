@@ -6,6 +6,8 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { defaultMessages } from '../../internal/messages'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { RecoveryCodeList, recoveryCodesFile } from './RecoveryCodeList'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 const codes = ['1234-5678', '2345-6789', '3456-7890']
 
@@ -94,5 +96,13 @@ describe('RecoveryCodeList', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('RecoveryCodeList in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<RecoveryCodeList codes={['4821-0937', '5530-1846']} revealed onReveal={() => {}} />)
+    expect(container.textContent).toContain('4821-0937')
+    await axeRtl(container)
   })
 })

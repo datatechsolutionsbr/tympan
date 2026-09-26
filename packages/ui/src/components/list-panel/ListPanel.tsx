@@ -57,7 +57,7 @@ function RowBody({ row, chevron }: { row: RowSpec; chevron?: boolean }) {
       {row.leading ? <span className="fk-list-panel__leading">{row.leading}</span> : null}
       <span className="fk-list-panel__main">{row.children}</span>
       {row.trailing ? <span className="fk-list-panel__trailing">{row.trailing}</span> : null}
-      {chevron ? <ChevronRight className="fk-icon fk-list-panel__chevron" aria-hidden="true" focusable="false" /> : null}
+      {chevron ? <ChevronRight className="fk-icon fk-mirror-rtl fk-list-panel__chevron" aria-hidden="true" focusable="false" /> : null}
     </>
   )
 }

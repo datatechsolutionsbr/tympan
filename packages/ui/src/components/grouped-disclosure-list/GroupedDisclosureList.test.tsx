@@ -5,6 +5,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { GroupedDisclosureList } from './GroupedDisclosureList'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 type Rec = { id: string; name: string }
 const groups = [
@@ -77,5 +80,13 @@ describe('GroupedDisclosureList', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('GroupedDisclosureList in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<GroupedDisclosureList headingLevel={3} groups={[{ key: 'a', header: <span>مثبت</span>, items: ['تم'] }]} renderItem={(item) => <span>{item}</span>} getItemKey={(item) => item} />)
+    expect(rtlDom.screen.getByRole('button', { name: /مثبت/ })).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

@@ -44,7 +44,7 @@ function OpenableEntry({ entry }: { entry: HistoryEntry }) {
   return (
     <Disclosure id={entry.id} className="fk-history-list__entry" data-openable="">
       <Button slot="trigger" className="fk-history-list__header">
-        <ChevronRight className="fk-icon fk-history-list__chevron" aria-hidden="true" focusable="false" />
+        <ChevronRight className="fk-icon fk-mirror-rtl fk-history-list__chevron" aria-hidden="true" focusable="false" />
         <HeaderText entry={entry} />
       </Button>
       <DisclosurePanel className="fk-history-list__details">{entry.details}</DisclosurePanel>

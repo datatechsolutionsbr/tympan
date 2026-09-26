@@ -6,6 +6,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { ListRow } from './ListRow'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 describe('ListRow', () => {
   it('lets Tab visit the two actions in order and nothing else', async () => {
@@ -72,5 +75,13 @@ describe('ListRow', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('ListRow in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<ListRow title="الاستبيان أ" actions={[{ label: 'فتح', onPress: () => {} }]} />)
+    expect(rtlDom.screen.getByRole('button', { name: /فتح/ })).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

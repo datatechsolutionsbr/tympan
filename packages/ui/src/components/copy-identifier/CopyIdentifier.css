@@ -27,7 +27,8 @@
     content: '';
     position: absolute;
     inset-block-start: 50%;
-    inset-inline-start: 50%;
+    /* physical: centring with translate(-50%) is the same in both directions */
+    left: 50%;
     inline-size: max(100%, var(--fk-control-target));
     block-size: max(100%, var(--fk-control-target));
     transform: translate(-50%, -50%);
@@ -45,6 +46,15 @@
   }
   .fk-copy-identifier__text {
     white-space: nowrap;
+  }
+  /* Visual elision only: the whole identifier stays in the tree (never cut by character count). */
+  .fk-copy-identifier__text[data-elided] {
+    display: inline-block;
+    max-inline-size: calc(var(--fk-copy-visible, 8) * 1ch + 1ch);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    unicode-bidi: isolate;
+    vertical-align: bottom;
   }
 
   .fk-copy-identifier__tooltip {
