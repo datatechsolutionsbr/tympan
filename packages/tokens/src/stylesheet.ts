@@ -126,6 +126,8 @@ export function buildStylesheet(input: StylesheetInput): string {
   if (input.base?.length) {
     parts.push(rule([':root'], decls(input.base)))
     parts.push(`/* per-script typography (:lang) */\n${scriptRules(input.base)}`)
+    // Reading direction as a number, for inline-axis translations that must mirror in RTL.
+    parts.push(`:root,\n[dir="ltr"] {\n  --fk-inline-sign: 1;\n}\n\n[dir="rtl"] {\n  --fk-inline-sign: -1;\n}`)
   }
 
   const densities = input.densities ?? {}
