@@ -1,0 +1,125 @@
+/* Tabs (spec: wave-1/tabs.md; design direction §2.3, §2.7). */
+@layer fakhir.components {
+  .fk-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-4);
+  }
+  .fk-tabs[data-orientation='vertical'] {
+    flex-direction: row;
+  }
+
+  .fk-tabs__list {
+    display: flex;
+    gap: var(--fk-space-1);
+    border-block-end: 1px solid var(--fk-line);
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+  .fk-tabs__list[data-orientation='vertical'] {
+    flex-direction: column;
+    border-block-end: 0;
+    border-inline-end: 1px solid var(--fk-line);
+    overflow: visible;
+  }
+
+  .fk-tabs__tab {
+    position: relative;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: var(--fk-space-2);
+    min-block-size: var(--fk-control-height);
+    padding-inline: var(--fk-space-3);
+    color: var(--fk-ink-2);
+    font-size: var(--fk-font-size-body);
+    font-weight: var(--fk-font-weight-regular);
+    white-space: nowrap;
+    cursor: default;
+    outline: none;
+    border-radius: var(--fk-radius-control) var(--fk-radius-control) 0 0;
+    transition: color var(--fk-dur-quick) var(--fk-ease);
+  }
+
+  /* Selection indicator: a bar plus a weight change, never colour alone. */
+  .fk-tabs__tab::after {
+    content: '';
+    position: absolute;
+    inset-inline: var(--fk-space-2);
+    inset-block-end: -1px;
+    block-size: 2px;
+    border-radius: var(--fk-radius-pill);
+    background: transparent;
+    transition: background-color var(--fk-dur-quick) var(--fk-ease);
+  }
+  .fk-tabs__list[data-orientation='vertical'] .fk-tabs__tab::after {
+    inset-inline: auto -1px;
+    inset-block: var(--fk-space-2);
+    inline-size: 2px;
+    block-size: auto;
+  }
+
+  .fk-tabs__tab[data-hovered] {
+    color: var(--fk-ink);
+  }
+  .fk-tabs__tab[data-selected] {
+    color: var(--fk-accent);
+    font-weight: var(--fk-font-weight-semibold);
+  }
+  .fk-tabs__tab[data-selected]::after {
+    background: var(--fk-accent);
+  }
+  .fk-tabs__tab[data-focus-visible] {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: -2px;
+  }
+  .fk-tabs__tab[data-disabled] {
+    color: var(--fk-ink-3);
+    opacity: 0.6;
+  }
+
+  .fk-tabs__count {
+    min-inline-size: 1.5em;
+    padding-inline: var(--fk-space-1);
+    border-radius: var(--fk-radius-pill);
+    background: var(--fk-surface-sunken);
+    color: var(--fk-ink-2);
+    font-size: var(--fk-font-size-meta);
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+
+  .fk-tabs__panel {
+    outline: none;
+    border-radius: var(--fk-radius-control);
+  }
+  .fk-tabs__panel[data-focus-visible] {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+  .fk-tabs__panel[data-inert] {
+    display: none;
+  }
+
+  @media (max-width: 1023.98px) {
+    .fk-tabs__tab {
+      min-block-size: var(--fk-control-target);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-tabs__tab,
+    .fk-tabs__tab::after {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-tabs__tab[data-selected]::after {
+      background: Highlight;
+    }
+    .fk-tabs__tab[data-selected] {
+      color: Highlight;
+    }
+  }
+}

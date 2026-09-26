@@ -1,0 +1,84 @@
+/* Popover (spec: wave-1/popover.md; design direction §2.2, §2.4, §2.5, §2.7). */
+@layer fakhir.components {
+  .fk-popover {
+    box-sizing: border-box;
+    max-inline-size: min(calc(var(--fk-measure-summary) * 1ch + 2 * var(--fk-space-4)), calc(100vw - 2 * var(--fk-space-4)));
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-card);
+    background: var(--fk-surface-raised);
+    color: var(--fk-on-surface-raised);
+    box-shadow: var(--fk-shadow-floating);
+    backdrop-filter: blur(var(--fk-glass-blur-floating)) saturate(var(--fk-glass-saturate));
+    -webkit-backdrop-filter: blur(var(--fk-glass-blur-floating)) saturate(var(--fk-glass-saturate));
+    z-index: var(--fk-z-popover);
+    outline: none;
+  }
+
+  .fk-popover[data-entering] {
+    animation: fk-popover-in var(--fk-dur-quick) var(--fk-ease);
+  }
+  .fk-popover[data-exiting] {
+    animation: fk-popover-in var(--fk-dur-quick) var(--fk-ease-out) reverse;
+  }
+
+  @keyframes fk-popover-in {
+    from {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+  }
+
+  .fk-popover__dialog {
+    padding: var(--fk-space-4);
+    outline: none;
+  }
+
+  .fk-popover__title {
+    margin: 0 0 var(--fk-space-2);
+    color: var(--fk-ink);
+    font-family: var(--fk-font-sans);
+    font-size: var(--fk-font-size-label);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-label);
+  }
+
+  .fk-popover__content {
+    color: var(--fk-ink-2);
+    font-size: var(--fk-font-size-body);
+    line-height: var(--fk-font-line-height-body);
+  }
+
+  .fk-popover__arrow svg {
+    display: block;
+    fill: var(--fk-surface-raised-solid);
+    stroke: var(--fk-line);
+    stroke-width: 1px;
+  }
+  .fk-popover__arrow[data-placement='bottom'] svg {
+    transform: rotate(180deg);
+  }
+  .fk-popover__arrow[data-placement='left'] svg {
+    transform: rotate(-90deg);
+  }
+  .fk-popover__arrow[data-placement='right'] svg {
+    transform: rotate(90deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-popover[data-entering],
+    .fk-popover[data-exiting] {
+      animation: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-popover {
+      border: 1px solid CanvasText;
+      background: Canvas;
+      backdrop-filter: none;
+    }
+    .fk-popover__arrow {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,153 @@
+/* ModalDialog (spec: wave-1/modal-dialog.md; design direction §2.1, §2.4, §2.5, §2.7). */
+@layer fakhir.components {
+  .fk-modal-dialog__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: var(--fk-z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--fk-space-5);
+    background: var(--fk-backdrop);
+  }
+
+  .fk-modal-dialog__backdrop[data-entering] {
+    animation: fk-modal-fade var(--fk-dur-base) var(--fk-ease);
+  }
+  .fk-modal-dialog__backdrop[data-exiting] {
+    animation: fk-modal-fade var(--fk-dur-base) var(--fk-ease-out) reverse;
+  }
+
+  .fk-modal-dialog {
+    --fk-modal-width: 32rem;
+    box-sizing: border-box;
+    inline-size: min(var(--fk-modal-width), 100%);
+    max-block-size: calc(100dvh - 2 * var(--fk-space-5));
+    display: flex;
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-sheet);
+    background: var(--fk-surface-raised);
+    color: var(--fk-on-surface-raised);
+    box-shadow: var(--fk-shadow-modal);
+    backdrop-filter: blur(var(--fk-glass-blur-floating)) saturate(var(--fk-glass-saturate));
+    -webkit-backdrop-filter: blur(var(--fk-glass-blur-floating)) saturate(var(--fk-glass-saturate));
+    overflow: hidden;
+  }
+  .fk-modal-dialog[data-width='narrow'] { --fk-modal-width: 24rem; }
+  .fk-modal-dialog[data-width='wide'] { --fk-modal-width: 44rem; }
+  .fk-modal-dialog[data-width='xwide'] { --fk-modal-width: 60rem; }
+
+  .fk-modal-dialog[data-entering] {
+    animation: fk-modal-in var(--fk-dur-base) var(--fk-ease);
+  }
+  .fk-modal-dialog[data-exiting] {
+    animation: fk-modal-in var(--fk-dur-base) var(--fk-ease-out) reverse;
+  }
+
+  @keyframes fk-modal-fade {
+    from { opacity: 0; }
+  }
+  @keyframes fk-modal-in {
+    from {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+  }
+
+  .fk-modal-dialog__panel {
+    display: flex;
+    flex: 1;
+    min-block-size: 0;
+    outline: none;
+  }
+
+  /* Header and actions stay visible; only the body scrolls. */
+  .fk-modal-dialog__inner {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-block-size: 0;
+    padding: var(--fk-space-6);
+    gap: var(--fk-space-4);
+  }
+
+  .fk-modal-dialog__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--fk-space-3);
+  }
+
+  .fk-modal-dialog__title {
+    margin: 0;
+    color: var(--fk-ink);
+    font-family: var(--fk-font-serif);
+    font-size: var(--fk-font-size-h3);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-h3);
+    text-wrap: balance;
+    outline: none;
+  }
+  .fk-modal-dialog__title:focus-visible {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+
+  .fk-modal-dialog__description {
+    margin: 0;
+    color: var(--fk-ink-2);
+    max-inline-size: calc(var(--fk-measure-prose) * 1ch);
+  }
+
+  .fk-modal-dialog__body {
+    flex: 1;
+    min-block-size: 0;
+    overflow: auto;
+  }
+
+  .fk-modal-dialog__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--fk-space-3);
+  }
+
+  .fk-modal-dialog__panel[data-busy] {
+    cursor: progress;
+  }
+
+  /* Below 640 px: full width with the 16 px gutter, anchored to the bottom, stacked actions (primary first). */
+  @media (max-width: 639.98px) {
+    .fk-modal-dialog__backdrop {
+      align-items: flex-end;
+      padding: var(--fk-space-4);
+    }
+    .fk-modal-dialog {
+      inline-size: 100%;
+    }
+    .fk-modal-dialog__inner {
+      padding: var(--fk-space-5);
+    }
+    .fk-modal-dialog__actions {
+      flex-direction: column-reverse;
+    }
+    .fk-modal-dialog__actions > * {
+      inline-size: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-modal-dialog[data-entering],
+    .fk-modal-dialog[data-exiting] {
+      animation: fk-modal-fade var(--fk-dur-base) linear;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-modal-dialog {
+      border: 1px solid CanvasText;
+      background: Canvas;
+      backdrop-filter: none;
+    }
+  }
+}

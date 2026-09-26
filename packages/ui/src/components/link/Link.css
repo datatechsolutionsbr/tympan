@@ -1,0 +1,76 @@
+/* Link (spec: wave-1/link.md; design direction §2.3, §2.6). */
+@layer fakhir.components {
+  .fk-link {
+    position: relative;
+    display: inline;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--fk-accent);
+    font: inherit;
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+    outline: none;
+    border-radius: 2px;
+  }
+
+  .fk-link[data-emphasis='subtle'] {
+    text-decoration-line: none;
+  }
+
+  .fk-link[data-hovered] {
+    color: var(--fk-accent-strong);
+    text-decoration-line: underline;
+  }
+
+  .fk-link[data-focus-visible] {
+    text-decoration-line: underline;
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+
+  .fk-link[data-current] {
+    font-weight: var(--fk-font-weight-semibold);
+  }
+
+  .fk-link__external {
+    display: inline-block;
+    inline-size: 0.9em;
+    block-size: 0.9em;
+    margin-inline-start: 0.2em;
+    vertical-align: -0.05em;
+  }
+
+  /* Standalone links get a 44 px hit height; inline prose links are exempt (WCAG 2.5.8). */
+  .fk-link[data-standalone] {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--fk-control-target);
+  }
+  .fk-link[data-standalone]::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: 50%;
+    block-size: max(100%, var(--fk-control-target));
+    transform: translateY(-50%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-link {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-link {
+      color: LinkText;
+      text-decoration-line: underline;
+    }
+    .fk-link[data-focus-visible] {
+      outline: 2px solid Highlight;
+    }
+  }
+}

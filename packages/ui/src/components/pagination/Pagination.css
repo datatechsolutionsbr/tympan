@@ -1,0 +1,138 @@
+/* Pagination (spec: wave-1/pagination.md; design direction §2.2, §2.3, §2.10). */
+@layer fakhir.components {
+  .fk-pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--fk-space-3) var(--fk-space-5);
+    color: var(--fk-ink-2);
+    font-size: var(--fk-font-size-body);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .fk-pagination__range {
+    margin: 0;
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+
+  .fk-pagination__controls,
+  .fk-pagination__pages {
+    display: flex;
+    align-items: center;
+    gap: var(--fk-space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .fk-pagination__button {
+    position: relative;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--fk-space-1);
+    min-inline-size: var(--fk-control-height);
+    min-block-size: var(--fk-control-height);
+    padding-inline: var(--fk-space-2);
+    border: 1px solid transparent;
+    border-radius: var(--fk-radius-control);
+    background: transparent;
+    color: var(--fk-ink-2);
+    font: inherit;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    outline: none;
+    transition: background-color var(--fk-dur-instant) var(--fk-ease);
+  }
+  .fk-pagination__button::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: max(100%, var(--fk-control-target));
+    block-size: max(100%, var(--fk-control-target));
+    transform: translate(-50%, -50%);
+  }
+  .fk-pagination__button[data-hovered] {
+    background: var(--fk-surface-sunken);
+    color: var(--fk-ink);
+  }
+  .fk-pagination__button[data-current] {
+    background: var(--fk-accent-soft);
+    color: var(--fk-accent);
+    font-weight: var(--fk-font-weight-semibold);
+  }
+  .fk-pagination__button[data-focus-visible] {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+  .fk-pagination__button[data-disabled] {
+    color: var(--fk-ink-3);
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .fk-pagination__gap {
+    min-inline-size: var(--fk-space-5);
+    color: var(--fk-ink-3);
+    text-align: center;
+  }
+
+  .fk-pagination__compact {
+    padding-inline: var(--fk-space-2);
+    white-space: nowrap;
+  }
+
+  .fk-pagination__size {
+    display: flex;
+    align-items: center;
+    gap: var(--fk-space-2);
+  }
+  .fk-pagination__size-label {
+    color: var(--fk-ink-2);
+    font-size: var(--fk-font-size-label);
+    font-weight: var(--fk-font-weight-semibold);
+  }
+  .fk-pagination__select {
+    min-block-size: var(--fk-control-height);
+    padding-inline: var(--fk-space-3);
+    border: 1px solid var(--fk-input);
+    border-radius: var(--fk-radius-control);
+    background: var(--fk-surface-solid);
+    color: var(--fk-ink);
+    font: inherit;
+  }
+  .fk-pagination__select:focus-visible {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 1023.98px) {
+    .fk-pagination__button,
+    .fk-pagination__select {
+      min-block-size: var(--fk-control-height-touch);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-pagination__button {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-pagination__button[data-current] {
+      border-color: CanvasText;
+      forced-color-adjust: none;
+      background: Highlight;
+      color: HighlightText;
+    }
+    .fk-pagination__button[data-focus-visible] {
+      outline-color: Highlight;
+    }
+  }
+}
