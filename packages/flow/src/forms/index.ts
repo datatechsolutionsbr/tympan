@@ -1,2 +1,12 @@
-// @fakhir/flow-canvas: forms group barrel.
-export {}
+// @fakhir/flow-canvas: forms group barrel (node configuration forms).
+export * from './NodeFormFooter'
+export * from './SchemaConfigForm'
+export * from './VariableListEditor'
+export * from './ToolServerListField'
+export * from './StartNodeForm'
+export * from './AgentNodeForm'
+export * from './GroupNodeForm'
+export * from './OutputSchemaBuilder'
+export * from './DataSourceNodeForm'
+export * from './ReportOutputNodeForm'
+export * from './DecisionNodeForm'
