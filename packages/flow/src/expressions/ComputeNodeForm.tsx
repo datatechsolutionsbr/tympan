@@ -1,7 +1,9 @@
-// ComputeNodeForm: a compute step whose logic is one expression tree, edited
-// visually or as structured text, with an optional dry run on sample data.
+// ComputeNodeForm: the settings of a compute step, whose whole logic is one
+// expression tree. The tree is edited with the visual builder or as JSON text
+// (with a side panel to insert operations, references and examples at the
+// caret), and can be tried on sample data when the host offers a dry run.
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Button as AriaButton } from 'react-aria-components'
 import { FlaskConical } from 'lucide-react'
 import { Button, InlineNotice, SegmentedControl, TextArea, TextField } from '@fakhir/design-system'
@@ -234,33 +236,222 @@ export interface ComputeNodeFormProps {
   labels?: Partial<ComputeNodeFormLabels>
 }
 
-export function textErrorMessage(error: ExpressionTextError, l: { unparseable: string; missingOperation: string; unknownOperation: string }, locale?: string): string | null {
-  switch (error.kind) {
-    case 'empty':
-      return null
-    case 'unparseable':
-      return fill(l.unparseable, { detail: error.detail }, locale)
-    case 'missing-operation':
-      return l.missingOperation
-    case 'unknown-operation':
-      return fill(l.unknownOperation, { name: error.operation }, locale)
-  }
+type ErrorWords = { unparseable: string; missingOperation: string; unknownOperation: string }
+
+const ERROR_TEXT: { [K in ExpressionTextError['kind']]: (e: Extract<ExpressionTextError, { kind: K }>, w: ErrorWords, locale?: string) => string | null } = {
+  empty: () => null,
+  unparseable: (e, w, locale) => fill(w.unparseable, { detail: e.detail }, locale),
+  'missing-operation': (_e, w) => w.missingOperation,
+  'unknown-operation': (e, w, locale) => fill(w.unknownOperation, { name: e.operation }, locale),
 }
 
-function parseSample(text: string): { ok: true; value: Record<string, unknown> | undefined } | { ok: false; detail: string } {
-  if (!text.trim()) return { ok: true, value: undefined }
+/** Sentence for a text problem; null for an empty document (no message). */
+export function textErrorMessage(error: ExpressionTextError, l: ErrorWords, locale?: string): string | null {
+  return (ERROR_TEXT[error.kind] as (e: ExpressionTextError, w: ErrorWords, locale?: string) => string | null)(error, l, locale)
+}
+
+/** Sample data text: blank is "none", otherwise it must be a JSON object. */
+function readSample(text: string): { sample?: Record<string, unknown> } | { problem: string } {
+  if (!text.trim()) return {}
+  let parsed: unknown
   try {
-    const v = JSON.parse(text)
-    if (!v || typeof v !== 'object' || Array.isArray(v)) return { ok: false, detail: 'object expected' }
-    return { ok: true, value: v as Record<string, unknown> }
-  } catch (e) {
-    return { ok: false, detail: e instanceof Error ? e.message : String(e) }
+    parsed = JSON.parse(text)
+  } catch (why) {
+    return { problem: why instanceof Error ? why.message : String(why) }
   }
+  return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? { sample: parsed as Record<string, unknown> } : { problem: 'object expected' }
 }
 
-function initialExpression(value: Record<string, unknown>): OperationNode {
-  const e = value.expression
-  return e && typeof e === 'object' && typeof (e as OperationNode).operation === 'string' ? (e as OperationNode) : PASS_THROUGH
+const startingTree = (config: Record<string, unknown>): OperationNode => {
+  const tree = config.expression as OperationNode | undefined
+  return tree && typeof tree === 'object' && typeof tree.operation === 'string' ? tree : PASS_THROUGH
+}
+
+/**
+ * The expression as both a tree and its JSON text. Text edits re-parse and
+ * move the tree only when valid; `insertAtCaret` splices a fragment where the
+ * caret is and puts the caret after it.
+ */
+function useExpressionDraft(start: OperationNode, catalog: ExpressionCatalog | undefined) {
+  const [tree, setTree] = useState(start)
+  const [text, setTextRaw] = useState(() => prettyJson(start))
+  const [problem, setProblem] = useState<ExpressionTextError | null>(null)
+  const area = useRef<HTMLTextAreaElement>(null)
+  const caretAfter = useRef<number | null>(null)
+
+  useEffect(() => {
+    const el = area.current
+    const at = caretAfter.current
+    if (at === null || !el) return
+    caretAfter.current = null
+    el.focus()
+    el.setSelectionRange(at, at)
+  }, [text])
+
+  const setText = (next: string) => {
+    setTextRaw(next)
+    const read = parseExpressionText(next, catalog)
+    setProblem(read.ok ? null : read.error)
+    if (read.ok) setTree(read.value)
+  }
+  const insertAtCaret = (fragment: string) => {
+    if (!text.trim()) {
+      caretAfter.current = fragment.length
+      return setText(fragment)
+    }
+    const from = area.current?.selectionStart ?? text.length
+    const to = area.current?.selectionEnd ?? from
+    caretAfter.current = from + fragment.length
+    setText(`${text.slice(0, from)}${fragment}${text.slice(to)}`)
+  }
+  const resync = () => {
+    setTextRaw(prettyJson(tree))
+    setProblem(null)
+  }
+  return { tree, setTree, text, setText, problem, area, insertAtCaret, resync }
+}
+
+type PanelView = 'operations' | 'references' | 'examples'
+
+function InsertButton({ onInsert, children }: { onInsert: () => void; children: ReactNode }) {
+  return (
+    <li>
+      <AriaButton className="fk-expr-form__insert" onPress={onInsert}>
+        {children}
+      </AriaButton>
+    </li>
+  )
+}
+
+const code = (text: string) => (
+  <code className="fk-compute__ref" dir="ltr">
+    {text}
+  </code>
+)
+
+function ReferencePanel({ catalog, refs, examples, l, locale, insert }: { catalog: ExpressionCatalog | undefined; refs: string[]; examples: ComputeExample[]; l: ComputeNodeFormLabels; locale: string; insert: (fragment: string) => void }) {
+  const [view, setView] = useState<PanelView>('operations')
+  const [query, setQuery] = useState('')
+  const all = useMemo(() => pickerEntries(catalog, 'expression'), [catalog])
+  const familyName = (f: string) => (l.builder.families as Record<string, string> | undefined)?.[f] ?? f
+  const wanted = query.trim().toLocaleLowerCase(locale)
+  const groups = EXPRESSION_FAMILIES.flatMap((family) => {
+    const hits = all.filter((e) => e.family === family && (!wanted || e.id.toLocaleLowerCase(locale).includes(wanted)))
+    return hits.length ? [{ family, hits }] : []
+  })
+
+  const views: Record<PanelView, () => ReactNode> = {
+    operations: () => (
+      <>
+        <TextField mode="search" label={l.searchOperations} value={query} onChange={setQuery} />
+        {groups.length === 0 ? (
+          <p className="fk-expr__hint" role="status">
+            {l.noOperations}
+          </p>
+        ) : (
+          groups.map(({ family, hits }) => (
+            <section key={family} className="fk-expr-form__family" aria-label={fill(l.familyCount, { family, count: hits.length }, locale)}>
+              <h4 className="fk-expr-form__family-title">{fill(l.familyCount, { family: familyName(family), count: hits.length }, locale)}</h4>
+              <ul className="fk-expr-form__insert-list">
+                {hits.map((e) => (
+                  <InsertButton key={e.id} onInsert={() => insert(JSON.stringify(seedOperation(e)))}>
+                    {code(e.id)}
+                  </InsertButton>
+                ))}
+              </ul>
+            </section>
+          ))
+        )}
+      </>
+    ),
+    references: () => (
+      <ul className="fk-expr-form__insert-list" aria-label={l.references}>
+        {refs.map((r) => (
+          <InsertButton key={r} onInsert={() => insert(JSON.stringify({ ref: r }))}>
+            {code(r)}
+          </InsertButton>
+        ))}
+      </ul>
+    ),
+    examples: () => (
+      <ul className="fk-expr-form__insert-list" aria-label={l.examples}>
+        {examples.map((ex) => (
+          <InsertButton key={ex.id} onInsert={() => insert(prettyJson(ex.expression))}>
+            {l.exampleNames[ex.id] ?? ex.id}
+          </InsertButton>
+        ))}
+      </ul>
+    ),
+  }
+
+  return (
+    <div className="fk-expr-form__panel">
+      <SegmentedControl
+        label={l.referencePanel}
+        size="compact"
+        value={view}
+        onChange={(v) => setView(v as PanelView)}
+        options={(['operations', 'references', 'examples'] as const).map((v) => ({ value: v, label: l[v] }))}
+      />
+      {views[view]()}
+    </div>
+  )
+}
+
+type Trial = { at: 'idle' } | { at: 'running' } | { at: 'done'; trace: TraceReport } | { at: 'failed'; message: string }
+
+function DryRunPanel({ l, locale, blocked, launch }: { l: ComputeNodeFormLabels; locale: string; blocked: boolean; launch: (samples: { inputs?: Record<string, unknown>; nodeOutputs?: Record<string, unknown> }) => Promise<TraceReport> }) {
+  const [shown, setShown] = useState(false)
+  const [inputsText, setInputsText] = useState('')
+  const [outputsText, setOutputsText] = useState('')
+  const [trial, setTrial] = useState<Trial>({ at: 'idle' })
+  const running = trial.at === 'running'
+
+  const go = async () => {
+    const inputs = readSample(inputsText)
+    const outputs = readSample(outputsText)
+    const bad = 'problem' in inputs ? inputs.problem : 'problem' in outputs ? outputs.problem : null
+    if (bad !== null) return setTrial({ at: 'failed', message: fill(l.invalidSamples, { detail: bad }, locale) })
+    setTrial({ at: 'running' })
+    try {
+      const trace = await launch({ ...('sample' in inputs && inputs.sample ? { inputs: inputs.sample } : {}), ...('sample' in outputs && outputs.sample ? { nodeOutputs: outputs.sample } : {}) })
+      setTrial({ at: 'done', trace })
+    } catch (why) {
+      setTrial({ at: 'failed', message: fill(l.testFailed, { message: why instanceof Error ? why.message : String(why) }, locale) })
+    }
+  }
+
+  return (
+    <div className="fk-expr-form__section">
+      <Button variant="secondary" leadingIcon={<FlaskConical />} aria-expanded={shown} onPress={() => setShown((v) => !v)}>
+        {l.testToggle}
+      </Button>
+      {shown && (
+        <div className="fk-expr-form__test">
+          <TextArea className="fk-expr-form__code" label={l.sampleInputs} hint={l.sampleHint} monospace rows={4} value={inputsText} onChange={setInputsText} />
+          <TextArea className="fk-expr-form__code" label={l.sampleOutputs} hint={l.sampleHint} monospace rows={4} value={outputsText} onChange={setOutputsText} />
+          {blocked && (
+            <InlineNotice tone="warning" urgency="polite">
+              {l.invalidExpression}
+            </InlineNotice>
+          )}
+          <div>
+            <Button variant="secondary" busy={running} busyLabel={l.running} disabled={blocked || running} onPress={go}>
+              {running ? l.running : l.run}
+            </Button>
+          </div>
+          <div className="fk-expr-form__section" role="region" aria-label={l.results} aria-live="polite" aria-busy={running || undefined}>
+            {trial.at === 'failed' && (
+              <InlineNotice tone="danger" urgency="none">
+                {trial.message}
+              </InlineNotice>
+            )}
+            {trial.at === 'done' && <TraceTree report={trial.trace} labels={l.trace} />}
+          </div>
+        </div>
+      )}
+    </div>
+  )
 }
 
 export function ComputeNodeForm(props: ComputeNodeFormProps) {
@@ -268,231 +459,48 @@ export function ComputeNodeForm(props: ComputeNodeFormProps) {
   const l = useLabels(computeNodeFormLabels, props.labels)
   const { locale } = useFlowLocale()
   const { catalog } = useExpressionCatalog(props.catalog)
-  const base = useMemo(() => {
-    const out: Record<string, unknown> = { ...(value as Record<string, unknown>) }
-    for (const k of LEGACY_SCRIPT_KEYS) delete out[k]
-    return out
-  }, [value])
+  /** The incoming configuration without the keys of the old script-based step. */
+  const kept = useMemo(() => Object.fromEntries(Object.entries(value as Record<string, unknown>).filter(([k]) => !(LEGACY_SCRIPT_KEYS as readonly string[]).includes(k))), [value])
+  const draft = useExpressionDraft(startingTree(kept), catalog)
+  const [asText, setAsText] = useState(false)
+  const refs = useMemo(() => [FLOW_INPUTS_REF, ...references.filter((r) => r !== FLOW_INPUTS_REF)], [references])
+  const blocked = asText && draft.problem !== null
+  const configOf = (): ComputeNodeConfig => ({ ...kept, kind: 'compute', expression: draft.tree })
+  const message = asText && draft.problem ? textErrorMessage(draft.problem, l, locale) : null
 
-  const [mode, setMode] = useState<'visual' | 'text'>('visual')
-  const [model, setModel] = useState<OperationNode>(() => initialExpression(base))
-  const [text, setText] = useState(() => prettyJson(initialExpression(base)))
-  const [textError, setTextError] = useState<ExpressionTextError | null>(null)
-  const [panel, setPanel] = useState<'operations' | 'references' | 'examples'>('operations')
-  const [search, setSearch] = useState('')
-  const areaRef = useRef<HTMLTextAreaElement>(null)
-  const pendingCaret = useRef<number | null>(null)
-
-  const [testOpen, setTestOpen] = useState(false)
-  const [inputsText, setInputsText] = useState('')
-  const [outputsText, setOutputsText] = useState('')
-  const [test, setTest] = useState<{ state: 'idle' } | { state: 'running' } | { state: 'done'; trace: TraceReport } | { state: 'error'; message: string }>({ state: 'idle' })
-
-  const allRefs = useMemo(() => [FLOW_INPUTS_REF, ...references.filter((r) => r !== FLOW_INPUTS_REF)], [references])
-  const invalid = mode === 'text' && textError !== null
-
-  useEffect(() => {
-    if (pendingCaret.current === null || !areaRef.current) return
-    const at = pendingCaret.current
-    pendingCaret.current = null
-    areaRef.current.focus()
-    areaRef.current.setSelectionRange(at, at)
-  }, [text])
-
-  const applyText = (t: string) => {
-    setText(t)
-    const r = parseExpressionText(t, catalog)
-    if (r.ok) {
-      setModel(r.value)
-      setTextError(null)
-    } else setTextError(r.error)
-  }
-
-  const insert = (fragment: string) => {
-    const area = areaRef.current
-    const blank = !text.trim()
-    if (blank) {
-      pendingCaret.current = fragment.length
-      applyText(fragment)
-      return
-    }
-    const start = area?.selectionStart ?? text.length
-    const end = area?.selectionEnd ?? start
-    pendingCaret.current = start + fragment.length
-    applyText(text.slice(0, start) + fragment + text.slice(end))
-  }
-
-  const entries = useMemo(() => pickerEntries(catalog, 'expression'), [catalog])
-  const needle = search.trim().toLocaleLowerCase(locale)
-  const families = EXPRESSION_FAMILIES.map((f) => ({ family: f, entries: entries.filter((e) => e.family === f && (!needle || e.id.toLocaleLowerCase(locale).includes(needle))) })).filter((g) => g.entries.length)
-  const builderLabels = l.builder
-
-  const runTest = async () => {
-    if (!onDryRun) return
-    const inputs = parseSample(inputsText)
-    const outputs = parseSample(outputsText)
-    if (!inputs.ok || !outputs.ok) {
-      setTest({ state: 'error', message: fill(l.invalidSamples, { detail: (!inputs.ok ? inputs.detail : !outputs.ok ? outputs.detail : '') as string }, locale) })
-      return
-    }
-    setTest({ state: 'running' })
-    try {
-      const res = await onDryRun({
-        config: { ...base, kind: 'compute', expression: model },
-        ...(inputs.value ? { inputs: inputs.value } : {}),
-        ...(outputs.value ? { nodeOutputs: outputs.value } : {}),
-      })
-      setTest({ state: 'done', trace: res.trace })
-    } catch (e) {
-      setTest({ state: 'error', message: fill(l.testFailed, { message: e instanceof Error ? e.message : String(e) }, locale) })
-    }
-  }
-
-  const errorText = mode === 'text' && textError ? textErrorMessage(textError, l, locale) : null
+  const editor = asText ? (
+    <div className="fk-expr-form__section">
+      <TextArea ref={draft.area} className="fk-expr-form__code" label={l.expression} hint={l.expressionHint} monospace rows={12} value={draft.text} onChange={draft.setText} errorMessage={message ?? undefined} />
+      {draft.problem === null && (
+        <p className="fk-expr-form__valid" role="status">
+          {l.valid}
+        </p>
+      )}
+    </div>
+  ) : (
+    <ExpressionBuilder label={l.expression} value={draft.tree} onChange={(n) => draft.setTree(n as OperationNode)} references={refs} {...(props.catalog ? { catalog: props.catalog } : {})} labels={l.builder} />
+  )
 
   return (
     <div className="fk-expr-form" data-form="compute">
       <SegmentedControl
         label={l.editorMode}
-        value={mode}
+        value={asText ? 'text' : 'visual'}
         onChange={(m) => {
-          if (m === 'text') {
-            setText(prettyJson(model))
-            setTextError(null)
-          }
-          setMode(m as 'visual' | 'text')
+          if (m === 'text') draft.resync()
+          setAsText(m === 'text')
         }}
         options={[
           { value: 'visual', label: l.visual },
           { value: 'text', label: l.text },
         ]}
       />
-      <div className="fk-expr-form__layout" data-with-panel={mode === 'text' || undefined}>
-        {mode === 'visual' ? (
-          <ExpressionBuilder label={l.expression} value={model} onChange={(n) => setModel(n as OperationNode)} references={allRefs} {...(props.catalog ? { catalog: props.catalog } : {})} labels={builderLabels} />
-        ) : (
-          <div className="fk-expr-form__section">
-            <TextArea
-              ref={areaRef}
-              className="fk-expr-form__code"
-              label={l.expression}
-              hint={l.expressionHint}
-              monospace
-              rows={12}
-              value={text}
-              onChange={applyText}
-              errorMessage={errorText ?? undefined}
-            />
-            {!textError ? (
-              <p className="fk-expr-form__valid" role="status">
-                {l.valid}
-              </p>
-            ) : null}
-          </div>
-        )}
-        {mode === 'text' ? (
-          <div className="fk-expr-form__panel">
-            <SegmentedControl
-              label={l.referencePanel}
-              size="compact"
-              value={panel}
-              onChange={(p) => setPanel(p as typeof panel)}
-              options={[
-                { value: 'operations', label: l.operations },
-                { value: 'references', label: l.references },
-                { value: 'examples', label: l.examples },
-              ]}
-            />
-            {panel === 'operations' ? (
-              <>
-                <TextField mode="search" label={l.searchOperations} value={search} onChange={setSearch} />
-                {families.length ? (
-                  families.map((g) => (
-                    <section key={g.family} className="fk-expr-form__family" aria-label={fill(l.familyCount, { family: g.family, count: g.entries.length }, locale)}>
-                      <h4 className="fk-expr-form__family-title">{fill(l.familyCount, { family: labelOfFamily(builderLabels, g.family), count: g.entries.length }, locale)}</h4>
-                      <ul className="fk-expr-form__insert-list">
-                        {g.entries.map((e) => (
-                          <li key={e.id}>
-                            <AriaButton className="fk-expr-form__insert" onPress={() => insert(JSON.stringify(seedOperation(e)))}>
-                              <code className="fk-compute__ref" dir="ltr">
-                                {e.id}
-                              </code>
-                            </AriaButton>
-                          </li>
-                        ))}
-                      </ul>
-                    </section>
-                  ))
-                ) : (
-                  <p className="fk-expr__hint" role="status">
-                    {l.noOperations}
-                  </p>
-                )}
-              </>
-            ) : panel === 'references' ? (
-              <ul className="fk-expr-form__insert-list" aria-label={l.references}>
-                {allRefs.map((r) => (
-                  <li key={r}>
-                    <AriaButton className="fk-expr-form__insert" onPress={() => insert(JSON.stringify({ ref: r }))}>
-                      <code className="fk-compute__ref" dir="ltr">
-                        {r}
-                      </code>
-                    </AriaButton>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <ul className="fk-expr-form__insert-list" aria-label={l.examples}>
-                {examples.map((ex) => (
-                  <li key={ex.id}>
-                    <AriaButton className="fk-expr-form__insert" onPress={() => insert(prettyJson(ex.expression))}>
-                      {l.exampleNames[ex.id] ?? ex.id}
-                    </AriaButton>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        ) : null}
+      <div className="fk-expr-form__layout" data-with-panel={asText || undefined}>
+        {editor}
+        {asText && <ReferencePanel catalog={catalog} refs={refs} examples={examples} l={l} locale={locale} insert={draft.insertAtCaret} />}
       </div>
-
-      {onDryRun ? (
-        <div className="fk-expr-form__section">
-          <Button variant="secondary" leadingIcon={<FlaskConical />} aria-expanded={testOpen} onPress={() => setTestOpen((o) => !o)}>
-            {l.testToggle}
-          </Button>
-          {testOpen ? (
-            <div className="fk-expr-form__test">
-              <TextArea className="fk-expr-form__code" label={l.sampleInputs} hint={l.sampleHint} monospace rows={4} value={inputsText} onChange={setInputsText} />
-              <TextArea className="fk-expr-form__code" label={l.sampleOutputs} hint={l.sampleHint} monospace rows={4} value={outputsText} onChange={setOutputsText} />
-              {invalid ? (
-                <InlineNotice tone="warning" urgency="polite">
-                  {l.invalidExpression}
-                </InlineNotice>
-              ) : null}
-              <div>
-                <Button variant="secondary" busy={test.state === 'running'} busyLabel={l.running} disabled={invalid || test.state === 'running'} onPress={runTest}>
-                  {test.state === 'running' ? l.running : l.run}
-                </Button>
-              </div>
-              <div className="fk-expr-form__section" role="region" aria-label={l.results} aria-live="polite" aria-busy={test.state === 'running' || undefined}>
-                {test.state === 'error' ? (
-                  <InlineNotice tone="danger" urgency="none">
-                    {test.message}
-                  </InlineNotice>
-                ) : null}
-                {test.state === 'done' ? <TraceTree report={test.trace} labels={l.trace} /> : null}
-              </div>
-            </div>
-          ) : null}
-        </div>
-      ) : null}
-
-      <NodeFormFooter labels={{ save: l.save, cancel: l.cancel }} saveDisabled={invalid} onCancel={onCancel} onSave={() => onSave({ ...base, kind: 'compute', expression: model })} />
+      {onDryRun && <DryRunPanel l={l} locale={locale} blocked={blocked} launch={async (samples) => (await onDryRun({ config: configOf(), ...samples })).trace} />}
+      <NodeFormFooter labels={{ save: l.save, cancel: l.cancel }} saveDisabled={blocked} onCancel={onCancel} onSave={() => onSave(configOf())} />
     </div>
   )
-}
-
-function labelOfFamily(l: Partial<ExpressionBuilderLabels>, family: string): string {
-  return (l.families as Record<string, string> | undefined)?.[family] ?? family
 }

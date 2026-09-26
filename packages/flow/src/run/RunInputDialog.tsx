@@ -1,11 +1,12 @@
-// RunInputDialog: collects values for the flow's declared inputs before a run.
+// RunInputDialog: before a run starts, ask for a value for every input the
+// flow's start step declares, pre-filled with its saved defaults each time the
+// dialog opens.
 
 import { useEffect, useId, useState, type FormEvent } from 'react'
 import { Button, ModalDialog, TextField } from '@fakhir/design-system'
 import { defineLabels, useLabels } from '../internal/labels'
-import { useOptionalFlowEditorStore } from '../state/editorState'
+import { createFlowEditorStore, useOptionalFlowEditorStore } from '../state/editorState'
 import { useStoreSelector } from '../state/store'
-import { createFlowEditorStore } from '../state/editorState'
 import { NumberInput } from './NumberInput'
 
 export interface RunInputDialogLabels {
@@ -36,80 +37,94 @@ export interface RunInputDialogProps {
   labels?: Partial<RunInputDialogLabels>
 }
 
-/** "loanAmount", "loan_amount" and "loan-amount" read as "Loan amount". */
+/** "loanAmount", "loan_amount" and "loan-amount" read as "Loan amount" (any script's letter cases). */
 export function humaniseIdentifier(id: string): string {
-  const words = id
-    .replace(/([\p{Ll}\p{N}])(\p{Lu})/gu, '$1 $2')
-    .replace(/[_-]+/g, ' ')
-    .trim()
+  const spaced = id
+    .split(/(?<=[\p{Ll}\p{N}])(?=\p{Lu})|[_-]+/u)
+    .filter(Boolean)
+    .join(' ')
     .toLowerCase()
-  return words ? words.charAt(0).toUpperCase() + words.slice(1) : id
+  return spaced ? spaced.charAt(0).toUpperCase() + spaced.slice(1) : id
 }
 
 /** Declared inputs as names; objects with a name are reduced to it, anything else is stringified. */
 export function declaredInputNames(raw: unknown): string[] {
   if (!Array.isArray(raw)) return []
-  return raw.map((v) => {
-    if (typeof v === 'string') return v
-    if (v && typeof v === 'object' && typeof (v as { name?: unknown }).name === 'string') return (v as { name: string }).name
-    return typeof v === 'object' ? JSON.stringify(v) : String(v)
+  return raw.map((item: unknown) => {
+    if (typeof item === 'string') return item
+    const named = item && typeof item === 'object' ? (item as { name?: unknown }).name : undefined
+    if (typeof named === 'string') return named
+    return typeof item === 'object' ? JSON.stringify(item) : String(item)
   })
 }
 
-const fallbackStore = createFlowEditorStore()
-
-function readStart(nodes: ReadonlyArray<{ kind: string; data: Record<string, unknown> }>) {
-  const start = nodes.find((n) => n.kind === 'start')
-  if (!start) return { names: [] as string[], defaults: {} as Record<string, unknown> }
-  const cfg = (start.data.config && typeof start.data.config === 'object' ? start.data.config : start.data) as Record<string, unknown>
-  const defaults = cfg.inputDefaults && typeof cfg.inputDefaults === 'object' ? (cfg.inputDefaults as Record<string, unknown>) : {}
-  return { names: declaredInputNames(cfg.inputVariables), defaults }
+type Raw = string | number | null
+interface Declared {
+  names: string[]
+  saved: Record<string, unknown>
 }
+
+const NO_START: Declared = { names: [], saved: {} }
+
+/** Inputs and saved defaults of the start step (config either nested or flat). */
+function declaredBy(nodes: ReadonlyArray<{ kind: string; data: Record<string, unknown> }>): Declared {
+  const start = nodes.find((n) => n.kind === 'start')
+  if (!start) return NO_START
+  const nested = start.data.config
+  const cfg = (nested && typeof nested === 'object' ? nested : start.data) as Record<string, unknown>
+  const saved = cfg.inputDefaults && typeof cfg.inputDefaults === 'object' ? (cfg.inputDefaults as Record<string, unknown>) : {}
+  return { names: declaredInputNames(cfg.inputVariables), saved }
+}
+
+const seedOf = (saved: unknown): Raw => (saved === undefined || saved === null ? '' : typeof saved === 'number' ? saved : String(saved))
+const numeric = (raw: Raw | undefined): number | null => {
+  if (typeof raw === 'number') return raw
+  if (raw === null || raw === undefined || raw === '') return null
+  const n = Number(raw)
+  return Number.isNaN(n) ? null : n
+}
+/** What `onRun` receives for a field: text as text, numbers as numbers, empty as an empty string. */
+const outgoing = (kind: InputFieldKind, raw: Raw | undefined): RunInputValue => (kind === 'text' ? (raw === null || raw === undefined ? '' : String(raw)) : (numeric(raw) ?? ''))
+
+const orphanStore = createFlowEditorStore()
 
 export function RunInputDialog({ open, onClose, onRun, classifyVariable, currencySymbol, labels }: RunInputDialogProps) {
   const l = useLabels(runInputDialogLabels, labels)
-  const store = useOptionalFlowEditorStore() ?? fallbackStore
-  const nodes = useStoreSelector(store, (s) => s.nodes)
-  const { names, defaults } = readStart(nodes)
+  const nodes = useStoreSelector(useOptionalFlowEditorStore() ?? orphanStore, (s) => s.nodes)
+  const { names, saved } = declaredBy(nodes)
   const formId = useId()
-  const [values, setValues] = useState<Record<string, string | number | null>>({})
+  const [entered, setEntered] = useState<Record<string, Raw>>({})
+  const kindOf = (name: string): InputFieldKind => classifyVariable?.(name) ?? 'text'
 
-  // Every opening starts from the saved defaults.
+  // Each opening starts again from the saved defaults.
   useEffect(() => {
-    if (!open) return
-    const seed: Record<string, string | number | null> = {}
-    for (const n of names) {
-      const d = defaults[n]
-      seed[n] = d === undefined || d === null ? '' : typeof d === 'number' ? d : String(d)
-    }
-    setValues(seed)
-    // Re-seed on open only.
+    if (open) setEntered(Object.fromEntries(names.map((n) => [n, seedOf(saved[n])])))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open])
 
-  const kindOf = (n: string): InputFieldKind => classifyVariable?.(n) ?? 'text'
-  const submit = (e?: FormEvent) => {
+  const put = (name: string) => (v: Raw) => setEntered((prev) => ({ ...prev, [name]: v }))
+  const send = (e?: FormEvent) => {
     e?.preventDefault()
-    const out: Record<string, RunInputValue> = {}
-    for (const n of names) {
-      const v = values[n]
-      if (kindOf(n) === 'text') out[n] = v === null || v === undefined ? '' : String(v)
-      else {
-        const num = typeof v === 'number' ? v : v === '' || v === null || v === undefined ? null : Number(v)
-        out[n] = num === null || Number.isNaN(num) ? '' : num
-      }
-    }
-    setValues({})
-    onRun(out)
+    const inputs = Object.fromEntries(names.map((n) => [n, outgoing(kindOf(n), entered[n])]))
+    setEntered({})
+    onRun(inputs)
     onClose()
   }
+
+  const fields = names.map((name, index) => {
+    const kind = kindOf(name)
+    const common = { label: humaniseIdentifier(name), hint: <code className="fk-run-mono">{name}</code>, name }
+    return kind === 'text' ? (
+      <TextField key={name} {...common} placeholder={l.valuePlaceholder} value={String(entered[name] ?? '')} onChange={put(name)} {...(index === 0 ? { autoFocus: true } : {})} />
+    ) : (
+      <NumberInput key={name} {...common} integer={kind === 'count'} {...(kind === 'currency' && currencySymbol ? { prefix: currencySymbol } : {})} value={numeric(entered[name])} onChange={put(name)} autoFocus={index === 0} />
+    )
+  })
 
   return (
     <ModalDialog
       isOpen={open}
-      onOpenChange={(o) => {
-        if (!o) onClose()
-      }}
+      onOpenChange={(stillOpen) => (stillOpen ? undefined : onClose())}
       title={l.title}
       description={l.subtitle}
       width="regular"
@@ -124,43 +139,9 @@ export function RunInputDialog({ open, onClose, onRun, classifyVariable, currenc
         </>
       }
     >
-      <form id={formId} className="fk-run-form" onSubmit={submit} noValidate>
-        {names.length === 0 ? <p className="fk-run-empty">{l.empty}</p> : null}
-        {names.map((n, i) => {
-          const kind = kindOf(n)
-          const label = humaniseIdentifier(n)
-          const hint = <code className="fk-run-mono">{n}</code>
-          if (kind === 'text') {
-            return (
-              <TextField
-                key={n}
-                label={label}
-                hint={hint}
-                name={n}
-                placeholder={l.valuePlaceholder}
-                value={String(values[n] ?? '')}
-                onChange={(v) => setValues((p) => ({ ...p, [n]: v }))}
-                {...(i === 0 ? { autoFocus: true } : {})}
-              />
-            )
-          }
-          const raw = values[n]
-          const num = typeof raw === 'number' ? raw : raw === '' || raw === null || raw === undefined ? null : Number(raw)
-          return (
-            <NumberInput
-              key={n}
-              name={n}
-              label={label}
-              hint={hint}
-              integer={kind === 'count'}
-              {...(kind === 'currency' && currencySymbol ? { prefix: currencySymbol } : {})}
-              value={num === null || Number.isNaN(num) ? null : num}
-              onChange={(v) => setValues((p) => ({ ...p, [n]: v }))}
-              autoFocus={i === 0}
-            />
-          )
-        })}
-        {/* Enter in a single-line field submits the form. */}
+      <form id={formId} className="fk-run-form" onSubmit={send} noValidate>
+        {fields.length ? fields : <p className="fk-run-empty">{l.empty}</p>}
+        {/* Lets Enter in a single-line field submit. */}
         <button type="submit" hidden tabIndex={-1} aria-hidden="true" />
       </form>
     </ModalDialog>

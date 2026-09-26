@@ -1,55 +1,53 @@
-// Run vocabulary shared by the run views, dialogs and the timeline.
+// Words and shapes the run group speaks: stored runs as the host returns
+// them, the live event stream, and the status vocabulary shown on screen.
 
 import type { ActorKind } from '@fakhir/design-system'
 
-/** Who started or produced something (design direction §2.11). */
-export interface RunActor {
-  kind: ActorKind
-  name: string
-  agentKey?: string
-  model?: string
-  email?: string
-}
+/** Status word every run view shows (always beside an icon). */
+export type RunWord = 'idle' | 'pending' | 'running' | 'completed' | 'failed' | 'skipped' | 'restored' | 'unknown'
 
-/** One node's outcome inside a stored run. */
-export interface RunNodeResult {
+/** State of the connection that delivers run events. */
+export type StreamStatus = 'idle' | 'streaming' | 'completed' | 'failed' | 'error'
+
+/** The person, agent or system behind a run or a version (design direction §2.11). */
+export type RunActor = { kind: ActorKind; name: string } & Partial<Record<'agentKey' | 'model' | 'email', string>>
+
+/** Outcome of one step inside a stored run. */
+export type RunNodeResult = {
   nodeId: string
-  label?: string
-  kind?: string
   status: string
-  durationMs?: number
-  error?: string
-  outputs?: unknown
-}
+} & Partial<{ label: string; kind: string; durationMs: number; error: string; outputs: unknown }>
 
-/** A past or current run as returned by the host's `loadRuns`. */
-export interface RunSummary {
+/**
+ * A run as the host's loader returns it. `status` is the engine's own
+ * spelling; views normalise it. `triggeredBy` is the engine's origin tag
+ * ("kind:baseRunId"), read with parseLineage.
+ */
+export type RunSummary = {
   id: string
-  /** Engine status; normalised by the views (completed, succeeded … read as completed). */
   status: string
   startedAt: string
-  durationMs?: number
-  nodeResults?: RunNodeResult[]
-  /** "kind:baseRunId" lineage text written by the engine (RunLineageAndDiff). */
-  triggeredBy?: string | null
-  actor?: RunActor
-  inputs?: Record<string, unknown>
-}
+} & Partial<{
+  durationMs: number
+  nodeResults: RunNodeResult[]
+  triggeredBy: string | null
+  actor: RunActor
+  inputs: Record<string, unknown>
+}>
 
 export type LoadRuns = (flowId: string) => Promise<RunSummary[]>
 
-/** Events of the run-event stream projected onto the editor state. */
-export type RunEvent =
-  | { type: 'run-started'; runId?: string }
-  | { type: 'node-started'; nodeId: string }
-  | { type: 'node-completed'; nodeId: string; outputs?: unknown; durationMs?: number }
-  | { type: 'node-restored'; nodeId: string; outputs?: unknown; durationMs?: number }
-  | { type: 'node-failed'; nodeId: string; error?: string; durationMs?: number }
-  | { type: 'run-completed'; runId?: string }
-  | { type: 'run-failed'; runId?: string; error?: string }
-  | { type: string; [key: string]: unknown }
+/** Payload per event name of the run stream; the union below is derived from it. */
+type StepTiming = { outputs?: unknown; durationMs?: number }
+interface RunEventPayloads {
+  'run-started': { runId?: string }
+  'run-completed': { runId?: string }
+  'run-failed': { runId?: string; error?: string }
+  'node-started': { nodeId: string }
+  'node-completed': { nodeId: string } & StepTiming
+  'node-restored': { nodeId: string } & StepTiming
+  'node-failed': { nodeId: string; error?: string; durationMs?: number }
+}
 
-export type StreamStatus = 'idle' | 'streaming' | 'completed' | 'failed' | 'error'
-
-/** Normalised word set the views show (always with an icon). */
-export type RunWord = 'idle' | 'pending' | 'running' | 'completed' | 'failed' | 'skipped' | 'restored' | 'unknown'
+/** Events of the run stream; names the projection does not know are allowed and ignored. */
+export type RunEvent = { [Name in keyof RunEventPayloads]: { type: Name } & RunEventPayloads[Name] }[keyof RunEventPayloads] | { type: string; [key: string]: unknown }

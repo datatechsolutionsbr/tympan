@@ -1,5 +1,6 @@
-// Trace of an expression evaluated on sample data, and the dry-run client
-// that asks the engine for one. The endpoint is always supplied by the host.
+// Evaluation traces of an expression on sample data, and the small client
+// that asks the engine to produce one (the "dry run"). The host always gives
+// the endpoint; the engine may answer in snake case, which is accepted too.
 
 export interface TraceSpan {
   kind: 'operation' | 'ref' | 'value'
@@ -17,37 +18,6 @@ export interface TraceReport {
   frameLimit: number
 }
 
-type Wire = Record<string, unknown>
-
-const pick = (o: Wire, ...keys: string[]) => {
-  for (const k of keys) if (k in o) return o[k]
-  return undefined
-}
-
-function spanFromWire(w: unknown): TraceSpan {
-  const o = (w && typeof w === 'object' ? w : {}) as Wire
-  const kindRaw = String(pick(o, 'kind', 'span_kind') ?? 'operation')
-  const kind: TraceSpan['kind'] = kindRaw === 'ref' || kindRaw === 'reference' ? 'ref' : kindRaw === 'value' || kindRaw === 'literal' ? 'value' : 'operation'
-  const children = pick(o, 'children', 'child_spans')
-  const span: TraceSpan = { kind, label: String(pick(o, 'label', 'name', 'operation') ?? '') }
-  const args = pick(o, 'args', 'arguments')
-  if (args && typeof args === 'object' && !Array.isArray(args)) span.args = args as Record<string, unknown>
-  if ('result' in o) span.result = o.result
-  if (Array.isArray(children) && children.length) span.children = children.map(spanFromWire)
-  return span
-}
-
-/** Maps a report whose keys may be snake case (frame_count …) onto TraceReport. */
-export function traceReportFromWire(wire: unknown): TraceReport {
-  const o = (wire && typeof wire === 'object' ? wire : {}) as Wire
-  return {
-    trace: spanFromWire(pick(o, 'trace', 'root')),
-    truncated: Boolean(pick(o, 'truncated', 'is_truncated')),
-    frameCount: Number(pick(o, 'frameCount', 'frame_count') ?? 0),
-    frameLimit: Number(pick(o, 'frameLimit', 'frame_limit') ?? 0),
-  }
-}
-
 export interface DryRunRequest {
   config: Record<string, unknown>
   inputs?: Record<string, unknown>
@@ -59,7 +29,43 @@ export interface DryRunResponse {
   trace: TraceReport
 }
 
-/** Rejection of runDryRun: HTTP status (0 for network or body failures) and server text. */
+/** A loose record read from the wire, with alias-aware lookups. */
+class Wire {
+  private readonly bag: Record<string, unknown>
+  constructor(raw: unknown) {
+    this.bag = raw !== null && typeof raw === 'object' ? (raw as Record<string, unknown>) : {}
+  }
+  /** First present value among the spellings. */
+  get(...spellings: string[]): unknown {
+    const hit = spellings.find((s) => Object.prototype.hasOwnProperty.call(this.bag, s))
+    return hit === undefined ? undefined : this.bag[hit]
+  }
+  has(name: string): boolean {
+    return Object.prototype.hasOwnProperty.call(this.bag, name)
+  }
+}
+
+const KIND_ALIASES: Record<string, TraceSpan['kind']> = { ref: 'ref', reference: 'ref', value: 'value', literal: 'value' }
+
+function toSpan(raw: unknown): TraceSpan {
+  const w = new Wire(raw)
+  const span: TraceSpan = { kind: KIND_ALIASES[String(w.get('kind', 'span_kind') ?? '')] ?? 'operation', label: String(w.get('label', 'name', 'operation') ?? '') }
+  const args = w.get('args', 'arguments')
+  if (args !== null && typeof args === 'object' && !Array.isArray(args)) span.args = args as Record<string, unknown>
+  if (w.has('result')) span.result = w.get('result')
+  const kids = w.get('children', 'child_spans')
+  if (Array.isArray(kids) && kids.length > 0) span.children = kids.map(toSpan)
+  return span
+}
+
+/** Maps a report whose keys may be snake case (frame_count …) onto TraceReport. */
+export function traceReportFromWire(raw: unknown): TraceReport {
+  const w = new Wire(raw)
+  const count = (...names: string[]) => Number(w.get(...names) ?? 0)
+  return { trace: toSpan(w.get('trace', 'root')), truncated: Boolean(w.get('truncated', 'is_truncated')), frameCount: count('frameCount', 'frame_count'), frameLimit: count('frameLimit', 'frame_limit') }
+}
+
+/** Why a dry run failed: the HTTP status (0 for network or unreadable bodies) and the server's text. */
 export class DryRunFailure extends Error {
   readonly status: number
   constructor(status: number, message: string) {
@@ -69,28 +75,24 @@ export class DryRunFailure extends Error {
   }
 }
 
+const messageOf = (why: unknown) => (why instanceof Error ? why.message : String(why))
+
+/** Runs `step`; any throw becomes a DryRunFailure with `status`. */
+async function orFail<T>(status: number, step: () => Promise<T>): Promise<T> {
+  try {
+    return await step()
+  } catch (why) {
+    throw why instanceof DryRunFailure ? why : new DryRunFailure(status, messageOf(why))
+  }
+}
+
 export async function runDryRun(endpoint: string, request: DryRunRequest, fetchImpl: typeof fetch = globalThis.fetch): Promise<DryRunResponse> {
-  let res: Response
-  try {
-    res = await fetchImpl(endpoint, { method: 'POST', headers: { 'content-type': 'application/json', accept: 'application/json' }, body: JSON.stringify(request) })
-  } catch (e) {
-    throw new DryRunFailure(0, e instanceof Error ? e.message : String(e))
+  const init: RequestInit = { method: 'POST', headers: { 'content-type': 'application/json', accept: 'application/json' }, body: JSON.stringify(request) }
+  const response = await orFail(0, () => fetchImpl(endpoint, init))
+  if (!response.ok) {
+    const said = await response.text().catch(() => response.statusText)
+    throw new DryRunFailure(response.status, said || response.statusText)
   }
-  if (!res.ok) {
-    let text = ''
-    try {
-      text = await res.text()
-    } catch {
-      text = res.statusText
-    }
-    throw new DryRunFailure(res.status, text || res.statusText)
-  }
-  let body: unknown
-  try {
-    body = await res.json()
-  } catch (e) {
-    throw new DryRunFailure(res.status, e instanceof Error ? e.message : String(e))
-  }
-  const o = (body && typeof body === 'object' ? body : {}) as Wire
-  return { result: o.result, trace: traceReportFromWire(o.trace) }
+  const body = new Wire(await orFail(response.status, () => response.json() as Promise<unknown>))
+  return { result: body.get('result'), trace: traceReportFromWire(body.get('trace')) }
 }

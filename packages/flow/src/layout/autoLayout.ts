@@ -1,5 +1,7 @@
-// AutoLayout: ranked (Sugiyama-style) placement through @dagrejs/dagre (MIT).
-// Pure: returns a new list, never mutates the input.
+// Ranked placement of a directed graph so connectors read one way. The
+// crossing reduction and coordinates come from @dagrejs/dagre (MIT); this
+// module only chooses who takes part, feeds sizes in and reads corners out.
+// Pure: the input list is never changed.
 
 import { Graph, layout } from '@dagrejs/dagre'
 import { sizeOf } from '../geometry/rect'
@@ -32,40 +34,34 @@ export interface AutoLayoutOptions {
   fallbackSize?: Size
 }
 
-const DEFAULTS = { rankGap: 64, siblingGap: 32, margin: 24 }
+const RANKDIR: Record<RankDirection, 'TB' | 'LR' | 'RL'> = { 'top-down': 'TB', 'left-right': 'LR', 'right-left': 'RL' }
 
-/** Arranges nodes in ranks so connectors read in one direction. */
-export function autoLayout<N extends LayoutNode>(nodes: readonly N[], connectors: readonly LayoutEdge[], direction: RankDirection, options: AutoLayoutOptions = {}): N[] {
-  const fixed = new Set(options.fixedKinds ?? ['note'])
-  const movable = nodes.filter((n) => !n.parentId && !fixed.has(n.kind))
-  if (!movable.length) return nodes.map((n) => n)
-  const ids = new Set(movable.map((n) => n.id))
-
-  const g = new Graph({ multigraph: false, compound: false })
-  g.setGraph({
-    rankdir: direction === 'left-right' ? 'LR' : direction === 'right-left' ? 'RL' : 'TB',
-    ranksep: options.rankGap ?? DEFAULTS.rankGap,
-    nodesep: options.siblingGap ?? DEFAULTS.siblingGap,
-    marginx: options.margin ?? DEFAULTS.margin,
-    marginy: options.margin ?? DEFAULTS.margin,
-  })
+/** Top-left corner for every node that takes part, keyed by id. */
+function placeRanked(members: readonly LayoutNode[], links: readonly LayoutEdge[], direction: RankDirection, o: AutoLayoutOptions): Map<string, Point> {
+  const g = new Graph()
+  const edgeGap = o.margin ?? 24
+  g.setGraph({ rankdir: RANKDIR[direction], ranksep: o.rankGap ?? 64, nodesep: o.siblingGap ?? 32, marginx: edgeGap, marginy: edgeGap })
   g.setDefaultEdgeLabel(() => ({}))
-  // Sorted insertion keeps dagre's tie-breaks independent of caller order quirks.
-  for (const n of movable) {
-    const s = sizeOf(n, options.fallbackSize)
-    g.setNode(n.id, { width: s.width, height: s.height })
-  }
-  for (const c of connectors) {
-    if (ids.has(c.source) && ids.has(c.target) && c.source !== c.target) g.setEdge(c.source, c.target)
-  }
+  const sizes = new Map(members.map((m) => [m.id, sizeOf(m, o.fallbackSize)]))
+  sizes.forEach((s, id) => g.setNode(id, { width: s.width, height: s.height }))
+  for (const { source, target } of links) if (source !== target && sizes.has(source) && sizes.has(target)) g.setEdge(source, target)
   layout(g)
+  const corners = new Map<string, Point>()
+  sizes.forEach((s, id) => {
+    const centre = g.node(id) as { x: number; y: number } | undefined
+    if (centre) corners.set(id, { x: centre.x - s.width / 2, y: centre.y - s.height / 2 })
+  })
+  return corners
+}
 
+/** Arranges nodes in ranks. Grouped children and fixed kinds (notes) keep their positions. */
+export function autoLayout<N extends LayoutNode>(nodes: readonly N[], connectors: readonly LayoutEdge[], direction: RankDirection, options: AutoLayoutOptions = {}): N[] {
+  const staysPut = new Set(options.fixedKinds ?? ['note'])
+  const members = nodes.filter((n) => n.parentId === undefined && !staysPut.has(n.kind))
+  const corners = members.length ? placeRanked(members, connectors, direction, options) : new Map<string, Point>()
   return nodes.map((n) => {
-    if (!ids.has(n.id)) return n
-    const placed = g.node(n.id) as { x: number; y: number; width: number; height: number } | undefined
-    if (!placed) return n
-    // dagre reports centres; nodes are positioned by their top-left corner.
-    return { ...n, position: { x: placed.x - placed.width / 2, y: placed.y - placed.height / 2 } }
+    const corner = corners.get(n.id)
+    return corner ? { ...n, position: corner } : n
   })
 }
 
@@ -74,6 +70,6 @@ export function autoLayout<N extends LayoutNode>(nodes: readonly N[], connectors
  * in the text direction: right-to-left in RTL locales unless `keepLtr`.
  */
 export function rankDirectionOf(direction: 'down' | 'right', rtl = false, keepLtr = false): RankDirection {
-  if (direction !== 'right') return 'top-down'
+  if (direction === 'down') return 'top-down'
   return rtl && !keepLtr ? 'right-left' : 'left-right'
 }

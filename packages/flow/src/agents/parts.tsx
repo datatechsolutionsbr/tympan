@@ -1,21 +1,23 @@
-// Local stand-ins used by the agent editors until the design system's wave 2
-// lands: an agent mark, a step list, choice tiles and a tag field. They follow
-// the wave-2 intent (StepList, ChoiceTile, TagField) but are not exported as
+// Small pieces the agent editors share while the design system's wave 2 is
+// pending (its StepList, ChoiceTile and TagField intents). Not exported as
 // design-system components.
 
-import { useLayoutEffect, useRef, useState, type ReactNode, type RefObject } from 'react'
-import { Button as AriaButton, Radio, RadioGroup, Label } from 'react-aria-components'
+import { useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode, type RefObject } from 'react'
+import { Button as AriaButton, Label, Radio, RadioGroup } from 'react-aria-components'
 import { Bot, Check, X } from 'lucide-react'
 import { TextField } from '@fakhir/design-system'
 import { fill } from '../internal/labels'
 
-/** Agent mark (design direction §2.11): a square with a dashed border and a bot icon; an image may fill it. */
+const SAFE_IMAGE = /^(https?:|data:|blob:|\/)/
+
+/** The agent's mark (design direction §2.11): dashed square with a bot glyph, or the agent's own image. */
 export function AgentMark({ image, size = 'md' }: { image?: string | null; size?: 'sm' | 'md' | 'lg' }) {
-  const [failed, setFailed] = useState(false)
-  const src = image && !failed && /^(https?:|data:|blob:|\/)/.test(image) ? image : null
+  const [broken, setBroken] = useState(false)
+  const usable = !broken && !!image && SAFE_IMAGE.test(image)
+  const face = usable ? <img src={image!} alt="" onError={() => setBroken(true)} /> : <Bot focusable="false" />
   return (
     <span className="fk-agent-mark" data-size={size} aria-hidden="true">
-      {src ? <img src={src} alt="" onError={() => setFailed(true)} /> : <Bot focusable="false" />}
+      {face}
     </span>
   )
 }
@@ -32,30 +34,35 @@ export interface StepListProps {
   locale?: string
 }
 
-/** Ordered list of steps; the current one has aria-current="step", completed ones are buttons. */
+type StepState = 'done' | 'current' | 'future'
+
+const stepState = (n: number, current: number, reached: number): StepState => (n === current ? 'current' : n < Math.max(current, reached) ? 'done' : 'future')
+
+/** Ordered list of the wizard's steps; finished steps are buttons, the current one is marked for assistive tech. */
 export function StepList({ steps, current, reached, label, completedWord, onJump, locale }: StepListProps) {
+  const numeral = new Intl.NumberFormat(locale)
   return (
     <ol className="fk-step-list" aria-label={label}>
-      {steps.map((name, i) => {
-        const n = i + 1
-        const state = n === current ? 'current' : n < reached || n < current ? 'done' : 'future'
+      {steps.map((title, index) => {
+        const n = index + 1
+        const state = stepState(n, current, reached)
+        const face = (
+          <>
+            <span className="fk-step-list__marker" aria-hidden="true">
+              {state === 'done' ? <Check focusable="false" /> : numeral.format(n)}
+            </span>
+            <span className="fk-step-list__name">{title}</span>
+          </>
+        )
         return (
-          <li key={name} className="fk-step-list__item" data-state={state} aria-current={n === current ? 'step' : undefined}>
+          <li key={title} className="fk-step-list__item" data-state={state} aria-current={state === 'current' ? 'step' : undefined}>
             {state === 'done' ? (
               <AriaButton className="fk-step-list__jump" onPress={() => onJump(n)}>
-                <span className="fk-step-list__marker" aria-hidden="true">
-                  <Check focusable="false" />
-                </span>
-                <span className="fk-step-list__name">{name}</span>
+                {face}
                 <span className="fk-visually-hidden">, {completedWord}</span>
               </AriaButton>
             ) : (
-              <span className="fk-step-list__static">
-                <span className="fk-step-list__marker" aria-hidden="true">
-                  {new Intl.NumberFormat(locale).format(n)}
-                </span>
-                <span className="fk-step-list__name">{name}</span>
-              </span>
+              <span className="fk-step-list__static">{face}</span>
             )}
           </li>
         )
@@ -71,30 +78,35 @@ export interface ChoiceTile {
   icon?: ReactNode
 }
 
-/** Radio group drawn as tiles (APG Radio Group); selection marked by a check, not colour alone. */
-export function ChoiceTiles({ label, tiles, value, onChange, hideLabel = false }: { label: string; tiles: ChoiceTile[]; value: string | null; onChange: (v: string) => void; hideLabel?: boolean }) {
+function TileFace({ tile, chosen }: { tile: ChoiceTile; chosen: boolean }) {
   return (
-    <RadioGroup className="fk-choice-tiles" value={value} onChange={onChange} aria-label={hideLabel ? label : undefined}>
-      {hideLabel ? null : <Label className="fk-choice-tiles__label">{label}</Label>}
+    <>
+      {tile.icon ? (
+        <span className="fk-choice-tile__icon" aria-hidden="true">
+          {tile.icon}
+        </span>
+      ) : null}
+      <span className="fk-choice-tile__text">
+        <span className="fk-choice-tile__title">{tile.title}</span>
+        {tile.detail ? <span className="fk-choice-tile__detail">{tile.detail}</span> : null}
+      </span>
+      <span className="fk-choice-tile__check" aria-hidden="true">
+        {chosen ? <Check focusable="false" /> : null}
+      </span>
+    </>
+  )
+}
+
+/** A single choice laid out as tiles (APG radio group); the choice shows a check mark, not only a colour. */
+export function ChoiceTiles({ label, tiles, value, onChange, hideLabel = false }: { label: string; tiles: ChoiceTile[]; value: string | null; onChange: (v: string) => void; hideLabel?: boolean }) {
+  const naming = hideLabel ? { 'aria-label': label } : {}
+  return (
+    <RadioGroup className="fk-choice-tiles" value={value} onChange={onChange} {...naming}>
+      {!hideLabel && <Label className="fk-choice-tiles__label">{label}</Label>}
       <div className="fk-choice-tiles__grid">
-        {tiles.map((t) => (
-          <Radio key={t.value} value={t.value} className="fk-choice-tile" aria-label={t.detail ? `${t.title}, ${t.detail}` : t.title}>
-            {({ isSelected }) => (
-              <>
-                {t.icon ? (
-                  <span className="fk-choice-tile__icon" aria-hidden="true">
-                    {t.icon}
-                  </span>
-                ) : null}
-                <span className="fk-choice-tile__text">
-                  <span className="fk-choice-tile__title">{t.title}</span>
-                  {t.detail ? <span className="fk-choice-tile__detail">{t.detail}</span> : null}
-                </span>
-                <span className="fk-choice-tile__check" aria-hidden="true">
-                  {isSelected ? <Check focusable="false" /> : null}
-                </span>
-              </>
-            )}
+        {tiles.map((tile) => (
+          <Radio key={tile.value} value={tile.value} className="fk-choice-tile" aria-label={[tile.title, tile.detail].filter(Boolean).join(', ')}>
+            {({ isSelected }) => <TileFace tile={tile} chosen={isSelected} />}
           </Radio>
         ))}
       </div>
@@ -102,48 +114,58 @@ export function ChoiceTiles({ label, tiles, value, onChange, hideLabel = false }
   )
 }
 
-/** Tag field stand-in: type and press Enter (or comma) to add; each tag has a remove button. */
+/** Words typed so far, split at commas, trimmed, without blanks or repeats of `known`. */
+function freshTags(typed: string, known: readonly string[]): string[] {
+  const out: string[] = []
+  for (const piece of typed.split(',')) {
+    const tag = piece.trim()
+    if (tag && !known.includes(tag) && !out.includes(tag)) out.push(tag)
+  }
+  return out
+}
+
+/** Stand-in tag field: Enter or a comma turns the typed word into a tag; each tag has its own remove button. */
 export function TagInput({ label, value, onChange, placeholder, removeLabel }: { label: string; value: string[]; onChange: (tags: string[]) => void; placeholder?: string; removeLabel: string }) {
-  const [draft, setDraft] = useState('')
-  const add = () => {
-    const t = draft.trim().replace(/,$/, '').trim()
-    if (t && !value.includes(t)) onChange([...value, t])
-    setDraft('')
+  const [typed, setTyped] = useState('')
+  const settle = () => {
+    const extra = freshTags(typed, value)
+    if (extra.length) onChange([...value, ...extra])
+    setTyped('')
+  }
+  const onKey = (e: KeyboardEvent<HTMLDivElement>) => {
+    const isInput = (e.target as HTMLElement).tagName === 'INPUT'
+    if (!isInput || (e.key !== 'Enter' && e.key !== ',')) return
+    e.preventDefault()
+    e.stopPropagation()
+    settle()
   }
   return (
     <div className="fk-tag-input">
-      <div
-        onKeyDown={(e) => {
-          if ((e.key === 'Enter' || e.key === ',') && (e.target as HTMLElement).tagName === 'INPUT') {
-            e.preventDefault()
-            e.stopPropagation()
-            add()
-          }
-        }}
-      >
-        <TextField label={label} value={draft} onChange={setDraft} {...(placeholder ? { placeholder } : {})} onBlur={add} />
+      <div onKeyDown={onKey}>
+        <TextField label={label} value={typed} onChange={setTyped} {...(placeholder ? { placeholder } : {})} onBlur={settle} />
       </div>
-      {value.length ? (
+      {value.length > 0 && (
         <ul className="fk-tag-input__list" aria-label={label}>
-          {value.map((t) => (
-            <li key={t} className="fk-tag-input__tag">
-              <span>{t}</span>
-              <AriaButton className="fk-tag-input__remove" aria-label={fill(removeLabel, { tag: t })} onPress={() => onChange(value.filter((x) => x !== t))}>
+          {value.map((tag) => (
+            <li key={tag} className="fk-tag-input__tag">
+              <span>{tag}</span>
+              <AriaButton className="fk-tag-input__remove" aria-label={fill(removeLabel, { tag })} onPress={() => onChange(value.filter((t) => t !== tag))}>
                 <X focusable="false" aria-hidden="true" />
               </AriaButton>
             </li>
           ))}
         </ul>
-      ) : null}
+      )}
     </div>
   )
 }
 
-/** Overrides a React Aria slider thumb's aria-valuetext (React Aria only formats numbers). */
+/** Writes a spoken value (tier or range name) on a React Aria slider input, which only formats numbers itself. */
 export function useValueText(inputRef: RefObject<HTMLInputElement | null>, text: string) {
-  const last = useRef(text)
-  last.current = text
+  const spoken = useRef(text)
+  spoken.current = text
   useLayoutEffect(() => {
-    inputRef.current?.setAttribute('aria-valuetext', last.current)
+    const input = inputRef.current
+    if (input) input.setAttribute('aria-valuetext', spoken.current)
   })
 }

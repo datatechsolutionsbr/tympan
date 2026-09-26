@@ -1,9 +1,9 @@
-// Labelled number field (RAC NumberField; the design system has no NumberField
-// yet): label above, identifier hint in mono, optional currency adornment,
-// locale-aware parsing, whole numbers only when `integer`.
+// Number field of the run dialogs, on React Aria NumberField (the design
+// system has none yet). Label on top, the variable's identifier as a hint,
+// an optional currency sign before the digits, whole numbers on request.
 
 import type { ReactNode } from 'react'
-import { FieldError, Group, Input, Label, NumberField, Text } from 'react-aria-components'
+import { FieldError, Group, Input, Label, NumberField, Text, type NumberFieldProps } from 'react-aria-components'
 
 export interface NumberInputProps {
   label: string
@@ -18,33 +18,42 @@ export interface NumberInputProps {
   name?: string
 }
 
-export function NumberInput({ label, hint, value, onChange, integer = false, prefix, errorMessage, autoFocus, name }: NumberInputProps) {
+const WHOLE: Intl.NumberFormatOptions = { maximumFractionDigits: 0, useGrouping: false }
+const ANY: Intl.NumberFormatOptions = { maximumFractionDigits: 20, useGrouping: false }
+
+/** React Aria reports an empty field as NaN; the dialogs speak null. */
+const fromField = (n: number): number | null => (Number.isNaN(n) ? null : n)
+const toField = (n: number | null): number => (n === null ? Number.NaN : n)
+
+export function NumberInput(props: NumberInputProps) {
+  const fieldProps: NumberFieldProps = {
+    className: 'fk-run-number',
+    value: toField(props.value),
+    onChange: (n) => props.onChange(fromField(n)),
+    formatOptions: props.integer ? WHOLE : ANY,
+    isInvalid: Boolean(props.errorMessage),
+  }
+  if (props.integer) fieldProps.step = 1
+  if (props.autoFocus) fieldProps.autoFocus = true
+  if (props.name) fieldProps.name = props.name
+  const adornment = props.prefix ? (
+    <span className="fk-run-number__prefix" aria-hidden="true">
+      {props.prefix}
+    </span>
+  ) : null
   return (
-    <NumberField
-      className="fk-run-number"
-      value={value ?? Number.NaN}
-      onChange={(v) => onChange(Number.isNaN(v) ? null : v)}
-      formatOptions={integer ? { maximumFractionDigits: 0, useGrouping: false } : { maximumFractionDigits: 20, useGrouping: false }}
-      {...(integer ? { step: 1 } : {})}
-      isInvalid={!!errorMessage}
-      {...(autoFocus ? { autoFocus } : {})}
-      {...(name ? { name } : {})}
-    >
-      <Label className="fk-run-field__label">{label}</Label>
-      {hint ? (
+    <NumberField {...fieldProps}>
+      <Label className="fk-run-field__label">{props.label}</Label>
+      {props.hint ? (
         <Text slot="description" className="fk-run-field__hint">
-          {hint}
+          {props.hint}
         </Text>
       ) : null}
       <Group className="fk-run-number__group">
-        {prefix ? (
-          <span className="fk-run-number__prefix" aria-hidden="true">
-            {prefix}
-          </span>
-        ) : null}
-        <Input className="fk-run-number__input" data-integer={integer || undefined} />
+        {adornment}
+        <Input className="fk-run-number__input" data-integer={props.integer ? true : undefined} />
       </Group>
-      {errorMessage ? <FieldError className="fk-run-field__error">{errorMessage}</FieldError> : null}
+      {props.errorMessage ? <FieldError className="fk-run-field__error">{props.errorMessage}</FieldError> : null}
     </NumberField>
   )
 }

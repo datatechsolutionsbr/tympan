@@ -1,67 +1,60 @@
-// RunLineageAndDiff: pure helpers to read how a run was derived from another
-// and to compare two runs node by node.
+// Run lineage and run comparison, as pure data functions.
+//
+// A derived run carries an origin tag written by the engine ("replay:r7",
+// "approval:r7:review"). Comparison lines two execution records up by step id
+// and names what differs, using one canonical text form for every equality.
 
 export type LineageKind = 'reset' | 'replay' | 'resume' | 'fork' | 'signal' | 'timer' | 'approval'
 
-const LINEAGE_KINDS: readonly LineageKind[] = ['reset', 'replay', 'resume', 'fork', 'signal', 'timer', 'approval']
-
+/** Origin of a derived run: how it was made and from which run (and step, for approvals). */
 export interface Lineage {
   kind: LineageKind
   baseRunId: string
   nodeId?: string
 }
 
-/** Reads the engine's "kind:baseRunId" (or "approval:baseRunId:nodeId") text; null for root runs. */
-export function parseLineage(triggeredBy: string | null | undefined): Lineage | null {
-  if (!triggeredBy) return null
-  const cut = triggeredBy.indexOf(':')
-  if (cut <= 0) return null
-  const kind = triggeredBy.slice(0, cut) as LineageKind
-  if (!LINEAGE_KINDS.includes(kind)) return null
-  const rest = triggeredBy.slice(cut + 1)
-  if (!rest) return null
-  if (kind === 'approval') {
-    const second = rest.indexOf(':')
-    if (second < 0) return { kind, baseRunId: rest }
-    const baseRunId = rest.slice(0, second)
-    if (!baseRunId) return null
-    const nodeId = rest.slice(second + 1)
-    return nodeId ? { kind, baseRunId, nodeId } : { kind, baseRunId }
-  }
-  return { kind, baseRunId: rest }
+const ORIGIN_TAG = /^(reset|replay|resume|fork|signal|timer|approval):(.+)$/s
+
+/** Origin of a run from its tag; null for root runs (people, webhooks, schedules) and malformed tags. */
+export function parseLineage(tag: string | null | undefined): Lineage | null {
+  const match = tag ? ORIGIN_TAG.exec(tag) : null
+  if (!match) return null
+  const kind = match[1] as LineageKind
+  const tail = match[2]!
+  if (kind !== 'approval') return { kind, baseRunId: tail }
+  const [run, ...stepParts] = tail.split(':')
+  if (!run) return null
+  const step = stepParts.join(':')
+  return step ? { kind, baseRunId: run, nodeId: step } : { kind, baseRunId: run }
 }
 
-/** Last entry (in stored order) carried over from an earlier run; null when none. */
-export function findForkPoint(entries: ReadonlyArray<{ nodeId: string; restored?: boolean }>): string | null {
-  for (let i = entries.length - 1; i >= 0; i--) if (entries[i]!.restored) return entries[i]!.nodeId
-  return null
+/** Id of the last carried-over step (stored order), or null. */
+export function findForkPoint(steps: ReadonlyArray<{ nodeId: string; restored?: boolean }>): string | null {
+  return steps.reduce<string | null>((found, step) => (step.restored ? step.nodeId : found), null)
 }
 
-/** "PausedForApproval", "PAUSED_FOR_APPROVAL" and "paused for approval" all become "paused_for_approval". */
-export function normaliseStatus(status: string): string {
-  return status
+/** Wire spellings of a status ("PausedForApproval", "PAUSED_FOR_APPROVAL", "paused for approval") collapse to snake case. */
+export function normaliseStatus(raw: string): string {
+  const words = raw
     .trim()
-    .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
-    .replace(/[\s-]+/g, '_')
-    .replace(/_+/g, '_')
-    .toLowerCase()
+    .split(/(?<=[a-z0-9])(?=[A-Z])|[\s_-]+/)
+    .filter(Boolean)
+  return words.join('_').toLowerCase()
 }
 
-function sortKeys(value: unknown): unknown {
-  if (Array.isArray(value)) return value.map(sortKeys)
-  if (value && typeof value === 'object') {
-    const out: Record<string, unknown> = {}
-    for (const k of Object.keys(value as Record<string, unknown>).sort()) out[k] = sortKeys((value as Record<string, unknown>)[k])
-    return out
-  }
-  return value
-}
-
-/** Structured-data text with object keys sorted at every depth; the basis of every equality check. */
+/** Structured text of a value with object keys in sorted order at every depth. */
 export function canonicalEncode(value: unknown): string {
-  return JSON.stringify(sortKeys(value)) ?? 'undefined'
+  const text = JSON.stringify(value, (_key, v: unknown) =>
+    v && typeof v === 'object' && !Array.isArray(v)
+      ? Object.fromEntries(Object.entries(v as Record<string, unknown>).sort(([p], [q]) => (p < q ? -1 : p > q ? 1 : 0)))
+      : v,
+  )
+  return text ?? 'undefined'
 }
 
+const sameValue = (x: unknown, y: unknown) => canonicalEncode(x) === canonicalEncode(y)
+
+/** One step of a recorded execution, as compared. */
 export interface DiffEntry {
   nodeId: string
   nodeKind: string
@@ -83,32 +76,6 @@ export interface NodeDiff {
   changedKeys: string[]
 }
 
-function changedOutputKeys(a: DiffEntry, b: DiffEntry): string[] {
-  const oa = a.outputs ?? {}
-  const ob = b.outputs ?? {}
-  const keys: string[] = []
-  for (const k of new Set([...Object.keys(oa), ...Object.keys(ob)])) {
-    if (canonicalEncode(oa[k]) !== canonicalEncode(ob[k])) keys.push(k)
-  }
-  return keys
-}
-
-/** Node-by-node comparison: run A's order, then nodes only in B in B's order. */
-export function diffTimelines(a: readonly DiffEntry[], b: readonly DiffEntry[]): NodeDiff[] {
-  const inB = new Map(b.map((e) => [e.nodeId, e]))
-  const inA = new Set(a.map((e) => e.nodeId))
-  const rows: NodeDiff[] = a.map((ea) => {
-    const eb = inB.get(ea.nodeId)
-    if (!eb) return { nodeId: ea.nodeId, nodeKind: ea.nodeKind, diff: 'onlyA', a: ea, b: null, changedKeys: [] }
-    const changedKeys = changedOutputKeys(ea, eb)
-    const sameStatus = normaliseStatus(ea.status) === normaliseStatus(eb.status)
-    const sameError = (ea.error ?? null) === (eb.error ?? null)
-    return { nodeId: ea.nodeId, nodeKind: ea.nodeKind, diff: sameStatus && sameError && !changedKeys.length ? 'identical' : 'diverged', a: ea, b: eb, changedKeys }
-  })
-  for (const eb of b) if (!inA.has(eb.nodeId)) rows.push({ nodeId: eb.nodeId, nodeKind: eb.nodeKind, diff: 'onlyB', a: null, b: eb, changedKeys: [] })
-  return rows
-}
-
 export interface VariableDiff {
   key: string
   diff: DiffKind
@@ -116,15 +83,41 @@ export interface VariableDiff {
   b: unknown
 }
 
-/** One row per key of either map, A's keys first then B's new keys. */
-export function diffVariables(a?: Record<string, unknown> | null, b?: Record<string, unknown> | null): VariableDiff[] {
-  const ma = a ?? {}
-  const mb = b ?? {}
-  const keys = [...Object.keys(ma), ...Object.keys(mb).filter((k) => !(k in ma))]
-  return keys.map((key) => {
-    const hasA = key in ma
-    const hasB = key in mb
-    const diff: DiffKind = !hasB ? 'onlyA' : !hasA ? 'onlyB' : canonicalEncode(ma[key]) === canonicalEncode(mb[key]) ? 'identical' : 'diverged'
-    return { key, diff, a: ma[key], b: mb[key] }
+/** Keys of A first, then keys only B has, each once. */
+function unionKeys(left: Record<string, unknown>, right: Record<string, unknown>): string[] {
+  return [...new Set([...Object.keys(left), ...Object.keys(right)])]
+}
+
+function verdict(inLeft: boolean, inRight: boolean, equal: () => boolean): DiffKind {
+  if (!inRight) return 'onlyA'
+  if (!inLeft) return 'onlyB'
+  return equal() ? 'identical' : 'diverged'
+}
+
+/** Step-by-step comparison: A's order, then steps only B ran, in B's order. */
+export function diffTimelines(a: readonly DiffEntry[], b: readonly DiffEntry[]): NodeDiff[] {
+  const left = new Map(a.map((s) => [s.nodeId, s]))
+  const right = new Map(b.map((s) => [s.nodeId, s]))
+  const order = [...new Set([...left.keys(), ...right.keys()])]
+  return order.map((id) => {
+    const x = left.get(id) ?? null
+    const y = right.get(id) ?? null
+    const outputsX = x?.outputs ?? {}
+    const outputsY = y?.outputs ?? {}
+    const changedKeys = x && y ? unionKeys(outputsX, outputsY).filter((k) => !sameValue(outputsX[k], outputsY[k])) : []
+    const diff = verdict(!!x, !!y, () => normaliseStatus(x!.status) === normaliseStatus(y!.status) && (x!.error ?? null) === (y!.error ?? null) && changedKeys.length === 0)
+    return { nodeId: id, nodeKind: (x ?? y)!.nodeKind, diff, a: x, b: y, changedKeys }
   })
+}
+
+/** One row per variable of either map. */
+export function diffVariables(a?: Record<string, unknown> | null, b?: Record<string, unknown> | null): VariableDiff[] {
+  const left = a ?? {}
+  const right = b ?? {}
+  return unionKeys(left, right).map((key) => ({
+    key,
+    diff: verdict(key in left, key in right, () => sameValue(left[key], right[key])),
+    a: left[key],
+    b: right[key],
+  }))
 }

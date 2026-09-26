@@ -1,7 +1,9 @@
-// SchemaConfigForm: a node configuration form generated from the field schema
-// the node kind catalog serves. One control per property, in schema order.
+// SchemaConfigForm: builds a node's settings form from the field schema the
+// node kind catalog serves, so most kinds need no form of their own. Each
+// property gets the editor its shape asks for; Save merges the edits over the
+// incoming value, keeping keys the schema does not mention.
 
-import { useMemo, useState } from 'react'
+import { useReducer, type ReactNode } from 'react'
 import { NativeSelect, Switch, TextArea, TextField } from '@fakhir/design-system'
 import type { ConfigSchema, FieldSchema } from '../catalog/kindCatalog'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
@@ -60,12 +62,12 @@ export const defaultSchemaConfigFormLabels: SchemaConfigFormLabels = schemaConfi
  */
 export function labelFromKey(key: string): string {
   if (!/^[\x20-\x7e]+$/.test(key)) return key
-  const words = key
-    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
-    .replace(/[_-]+/g, ' ')
-    .trim()
+  const lower = key
+    .split(/(?<=[a-z0-9])(?=[A-Z])|[_-]+/)
+    .filter(Boolean)
+    .join(' ')
     .toLowerCase()
-  return words ? words[0]!.toUpperCase() + words.slice(1) : key
+  return lower ? lower.charAt(0).toUpperCase() + lower.slice(1) : key
 }
 
 export interface SchemaConfigFormProps {
@@ -77,154 +79,136 @@ export interface SchemaConfigFormProps {
   labels?: Partial<SchemaConfigFormLabels>
 }
 
+type Control = 'select' | 'number' | 'switch' | 'structured' | 'multiline' | 'line'
+
 /** Keys whose text is long enough to deserve a multi-line area. */
 const LONG_TEXT = /(prompt|template|body|instructions?|input|code)$/i
 
-type Control = 'select' | 'number' | 'switch' | 'structured' | 'multiline' | 'line'
+/** Shape tests in priority order; the first that matches picks the editor. */
+const SHAPES: ReadonlyArray<[Control, (key: string, f: FieldSchema) => boolean]> = [
+  ['select', (_k, f) => !!f.enum?.length],
+  ['number', (_k, f) => f.type === 'number' || f.type === 'integer'],
+  ['switch', (_k, f) => f.type === 'boolean'],
+  ['structured', (_k, f) => f.type === 'array' || f.type === 'object'],
+  ['multiline', (k) => LONG_TEXT.test(k)],
+]
 
 export function controlFor(key: string, field: FieldSchema): Control {
-  if (field.enum && field.enum.length) return 'select'
-  if (field.type === 'number' || field.type === 'integer') return 'number'
-  if (field.type === 'boolean') return 'switch'
-  if (field.type === 'array' || field.type === 'object') return 'structured'
-  if (LONG_TEXT.test(key)) return 'multiline'
-  return 'line'
+  return SHAPES.find(([, test]) => test(key, field))?.[0] ?? 'line'
 }
 
-const pretty = (v: unknown) => (v === undefined ? '' : JSON.stringify(v, null, 2))
+/** Per-field working state: the value to save (absent = unchanged), raw JSON text, its problem, whether it was visited. */
+interface Slot {
+  changed?: { to: unknown }
+  text?: string
+  problem?: string
+  visited?: boolean
+}
+
+type Slots = Record<string, Slot>
+const patchSlot = (slots: Slots, [key, patch]: [string, Slot]): Slots => ({ ...slots, [key]: { ...slots[key], ...patch } })
+
+const asText = (v: unknown) => (v === undefined || v === null ? '' : String(v))
+const isEmpty = (v: unknown) => v === undefined || v === null || v === ''
+
+/** Everything a field editor needs. */
+interface FieldCtx {
+  name: string
+  field: FieldSchema
+  label: string
+  required: boolean
+  current: unknown
+  slot: Slot
+  problem?: string
+  l: SchemaConfigFormLabels
+  put: (to: unknown) => void
+  visit: () => void
+  typeJson: (text: string) => void
+}
+
+const shared = (c: FieldCtx) => ({ label: c.label, hint: c.field.description, required: c.required, ...(c.problem ? { errorMessage: c.problem } : {}) })
+
+const EDITORS: Record<Control, (c: FieldCtx) => ReactNode> = {
+  select: (c) => (
+    <NativeSelect
+      {...shared(c)}
+      placeholder={c.l.none}
+      options={c.field.enum!.map((o) => ({ value: String(o), label: String(o) }))}
+      value={asText(c.current)}
+      onChange={(picked) => c.put(picked === '' ? undefined : c.field.enum!.find((o) => String(o) === picked))}
+    />
+  ),
+  number: (c) => (
+    <TextField
+      {...shared(c)}
+      inputType="number"
+      value={typeof c.current === 'number' ? String(c.current) : ''}
+      onChange={(t) => c.put(t.trim() === '' || Number.isNaN(Number(t)) ? undefined : Number(t))}
+      onBlur={c.visit}
+    />
+  ),
+  switch: (c) => <Switch label={c.label} {...(c.field.description ? { description: c.field.description } : {})} isSelected={c.current === true} onChange={c.put} />,
+  structured: (c) => <TextArea {...shared(c)} monospace className="fk-ltr-text" rows={5} value={c.slot.text ?? ''} onChange={c.typeJson} />,
+  multiline: (c) => <TextArea {...shared(c)} rows={4} autoGrow value={asText(c.current)} onChange={c.put} />,
+  line: (c) => <TextField {...shared(c)} value={asText(c.current)} onChange={c.put} onBlur={c.visit} />,
+}
 
 export function SchemaConfigForm({ value, schema, onSave, onCancel, saveDisabled = false, labels }: SchemaConfigFormProps) {
   const l = useLabels(schemaConfigFormLabels, labels)
   const { locale } = useFlowLocale()
-  const entries = useMemo(() => Object.entries(schema.properties ?? {}), [schema])
-  const required = useMemo(() => new Set(schema.required ?? []), [schema])
-  // Edited values keyed by property; `undefined` means "unset" (removed on save).
-  const [edits, setEdits] = useState<Record<string, unknown>>({})
-  // Raw text of structured fields and their parse problems.
-  const [texts, setTexts] = useState<Record<string, string>>(() => Object.fromEntries(entries.filter(([k, f]) => controlFor(k, f) === 'structured').map(([k]) => [k, pretty(value[k])])))
-  const [parseErrors, setParseErrors] = useState<Record<string, string>>({})
-  const [touched, setTouched] = useState<Record<string, boolean>>({})
+  const fields = Object.entries(schema.properties ?? {})
+  const needed = schema.required ?? []
+  const [slots, patch] = useReducer(patchSlot, undefined, () =>
+    Object.fromEntries(fields.filter(([k, f]) => controlFor(k, f) === 'structured').map(([k]) => [k, { text: value[k] === undefined ? '' : JSON.stringify(value[k], null, 2) }])),
+  )
 
-  const current = (key: string) => (key in edits ? edits[key] : value[key])
-  const set = (key: string, next: unknown) => setEdits((e) => ({ ...e, [key]: next }))
+  const valueOf = (key: string) => (slots[key]?.changed ? slots[key]!.changed!.to : value[key])
 
-  const setStructured = (key: string, text: string) => {
-    setTexts((t) => ({ ...t, [key]: text }))
-    if (!text.trim()) {
-      setParseErrors((p) => ({ ...p, [key]: '' }))
-      set(key, undefined)
-      return
-    }
+  /** Structured text: blank unsets, valid JSON replaces, invalid keeps the last good value and explains. */
+  const typeJsonFor = (key: string) => (text: string) => {
+    if (!text.trim()) return patch([key, { text, problem: '', changed: { to: undefined } }])
     try {
-      const parsed = JSON.parse(text) as unknown
-      setParseErrors((p) => ({ ...p, [key]: '' }))
-      set(key, parsed)
-    } catch (err) {
-      // The last valid value stays in `edits`; only the message changes.
-      setParseErrors((p) => ({ ...p, [key]: fill(l.invalidStructured, { detail: err instanceof Error ? err.message : String(err) }, locale) }))
+      patch([key, { text, problem: '', changed: { to: JSON.parse(text) as unknown } }])
+    } catch (why) {
+      patch([key, { text, problem: fill(l.invalidStructured, { detail: why instanceof Error ? why.message : String(why) }, locale) }])
     }
   }
 
-  const save = () => {
-    const out: Record<string, unknown> = { ...value }
-    for (const [k, v] of Object.entries(edits)) {
-      if (v === undefined) delete out[k]
-      else out[k] = v
+  const merged = () => {
+    const out = { ...value }
+    for (const [key, slot] of Object.entries(slots)) {
+      if (!slot.changed) continue
+      if (slot.changed.to === undefined) delete out[key]
+      else out[key] = slot.changed.to
     }
-    onSave(out)
+    return out
   }
+
+  const editors = fields.map(([name, field]) => {
+    const slot = slots[name] ?? {}
+    const required = needed.includes(name)
+    const current = valueOf(name)
+    const problem = slot.problem || (required && slot.visited && isEmpty(current) ? l.required : undefined)
+    const ctx: FieldCtx = {
+      name,
+      field,
+      label: field.title ?? labelFromKey(name),
+      required,
+      current,
+      slot,
+      ...(problem ? { problem } : {}),
+      l,
+      put: (to) => patch([name, { changed: { to } }]),
+      visit: () => patch([name, { visited: true }]),
+      typeJson: typeJsonFor(name),
+    }
+    return <div key={name} className="fk-schema-form__field">{EDITORS[controlFor(name, field)](ctx)}</div>
+  })
 
   return (
     <div className="fk-node-form fk-schema-form">
-      {entries.length ? (
-        <div className="fk-node-form__fields">
-          {entries.map(([key, field]) => {
-            const label = field.title ?? labelFromKey(key)
-            const isRequired = required.has(key)
-            const v = current(key)
-            const missing = isRequired && touched[key] && (v === undefined || v === '' || v === null)
-            const common = { label, hint: field.description, required: isRequired }
-            switch (controlFor(key, field)) {
-              case 'select':
-                return (
-                  <NativeSelect
-                    key={key}
-                    {...common}
-                    placeholder={l.none}
-                    options={field.enum!.map((o) => ({ value: String(o), label: String(o) }))}
-                    value={v === undefined || v === null ? '' : String(v)}
-                    onChange={(s) => {
-                      const match = field.enum!.find((o) => String(o) === s)
-                      set(key, s === '' ? undefined : match)
-                    }}
-                    {...(missing ? { errorMessage: l.required } : {})}
-                  />
-                )
-              case 'number':
-                return (
-                  <TextField
-                    key={key}
-                    {...common}
-                    inputType="number"
-                    value={typeof v === 'number' ? String(v) : ''}
-                    onChange={(s) => set(key, s.trim() === '' || Number.isNaN(Number(s)) ? undefined : Number(s))}
-                    onBlur={() => setTouched((t) => ({ ...t, [key]: true }))}
-                    {...(missing ? { errorMessage: l.required } : {})}
-                  />
-                )
-              case 'switch':
-                return (
-                  <Switch
-                    key={key}
-                    label={label}
-                    {...(field.description ? { description: field.description } : {})}
-                    isSelected={v === true}
-                    onChange={(on) => set(key, on)}
-                  />
-                )
-              case 'structured':
-                return (
-                  <TextArea
-                    key={key}
-                    {...common}
-                    monospace
-                    className="fk-ltr-text"
-                    rows={5}
-                    value={texts[key] ?? ''}
-                    onChange={(t) => setStructured(key, t)}
-                    {...(parseErrors[key] ? { errorMessage: parseErrors[key] } : missing ? { errorMessage: l.required } : {})}
-                  />
-                )
-              case 'multiline':
-                return (
-                  <TextArea
-                    key={key}
-                    {...common}
-                    rows={4}
-                    autoGrow
-                    value={typeof v === 'string' ? v : v === undefined ? '' : String(v)}
-                    onChange={(t) => set(key, t)}
-                    {...(missing ? { errorMessage: l.required } : {})}
-                  />
-                )
-              default:
-                return (
-                  <TextField
-                    key={key}
-                    {...common}
-                    value={typeof v === 'string' ? v : v === undefined || v === null ? '' : String(v)}
-                    onChange={(t) => set(key, t)}
-                    onBlur={() => setTouched((tt) => ({ ...tt, [key]: true }))}
-                    {...(missing ? { errorMessage: l.required } : {})}
-                  />
-                )
-            }
-          })}
-        </div>
-      ) : (
-        <p className="fk-node-form__empty">{l.empty}</p>
-      )}
-      <NodeFormFooter onSave={save} onCancel={onCancel} saveDisabled={saveDisabled} labels={{ save: l.save, cancel: l.cancel }} />
+      {editors.length ? <div className="fk-node-form__fields">{editors}</div> : <p className="fk-node-form__empty">{l.empty}</p>}
+      <NodeFormFooter onSave={() => onSave(merged())} onCancel={onCancel} saveDisabled={saveDisabled} labels={{ save: l.save, cancel: l.cancel }} />
     </div>
   )
 }

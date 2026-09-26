@@ -1,7 +1,8 @@
-// StartNodeForm: the input variables a run needs, and an optional default per
-// variable. Edits stay local until Save.
+// StartNodeForm: which inputs a run asks for, and a starting value for each.
+// Nothing leaves the form until Save; Save cleans the names and keeps only the
+// defaults that still belong to a named variable and are not empty.
 
-import { useId, useState } from 'react'
+import { useId, useReducer } from 'react'
 import { TextField } from '@fakhir/design-system'
 import { defineLabels, useLabels } from '../internal/labels'
 import { NodeFormFooter } from './NodeFormFooter'
@@ -39,48 +40,49 @@ export interface StartNodeFormProps {
   labels?: Partial<StartNodeFormLabels>
 }
 
+interface Draft {
+  names: string[]
+  fallback: Record<string, string>
+}
+
+type DraftEdit = { names: string[] } | { name: string; fallback: string }
+
+function edit(draft: Draft, change: DraftEdit): Draft {
+  return 'names' in change ? { ...draft, names: change.names } : { ...draft, fallback: { ...draft.fallback, [change.name]: change.fallback } }
+}
+
+/** The start configuration Save emits: unique trimmed names, non-empty defaults of those names, other keys untouched. */
+function settle(config: StartNodeFormProps['config'], draft: Draft): StartConfig {
+  const inputVariables = Array.from(new Set(draft.names.map((n) => n.trim()).filter(Boolean)))
+  const inputDefaults = Object.fromEntries(inputVariables.flatMap((n) => (draft.fallback[n] ? [[n, draft.fallback[n]!]] : [])))
+  return { ...config, kind: 'start', inputVariables, inputDefaults }
+}
+
+function DefaultValues({ names, fallback, heading, placeholder, onEdit }: { names: string[]; fallback: Record<string, string>; heading: string; placeholder: string; onEdit: (name: string, value: string) => void }) {
+  const headingId = useId()
+  return (
+    <div className="fk-start-form__defaults" role="group" aria-labelledby={headingId}>
+      <span id={headingId} className="fk-start-form__defaults-title">
+        {heading}
+      </span>
+      <div className="fk-start-form__grid">
+        {names.map((name) => (
+          <TextField key={name} className="fk-start-form__default" label={name} placeholder={placeholder} value={fallback[name] ?? ''} onChange={(v) => onEdit(name, v)} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export function StartNodeForm({ config, onSave, onCancel, labels }: StartNodeFormProps) {
   const l = useLabels(startNodeFormLabels, labels)
-  const groupId = useId()
-  const [vars, setVars] = useState<string[]>(() => [...(config.inputVariables ?? [])])
-  const [defaults, setDefaults] = useState<Record<string, string>>(() => ({ ...(config.inputDefaults ?? {}) }))
-
-  const save = () => {
-    const names = vars.map((v) => v.trim()).filter(Boolean)
-    const unique = [...new Set(names)]
-    const kept: Record<string, string> = {}
-    for (const name of unique) {
-      const d = defaults[name]
-      if (d !== undefined && d !== '') kept[name] = d
-    }
-    onSave({ ...config, kind: 'start', inputVariables: unique, inputDefaults: kept })
-  }
-
-  const named = vars.filter((v) => v.trim())
-
+  const [draft, change] = useReducer(edit, config, (c): Draft => ({ names: [...(c.inputVariables ?? [])], fallback: { ...(c.inputDefaults ?? {}) } }))
+  const named = draft.names.filter((n) => n.trim() !== '')
   return (
     <div className="fk-node-form fk-start-form">
-      <VariableListEditor label={l.variables} value={vars} onChange={setVars} numbered editable tone="input" addLabel={l.add} placeholder={l.placeholder} />
-      {named.length ? (
-        <div className="fk-start-form__defaults" role="group" aria-labelledby={groupId}>
-          <span id={groupId} className="fk-start-form__defaults-title">
-            {l.defaults}
-          </span>
-          <div className="fk-start-form__grid">
-            {named.map((name) => (
-              <TextField
-                key={name}
-                className="fk-start-form__default"
-                label={name}
-                placeholder={l.defaultPlaceholder}
-                value={defaults[name] ?? ''}
-                onChange={(v) => setDefaults((d) => ({ ...d, [name]: v }))}
-              />
-            ))}
-          </div>
-        </div>
-      ) : null}
-      <NodeFormFooter onSave={save} onCancel={onCancel} labels={{ save: l.save, cancel: l.cancel }} />
+      <VariableListEditor label={l.variables} value={draft.names} onChange={(names) => change({ names })} numbered editable tone="input" addLabel={l.add} placeholder={l.placeholder} />
+      {named.length > 0 && <DefaultValues names={named} fallback={draft.fallback} heading={l.defaults} placeholder={l.defaultPlaceholder} onEdit={(name, fallback) => change({ name, fallback })} />}
+      <NodeFormFooter onSave={() => onSave(settle(config, draft))} onCancel={onCancel} labels={{ save: l.save, cancel: l.cancel }} />
     </div>
   )
 }

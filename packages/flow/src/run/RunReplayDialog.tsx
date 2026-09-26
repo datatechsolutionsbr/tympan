@@ -1,7 +1,8 @@
-// RunReplayDialog: re-executes a past run pre-filled with its inputs and sends
-// only the inputs the person changed, converted back to their original type.
+// RunReplayDialog: runs a past run again. Every original input is shown with
+// an editor that fits its type; only the inputs the person changed are sent,
+// turned back into their original type. Untouched inputs keep their value.
 
-import { useEffect, useId, useRef, useState, type FormEvent } from 'react'
+import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import { RotateCcw } from 'lucide-react'
 import { Button, InlineNotice, SegmentedControl, Tag, TextArea, TextField } from '@fakhir/design-system'
 import { SectionedModal } from '../internal/SectionedModal'
@@ -94,28 +95,60 @@ export const runReplayDialogLabels = defineLabels<RunReplayDialogLabels>('run-re
 })
 export const defaultRunReplayDialogLabels: RunReplayDialogLabels = runReplayDialogLabels.bundles.en
 
-type ValueType = 'text' | 'number' | 'boolean' | 'structured'
+type Draft = string | number | boolean | null
 
-interface Row {
-  key: string
-  type: ValueType
-  /** Editor text (text and structured), number or boolean. */
-  draft: string | number | boolean | null
-  touched: boolean
+/** Outcome of turning a draft back into a value. */
+type Parsed = { value: unknown } | { problem: 'invalidNumber' | 'invalidStructured' }
+
+/** How one kind of input value is detected, drafted, read back and edited. */
+interface Codec {
+  word: (l: RunReplayDialogLabels) => string
+  draft: (original: unknown) => Draft
+  read: (draft: Draft) => Parsed
+  editor: (p: { label: string; draft: Draft; l: RunReplayDialogLabels; put: (d: Draft) => void }) => ReactNode
 }
 
-function typeOf(v: unknown): ValueType {
-  if (typeof v === 'number') return 'number'
-  if (typeof v === 'boolean') return 'boolean'
-  if (v !== null && typeof v === 'object') return 'structured'
-  return 'text'
-}
+const CODECS = {
+  number: {
+    word: (l) => l.number,
+    draft: (v) => v as number,
+    read: (d) => (typeof d === 'number' && Number.isFinite(d) ? { value: d } : { problem: 'invalidNumber' }),
+    editor: ({ label, draft, put }) => <NumberInput label={label} value={typeof draft === 'number' ? draft : null} onChange={put} />,
+  },
+  boolean: {
+    word: (l) => l.boolean,
+    draft: (v) => v as boolean,
+    read: (d) => ({ value: Boolean(d) }),
+    editor: ({ label, draft, l, put }) => (
+      <SegmentedControl label={label} options={[{ value: 'true', label: l.yes }, { value: 'false', label: l.no }]} value={draft ? 'true' : 'false'} onChange={(v) => put(v === 'true')} />
+    ),
+  },
+  structured: {
+    word: (l) => l.structured,
+    draft: (v) => JSON.stringify(v, null, 2),
+    read: (d) => {
+      const text = String(d ?? '').trim()
+      if (!text) return { value: null }
+      try {
+        return { value: JSON.parse(text) as unknown }
+      } catch {
+        return { problem: 'invalidStructured' }
+      }
+    },
+    editor: ({ label, draft, put }) => <TextArea label={label} monospace rows={4} value={String(draft ?? '')} onChange={put} />,
+  },
+  text: {
+    word: (l) => l.text,
+    draft: (v) => (v === null || v === undefined ? '' : String(v)),
+    read: (d) => ({ value: String(d ?? '') }),
+    editor: ({ label, draft, put }) => <TextField label={label} value={String(draft ?? '')} onChange={put} />,
+  },
+} satisfies Record<string, Codec>
 
-function seed(original: unknown, type: ValueType): Row['draft'] {
-  if (type === 'structured') return JSON.stringify(original, null, 2)
-  if (type === 'number' || type === 'boolean') return original as number | boolean
-  return original === null || original === undefined ? '' : String(original)
-}
+type Kind = keyof typeof CODECS
+
+/** Null and missing originals are text. */
+const kindOf = (v: unknown): Kind => (typeof v === 'number' ? 'number' : typeof v === 'boolean' ? 'boolean' : v !== null && typeof v === 'object' ? 'structured' : 'text')
 
 export interface RunReplayDialogProps {
   open: boolean
@@ -130,126 +163,116 @@ export interface RunReplayDialogProps {
 export function RunReplayDialog({ open, onClose, runId, flowId, originalInputs, onReplay, labels }: RunReplayDialogProps) {
   const l = useLabels(runReplayDialogLabels, labels)
   const formId = useId()
-  const [rows, setRows] = useState<Row[]>([])
-  const [error, setError] = useState<string | null>(null)
-  const [busy, setBusy] = useState(false)
-  const errorRef = useRef<HTMLDivElement>(null)
+  /** Drafts of the edited inputs only; an input absent here is untouched. */
+  const [edited, setEdited] = useState<ReadonlyMap<string, Draft>>(new Map())
+  const [notice, setNotice] = useState<string | null>(null)
+  const [sending, setSending] = useState(false)
+  const noticeRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!open) return
-    setRows(Object.entries(originalInputs).map(([key, v]) => ({ key, type: typeOf(v), draft: seed(v, typeOf(v)), touched: false })))
-    setError(null)
-    setBusy(false)
-    // Rows re-seed on every opening.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setEdited(new Map())
+    setNotice(null)
+    setSending(false)
   }, [open])
 
   useEffect(() => {
-    if (error) errorRef.current?.focus()
-  }, [error])
+    if (notice) noticeRef.current?.focus()
+  }, [notice])
 
-  const edit = (key: string, draft: Row['draft']) => setRows((rs) => rs.map((r) => (r.key === key ? { ...r, draft, touched: true } : r)))
-  const reset = (key: string) => setRows((rs) => rs.map((r) => (r.key === key ? { ...r, draft: seed(originalInputs[key], r.type), touched: false } : r)))
+  const keys = Object.keys(originalInputs)
+  const put = (key: string, d: Draft) => setEdited((m) => new Map(m).set(key, d))
+  const restore = (key: string) =>
+    setEdited((m) => {
+      const next = new Map(m)
+      next.delete(key)
+      return next
+    })
 
-  const submit = async (e?: FormEvent) => {
-    e?.preventDefault()
+  const collect = (): { overrides: Record<string, unknown> } | { problem: string } => {
     const overrides: Record<string, unknown> = {}
-    for (const r of rows) {
-      if (!r.touched) continue
-      if (r.type === 'number') {
-        if (typeof r.draft !== 'number' || !Number.isFinite(r.draft)) return setError(fill(l.invalidNumber, { key: r.key }))
-        overrides[r.key] = r.draft
-      } else if (r.type === 'structured') {
-        const text = String(r.draft ?? '').trim()
-        if (!text) overrides[r.key] = null
-        else {
-          try {
-            overrides[r.key] = JSON.parse(text)
-          } catch {
-            return setError(fill(l.invalidStructured, { key: r.key }))
-          }
-        }
-      } else overrides[r.key] = r.type === 'boolean' ? !!r.draft : String(r.draft ?? '')
+    for (const [key, draft] of edited) {
+      const parsed: Parsed = CODECS[kindOf(originalInputs[key])].read(draft)
+      if ('problem' in parsed) return { problem: fill(l[parsed.problem], { key }) }
+      overrides[key] = parsed.value
     }
-    setError(null)
-    setBusy(true)
+    return { overrides }
+  }
+
+  const send = async (e?: FormEvent) => {
+    e?.preventDefault()
+    const result = collect()
+    if ('problem' in result) return setNotice(result.problem)
+    setNotice(null)
+    setSending(true)
     try {
-      await onReplay(overrides)
-      setBusy(false)
+      await onReplay(result.overrides)
+      setSending(false)
       onClose()
-    } catch (err) {
-      setBusy(false)
-      setError(err instanceof Error ? err.message : String(err))
+    } catch (why) {
+      setSending(false)
+      setNotice(why instanceof Error ? why.message : String(why))
     }
   }
 
-  const typeWord: Record<ValueType, string> = { text: l.text, number: l.number, boolean: l.boolean, structured: l.structured }
+  const rows = keys.map((key) => {
+    const codec = CODECS[kindOf(originalInputs[key])]
+    const touched = edited.has(key)
+    const draft = touched ? edited.get(key)! : codec.draft(originalInputs[key])
+    const word = codec.word(l)
+    return (
+      <div key={key} className="fk-run-replay-row" data-touched={touched || undefined}>
+        <div className="fk-run-replay-row__head">
+          <code className="fk-run-mono">{key}</code>
+          <Tag size="small">{word}</Tag>
+          {touched && (
+            <Button variant="quiet" size="compact" leadingIcon={<RotateCcw />} onPress={() => restore(key)} className="fk-run-replay-row__reset">
+              <span aria-hidden="true">{l.reset}</span>
+              <span className="fk-visually-hidden">{fill(l.resetKey, { key })}</span>
+            </Button>
+          )}
+        </div>
+        {codec.editor({ label: `${key} (${word})`, draft, l, put: (d) => put(key, d) })}
+      </div>
+    )
+  })
 
   return (
     <SectionedModal
       isOpen={open}
-      onOpenChange={(o) => {
-        if (!o && !busy) onClose()
+      onOpenChange={(stillOpen) => {
+        if (!stillOpen && !sending) onClose()
       }}
       title={l.title}
       subtitle={l.subtitle}
       width="wide"
-      busy={busy}
-      onSubmitShortcut={() => void submit()}
+      busy={sending}
+      onSubmitShortcut={() => void send()}
       footer={
         <div className="fk-run-dialog-footer">
           <span className="fk-run-dialog-footer__ids">
             <ShortId id={runId} label={l.run} />
             <ShortId id={flowId} label={l.flow} />
           </span>
-          <Button variant="quiet" onPress={onClose} disabled={busy}>
+          <Button variant="quiet" onPress={onClose} disabled={sending}>
             {l.cancel}
           </Button>
-          <Button variant="primary" type="submit" form={formId} busy={busy} busyLabel={l.replaying}>
+          <Button variant="primary" type="submit" form={formId} busy={sending} busyLabel={l.replaying}>
             {l.replay}
           </Button>
         </div>
       }
     >
-      <form id={formId} className="fk-run-form" onSubmit={(e) => void submit(e)} noValidate>
-        {error ? (
-          <div ref={errorRef} tabIndex={-1} className="fk-run-dialog-error">
+      <form id={formId} className="fk-run-form" onSubmit={(e) => void send(e)} noValidate>
+        {notice && (
+          <div ref={noticeRef} tabIndex={-1} className="fk-run-dialog-error">
             <InlineNotice tone="danger" urgency="assertive">
-              {error}
+              {notice}
             </InlineNotice>
           </div>
-        ) : null}
-        {rows.length === 0 ? <p className="fk-run-empty">{l.empty}</p> : null}
-        {rows.map((r) => (
-          <div key={r.key} className="fk-run-replay-row" data-touched={r.touched || undefined}>
-            <div className="fk-run-replay-row__head">
-              <code className="fk-run-mono">{r.key}</code>
-              <Tag size="small">{typeWord[r.type]}</Tag>
-              {r.touched ? (
-                <Button variant="quiet" size="compact" leadingIcon={<RotateCcw />} onPress={() => reset(r.key)} className="fk-run-replay-row__reset">
-                  <span aria-hidden="true">{l.reset}</span>
-                  <span className="fk-visually-hidden">{fill(l.resetKey, { key: r.key })}</span>
-                </Button>
-              ) : null}
-            </div>
-            <RowEditor row={r} typeWord={typeWord[r.type]} labels={l} onEdit={(v) => edit(r.key, v)} />
-          </div>
-        ))}
+        )}
+        {rows.length ? rows : <p className="fk-run-empty">{l.empty}</p>}
       </form>
     </SectionedModal>
   )
-}
-
-function RowEditor({ row, typeWord, labels: l, onEdit }: { row: Row; typeWord: string; labels: RunReplayDialogLabels; onEdit: (v: Row['draft']) => void }) {
-  const label = `${row.key} (${typeWord})`
-  switch (row.type) {
-    case 'number':
-      return <NumberInput label={label} value={typeof row.draft === 'number' ? row.draft : null} onChange={onEdit} />
-    case 'boolean':
-      return <SegmentedControl label={label} options={[{ value: 'true', label: l.yes }, { value: 'false', label: l.no }]} value={row.draft ? 'true' : 'false'} onChange={(v) => onEdit(v === 'true')} />
-    case 'structured':
-      return <TextArea label={label} monospace rows={4} value={String(row.draft ?? '')} onChange={onEdit} />
-    default:
-      return <TextField label={label} value={String(row.draft ?? '')} onChange={onEdit} />
-  }
 }

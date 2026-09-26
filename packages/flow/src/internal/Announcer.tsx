@@ -1,44 +1,63 @@
-// One polite (and one assertive) live region per canvas, instead of one per
-// node. Components call `useAnnounce()`; outside a provider it is a no-op.
+// A canvas speaks through two shared live regions (polite and assertive)
+// instead of one region per node. `useAnnounce()` returns the speaker; with
+// no AnnouncerProvider above it, speaking does nothing.
 
-import { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from 'react'
+import { createContext, useContext, useReducer, type ReactNode } from 'react'
 
-type Announce = (message: string, politeness?: 'polite' | 'assertive') => void
+type Urgency = 'polite' | 'assertive'
+type Speaker = (message: string, urgency?: Urgency) => void
 
-const AnnounceContext = createContext<Announce | null>(null)
+interface Lines {
+  polite: string
+  assertive: string
+  /** Odd/even counter: an invisible suffix changes so repeating a sentence still reads. */
+  beat: number
+}
+
+type Utterance = { text: string; urgency: Urgency }
+
+function speak(prev: Lines, next: Utterance): Lines {
+  const beat = prev.beat + 1
+  const text = beat % 2 ? next.text : `${next.text} `
+  return { ...prev, beat, [next.urgency]: text }
+}
+
+const SpeakerContext = createContext<Speaker | null>(null)
+
+const REGIONS: ReadonlyArray<{ urgency: Urgency; role: 'status' | 'alert' }> = [
+  { urgency: 'polite', role: 'status' },
+  { urgency: 'assertive', role: 'alert' },
+]
 
 export function AnnouncerProvider({ children }: { children: ReactNode }) {
-  const [polite, setPolite] = useState('')
-  const [assertive, setAssertive] = useState('')
-  const flip = useRef(false)
-  const announce = useCallback<Announce>((message, politeness = 'polite') => {
-    // A trailing no-break space toggles so repeating the same words is still a change.
-    flip.current = !flip.current
-    const text = flip.current ? message : `${message} `
-    if (politeness === 'assertive') setAssertive(text)
-    else setPolite(text)
-  }, [])
-  const value = useMemo(() => announce, [announce])
+  const [lines, dispatch] = useReducer(speak, { polite: '', assertive: '', beat: 0 })
+  // `dispatch` is stable, so the speaker needs no memoisation.
+  const speaker: Speaker = (text, urgency = 'polite') => dispatch({ text, urgency })
   return (
-    <AnnounceContext.Provider value={value}>
+    <SpeakerContext.Provider value={useStableSpeaker(speaker)}>
       {children}
-      <div className="fk-visually-hidden" role="status" aria-live="polite" data-fk-announcer="polite">
-        {polite}
-      </div>
-      <div className="fk-visually-hidden" role="alert" aria-live="assertive" data-fk-announcer="assertive">
-        {assertive}
-      </div>
-    </AnnounceContext.Provider>
+      {REGIONS.map((r) => (
+        <div key={r.urgency} className="fk-visually-hidden" role={r.role} aria-live={r.urgency} data-fk-announcer={r.urgency}>
+          {lines[r.urgency]}
+        </div>
+      ))}
+    </SpeakerContext.Provider>
   )
 }
 
-const noop: Announce = () => {}
-
-export function useAnnounce(): Announce {
-  return useContext(AnnounceContext) ?? noop
+/** Keeps the first speaker function (it only closes over the stable dispatch). */
+function useStableSpeaker(candidate: Speaker): Speaker {
+  const [kept] = useReducer((s: Speaker) => s, candidate)
+  return kept
 }
 
-/** True when an AnnouncerProvider is above (components then skip their own region). */
+const silent: Speaker = () => undefined
+
+export function useAnnounce(): Speaker {
+  return useContext(SpeakerContext) ?? silent
+}
+
+/** Whether a provider is above (components then skip a region of their own). */
 export function useHasAnnouncer(): boolean {
-  return useContext(AnnounceContext) !== null
+  return useContext(SpeakerContext) !== null
 }

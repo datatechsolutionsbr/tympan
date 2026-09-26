@@ -1,11 +1,11 @@
-// Render catalog: the resolvers node components use to present a kind. A host
-// may replace any resolver through <NodeKindCatalogProvider>; without one, the
-// installed NodeKindCatalog store answers.
+// How a node kind is presented (label, icon, tone, ports, per-node identity).
+// By default the installed NodeKindCatalog answers; a host can swap any single
+// answer for a subtree with <NodeKindCatalogProvider>.
 
 import { createContext, useContext, useMemo, useSyncExternalStore, type ReactNode } from 'react'
 import type { IconComponent } from '@fakhir/design-system'
 import { FALLBACK_KIND_ICONS, resolveIcon } from './icons'
-import { nodeKindCatalog, type NodeKindCatalogStore, type NodeKindEntry, type PortTopology } from './kindCatalog'
+import { nodeKindCatalog, type NodeKindCatalogStore, type PortTopology } from './kindCatalog'
 import { kindTone, type ToneName } from './palette'
 
 /** Per-instance presentation that wins over the per-kind catalog data. */
@@ -31,29 +31,40 @@ export interface RenderCatalogOverrides extends Partial<Omit<RenderCatalog, 'flo
   floatingConnections?: boolean
 }
 
+/** Answers read straight from a catalog store. */
 export function catalogFromStore(store: NodeKindCatalogStore, floatingConnections = false): RenderCatalog {
-  const entryOf = (kind: string): NodeKindEntry | undefined => store.entry(kind)
   return {
-    entry(kind) {
-      const e = entryOf(kind)
-      return e ? { label: e.label, category: e.category, ...(e.description ? { description: e.description } : {}) } : undefined
+    entry: (kind) => {
+      const found = store.entry(kind)
+      if (!found) return undefined
+      const { label, category, description } = found
+      return description ? { label, category, description } : { label, category }
     },
-    icon(kind) {
-      return resolveIcon(entryOf(kind)?.icon ?? FALLBACK_KIND_ICONS[kind])
-    },
+    icon: (kind) => resolveIcon(store.entry(kind)?.icon ?? FALLBACK_KIND_ICONS[kind]),
     tone: kindTone,
-    ports(kind) {
-      return entryOf(kind)?.ports
-    },
-    identity() {
-      return null
-    },
     badgeTone: kindTone,
+    ports: (kind) => store.entry(kind)?.ports,
+    identity: () => null,
     floatingConnections,
   }
 }
 
-const RenderCatalogContext = createContext<RenderCatalog | null>(null)
+const ANSWER_KEYS = ['entry', 'icon', 'tone', 'ports', 'identity', 'badgeTone'] as const
+
+/** Base answers with every defined override laid on top. */
+function layered(base: RenderCatalog, patch: RenderCatalogOverrides): RenderCatalog {
+  const out = { ...base, floatingConnections: patch.floatingConnections ?? false }
+  for (const key of ANSWER_KEYS) {
+    const replacement = patch[key]
+    if (replacement) (out as Record<string, unknown>)[key] = replacement
+  }
+  return out
+}
+
+/** Re-renders when a new catalog is installed into the store. */
+const useStoreVersion = (store: NodeKindCatalogStore) => useSyncExternalStore(store.subscribe, store.getVersion, store.getVersion)
+
+const CatalogContext = createContext<RenderCatalog | null>(null)
 
 export interface NodeKindCatalogProviderProps extends RenderCatalogOverrides {
   store?: NodeKindCatalogStore
@@ -61,39 +72,27 @@ export interface NodeKindCatalogProviderProps extends RenderCatalogOverrides {
 }
 
 /** Lets a host replace any resolver (icon, tone, identity …) for the subtree. */
-export function NodeKindCatalogProvider({ store = nodeKindCatalog, children, ...overrides }: NodeKindCatalogProviderProps) {
-  const version = useSyncExternalStore(store.subscribe, store.getVersion, store.getVersion)
-  const { entry, icon, tone, ports, identity, badgeTone, floatingConnections } = overrides
-  const value = useMemo<RenderCatalog>(() => {
-    const base = catalogFromStore(store, floatingConnections ?? false)
-    return {
-      entry: entry ?? base.entry,
-      icon: icon ?? base.icon,
-      tone: tone ?? base.tone,
-      ports: ports ?? base.ports,
-      identity: identity ?? base.identity,
-      badgeTone: badgeTone ?? base.badgeTone,
-      floatingConnections: floatingConnections ?? false,
-    }
-    // version re-derives the catalog after a new install
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [store, version, entry, icon, tone, ports, identity, badgeTone, floatingConnections])
-  return <RenderCatalogContext.Provider value={value}>{children}</RenderCatalogContext.Provider>
+export function NodeKindCatalogProvider({ store = nodeKindCatalog, children, ...patch }: NodeKindCatalogProviderProps) {
+  const version = useStoreVersion(store)
+  const deps = [store, version, patch.floatingConnections, ...ANSWER_KEYS.map((k) => patch[k])]
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const catalog = useMemo(() => layered(catalogFromStore(store, patch.floatingConnections ?? false), patch), deps)
+  return <CatalogContext.Provider value={catalog}>{children}</CatalogContext.Provider>
 }
 
-/** Current render catalog (provider, else the installed store). Re-renders on install. */
+/** The catalog in effect: a provider's, else the installed store's. */
 export function useRenderCatalog(): RenderCatalog {
-  const fromContext = useContext(RenderCatalogContext)
-  const version = useSyncExternalStore(nodeKindCatalog.subscribe, nodeKindCatalog.getVersion, nodeKindCatalog.getVersion)
-  return useMemo(() => fromContext ?? catalogFromStore(nodeKindCatalog), [fromContext, version])
+  const provided = useContext(CatalogContext)
+  const version = useStoreVersion(nodeKindCatalog)
+  return useMemo(() => provided ?? catalogFromStore(nodeKindCatalog), [provided, version])
 }
 
 /** Readable fallback for a kind key when no catalog label exists ("if-else" → "If else"). */
 export function humaniseKey(key: string): string {
-  const words = key
-    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
-    .replace(/[_-]+/g, ' ')
-    .trim()
+  const spaced = key
+    .split(/(?<=[a-z0-9])(?=[A-Z])|[_-]+/)
+    .filter(Boolean)
+    .join(' ')
     .toLowerCase()
-  return words ? words[0]!.toUpperCase() + words.slice(1) : key
+  return spaced ? spaced.charAt(0).toUpperCase() + spaced.slice(1) : key
 }

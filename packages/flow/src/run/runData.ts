@@ -1,6 +1,7 @@
-// Loading run history and reading usage figures out of node outputs.
+// Run history loading plus two readers that dig usage figures out of the
+// free-form outputs steps report (token counts, tool calls).
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useReducer, useRef } from 'react'
 import type { LoadRuns, RunSummary } from './types'
 
 export interface RunHistory {
@@ -10,46 +11,43 @@ export interface RunHistory {
   retry: () => void
 }
 
-/** Loads runs when `active` becomes true and whenever `reloadKey` changes while active. Late answers are ignored. */
-export function useRunHistory(flowId: string, loadRuns: LoadRuns | undefined, active: boolean, reloadKey: unknown = 0): RunHistory {
-  const [runs, setRuns] = useState<RunSummary[]>([])
-  const [state, setState] = useState<RunHistory['state']>('idle')
-  const [error, setError] = useState<string | null>(null)
-  const [attempt, setAttempt] = useState(0)
-  const ticket = useRef(0)
-  useEffect(() => {
-    if (!active || !loadRuns) return
-    const mine = ++ticket.current
-    setState('loading')
-    setError(null)
-    loadRuns(flowId).then(
-      (list) => {
-        if (mine !== ticket.current) return
-        setRuns(list)
-        setState('ready')
-      },
-      (err: unknown) => {
-        if (mine !== ticket.current) return
-        setError(err instanceof Error ? err.message : String(err))
-        setState('error')
-      },
-    )
-    return () => {
-      ticket.current++
-    }
-  }, [flowId, loadRuns, active, reloadKey, attempt])
-  const retry = useCallback(() => setAttempt((a) => a + 1), [])
-  return { runs, state, error, retry }
+type Ledger = Omit<RunHistory, 'retry'> & { round: number }
+type LedgerStep = { to: 'loading' } | { to: 'ready'; runs: RunSummary[] } | { to: 'error'; message: string } | { to: 'again' }
+
+function ledger(prev: Ledger, step: LedgerStep): Ledger {
+  if (step.to === 'again') return { ...prev, round: prev.round + 1 }
+  if (step.to === 'loading') return { ...prev, state: 'loading', error: null }
+  if (step.to === 'ready') return { ...prev, state: 'ready', runs: step.runs }
+  return { ...prev, state: 'error', error: step.message }
 }
 
-/** Calls `fn` when `value` changes from `from` to `to`. */
-export function useTransition<T>(value: T, from: T, to: T, fn: () => void): void {
-  const prev = useRef(value)
-  const latest = useRef(fn)
-  latest.current = fn
+/** Fetches the runs while `active`, again when `reloadKey` changes; an answer that arrives late is dropped. */
+export function useRunHistory(flowId: string, loadRuns: LoadRuns | undefined, active: boolean, reloadKey: unknown = 0): RunHistory {
+  const [book, apply] = useReducer(ledger, { runs: [], state: 'idle', error: null, round: 0 })
   useEffect(() => {
-    if (Object.is(prev.current, from) && Object.is(value, to)) latest.current()
-    prev.current = value
+    if (!active || !loadRuns) return
+    let current = true
+    apply({ to: 'loading' })
+    loadRuns(flowId)
+      .then((runs) => current && apply({ to: 'ready', runs }))
+      .catch((why: unknown) => current && apply({ to: 'error', message: why instanceof Error ? why.message : String(why) }))
+    return () => {
+      current = false
+    }
+  }, [flowId, loadRuns, active, reloadKey, book.round])
+  const retry = useCallback(() => apply({ to: 'again' }), [])
+  return { runs: book.runs, state: book.state, error: book.error, retry }
+}
+
+/** Runs `effect` once each time `value` goes from `from` to `to`. */
+export function useTransition<T>(value: T, from: T, to: T, effect: () => void): void {
+  const seen = useRef(value)
+  const handler = useRef(effect)
+  handler.current = effect
+  useEffect(() => {
+    const before = seen.current
+    seen.current = value
+    if (Object.is(before, from) && Object.is(value, to)) handler.current()
   }, [value, from, to])
 }
 
@@ -59,67 +57,62 @@ export interface TokenUsage {
   total: number
 }
 
-const isObj = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v)
-const n = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v) ? v : 0)
+type Bag = Record<string, unknown>
+const isBag = (v: unknown): v is Bag => typeof v === 'object' && v !== null && !Array.isArray(v)
+const count = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v) ? v : 0)
 
-function usageOf(o: Record<string, unknown>): { input: number; output: number } | null {
-  const pairs: Array<[string, string]> = [
-    ['input_tokens', 'output_tokens'],
-    ['inputTokens', 'outputTokens'],
-    ['prompt_tokens', 'completion_tokens'],
-    ['promptTokens', 'completionTokens'],
-    ['input', 'output'],
-  ]
-  for (const [i, o2] of pairs) if (typeof o[i] === 'number' || typeof o[o2] === 'number') return { input: n(o[i]), output: n(o[o2]) }
-  return null
+/** Spellings providers use for the (in, out) token pair. */
+const TOKEN_FIELDS: ReadonlyArray<readonly [string, string]> = [
+  ['input_tokens', 'output_tokens'],
+  ['inputTokens', 'outputTokens'],
+  ['prompt_tokens', 'completion_tokens'],
+  ['promptTokens', 'completionTokens'],
+  ['input', 'output'],
+]
+const USAGE_HOLDERS = ['usage', 'tokenUsage', 'token_usage', 'tokens']
+const TOOL_LISTS = ['toolCalls', 'tool_calls', 'tools']
+
+/** Every usage block found in a value, searching nested objects up to a small depth. */
+function* usageBlocks(v: unknown, depth = 0): Generator<[number, number]> {
+  if (!isBag(v) || depth > 3) return
+  const holder = USAGE_HOLDERS.map((k) => v[k]).find(isBag)
+  const pair = holder && TOKEN_FIELDS.find(([i, o]) => typeof holder[i] === 'number' || typeof holder[o] === 'number')
+  if (holder && pair) {
+    yield [count(holder[pair[0]]), count(holder[pair[1]])]
+    return
+  }
+  for (const inner of Object.values(v)) yield* usageBlocks(inner, depth + 1)
 }
 
-/** Best-effort sum of token usage reported in node outputs; null when none reports it. */
+/** Token usage summed over step outputs; null when no step reports any. */
 export function sumTokens(outputs: readonly unknown[]): TokenUsage | null {
-  let found = false
-  let input = 0
-  let output = 0
-  const visit = (v: unknown, depth: number) => {
-    if (!isObj(v) || depth > 3) return
-    for (const key of ['usage', 'tokenUsage', 'token_usage', 'tokens']) {
-      const u = v[key]
-      if (isObj(u)) {
-        const got = usageOf(u)
-        if (got) {
-          found = true
-          input += got.input
-          output += got.output
-          return
-        }
-      }
-    }
-    for (const child of Object.values(v)) if (isObj(child)) visit(child, depth + 1)
-  }
-  for (const o of outputs) visit(o, 0)
-  return found ? { input, output, total: input + output } : null
+  const blocks = outputs.flatMap((o) => [...usageBlocks(o)])
+  if (blocks.length === 0) return null
+  const input = blocks.reduce((s, [i]) => s + i, 0)
+  const output = blocks.reduce((s, [, o]) => s + o, 0)
+  return { input, output, total: input + output }
 }
 
-/** Tool names called, with counts, from common tool-call shapes; null when none. */
+function toolName(call: unknown): string | undefined {
+  if (typeof call === 'string') return call || undefined
+  if (!isBag(call)) return undefined
+  const named = call.name ?? call.tool ?? (isBag(call.function) ? call.function.name : undefined)
+  return typeof named === 'string' && named ? named : undefined
+}
+
+/** How often each tool was called, from common tool-call shapes; null when none. */
 export function countTools(outputs: readonly unknown[]): Array<{ name: string; count: number }> | null {
-  const counts = new Map<string, number>()
-  const add = (name: unknown) => {
-    if (typeof name === 'string' && name) counts.set(name, (counts.get(name) ?? 0) + 1)
-  }
-  for (const o of outputs) {
-    if (!isObj(o)) continue
-    for (const key of ['toolCalls', 'tool_calls', 'tools']) {
-      const list = o[key]
-      if (!Array.isArray(list)) continue
-      for (const call of list) {
-        if (typeof call === 'string') add(call)
-        else if (isObj(call)) add(call.name ?? call.tool ?? (isObj(call.function) ? call.function.name : undefined))
-      }
-    }
-  }
-  return counts.size ? [...counts.entries()].map(([name, count]) => ({ name, count })) : null
+  const names = outputs
+    .filter(isBag)
+    .flatMap((o) => TOOL_LISTS.flatMap((k) => (Array.isArray(o[k]) ? (o[k] as unknown[]) : [])))
+    .map(toolName)
+    .filter((n): n is string => !!n)
+  if (!names.length) return null
+  const tally = names.reduce((m, n) => m.set(n, (m.get(n) ?? 0) + 1), new Map<string, number>())
+  return Array.from(tally, ([name, n]) => ({ name, count: n }))
 }
 
-/** Pretty structured text for outputs. */
+/** Readable text of an output value (strings as they are, the rest indented). */
 export function prettyValue(value: unknown): string {
   if (value === undefined) return ''
   if (typeof value === 'string') return value

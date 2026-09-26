@@ -1,7 +1,8 @@
-// RunRewindDialog: forks a corrected re-run from a completed node. Up to and
-// including that node, recorded outputs are kept; everything after runs again.
+// RunRewindDialog: starts a corrected run from a finished step of an earlier
+// one. Recorded outputs up to and including the chosen step are reused;
+// every later step runs again. Only finished steps can be chosen.
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useReducer, type ComponentType, type SVGProps } from 'react'
 import { History, RotateCw } from 'lucide-react'
 import { Button, InlineNotice, NativeSelect, TextField } from '@fakhir/design-system'
 import { SectionedModal } from '../internal/SectionedModal'
@@ -94,130 +95,134 @@ export interface RunRewindDialogProps {
   labels?: Partial<RunRewindDialogLabels>
 }
 
-const isCompleted = (n: RewindNode) => normaliseStatus(n.status) === 'completed'
+const finished = (step: RewindNode) => normaliseStatus(step.status) === 'completed'
 
-/** Kept = completed nodes at or before the cut; re-execute = every node after it. */
-export function splitAtCut(nodes: readonly RewindNode[], cut: string | null): { kept: RewindNode[]; rerun: RewindNode[] } {
-  const at = cut ? nodes.findIndex((n) => n.nodeId === cut) : -1
-  if (at < 0) return { kept: [], rerun: [...nodes] }
-  return { kept: nodes.slice(0, at + 1).filter(isCompleted), rerun: nodes.slice(at + 1) }
+/** Reused = finished steps at or before the chosen step; again = every step after it, whatever its state. */
+export function splitAtCut(steps: readonly RewindNode[], cut: string | null): { kept: RewindNode[]; rerun: RewindNode[] } {
+  const position = steps.findIndex((s) => s.nodeId === cut)
+  return position < 0 ? { kept: [], rerun: [...steps] } : { kept: steps.slice(0, position + 1).filter(finished), rerun: steps.slice(position + 1) }
+}
+
+interface Plan {
+  cut: string | null
+  note: string
+  sending: boolean
+  failure: string | null
+  /** Counts sentence for the polite region, set when the person changes the cut. */
+  spoken: string
+}
+
+type PlanChange = Partial<Plan>
+const revise = (plan: Plan, change: PlanChange): Plan => ({ ...plan, ...change })
+const FRESH: Plan = { cut: null, note: '', sending: false, failure: null, spoken: '' }
+
+function StepGroup({ id, heading, Icon, steps, emptyWord }: { id: string; heading: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; steps: RewindNode[]; emptyWord: string }) {
+  return (
+    <section className="fk-run-rewind__list" aria-labelledby={id}>
+      <h3 id={id} className="fk-run-section__title">
+        <Icon aria-hidden="true" focusable="false" className="fk-run-rewind__icon" />
+        {heading}
+      </h3>
+      {steps.length === 0 ? (
+        <p className="fk-run-hint">{emptyWord}</p>
+      ) : (
+        <ul aria-labelledby={id} className="fk-run-rewind__items">
+          {steps.map((s) => (
+            <li key={s.nodeId}>
+              <code className="fk-run-mono">{s.nodeId}</code> <span className="fk-run-row__kind">{s.nodeKind}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  )
 }
 
 export function RunRewindDialog({ open, onClose, runId, nodes, initialNodeId, onRewind, labels }: RunRewindDialogProps) {
   const l = useLabels(runRewindDialogLabels, labels)
   const { locale } = useFlowLocale()
-  const eligible = useMemo(() => nodes.filter(isCompleted), [nodes])
-  const [cut, setCut] = useState<string | null>(null)
-  const [reason, setReason] = useState('')
-  const [error, setError] = useState<string | null>(null)
-  const [busy, setBusy] = useState(false)
-  const [live, setLive] = useState('')
+  const choosable = nodes.filter(finished)
+  const [plan, change] = useReducer(revise, FRESH)
 
+  // Every opening starts over, at the requested step when it can be chosen.
   useEffect(() => {
     if (!open) return
-    setCut(initialNodeId && eligible.some((n) => n.nodeId === initialNodeId) ? initialNodeId : (eligible[0]?.nodeId ?? null))
-    setReason('')
-    setError(null)
-    setBusy(false)
-    setLive('')
-    // Re-seed on every opening.
+    const wanted = choosable.find((s) => s.nodeId === initialNodeId) ?? choosable[0]
+    change({ ...FRESH, cut: wanted?.nodeId ?? null })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open])
 
-  const { kept, rerun } = splitAtCut(nodes, cut)
+  const { kept, rerun } = splitAtCut(nodes, plan.cut)
 
-  const choose = (id: string) => {
-    setCut(id)
-    const s = splitAtCut(nodes, id)
-    setLive(fill(l.counts, { kept: s.kept.length, rerun: s.rerun.length }, locale))
+  const pick = (cut: string) => {
+    const preview = splitAtCut(nodes, cut)
+    change({ cut, spoken: fill(l.counts, { kept: preview.kept.length, rerun: preview.rerun.length }, locale) })
   }
 
-  const confirm = async () => {
-    if (!cut) return
-    setBusy(true)
-    setError(null)
+  const go = async () => {
+    if (!plan.cut) return
+    change({ sending: true, failure: null })
+    const note = plan.note.trim()
     try {
-      const trimmed = reason.trim()
-      await onRewind(trimmed ? { resetToNode: cut, reason: trimmed } : { resetToNode: cut })
-      setBusy(false)
+      await onRewind(note ? { resetToNode: plan.cut, reason: note } : { resetToNode: plan.cut })
+      change({ sending: false })
       onClose()
-    } catch (err) {
-      setBusy(false)
-      setError(err instanceof Error ? err.message : String(err))
+    } catch (why) {
+      change({ sending: false, failure: why instanceof Error ? why.message : String(why) })
     }
   }
 
-  const list = (items: RewindNode[], heading: string, icon: typeof History, id: string) => {
-    const Icon = icon
-    return (
-      <section className="fk-run-rewind__list" aria-labelledby={id}>
-        <h3 id={id} className="fk-run-section__title">
-          <Icon aria-hidden="true" focusable="false" className="fk-run-rewind__icon" />
-          {heading}
-        </h3>
-        {items.length ? (
-          <ul aria-labelledby={id} className="fk-run-rewind__items">
-            {items.map((n) => (
-              <li key={n.nodeId}>
-                <code className="fk-run-mono">{n.nodeId}</code> <span className="fk-run-row__kind">{n.nodeKind}</span>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="fk-run-hint">{l.none}</p>
+  const body =
+    choosable.length === 0 ? (
+      <InlineNotice tone="warning">{l.noEligible}</InlineNotice>
+    ) : (
+      <div className="fk-run-form">
+        {plan.failure && (
+          <InlineNotice tone="danger" urgency="assertive">
+            {plan.failure}
+          </InlineNotice>
         )}
-      </section>
+        <NativeSelect label={l.picker} options={choosable.map((s) => ({ value: s.nodeId, label: `${s.nodeId}, ${s.nodeKind}` }))} value={plan.cut ?? ''} onChange={pick} />
+        <TextField label={l.reason} placeholder={l.reasonPlaceholder} value={plan.note} onChange={(note) => change({ note })} />
+        <div className="fk-run-rewind__preview">
+          <StepGroup id="fk-rewind-kept" heading={fill(l.keptHeading, { count: kept.length }, locale)} Icon={History} steps={kept} emptyWord={l.none} />
+          <StepGroup id="fk-rewind-rerun" heading={fill(l.rerunHeading, { count: rerun.length }, locale)} Icon={RotateCw} steps={rerun} emptyWord={l.none} />
+        </div>
+        <p className="fk-visually-hidden" role="status" aria-live="polite">
+          {plan.spoken}
+        </p>
+      </div>
     )
-  }
 
   return (
     <SectionedModal
       isOpen={open}
-      onOpenChange={(o) => {
-        if (!o && !busy) onClose()
+      onOpenChange={(stillOpen) => {
+        if (!stillOpen && !plan.sending) onClose()
       }}
       title={l.title}
       subtitle={l.subtitle}
       tone="warning"
       width="wide"
-      busy={busy}
+      busy={plan.sending}
       className="fk-run-rewind"
       footer={
         <div className="fk-run-dialog-footer">
           <span className="fk-run-dialog-footer__ids">
             <ShortId id={runId} label={l.run} />
           </span>
-          <Button variant="quiet" onPress={onClose} disabled={busy}>
+          <Button variant="quiet" onPress={onClose} disabled={plan.sending}>
             {l.cancel}
           </Button>
-          {eligible.length ? (
-            <Button variant="primary" onPress={() => void confirm()} disabled={!cut} busy={busy} busyLabel={l.confirming}>
+          {choosable.length > 0 && (
+            <Button variant="primary" onPress={() => void go()} disabled={!plan.cut} busy={plan.sending} busyLabel={l.confirming}>
               {l.confirm}
             </Button>
-          ) : null}
+          )}
         </div>
       }
     >
-      {eligible.length === 0 ? (
-        <InlineNotice tone="warning">{l.noEligible}</InlineNotice>
-      ) : (
-        <div className="fk-run-form">
-          {error ? (
-            <InlineNotice tone="danger" urgency="assertive">
-              {error}
-            </InlineNotice>
-          ) : null}
-          <NativeSelect label={l.picker} options={eligible.map((n) => ({ value: n.nodeId, label: `${n.nodeId}, ${n.nodeKind}` }))} value={cut ?? ''} onChange={choose} />
-          <TextField label={l.reason} placeholder={l.reasonPlaceholder} value={reason} onChange={setReason} />
-          <div className="fk-run-rewind__preview">
-            {list(kept, fill(l.keptHeading, { count: kept.length }, locale), History, 'fk-rewind-kept')}
-            {list(rerun, fill(l.rerunHeading, { count: rerun.length }, locale), RotateCw, 'fk-rewind-rerun')}
-          </div>
-          <p className="fk-visually-hidden" role="status" aria-live="polite">
-            {live}
-          </p>
-        </div>
-      )}
+      {body}
     </SectionedModal>
   )
 }

@@ -1,7 +1,8 @@
-// Stand-in for the wave-2 ConfirmService: `useConfirm()` returns an async
-// confirm function. A host may pass its own through <ConfirmProvider confirm>.
+// Asking a person to confirm, until the design system's wave-2 confirm
+// service exists. `useConfirm()` gives an async question function; hosts can
+// plug in their own through <ConfirmProvider confirm={...}>.
 
-import { createContext, useCallback, useContext, useRef, useState, type ReactNode } from 'react'
+import { createContext, useContext, useState, type ReactNode } from 'react'
 import { Button, ModalDialog } from '@fakhir/design-system'
 
 export interface ConfirmOptions {
@@ -14,58 +15,59 @@ export interface ConfirmOptions {
 
 export type ConfirmFn = (options: ConfirmOptions) => Promise<boolean>
 
-const ConfirmContext = createContext<ConfirmFn | null>(null)
+/** An open question: what is asked and how to answer it. */
+interface Question {
+  ask: ConfirmOptions
+  answer: (yes: boolean) => void
+}
 
-export function ConfirmProvider({ confirm, children }: { confirm?: ConfirmFn; children: ReactNode }) {
-  const [pending, setPending] = useState<ConfirmOptions | null>(null)
-  const resolver = useRef<((ok: boolean) => void) | null>(null)
-  const builtIn = useCallback<ConfirmFn>(
-    (options) =>
-      new Promise<boolean>((resolve) => {
-        resolver.current = resolve
-        setPending(options)
-      }),
-    [],
-  )
-  const settle = (ok: boolean) => {
-    resolver.current?.(ok)
-    resolver.current = null
-    setPending(null)
+const AskContext = createContext<ConfirmFn | null>(null)
+
+function QuestionDialog({ question, done }: { question: Question; done: () => void }) {
+  const reply = (yes: boolean) => {
+    question.answer(yes)
+    done()
   }
+  const { ask } = question
   return (
-    <ConfirmContext.Provider value={confirm ?? builtIn}>
-      {children}
-      {pending ? (
-        <ModalDialog
-          isOpen
-          role="alertdialog"
-          width="narrow"
-          onOpenChange={(open) => {
-            if (!open) settle(false)
-          }}
-          title={pending.title}
-          description={pending.message}
-          actions={
-            <>
-              <Button variant="secondary" autoFocus onPress={() => settle(false)}>
-                {pending.cancelLabel}
-              </Button>
-              <Button variant={pending.tone === 'danger' ? 'danger' : 'primary'} onPress={() => settle(true)}>
-                {pending.confirmLabel}
-              </Button>
-            </>
-          }
-        />
-      ) : null}
-    </ConfirmContext.Provider>
+    <ModalDialog
+      isOpen
+      role="alertdialog"
+      width="narrow"
+      onOpenChange={(open) => (open ? undefined : reply(false))}
+      title={ask.title}
+      description={ask.message}
+      actions={
+        <>
+          <Button variant="secondary" autoFocus onPress={() => reply(false)}>
+            {ask.cancelLabel}
+          </Button>
+          <Button variant={ask.tone === 'danger' ? 'danger' : 'primary'} onPress={() => reply(true)}>
+            {ask.confirmLabel}
+          </Button>
+        </>
+      }
+    />
   )
 }
 
-/** Confirm function from the nearest provider; without one, the browser's confirm. */
-export function useConfirm(): ConfirmFn {
-  const ctx = useContext(ConfirmContext)
+export function ConfirmProvider({ confirm, children }: { confirm?: ConfirmFn; children: ReactNode }) {
+  const [open, setOpen] = useState<Question | null>(null)
+  const [builtIn] = useState<ConfirmFn>(() => (ask: ConfirmOptions) => new Promise<boolean>((answer) => setOpen({ ask, answer })))
   return (
-    ctx ??
-    ((o) => Promise.resolve(typeof window !== 'undefined' && typeof window.confirm === 'function' ? window.confirm([o.title, o.message].filter(Boolean).join('\n')) : true))
+    <AskContext.Provider value={confirm ?? builtIn}>
+      {children}
+      {open ? <QuestionDialog question={open} done={() => setOpen(null)} /> : null}
+    </AskContext.Provider>
   )
+}
+
+/** Without a provider the browser's own confirm box answers (true where there is none). */
+const browserAsk: ConfirmFn = async ({ title, message }) => {
+  if (typeof window === 'undefined' || typeof window.confirm !== 'function') return true
+  return window.confirm(message ? `${title}\n${message}` : title)
+}
+
+export function useConfirm(): ConfirmFn {
+  return useContext(AskContext) ?? browserAsk
 }

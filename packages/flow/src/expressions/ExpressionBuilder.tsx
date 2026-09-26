@@ -1,9 +1,10 @@
-// ExpressionBuilder: compose a computation (or a yes/no condition) as a tree
-// of operations without writing code. Each nested level is a labelled group
-// ("‹operand›, level n") with an indent and a leading rail; the level number
-// is text, so depth never depends on colour.
+// ExpressionBuilder: builds a computation (or, in predicate mode, a yes/no
+// test) as a tree of operations, without code. What a level needs from the
+// root (strings, catalog, limits) travels through a context; every operand is
+// its own labelled group ("‹key›, level n"), indented with a rail and a level
+// number in text, so depth is never told by colour alone.
 
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { ToggleButton } from 'react-aria-components'
 import { Plus, Trash2 } from 'lucide-react'
 import { Button, InlineNotice, ListboxSelect, SegmentedControl, Tag, TextArea, TextField } from '@fakhir/design-system'
@@ -52,205 +53,209 @@ export interface ExpressionBuilderProps {
   label?: string
 }
 
-interface Shared {
+/** What every level of one builder shares. */
+interface Scope {
   l: ExpressionBuilderLabels
   locale: string
   catalog: ExpressionCatalog | undefined
-  loading: boolean
+  waiting: boolean
   maxDepth: number
-  /** Operation entries in expression mode (nested levels). */
-  entries: PickerEntry[]
+  /** Operations offered below the root (always the full expression palette). */
+  nestedChoices: PickerEntry[]
 }
 
-const opName = (l: ExpressionBuilderLabels, entry: PickerEntry) => {
-  if (entry.verb) return l.vocabulary[entry.verb.value] ?? entry.verb.value
-  return l.operations[entry.op.name] ?? entry.op.name
-}
+const ScopeContext = createContext<Scope | null>(null)
+const useScope = (): Scope => useContext(ScopeContext)!
+
+/** Visible name of an operation: the flattened verb when it has one, else the operation. */
+const choiceName = (l: ExpressionBuilderLabels, entry: PickerEntry) => (entry.verb ? (l.vocabulary[entry.verb.value] ?? entry.verb.value) : (l.operations[entry.op.name] ?? entry.op.name))
 
 export function ExpressionBuilder(props: ExpressionBuilderProps) {
   const { value, onChange, references = [], mode = 'expression', depth = 0, maxDepth = MAX_EXPRESSION_DEPTH, label } = props
   const l = useLabels(expressionBuilderLabels, props.labels)
   const { catalog, loading } = useExpressionCatalog(props.catalog)
   const { locale } = useFlowLocale()
-  const entries = useMemo(() => pickerEntries(catalog, 'expression'), [catalog])
-  const rootEntries = useMemo(() => pickerEntries(catalog, mode), [catalog, mode])
-  const shared: Shared = { l, locale, catalog, loading: !!loading || !catalog, maxDepth, entries }
-
-  const body =
-    value !== undefined && !isOperation(value) ? (
-      <OperandEditor shared={shared} slot={{ key: label ?? l.kindLiteral, kind: 'expression' }} value={value} onChange={onChange} depth={depth} references={references} rootEntries={rootEntries} />
-    ) : (
-      <OperationEditor shared={shared} node={value} onChange={onChange} depth={depth} references={references} entries={rootEntries} />
-    )
+  const nestedChoices = useMemo(() => pickerEntries(catalog, 'expression'), [catalog])
+  const rootChoices = useMemo(() => pickerEntries(catalog, mode), [catalog, mode])
+  const scope = useMemo<Scope>(() => ({ l, locale, catalog, waiting: !!loading || !catalog, maxDepth, nestedChoices }), [l, locale, catalog, loading, maxDepth, nestedChoices])
+  const rootIsOperand = value !== undefined && !isOperation(value)
   return (
-    <div className="fk-expr" data-depth={depth} role="group" aria-label={label ?? fill(l.level, { key: l.operation, level: depth + 1 })}>
-      {body}
-    </div>
+    <ScopeContext.Provider value={scope}>
+      <div className="fk-expr" data-depth={depth} role="group" aria-label={label ?? fill(l.level, { key: l.operation, level: depth + 1 })}>
+        {rootIsOperand ? (
+          <Operand slotKey={label ?? l.kindLiteral} value={value} onChange={onChange} depth={depth} references={references} choices={rootChoices} />
+        ) : (
+          <OperationBlock node={value} onChange={onChange} depth={depth} references={references} choices={rootChoices} />
+        )}
+      </div>
+    </ScopeContext.Provider>
   )
 }
 
-function OperationEditor({ shared, node, onChange, depth, references, entries }: { shared: Shared; node: OperationNode | undefined; onChange: (n: ExpressionNode) => void; depth: number; references: readonly string[]; entries: PickerEntry[] }) {
-  const { l, catalog, maxDepth } = shared
+interface BlockProps {
+  node: OperationNode | undefined
+  onChange: (n: ExpressionNode) => void
+  depth: number
+  references: readonly string[]
+  choices: PickerEntry[]
+}
+
+function OperationBlock({ node, onChange, depth, references, choices }: BlockProps) {
+  const { l, catalog, maxDepth } = useScope()
   if (node && depth >= maxDepth) {
     return (
       <>
         <InlineNotice tone="warning" urgency="none">
           {l.depthLimit}
         </InlineNotice>
-        <RawSlot shared={shared} label={l.raw} value={node} onChange={(v) => onChange(v as ExpressionNode)} />
+        <RawOperand label={l.raw} value={node} onChange={(v) => onChange(v as ExpressionNode)} />
       </>
     )
   }
-  const spec = node ? findOperation(catalog, node.operation) : undefined
-  const unknown = !!node && !!catalog && !spec && node.operation !== ''
-  const slots: OperandSlotSpec[] = node ? (spec ? [...spec.operands] : inferSlots(node)) : []
-  const current = node ? entryIdOf(node, entries) : null
-  const verbKey = current ? entries.find((e) => e.id === current)?.verb?.key : undefined
-
+  const known = node ? findOperation(catalog, node.operation) : undefined
+  const chosen = node ? entryIdOf(node, choices) : null
+  // A flattened verb (add, subtract …) is picked in the menu, not edited as a slot.
+  const verbSlot = choices.find((e) => e.id === chosen)?.verb?.key
+  const operands = !node ? [] : (known ? [...known.operands] : inferSlots(node)).filter((slot) => slot.key !== verbSlot)
+  const notInCatalog = !!node && !!catalog && !known && node.operation !== ''
   return (
     <div className="fk-expr__operation">
-      <OperationPicker shared={shared} entries={entries} current={current} onPick={(entry) => onChange(seedOperation(entry))} />
-      {unknown ? (
+      <Chooser choices={choices} chosen={chosen} onChoose={(entry) => onChange(seedOperation(entry))} />
+      {notInCatalog && (
         <InlineNotice tone="warning" urgency="none">
           {fill(l.unknownOperation, { name: node!.operation })}
         </InlineNotice>
-      ) : null}
-      {node
-        ? slots
-            .filter((s) => s.key !== verbKey)
-            .map((slot) => (
-              <SlotEditor
-                key={slot.key}
-                shared={shared}
-                slot={slot}
-                value={node[slot.key]}
-                depth={depth}
-                references={references}
-                onChange={(v) => onChange({ ...node, [slot.key]: v })}
-              />
-            ))
-        : null}
+      )}
+      {node &&
+        operands.map((slot) => <Slot key={slot.key} slot={slot} value={node[slot.key]} depth={depth} references={references} onChange={(v) => onChange({ ...node, [slot.key]: v })} />)}
     </div>
   )
 }
 
-function OperationPicker({ shared, entries, current, onPick }: { shared: Shared; entries: PickerEntry[]; current: string | null; onPick: (e: PickerEntry) => void }) {
-  const { l, loading } = shared
-  const families = EXPRESSION_FAMILIES.filter((f) => entries.some((e) => e.family === f))
-  const currentFamily = entries.find((e) => e.id === current)?.family
-  const [chosenFamily, setChosenFamily] = useState(currentFamily ?? families[0])
-  const family = currentFamily ?? chosenFamily ?? families[0]
-  const inFamily = entries.filter((e) => e.family === family)
-  if (loading && !entries.length) {
+/** Family then operation; picking another family jumps to its first operation. */
+function Chooser({ choices, chosen, onChoose }: { choices: PickerEntry[]; chosen: string | null; onChoose: (e: PickerEntry) => void }) {
+  const { l, waiting } = useScope()
+  const offered = EXPRESSION_FAMILIES.filter((f) => choices.some((e) => e.family === f))
+  const familyOfChosen = choices.find((e) => e.id === chosen)?.family
+  const [browsing, setBrowsing] = useState(familyOfChosen ?? offered[0])
+  const family = familyOfChosen ?? browsing ?? offered[0]
+  if (waiting && choices.length === 0) {
     return (
       <p className="fk-expr__loading" role="status">
         {l.loadingOperations}
       </p>
     )
   }
+  const byId = (id: string) => choices.find((e) => e.id === id)
   return (
     <div className="fk-expr__picker">
       <ListboxSelect
         label={l.family}
         value={family ?? null}
-        options={families.map((f) => ({ value: f, label: l.families[f] }))}
+        options={offered.map((f) => ({ value: f, label: l.families[f] }))}
         onChange={(f) => {
-          setChosenFamily(f as typeof family)
-          // Changing family selects that family's first operation.
-          const first = entries.find((e) => e.family === f)
-          if (first && f !== currentFamily) onPick(first)
+          setBrowsing(f as typeof family)
+          const first = choices.find((e) => e.family === f)
+          if (first && f !== familyOfChosen) onChoose(first)
         }}
       />
       <ListboxSelect
         label={l.operation}
         placeholder={l.choose}
-        value={current}
-        options={inFamily.map((e) => ({ value: e.id, label: opName(l, e) }))}
+        value={chosen}
+        options={choices.filter((e) => e.family === family).map((e) => ({ value: e.id, label: choiceName(l, e) }))}
         onChange={(id) => {
-          const e = entries.find((x) => x.id === id)
-          if (e) onPick(e)
+          const entry = byId(id)
+          if (entry) onChoose(entry)
         }}
       />
     </div>
   )
 }
 
-function SlotEditor({ shared, slot, value, onChange, depth, references }: { shared: Shared; slot: OperandSlotSpec; value: unknown; onChange: (v: unknown) => void; depth: number; references: readonly string[] }) {
-  const { l } = shared
-  const refs = useMemo(() => withBindings(references, slot.binds, l), [references, slot.binds, l])
-  switch (slot.kind) {
-    case 'expression':
-      return (
-        <OperandEditor shared={shared} slot={slot} value={value} onChange={onChange} depth={depth + 1} references={refs} hint={slot.binds?.length ? fill(l.loopHint, { names: slot.binds.map((b) => l.bindings[b]).join(', ') }) : undefined} />
-      )
-    case 'list':
-      return <ListSlot shared={shared} slot={slot} value={Array.isArray(value) ? value : []} onChange={onChange} depth={depth} references={refs} />
-    case 'param':
-      return <ParamField shared={shared} slot={slot} value={value} onChange={onChange} />
-    case 'raw':
-      return <RawSlot shared={shared} label={slot.key} value={value} onChange={onChange} />
-  }
-}
-
-// Loop variables are engine identifiers (never translated); the hint names them in words.
-function withBindings(references: readonly string[], binds: readonly LoopBinding[] | undefined, _l: ExpressionBuilderLabels): string[] {
-  if (!binds?.length) return [...references]
-  const extra = binds.filter((b) => !references.includes(b))
-  return [...extra, ...references]
-}
-
-type OperandKindChoice = 'operation' | 'reference' | 'literal'
-
-function kindOf(v: unknown): OperandKindChoice {
-  if (isOperation(v)) return 'operation'
-  if (isReference(v)) return 'reference'
-  return 'literal'
-}
-
-function OperandEditor({
-  shared,
-  slot,
-  value,
-  onChange,
-  depth,
-  references,
-  hint,
-  rootEntries,
-  kindSwitchRef,
-}: {
-  shared: Shared
+interface SlotProps {
   slot: OperandSlotSpec
+  value: unknown
+  onChange: (v: unknown) => void
+  depth: number
+  references: readonly string[]
+}
+
+/** Loop variables (engine identifiers, never translated) come first in the chips inside their subtree. */
+const withLoopNames = (references: readonly string[], binds: readonly LoopBinding[] | undefined): string[] => [...(binds ?? []).filter((b) => !references.includes(b)), ...references]
+
+const SLOT_KINDS: Record<OperandSlotSpec['kind'], (p: SlotProps & { l: ExpressionBuilderLabels; refs: string[] }) => ReactNode> = {
+  expression: ({ slot, value, onChange, depth, refs, l }) => (
+    <Operand
+      slotKey={slot.key}
+      value={value}
+      onChange={onChange}
+      depth={depth + 1}
+      references={refs}
+      {...(slot.binds?.length ? { hint: fill(l.loopHint, { names: slot.binds.map((b) => l.bindings[b]).join(', ') }) } : {})}
+    />
+  ),
+  list: ({ slot, value, onChange, depth, refs }) => <ListOperand slotKey={slot.key} items={Array.isArray(value) ? value : []} onChange={onChange} depth={depth} references={refs} />,
+  param: ({ slot, value, onChange }) => <ParamOperand slot={slot} value={value} onChange={onChange} />,
+  raw: ({ slot, value, onChange }) => <RawOperand label={slot.key} value={value} onChange={onChange} />,
+}
+
+function Slot(props: SlotProps) {
+  const { l } = useScope()
+  const refs = useMemo(() => withLoopNames(props.references, props.slot.binds), [props.references, props.slot.binds])
+  return <>{SLOT_KINDS[props.slot.kind]({ ...props, l, refs })}</>
+}
+
+type OperandForm = 'operation' | 'reference' | 'literal'
+const formOf = (v: unknown): OperandForm => (isOperation(v) ? 'operation' : isReference(v) ? 'reference' : 'literal')
+
+interface OperandProps {
+  slotKey: string
   value: unknown
   onChange: (v: ExpressionNode) => void
   depth: number
   references: readonly string[]
-  hint?: string | undefined
-  rootEntries?: PickerEntry[]
-  kindSwitchRef?: (el: HTMLDivElement | null) => void
-}) {
-  const { l, entries } = shared
-  const kind = kindOf(value)
-  const ownEntries = rootEntries ?? entries
-  const switchKind = (k: string) => {
-    if (k === 'operation') onChange(ownEntries[0] ? seedOperation(ownEntries[0]) : { operation: '' })
-    else if (k === 'reference') onChange({ ref: references[0] ?? '' })
-    else onChange({ value: '' })
+  hint?: string
+  /** Operations offered here (the root's own palette at the root, else the full one). */
+  choices?: PickerEntry[]
+  switchRef?: (el: HTMLDivElement | null) => void
+}
+
+function Operand({ slotKey, value, onChange, depth, references, hint, choices, switchRef }: OperandProps) {
+  const { l, nestedChoices } = useScope()
+  const offered = choices ?? nestedChoices
+  const form = formOf(value)
+  const starters: Record<OperandForm, () => ExpressionNode> = {
+    operation: () => (offered[0] ? seedOperation(offered[0]) : { operation: '' }),
+    reference: () => ({ ref: references[0] ?? '' }),
+    literal: () => ({ value: '' }),
+  }
+  const editors: Record<OperandForm, () => ReactNode> = {
+    operation: () => (
+      <div className="fk-expr__nested" data-depth={depth}>
+        <OperationBlock node={value as OperationNode} onChange={onChange} depth={depth} references={references} choices={offered} />
+      </div>
+    ),
+    reference: () => <ReferenceChips value={(value as { ref: string }).ref} references={references} onChange={(ref) => onChange({ ref })} />,
+    literal: () => <LiteralOperand value={isLiteral(value) ? value.value : value} onChange={(v) => onChange({ value: v })} />,
   }
   return (
-    <div className="fk-expr__slot" role="group" aria-label={fill(l.level, { key: slot.key, level: depth + 1 })} data-depth={depth}>
+    <div className="fk-expr__slot" role="group" aria-label={fill(l.level, { key: slotKey, level: depth + 1 })} data-depth={depth}>
       <div className="fk-expr__slot-head">
-        <code className="fk-expr__slot-key" dir="ltr">{slot.key}</code>
+        <code className="fk-expr__slot-key" dir="ltr">
+          {slotKey}
+        </code>
         <span className="fk-expr__level" aria-hidden="true">
           {depth + 1}
         </span>
       </div>
-      {hint ? <p className="fk-expr__hint">{hint}</p> : null}
-      <div ref={kindSwitchRef} className="fk-expr__kind">
+      {hint && <p className="fk-expr__hint">{hint}</p>}
+      <div ref={switchRef} className="fk-expr__kind">
         <SegmentedControl
           label={l.kindSwitch}
           size="compact"
-          value={kind}
-          onChange={switchKind}
+          value={form}
+          onChange={(f) => onChange(starters[f as OperandForm]())}
           options={[
             { value: 'operation', label: l.kindOperation },
             { value: 'reference', label: l.kindReference },
@@ -258,23 +263,16 @@ function OperandEditor({
           ]}
         />
       </div>
-      {kind === 'operation' ? (
-        <div className="fk-expr__nested" data-depth={depth}>
-          <OperationEditor shared={shared} node={value as OperationNode} onChange={onChange} depth={depth} references={references} entries={ownEntries} />
-        </div>
-      ) : kind === 'reference' ? (
-        <ReferencePicker l={l} value={(value as { ref: string }).ref} references={references} onChange={(ref) => onChange({ ref })} />
-      ) : (
-        <LiteralField l={l} value={isLiteral(value) ? value.value : value} onChange={(v) => onChange({ value: v })} />
-      )}
+      {editors[form]()}
     </div>
   )
 }
 
-function ReferencePicker({ l, value, references, onChange }: { l: ExpressionBuilderLabels; value: string; references: readonly string[]; onChange: (ref: string) => void }) {
+function ReferenceChips({ value, references, onChange }: { value: string; references: readonly string[]; onChange: (ref: string) => void }) {
+  const { l } = useScope()
   return (
     <div className="fk-expr__reference">
-      {references.length ? (
+      {references.length > 0 && (
         <div className="fk-expr__chips" role="group" aria-label={l.references}>
           {references.map((r) => (
             <ToggleButton key={r} className="fk-expr__chip" isSelected={r === value} onChange={() => onChange(r)}>
@@ -282,127 +280,120 @@ function ReferencePicker({ l, value, references, onChange }: { l: ExpressionBuil
             </ToggleButton>
           ))}
         </div>
-      ) : null}
+      )}
       <TextField label={l.referencePath} value={value} onChange={onChange} className="fk-expr__mono" />
     </div>
   )
 }
 
-function LiteralField({ l, value, onChange }: { l: ExpressionBuilderLabels; value: unknown; onChange: (v: unknown) => void }) {
-  const [text, setText] = useState(() => writeLiteral(value))
-  const last = useRef(value)
+/** Free text read as structured data when it parses; follows outside changes without fighting the typist. */
+function LiteralOperand({ value, onChange }: { value: unknown; onChange: (v: unknown) => void }) {
+  const { l } = useScope()
+  const [typed, setTyped] = useState(() => writeLiteral(value))
+  const echoed = useRef<unknown>(value)
   useEffect(() => {
-    if (JSON.stringify(last.current) !== JSON.stringify(value)) {
-      last.current = value
-      setText(writeLiteral(value))
-    }
+    if (JSON.stringify(echoed.current) === JSON.stringify(value)) return
+    echoed.current = value
+    setTyped(writeLiteral(value))
   }, [value])
   return (
     <TextField
       label={l.literal}
       hint={l.literalHint}
-      value={text}
+      value={typed}
       onChange={(t) => {
-        setText(t)
-        const v = readLiteral(t)
-        last.current = v
-        onChange(v)
+        setTyped(t)
+        echoed.current = readLiteral(t)
+        onChange(echoed.current)
       }}
     />
   )
 }
 
-function ParamField({ shared, slot, value, onChange }: { shared: Shared; slot: OperandSlotSpec; value: unknown; onChange: (v: unknown) => void }) {
-  const { l } = shared
-  const vocab = vocabularyOf(slot)
-  if (vocab) {
-    return <ListboxSelect label={slot.key} value={typeof value === 'string' ? value : null} options={vocab.map((v) => ({ value: v, label: l.vocabulary[v] ?? v }))} onChange={onChange} />
+function ParamOperand({ slot, value, onChange }: { slot: OperandSlotSpec; value: unknown; onChange: (v: unknown) => void }) {
+  const { l } = useScope()
+  const words = vocabularyOf(slot)
+  return words ? (
+    <ListboxSelect label={slot.key} value={typeof value === 'string' ? value : null} options={words.map((w) => ({ value: w, label: l.vocabulary[w] ?? w }))} onChange={onChange} />
+  ) : (
+    <TextField label={slot.key} value={value === undefined || value === null ? '' : String(value)} onChange={(t) => onChange(readLiteral(t))} />
+  )
+}
+
+/** JSON area for operands the builder cannot shape; keeps the last valid value while the text is broken. */
+function RawOperand({ label, value, onChange }: { label: string; value: unknown; onChange: (v: unknown) => void }) {
+  const { l } = useScope()
+  const [typed, setTyped] = useState(() => prettyJson(value ?? {}))
+  const [complaint, setComplaint] = useState<string | undefined>(undefined)
+  const edit = (t: string) => {
+    setTyped(t)
+    let parsed: unknown
+    try {
+      parsed = JSON.parse(t)
+    } catch (why) {
+      return setComplaint(fill(l.rawError, { detail: why instanceof Error ? why.message : String(why) }))
+    }
+    setComplaint(undefined)
+    onChange(parsed)
   }
-  return <TextField label={slot.key} value={value === undefined || value === null ? '' : String(value)} onChange={(t) => onChange(readLiteral(t))} />
+  return <TextArea label={label} monospace rows={4} value={typed} errorMessage={complaint} onChange={edit} />
 }
 
-function RawSlot({ shared, label, value, onChange }: { shared: Shared; label: string; value: unknown; onChange: (v: unknown) => void }) {
-  const [text, setText] = useState(() => prettyJson(value ?? {}))
-  const [error, setError] = useState<string | null>(null)
-  return (
-    <TextArea
-      label={label}
-      monospace
-      rows={4}
-      value={text}
-      errorMessage={error ?? undefined}
-      onChange={(t) => {
-        setText(t)
-        try {
-          const parsed = JSON.parse(t)
-          setError(null)
-          onChange(parsed)
-        } catch (e) {
-          setError(fill(shared.l.rawError, { detail: e instanceof Error ? e.message : String(e) }))
-        }
-      }}
-    />
-  )
-}
-
-function ListSlot({ shared, slot, value, onChange, depth, references }: { shared: Shared; slot: OperandSlotSpec; value: unknown[]; onChange: (v: unknown) => void; depth: number; references: readonly string[] }) {
-  const { l } = shared
-  const switches = useRef(new Map<number, HTMLDivElement>())
-  const addRef = useRef<HTMLButtonElement>(null)
-  const [focusAfter, setFocusAfter] = useState<number | null>(null)
+/** Numbered operands; removing one sends focus to the operand that takes its place, or to "add item". */
+function ListOperand({ slotKey, items, onChange, depth, references }: { slotKey: string; items: unknown[]; onChange: (v: unknown) => void; depth: number; references: readonly string[] }) {
+  const { l, locale } = useScope()
+  const kindSwitches = useRef(new Map<number, HTMLDivElement>())
+  const addButton = useRef<HTMLButtonElement>(null)
+  const [landing, setLanding] = useState<number | null>(null)
 
   useEffect(() => {
-    if (focusAfter === null) return
-    const next = switches.current.get(focusAfter)
-    const radio = next?.querySelector<HTMLInputElement>('input[type="radio"]:checked') ?? next?.querySelector<HTMLInputElement>('input[type="radio"]')
-    if (radio) radio.focus()
-    else addRef.current?.focus()
-    setFocusAfter(null)
-  }, [focusAfter, value.length])
+    if (landing === null) return
+    const holder = kindSwitches.current.get(landing)
+    const radio = holder?.querySelector<HTMLInputElement>('input[type="radio"]:checked') ?? holder?.querySelector<HTMLInputElement>('input[type="radio"]')
+    ;(radio ?? addButton.current)?.focus()
+    setLanding(null)
+  }, [landing, items.length])
 
-  const items: ReactNode[] = value.map((item, i) => (
-    <li key={i} className="fk-expr__item">
-      <span className="fk-expr__item-number" aria-hidden="true">
-        {i + 1}
-      </span>
-      <div className="fk-expr__item-body">
-        <OperandEditor
-          shared={shared}
-          slot={{ key: fill(l.item, { n: i + 1 }), kind: 'expression' }}
-          value={item}
-          depth={depth + 1}
-          references={references}
-          onChange={(v) => onChange(value.map((x, j) => (j === i ? v : x)))}
-          kindSwitchRef={(el) => {
-            if (el) switches.current.set(i, el)
-            else switches.current.delete(i)
-          }}
-        />
-      </div>
-      <Button
-        variant="quiet"
-        size="compact"
-        shape="circle"
-        iconOnly
-        accessibleLabel={fill(l.removeItem, { n: i + 1 })}
-        leadingIcon={<Trash2 />}
-        onPress={() => {
-          onChange(value.filter((_, j) => j !== i))
-          // The next item takes this index; past the end, focus "add item".
-          setFocusAfter(i < value.length - 1 ? i : -1)
-        }}
-      />
-    </li>
-  ))
+  const replaceAt = (i: number, v: unknown) => onChange(items.map((x, j) => (j === i ? v : x)))
+  const removeAt = (i: number) => {
+    onChange(items.filter((_, j) => j !== i))
+    setLanding(i < items.length - 1 ? i : -1)
+  }
 
   return (
-    <div className="fk-expr__list" role="group" aria-label={fill(l.level, { key: slot.key, level: depth + 1 })}>
+    <div className="fk-expr__list" role="group" aria-label={fill(l.level, { key: slotKey, level: depth + 1 })}>
       <div className="fk-expr__slot-head">
-        <code className="fk-expr__slot-key" dir="ltr">{slot.key}</code>
-        <Tag size="small">{fill(l.itemCount, { count: value.length }, shared.locale)}</Tag>
+        <code className="fk-expr__slot-key" dir="ltr">
+          {slotKey}
+        </code>
+        <Tag size="small">{fill(l.itemCount, { count: items.length }, locale)}</Tag>
       </div>
-      {items.length ? <ol className="fk-expr__items">{items}</ol> : null}
-      <Button ref={addRef} variant="secondary" size="compact" leadingIcon={<Plus />} onPress={() => onChange([...value, { value: null }])}>
+      {items.length > 0 && (
+        <ol className="fk-expr__items">
+          {items.map((item, i) => (
+            <li key={i} className="fk-expr__item">
+              <span className="fk-expr__item-number" aria-hidden="true">
+                {i + 1}
+              </span>
+              <div className="fk-expr__item-body">
+                <Operand
+                  slotKey={fill(l.item, { n: i + 1 })}
+                  value={item}
+                  depth={depth + 1}
+                  references={references}
+                  onChange={(v) => replaceAt(i, v)}
+                  switchRef={(el) => {
+                    if (el) kindSwitches.current.set(i, el)
+                    else kindSwitches.current.delete(i)
+                  }}
+                />
+              </div>
+              <Button variant="quiet" size="compact" shape="circle" iconOnly accessibleLabel={fill(l.removeItem, { n: i + 1 })} leadingIcon={<Trash2 />} onPress={() => removeAt(i)} />
+            </li>
+          ))}
+        </ol>
+      )}
+      <Button ref={addButton} variant="secondary" size="compact" leadingIcon={<Plus />} onPress={() => onChange([...items, { value: null }])}>
         {l.addItem}
       </Button>
     </div>

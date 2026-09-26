@@ -1,9 +1,11 @@
-// AutosaveController: FlowEditor plus two listeners called on every committed
-// graph change, in order: onSnapshot (local mirrors), then onAutosave (the
-// host debounces and persists). New callback identities are picked up through
-// a ref, so re-rendering the host never re-mounts the editor.
+// AutosaveController wraps FlowEditor and fans every committed graph out to
+// two sinks, always in the same order: the snapshot sink (local mirrors such
+// as an unsaved-changes guard) and then the autosave sink (the host debounces
+// and persists). The relay handed to the editor is created once; it reads the
+// sinks from a box refreshed on each render, so new callback identities never
+// re-mount the canvas or lose its viewport and selection.
 
-import { useCallback, useRef } from 'react'
+import { createElement, useState } from 'react'
 import type { FlowGraph } from '../model/types'
 import { FlowEditor, type FlowEditorProps } from './FlowEditor'
 
@@ -12,12 +14,12 @@ export interface AutosaveControllerProps extends Omit<FlowEditorProps, 'onGraphC
   onSnapshot?: (graph: FlowGraph) => void
 }
 
-export function AutosaveController({ onAutosave, onSnapshot, ...editor }: AutosaveControllerProps) {
-  const latest = useRef({ onAutosave, onSnapshot })
-  latest.current = { onAutosave, onSnapshot }
-  const commit = useCallback((graph: FlowGraph) => {
-    latest.current.onSnapshot?.(graph)
-    latest.current.onAutosave(graph)
-  }, [])
-  return <FlowEditor {...editor} onGraphCommit={commit} />
+type Sink = ((graph: FlowGraph) => void) | undefined
+
+export function AutosaveController(props: AutosaveControllerProps) {
+  const { onAutosave, onSnapshot, ...editorProps } = props
+  const [box] = useState<{ sinks: Sink[] }>(() => ({ sinks: [] }))
+  box.sinks = [onSnapshot, onAutosave]
+  const [relay] = useState(() => (graph: FlowGraph) => box.sinks.forEach((sink) => sink?.(graph)))
+  return createElement(FlowEditor, { ...editorProps, onGraphCommit: relay })
 }
