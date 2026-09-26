@@ -28,6 +28,15 @@ describe('dockItemsFromCanvasTools', () => {
     expect(base.onFit).toHaveBeenCalled()
   })
 
+  it('drops disabled tools and leaves unset optional fields out of the entry', () => {
+    const items = dockItemsFromCanvasTools([
+      { id: 'a', label: 'A', kind: 'action', group: 'view', text: 'x' },
+      { id: 'b', label: 'B', kind: 'toggle', group: 'view', text: 'y', disabled: true },
+    ])
+    expect(items.map((i) => i.id)).toEqual(['a'])
+    expect(Object.keys(items[0]!).sort()).toEqual(['group', 'icon', 'id', 'label'])
+  })
+
   it('renders in the research dock with aria-pressed, the zoom percentage and group separators', () => {
     const { container } = render(<FloatingActionBar destinations={[]} contextual={dockItemsFromCanvasTools(canvasToolItems(base))} anchor="container" />)
     expect(screen.getByRole('button', { name: 'Select' })).toHaveAttribute('aria-pressed', 'true')
