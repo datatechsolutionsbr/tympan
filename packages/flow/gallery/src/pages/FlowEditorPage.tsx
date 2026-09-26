@@ -56,12 +56,12 @@ function buildGraph(t: Record<string, string>): FlowGraph {
     nodes: [
       { id: 'start', kind: 'start', position: { x: 0, y: 0 }, data: { label: t.start, inputVariables: ['edition'], inputDefaults: { edition: '2026-09-20' } } },
       { id: 'source', kind: 'datasource', position: { x: 0, y: 150 }, data: { label: t.source, sourceId: 'census', dialect: 'postgresql', table: 'assertions', selectedColumns: ['case_id', 'key', 'value'], filters: [{ column: 'edition', operator: 'equals', value: '{{start.edition}}' }], limit: 5000 } },
-      { id: 'coding', kind: 'group', position: { x: -40, y: 300 }, size: { width: 400, height: 470 }, data: { name: t.group, tone: 'categorical-3', expanded: true, autoFit: true } },
+      { id: 'coding', kind: 'group', position: { x: -40, y: 360 }, size: { width: 400, height: 470 }, data: { name: t.group, tone: 'categorical-3', expanded: true, autoFit: true } },
       { id: 'rule', kind: 'code', parentId: 'coding', position: { x: 40, y: 64 }, data: { label: t.rule, operation: 'map' } },
       { id: 'decision', kind: 'decision', parentId: 'coding', position: { x: 40, y: 214 }, data: { label: t.decision, input: { ref: 'assertion.value' }, options: [{ value: 'confirmed_primary', label: t.confirmed_primary }, { value: 'confirmed_secondary', label: t.confirmed_secondary }, { value: 'not_confirmed', label: t.not_confirmed }], provider: 'provider-a', model: 'family-large', modelVersion: '2026-06-01', threshold: 0.6 } },
-      { id: 'check', kind: 'rule', position: { x: 440, y: 520 }, data: { label: t.check, ruleId: 'r-stage' } },
-      { id: 'report', kind: 'report-output', position: { x: 0, y: 830 }, data: { label: t.report, from: 'count.report' } },
-      { id: 'end', kind: 'end', position: { x: 0, y: 980 }, data: { label: t.end } },
+      { id: 'check', kind: 'rule', position: { x: 440, y: 580 }, data: { label: t.check, ruleId: 'r-stage' } },
+      { id: 'report', kind: 'report-output', position: { x: 0, y: 900 }, data: { label: t.report, from: 'count.report' } },
+      { id: 'end', kind: 'end', position: { x: 0, y: 1050 }, data: { label: t.end } },
       { id: 'note', kind: 'note', position: { x: 420, y: 150 }, size: { width: 240, height: 120 }, data: { text: t.note, tone: 'categorical-5' } },
     ],
     connectors: [

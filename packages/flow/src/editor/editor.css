@@ -22,6 +22,9 @@
       grid-template-columns: minmax(0, 1fr) 320px;
     }
   }
+  .fk-editor__palette-open {
+    justify-self: start;
+  }
   .fk-editor__canvas {
     position: relative;
     min-block-size: 480px;

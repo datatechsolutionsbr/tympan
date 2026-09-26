@@ -17,7 +17,8 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react'
-import { useMediaQuery } from '@fakhir/design-system'
+import { Button, Drawer, useMediaQuery } from '@fakhir/design-system'
+import { Plus } from 'lucide-react'
 import { nodeKindCatalog } from '../catalog/kindCatalog'
 import { useRenderCatalog } from '../catalog/RenderCatalog'
 import { absoluteRect } from '../geometry/rect'
@@ -62,6 +63,7 @@ export interface FlowEditorLabels {
   tools: string
   outline: string
   palette: string
+  openPalette: string
   aligned: string
   arranged: string
   canConnect: string
@@ -77,6 +79,7 @@ export const flowEditorLabels = defineLabels<FlowEditorLabels>('FlowEditor', {
     tools: 'Canvas tools',
     outline: 'Flow steps',
     palette: 'Steps to add',
+    openPalette: 'Add a step',
     aligned: '{count, plural, one {# node} other {# nodes}} arranged',
     arranged: '{count, plural, one {# node} other {# nodes}} grouped',
     canConnect: '{name}: can connect',
@@ -90,6 +93,7 @@ export const flowEditorLabels = defineLabels<FlowEditorLabels>('FlowEditor', {
     tools: 'Ferramentas do canvas',
     outline: 'Etapas do fluxo',
     palette: 'Etapas para adicionar',
+    openPalette: 'Adicionar etapa',
     aligned: '{count, plural, one {# nó organizado} other {# nós organizados}}',
     arranged: '{count, plural, one {# nó agrupado} other {# nós agrupados}}',
     canConnect: '{name}: pode conectar',
@@ -103,6 +107,7 @@ export const flowEditorLabels = defineLabels<FlowEditorLabels>('FlowEditor', {
     tools: 'Herramientas del lienzo',
     outline: 'Pasos del flujo',
     palette: 'Pasos para añadir',
+    openPalette: 'Añadir un paso',
     aligned: '{count, plural, one {# nodo organizado} other {# nodos organizados}}',
     arranged: '{count, plural, one {# nodo agrupado} other {# nodos agrupados}}',
     canConnect: '{name}: se puede conectar',
@@ -268,6 +273,7 @@ function EditorBody(props: FlowEditorProps & { reference: FlowReferenceData }) {
   const announce = useAnnounce()
   const dialogs = useDialogStack()
   const wide = useMediaQuery('(min-width: 1024px)', true)
+  const [paletteOpen, setPaletteOpen] = useState(false)
 
   const nodes = useFlowEditorState((s) => s.nodes)
   const connectors = useFlowEditorState((s) => s.connectors)
@@ -640,6 +646,21 @@ function EditorBody(props: FlowEditorProps & { reference: FlowReferenceData }) {
 
   const tools = props.renderTools ? props.renderTools(items) : <CanvasToolbar items={items} label={l.tools} placement="dock" />
 
+  // Below 1024 px the palette opens as a bottom drawer and steps are placed by tap.
+  const paletteBody =
+    props.palette === false ? null : (
+      <NodePalette
+        {...(props.palette ?? {})}
+        onPlace={(kind, payload) => {
+          const selected = store.getState().nodes.find((n) => n.selected)
+          const at = selected ? { x: selected.position.x + 320, y: selected.position.y + 60 } : (apiRef.current?.visibleCentre() ?? { x: 0, y: 0 })
+          const id = addNode(kind, at, payload)
+          setPaletteOpen(false)
+          if (id) focusNodeSoon(id)
+        }}
+      />
+    )
+
   return (
     <div
       ref={rootRef}
@@ -648,18 +669,16 @@ function EditorBody(props: FlowEditorProps & { reference: FlowReferenceData }) {
       data-palette={props.palette === false ? 'none' : 'shown'}
       data-locked={locked ? 'true' : 'false'}
     >
-      {props.palette !== false && wide ? (
-        <aside className="fk-editor__palette" aria-label={l.palette}>
-          <NodePalette
-            {...(props.palette ?? {})}
-            onPlace={(kind, payload) => {
-              const selected = store.getState().nodes.find((n) => n.selected)
-              const at = selected ? { x: selected.position.x + 320, y: selected.position.y + 60 } : (apiRef.current?.visibleCentre() ?? { x: 0, y: 0 })
-              const id = addNode(kind, at, payload)
-              if (id) focusNodeSoon(id)
-            }}
-          />
-        </aside>
+      {props.palette !== false && wide ? <aside className="fk-editor__palette" aria-label={l.palette}>{paletteBody}</aside> : null}
+      {props.palette !== false && !wide ? (
+        <>
+          <Button className="fk-editor__palette-open" variant="secondary" leadingIcon={<Plus />} onPress={() => setPaletteOpen(true)}>
+            {l.openPalette}
+          </Button>
+          <Drawer open={paletteOpen} onOpenChange={setPaletteOpen} title={l.palette} placement="bottom">
+            {paletteBody}
+          </Drawer>
+        </>
       ) : null}
       <div ref={canvasRef} className="fk-editor__canvas" onDragOver={onDragOver} onDrop={onDrop}>
         <CanvasSurface

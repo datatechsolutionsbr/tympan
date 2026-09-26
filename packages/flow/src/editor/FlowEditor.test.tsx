@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { FakhirProvider } from '@fakhir/design-system'
 import { expectNoAxeViolations } from '../../test/axe'
 import { cssOf, mediaBlock } from '../../test/css'
+import { setViewportWidth } from '../../test/media'
 import { nodeKindCatalog } from '../catalog/kindCatalog'
 import type { FlowGraph } from '../model/types'
 import { createFlowEditorStore } from '../state/editorState'
@@ -155,6 +156,22 @@ describe('FlowEditor', () => {
     expect(css).not.toMatch(/(^|[^-])(left|right)\s*:/m)
     expect(mediaBlock(css, /\(forced-colors: active\)/)).toMatch(/Highlight/)
     expect(mediaBlock(css, /\(prefers-reduced-motion: reduce\)/)).toMatch(/animation:\s*none/)
+  })
+})
+
+describe('FlowEditor on narrow screens', () => {
+  it('opens the palette as a bottom drawer and places a step by tap', async () => {
+    setViewportWidth(375)
+    nodeKindCatalog.install([{ kind: 'code', label: 'Compute', category: 'Data processing', icon: 'code' }])
+    const { container } = render(<FlowEditor initialGraph={graph()} />)
+    expect(container.querySelector('.fk-editor__palette')).toBeNull()
+    await userEvent.click(screen.getByRole('button', { name: 'Add a step' }))
+    const drawer = await screen.findByRole('dialog', { name: 'Steps to add' })
+    const before = container.querySelectorAll('[data-fk-node-id]').length
+    const item = within(drawer).getAllByRole('row').find((r) => r.textContent?.includes('Compute'))!
+    item.focus()
+    await userEvent.keyboard('{Enter}')
+    expect(container.querySelectorAll('[data-fk-node-id]').length).toBe(before + 1)
   })
 })
 
