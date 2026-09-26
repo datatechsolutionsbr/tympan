@@ -1,0 +1,196 @@
+/* TextField (spec: wave-1/text-field.md; design direction §2.2, §2.6, §2.10). */
+@layer fakhir.components {
+  .fk-text-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-1);
+    min-inline-size: 0;
+  }
+
+  .fk-text-field__label {
+    color: var(--fk-ink);
+    font-size: var(--fk-font-size-label);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-label);
+  }
+
+  .fk-text-field__hint,
+  .fk-text-field__counter,
+  .fk-text-field__success {
+    margin: 0;
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+
+  .fk-text-field__counter {
+    align-self: flex-end;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .fk-text-field__counter[data-over-limit],
+  .fk-text-field__error {
+    color: var(--fk-danger);
+  }
+
+  .fk-text-field__success {
+    color: var(--fk-success);
+  }
+
+  .fk-text-field__error {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--fk-space-1);
+    margin: 0;
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+
+  .fk-text-field__group {
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: var(--fk-space-1);
+    min-block-size: var(--fk-control-height);
+    padding-inline: var(--fk-space-3) var(--fk-space-1);
+    border: 1px solid var(--fk-input);
+    border-radius: var(--fk-radius-control);
+    background: var(--fk-surface-solid);
+    color: var(--fk-ink);
+    transition: border-color var(--fk-dur-instant) var(--fk-ease);
+  }
+
+  .fk-text-field[data-appearance='filled'] .fk-text-field__group {
+    border-color: transparent;
+    background: var(--fk-surface-sunken);
+  }
+
+  .fk-text-field[data-hovered] .fk-text-field__group {
+    border-color: var(--fk-ink-3);
+  }
+
+  .fk-text-field__group:has(.fk-text-field__input[data-focus-visible]),
+  .fk-text-field__group:focus-within {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+
+  .fk-text-field[data-invalid] .fk-text-field__group {
+    border-color: var(--fk-danger);
+  }
+
+  .fk-text-field[data-readonly] .fk-text-field__group {
+    background: var(--fk-surface-sunken);
+  }
+
+  .fk-text-field[data-disabled] .fk-text-field__group {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .fk-text-field__leading {
+    display: inline-flex;
+    color: var(--fk-ink-3);
+  }
+  .fk-text-field__leading > svg {
+    inline-size: 1.15em;
+    block-size: 1.15em;
+  }
+
+  .fk-text-field__input {
+    flex: 1;
+    min-inline-size: 0;
+    min-block-size: calc(var(--fk-control-height) - 2px);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-family: var(--fk-font-sans);
+    font-size: var(--fk-font-size-body);
+    outline: none;
+  }
+  .fk-text-field__input::placeholder {
+    color: var(--fk-ink-3);
+  }
+  .fk-text-field__input::-webkit-search-cancel-button {
+    appearance: none;
+  }
+
+  .fk-text-field__action {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--fk-space-6);
+    block-size: var(--fk-space-6);
+    padding: 0;
+    border: 0;
+    border-radius: var(--fk-radius-control);
+    background: transparent;
+    color: var(--fk-ink-3);
+    cursor: pointer;
+    transition: background-color var(--fk-dur-quick) var(--fk-ease), opacity var(--fk-dur-quick) var(--fk-ease);
+  }
+  /* 44 x 44 px hit area on each trailing action. */
+  .fk-text-field__action::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: max(100%, var(--fk-control-target));
+    block-size: max(100%, var(--fk-control-target));
+    transform: translate(-50%, -50%);
+  }
+  .fk-text-field__action[data-hovered] {
+    background: var(--fk-surface-sunken);
+    color: var(--fk-ink);
+  }
+  .fk-text-field__action[data-focus-visible] {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+
+  .fk-text-field__success-mark {
+    margin-inline-end: var(--fk-space-2);
+    color: var(--fk-success);
+  }
+
+  @media (max-width: 1023.98px) {
+    .fk-text-field__group {
+      min-block-size: var(--fk-control-height-touch);
+    }
+  }
+
+  /* At least 16 px on touch devices so browsers do not zoom on focus. */
+  @media (pointer: coarse) {
+    .fk-text-field__input {
+      font-size: var(--fk-font-size-body-lg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-text-field__group,
+    .fk-text-field__action {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-text-field__group {
+      border: 1px solid FieldText;
+      background: Field;
+      color: FieldText;
+    }
+    .fk-text-field__group:focus-within {
+      outline: 2px solid Highlight;
+    }
+    .fk-text-field[data-invalid] .fk-text-field__group {
+      border-width: 2px;
+    }
+    .fk-text-field__action[data-focus-visible] {
+      outline-color: Highlight;
+    }
+  }
+}

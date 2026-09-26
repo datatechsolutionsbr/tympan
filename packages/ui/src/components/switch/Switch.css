@@ -1,0 +1,181 @@
+/* Switch and SwitchGroup (spec: wave-1/switch.md; design direction §2.3, §2.6, §2.7). */
+@layer fakhir.components {
+  .fk-switch {
+    --fk-switch-width: 36px;
+    --fk-switch-height: 20px;
+    --fk-switch-thumb: 14px;
+
+    position: relative;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fk-space-3);
+    min-block-size: var(--fk-control-target);
+    color: var(--fk-ink-2);
+    cursor: pointer;
+    outline: none;
+  }
+
+  .fk-switch[data-size='small'] {
+    --fk-switch-width: 28px;
+    --fk-switch-height: 16px;
+    --fk-switch-thumb: 10px;
+  }
+
+  .fk-switch[data-size='large'] {
+    --fk-switch-width: 44px;
+    --fk-switch-height: 24px;
+    --fk-switch-thumb: 18px;
+  }
+
+  /* Tile: text on the start side, control at the end, whole row is the target. */
+  .fk-switch[data-layout='tile'] {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    padding: var(--fk-space-3) var(--fk-space-4);
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-control);
+    background: var(--fk-surface-solid);
+  }
+
+  .fk-switch__track {
+    position: relative;
+    box-sizing: border-box;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    inline-size: var(--fk-switch-width);
+    block-size: var(--fk-switch-height);
+    padding-inline: calc((var(--fk-switch-height) - var(--fk-switch-thumb)) / 2);
+    border: 1px solid var(--fk-line-strong);
+    border-radius: var(--fk-radius-pill);
+    background: var(--fk-surface-sunken);
+    transition: background-color var(--fk-dur-quick) var(--fk-ease);
+  }
+
+  /* Invisible hit area on the control alone: at least 44 px (§2.10). */
+  .fk-switch__track::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: max(100%, var(--fk-control-target));
+    block-size: max(100%, var(--fk-control-target));
+    transform: translate(-50%, -50%);
+  }
+
+  .fk-switch__thumb {
+    inline-size: var(--fk-switch-thumb);
+    block-size: var(--fk-switch-thumb);
+    border-radius: var(--fk-radius-pill);
+    background: var(--fk-ink-3);
+    transition: transform var(--fk-dur-quick) var(--fk-ease), background-color var(--fk-dur-quick) var(--fk-ease);
+  }
+
+  .fk-switch[data-selected] .fk-switch__track {
+    border-color: var(--fk-accent);
+    background: var(--fk-accent);
+  }
+
+  .fk-switch[data-selected] .fk-switch__thumb {
+    background: var(--fk-accent-ink);
+    transform: translateX(calc(var(--fk-switch-width) - var(--fk-switch-height)));
+  }
+
+  .fk-switch[data-selected] .fk-switch__thumb:dir(rtl) {
+    transform: translateX(calc(-1 * (var(--fk-switch-width) - var(--fk-switch-height))));
+  }
+
+  .fk-switch[data-hovered]:not([data-disabled]) .fk-switch__track {
+    border-color: var(--fk-ink-3);
+  }
+
+  .fk-switch[data-pressed] .fk-switch__thumb {
+    opacity: 0.85;
+  }
+
+  .fk-switch[data-focus-visible] .fk-switch__track {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+
+  .fk-switch[data-disabled] {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .fk-switch[data-readonly] {
+    cursor: default;
+  }
+
+  .fk-switch__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-1);
+  }
+
+  .fk-switch__label {
+    color: var(--fk-ink);
+    font-size: var(--fk-font-size-body);
+    line-height: var(--fk-font-line-height-body);
+  }
+
+  .fk-switch__description {
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+
+  .fk-switch-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-2);
+  }
+
+  .fk-switch-group__label {
+    color: var(--fk-ink);
+    font-size: var(--fk-font-size-label);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-label);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-switch__track,
+    .fk-switch__thumb {
+      transition: none;
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .fk-switch__track {
+      background: var(--fk-surface-sunken);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-switch__track {
+      border: 1px solid CanvasText;
+      background: Canvas;
+      forced-color-adjust: none;
+    }
+    .fk-switch__thumb {
+      box-sizing: border-box;
+      border: 2px solid CanvasText;
+      background: Canvas;
+    }
+    .fk-switch[data-selected] .fk-switch__track {
+      border-color: CanvasText;
+      background: Canvas;
+    }
+    .fk-switch[data-selected] .fk-switch__thumb {
+      background: CanvasText;
+    }
+    .fk-switch[data-focus-visible] .fk-switch__track {
+      outline-color: Highlight;
+    }
+    .fk-switch[data-layout='tile'] {
+      border: 1px solid CanvasText;
+    }
+  }
+}

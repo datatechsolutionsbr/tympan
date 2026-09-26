@@ -1,0 +1,240 @@
+/* ListboxSelect (spec: wave-1/listbox-select.md; design direction §2.5, §2.7, §2.10). */
+@layer fakhir.components {
+  .fk-listbox-select {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-1);
+    min-inline-size: 0;
+  }
+
+  .fk-listbox-select__label {
+    color: var(--fk-ink);
+    font-size: var(--fk-font-size-label);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-label);
+  }
+
+  .fk-listbox-select__hint {
+    margin: 0;
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+
+  .fk-listbox-select__error {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--fk-space-1);
+    margin: 0;
+    color: var(--fk-danger);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+
+  .fk-listbox-select__trigger {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: var(--fk-space-2);
+    inline-size: 100%;
+    min-block-size: var(--fk-control-height);
+    padding-inline: var(--fk-space-3);
+    border: 1px solid var(--fk-input);
+    border-radius: var(--fk-radius-control);
+    background: var(--fk-surface-solid);
+    color: var(--fk-ink);
+    font: inherit;
+    font-family: var(--fk-font-sans);
+    font-size: var(--fk-font-size-body);
+    text-align: start;
+    cursor: pointer;
+    outline: none;
+    transition: border-color var(--fk-dur-instant) var(--fk-ease);
+  }
+
+  .fk-listbox-select__trigger[data-hovered] {
+    border-color: var(--fk-ink-3);
+  }
+
+  .fk-listbox-select__trigger[data-focus-visible] {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+
+  .fk-listbox-select[data-invalid] .fk-listbox-select__trigger {
+    border-color: var(--fk-danger);
+  }
+
+  .fk-listbox-select[data-disabled] .fk-listbox-select__trigger {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .fk-listbox-select__value {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .fk-listbox-select__value[data-placeholder] {
+    color: var(--fk-ink-3);
+  }
+
+  .fk-listbox-select__chevron {
+    color: var(--fk-ink-3);
+    transition: transform var(--fk-dur-quick) var(--fk-ease);
+  }
+
+  .fk-listbox-select[data-open] .fk-listbox-select__chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Popover: elevation level 3 (§2.5). */
+  .fk-listbox-select__popover {
+    box-sizing: border-box;
+    min-inline-size: var(--trigger-width);
+    max-inline-size: min(28rem, calc(100vw - var(--fk-space-6)));
+    padding: var(--fk-space-1);
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-card);
+    background: var(--fk-surface-raised);
+    box-shadow: var(--fk-shadow-floating);
+    backdrop-filter: blur(var(--fk-glass-blur-floating));
+    overflow: auto;
+  }
+
+  .fk-listbox-select__popover[data-entering] {
+    animation: fk-listbox-select-in var(--fk-dur-quick) var(--fk-ease);
+  }
+
+  /* Bottom tray: overrides the popover's computed inline position. */
+  .fk-listbox-select__tray {
+    position: fixed !important;
+    inset: auto 0 0 0 !important;
+    z-index: var(--fk-z-modal);
+    box-sizing: border-box;
+    border: 1px solid var(--fk-line);
+    border-block-end: 0;
+    inline-size: 100%;
+    max-block-size: 70vh;
+    padding: var(--fk-space-3) var(--fk-space-3) calc(var(--fk-space-3) + env(safe-area-inset-bottom, 0px));
+    border-start-start-radius: var(--fk-radius-sheet);
+    border-start-end-radius: var(--fk-radius-sheet);
+    background: var(--fk-surface-raised);
+    box-shadow: var(--fk-shadow-modal);
+    overflow: auto;
+  }
+
+  .fk-listbox-select__list {
+    outline: none;
+  }
+
+  .fk-listbox-select__section-title {
+    padding: var(--fk-space-2) var(--fk-space-3) var(--fk-space-1);
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+    font-weight: var(--fk-font-weight-semibold);
+  }
+
+  .fk-listbox-select__option {
+    display: flex;
+    align-items: center;
+    gap: var(--fk-space-2);
+    min-block-size: var(--fk-control-target);
+    padding: var(--fk-space-1) var(--fk-space-3);
+    border-radius: var(--fk-radius-control);
+    color: var(--fk-ink-2);
+    cursor: pointer;
+    outline: none;
+  }
+
+  .fk-listbox-select__option[data-focused] {
+    background: var(--fk-surface-sunken);
+    color: var(--fk-ink);
+  }
+
+  .fk-listbox-select__option[data-focus-visible] {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: -2px;
+  }
+
+  .fk-listbox-select__option[data-selected] {
+    color: var(--fk-on-accent-soft);
+    font-weight: var(--fk-font-weight-semibold);
+  }
+
+  .fk-listbox-select__option[data-disabled] {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .fk-listbox-select__option-text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+
+  .fk-listbox-select__option-description {
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+    font-weight: var(--fk-font-weight-regular);
+  }
+
+  .fk-listbox-select__check {
+    display: inline-flex;
+    inline-size: 1.15em;
+    color: var(--fk-accent);
+  }
+
+  @keyframes fk-listbox-select-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+  }
+
+  @media (max-width: 1023.98px) {
+    .fk-listbox-select__trigger {
+      min-block-size: var(--fk-control-height-touch);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-listbox-select__trigger,
+    .fk-listbox-select__chevron {
+      transition: none;
+    }
+    .fk-listbox-select__popover[data-entering] {
+      animation: none;
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .fk-listbox-select__popover,
+    .fk-listbox-select__tray {
+      background: var(--fk-surface-raised-solid);
+      backdrop-filter: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-listbox-select__trigger {
+      border: 1px solid ButtonText;
+    }
+    .fk-listbox-select__popover,
+    .fk-listbox-select__tray {
+      border: 1px solid CanvasText;
+    }
+    .fk-listbox-select__option[data-selected],
+    .fk-listbox-select__option[data-focused] {
+      background: Highlight;
+      color: HighlightText;
+      forced-color-adjust: none;
+    }
+    .fk-listbox-select__check {
+      color: HighlightText;
+    }
+  }
+}

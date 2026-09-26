@@ -1,0 +1,99 @@
+/* Field, Fieldset, FieldStack (spec: wave-1/field.md; design direction §2.1, §2.2, §2.10). */
+@layer fakhir.components {
+  .fk-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-1);
+    min-inline-size: 0;
+  }
+
+  /* Label always above the control (§2.10). */
+  .fk-field__label {
+    color: var(--fk-ink);
+    font-family: var(--fk-font-sans);
+    font-size: var(--fk-font-size-label);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-label);
+  }
+
+  .fk-field__required {
+    color: var(--fk-ink-3);
+    font-weight: var(--fk-font-weight-regular);
+  }
+
+  .fk-field__hint {
+    margin: 0;
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+    max-inline-size: calc(var(--fk-measure-prose) * 1ch);
+  }
+
+  .fk-field__error {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--fk-space-1);
+    margin: 0;
+    color: var(--fk-danger);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+
+  .fk-field__error-icon {
+    margin-block-start: 1px;
+  }
+
+  .fk-field[data-disabled] .fk-field__label {
+    color: var(--fk-ink-3);
+  }
+
+  .fk-fieldset {
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .fk-fieldset__legend {
+    padding: 0;
+    margin-block-end: var(--fk-space-2);
+    color: var(--fk-ink);
+    font-family: var(--fk-font-sans);
+    font-size: var(--fk-font-size-body);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-body);
+  }
+
+  .fk-fieldset__description {
+    margin: 0 0 var(--fk-space-3);
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+
+  .fk-fieldset__body,
+  .fk-field-stack {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--fk-space-4) + var(--fk-space-1));
+  }
+
+  @media (max-width: 767.98px) {
+    .fk-fieldset__body,
+    .fk-field-stack {
+      gap: var(--fk-space-4);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-field__label,
+    .fk-fieldset__legend {
+      color: CanvasText;
+    }
+    .fk-field__error,
+    .fk-field__error-icon {
+      color: CanvasText;
+      forced-color-adjust: auto;
+    }
+  }
+}
