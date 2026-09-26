@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import '../../src/styles.css'
 import './gallery.css'
 import { FakhirProvider, ThemeProvider, ToastProvider } from '../../src'
+import { GalleryLocaleContext, useGalleryLocaleState } from './locale'
 import { Customizer } from './Customizer'
 import { Gallery } from './Gallery'
 import { ResearchShellDemo } from './ResearchShell'
@@ -24,8 +25,10 @@ function App() {
   const navigate = (href: string) => {
     window.location.hash = href.replace(/^#/, '')
   }
+  const locale = useGalleryLocaleState()
   return (
-    <FakhirProvider navigate={navigate}>
+    <GalleryLocaleContext.Provider value={locale}>
+    <FakhirProvider navigate={navigate} locale={locale.locale} pseudo={locale.pseudo}>
       <ThemeProvider storageKey={STORAGE_KEY}>
         <ToastProvider>
           {hash.startsWith('#/customizer') ? (
@@ -38,6 +41,7 @@ function App() {
         </ToastProvider>
       </ThemeProvider>
     </FakhirProvider>
+    </GalleryLocaleContext.Provider>
   )
 }
 

@@ -1,10 +1,12 @@
-import { NativeSelect, SegmentedControl, ThemeScope, useTheme, type ThemeDensity, type ThemeMode } from '../../src'
+import { NativeSelect, SegmentedControl, Switch, ThemeScope, useTheme, type ThemeDensity, type ThemeMode } from '../../src'
+import { GALLERY_LOCALES, useGalleryLocale } from './locale'
 import { GALLERY_PAGES } from './Groups'
 
 export const PRESET_NAMES = ['fakhir', 'neutral', 'high-contrast']
 
 export function GalleryToolbar({ extra }: { extra?: React.ReactNode }) {
   const t = useTheme()
+  const l = useGalleryLocale()
   return (
     <header className="fk-gallery-toolbar">
       <strong className="fk-gallery-toolbar__brand">Fakhir design system</strong>
@@ -20,6 +22,13 @@ export function GalleryToolbar({ extra }: { extra?: React.ReactNode }) {
       <div className="fk-gallery-toolbar__controls">
         {extra ?? <NativeSelect label="Theme" options={PRESET_NAMES} value={t.theme} onChange={t.setTheme} />}
         <SegmentedControl label="Mode" size="compact" options={['system', 'light', 'dark']} value={t.mode} onChange={(m) => t.setMode(m as ThemeMode)} />
+        <NativeSelect
+          label="Language"
+          options={GALLERY_LOCALES.map((x) => ({ value: x.tag, label: x.name }))}
+          value={l.locale}
+          onChange={l.setLocale}
+        />
+        <Switch isSelected={l.pseudo} onChange={l.setPseudo} label="Pseudo-localization" />
         <SegmentedControl label="Density" size="compact" options={['compact', 'default', 'comfortable']} value={t.density} onChange={(d) => t.setDensity(d as ThemeDensity)} />
       </div>
     </header>

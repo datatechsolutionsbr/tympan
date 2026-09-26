@@ -1,6 +1,7 @@
 // Research shell demo: the overview storyboard on the rail + glass sheet +
 // bottom dock shell (no top bar). Copy in Brazilian Portuguese, the
-// platform's first language. Figures are illustrative demo data.
+// platform's first language (the library copy follows the gallery's language
+// switch). Figures are illustrative demo data.
 import {
   BookMarked,
   BookOpen,
@@ -26,7 +27,6 @@ import {
   EvidencePanel,
   FakhirProvider,
   FloatingActionBar,
-  messagesPtBR,
   PageHeader,
   PhaseBar,
   ProfileAvatar,
@@ -45,6 +45,7 @@ import {
   type Stage,
   type StatStripItem,
 } from '../../src'
+import { useGalleryLocale } from './locale'
 
 const base = '#/research-shell'
 const go = (section: string) => `${base}/${section}`
@@ -124,6 +125,7 @@ function Account() {
 }
 
 export function ResearchShellDemo() {
+  const gallery = useGalleryLocale()
   const [navOpen, setNavOpen] = useState(false)
   const [evidence, setEvidence] = useState<AttentionItem | null>(null)
 
@@ -158,7 +160,7 @@ export function ResearchShellDemo() {
   ]
 
   return (
-    <FakhirProvider baseMessages={messagesPtBR} locale="pt-BR" navigate={(href) => (window.location.hash = href.replace(/^#/, ''))}>
+    <FakhirProvider locale={gallery.locale} pseudo={gallery.pseudo} navigate={(href) => (window.location.hash = href.replace(/^#/, ''))}>
       <AppFrame
         layout="rail"
         ambient
