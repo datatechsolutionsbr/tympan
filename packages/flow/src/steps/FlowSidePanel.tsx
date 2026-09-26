@@ -6,11 +6,11 @@
 
 import { ArrowRight, Check, Ellipsis } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
-import { ActionMenu, Button, ListboxSelect, TextField } from '@fakhir/design-system'
+import { ActionMenu, Button, ListboxSelect, Switch, TextArea, TextField } from '@fakhir/design-system'
 import { fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { FlowNode } from '../model/types'
 import { ShapeFlow } from './ShapeChip'
-import { researchStepWords, specOfNode, type ReadyStep, type StepField } from './researchSteps'
+import { researchStepWords, settingProblems, settingsOf, specOfNode, type ReadyStep, type StepField } from './researchSteps'
 import { shapeCounts, type DataShape } from './shapes'
 import { useSteps } from './StepsContext'
 
@@ -113,6 +113,16 @@ function StepSettings({ node, spec, preview, locked, onTestStep, onRemove, onEdi
   const rt = useSteps()
   const w = rt.words
   const title = (typeof node.data.label === 'string' && node.data.label) || spec?.name || node.kind
+  const settings = settingsOf(spec, node.data)
+  const problems = settingProblems(spec, node.data, rt.problems.get(node.id))
+  /** A field's new value, at the top of the node data or inside the object `configIn` names (undefined removes it). */
+  const commit = (key: string, v: unknown) => {
+    if (!spec?.configIn) return onEdit(node.id, { [key]: v })
+    const next = { ...settings }
+    if (v === undefined) delete next[key]
+    else next[key] = v
+    onEdit(node.id, { [spec.configIn]: next })
+  }
   return (
     <section className="fk-flow-side" aria-labelledby="fk-flow-side-title" data-step={node.id}>
       <div className="fk-flow-side__top">
@@ -131,9 +141,14 @@ function StepSettings({ node, spec, preview, locked, onTestStep, onRemove, onEdi
         {title}
       </h2>
       {spec && !spec.primitive ? <ShapeFlow inputs={spec.inputs} output={spec.output} words={rt.shapes} labels={w} /> : null}
-      <form className="fk-flow-side__form" onSubmit={(e) => e.preventDefault()}>
+      <form className="fk-flow-side__form" onSubmit={(e) => e.preventDefault()} noValidate>
+        {problems[''] ? (
+          <p className="fk-flow-side__problem" role="alert">
+            {problems['']}
+          </p>
+        ) : null}
         {(spec?.fields ?? []).map((f) => (
-          <Field key={f.key} field={f} value={node.data[f.key]} disabled={!!locked} onCommit={(v) => onEdit(node.id, { [f.key]: v })} />
+          <Field key={f.key} field={f} value={settings[f.key]} error={problems[f.key]} disabled={!!locked} onCommit={(v) => commit(f.key, v)} />
         ))}
         <Draft label={w.stepName} value={typeof node.data.label === 'string' ? node.data.label : ''} placeholder={spec?.name ?? ''} disabled={!!locked} onCommit={(v) => onEdit(node.id, { label: v || undefined })} />
       </form>
@@ -182,35 +197,98 @@ function StepSettings({ node, spec, preview, locked, onTestStep, onRemove, onEdi
   )
 }
 
-/** A settings field: a choice, or text / number committed on blur or Enter. */
-function Field({ field, value, disabled, onCommit }: { field: StepField; value: unknown; disabled: boolean; onCommit: (v: unknown) => void }) {
+/** A settings field: a choice, a switch, or text / number / list / structured text committed on blur or Enter. */
+function Field({ field, value, error, disabled, onCommit }: { field: StepField; value: unknown; error?: string; disabled: boolean; onCommit: (v: unknown) => void }) {
   const words = useLabels(researchStepWords, undefined)
-  const current = value === undefined || value === null ? '' : String(value)
+  const rt = useSteps()
+  const { locale } = useFlowLocale()
+  const current = value === undefined || value === null ? '' : typeof value === 'object' ? '' : String(value)
   const options = useMemo(() => {
     const values = [...(field.options ?? [])]
     if (current && !values.includes(current)) values.unshift(current)
     return values.map((v) => ({ value: v, label: words[`option.${v}`] ?? v }))
   }, [field.options, current, words])
+  const label = field.label ?? field.key
+  const req = field.required ? { required: true } : {}
   if (field.type === 'choice') {
     return (
       <div className="fk-flow-side__field">
-        <ListboxSelect label={field.label ?? field.key} options={options} value={current || null} disabled={disabled} onChange={(v) => v !== current && onCommit(v)} />
+        <ListboxSelect label={label} options={options} value={current || null} disabled={disabled} {...req} {...(error ? { errorMessage: error } : {})} onChange={(v) => v !== current && onCommit(v)} />
       </div>
+    )
+  }
+  if (field.type === 'boolean') {
+    return (
+      <div className="fk-flow-side__field">
+        <Switch label={label} isSelected={value === true} disabled={disabled} onChange={(on) => onCommit(on)} {...(error ? { description: <span className="fk-flow-side__problem">{error}</span> } : {})} />
+      </div>
+    )
+  }
+  if (field.type === 'json') return <JsonDraft label={label} value={value} error={error} disabled={disabled} required={!!field.required} invalid={(detail) => fill(rt.words.invalidJson, { detail }, locale)} onCommit={onCommit} />
+  if (field.type === 'list') {
+    const text = Array.isArray(value) ? value.map(String).join(', ') : current
+    return (
+      <Draft
+        label={label}
+        value={text}
+        hint={rt.words.valuesHint}
+        error={error}
+        required={!!field.required}
+        disabled={disabled}
+        onCommit={(v) => {
+          const items = v.split(',').map((x) => x.trim()).filter(Boolean)
+          onCommit(items.length ? items : undefined)
+        }}
+      />
     )
   }
   return (
     <Draft
-      label={field.label ?? field.key}
+      label={label}
       value={current}
       numeric={field.type === 'number'}
+      error={error}
+      required={!!field.required}
       disabled={disabled}
       onCommit={(v) => onCommit(v === '' ? undefined : field.type === 'number' && Number.isFinite(Number(v)) ? Number(v) : v)}
     />
   )
 }
 
+/** Structured text (JSON) committed when it leaves the field; text that does not parse stays with its error. */
+function JsonDraft({ label, value, error, disabled, required, invalid, onCommit }: { label: string; value: unknown; error?: string; disabled: boolean; required: boolean; invalid: (detail: string) => string; onCommit: (v: unknown) => void }) {
+  const text = value === undefined ? '' : JSON.stringify(value, null, 2)
+  const [draft, setDraft] = useState(text)
+  const [parseError, setParseError] = useState<string | null>(null)
+  useEffect(() => {
+    setDraft(text)
+    setParseError(null)
+  }, [text])
+  const commit = () => {
+    const t = draft.trim()
+    if (!t) {
+      setParseError(null)
+      if (value !== undefined) onCommit(undefined)
+      return
+    }
+    try {
+      const parsed: unknown = JSON.parse(t)
+      setParseError(null)
+      if (JSON.stringify(parsed) !== JSON.stringify(value)) onCommit(parsed)
+    } catch (e) {
+      setParseError(invalid(e instanceof Error ? e.message : String(e)))
+    }
+  }
+  const shown = parseError ?? error
+  return (
+    <div className="fk-flow-side__field" onBlur={commit}>
+      <TextArea label={label} value={draft} onChange={setDraft} monospace autoGrow rows={3} maxRows={12} disabled={disabled} {...(required ? { required: true } : {})} {...(shown ? { errorMessage: shown } : {})} />
+    </div>
+  )
+}
+
 /** A text field that reports its value when it loses focus or on Enter (one undo step per edit). */
-function Draft({ label, value, placeholder, numeric, disabled, onCommit }: { label: string; value: string; placeholder?: string; numeric?: boolean; disabled: boolean; onCommit: (v: string) => void }) {
+function Draft({ label, value, placeholder, numeric, hint, error, required, disabled, onCommit }: { label: string; value: string; placeholder?: string; numeric?: boolean; hint?: string; error?: string; required?: boolean; disabled: boolean; onCommit: (v: string) => void }) {
   const [draft, setDraft] = useState(value)
   useEffect(() => setDraft(value), [value])
   const commit = () => {
@@ -223,7 +301,18 @@ function Draft({ label, value, placeholder, numeric, disabled, onCommit }: { lab
         if (e.key === 'Enter') commit()
       }}
     >
-      <TextField label={label} value={draft} onChange={setDraft} onBlur={commit} disabled={disabled} {...(placeholder ? { placeholder } : {})} {...(numeric ? { inputType: 'number' as const } : {})} />
+      <TextField
+        label={label}
+        value={draft}
+        onChange={setDraft}
+        onBlur={commit}
+        disabled={disabled}
+        {...(placeholder ? { placeholder } : {})}
+        {...(numeric ? { inputType: 'number' as const } : {})}
+        {...(hint ? { hint } : {})}
+        {...(error ? { errorMessage: error } : {})}
+        {...(required ? { required: true } : {})}
+      />
     </div>
   )
 }

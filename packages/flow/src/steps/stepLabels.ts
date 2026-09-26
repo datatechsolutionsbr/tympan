@@ -27,6 +27,12 @@ export interface StepEditorWords {
   results: string
   addAfter: string
   notSet: string
+  /** Card line when the step has configuration problems. */
+  configIncomplete: string
+  /** Error of a structured (JSON) setting that does not parse. */
+  invalidJson: string
+  /** Hint of a list setting. */
+  valuesHint: string
   runOk: string
   runRunning: string
   runFailed: string
@@ -98,7 +104,7 @@ export const stepEditorWords = defineLabels<StepEditorWords>('stepEditor', {
     dragHint: 'Drag onto the canvas or press Enter', addNamed: 'Add {name}',
     pickerAfter: 'Add after “{name}”', pickerBetween: 'Insert between “{from}” and “{to}”', pickerFree: 'Add a step', pickerSearch: 'Find a step',
     accepts: 'Takes {shape}', nothingAccepts: 'No step takes {shape}', results: '{count, plural, =0 {No steps} one {# step} other {# steps}}',
-    addAfter: 'Add a step after “{name}”', notSet: 'not configured', runOk: 'ok', runRunning: 'running', runFailed: 'failed',
+    addAfter: 'Add a step after “{name}”', notSet: 'not configured', configIncomplete: 'configuration incomplete', invalidJson: 'Not valid JSON: {detail}', valuesHint: 'Separate the values with commas.', runOk: 'ok', runRunning: 'running', runFailed: 'failed',
     mismatch: 'expects {expects}; gets {gets}', nothing: 'nothing', inputs: 'Takes', output: 'Gives', dropHere: 'Drop to add “{name}”',
     issueCount: '{count, plural, one {# problem} other {# problems}}',
     fixInsert: 'Insert “{step}” between “{from}” and “{to}”', fixUnlink: 'Remove the link from “{from}” to “{to}”', flowOk: 'Every link fits',
@@ -118,7 +124,7 @@ export const stepEditorWords = defineLabels<StepEditorWords>('stepEditor', {
     dragHint: 'Arraste para o canvas ou pressione Enter', addNamed: 'Adicionar {name}',
     pickerAfter: 'Adicionar depois de “{name}”', pickerBetween: 'Inserir entre “{from}” e “{to}”', pickerFree: 'Adicionar passo', pickerSearch: 'Buscar passo',
     accepts: 'Recebe {shape}', nothingAccepts: 'Nenhum passo recebe {shape}', results: '{count, plural, =0 {Nenhum passo} one {# passo} other {# passos}}',
-    addAfter: 'Adicionar passo depois de “{name}”', notSet: 'não configurado', runOk: 'ok', runRunning: 'rodando', runFailed: 'falhou',
+    addAfter: 'Adicionar passo depois de “{name}”', notSet: 'não configurado', configIncomplete: 'configuração incompleta', invalidJson: 'JSON inválido: {detail}', valuesHint: 'Separe os valores por vírgula.', runOk: 'ok', runRunning: 'rodando', runFailed: 'falhou',
     mismatch: 'espera {expects}; recebe {gets}', nothing: 'nada', inputs: 'Recebe', output: 'Entrega', dropHere: 'Solte para adicionar “{name}”',
     issueCount: '{count, plural, one {# problema} other {# problemas}}',
     fixInsert: 'Inserir “{step}” entre “{from}” e “{to}”', fixUnlink: 'Remover a ligação de “{from}” para “{to}”', flowOk: 'Todas as ligações encaixam',
@@ -138,7 +144,7 @@ export const stepEditorWords = defineLabels<StepEditorWords>('stepEditor', {
     dragHint: 'Arrastra al lienzo o pulsa Enter', addNamed: 'Añadir {name}',
     pickerAfter: 'Añadir después de “{name}”', pickerBetween: 'Insertar entre “{from}” y “{to}”', pickerFree: 'Añadir paso', pickerSearch: 'Buscar paso',
     accepts: 'Recibe {shape}', nothingAccepts: 'Ningún paso recibe {shape}', results: '{count, plural, =0 {Ningún paso} one {# paso} other {# pasos}}',
-    addAfter: 'Añadir paso después de “{name}”', notSet: 'sin configurar', runOk: 'ok', runRunning: 'en curso', runFailed: 'falló',
+    addAfter: 'Añadir paso después de “{name}”', notSet: 'sin configurar', configIncomplete: 'configuración incompleta', invalidJson: 'JSON no válido: {detail}', valuesHint: 'Separa los valores con comas.', runOk: 'ok', runRunning: 'en curso', runFailed: 'falló',
     mismatch: 'espera {expects}; recibe {gets}', nothing: 'nada', inputs: 'Recibe', output: 'Entrega', dropHere: 'Suelta para añadir “{name}”',
     issueCount: '{count, plural, one {# problema} other {# problemas}}',
     fixInsert: 'Insertar “{step}” entre “{from}” y “{to}”', fixUnlink: 'Quitar el enlace de “{from}” a “{to}”', flowOk: 'Todos los enlaces encajan',

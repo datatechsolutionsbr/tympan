@@ -20,16 +20,21 @@ export interface StepsRuntime {
   counts: ShapeWords
   /** Wiring issues by receiving node id. */
   issues: ReadonlyMap<string, WiringIssue[]>
+  /** Settings problems the host reported, by node id then field key. */
+  problems: ReadonlyMap<string, Record<string, string>>
   /** Opens the add picker after a node, anchored to `trigger`. */
   addAfter?: (nodeId: string, trigger: HTMLElement) => void
 }
 
 const Ctx = createContext<StepsRuntime | null>(null)
+const EMPTY_ISSUES: ReadonlyMap<string, WiringIssue[]> = new Map()
+const EMPTY_PROBLEMS: ReadonlyMap<string, Record<string, string>> = new Map()
 
 export interface StepsProviderProps {
   catalog?: StepCatalog
   aiAllowed?: boolean
   issues?: ReadonlyMap<string, WiringIssue[]>
+  problems?: ReadonlyMap<string, Record<string, string>>
   addAfter?: (nodeId: string, trigger: HTMLElement) => void
   words?: Partial<StepEditorWords>
   children: ReactNode
@@ -41,19 +46,18 @@ export function useReadyCatalog(catalog: StepCatalog = researchStepCatalog) {
   return useMemo(() => readyCatalog(catalog, words), [catalog, words])
 }
 
-export function StepsProvider({ catalog, aiAllowed = true, issues, addAfter, words, children }: StepsProviderProps) {
+export function StepsProvider({ catalog, aiAllowed = true, issues, problems, addAfter, words, children }: StepsProviderProps) {
   const ready = useReadyCatalog(catalog)
   const w = useLabels(stepEditorWords, words)
   const shapes = useLabels(shapeWords, undefined)
   const counts = useLabels(shapeCountWords, undefined)
   const value = useMemo<StepsRuntime>(
-    () => ({ ...ready, aiAllowed, words: w, shapes, counts, issues: issues ?? new Map(), ...(addAfter ? { addAfter } : {}) }),
-    [ready, aiAllowed, w, shapes, counts, issues, addAfter],
+    () => ({ ...ready, aiAllowed, words: w, shapes, counts, issues: issues ?? EMPTY_ISSUES, problems: problems ?? EMPTY_PROBLEMS, ...(addAfter ? { addAfter } : {}) }),
+    [ready, aiAllowed, w, shapes, counts, issues, problems, addAfter],
   )
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>
 }
 
-const EMPTY_ISSUES: ReadonlyMap<string, WiringIssue[]> = new Map()
 
 /** The runtime of the nearest StepsProvider, or the built-in catalog. */
 export function useSteps(): StepsRuntime {
@@ -62,5 +66,5 @@ export function useSteps(): StepsRuntime {
   const words = useLabels(stepEditorWords, undefined)
   const shapes = useLabels(shapeWords, undefined)
   const counts = useLabels(shapeCountWords, undefined)
-  return got ?? { ...ready, aiAllowed: true, words, shapes, counts, issues: EMPTY_ISSUES }
+  return got ?? { ...ready, aiAllowed: true, words, shapes, counts, issues: EMPTY_ISSUES, problems: EMPTY_PROBLEMS }
 }

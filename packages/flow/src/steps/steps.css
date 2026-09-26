@@ -681,8 +681,15 @@
     margin-block-start: 4px;
   }
   .fk-flow-side__hint,
-  .fk-flow-side__status {
+  .fk-flow-side__status,
+  .fk-flow-side__problem {
     margin: 0;
+  }
+  /* A settings problem: danger ink with the words, never the colour alone. */
+  .fk-flow-side__problem {
+    color: var(--fk-danger);
+    font: 500 12px/1.5 var(--fk-font-sans);
+    overflow-wrap: anywhere;
   }
   .fk-flow-side__hint {
     color: var(--fk-ink-3);

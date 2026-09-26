@@ -13,12 +13,19 @@ import type { DataShape } from './shapes'
 /** A value field of a step's configuration form. */
 export interface StepField {
   key: string
-  /** `choice` picks one of `options` (the current value is always offered). */
-  type: 'text' | 'number' | 'choice'
+  /**
+   * `choice` picks one of `options` (the current value is always offered); `boolean` is a switch; `list` is a list of
+   * short values typed with commas; `json` is structured text (objects, lists of objects, bindings).
+   */
+  type: 'text' | 'number' | 'choice' | 'boolean' | 'list' | 'json'
   /** Visible label; the built-in word for `key`, else the key. */
   label?: string
   /** Option values of a choice; each shows its built-in word `option.<value>` when there is one. */
   options?: readonly string[]
+  /** The setting must be filled (marked on the field). */
+  required?: boolean
+  /** A number setting takes whole numbers only. */
+  integer?: boolean
 }
 
 export interface StepSpec {
@@ -37,6 +44,13 @@ export interface StepSpec {
   /** ICU template over the node data: the one-line summary on the card. */
   summary?: string
   fields?: readonly StepField[]
+  /**
+   * Where the fields live in the node data: at its top level (default), or inside one object of it (e.g. `config`,
+   * as the host's graph stores a step's configuration). The card's summary reads the same place.
+   */
+  configIn?: string
+  /** Problems of the step's settings, as the host words them, by field key ('' for the whole configuration). */
+  check?: (values: Record<string, unknown>) => Record<string, string>
   defaults?: Record<string, unknown>
   /** Engine primitive: no typed ports. */
   primitive?: boolean
@@ -227,13 +241,26 @@ export function specOfNode(node: Pick<FlowNode, 'kind' | 'data'>, byId: Readonly
 
 const SLOT = /\{(\w+)/g
 
+/** The values a step's fields edit: the node data, or the object of it named by `configIn`. */
+export function settingsOf(step: Pick<ReadyStep, 'configIn'> | undefined, data: Record<string, unknown>): Record<string, unknown> {
+  if (!step?.configIn) return data
+  const inner = data[step.configIn]
+  return inner && typeof inner === 'object' && !Array.isArray(inner) ? (inner as Record<string, unknown>) : {}
+}
+
+/** Problems of a node's settings by field key: the spec's own check, then what the host reports for this node. */
+export function settingProblems(step: Pick<ReadyStep, 'configIn' | 'check'> | undefined, data: Record<string, unknown>, reported?: Record<string, string>): Record<string, string> {
+  return { ...(step?.check ? step.check(settingsOf(step, data)) : {}), ...(reported ?? {}) }
+}
+
 /** The card's one-line summary (a host `line` wins), or null while a value it names is not set. */
-export function summaryLine(step: Pick<ReadyStep, 'summary'>, data: Record<string, unknown>, locale: string): string | null {
+export function summaryLine(step: Pick<ReadyStep, 'summary' | 'configIn'>, data: Record<string, unknown>, locale: string): string | null {
   if (typeof data.line === 'string' && data.line) return data.line
   if (!step.summary) return null
   const values: Record<string, string | number> = {}
+  const settings = settingsOf(step, data)
   for (const [, key] of step.summary.matchAll(SLOT)) {
-    const v = data[key!]
+    const v = data[key!] ?? settings[key!]
     if (v === undefined || v === null || v === '') return null
     if (typeof v === 'string' || typeof v === 'number') values[key!] = v
     else return null
