@@ -1,0 +1,106 @@
+/* Avatar (spec: wave-1/avatar.md; design direction §2.3, §2.11). */
+@layer fakhir.components {
+  .fk-avatar {
+    --fk-avatar-size: calc(var(--fk-space-6) + var(--fk-space-2));
+    box-sizing: border-box;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--fk-avatar-size);
+    block-size: var(--fk-avatar-size);
+    overflow: hidden;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    background: var(--fk-accent-soft);
+    color: var(--fk-on-accent-soft);
+    font-family: var(--fk-font-sans);
+    font-weight: var(--fk-font-weight-semibold);
+    font-size: max(12px, calc(var(--fk-avatar-size) * 0.4));
+    line-height: 1;
+    user-select: none;
+  }
+
+  .fk-avatar[data-size='xsmall'] {
+    --fk-avatar-size: var(--fk-space-5);
+  }
+  .fk-avatar[data-size='small'] {
+    --fk-avatar-size: var(--fk-space-6);
+  }
+  .fk-avatar[data-size='large'] {
+    --fk-avatar-size: calc(var(--fk-space-7) + var(--fk-space-2));
+  }
+
+  .fk-avatar[data-tint='neutral'] {
+    background: var(--fk-surface-sunken);
+    color: var(--fk-on-surface-sunken);
+  }
+
+  /* Agents: rounded square, dashed border, never initials (§2.11). */
+  .fk-avatar[data-kind='agent'] {
+    border-radius: var(--fk-radius-agent);
+    border: 1px dashed var(--fk-line-strong);
+    background: var(--fk-actor-agent-soft);
+    color: var(--fk-actor-agent);
+  }
+
+  .fk-avatar[data-image] {
+    background: var(--fk-surface-sunken);
+  }
+  .fk-avatar__image {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+  .fk-avatar__icon {
+    inline-size: 60%;
+    block-size: 60%;
+  }
+  .fk-avatar__initials {
+    text-transform: uppercase;
+  }
+
+  /* Pressable wrapper: 44 x 44 px hit area at every size; hover changes fill only. */
+  .fk-avatar-control {
+    all: unset;
+    position: relative;
+    display: inline-flex;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .fk-avatar-control::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: max(100%, var(--fk-control-target));
+    block-size: max(100%, var(--fk-control-target));
+    transform: translate(-50%, -50%);
+  }
+  .fk-avatar-control[data-hovered] .fk-avatar {
+    background: var(--fk-accent-soft);
+    border-color: var(--fk-accent);
+  }
+  .fk-avatar-control[data-focus-visible] {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+  .fk-avatar-control[data-pressed] .fk-avatar {
+    opacity: 0.85;
+  }
+
+  @media (forced-colors: active) {
+    .fk-avatar {
+      border: 1px solid CanvasText;
+      color: CanvasText;
+      forced-color-adjust: none;
+      background: Canvas;
+    }
+    .fk-avatar[data-kind='agent'] {
+      border-style: dashed;
+    }
+    .fk-avatar-control[data-focus-visible] {
+      outline: 2px solid Highlight;
+    }
+  }
+}

@@ -1,0 +1,178 @@
+/* ProofBadge (design direction §2.11: icon, word and border style per proof state). */
+@layer fakhir.components {
+  .fk-proof-badge {
+    --fk-proof-color: var(--fk-proof-none);
+    --fk-proof-fill: transparent;
+    --fk-proof-border: 1px solid var(--fk-line);
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fk-space-1);
+    color: var(--fk-proof-color);
+    font-family: var(--fk-font-sans);
+    white-space: nowrap;
+  }
+
+  .fk-proof-badge[data-state='proved'] {
+    --fk-proof-color: var(--fk-proof-proved);
+    --fk-proof-fill: var(--fk-proof-proved-soft);
+    --fk-proof-border: 1.5px solid var(--fk-proof-proved);
+  }
+  .fk-proof-badge[data-state='pending'] {
+    --fk-proof-color: var(--fk-proof-pending);
+    --fk-proof-fill: var(--fk-proof-pending-soft);
+    --fk-proof-border: 1.5px dashed var(--fk-proof-pending);
+  }
+  .fk-proof-badge[data-state='refuted'] {
+    --fk-proof-color: var(--fk-proof-refuted);
+    --fk-proof-fill: var(--fk-proof-refuted-soft);
+    --fk-proof-border: 3px double var(--fk-proof-refuted);
+  }
+  .fk-proof-badge[data-state='not-disclosed'] {
+    --fk-proof-color: var(--fk-proof-not-disclosed);
+    --fk-proof-fill: var(--fk-proof-not-disclosed-soft);
+    --fk-proof-border: 1.5px dotted var(--fk-proof-not-disclosed);
+  }
+  .fk-proof-badge[data-state='none'] {
+    --fk-proof-color: var(--fk-ink-3);
+    --fk-proof-fill: transparent;
+    --fk-proof-border: 1px solid var(--fk-line);
+  }
+
+  .fk-proof-badge__icon {
+    flex: none;
+    inline-size: 14px;
+    block-size: 14px;
+  }
+
+  /* inline: icon 14 + word, 12 px text, 22 px tall pill. */
+  .fk-proof-badge[data-size='inline'] {
+    block-size: 22px;
+    padding-inline: var(--fk-space-2);
+    border: var(--fk-proof-border);
+    border-radius: var(--fk-radius-pill);
+    background: var(--fk-proof-fill);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+    font-weight: var(--fk-font-weight-semibold);
+  }
+
+  /* compact: icon only, word for AT and tooltip. */
+  .fk-proof-badge[data-size='compact'] {
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+    font-variant-numeric: tabular-nums;
+  }
+  .fk-proof-badge[data-size='compact'] .fk-proof-badge__icon {
+    box-sizing: content-box;
+    padding: 2px;
+    border: var(--fk-proof-border);
+    border-radius: var(--fk-radius-pill);
+    background: var(--fk-proof-fill);
+  }
+  .fk-proof-badge[data-interactive] {
+    border-radius: var(--fk-radius-pill);
+    outline: none;
+    cursor: default;
+  }
+  .fk-proof-badge[data-interactive]:focus-visible {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* block: strip on top of the evidence panel. */
+  .fk-proof-badge[data-size='block'] {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--fk-space-1);
+    padding: var(--fk-space-3) var(--fk-space-4);
+    border: var(--fk-proof-border);
+    border-radius: var(--fk-radius-card);
+    background: var(--fk-proof-fill);
+    white-space: normal;
+  }
+  .fk-proof-badge[data-size='block'] .fk-proof-badge__icon {
+    inline-size: 20px;
+    block-size: 20px;
+  }
+  .fk-proof-badge__head {
+    display: flex;
+    align-items: center;
+    gap: var(--fk-space-2);
+    font-size: var(--fk-font-size-body);
+    line-height: var(--fk-font-line-height-body);
+    font-weight: var(--fk-font-weight-semibold);
+  }
+  .fk-proof-badge__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--fk-space-1) var(--fk-space-3);
+    margin: 0;
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+  .fk-proof-badge__rule {
+    font-family: var(--fk-font-mono);
+  }
+  .fk-proof-badge__detail {
+    color: var(--fk-ink-2);
+    font-weight: var(--fk-font-weight-regular);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .fk-proof-badge__tooltip {
+    max-inline-size: calc(var(--fk-measure-summary) * 1ch);
+    padding: var(--fk-space-1) var(--fk-space-2);
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-control);
+    background: var(--fk-surface-raised-solid);
+    color: var(--fk-ink);
+    box-shadow: var(--fk-shadow-floating);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+    z-index: var(--fk-z-popover);
+  }
+  .fk-proof-badge__tooltip[data-entering] {
+    animation: fk-proof-badge-fade var(--fk-dur-quick) var(--fk-ease);
+  }
+  @keyframes fk-proof-badge-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-proof-badge__tooltip[data-entering] {
+      animation: none;
+    }
+  }
+
+  /* Forced colours: the border style (solid, dashed, double, dotted) and the word carry the state. */
+  @media (forced-colors: active) {
+    .fk-proof-badge {
+      color: CanvasText;
+      forced-color-adjust: none;
+      --fk-proof-fill: Canvas;
+    }
+    .fk-proof-badge[data-state='proved'] {
+      --fk-proof-border: 1.5px solid CanvasText;
+    }
+    .fk-proof-badge[data-state='pending'] {
+      --fk-proof-border: 1.5px dashed CanvasText;
+    }
+    .fk-proof-badge[data-state='refuted'] {
+      --fk-proof-border: 3px double CanvasText;
+    }
+    .fk-proof-badge[data-state='not-disclosed'] {
+      --fk-proof-border: 1.5px dotted CanvasText;
+    }
+    .fk-proof-badge[data-state='none'] {
+      --fk-proof-border: 1px solid CanvasText;
+    }
+    .fk-proof-badge__tooltip {
+      border-color: CanvasText;
+    }
+  }
+}

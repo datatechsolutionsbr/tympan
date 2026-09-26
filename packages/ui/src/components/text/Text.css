@@ -1,0 +1,84 @@
+/* Text, Strong, Code (spec: wave-1/text.md; design direction §2.2, §2.3). */
+@layer fakhir.components {
+  .fk-text {
+    margin: 0;
+    font-family: var(--fk-font-sans);
+    font-weight: var(--fk-font-weight-regular);
+    font-size: var(--fk-font-size-body);
+    line-height: var(--fk-font-line-height-body);
+    color: var(--fk-ink-2);
+  }
+  span.fk-text {
+    display: inline;
+  }
+
+  .fk-text[data-size='body-lg'] {
+    font-size: var(--fk-font-size-body-lg);
+    line-height: var(--fk-font-line-height-body-lg);
+  }
+  .fk-text[data-size='meta'] {
+    /* 12 px floor of §2.2. */
+    font-size: max(12px, var(--fk-font-size-meta));
+    line-height: var(--fk-font-line-height-meta);
+  }
+
+  .fk-text[data-tone='muted'] {
+    color: var(--fk-ink-3);
+  }
+  .fk-text[data-tone='danger'] {
+    color: var(--fk-danger);
+  }
+  .fk-text[data-tone='success'] {
+    color: var(--fk-success);
+  }
+
+  .fk-text[data-measure='prose'] {
+    max-inline-size: calc(var(--fk-measure-prose) * 1ch);
+  }
+  .fk-text[data-measure='summary'] {
+    max-inline-size: calc(var(--fk-measure-summary) * 1ch);
+  }
+
+  .fk-text[data-numeric] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .fk-text[data-truncate='line'] {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .fk-text[data-truncate='clamp'] {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--fk-text-lines, 2);
+    line-clamp: var(--fk-text-lines, 2);
+  }
+
+  .fk-strong {
+    font-weight: var(--fk-font-weight-semibold);
+    color: var(--fk-ink);
+  }
+
+  .fk-code {
+    font-family: var(--fk-font-mono);
+    font-size: 0.92em;
+    padding-inline: var(--fk-space-1);
+    border-radius: calc(var(--fk-radius-control) / 2);
+    background: var(--fk-surface-sunken);
+    color: var(--fk-on-surface-sunken);
+    overflow-wrap: anywhere;
+  }
+
+  @media (forced-colors: active) {
+    .fk-text,
+    .fk-strong,
+    .fk-code {
+      color: CanvasText;
+    }
+    .fk-code {
+      border: 1px solid CanvasText;
+    }
+  }
+}

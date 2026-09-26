@@ -1,0 +1,93 @@
+/* ActorChip (design direction §2.11: person, agent, system). */
+@layer fakhir.components {
+  .fk-actor-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fk-space-2);
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    color: var(--fk-ink-2);
+    font-family: var(--fk-font-sans);
+    font-size: var(--fk-font-size-body);
+    line-height: var(--fk-font-line-height-body);
+    vertical-align: middle;
+  }
+  .fk-actor-chip[data-compact] {
+    gap: var(--fk-space-1);
+    font-size: var(--fk-font-size-label);
+    line-height: var(--fk-font-line-height-label);
+  }
+
+  .fk-actor-chip__text {
+    display: inline-flex;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+  .fk-actor-chip__line {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--fk-space-1);
+    min-inline-size: 0;
+  }
+
+  .fk-actor-chip__name {
+    overflow: hidden;
+    color: var(--fk-ink);
+    font-weight: var(--fk-font-weight-semibold);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* The kind word ("agent", "system") is always visible text, never colour alone. */
+  .fk-actor-chip__kind {
+    flex: none;
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+  .fk-actor-chip[data-kind='agent'] .fk-actor-chip__kind {
+    padding-inline: var(--fk-space-1);
+    border: 1px dashed var(--fk-line-strong);
+    border-radius: var(--fk-radius-agent);
+    color: var(--fk-actor-agent);
+  }
+
+  .fk-actor-chip__meta {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0 var(--fk-space-2);
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+  .fk-actor-chip__mono {
+    font-family: var(--fk-font-mono);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+  .fk-actor-chip__rule {
+    color: var(--fk-ink-2);
+  }
+
+  .fk-actor-chip__icon {
+    flex: none;
+    inline-size: 16px;
+    block-size: 16px;
+    color: var(--fk-ink-3);
+  }
+  .fk-actor-chip[data-kind='system'] .fk-actor-chip__icon {
+    color: var(--fk-actor-system);
+  }
+
+  @media (forced-colors: active) {
+    .fk-actor-chip,
+    .fk-actor-chip__name,
+    .fk-actor-chip__kind,
+    .fk-actor-chip__icon {
+      color: CanvasText;
+    }
+    .fk-actor-chip[data-kind='agent'] .fk-actor-chip__kind {
+      border-color: CanvasText;
+    }
+  }
+}

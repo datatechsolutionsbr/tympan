@@ -1,0 +1,67 @@
+/* Heading and Subheading (spec: wave-1/heading.md; design direction §2.2). */
+@layer fakhir.components {
+  .fk-heading {
+    margin: 0;
+    color: var(--fk-ink);
+    font-family: var(--fk-font-serif);
+    font-weight: var(--fk-font-weight-semibold);
+    text-wrap: balance;
+    overflow-wrap: break-word;
+  }
+
+  .fk-heading[data-appearance='display'] {
+    font-size: var(--fk-font-size-display);
+    line-height: var(--fk-font-line-height-display);
+  }
+  .fk-heading[data-appearance='h1'] {
+    font-size: var(--fk-font-size-h1);
+    line-height: var(--fk-font-line-height-h1);
+    font-weight: var(--fk-font-weight-bold);
+    letter-spacing: var(--fk-font-tracking-h1);
+  }
+  .fk-heading[data-appearance='h2'] {
+    font-size: var(--fk-font-size-h2);
+    line-height: var(--fk-font-line-height-h2);
+  }
+  .fk-heading[data-appearance='h3'] {
+    font-size: var(--fk-font-size-h3);
+    line-height: var(--fk-font-line-height-h3);
+  }
+  .fk-heading[data-appearance='label'] {
+    font-family: var(--fk-font-sans);
+    font-size: var(--fk-font-size-label);
+    line-height: var(--fk-font-line-height-label);
+  }
+
+  .fk-heading-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-1);
+  }
+
+  .fk-heading__eyebrow {
+    margin: 0;
+    color: var(--fk-ink-3);
+    font-family: var(--fk-font-sans);
+    font-size: var(--fk-font-size-eyebrow);
+    line-height: var(--fk-font-line-height-eyebrow);
+    font-weight: var(--fk-font-weight-semibold);
+    letter-spacing: var(--fk-font-tracking-eyebrow);
+    text-transform: uppercase;
+  }
+
+  /* The h1 step shrinks on narrow screens (§2.2). */
+  @media (max-width: 639.98px) {
+    .fk-heading[data-appearance='h1'] {
+      font-size: var(--fk-font-size-h1-narrow);
+      line-height: var(--fk-font-line-height-h1-narrow);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-heading,
+    .fk-heading__eyebrow {
+      color: CanvasText;
+    }
+  }
+}
