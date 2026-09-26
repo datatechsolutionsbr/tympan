@@ -115,8 +115,11 @@ levels into `expressions/builder/`; ComputeNodeForm into `computeDraft`,
 ## Storyboard alignment (DAG editor)
 
 The canvas storyboards (our own designs F2, Q2–Q6) are the visual spec.
-The gallery renders the editor inside a research shell stand-in
-(`gallery/src/shell/`: rail, sheet, header, sheet-level dock) at 1440×960,
+The gallery renders the editor inside the design system's research shell
+(`gallery/src/shell/ResearchShell.tsx`: `AppFrame layout="rail"`, the
+editorial `PageHeader` and a `FloatingActionBar` dock fed by
+`dockItemsFromCanvasTools`; the first versions used a stand-in drawn before
+the rail layout existed) at 1440×960,
 with the storyboard states reachable as `#/editor?state=canvas|picker|drag|
 search|mismatch|list|selected` (`&lang=` for the locale). Measurements come
 from the storyboards' inline styles. Side-by-side comparisons (reference |

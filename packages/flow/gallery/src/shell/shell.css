@@ -1,350 +1,140 @@
-/* Research shell stand-in (gallery only). Measurements follow the storyboards:
-   rail 248px, sheet inset 12px with a 24px radius, header 28/40/20. */
-.fk-shell {
-  display: flex;
-  block-size: 100dvh;
-  min-block-size: 640px;
-  overflow: hidden;
-  background-color: var(--fk-bg);
-  background-image:
-    radial-gradient(900px 600px at 85% -10%, color-mix(in oklab, var(--fk-accent) 7%, transparent), transparent 60%),
-    radial-gradient(700px 500px at 10% 110%, color-mix(in oklab, var(--fk-categorical-1) 5%, transparent), transparent 60%);
-  color: var(--fk-ink-2);
-  font-family: var(--fk-font-sans);
+/* Gallery host styles around the design system's research shell (AppFrame
+   layout="rail"). Only page-level layout lives here: canvas pages fill the
+   sheet edge to edge under the editorial header, as in the storyboards
+   (header 28/40/20). Not shipped. */
+.fk-flow-frame {
+  --fk-flow-head-pad-block: 28px 20px;
+  --fk-flow-head-pad-inline: 40px;
 }
-.fk-shell__rail {
+
+.fk-flow-frame .fk-app-frame__sheet {
   display: flex;
   flex-direction: column;
-  flex: none;
-  gap: 20px;
-  inline-size: 248px;
-  box-sizing: border-box;
-  padding-block: 22px 18px;
-  padding-inline: 18px 14px;
-  overflow: auto;
+  padding: 0;
+  overflow: hidden;
 }
-.fk-shell__brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding-inline: 6px;
-}
-.fk-shell__mark {
-  display: inline-grid;
-  place-items: center;
-  inline-size: 30px;
-  block-size: 30px;
-  border-radius: 9px;
-  background: var(--fk-accent);
-  color: var(--fk-on-accent);
-}
-.fk-shell__name {
-  color: var(--fk-ink);
-  font: 700 17px/1 var(--fk-font-serif);
-  letter-spacing: -0.01em;
-}
-.fk-shell__study {
-  all: unset;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding-block: 10px;
-  padding-inline: 12px;
-  border: 1px solid var(--fk-line);
-  border-radius: 12px;
-  background: var(--fk-surface-raised);
-  box-shadow: 0 1px 2px rgb(15 23 42 / 0.04);
-  color: var(--fk-ink-3);
-  cursor: pointer;
-}
-.fk-shell__study:focus-visible,
-.fk-shell__link:focus-visible,
-.fk-shell__account:focus-visible,
-.fk-app-dock__item:focus-visible {
-  outline: var(--fk-focus-width) solid var(--fk-focus-ring);
-  outline-offset: 2px;
-}
-.fk-shell__study > svg {
-  inline-size: 16px;
-  block-size: 16px;
-  flex: none;
-}
-.fk-shell__study-text {
+
+.fk-flow-frame .fk-app-frame__content {
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 3px;
+  min-block-size: 0;
+}
+
+.fk-flow-frame__header {
+  flex: none;
+  margin: 0;
+  padding-block: var(--fk-flow-head-pad-block);
+  padding-inline: var(--fk-flow-head-pad-inline);
+}
+
+.fk-flow-frame__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-block-size: 0;
+
+  & > * {
+    flex: 1;
+    min-block-size: 0;
+  }
+}
+
+/* Compact header (graph view): trail and title on the start side, the
+   question and the view switch on the same row at the end. */
+.fk-flow-frame--compact {
+  --fk-flow-head-pad-block: 18px 14px;
+  --fk-flow-head-pad-inline: 32px;
+
+  & .fk-flow-frame__header {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-items: center;
+    column-gap: 24px;
+    row-gap: 4px;
+  }
+
+  & .fk-page-header__trail {
+    grid-area: 1 / 1;
+  }
+
+  & .fk-page-header__row {
+    display: contents;
+  }
+
+  & .fk-page-header__text {
+    grid-area: 2 / 1;
+  }
+
+  & .fk-page-header__title {
+    font-size: 24px;
+    line-height: 1.1;
+  }
+
+  & .fk-page-header__actions {
+    grid-area: 1 / 2 / 3 / 3;
+    flex-wrap: nowrap;
+    gap: 16px;
+    min-inline-size: 0;
+
+    & > .fk-prov-question {
+      flex: 1 1 auto;
+      min-inline-size: 0;
+    }
+  }
+}
+
+/* Account block at the foot of the rail. */
+.fk-flow-account {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fk-flow-account__who {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   min-inline-size: 0;
 }
-.fk-shell__org {
-  color: var(--fk-ink-3);
-  font: 500 11px/1 var(--fk-font-mono);
-  letter-spacing: 0.02em;
-}
-.fk-shell__study-name {
+
+.fk-flow-account__name {
   color: var(--fk-ink);
   font: 600 13px/1.3 var(--fk-font-sans);
 }
-.fk-shell__group {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.fk-shell__group-title {
-  padding-block-end: 6px;
-  padding-inline: 10px;
-  color: var(--fk-ink-3);
-  font: 600 11px/1 var(--fk-font-sans);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-.fk-shell__link {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  block-size: 36px;
-  padding-inline: 10px;
-  border-radius: 10px;
-  color: var(--fk-ink-2);
-  font: 500 14px/1 var(--fk-font-sans);
-  text-decoration: none;
-}
-.fk-shell__link:hover {
-  background: var(--fk-surface-sunken);
-}
-.fk-shell__link[aria-current='page'] {
-  background: var(--fk-accent-soft);
-  box-shadow: inset 3px 0 0 var(--fk-accent);
-  color: var(--fk-accent);
-  font-weight: 600;
-}
-[dir='rtl'] .fk-shell__link[aria-current='page'] {
-  box-shadow: inset -3px 0 0 var(--fk-accent);
-}
-.fk-shell__icon {
-  inline-size: 17px;
-  block-size: 17px;
-  flex: none;
-  stroke-width: 1.6;
-}
-.fk-shell__spacer {
-  flex: 1;
-}
-.fk-shell__user {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px;
-  border-block-start: 1px solid var(--fk-line);
-}
-.fk-shell__avatar {
-  display: inline-grid;
-  place-items: center;
-  inline-size: 26px;
-  block-size: 26px;
-  border-radius: 999px;
-  background: var(--fk-accent-soft);
-  color: var(--fk-accent);
-  font: 600 11px/1 var(--fk-font-sans);
-}
-.fk-shell__who {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 1px;
-}
-.fk-shell__user-name {
-  color: var(--fk-ink);
-  font: 600 13px/1.2 var(--fk-font-sans);
-}
-.fk-shell__user-role {
+
+.fk-flow-account__role {
   color: var(--fk-ink-3);
   font: 400 12px/1.3 var(--fk-font-sans);
 }
-.fk-shell__account {
-  all: unset;
-  display: inline-grid;
-  place-items: center;
-  inline-size: 32px;
-  block-size: 32px;
-  border-radius: 8px;
-  color: var(--fk-ink-3);
-  cursor: pointer;
-}
-.fk-shell__account svg {
-  inline-size: 16px;
-  block-size: 16px;
-}
-.fk-shell__sheet {
-  position: relative;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-inline-size: 0;
-  margin-block: 12px;
-  margin-inline: 0 12px;
-  overflow: hidden;
-  border: 1px solid var(--fk-line);
-  border-radius: 24px;
-  background: var(--fk-surface-raised);
-  box-shadow:
-    0 1px 2px rgb(15 23 42 / 0.04),
-    0 8px 24px -12px rgb(15 23 42 / 0.1);
-}
-.fk-shell__head {
-  display: flex;
-  align-items: flex-end;
-  gap: 24px;
-  padding-block: 28px 20px;
-  padding-inline: 40px;
-  border-block-end: 1px solid var(--fk-line);
-}
-.fk-shell__titles {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 8px;
-  min-inline-size: 0;
-}
-.fk-shell__crumbs {
-  color: var(--fk-ink-3);
-  font: 500 12px/1 var(--fk-font-mono);
-}
-.fk-shell__title {
-  margin: 0;
-  color: var(--fk-ink);
-  font: 600 30px/1.15 var(--fk-font-serif);
-  letter-spacing: -0.01em;
-}
-.fk-shell__description {
-  max-inline-size: 68ch;
-  margin: 0;
-  color: var(--fk-ink-2);
-  font: 400 15px/1.45 var(--fk-font-sans);
-}
-.fk-shell__actions {
-  display: flex;
-  flex: none;
-  align-items: center;
-  gap: 10px;
-}
-.fk-shell__subhead {
-  padding-block: 14px;
-  padding-inline: 40px;
-  border-block-end: 1px solid var(--fk-line);
-}
-.fk-shell__body {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-block-size: 0;
-}
-.fk-shell__body > * {
-  flex: 1;
-  min-block-size: 0;
-}
-.fk-shell__dock {
-  position: absolute;
-  inset-block-end: 22px;
-  inset-inline: 0;
-  z-index: 6;
-  display: flex;
-  justify-content: center;
-  pointer-events: none;
-}
-.fk-shell__dock > * {
-  pointer-events: auto;
-}
 
-/* ---- app dock ---- */
-.fk-app-dock {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding-block: 6px;
-  padding-inline: 8px;
-  border: 1px solid var(--fk-line);
-  border-radius: 18px;
-  background: var(--fk-surface-raised);
-  box-shadow: 0 12px 32px -10px rgb(15 23 42 / 0.22);
-}
-.fk-app-dock__item {
-  all: unset;
-  display: inline-grid;
-  place-items: center;
-  inline-size: 44px;
-  block-size: 44px;
-  border-radius: 12px;
-  color: var(--fk-ink-2);
-  cursor: pointer;
-}
-.fk-app-dock__item:hover {
-  background: var(--fk-surface-sunken);
-}
-.fk-app-dock__item svg {
-  inline-size: 18px;
-  block-size: 18px;
-  stroke-width: 1.6;
-}
-.fk-app-dock__rule {
-  inline-size: 1px;
-  block-size: 24px;
-  background: var(--fk-line);
-}
-.fk-shell-action {
+/* "saved" beside the run button. */
+.fk-flow-saved {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   color: var(--fk-ink-3);
   font: 500 13px/1 var(--fk-font-sans);
-}
-.fk-shell-action svg {
-  inline-size: 14px;
-  block-size: 14px;
-}
-@media (forced-colors: active) {
-  .fk-shell__link[aria-current='page'] {
-    outline: 2px solid Highlight;
+
+  & svg {
+    inline-size: 14px;
+    block-size: 14px;
   }
 }
-.fk-shell__dock .fk-canvas-toolbar[data-placement='dock'] {
-  position: static;
-  margin: 0;
-}
-/* Narrow screens: the rail becomes the host's drawer (not drawn here) and the sheet flows. */
+
+/* Narrow screens: the rail is the frame's drawer and the sheet scrolls. */
 @media (max-width: 1023px) {
-  .fk-shell {
-    block-size: auto;
-    min-block-size: 100dvh;
-    overflow: visible;
+  .fk-flow-frame {
+    --fk-flow-head-pad-block: 20px 16px;
+    --fk-flow-head-pad-inline: 16px;
   }
-  .fk-shell__rail {
-    display: none;
+
+  .fk-flow-frame .fk-app-frame__sheet {
+    overflow: auto;
   }
-  .fk-shell__sheet {
-    margin: 0;
-    overflow: visible;
-    border: 0;
-    border-radius: 0;
-  }
-  .fk-shell__head {
-    flex-wrap: wrap;
-    align-items: flex-start;
-    gap: 12px;
-    padding-block: 20px 16px;
-    padding-inline: 16px;
-  }
-  .fk-shell__titles {
-    flex-basis: 100%;
-  }
-  .fk-shell__title {
-    font-size: 26px;
-  }
-  .fk-shell__body {
+
+  .fk-flow-frame__body {
     min-block-size: 70dvh;
-  }
-  .fk-shell__dock {
-    position: fixed;
-    inset-block-end: 12px;
   }
 }

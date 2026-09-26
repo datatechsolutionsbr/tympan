@@ -6,13 +6,19 @@
 import type { ActionBarItem } from '@fakhir/design-system'
 import type { CanvasToolItem } from './canvasTools'
 
+function glyphOf(item: CanvasToolItem) {
+  if (item.text) return <span className="fk-canvas-tool__text">{item.text}</span>
+  const Icon = item.icon
+  return Icon ? <Icon className="fk-icon" aria-hidden="true" focusable="false" /> : null
+}
+
 export function dockItemsFromCanvasTools(items: readonly CanvasToolItem[]): ActionBarItem[] {
   return items
     .filter((item) => !item.disabled)
     .map((item) => ({
       id: item.id,
       label: item.label,
-      icon: item.text ? <span className="fk-canvas-tool__text">{item.text}</span> : item.icon ?? null,
+      icon: glyphOf(item),
       ...(item.onPress ? { onPress: item.onPress } : {}),
       ...(item.kind === 'action' ? {} : { pressed: !!item.pressed }),
       ...(item.shortcut ? { shortcut: item.shortcut } : {}),

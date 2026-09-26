@@ -4,13 +4,11 @@
 // only (see provenance/sampleData.ts); a "Dados de exemplo" tag stays visible.
 
 import { useMemo, useState } from 'react'
-import { createPortal } from 'react-dom'
 import { Check, ChevronDown, FileDown, FileText, Lock } from 'lucide-react'
 import { Button, FakhirProvider, Tag } from '@fakhir/design-system'
-import { CanvasToolbar, NumberTrace, ProvenanceGraph, ProvenanceQuestion, ProvenanceViewSwitch, type ProvenanceViewMode } from '../../../src'
-import { AppDock } from '../shell/AppDock'
-import { nextLocale, setHashParam, useHashParams } from '../shell/params'
-import { ResearchShell } from '../shell/ResearchShell'
+import { NumberTrace, ProvenanceGraph, ProvenanceQuestion, ProvenanceViewSwitch, type ProvenanceViewMode } from '../../../src'
+import { setHashParam, useHashParams } from '../shell/params'
+import { ResearchShell, useDockTools } from '../shell/ResearchShell'
 import { certificates, comparison, passage, REAL_TIMES, trail, WORDS, type Lang } from './provenance/sampleData'
 import './provenance/provenance-page.css'
 
@@ -56,7 +54,7 @@ function ViewPage({ lang, view }: { lang: Lang; view: ProvenanceViewMode }) {
   const start = START[view]
   const [focus, setFocus] = useState<string | null>(start.focus)
   const [selected, setSelected] = useState<string | null>(start.selected)
-  const [dock, setDock] = useState<HTMLDivElement | null>(null)
+  const [tools, renderTools] = useDockTools()
   const badge = <Tag size="small">{w.badge}</Tag>
   const changeView = (v: ProvenanceViewMode) => setHashParam('view', v)
   const question = <ProvenanceQuestion items={data.items} value={focus} onChange={(id) => (setFocus(id), setSelected(id))} hint={view !== 'graph'} />
@@ -105,8 +103,9 @@ function ViewPage({ lang, view }: { lang: Lang; view: ProvenanceViewMode }) {
               </div>
             ),
           })}
-      dockSlot={setDock}
-      {...(view === 'graph' ? {} : { dock: <AppDock locale={lang} onNextLocale={() => setHashParam('lang', nextLocale(lang))} /> })}
+      compact={view === 'graph'}
+      tools={view === 'graph' ? tools : null}
+      toolsLabel={w.title}
     >
       <ProvenanceGraph
         items={data.items}
@@ -130,7 +129,7 @@ function ViewPage({ lang, view }: { lang: Lang; view: ProvenanceViewMode }) {
             {w.seeAnswer}
           </Button>
         )}
-        renderTools={(items) => (dock && view === 'graph' ? createPortal(<CanvasToolbar items={items} label={w.title} placement="dock" />, dock) : null)}
+        renderTools={(items) => (view === 'graph' ? renderTools(items) : null)}
         toolRowEnd={badge}
         onExport={() => undefined}
         onReread={() => undefined}
@@ -160,7 +159,6 @@ function NumberPage({ lang }: { lang: Lang }) {
           </Button>
         </>
       }
-      dock={<AppDock locale={lang} onNextLocale={() => setHashParam('lang', nextLocale(lang))} />}
     >
       <NumberTrace passage={passage(w)} source={w.file} after={<p>{w.next}</p>} defaultOpenId="n-[n]" onOpenInGraph={() => setHashParam('view', 'graph')} onRerun={() => undefined} />
     </ResearchShell>

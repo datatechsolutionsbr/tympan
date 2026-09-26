@@ -4,8 +4,7 @@
 // edition 2026-09-20 with 582 records and the counts per phase 9 · 26 · 24 ·
 // 18; everything else is a neutral placeholder.
 
-import { useEffect, useMemo, useState } from 'react'
-import { createPortal } from 'react-dom'
+import { useEffect, useMemo } from 'react'
 import { ArrowRight, Check } from 'lucide-react'
 import { Button, FakhirProvider, Tag, messagesPtBR } from '@fakhir/design-system'
 import { FlowEditor } from '../../../src/editor/FlowEditor'
@@ -13,9 +12,8 @@ import { autoLayout } from '../../../src/layout/autoLayout'
 import type { FlowConnector, FlowNode } from '../../../src/model/types'
 import { STEP_MEDIA_TYPE, stepDragType } from '../../../src/steps/StepPalette'
 import { createFlowEditorStore } from '../../../src/state/editorState'
-import { CanvasToolbar } from '../../../src/toolbar/CanvasToolbar'
 import { useHashParams } from '../shell/params'
-import { ResearchShell } from '../shell/ResearchShell'
+import { ResearchShell, useDockTools } from '../shell/ResearchShell'
 
 type Words = Record<string, string>
 
@@ -96,7 +94,7 @@ export function FlowEditorPage() {
   const state = params.get('state') ?? 'canvas'
   const t = TEXT[locale] ?? TEXT.en!
   const rtl = locale === 'ar'
-  const [dock, setDock] = useState<HTMLDivElement | null>(null)
+  const [tools, renderTools] = useDockTools()
   const selectedAtStart = state === 'picker' || state === 'search' || state === 'list' || state === 'selected'
   const store = useMemo(() => {
     const g = buildFlow(t, state === 'mismatch', rtl)
@@ -120,7 +118,7 @@ export function FlowEditorPage() {
           actions={
             <>
               <Tag>{t.sample}</Tag>
-              <span className="fk-shell-action">
+              <span className="fk-flow-saved">
                 <Check aria-hidden="true" />
                 {t.saved}
               </span>
@@ -129,7 +127,8 @@ export function FlowEditorPage() {
               </Button>
             </>
           }
-          dockSlot={setDock}
+          tools={tools}
+          toolsLabel={t.tools!}
         >
           <FlowEditor
             key={`${locale}-${state}`}
@@ -146,7 +145,7 @@ export function FlowEditorPage() {
                   ? { columns: [t.phase!, 'n'], rows: COUNTS.map((n, i) => [`[${t.phase} ${i + 1}]`, n]) }
                   : null
             }
-            renderTools={(items) => (dock ? createPortal(<CanvasToolbar items={items} label={t.tools!} placement="dock" />, dock) : null)}
+            renderTools={renderTools}
           />
         </ResearchShell>
       </div>
