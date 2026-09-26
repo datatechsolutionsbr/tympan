@@ -297,7 +297,7 @@ describe('FlowEditor with research steps', () => {
   it('keeps its styles logical, with forced colours and reduced motion', () => {
     const css = cssOf('steps/steps.css')
     expect(css).not.toMatch(/(^|[^-])(left|right)\s*:/m)
-    expect(css).toMatch(/\[dir='rtl'\] \.fk-shape-flow__arrow/)
+    expect(css).toMatch(/\[dir='rtl'\] :is\([^)]*\.fk-shape-flow__arrow/)
     expect(mediaBlock(css, /\(forced-colors: active\)/)).toMatch(/Highlight/)
     expect(mediaBlock(css, /\(prefers-reduced-motion: reduce\)/)).toMatch(/animation:\s*none/)
   })
