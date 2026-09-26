@@ -1,2 +1,9 @@
-// @fakhir/flow-canvas: provenance group barrel.
-export {}
+// @fakhir/flow-canvas: provenance group barrel (W3C PROV graph viewer).
+export * from './model'
+export * from './labels'
+export * from './ProvenanceNode'
+export * from './ProvenanceLegend'
+export * from './ProvenanceFilters'
+export * from './ProvenanceTree'
+export * from './ProvenanceInspector'
+export * from './ProvenanceGraph'
