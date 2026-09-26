@@ -1,0 +1,61 @@
+name: Release
+
+# Publishes the three packages to npmjs.com (restricted access) when a v* tag is
+# pushed. Authentication is npm trusted publishing (OpenID Connect): each
+# package lists this repository and this workflow file (release.yml) as its
+# trusted publisher on npmjs.com, so no npm token is stored here. The first
+# publish of each package is manual; see "Releasing" in README.md.
+#
+# No --provenance: npm generates provenance only for public packages built
+# from public repositories.
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          registry-url: https://registry.npmjs.org
+      - name: npm CLI with trusted publishing (>= 11.5.1)
+        run: npm install -g npm@^11.5.1
+      - name: Tag matches the package versions
+        run: node tools/release/set-version.mjs --check "$GITHUB_REF_NAME"
+      - run: npm ci --no-audit --no-fund
+      - name: Guards (no utility CSS, logical CSS, provenance markers)
+        run: npm run lint
+      - run: npm run build
+      - run: npm run typecheck
+      - run: npm test
+      - name: Publish tokens, components, canvas (in dependency order)
+        run: |
+          set -euo pipefail
+          for pkg in @datatechsolutions/tympan-tokens @datatechsolutions/tympan @datatechsolutions/tympan-flow; do
+            echo "::group::$pkg"
+            if ! out=$(npm publish -w "$pkg" --access restricted 2>&1); then
+              echo "$out"
+              # A version published by hand (the first release) is not an error.
+              if grep -q "cannot publish over the previously published versions" <<<"$out"; then
+                echo "$pkg: this version is already on the registry, skipped"
+              else
+                exit 1
+              fi
+            else
+              echo "$out"
+            fi
+            echo "::endgroup::"
+          done

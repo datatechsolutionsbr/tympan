@@ -19,7 +19,6 @@
     "accessibility",
     "canvas"
   ],
-  "private": true,
   "type": "module",
   "sideEffects": [
     "*.css"
@@ -39,6 +38,7 @@
   "files": [
     "dist",
     "LICENSE",
+    "README.md",
     "THIRD_PARTY_NOTICES.md"
   ],
   "scripts": {
@@ -50,7 +50,8 @@
     "gallery": "npm run build -w @datatechsolutions/tympan-tokens && vite --config gallery/vite.config.ts",
     "gallery:build": "npm run build -w @datatechsolutions/tympan-tokens && vite build --config gallery/vite.config.ts",
     "pretest": "npm run build -w @datatechsolutions/tympan-tokens",
-    "pretypecheck": "npm run build -w @datatechsolutions/tympan-tokens"
+    "pretypecheck": "npm run build -w @datatechsolutions/tympan-tokens",
+    "prepack": "npm run build"
   },
   "peerDependencies": {
     "react": "^19.2.0",
@@ -58,12 +59,20 @@
   },
   "dependencies": {
     "@dagrejs/dagre": "^3.1.1",
-    "@datatechsolutions/tympan": "0.1.0",
-    "@datatechsolutions/tympan-tokens": "0.1.0",
+    "@datatechsolutions/tympan": "^0.1.0",
+    "@datatechsolutions/tympan-tokens": "^0.1.0",
     "lucide-react": "^1.48.0",
     "react-aria-components": "^1.21.1"
   },
   "devDependencies": {
     "axe-core": "^4.13.0"
+  },
+  "homepage": "https://github.com/datatechsolutionsbr/tympan#readme",
+  "bugs": {
+    "url": "https://github.com/datatechsolutionsbr/tympan/issues"
+  },
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://registry.npmjs.org/"
   }
 }

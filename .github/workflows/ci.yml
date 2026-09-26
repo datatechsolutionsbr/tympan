@@ -17,6 +17,8 @@ jobs:
         with:
           node-version: 24
           cache: npm
+      - name: npm CLI >= 11.5.1 (allowScripts, trusted publishing)
+        run: npm install -g npm@^11.5.1
       - run: npm ci --no-audit --no-fund
       - name: Guards (no utility CSS, logical CSS, provenance markers)
         run: npm run lint

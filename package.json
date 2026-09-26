@@ -2,7 +2,7 @@
   "name": "@datatechsolutions/tympan-workspace",
   "private": true,
   "version": "0.0.0",
-  "description": "Tympan, an Astrlabe-family component published by Datatech: design tokens (@datatechsolutions/tympan-tokens), accessible React components (@datatechsolutions/tympan) and the flow and provenance canvas (@datatechsolutions/tympan-flow).",
+  "description": "Tympan, published by Datatech: design tokens (@datatechsolutions/tympan-tokens), accessible React components (@datatechsolutions/tympan) and the flow and provenance canvas (@datatechsolutions/tympan-flow).",
   "license": "FSL-1.1-ALv2",
   "author": "Natalia Mesquita",
   "repository": {
@@ -43,5 +43,8 @@
     "typescript": "^7.0.2",
     "vite": "^8.3.1",
     "vitest": "^5.0.2"
+  },
+  "allowScripts": {
+    "fsevents": false
   }
 }

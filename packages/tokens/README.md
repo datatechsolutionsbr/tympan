@@ -1,11 +1,9 @@
 # @datatechsolutions/tympan-tokens
 
-Design tokens and theme generator of Tympan, an Astrlabe-family component
-published by Datatech. Licence:
+Design tokens and theme generator of Tympan, published by Datatech. Licence:
 FSL-1.1-ALv2 (Functional Source License, Version 1.1, Apache 2.0 Future
-License); see `LICENSE`.
-Visual source of truth: `docs/infra/design-direction-fakhir.md` (§2.1 to §2.13)
-in the thesis repository.
+License); see `LICENSE`. Section references (§2.1 to §2.13) point to the
+visual design direction the tokens implement.
 
 ```sh
 npm run build -w @datatechsolutions/tympan-tokens      # dist/tokens.css, tokens.json, values.js, dtcg/, contrast-report.md, index.js
@@ -106,7 +104,7 @@ In the design system, `<ThemeProvider>` / `useTheme()` set these attributes and
 | Preset | Seeds | Radius | Contrast | Glass | CTA |
 |---|---|---|---|---|---|
 | `tympan` (default) | brand teal from the §2.3 accent, neutral with a slight teal tint, semantic hues | 10 | default | on | gradient |
-| `fakhir` | the look of the Fakhir research platform; today the same values as `tympan` | 10 | default | on | gradient |
+| `fakhir` | a named product preset; today the same values as `tympan` | 10 | default | on | gradient |
 | `neutral` | grey-blue brand, near-grey neutral | 8 | default | on | solid |
 | `high-contrast` | tympan seeds | 10 | high | off | solid |
 
