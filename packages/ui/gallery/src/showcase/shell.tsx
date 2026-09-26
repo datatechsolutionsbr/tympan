@@ -79,10 +79,10 @@ export function ShellShowcase({ scope }: { scope: string }) {
         <StatStrip
           label={`Research state ${scope}`}
           items={[
-            { id: 'r', value: 94, label: 'records', href: '#/base' },
-            { id: 'p', value: 512, label: 'proved claims', proof: 'proved' },
-            { id: 'w', value: 145, label: 'pending', detail: '12 assigned to you' },
-            { id: 'x', value: 7, label: 'refuted', proof: 'refuted' },
+            { id: 'r', value: 582, label: 'records', href: '#/base' },
+            { id: 'p', value: 60, label: 'proved claims', proof: 'proved' },
+            { id: 'w', value: 30, label: 'pending', detail: 'example' },
+            { id: 'x', value: 5, label: 'refuted', proof: 'refuted' },
           ]}
         />
       </Section>
@@ -91,8 +91,8 @@ export function ShellShowcase({ scope }: { scope: string }) {
         <StageStrip
           label={`Stages ${scope}`}
           stages={[
-            { id: 's', label: 'Search', href: '#/sources', status: 'done', figures: ['14 sources'] },
-            { id: 'o', label: 'Organise', href: '#/base', status: 'current', figures: ['94 records'] },
+            { id: 's', label: 'Search', href: '#/sources', status: 'done', figures: ['774 sources'] },
+            { id: 'o', label: 'Organise', href: '#/base', status: 'current', figures: ['582 records'] },
             { id: 'a', label: 'Analyse', href: '#/analyses', status: 'attention', figures: ['1 failed run'] },
             { id: 'p', label: 'Publish', status: 'upcoming' },
             { id: 'm', label: 'Manuscript', status: 'upcoming' },
@@ -104,9 +104,9 @@ export function ShellShowcase({ scope }: { scope: string }) {
         <AttentionList
           label={`Attention ${scope}`}
           items={[
-            { id: 't', proof: 'pending', title: 'TAMM AI Assistant', detail: 'Launch year without an open source', action: { label: 'Verify', onPress: () => undefined } },
-            { id: 'b', proof: 'refuted', title: 'Boti', detail: 'Stage refuted by the second coder', action: { label: 'Review', href: '#/base/boti' } },
-            { id: 'k', proof: 'not_disclosed', title: 'Bürokratt', detail: 'Operator not disclosed' },
+            { id: 't', proof: 'pending', title: 'Case A', detail: 'Launch year without an open source', action: { label: 'Verify', onPress: () => undefined } },
+            { id: 'b', proof: 'refuted', title: 'Case B', detail: 'Stage refuted by the second coder', action: { label: 'Review', href: '#/base/boti' } },
+            { id: 'k', proof: 'not_disclosed', title: 'Case C', detail: 'Operator not disclosed' },
           ]}
           seeAllHref="#/verify"
         />
@@ -117,12 +117,12 @@ export function ShellShowcase({ scope }: { scope: string }) {
         <PhaseBar
           label={`Proof ${scope}`}
           segments={[
-            { id: 'p', label: 'proved', value: 512, tone: 'proved' },
-            { id: 'w', label: 'pending', value: 145, tone: 'pending' },
-            { id: 'r', label: 'refuted', value: 7, tone: 'refuted' },
-            { id: 'n', label: 'not disclosed', value: 64, tone: 'not_disclosed' },
+            { id: 'p', label: 'proved', value: 60, tone: 'proved' },
+            { id: 'w', label: 'pending', value: 30, tone: 'pending' },
+            { id: 'r', label: 'refuted', value: 5, tone: 'refuted' },
+            { id: 'n', label: 'not disclosed', value: 5, tone: 'not_disclosed' },
           ]}
-          caption="Two thirds of the claims in tables 2 and 3 already have an open, checked source."
+          caption="Example finding sentence: on the platform it comes from the run that produced it."
         />
       </Section>
 
@@ -131,7 +131,7 @@ export function ShellShowcase({ scope }: { scope: string }) {
           label={`Activity ${scope}`}
           now={now}
           entries={[
-            { id: '1', actor: { kind: 'person', name: 'Natalia Mesquita' }, text: 'verified the launch year of TAMM', at: '2026-09-26T11:54:00Z', meta: 'ae-tamm-4-0' },
+            { id: '1', actor: { kind: 'person', name: 'Natalia Mesquita' }, text: 'verified a value of Case A', at: '2026-09-26T11:54:00Z', meta: 'example-id' },
             { id: '2', actor: { kind: 'agent', name: 'stage-counter' }, text: 'ran the stage count', at: '2026-09-26T09:00:00Z', meta: 'rule stage-rule-v2' },
             { id: '3', actor: { kind: 'system', name: 'freeze@2' }, text: 'froze edition 2026-09-20', at: '2026-09-20T03:00:00Z' },
           ]}
@@ -151,7 +151,7 @@ export function ShellShowcase({ scope }: { scope: string }) {
             stackBelow={640}
             primary={
               <div className="fk-gallery-stack">
-                <Text>Queue: TAMM, Boti, Bürokratt.</Text>
+                <Text>Queue: Case A, Case B, Case C.</Text>
                 <Text size="meta" tone="muted">
                   Drag the line or use the arrow keys on it.
                 </Text>
@@ -160,13 +160,13 @@ export function ShellShowcase({ scope }: { scope: string }) {
             secondary={
               <EvidencePanel
                 title="Situation: in operation"
-                subtitle="ae-tamm-4-0"
+                subtitle="example-id"
                 open
                 placement="docked"
                 onOpenChange={() => undefined}
                 proof={{ state: 'proved', provedBy: 'Reviewer B', at: '23 Sep 2026', rule: 'compile@1' }}
               >
-                <Text>“…completes services on a platform of more than 900 services.”</Text>
+                <Text>“Example quoted passage.”</Text>
               </EvidencePanel>
             }
           />

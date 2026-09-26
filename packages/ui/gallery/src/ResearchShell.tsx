@@ -1,7 +1,9 @@
 // Research shell demo: the overview storyboard on the rail + glass sheet +
 // bottom dock shell (no top bar). Copy in Brazilian Portuguese, the
 // platform's first language (the library copy follows the gallery's language
-// switch). Figures are illustrative demo data.
+// switch). No invented research data: record, source and page counts and the
+// edition date are the census's known values; everything else is labelled
+// example data with neutral names (Caso A, B, C) and round numbers.
 import {
   BookMarked,
   BookOpen,
@@ -21,6 +23,7 @@ import {
 import { useState } from 'react'
 import {
   ActivityFeed,
+  BrandMark,
   AppFrame,
   AttentionList,
   Button,
@@ -36,6 +39,7 @@ import {
   SectionHeading,
   StageStrip,
   StatStrip,
+  Tag,
   ThemeSwitcher,
   useTheme,
   type ActionBarItem,
@@ -51,34 +55,33 @@ const base = '#/research-shell'
 const go = (section: string) => `${base}/${section}`
 
 const stats: StatStripItem[] = [
-  { id: 'records', value: 94, label: 'registros', href: go('base'), detail: 'edição 2026-09-20' },
-  { id: 'proved', value: 512, label: 'alegações provadas', href: go('base'), proof: 'proved' },
-  { id: 'pending', value: 145, label: 'pendentes', href: go('verificacao'), detail: '12 atribuídas a você' },
-  { id: 'refuted', value: 7, label: 'refutadas', href: go('base'), proof: 'refuted' },
+  { id: 'records', value: 582, label: 'registros', href: go('base'), detail: 'edição 2026-09-20' },
+  { id: 'sources', value: 774, label: 'fontes', href: go('fontes') },
+  { id: 'pages', value: 456, label: 'páginas lidas', href: go('fontes') },
 ]
 
 const stages: Stage[] = [
-  { id: 'busca', label: 'Busca', href: go('fontes'), status: 'done', figures: ['14 fontes', '2 sessões'] },
-  { id: 'organizar', label: 'Organizar', href: go('base'), status: 'current', figures: ['94 registros', '6 em revisão'] },
-  { id: 'analisar', label: 'Analisar', href: go('analises'), status: 'attention', figures: ['3 análises', '1 falhou'] },
-  { id: 'publicar', label: 'Publicar', href: go('edicoes'), status: 'upcoming', figures: ['1 edição'] },
-  { id: 'manuscrito', label: 'Manuscrito', href: go('manuscrito'), status: 'upcoming', figures: ['0 rascunhos'] },
+  { id: 'busca', label: 'Busca', href: go('fontes'), status: 'done', figures: ['774 fontes'] },
+  { id: 'organizar', label: 'Organizar', href: go('base'), status: 'current', figures: ['582 registros'] },
+  { id: 'analisar', label: 'Analisar', href: go('analises'), status: 'attention', figures: ['exemplo'] },
+  { id: 'publicar', label: 'Publicar', href: go('edicoes'), status: 'upcoming', figures: ['edição 2026-09-20'] },
+  { id: 'manuscrito', label: 'Manuscrito', href: go('manuscrito'), status: 'upcoming' },
 ]
 
+/** Example shares (round numbers, not census results). */
 const phases: PhaseSegment[] = [
-  { id: 'proved', label: 'provadas', value: 512, tone: 'proved' },
-  { id: 'pending', label: 'pendentes', value: 145, tone: 'pending' },
-  { id: 'refuted', label: 'refutadas', value: 7, tone: 'refuted' },
-  { id: 'nd', label: 'não informadas', value: 64, tone: 'not_disclosed' },
+  { id: 'proved', label: 'provadas', value: 60, tone: 'proved' },
+  { id: 'pending', label: 'pendentes', value: 30, tone: 'pending' },
+  { id: 'refuted', label: 'refutadas', value: 5, tone: 'refuted' },
+  { id: 'nd', label: 'não informadas', value: 5, tone: 'not_disclosed' },
 ]
 
 const minutesAgo = (n: number) => new Date(Date.now() - n * 60_000)
 
 const activity: ActivityEntry[] = [
-  { id: 'a1', actor: { kind: 'person', name: 'Natalia Mesquita' }, text: 'verificou o ano de lançamento de TAMM', at: minutesAgo(6), meta: 'ae-tamm-4-0' },
-  { id: 'a2', actor: { kind: 'agent', name: 'stage-counter' }, text: 'executou a contagem por estágio', at: minutesAgo(180), meta: 'regra stage-rule-v2' },
-  { id: 'a3', actor: { kind: 'system', name: 'freeze@2' }, text: 'congelou a edição 2026-09-20', at: minutesAgo(6 * 1440), meta: 'sha256:9f2c' },
-  { id: 'a4', actor: { kind: 'person', name: 'Avaliador B' }, text: 'refutou o estágio de Boti', at: minutesAgo(8 * 1440) },
+  { id: 'a1', actor: { kind: 'person', name: 'Natalia Mesquita' }, text: 'verificou um valor do Caso A', at: minutesAgo(6), meta: 'exemplo' },
+  { id: 'a2', actor: { kind: 'agent', name: 'agente-exemplo' }, text: 'executou uma análise de exemplo', at: minutesAgo(180), meta: 'regra de exemplo' },
+  { id: 'a3', actor: { kind: 'system', name: 'freeze' }, text: 'congelou a edição 2026-09-20', at: minutesAgo(6 * 1440) },
 ]
 
 function Navigation() {
@@ -91,7 +94,7 @@ function Navigation() {
       <RailNavSection label="Coletar">
         {item('Fontes e trilha', BookOpen, 'fontes')}
         {item('Instrumentos', ClipboardList, 'instrumentos')}
-        {item('Verificação', CheckSquare, 'verificacao', { count: 12 })}
+        {item('Verificação', CheckSquare, 'verificacao', { count: 3 })}
       </RailNavSection>
       <RailNavSection label="Organizar">
         {item('Base', FileStack, 'base')}
@@ -130,10 +133,10 @@ export function ResearchShellDemo() {
   const [evidence, setEvidence] = useState<AttentionItem | null>(null)
 
   const attention: AttentionItem[] = [
-    { id: 'tamm', proof: 'pending', title: 'TAMM AI Assistant', detail: 'Ano de lançamento sem fonte aberta' },
-    { id: 'boti', proof: 'refuted', title: 'Boti', detail: 'Estágio refutado pela segunda codificação' },
-    { id: 'burokratt', proof: 'not_disclosed', title: 'Bürokratt', detail: 'Operador não informado pelo órgão' },
-    { id: 'analise', proof: 'none', title: 'Contagem por estágio', detail: 'Última execução falhou no passo 2', action: { label: 'Ver execução', href: go('analises') } },
+    { id: 'a', proof: 'pending', title: 'Caso A', detail: 'Valor de exemplo sem fonte aberta' },
+    { id: 'b', proof: 'refuted', title: 'Caso B', detail: 'Valor de exemplo refutado pela segunda codificação' },
+    { id: 'c', proof: 'not_disclosed', title: 'Caso C', detail: 'Campo de exemplo não informado pelo órgão' },
+    { id: 'd', proof: 'none', title: 'Análise de exemplo', detail: 'Execução de exemplo com falha', action: { label: 'Ver execução', href: go('analises') } },
   ].map((row, index) =>
     row.action ? row : { ...row, action: { label: ['Verificar', 'Revisar', 'Abrir'][index] ?? 'Abrir', onPress: () => setEvidence(row as AttentionItem) } },
   ) as AttentionItem[]
@@ -141,7 +144,7 @@ export function ResearchShellDemo() {
   const dockDestinations: ActionBarItem[] = [
     { id: 'overview', label: 'Visão geral', icon: Home, href: go('visao-geral'), active: true },
     { id: 'base', label: 'Base', icon: FileStack, href: go('base') },
-    { id: 'verify', label: 'Verificação', icon: CheckSquare, href: go('verificacao'), count: 12 },
+    { id: 'verify', label: 'Verificação', icon: CheckSquare, href: go('verificacao'), count: 3 },
     { id: 'graph', label: 'Proveniência', icon: Network, href: go('proveniencia') },
   ]
   const dockContextual: ActionBarItem[] = [
@@ -167,7 +170,7 @@ export function ResearchShellDemo() {
         width="reading"
         navOpen={navOpen}
         onNavOpenChange={setNavOpen}
-        brand={<span className="fk-demo-brand">Fakhir</span>}
+        brand={<BrandMark size="small" />}
         context={<RailContextButton scope="EACH/USP" name="Censo de assistentes de IA governamentais" />}
         navigation={<Navigation />}
         account={<Account />}
@@ -179,11 +182,11 @@ export function ResearchShellDemo() {
               subtitle={evidence.detail}
               open
               onOpenChange={(open) => !open && setEvidence(null)}
-              proof={{ state: evidence.proof === 'none' ? null : evidence.proof, provedBy: 'Avaliador B', at: '23 set 2026', rule: 'compile@1' }}
+              proof={{ state: evidence.proof === 'none' ? null : evidence.proof, provedBy: 'Avaliadora de exemplo', rule: 'regra de exemplo' }}
               footer={<Button variant="primary">Salvar e seguir</Button>}
             >
-              <p className="fk-demo-quote">“…completes services on a platform of more than 900 services.”</p>
-              <p className="fk-demo-meta">tamm.abudhabi, recuperada em 12 set, sha256:9f2c</p>
+              <p className="fk-demo-quote" dir="auto">“Trecho citado de exemplo.”</p>
+              <p className="fk-demo-meta">fonte de exemplo</p>
             </EvidencePanel>
           ) : null
         }
@@ -194,9 +197,12 @@ export function ResearchShellDemo() {
           trail={[{ label: 'EACH/USP', href: go('org') }, { label: 'Censo IA gov', href: go('visao-geral') }, { label: 'Visão geral' }]}
           lead="Registro mundial de assistentes e agentes de IA de governos, com evidência citada por propriedade."
           actions={
-            <Button variant="primary" href={go('verificacao')}>
-              Verificar 12
-            </Button>
+            <>
+              <Tag tone="neutral" icon={<FlaskConical aria-hidden="true" />}>Dados de exemplo</Tag>
+              <Button variant="primary" href={go('verificacao')}>
+                Verificar 3
+              </Button>
+            </>
           }
         />
         <div className="fk-demo-stack">
@@ -211,8 +217,8 @@ export function ResearchShellDemo() {
               <AttentionList label="Pendências" items={attention} maxRows={4} seeAllHref={go('verificacao')} />
             </section>
             <section aria-labelledby="demo-proof" className="fk-demo-section">
-              <SectionHeading id="demo-proof" title="Estado da prova" level={2} subtitle="Edição 2026-09-20, congelada em 20 set 2026" />
-              <PhaseBar label="Estado da prova" segments={phases} caption="Dois terços das alegações das tabelas 2 e 3 já têm fonte aberta e conferida." />
+              <SectionHeading id="demo-proof" title="Estado da prova" level={2} subtitle="Proporções de exemplo" />
+              <PhaseBar label="Estado da prova" segments={phases} caption="Frase-achado de exemplo: na plataforma ela vem da execução que a produziu." />
             </section>
           </div>
           <section aria-labelledby="demo-activity" className="fk-demo-section">
