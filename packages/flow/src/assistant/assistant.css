@@ -53,16 +53,16 @@
     overflow-wrap: anywhere;
     text-align: start;
   }
-  .fk-chat__message[data-role='user'] .fk-chat__bubble {
+  .fk-chat__message[data-speaker='person'] .fk-chat__bubble {
     border-color: transparent;
     border-end-end-radius: var(--fk-radius-control);
     background: var(--fk-accent-soft);
     color: var(--fk-ink);
   }
-  .fk-chat__message[data-role='assistant'] .fk-chat__bubble {
+  .fk-chat__message[data-speaker='assistant'] .fk-chat__bubble {
     border-end-start-radius: var(--fk-radius-control);
   }
-  .fk-chat__message[data-state='failed'] .fk-chat__bubble {
+  .fk-chat__message[data-phase='broken'] .fk-chat__bubble {
     border-color: var(--fk-danger);
   }
   .fk-chat__plain {
@@ -547,12 +547,12 @@
   }
   @media (forced-colors: active) {
     .fk-chat__bubble,
-    .fk-chat__message[data-role='user'] .fk-chat__bubble,
+    .fk-chat__message[data-speaker='person'] .fk-chat__bubble,
     .fk-chat__composer,
     .fk-visual-block {
       border: 1px solid CanvasText;
     }
-    .fk-chat__message[data-state='failed'] .fk-chat__bubble {
+    .fk-chat__message[data-phase='broken'] .fk-chat__bubble {
       border: 3px double CanvasText;
     }
     .fk-convo-row[data-active] {

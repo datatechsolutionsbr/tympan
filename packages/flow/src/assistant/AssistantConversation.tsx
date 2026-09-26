@@ -1,4 +1,4 @@
-// AssistantConversation: the dialogue surface over useAssistantChat. The log
+// AssistantConversation: the dialogue surface over useAssistantSession. The log
 // is a polite live region marked busy while a turn streams, so a completed
 // turn is read once instead of every delta; failures go to an assertive
 // region. The composer stays editable while the assistant answers.
@@ -10,7 +10,7 @@ import { Button, Skeleton } from '@fakhir/design-system'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { AssistantVisualBlock } from './AssistantVisualBlock'
 import { MarkdownView } from './MarkdownView'
-import type { AssistantChat, ChatMessage, ChatPart } from './useAssistantChat'
+import type { AssistantSession, Block, Utterance } from './useAssistantSession'
 
 export interface AssistantLabels {
   log: string
@@ -188,7 +188,7 @@ export const assistantLabels = defineLabels<AssistantLabels>('Assistant', {
 export const defaultAssistantLabels: AssistantLabels = assistantLabels.bundles.en
 
 export interface AssistantConversationProps {
-  chat: AssistantChat
+  session: AssistantSession
   labels?: Partial<AssistantLabels>
   suggestions?: string[]
   variant?: 'panel' | 'full'
@@ -205,7 +205,7 @@ export interface AssistantConversationProps {
 const NEAR_BOTTOM = 96
 
 export function AssistantConversation(props: AssistantConversationProps) {
-  const { chat, suggestions = [], variant = 'panel', appMark, onOpenCanvas, canOpenCanvas = false, locale, currency, composerRef, className } = props
+  const { session, suggestions = [], variant = 'panel', appMark, onOpenCanvas, canOpenCanvas = false, locale, currency, composerRef, className } = props
   const l = useLabels(assistantLabels, props.labels)
   const { locale: providerLocale } = useFlowLocale()
   const loc = locale ?? providerLocale
@@ -214,18 +214,18 @@ export function AssistantConversation(props: AssistantConversationProps) {
   const [alert, setAlert] = useState('')
   const announcedFailure = useRef<string | null>(null)
 
-  const last = chat.messages[chat.messages.length - 1]
+  const last = session.utterances[session.utterances.length - 1]
   useEffect(() => {
-    if (last?.state === 'failed' && announcedFailure.current !== last.id) {
-      announcedFailure.current = last.id
-      setAlert(fill(l.turnFailed, { message: last.error ?? '' }, loc))
+    if (last?.phase === 'broken' && announcedFailure.current !== last.key) {
+      announcedFailure.current = last.key
+      setAlert(fill(l.turnFailed, { message: last.problem ?? '' }, loc))
     }
   }, [last, l.turnFailed, loc])
 
   useLayoutEffect(() => {
     const el = logRef.current
     if (el && nearBottom.current) el.scrollTop = el.scrollHeight
-  }, [chat.messages])
+  }, [session.utterances])
 
   const onScroll = () => {
     const el = logRef.current
@@ -234,8 +234,8 @@ export function AssistantConversation(props: AssistantConversationProps) {
 
   const submit = (e?: FormEvent) => {
     e?.preventDefault()
-    if (chat.busy) return
-    chat.send()
+    if (session.working) return
+    session.ask()
   }
 
   const onComposerKey = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -244,11 +244,11 @@ export function AssistantConversation(props: AssistantConversationProps) {
     submit()
   }
 
-  const empty = !chat.isHydrating && chat.messages.length === 0
+  const empty = !session.loadingHistory && session.utterances.length === 0
 
   return (
     <section className={['fk-chat', className].filter(Boolean).join(' ')} data-variant={variant} aria-label={l.log}>
-      {chat.isHydrating ? (
+      {session.loadingHistory ? (
         <div className="fk-chat__loading" role="status" aria-busy="true">
           <span className="fk-visually-hidden">{l.loading}</span>
           {[0, 1, 2].map((i) => (
@@ -270,7 +270,7 @@ export function AssistantConversation(props: AssistantConversationProps) {
             <ul className="fk-chat__suggestions" aria-label={l.suggestions}>
               {suggestions.map((s) => (
                 <li key={s}>
-                  <Button variant="secondary" size="compact" shape="pill" onPress={() => chat.send(s)}>
+                  <Button variant="secondary" size="compact" shape="pill" onPress={() => session.ask(s)}>
                     <span dir="auto">{s}</span>
                   </Button>
                 </li>
@@ -285,20 +285,20 @@ export function AssistantConversation(props: AssistantConversationProps) {
         role="log"
         aria-live="polite"
         aria-label={l.log}
-        aria-busy={chat.busy || undefined}
-        hidden={empty || chat.isHydrating}
+        aria-busy={session.working || undefined}
+        hidden={empty || session.loadingHistory}
         tabIndex={-1}
         onScroll={onScroll}
       >
-        {chat.messages.map((m, i) => (
-          <Bubble key={m.id} message={m} l={l} loc={loc} currency={currency} isLast={i === chat.messages.length - 1} chat={chat} onOpenCanvas={onOpenCanvas} />
+        {session.utterances.map((m, i) => (
+          <Bubble key={m.key} utterance={m} l={l} loc={loc} currency={currency} isLast={i === session.utterances.length - 1} session={session} onOpenCanvas={onOpenCanvas} />
         ))}
       </div>
       <div className="fk-visually-hidden" role="alert">
         {alert}
       </div>
       <form className="fk-chat__composer" onSubmit={submit}>
-        <TextField className="fk-chat__field" value={chat.input} onChange={chat.setInput}>
+        <TextField className="fk-chat__field" value={session.draft} onChange={session.setDraft}>
           <Label className="fk-visually-hidden">
             {l.composer}
           </Label>
@@ -310,10 +310,10 @@ export function AssistantConversation(props: AssistantConversationProps) {
               {l.openCanvas}
             </Button>
           ) : null}
-          {chat.busy ? (
-            <Button variant="secondary" iconOnly accessibleLabel={l.stop} leadingIcon={<Square />} onPress={chat.stop} />
+          {session.working ? (
+            <Button variant="secondary" iconOnly accessibleLabel={l.stop} leadingIcon={<Square />} onPress={session.halt} />
           ) : (
-            <Button className="fk-chat__send" variant="primary" iconOnly accessibleLabel={l.send} leadingIcon={<SendHorizontal />} type="submit" disabled={!chat.input.trim()} />
+            <Button className="fk-chat__send" variant="primary" iconOnly accessibleLabel={l.send} leadingIcon={<SendHorizontal />} type="submit" disabled={!session.draft.trim()} />
           )}
         </div>
       </form>
@@ -321,13 +321,13 @@ export function AssistantConversation(props: AssistantConversationProps) {
   )
 }
 
-function Bubble({ message, l, loc, currency, isLast, chat, onOpenCanvas }: { message: ChatMessage; l: AssistantLabels; loc: string; currency: string | undefined; isLast: boolean; chat: AssistantChat; onOpenCanvas: (() => void) | undefined }) {
-  const user = message.role === 'user'
+function Bubble({ utterance, l, loc, currency, isLast, session, onOpenCanvas }: { utterance: Utterance; l: AssistantLabels; loc: string; currency: string | undefined; isLast: boolean; session: AssistantSession; onOpenCanvas: (() => void) | undefined }) {
+  const user = utterance.speaker === 'person'
   return (
-    <div className="fk-chat__message" data-role={message.role} data-align={user ? 'end' : 'start'} data-state={message.state}>
+    <div className="fk-chat__message" data-speaker={utterance.speaker} data-align={user ? 'end' : 'start'} data-phase={utterance.phase}>
       <span className="fk-visually-hidden">{user ? l.you : l.assistant}</span>
       <div className="fk-chat__bubble" dir="auto">
-        {message.state === 'pending' && !message.parts.length ? (
+        {utterance.phase === 'waiting' && !utterance.blocks.length ? (
           <p className="fk-chat__thinking">
             {l.thinking}
             <span className="fk-chat__dots" aria-hidden="true">
@@ -337,17 +337,17 @@ function Bubble({ message, l, loc, currency, isLast, chat, onOpenCanvas }: { mes
             </span>
           </p>
         ) : null}
-        {message.parts.map((p, i) => (
-          <PartView key={i} part={p} user={user} l={l} loc={loc} currency={currency} onOpenCanvas={onOpenCanvas} />
+        {utterance.blocks.map((p, i) => (
+          <BlockView key={i} block={p} user={user} l={l} loc={loc} currency={currency} onOpenCanvas={onOpenCanvas} />
         ))}
-        {message.state === 'failed' ? (
+        {utterance.phase === 'broken' ? (
           <div className="fk-chat__failure">
             <p className="fk-chat__error">
               <CircleX aria-hidden="true" focusable="false" />
-              <span>{message.error}</span>
+              <span>{utterance.problem}</span>
             </p>
-            {isLast && chat.canRetry ? (
-              <Button variant="secondary" size="compact" leadingIcon={<RotateCcw />} onPress={chat.retry}>
+            {isLast && session.canAskAgain ? (
+              <Button variant="secondary" size="compact" leadingIcon={<RotateCcw />} onPress={session.askAgain}>
                 {l.retry}
               </Button>
             ) : null}
@@ -358,29 +358,31 @@ function Bubble({ message, l, loc, currency, isLast, chat, onOpenCanvas }: { mes
   )
 }
 
-function PartView({ part, user, l, loc, currency, onOpenCanvas }: { part: ChatPart; user: boolean; l: AssistantLabels; loc: string; currency: string | undefined; onOpenCanvas: (() => void) | undefined }) {
-  switch (part.type) {
-    case 'text':
-      return user ? <p className="fk-chat__plain">{part.text}</p> : <MarkdownView source={part.text} />
-    case 'reasoning':
-      return (
-        <details className="fk-chat__reasoning">
-          <summary>{l.reasoning}</summary>
-          <p>{part.text}</p>
-        </details>
-      )
-    case 'tool': {
-      const Icon = part.state === 'running' ? LoaderCircle : part.state === 'succeeded' ? CircleCheck : CircleX
-      const template = part.state === 'running' ? l.toolRunning : part.state === 'succeeded' ? l.toolSucceeded : l.toolFailed
-      return (
-        <p className="fk-chat__tool" data-state={part.state}>
-          <Icon className="fk-chat__tool-icon" aria-hidden="true" focusable="false" />
-          <span className="fk-chat__tool-name">{fill(template, { tool: part.toolName }, loc)}</span>
-          {part.summary ? <span className="fk-chat__tool-summary">{part.summary}</span> : null}
-        </p>
-      )
-    }
-    case 'visual':
-      return <AssistantVisualBlock envelope={part.envelope} locale={loc} {...(currency ? { currency } : {})} {...(onOpenCanvas ? { onOpen: onOpenCanvas } : {})} />
-  }
+/** Icon, label key and CSS state of a tool call in each phase. */
+const TOOL_LOOK = {
+  working: { icon: LoaderCircle, label: 'toolRunning', state: 'running' },
+  ok: { icon: CircleCheck, label: 'toolSucceeded', state: 'succeeded' },
+  broken: { icon: CircleX, label: 'toolFailed', state: 'failed' },
+} as const
+
+function BlockView({ block, user, l, loc, currency, onOpenCanvas }: { block: Block; user: boolean; l: AssistantLabels; loc: string; currency: string | undefined; onOpenCanvas: (() => void) | undefined }) {
+  const kind = block.kind
+  if (kind === 'prose') return user ? <p className="fk-chat__plain">{block.body}</p> : <MarkdownView source={block.body} />
+  if (kind === 'thinking')
+    return (
+      <details className="fk-chat__reasoning">
+        <summary>{l.reasoning}</summary>
+        <p>{block.body}</p>
+      </details>
+    )
+  if (kind === 'figure') return <AssistantVisualBlock envelope={block.envelope} locale={loc} {...(currency ? { currency } : {})} {...(onOpenCanvas ? { onOpen: onOpenCanvas } : {})} />
+  const look = TOOL_LOOK[block.phase]
+  const Icon = look.icon
+  return (
+    <p className="fk-chat__tool" data-state={look.state}>
+      <Icon className="fk-chat__tool-icon" aria-hidden="true" focusable="false" />
+      <span className="fk-chat__tool-name">{fill(l[look.label], { tool: block.tool }, loc)}</span>
+      {block.note ? <span className="fk-chat__tool-summary">{block.note}</span> : null}
+    </p>
+  )
 }
