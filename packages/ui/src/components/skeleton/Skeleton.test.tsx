@@ -4,6 +4,10 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { PageLoadingState, Skeleton, type SkeletonPreset } from './Skeleton'
 
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 const presets: SkeletonPreset[] = ['stats', 'cards', 'section-heading', 'filters', 'analysis']
 
 describe('Skeleton and PageLoadingState', () => {
@@ -80,5 +84,13 @@ describe('Skeleton and PageLoadingState', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('Skeleton in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<PageLoadingState label="جارٍ تحميل الفهرس"><Skeleton lines={3} /></PageLoadingState>)
+    expect(rtlDom.screen.getByRole('status')).toHaveTextContent('جارٍ تحميل الفهرس')
+    await axeRtl(container)
   })
 })

@@ -6,6 +6,10 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { Field } from '../field/Field'
 import { TextArea } from './TextArea'
 
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 describe('TextArea', () => {
   it('uses the label as the accessible name', () => {
     render(<TextArea label="Notes" />)
@@ -81,5 +85,13 @@ describe('TextArea', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('TextArea in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<TextArea label="الاقتباس" showCounter maxLength={10} defaultValue="نص" />)
+    expect(rtlDom.screen.getByRole('textbox', { name: 'الاقتباس' })).toHaveValue('نص')
+    await axeRtl(container)
   })
 })

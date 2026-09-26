@@ -5,6 +5,20 @@ import { cx } from '../../internal/cx'
 import { devWarning } from '../../internal/dev'
 import { useMessages } from '../../internal/provider'
 
+/** The first `count` user-perceived characters (grapheme clusters), so marks and emoji stay whole. */
+function leadingGraphemes(text: string, count: number): string {
+  const Segmenter = (Intl as { Segmenter?: typeof Intl.Segmenter }).Segmenter
+  if (!Segmenter) return Array.from(text).slice(0, count).join('')
+  let out = ''
+  let taken = 0
+  for (const { segment } of new Segmenter(undefined, { granularity: 'grapheme' }).segment(text)) {
+    if (taken === count) break
+    out += segment
+    taken += 1
+  }
+  return out
+}
+
 export type AvatarSize = 'xsmall' | 'small' | 'regular' | 'large'
 
 export interface AvatarProps {
@@ -49,7 +63,7 @@ export function Avatar({ src, fallbackText, name, decorative = false, actorKind 
   } else if (fallbackText) {
     inner = (
       <span className="fk-avatar__initials" aria-hidden="true">
-        {fallbackText.slice(0, 2)}
+        {leadingGraphemes(fallbackText, 2)}
       </span>
     )
   } else {

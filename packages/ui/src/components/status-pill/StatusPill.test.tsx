@@ -5,6 +5,10 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { StatusPill } from './StatusPill'
 
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 describe('StatusPill', () => {
   it('shows the word and success-tone icon for active', () => {
     const { container } = render(<StatusPill status="active" />)
@@ -75,5 +79,13 @@ describe('StatusPill', () => {
       </p>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('StatusPill in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<StatusPill status="pending" label="معلق" />)
+    expect(rtlDom.screen.getByText('معلق')).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

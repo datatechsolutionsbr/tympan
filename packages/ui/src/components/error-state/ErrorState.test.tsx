@@ -4,6 +4,10 @@ import { describe, expect, it, vi } from 'vitest'
 import { expectNoAxeViolations } from '../../../test/axe'
 import { ErrorState } from './ErrorState'
 
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 describe('ErrorState', () => {
   it('network kind describes a connection problem and offers "Try again"', () => {
     render(<ErrorState kind="network" onRetry={() => {}} />)
@@ -82,5 +86,13 @@ describe('ErrorState', () => {
       <ErrorState kind="permission" statusCode={403} details="x" onRetry={() => {}} secondaryAction={{ label: 'Back', onPress: () => {} }} />,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('ErrorState in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<ErrorState kind="network" scope="block" onRetry={() => {}} />)
+    expect(rtlDom.screen.getByRole('button')).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

@@ -13,6 +13,10 @@ import { platformEn, platformEs, platformPtBR, type PlatformMessages } from './m
 import { showcaseEn, showcaseEs, showcasePtBR, type ShowcaseMessages } from './messages/showcase'
 import { shellEn, shellEs, shellPtBR, type ShellMessages } from './messages/shell'
 import { coreEs } from './messages/core-es'
+import { speaker } from './messages/plural'
+
+const en = speaker('en')
+const pt = speaker('pt-BR')
 
 export type ProofStateKey = 'proved' | 'pending' | 'refuted' | 'not_disclosed' | 'none'
 export type ErrorKind = 'generic' | 'network' | 'server' | 'permission' | 'not-found' | 'conflict'
@@ -108,8 +112,9 @@ export const defaultMessages: Messages = {
     clear: 'Clear',
     showPassword: 'Show password',
     hidePassword: 'Hide password',
-    counter: (n, max) => `${n} of ${max} characters`,
-    overLimit: (n, max) => `${n} of ${max} characters, ${n - max} over the limit`,
+    counter: (n, max) => `${en.n(n)} of ${en.n(max)} ${en.word(max, { one: 'character', other: 'characters' })}`,
+    overLimit: (n, max) =>
+      `${en.n(n)} of ${en.n(max)} ${en.word(max, { one: 'character', other: 'characters' })}, ${en.n(n - max)} over the limit`,
   },
   select: { placeholder: 'Select…', done: 'Done' },
   notice: { toneWord: { danger: 'Error:', warning: 'Warning:', info: 'Information:', success: 'Success:' } },
@@ -136,9 +141,9 @@ export const defaultMessages: Messages = {
     previous: 'Previous',
     next: 'Next',
     pageSize: 'Items per page',
-    range: (from, to, total) => `${from} to ${to} of ${total}`,
-    page: (n) => `Page ${n}`,
-    pageOf: (n, count) => `Page ${n} of ${count}`,
+    range: (from, to, total) => `${en.n(from)} to ${en.n(to)} of ${en.n(total)}`,
+    page: (n) => `Page ${en.n(n)}`,
+    pageOf: (n, count) => `Page ${en.n(n)} of ${en.n(count)}`,
   },
   skipLink: 'Skip to main content',
   status: {
@@ -207,8 +212,9 @@ export const messagesPtBR: Messages = {
     clear: 'Limpar',
     showPassword: 'Mostrar senha',
     hidePassword: 'Ocultar senha',
-    counter: (n, max) => `${n} de ${max} caracteres`,
-    overLimit: (n, max) => `${n} de ${max} caracteres, ${n - max} acima do limite`,
+    counter: (n, max) => `${pt.n(n)} de ${pt.n(max)} ${pt.word(max, { one: 'caractere', other: 'caracteres' })}`,
+    overLimit: (n, max) =>
+      `${pt.n(n)} de ${pt.n(max)} ${pt.word(max, { one: 'caractere', other: 'caracteres' })}, ${pt.n(n - max)} acima do limite`,
   },
   select: { placeholder: 'Selecione…', done: 'Concluir' },
   notice: { toneWord: { danger: 'Erro:', warning: 'Atenção:', info: 'Informação:', success: 'Sucesso:' } },
@@ -235,9 +241,9 @@ export const messagesPtBR: Messages = {
     previous: 'Anterior',
     next: 'Próxima',
     pageSize: 'Itens por página',
-    range: (from, to, total) => `${from} a ${to} de ${total}`,
-    page: (n) => `Página ${n}`,
-    pageOf: (n, count) => `Página ${n} de ${count}`,
+    range: (from, to, total) => `${pt.n(from)} a ${pt.n(to)} de ${pt.n(total)}`,
+    page: (n) => `Página ${pt.n(n)}`,
+    pageOf: (n, count) => `Página ${pt.n(n)} de ${pt.n(count)}`,
   },
   skipLink: 'Ir para o conteúdo',
   status: {

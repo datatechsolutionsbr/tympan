@@ -7,6 +7,10 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { Button } from '../button/Button'
 import { ModalDialog, type ModalDialogProps } from './ModalDialog'
 
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 function Harness(props: Partial<ModalDialogProps> & { onChange?: (open: boolean) => void }) {
   const [open, setOpen] = useState(false)
   return (
@@ -142,5 +146,13 @@ describe('ModalDialog', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Open' }))
     await screen.findByRole('dialog')
     await expectNoAxeViolations(document.body)
+  })
+})
+
+describe('ModalDialog in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    renderRtl(<ModalDialog isOpen onOpenChange={() => {}} title="تجميد الإصدار" actions={<button type="button">إلغاء</button>}><p>نص</p></ModalDialog>)
+    expect(await rtlDom.screen.findByRole('dialog', { name: 'تجميد الإصدار' })).toBeInTheDocument()
+    await axeRtl(document.body)
   })
 })

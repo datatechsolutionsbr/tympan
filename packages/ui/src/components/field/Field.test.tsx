@@ -4,6 +4,10 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { TextField } from '../text-field/TextField'
 import { Field, FieldLabel, Fieldset, FieldStack, useField } from './Field'
 
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 function NativeInput() {
   const field = useField()
   return <input id={field?.controlId} aria-describedby={field?.describedBy} aria-invalid={field?.invalid || undefined} />
@@ -118,5 +122,13 @@ describe('Field', () => {
       </Fieldset>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('Field in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<Field label="سنة الإطلاق" hint="أربعة أرقام." controlId="rtl-year"><input id="rtl-year" /></Field>)
+    expect(rtlDom.screen.getByRole('textbox', { name: 'سنة الإطلاق' })).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

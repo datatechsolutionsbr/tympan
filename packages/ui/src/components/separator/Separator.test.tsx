@@ -4,6 +4,10 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { Separator } from './Separator'
 
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 describe('Separator', () => {
   it('is decorative by default', () => {
     const { container } = render(<Separator />)
@@ -49,5 +53,13 @@ describe('Separator', () => {
       </div>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('Separator in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<Separator caption="أو" />)
+    expect(rtlDom.screen.getByText('أو')).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

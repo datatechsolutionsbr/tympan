@@ -7,6 +7,9 @@ import { renderWithProvider } from '../../../test/render'
 import { messagesPtBR } from '../../internal/messages'
 import { ProofBadge, type ProofState } from './ProofBadge'
 
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 const states: Array<[ProofState | null, string, string]> = [
   ['proved', 'proved', 'proved'],
   ['pending', 'pending', 'pending'],
@@ -80,5 +83,13 @@ describe('ProofBadge', () => {
       </div>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('ProofBadge in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<ProofBadge state="proved" size="block" provedBy="مراجع" rule="compile@1" />)
+    expect(container.textContent).toMatch(/compile@1/)
+    await axeRtl(container)
   })
 })

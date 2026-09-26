@@ -5,6 +5,10 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { TextField } from './TextField'
 
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 describe('TextField', () => {
   it('uses the label as the accessible name', () => {
     render(<TextField label="Name" />)
@@ -120,5 +124,13 @@ describe('TextField', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('TextField in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<TextField label="اسم الحالة" defaultValue="تم" />)
+    expect(rtlDom.screen.getByRole('textbox', { name: 'اسم الحالة' })).toHaveValue('تم')
+    await axeRtl(container)
   })
 })

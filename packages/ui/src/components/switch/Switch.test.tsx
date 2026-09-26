@@ -5,6 +5,11 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { Switch, SwitchGroup } from './Switch'
 
+import * as rtlDom from '@testing-library/react'
+import rtlUser from '@testing-library/user-event'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 describe('Switch', () => {
   it('has role switch and starts unchecked', () => {
     render(<Switch label="Notifications" />)
@@ -91,5 +96,17 @@ describe('Switch', () => {
     )
     expect(screen.getByRole('group', { name: 'Email' })).toBeInTheDocument()
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('Switch in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<Switch label="الإشعارات" />)
+    const sw = rtlDom.screen.getByRole('switch', { name: 'الإشعارات' })
+    await rtlUser.click(sw)
+    expect(sw).toBeChecked()
+    // The thumb travels towards the inline end, which is the left in right-to-left.
+    expect(cssOf('components/switch/Switch.css')).toMatch(/:dir\(rtl\)\s*\{[^}]*translateX\(calc\(-1/)
+    await axeRtl(container)
   })
 })

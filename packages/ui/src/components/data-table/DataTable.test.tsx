@@ -7,6 +7,10 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { renderWithProvider } from '../../../test/render'
 import { DataTable, type DataTableColumn, type DataTableRow, type SortDirection } from './DataTable'
 
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 const columns: DataTableColumn[] = [
   { id: 'name', header: 'Name', sortable: true },
   { id: 'country', header: 'Country' },
@@ -197,5 +201,14 @@ describe('DataTable', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('DataTable in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<DataTable caption="الحالات" columns={[{ id: 'name', header: 'الحالة' }, { id: 'stage', header: 'المرحلة', numeric: true }]} rows={[{ id: 'a', cells: { name: 'تم', stage: '4' }, label: 'تم' }]} />)
+    expect(rtlDom.screen.getByRole('table', { name: 'الحالات' })).toBeInTheDocument()
+    expect(container.querySelector('[data-align="end"]')).not.toBeNull()
+    await axeRtl(container)
   })
 })

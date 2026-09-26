@@ -5,6 +5,11 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { Checkbox, CheckboxGroup } from './Checkbox'
 
+import * as rtlDom from '@testing-library/react'
+import rtlUser from '@testing-library/user-event'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 describe('Checkbox', () => {
   it('toggles when the row text is clicked and reports the next value', async () => {
     const onChange = vi.fn()
@@ -78,5 +83,15 @@ describe('Checkbox', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('Checkbox in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<Checkbox label="أؤكد أنني فتحت المصدر" />)
+    const box = rtlDom.screen.getByRole('checkbox', { name: 'أؤكد أنني فتحت المصدر' })
+    await rtlUser.click(box)
+    expect(box).toBeChecked()
+    await axeRtl(container)
   })
 })

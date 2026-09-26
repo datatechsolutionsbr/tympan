@@ -6,6 +6,10 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { renderWithProvider } from '../../../test/render'
 import { Surface } from './Surface'
 
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 describe('Surface', () => {
   it('is a region named by its title when rendered as a section', () => {
     render(<Surface title="Evidence">Body</Surface>)
@@ -81,5 +85,13 @@ describe('Surface', () => {
       </div>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('Surface in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<Surface title="الإصدار الحالي" description="مجمّد"><p>نص</p></Surface>)
+    expect(rtlDom.screen.getByText('الإصدار الحالي')).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

@@ -7,6 +7,9 @@ import { setViewportWidth } from '../../../test/media'
 import { renderWithProvider } from '../../../test/render'
 import { Breadcrumbs } from './Breadcrumbs'
 
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 const three = [
   { label: 'Organisation', href: '/org' },
   { label: 'Project', href: '/org/project' },
@@ -87,5 +90,15 @@ describe('Breadcrumbs', () => {
   it('has no axe violations', async () => {
     const { container } = renderWithProvider(<Breadcrumbs items={three} />, { navigate: vi.fn() })
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('Breadcrumbs in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<Breadcrumbs mode="trail" items={[{ label: 'الجامعة', href: '/org' }, { label: 'التعداد', href: '/org/c' }, { label: 'القاعدة', href: '/org/c/b' }]} />, { navigate: () => {} })
+    const separators = container.querySelectorAll('.fk-breadcrumbs__separator')
+    expect(separators.length).toBeGreaterThan(0)
+    for (const s of separators) expect(s).toHaveClass('fk-mirror-rtl')
+    await axeRtl(container)
   })
 })

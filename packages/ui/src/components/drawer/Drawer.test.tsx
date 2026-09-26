@@ -7,6 +7,10 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { Button } from '../button/Button'
 import { Drawer, type DrawerProps } from './Drawer'
 
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 function Harness(props: Partial<DrawerProps> & { onChange?: (o: boolean) => void }) {
   const [open, setOpen] = useState(props.open ?? false)
   return (
@@ -134,5 +138,15 @@ describe('Drawer', () => {
 
   it('draws a system-colour border in forced colours', () => {
     expect(mediaBlock(cssOf('components/drawer/Drawer.css'), /\(forced-colors:\s*active\)/)).toMatch(/CanvasText/)
+  })
+})
+
+describe('Drawer in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    renderRtl(<Drawer open onOpenChange={() => {}} title="الدليل" placement="end"><p>نص</p></Drawer>)
+    expect(await rtlDom.screen.findByRole('dialog', { name: 'الدليل' })).toBeInTheDocument()
+    // The end drawer enters from the inline end, which is the left in right-to-left.
+    expect(cssOf('components/drawer/Drawer.css')).toMatch(/\[dir='rtl'\] \.fk-drawer\[data-placement='end'\]\[data-entering\]/)
+    await axeRtl(document.body)
   })
 })

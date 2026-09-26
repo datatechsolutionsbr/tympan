@@ -6,6 +6,10 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { setViewportWidth } from '../../../test/media'
 import { ListboxSelect } from './ListboxSelect'
 
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 const options = [
   { value: 'apple', label: 'Apple' },
   { value: 'banana', label: 'Banana', description: 'Yellow' },
@@ -113,5 +117,13 @@ describe('ListboxSelect', () => {
     await expectNoAxeViolations(container)
     await userEvent.click(screen.getByRole('button', { name: /Fruit/ }))
     await expectNoAxeViolations(document.body)
+  })
+})
+
+describe('ListboxSelect in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<ListboxSelect label="القدرة" options={[{ value: 'inform', label: 'يُعلم' }, { value: 'act', label: 'يُنفذ' }]} />)
+    expect(rtlDom.screen.getByRole('button', { name: /القدرة/ })).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

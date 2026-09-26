@@ -6,6 +6,10 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { InlineNotice } from './InlineNotice'
 
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 describe('InlineNotice', () => {
   it('danger after a failed submit is an alert with the message', () => {
     render(<InlineNotice tone="danger">The form has 2 errors.</InlineNotice>)
@@ -107,5 +111,13 @@ describe('InlineNotice', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('InlineNotice in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<InlineNotice tone="warning" urgency="none">لم يتم فتح مصدرين.</InlineNotice>)
+    expect(rtlDom.screen.getByText('لم يتم فتح مصدرين.')).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

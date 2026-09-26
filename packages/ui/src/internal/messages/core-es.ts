@@ -1,5 +1,8 @@
 // Spanish copy of the wave-1 core catalogue (the groups ship their own `xEs`).
 import type { CoreMessages } from '../messages'
+import { speaker } from './plural'
+
+const es = speaker('es')
 
 export const coreEs: CoreMessages = {
   close: 'Cerrar',
@@ -14,8 +17,9 @@ export const coreEs: CoreMessages = {
     clear: 'Borrar',
     showPassword: 'Mostrar contraseña',
     hidePassword: 'Ocultar contraseña',
-    counter: (n, max) => `${n} de ${max} caracteres`,
-    overLimit: (n, max) => `${n} de ${max} caracteres, ${n - max} por encima del límite`,
+    counter: (n, max) => `${es.n(n)} de ${es.n(max)} ${es.word(max, { one: 'carácter', other: 'caracteres' })}`,
+    overLimit: (n, max) =>
+      `${es.n(n)} de ${es.n(max)} ${es.word(max, { one: 'carácter', other: 'caracteres' })}, ${es.n(n - max)} por encima del límite`,
   },
   select: { placeholder: 'Seleccione…', done: 'Listo' },
   notice: { toneWord: { danger: 'Error:', warning: 'Atención:', info: 'Información:', success: 'Éxito:' } },
@@ -42,9 +46,9 @@ export const coreEs: CoreMessages = {
     previous: 'Anterior',
     next: 'Siguiente',
     pageSize: 'Elementos por página',
-    range: (from, to, total) => `${from} a ${to} de ${total}`,
-    page: (n) => `Página ${n}`,
-    pageOf: (n, count) => `Página ${n} de ${count}`,
+    range: (from, to, total) => `${es.n(from)} a ${es.n(to)} de ${es.n(total)}`,
+    page: (n) => `Página ${es.n(n)}`,
+    pageOf: (n, count) => `Página ${es.n(n)} de ${es.n(count)}`,
   },
   skipLink: 'Ir al contenido',
   status: {

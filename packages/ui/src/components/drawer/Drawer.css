@@ -112,7 +112,8 @@
   .fk-drawer__handle {
     position: absolute;
     inset-block-start: var(--fk-space-2);
-    inset-inline-start: 50%;
+    /* physical: centring with translate(-50%) is the same in both directions */
+    left: 50%;
     inline-size: var(--fk-space-7);
     block-size: var(--fk-space-1);
     border-radius: var(--fk-radius-pill);
@@ -122,7 +123,8 @@
   .fk-drawer__handle::before {
     content: '';
     position: absolute;
-    inset-inline-start: 50%;
+    /* physical: centring with translate(-50%) is the same in both directions */
+    left: 50%;
     inset-block-start: 50%;
     inline-size: max(100%, var(--fk-control-target));
     block-size: max(100%, var(--fk-control-target));

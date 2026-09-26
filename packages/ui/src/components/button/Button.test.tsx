@@ -8,6 +8,11 @@ import { renderWithProvider } from '../../../test/render'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { Button } from './Button'
 
+import * as rtlDom from '@testing-library/react'
+import rtlUser from '@testing-library/user-event'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 describe('Button', () => {
   it('calls onPress once when clicked', async () => {
     const onPress = vi.fn()
@@ -156,5 +161,17 @@ describe('Button', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('Button in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const onPress = vi.fn()
+    const { container } = renderRtl(<Button onPress={onPress}>حفظ</Button>)
+    await rtlUser.click(rtlDom.screen.getByRole('button', { name: 'حفظ' }))
+    expect(onPress).toHaveBeenCalledTimes(1)
+    // The 44 px hit area is centred with a physical left: 50% + translate(-50%), identical in both directions.
+    expect(cssOf('components/button/Button.css')).toMatch(/\.fk-button::before\s*\{[^}]*left:\s*50%/)
+    await axeRtl(container)
   })
 })

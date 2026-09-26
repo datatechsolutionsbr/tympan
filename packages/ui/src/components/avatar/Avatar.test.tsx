@@ -5,6 +5,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf } from '../../../test/css'
 import { Avatar } from './Avatar'
 
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 describe('Avatar', () => {
   it('shows an image whose alternative text is the name', () => {
     render(<Avatar src="/a.png" name="Natália Mesquita" />)
@@ -65,5 +68,16 @@ describe('Avatar', () => {
       </div>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('Avatar in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<><Avatar name="نور الهدى" fallbackText="نه" /><Avatar name="Núria" fallbackText={'Nu\u0301r'} /></>)
+    const initials = container.querySelectorAll('.fk-avatar__initials')
+    expect(initials[0]).toHaveTextContent('نه')
+    // Two grapheme clusters: the combining accent stays with its letter.
+    expect(initials[1]!.textContent).toBe('Nu\u0301')
+    await axeRtl(container)
   })
 })

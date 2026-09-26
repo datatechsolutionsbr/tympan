@@ -57,7 +57,7 @@ export function Breadcrumbs(props: BreadcrumbsProps) {
           <div className="fk-breadcrumbs__back">
             {parent ? (
               <Link href={parent.href} emphasis="subtle" standalone aria-label={messages.breadcrumbs.backTo(parent.label)}>
-                <ArrowLeft className="fk-icon" aria-hidden="true" focusable="false" />
+                <ArrowLeft className="fk-icon fk-mirror-rtl" aria-hidden="true" focusable="false" />
                 <span className="fk-breadcrumbs__back-label">{parent.label}</span>
               </Link>
             ) : null}
@@ -83,7 +83,7 @@ export function Breadcrumbs(props: BreadcrumbsProps) {
       <ol className="fk-breadcrumbs__list">
         {entries.map((entry, i) => {
           const isLast = i === entries.length - 1
-          const separator = isLast ? null : <ChevronRight className="fk-icon fk-breadcrumbs__separator" aria-hidden="true" focusable="false" />
+          const separator = isLast ? null : <ChevronRight className="fk-icon fk-mirror-rtl fk-breadcrumbs__separator" aria-hidden="true" focusable="false" />
           if (entry.kind === 'overflow') {
             return (
               <li key="overflow" className="fk-breadcrumbs__item">

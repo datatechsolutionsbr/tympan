@@ -5,6 +5,11 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { TabPanel, Tabs, type TabItem, type TabsProps } from './Tabs'
 
+import * as rtlDom from '@testing-library/react'
+import rtlUser from '@testing-library/user-event'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 const tabs: TabItem[] = [
   { id: 'definition', label: 'Definition' },
   { id: 'runs', label: 'Runs', count: 4 },
@@ -102,5 +107,21 @@ describe('Tabs', () => {
   it('has no axe violations', async () => {
     const { container } = render(<Example />)
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('Tabs in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(
+      <Tabs label="التحليل" tabs={[{ id: 'a', label: 'التعريف' }, { id: 'b', label: 'التشغيلات' }]}>
+        <TabPanel id="a">أ</TabPanel>
+        <TabPanel id="b">ب</TabPanel>
+      </Tabs>,
+    )
+    await rtlUser.click(rtlDom.screen.getByRole('tab', { name: 'التعريف' }))
+    // In right-to-left, Left Arrow goes to the next tab.
+    await rtlUser.keyboard('{ArrowLeft}')
+    expect(rtlDom.screen.getByRole('tab', { name: 'التشغيلات' })).toHaveAttribute('aria-selected', 'true')
+    await axeRtl(container)
   })
 })

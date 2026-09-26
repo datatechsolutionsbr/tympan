@@ -4,6 +4,10 @@ import { describe, expect, it, vi } from 'vitest'
 import { expectNoAxeViolations } from '../../../test/axe'
 import { EmptyState } from './EmptyState'
 
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 describe('EmptyState', () => {
   it('no-results with onClearFilters says nothing matches and offers "Clear filters"', async () => {
     const onClear = vi.fn()
@@ -61,5 +65,13 @@ describe('EmptyState', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('EmptyState in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<EmptyState reason="no-data" title="لا توجد مصادر بعد" description="يبدأ المسار عند فتح جلسة." />)
+    expect(rtlDom.screen.getByText('لا توجد مصادر بعد')).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

@@ -6,6 +6,9 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { setViewportWidth } from '../../../test/media'
 import { Pagination, pageSlots, type PaginationProps } from './Pagination'
 
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 const base: PaginationProps = { page: 1, pageCount: 10, totalItems: 480, pageSize: 50, onPageChange: () => {} }
 
 function pageNumbers() {
@@ -86,5 +89,16 @@ describe('Pagination', () => {
   it('has no axe violations', async () => {
     const { container } = render(<Pagination {...base} page={5} pageSizeOptions={[25, 50]} />)
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('Pagination in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<Pagination page={2} pageCount={5} totalItems={120} pageSize={25} onPageChange={() => {}} />, { locale: 'ar-EG' })
+    // Page numbers use the locale's digits; the previous/next chevrons mirror.
+    expect(container.querySelector('[aria-current="page"]')).toHaveTextContent('٢')
+    const arrows = container.querySelectorAll('[data-arrow] svg')
+    for (const a of arrows) expect(a).toHaveClass('fk-mirror-rtl')
+    await axeRtl(container)
   })
 })

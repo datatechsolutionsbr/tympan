@@ -6,6 +6,12 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { SegmentedControl } from './SegmentedControl'
 
+import * as rtlDom from '@testing-library/react'
+import rtlUser from '@testing-library/user-event'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { useState as useRtlState } from 'react'
+import { renderRtl } from '../../../test/rtl'
+
 const periods = ['Day', 'Week', 'Month']
 
 describe('SegmentedControl', () => {
@@ -84,5 +90,20 @@ describe('SegmentedControl', () => {
   it('has no axe violations', async () => {
     const { container } = render(<SegmentedControl label="Period" options={periods} onChange={() => {}} />)
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('SegmentedControl in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    function Host() {
+      const [value, setValue] = useRtlState('يوم')
+      return <SegmentedControl label="الفترة" options={['يوم', 'أسبوع', 'شهر']} value={value} onChange={setValue} />
+    }
+    const { container } = renderRtl(<Host />)
+    await rtlUser.click(rtlDom.screen.getByRole('radio', { name: 'يوم' }))
+    // In right-to-left, Left Arrow moves forward (to the option on the left).
+    await rtlUser.keyboard('{ArrowLeft}')
+    expect(rtlDom.screen.getByRole('radio', { name: 'أسبوع' })).toBeChecked()
+    await axeRtl(container)
   })
 })

@@ -78,7 +78,7 @@ export const Link = forwardRef<HTMLAnchorElement | HTMLButtonElement, LinkProps>
       {children}
       {isExternal ? (
         <>
-          <ExternalLink className="fk-icon fk-link__external" aria-hidden="true" focusable="false" />
+          <ExternalLink className="fk-icon fk-mirror-rtl fk-link__external" aria-hidden="true" focusable="false" />
           <span className="fk-visually-hidden"> {messages.link.opensInNewTab}</span>
         </>
       ) : null}

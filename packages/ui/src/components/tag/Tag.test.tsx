@@ -7,6 +7,11 @@ import { cssOf } from '../../../test/css'
 import { renderWithProvider } from '../../../test/render'
 import { Tag, TagList, type TagListItem } from './Tag'
 
+import * as rtlDom from '@testing-library/react'
+import rtlUser from '@testing-library/user-event'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 describe('Tag', () => {
   it('static tag is inline text with no interactive role', () => {
     const { container } = render(<Tag>Survey</Tag>)
@@ -110,5 +115,15 @@ describe('Tag', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('Tag in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const onRemove = vi.fn()
+    const { container } = renderRtl(<Tag removable onRemove={onRemove}>المرحلة: ٤</Tag>)
+    await rtlUser.click(rtlDom.screen.getByRole('button'))
+    expect(onRemove).toHaveBeenCalled()
+    await axeRtl(container)
   })
 })

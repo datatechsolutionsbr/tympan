@@ -6,6 +6,9 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { renderWithProvider } from '../../../test/render'
 import { Link } from './Link'
 
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 describe('Link', () => {
   it('navigates through the router adapter without a page reload', async () => {
     const navigate = vi.fn()
@@ -88,5 +91,13 @@ describe('Link', () => {
       </p>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('Link in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<Link href="https://www.w3.org/WAI/">مرجع خارجي</Link>)
+    expect(container.querySelector('.fk-link__external')).toHaveClass('fk-mirror-rtl')
+    await axeRtl(container)
   })
 })

@@ -5,6 +5,10 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { SkipLink } from './SkipLink'
 
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 function Page({ label }: { label?: string }) {
   return (
     <>
@@ -74,5 +78,13 @@ describe('SkipLink', () => {
   it('has no axe violations', async () => {
     const { container } = render(<Page />)
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('SkipLink in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<><SkipLink targetId="rtl-main" label="انتقل إلى المحتوى" /><main id="rtl-main">محتوى</main></>)
+    expect(rtlDom.screen.getByRole('link', { name: 'انتقل إلى المحتوى' })).toHaveAttribute('href', '#rtl-main')
+    await axeRtl(container)
   })
 })

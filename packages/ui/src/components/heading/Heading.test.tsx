@@ -4,6 +4,10 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { Heading, Subheading } from './Heading'
 
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 describe('Heading', () => {
   it('renders an h1 with no props', () => {
     render(<Heading>Sources</Heading>)
@@ -77,5 +81,13 @@ describe('Heading', () => {
       </main>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('Heading in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<Heading eyebrow="تعداد">الفهرس</Heading>)
+    expect(rtlDom.screen.getByRole('heading', { name: 'الفهرس' })).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

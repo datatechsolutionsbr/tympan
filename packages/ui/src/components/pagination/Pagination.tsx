@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useEffect, useId, useRef } from 'react'
-import { Button as AriaButton } from 'react-aria-components'
+import { Button as AriaButton, useLocale } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 import { breakpoints, useMinWidth } from '../../internal/media'
 import { useMessages } from '../../internal/provider'
@@ -69,6 +69,8 @@ export function Pagination(props: PaginationProps) {
   const messages = useMessages()
   const labels: PaginationLabels = { ...messages.pagination, ...props.labels }
   const wide = useMinWidth(breakpoints.sm)
+  const { locale } = useLocale()
+  const numeral = new Intl.NumberFormat(locale)
   const selectId = useId()
   const prevRef = useRef<HTMLButtonElement>(null)
   const nextRef = useRef<HTMLButtonElement>(null)
@@ -98,7 +100,7 @@ export function Pagination(props: PaginationProps) {
       </p>
       <div className="fk-pagination__controls">
         <AriaButton ref={prevRef} className="fk-pagination__button" data-arrow="" isDisabled={busy || atStart} onPress={() => go(page - 1)}>
-          <ChevronLeft className="fk-icon" aria-hidden="true" focusable="false" />
+          <ChevronLeft className="fk-icon fk-mirror-rtl" aria-hidden="true" focusable="false" />
           <span className="fk-pagination__arrow-label">{labels.previous}</span>
         </AriaButton>
         {wide ? (
@@ -119,7 +121,7 @@ export function Pagination(props: PaginationProps) {
                     isDisabled={busy}
                     onPress={() => go(slot)}
                   >
-                    {slot}
+                    {numeral.format(slot)}
                   </AriaButton>
                 </li>
               ),
@@ -130,7 +132,7 @@ export function Pagination(props: PaginationProps) {
         )}
         <AriaButton ref={nextRef} className="fk-pagination__button" data-arrow="" isDisabled={busy || atEnd} onPress={() => go(page + 1)}>
           <span className="fk-pagination__arrow-label">{labels.next}</span>
-          <ChevronRight className="fk-icon" aria-hidden="true" focusable="false" />
+          <ChevronRight className="fk-icon fk-mirror-rtl" aria-hidden="true" focusable="false" />
         </AriaButton>
       </div>
       {pageSizeOptions ? (

@@ -6,6 +6,10 @@ import { setMedia } from '../../../test/media'
 import { Button } from '../button/Button'
 import { Spinner } from './Spinner'
 
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 describe('Spinner', () => {
   it('is a progressbar named by its label', () => {
     render(<Spinner label="Saving" />)
@@ -83,5 +87,13 @@ describe('Spinner', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('Spinner in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<Spinner label="جارٍ الحفظ" showLabel />)
+    expect(rtlDom.screen.getByText('جارٍ الحفظ')).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

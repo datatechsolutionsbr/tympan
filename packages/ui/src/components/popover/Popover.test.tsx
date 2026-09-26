@@ -6,6 +6,11 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { Button } from '../button/Button'
 import { Popover } from './Popover'
 
+import * as rtlDom from '@testing-library/react'
+import rtlUser from '@testing-library/user-event'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 describe('Popover', () => {
   afterEach(() => vi.restoreAllMocks())
 
@@ -135,5 +140,14 @@ describe('Popover', () => {
     )
     await screen.findByRole('dialog')
     await expectNoAxeViolations(document.body)
+  })
+})
+
+describe('Popover in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    renderRtl(<Popover triggerLabel="حول هذه النتيجة" title="نتيجة الإثبات"><p>نص</p></Popover>)
+    await rtlUser.click(rtlDom.screen.getByRole('button', { name: 'حول هذه النتيجة' }))
+    expect(await rtlDom.screen.findByRole('dialog')).toBeInTheDocument()
+    await axeRtl(document.body)
   })
 })

@@ -7,6 +7,10 @@ import { setMedia } from '../../../test/media'
 import { Field } from '../field/Field'
 import { NativeSelect } from './NativeSelect'
 
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 describe('NativeSelect', () => {
   it('turns string options into options whose value equals the label', () => {
     render(<NativeSelect label="Stage" options={['One', 'Two']} />)
@@ -126,5 +130,13 @@ describe('NativeSelect', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('NativeSelect in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<NativeSelect label="المرحلة" options={['1', '2', '3']} defaultValue="2" />)
+    expect(rtlDom.screen.getByRole('combobox', { name: 'المرحلة' })).toHaveValue('2')
+    await axeRtl(container)
   })
 })

@@ -5,6 +5,10 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf } from '../../../test/css'
 import { SectionHeading } from './SectionHeading'
 
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 describe('SectionHeading', () => {
   it('renders an h3 with level 3', () => {
     render(<SectionHeading title="Members" level={3} />)
@@ -49,5 +53,13 @@ describe('SectionHeading', () => {
   it('has no axe violations', async () => {
     const { container } = render(<SectionHeading title="Agents" subtitle="Keys and models" trailing={<button type="button">New agent</button>} />)
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('SectionHeading in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<SectionHeading title="التحقق" level={3} subtitle="٣ من ٣" />)
+    expect(rtlDom.screen.getByRole('heading', { name: 'التحقق' })).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

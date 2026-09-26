@@ -4,6 +4,11 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ToastProvider, useToast, type ToastApi, type ToastProviderProps } from './Toast'
 
+import * as rtlDom from '@testing-library/react'
+import rtlUser from '@testing-library/user-event'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 function setup(props: Omit<ToastProviderProps, 'children'> = {}) {
   let api!: ToastApi
   function Grab() {
@@ -199,5 +204,18 @@ describe('Toast', () => {
       api().error('Failed', { action: { label: 'Retry', onPress: () => {} } })
     })
     await expectNoAxeViolations(container.ownerDocument.body)
+  })
+})
+
+describe('Toast in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    function Trigger() {
+      const toast = useToast()
+      return <button type="button" onClick={() => toast.success('تم حفظ المصدر')}>احفظ</button>
+    }
+    const { container } = renderRtl(<ToastProvider><Trigger /></ToastProvider>)
+    await rtlUser.click(rtlDom.screen.getByRole('button', { name: 'احفظ' }))
+    expect(await rtlDom.screen.findByText('تم حفظ المصدر')).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

@@ -7,6 +7,11 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { Button } from '../button/Button'
 import { ActionMenu, clampToViewport, type ActionMenuEntry } from './ActionMenu'
 
+import * as rtlDom from '@testing-library/react'
+import rtlUser from '@testing-library/user-event'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 const items: ActionMenuEntry[] = [
   { id: 'open', label: 'Open' },
   { id: 'rename', label: 'Rename', shortcut: 'F2' },
@@ -171,5 +176,14 @@ describe('ActionMenu', () => {
     render(<ActionMenu label="Record actions" items={items} onAction={() => {}} defaultOpen trigger={<Button>Actions</Button>} />)
     await screen.findByRole('menu')
     await expectNoAxeViolations(document.body)
+  })
+})
+
+describe('ActionMenu in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    renderRtl(<ActionMenu label="إجراءات" trigger={<Button>المزيد</Button>} items={[{ id: 'open', label: 'فتح' }, { id: 'export', label: 'تصدير' }]} onAction={() => {}} />)
+    await rtlUser.click(rtlDom.screen.getByRole('button', { name: 'المزيد' }))
+    expect(await rtlDom.screen.findByRole('menu')).toBeInTheDocument()
+    await axeRtl(document.body)
   })
 })

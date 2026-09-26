@@ -56,8 +56,9 @@
     inline-size: 60%;
     block-size: 60%;
   }
+  /* Initials are shown as given: case is the host's (and the script's) business. */
   .fk-avatar__initials {
-    text-transform: uppercase;
+    line-height: 1;
   }
 
   /* Pressable wrapper: 44 x 44 px hit area at every size; hover changes fill only. */
@@ -72,7 +73,8 @@
     content: '';
     position: absolute;
     inset-block-start: 50%;
-    inset-inline-start: 50%;
+    /* physical: centring with translate(-50%) is the same in both directions */
+    left: 50%;
     inline-size: max(100%, var(--fk-control-target));
     block-size: max(100%, var(--fk-control-target));
     transform: translate(-50%, -50%);

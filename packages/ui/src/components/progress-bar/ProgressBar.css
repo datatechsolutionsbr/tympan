@@ -55,6 +55,19 @@
     animation: fk-progress-slide 1400ms var(--fk-ease) infinite;
   }
 
+  [dir='rtl'] .fk-progress[data-indeterminate] .fk-progress__fill,
+  .fk-progress[data-indeterminate]:dir(rtl) .fk-progress__fill {
+    animation-name: fk-progress-slide-rtl;
+  }
+  @keyframes fk-progress-slide-rtl {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(-300%);
+    }
+  }
+
   @keyframes fk-progress-slide {
     from {
       transform: translateX(-100%);

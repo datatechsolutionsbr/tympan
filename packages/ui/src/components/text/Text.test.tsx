@@ -4,6 +4,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf } from '../../../test/css'
 import { Code, Strong, Text } from './Text'
 
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+
 function luminance(hex: string): number {
   const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4))
   return 0.2126 * r! + 0.7152 * g! + 0.0722 * b!
@@ -74,5 +77,15 @@ describe('Text', () => {
       </div>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('Text in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<Text truncate={2}>جملة طويلة جدًا تُقطع بصريًا فقط ويبقى النص الكامل متاحًا.</Text>)
+    const text = container.querySelector('.fk-text')!
+    // Truncation is visual (line clamp); the whole text stays in the tree.
+    expect(text.textContent).toBe('جملة طويلة جدًا تُقطع بصريًا فقط ويبقى النص الكامل متاحًا.')
+    await axeRtl(container)
   })
 })
