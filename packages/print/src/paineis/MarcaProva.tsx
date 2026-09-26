@@ -71,6 +71,74 @@ function Icone({ estado }: { estado: EstadoProva }) {
   )
 }
 
+/**
+ * Geometric marks: Bauhaus shapes (square, triangle, circle…) or Vignelli/Bayer dots. The shape is the
+ * state; the word beside it is always printed, so neither colour nor shape alone carries the meaning.
+ */
+function Forma({ estado, estilo }: { estado: EstadoProva; estilo: 'formas' | 'ponto' }) {
+  const cheio = { fill: 'currentColor' }
+  const vazio = { fill: 'none', stroke: 'currentColor', strokeWidth: 1.3 }
+  let corpo: ReactNode
+  if (estilo === 'formas') {
+    switch (estado) {
+      case 'sustentada':
+        corpo = <rect x={1.5} y={1.5} width={9} height={9} style={cheio} />
+        break
+      case 'refutada':
+        corpo = <polygon points="6,1 11,10.6 1,10.6" style={cheio} />
+        break
+      case 'nao-da-para-afirmar':
+        corpo = <circle cx={6} cy={6} r={4.6} style={{ ...vazio, strokeWidth: 2.2 }} />
+        break
+      case 'pendente':
+        corpo = <polygon points="6,1 11,10.6 1,10.6" style={vazio} />
+        break
+      case 'sem-dado':
+        corpo = <rect x={1.8} y={1.8} width={8.4} height={8.4} style={vazio} />
+        break
+      case 'nao-testada':
+        corpo = <circle cx={6} cy={6} r={4.4} style={vazio} strokeDasharray="1 1.6" />
+        break
+    }
+  } else {
+    switch (estado) {
+      case 'sustentada':
+        corpo = <circle cx={6} cy={6} r={4.8} style={cheio} />
+        break
+      case 'refutada':
+        corpo = (
+          <>
+            <circle cx={6} cy={6} r={4.8} style={cheio} />
+            <circle cx={6} cy={6} r={2} fill="var(--ty-print-papel)" />
+          </>
+        )
+        break
+      case 'nao-da-para-afirmar':
+        corpo = (
+          <>
+            <circle cx={6} cy={6} r={4.4} style={vazio} />
+            <path d="M6 1.6 A4.4 4.4 0 0 0 6 10.4 Z" style={cheio} />
+          </>
+        )
+        break
+      case 'pendente':
+        corpo = <circle cx={6} cy={6} r={4.4} style={vazio} strokeDasharray="3 1.4" />
+        break
+      case 'sem-dado':
+        corpo = <circle cx={6} cy={6} r={4.4} style={vazio} />
+        break
+      case 'nao-testada':
+        corpo = <circle cx={6} cy={6} r={4.4} style={vazio} strokeDasharray="0.8 1.6" />
+        break
+    }
+  }
+  return (
+    <svg className="ty-print-prova-forma" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+      {corpo}
+    </svg>
+  )
+}
+
 /** Hand-drawn or ruled ellipse, underline or stamp frame, stretched over the word. */
 function Contorno({ forma, estado, tremor, chave }: { forma: FormaMarca; estado: EstadoProva; tremor: number; chave: string }) {
   const t = TRACO[estado]
@@ -149,6 +217,7 @@ export function MarcaProva({ estado, grande = false, forma, className }: MarcaPr
       data-mao={tremor > 0 ? '' : undefined}
     >
       {comIcone ? <Icone estado={estado} /> : null}
+      {f === 'formas' || f === 'ponto' ? <Forma estado={estado} estilo={f} /> : null}
       <span className="ty-print-prova-texto">{ROTULOS_PROVA[estado]}</span>
       {comContorno ? <Contorno forma={f} estado={estado} tremor={tremor} chave={`prova-${estado}-${grande ? 'g' : 'p'}`} /> : null}
     </span>

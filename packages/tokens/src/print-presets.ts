@@ -13,7 +13,7 @@
 import { luminance, parseColor, toHex, type Rgba } from './color.ts'
 
 export type RenderizadorGrafico = 'limpo' | 'mao' | 'isotype' | 'gravura' | 'prancheta' | 'aquarela' | 'riso' | 'pontos'
-export type MarcaProva = 'pilula' | 'carimbo' | 'circulo' | 'sublinhado' | 'barra' | 'etiqueta'
+export type MarcaProva = 'pilula' | 'carimbo' | 'circulo' | 'sublinhado' | 'barra' | 'etiqueta' | 'formas' | 'ponto'
 export type EstadoProva = 'sustentada' | 'refutada' | 'nao-da-para-afirmar' | 'pendente' | 'sem-dado' | 'nao-testada'
 
 export const ESTADOS_PROVA: readonly EstadoProva[] = ['sustentada', 'refutada', 'nao-da-para-afirmar', 'pendente', 'sem-dado', 'nao-testada']
@@ -82,8 +82,12 @@ export interface PrintEstrutura {
   moldura?: Moldura
   /** Running head: plain text (default), a full-width band (Vignelli, constructivism) or a tag with an arrow (signage). */
   cabeco?: 'texto' | 'faixa' | 'etiqueta'
-  /** Title treatment: cut-paper word blocks, a band with a hard shadow, an offset colour shadow, or the ornament colours. */
-  tituloEstilo?: 'normal' | 'recorte' | 'faixa' | 'sombra' | 'arcoiris'
+  /**
+   * Title treatment: cut-paper word blocks, a band with a hard shadow, an offset colour shadow, the ornament colours;
+   * italic (Tufte), centred capitals with wide spacing (Du Bois), centred italic (Minard), heavier and larger
+   * (constructivism), set from the third column (Swiss grid), or underlined by hand (caderno).
+   */
+  tituloEstilo?: 'normal' | 'recorte' | 'faixa' | 'sombra' | 'arcoiris' | 'italico' | 'centro' | 'centro-italico' | 'pesado' | 'coluna3' | 'sublinhado'
   /** Fill of the square or round panel letter. */
   corRotulo?: 'destaque' | 'destaque2' | 'tinta' | 'marcaTexto' | 'sustentada' | 'refutada'
   /** Bars get an ink outline (Memphis, pop art). */
@@ -155,6 +159,7 @@ export type Moldura =
   | 'memphis' // zigzags, triangles, circles and confetti
   | 'diagonais' // header wedges and a diagonal bar (constructivism)
   | 'formas' // triangle, square and circle (Bauhaus)
+  | 'quartos' // quarter circles in the page corners (Herbert Bayer)
 
 export interface PrintStyle {
   /** Stable id, e.g. 'jornal'. */
@@ -307,7 +312,7 @@ const dubois: PrintStyle = {
   raio: 0,
   caixaAlta: true,
   pb: { destaque: '#3a3a3a', destaque2: '#9a9a9a' },
-  estrutura: { painel: 'caixa-grossa', rotulo: 'letra', rotuloCaixa: 'versalete', notas: 'dentro', figura: 'simples', minusculas: false, forma: 'ziguezague' },
+  estrutura: { painel: 'caixa-grossa', rotulo: 'letra', rotuloCaixa: 'versalete', notas: 'dentro', figura: 'simples', minusculas: false, forma: 'ziguezague', tituloEstilo: 'centro' },
 }
 
 const deardata: PrintStyle = {
@@ -400,7 +405,7 @@ const caderno: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: { destaque2: '#3a3a3a', marcaTexto: '#dddddd' },
-  estrutura: { painel: 'caixa', rotulo: 'parenteses', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, forma: 'colunas', chamadas: 'manuscritas', multiplos: 'lado-a-lado' },
+  estrutura: { painel: 'caixa', rotulo: 'parenteses', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, forma: 'colunas', chamadas: 'manuscritas', multiplos: 'lado-a-lado', tituloEstilo: 'sublinhado', numerosMarcados: true },
 }
 
 const isotype: PrintStyle = {
@@ -484,7 +489,7 @@ const cordel: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: {},
-  estrutura: { painel: 'caixa-grossa', rotulo: 'quadrado', rotuloCaixa: 'versalete', notas: 'dentro', figura: 'simples', minusculas: false },
+  estrutura: { painel: 'caixa-grossa', rotulo: 'quadrado', rotuloCaixa: 'versalete', notas: 'dentro', figura: 'simples', minusculas: false, emblema: 'casa' },
   logo: 'mono',
 }
 
@@ -531,7 +536,7 @@ const riso: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: { tinta: '#1a1a1a', tinta2: '#1a1a1a', tinta3: '#3a3a3a', linha: '#1a1a1a', destaque: '#1a1a1a', destaque2: '#8a8a8a' },
-  estrutura: { painel: 'caixa', rotulo: 'circulo', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false },
+  estrutura: { painel: 'caixa', rotulo: 'circulo', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false, fundoPainel: 'pontilhado', veredito: 'bloco-cor' },
   logo: 'mono',
 }
 
@@ -708,7 +713,7 @@ const aquarela: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: { destaque: '#5a5a5a', destaque2: '#b0b0b0' },
-  estrutura: { painel: 'caixa', rotulo: 'parenteses', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, forma: 'colunas', multiplos: 'lado-a-lado' },
+  estrutura: { painel: 'caixa', rotulo: 'parenteses', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, forma: 'colunas', multiplos: 'lado-a-lado', tituloEstilo: 'italico' },
 }
 
 const tufte: PrintStyle = {
@@ -750,7 +755,7 @@ const tufte: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: { destaque: '#111111' },
-  estrutura: { painel: 'nenhum', rotulo: 'letra', rotuloCaixa: 'versalete', notas: 'margem', figura: 'amplitude', minusculas: false, forma: 'colunas', colunasFinas: true, linhaCorte: 'tracejada' },
+  estrutura: { painel: 'nenhum', rotulo: 'letra', rotuloCaixa: 'versalete', notas: 'margem', figura: 'amplitude', minusculas: false, forma: 'colunas', colunasFinas: true, linhaCorte: 'tracejada', tituloEstilo: 'italico' },
 }
 
 const suico: PrintStyle = {
@@ -792,7 +797,7 @@ const suico: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: { destaque2: '#8a8a8a' },
-  estrutura: { painel: 'fio-grosso', rotulo: 'letra', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false },
+  estrutura: { painel: 'fio-grosso', rotulo: 'letra', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, tituloEstilo: 'coluna3' },
 }
 
 const concretismo: PrintStyle = {
@@ -834,7 +839,7 @@ const concretismo: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: { destaque: '#141414', destaque2: '#8a8a8a' },
-  estrutura: { painel: 'fio-grosso', rotulo: 'quadrado', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: true, forma: 'eixo-central' },
+  estrutura: { painel: 'fio-grosso', rotulo: 'quadrado', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: true, forma: 'eixo-central', emblema: 'circulo-bicolor', veredito: 'bloco-escuro', costura: 'barra' },
 }
 
 const economist: PrintStyle = {
@@ -921,7 +926,7 @@ const holmes: PrintStyle = {
   raio: 2.4,
   caixaAlta: false,
   pb: { destaque: '#2a2a2a', destaque2: '#8a8a8a' },
-  estrutura: { painel: 'cartao', rotulo: 'circulo', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, forma: 'predios', linhaCorte: 'tracejada', chamadas: 'baloes', multiplos: 'lado-a-lado' },
+  estrutura: { painel: 'cartao', rotulo: 'circulo', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, forma: 'predios', linhaCorte: 'tracejada', chamadas: 'baloes', multiplos: 'lado-a-lado', emblema: 'predios' },
 }
 
 const bayer: PrintStyle = {
@@ -959,11 +964,11 @@ const bayer: PrintStyle = {
   papel: { textura: 'nenhuma', intensidade: 0 },
   traco: { largura: 0.4, tremor: 0, hachura: 'nenhuma' },
   grafico: 'limpo',
-  marcaProva: 'etiqueta',
+  marcaProva: 'ponto',
   raio: 0,
   caixaAlta: false,
   pb: { destaque: '#2a2a2a', destaque2: '#8a8a8a' },
-  estrutura: { painel: 'bloco', rotulo: 'circulo', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: true, forma: 'colunas', linhaCorte: 'cheia', marcador: 'circulo', multiplos: 'lado-a-lado' },
+  estrutura: { painel: 'bloco', rotulo: 'circulo', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: true, forma: 'colunas', linhaCorte: 'cheia', marcador: 'circulo', multiplos: 'lado-a-lado', fundoPainel: 'alternado', moldura: 'quartos', manchete: 'texto' },
 }
 
 const ft: PrintStyle = {
@@ -1029,7 +1034,7 @@ const dadosBr: PrintStyle = {
   raio: 0.8,
   caixaAlta: false,
   pb: { destaque: '#1f1e1c' },
-  estrutura: { painel: 'fio', rotulo: 'letra', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false },
+  estrutura: { painel: 'fio', rotulo: 'letra', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, notasFigura: 'coluna', manchete: 'texto' },
 }
 
 const minard: PrintStyle = {
@@ -1046,7 +1051,7 @@ const minard: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: { destaque: '#8a8a8a' },
-  estrutura: { painel: 'fio', rotulo: 'letra', rotuloCaixa: 'versalete', notas: 'dentro', figura: 'simples', minusculas: false, moldura: 'dupla', forma: 'fluxo' },
+  estrutura: { painel: 'fio', rotulo: 'letra', rotuloCaixa: 'versalete', notas: 'dentro', figura: 'simples', minusculas: false, moldura: 'dupla', forma: 'fluxo', tituloEstilo: 'centro-italico' },
 }
 
 const mccandless: PrintStyle = {
@@ -1063,7 +1068,7 @@ const mccandless: PrintStyle = {
   raio: 1.6,
   caixaAlta: false,
   pb: { destaque: '#2b2b2b', destaque2: '#9a9a9a' },
-  estrutura: { painel: 'cartao', rotulo: 'quadrado', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical', corRotulo: 'tinta', forma: 'cartoes', multiplos: 'lado-a-lado' },
+  estrutura: { painel: 'cartao', rotulo: 'quadrado', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical', corRotulo: 'tinta', forma: 'cartoes', multiplos: 'lado-a-lado', veredito: 'bloco-escuro', fundoPainel: 'alternado', manchete: 'texto' },
 }
 
 const construtivismo: PrintStyle = {
@@ -1080,7 +1085,7 @@ const construtivismo: PrintStyle = {
   raio: 0,
   caixaAlta: true,
   pb: { destaque: '#6a6a6a' },
-  estrutura: { painel: 'fio-grosso', rotulo: 'quadrado', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false, moldura: 'diagonais', corRotulo: 'refutada' },
+  estrutura: { painel: 'fio-grosso', rotulo: 'quadrado', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false, moldura: 'diagonais', corRotulo: 'refutada', tituloEstilo: 'pesado', costura: 'bloco-escuro', manchete: 'diagonal' },
 }
 
 const bauhaus: PrintStyle = {
@@ -1093,11 +1098,11 @@ const bauhaus: PrintStyle = {
   papel: { textura: 'nenhuma', intensidade: 0 },
   traco: { largura: 0.4, tremor: 0, hachura: 'nenhuma' },
   grafico: 'limpo',
-  marcaProva: 'etiqueta',
+  marcaProva: 'formas',
   raio: 0,
   caixaAlta: false,
   pb: { destaque: '#5a5a5a', destaque2: '#a0a0a0', marcaTexto: '#e0e0e0' },
-  estrutura: { painel: 'fio-grosso', rotulo: 'circulo', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: true, barras: 'vertical', moldura: 'formas', corRotulo: 'marcaTexto', multiplos: 'lado-a-lado' },
+  estrutura: { painel: 'fio-grosso', rotulo: 'circulo', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: true, barras: 'vertical', moldura: 'formas', corRotulo: 'marcaTexto', multiplos: 'lado-a-lado', costura: 'faixa', manchete: 'texto' },
 }
 
 const brutalista: PrintStyle = {
@@ -1131,7 +1136,7 @@ const divulgacao: PrintStyle = {
   raio: 3,
   caixaAlta: false,
   pb: { destaque: '#8a8a8a', destaque2: '#2a2a2a' },
-  estrutura: { painel: 'cartao', rotulo: 'circulo', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical', corRotulo: 'destaque', contornoBarra: true, tituloEstilo: 'normal', forma: 'colunas', chamadas: 'baloes', multiplos: 'lado-a-lado' },
+  estrutura: { painel: 'cartao', rotulo: 'circulo', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical', corRotulo: 'destaque', contornoBarra: true, tituloEstilo: 'normal', forma: 'colunas', chamadas: 'baloes', multiplos: 'lado-a-lado', emblema: 'lupa', fundoPainel: 'alternado', costura: 'selo', manchete: 'lupa' },
 }
 
 const corbusier: PrintStyle = {
@@ -1148,7 +1153,7 @@ const corbusier: PrintStyle = {
   raio: 0,
   caixaAlta: true,
   pb: { destaque: '#5a5a5a', destaque2: '#a0a0a0' },
-  estrutura: { painel: 'bloco', rotulo: 'quadrado', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical', corRotulo: 'tinta', multiplos: 'lado-a-lado' },
+  estrutura: { painel: 'bloco', rotulo: 'quadrado', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical', corRotulo: 'tinta', multiplos: 'lado-a-lado', emblema: 'modulor', fundoPainel: 'alternado', costura: 'barra', manchete: 'texto' },
 }
 
 const schiphol: PrintStyle = {
@@ -1165,7 +1170,7 @@ const schiphol: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: { marcaTexto: '#d9d9d9' },
-  estrutura: { painel: 'placa', rotulo: 'quadrado', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, cabeco: 'etiqueta', corRotulo: 'tinta' },
+  estrutura: { painel: 'placa', rotulo: 'quadrado', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, cabeco: 'etiqueta', corRotulo: 'tinta', veredito: 'bloco-escuro', rastro: 'placa', manchete: 'faixa' },
 }
 
 const aicher: PrintStyle = {
@@ -1182,7 +1187,7 @@ const aicher: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: { destaque: '#8a8a8a', destaque2: '#3a3a3a', marcaTexto: '#d9d9d9' },
-  estrutura: { painel: 'bloco', rotulo: 'quadrado', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical', corRotulo: 'sustentada', multiplos: 'lado-a-lado' },
+  estrutura: { painel: 'bloco', rotulo: 'quadrado', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical', corRotulo: 'sustentada', multiplos: 'lado-a-lado', emblema: 'pictogramas', fundoPainel: 'claro', manchete: 'faixa' },
 }
 
 const vignelli: PrintStyle = {
@@ -1195,11 +1200,11 @@ const vignelli: PrintStyle = {
   papel: { textura: 'nenhuma', intensidade: 0 },
   traco: { largura: 0.3, tremor: 0, hachura: 'nenhuma' },
   grafico: 'limpo',
-  marcaProva: 'etiqueta',
+  marcaProva: 'ponto',
   raio: 0,
   caixaAlta: false,
   pb: { destaque: '#4a4a4a' },
-  estrutura: { painel: 'fio', rotulo: 'circulo', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical', cabeco: 'faixa', corRotulo: 'tinta' },
+  estrutura: { painel: 'fio', rotulo: 'circulo', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical', cabeco: 'faixa', corRotulo: 'tinta', veredito: 'bloco-escuro', rastro: 'metro', manchete: 'texto' },
 }
 
 const jornalDoBrasil: PrintStyle = {

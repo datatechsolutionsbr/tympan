@@ -1,5 +1,5 @@
 import type { EstadoProva } from '@datatechsolutions/tympan-tokens'
-import { SeloLakebrasil } from '../marca/LogoLakebrasil.tsx'
+import { LogoLakebrasil, SeloLakebrasil } from '../marca/LogoLakebrasil.tsx'
 import { cx, formatarNumero } from '../util.ts'
 import { comColchetes } from './comum.tsx'
 import { MarcaProva } from './MarcaProva.tsx'
@@ -327,13 +327,15 @@ export interface RastroProps {
   versao: string
   /** Edition date. */
   edicao?: string
+  /** Sign the trace with the lakebrasil mark above the seal, as in the style studies (default true). */
+  assinatura?: boolean
   className?: string
 }
 
 const curtoSha = (s: string) => (/^[0-9a-f]{16,}$/i.test(s) ? `${s.slice(0, 12)}…` : s)
 
 /** The number's trace: number → query → lake table → official source → version. */
-export function Rastro({ referencia, numero, descricao, consulta, sha256, tabela, cobertura, fonteOficial, licenca, versao, edicao, className }: RastroProps) {
+export function Rastro({ referencia, numero, descricao, consulta, sha256, tabela, cobertura, fonteOficial, licenca, versao, edicao, assinatura = true, className }: RastroProps) {
   const versaoLake = /(\d{4}-\d{2}-\d{2})/.exec(versao)?.[1]
   const linhas: Array<[string, string, string | undefined, boolean]> = [
     ['Número', numero, descricao, false],
@@ -355,7 +357,12 @@ export function Rastro({ referencia, numero, descricao, consulta, sha256, tabela
           </div>
         ))}
       </dl>
-      {versaoLake ? <SeloLakebrasil versaoLake={versaoLake} /> : null}
+      {assinatura || versaoLake ? (
+        <div className="ty-print-rastro-assina">
+          {assinatura ? <LogoLakebrasil largura={26} /> : null}
+          {versaoLake ? <SeloLakebrasil versaoLake={versaoLake} /> : null}
+        </div>
+      ) : null}
     </div>
   )
 }

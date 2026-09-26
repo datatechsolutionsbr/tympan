@@ -2,9 +2,13 @@
 export { LivroPrint, type LivroPrintProps } from './livro/LivroPrint.tsx'
 export { Dupla, type DuplaProps } from './livro/Dupla.tsx'
 export { Pagina, type PaginaProps } from './livro/Pagina.tsx'
+export { Area, type AreaProps } from './livro/Area.tsx'
+export { ajustarPaginas, SCRIPT_AJUSTE_PAGINAS, type AjusteOpcoes, type AjustePagina } from './livro/ajuste.ts'
+export { MOLDES, gradeDoMolde, linhasDoMolde, moldePorNome, type Molde, type LinhaMolde, type InfoArea } from './livro/moldes.ts'
 export { Textura } from './livro/Textura.tsx'
 export { Ornamento } from './livro/Ornamento.tsx'
 export { Painel, type PainelProps, type VariantePainel } from './paineis/Painel.tsx'
+export { Figuras, type FigurasProps } from './paineis/Figuras.tsx'
 export { Texto, Margem, Anotacao, type TextoProps, type MargemProps, type AnotacaoProps, type VarianteTexto } from './paineis/Texto.tsx'
 export {
   Promessa,
@@ -69,6 +73,7 @@ export {
   COMPONENTES,
   NoConteudo,
   PaginaConteudo,
+  agruparPorArea,
   CapituloConteudo,
   LivroConteudo,
   propsDesconhecidas,

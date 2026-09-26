@@ -7,6 +7,7 @@ import type { ComponentType, ReactNode } from 'react'
 import type { PrintPresetName, PrintStyle, PrintStyleOverrides } from '@datatechsolutions/tympan-tokens'
 import { GraficoMetodo } from './grafico/GraficoMetodo.tsx'
 import { ITENS_SPEC_CORRELACAO, SPEC_CORRELACAO } from './grafico/contratoCorrelacao.ts'
+import { Area } from './livro/Area.tsx'
 import { Dupla } from './livro/Dupla.tsx'
 import { LivroPrint } from './livro/LivroPrint.tsx'
 import { Pagina } from './livro/Pagina.tsx'
@@ -31,12 +32,15 @@ import {
   Testes,
   Veredito,
 } from './paineis/Metodo.tsx'
+import { Figuras } from './paineis/Figuras.tsx'
 import { Painel } from './paineis/Painel.tsx'
 import { Anotacao, Margem, Texto } from './paineis/Texto.tsx'
 
 export interface NoJson {
   tipo: string
   props: Record<string, unknown>
+  /** Area of the page's molde the node goes in (livro/moldes.ts). Consecutive nodes of one area stack in it. */
+  area?: string
 }
 
 export interface PaginaJson {
@@ -44,6 +48,8 @@ export interface PaginaJson {
   variante?: 'normal' | 'capa' | 'prancha'
   cabeco?: string
   folio?: boolean
+  /** Template of this page, when it differs from the spread's. */
+  molde?: string
   paineis: NoJson[]
 }
 
@@ -51,6 +57,8 @@ export interface DuplaJson {
   numero: string
   rotulo?: string
   densidade?: string
+  /** Template of the spread: where each area of each page sits (livro/moldes.ts). */
+  molde?: string
   paginas: PaginaJson[]
 }
 
@@ -111,6 +119,7 @@ const ITENS_SPEC: Record<string, string[]> = {
 /** Components by content `tipo`, with the props each one reads. */
 export const COMPONENTES: Record<string, Registro> = {
   Painel: { componente: Painel, props: ['letra', 'titulo', 'eyebrow', 'largura', 'variante', 'nivel', 'children', 'className'] },
+  Figuras: { componente: Figuras, props: ['arranjo', 'pesos', 'manchete', 'children', 'className'] },
   Texto: { componente: Texto, props: ['eyebrow', 'titulo', 'nivel', 'variante', 'paragrafos', 'lista', 'largura', 'className'] },
   Margem: { componente: Margem, props: ['titulo', 'texto', 'className'] },
   Anotacao: { componente: Anotacao, props: ['alvo', 'texto', 'className'] },
@@ -123,7 +132,7 @@ export const COMPONENTES: Record<string, Registro> = {
   NaoDaParaAfirmar: { componente: NaoDaParaAfirmar, props: ['itens', 'className'] },
   Rastro: {
     componente: Rastro,
-    props: ['ref', 'referencia', 'numero', 'descricao', 'consulta', 'sha256', 'tabela', 'cobertura', 'fonteOficial', 'licenca', 'versao', 'edicao', 'className'],
+    props: ['ref', 'referencia', 'numero', 'descricao', 'consulta', 'sha256', 'tabela', 'cobertura', 'fonteOficial', 'licenca', 'versao', 'edicao', 'assinatura', 'className'],
     renomear: { ref: 'referencia' },
   },
   Fonte: { componente: Fonte, props: ['texto', 'versaoLake', 'rodape', 'className'] },
@@ -170,7 +179,7 @@ export function propsDesconhecidas(no: NoJson, caminho = no.tipo): string[] {
       }
     }
   }
-  if (no.tipo === 'Painel' && Array.isArray(no.props.children)) {
+  if (Array.isArray(no.props.children)) {
     ;(no.props.children as NoJson[]).forEach((f, i) => out.push(...propsDesconhecidas(f, `${caminho}.children[${i}].${f.tipo}`)))
   }
   return out
@@ -186,7 +195,7 @@ export function NoConteudo({ no }: { no: NoJson }): ReactNode {
     props[reg.renomear?.[k] ?? k] = v
   }
   const C = reg.componente
-  if (no.tipo === 'Painel' && Array.isArray(no.props.children)) {
+  if (Array.isArray(no.props.children)) {
     return (
       <C {...props}>
         {(no.props.children as NoJson[]).map((f, i) => (
@@ -204,12 +213,35 @@ function cabecos(cap: CapituloJson) {
   return { parte: cap.parte ?? undefined, capitulo }
 }
 
+/** Groups the nodes of a page by area, in order; a node without `area` joins the area before it. */
+export function agruparPorArea(paineis: NoJson[]): Array<{ area: string | undefined; nos: NoJson[] }> {
+  const grupos: Array<{ area: string | undefined; nos: NoJson[] }> = []
+  for (const no of paineis) {
+    const area = no.area ?? grupos.at(-1)?.area
+    const ultimo = grupos.at(-1)
+    if (ultimo && ultimo.area === area) ultimo.nos.push(no)
+    else grupos.push({ area, nos: [no] })
+  }
+  return grupos
+}
+
 export function PaginaConteudo({ pagina }: { pagina: PaginaJson }) {
+  const comAreas = pagina.paineis.some((no) => no.area)
   return (
-    <Pagina lado={pagina.lado} variante={pagina.variante} cabeco={pagina.cabeco} folio={pagina.folio ?? true}>
-      {pagina.paineis.map((no, i) => (
-        <NoConteudo key={i} no={no} />
-      ))}
+    <Pagina lado={pagina.lado} variante={pagina.variante} cabeco={pagina.cabeco} folio={pagina.folio ?? true} molde={pagina.molde}>
+      {comAreas
+        ? agruparPorArea(pagina.paineis).map((g, i) =>
+            g.area ? (
+              <Area key={`${g.area}-${i}`} nome={g.area}>
+                {g.nos.map((no, j) => (
+                  <NoConteudo key={j} no={no} />
+                ))}
+              </Area>
+            ) : (
+              g.nos.map((no, j) => <NoConteudo key={`${i}-${j}`} no={no} />)
+            ),
+          )
+        : pagina.paineis.map((no, i) => <NoConteudo key={i} no={no} />)}
     </Pagina>
   )
 }
@@ -220,7 +252,7 @@ export function CapituloConteudo({ capitulo }: { capitulo: CapituloJson }) {
   return (
     <>
       {capitulo.duplas.map((d, i) => (
-        <Dupla key={d.numero} numero={d.numero} parte={c.parte} capitulo={c.capitulo} abreCapitulo={i === 0}>
+        <Dupla key={d.numero} numero={d.numero} parte={c.parte} capitulo={c.capitulo} abreCapitulo={i === 0} molde={d.molde}>
           {d.paginas.map((p) => (
             <PaginaConteudo key={p.lado} pagina={p} />
           ))}

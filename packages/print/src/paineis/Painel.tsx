@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react'
-import { LarguraProvider, usePrint } from '../contexto.tsx'
+import { LarguraProvider, useColunasDaArea, usePrint } from '../contexto.tsx'
 import { cx, useIdSeguro } from '../util.ts'
 import { BordaMao } from './comum.tsx'
 
@@ -40,7 +40,10 @@ export function larguraUtil(largura: number | undefined, moldura: string, varian
 }
 
 /** A lettered dashboard panel; its frame follows the style (rule, box, card, band, drafting board). */
-export function Painel({ letra, titulo, eyebrow, largura, variante = 'normal', nivel = 2, className, style, children }: PainelProps) {
+export function Painel({ letra, titulo, eyebrow, largura: larguraPedida, variante = 'normal', nivel = 2, className, style, children }: PainelProps) {
+  // Inside a molde area, the area's span is the panel's width (a `largura` wider than the area cannot apply).
+  const daArea = useColunasDaArea()
+  const largura = daArea ? Math.min(daArea, larguraPedida ?? daArea) : larguraPedida
   const H = `h${nivel}` as 'h2' | 'h3' | 'h4'
   const { estilo } = usePrint()
   const id = useIdSeguro('ty-print-painel')
@@ -53,7 +56,7 @@ export function Painel({ letra, titulo, eyebrow, largura, variante = 'normal', n
       data-variante={variante}
       data-largura={largura ?? 6}
       aria-labelledby={temCabeca ? `${id}-t` : undefined}
-      style={{ ...larguraColunas(largura), ...style }}
+      style={{ ...(daArea ? undefined : larguraColunas(largura)), ...style }}
     >
       {mao ? <BordaMao chave={`painel-${letra ?? ''}-${typeof titulo === 'string' ? titulo : ''}`} grossa={moldura === 'caixa-grossa'} dupla={moldura === 'caixa-grossa'} /> : null}
       {eyebrow ? <p className="ty-print-sobretitulo">{eyebrow}</p> : null}

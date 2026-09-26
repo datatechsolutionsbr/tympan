@@ -11,12 +11,14 @@ export interface DuplaProps {
   capitulo?: string
   /** First spread of a chapter: forces the even page to start on a left (even) page in print. */
   abreCapitulo?: boolean
+  /** Template of the spread (livro/moldes.ts): places each page's areas on an explicit six-column grid. */
+  molde?: string
   className?: string
   children?: ReactNode
 }
 
 /** A two-page spread (even page left, odd page right), 340 × 240 mm on screen, two pages in print. */
-export function Dupla({ numero, parte, capitulo, abreCapitulo = false, className, children }: DuplaProps) {
+export function Dupla({ numero, parte, capitulo, abreCapitulo = false, molde, className, children }: DuplaProps) {
   const capa = numero === 'capa'
   const [par = '', impar = ''] = capa ? ['', ''] : numero.split('-')
   return (
@@ -26,8 +28,9 @@ export function Dupla({ numero, parte, capitulo, abreCapitulo = false, className
       aria-label={capa ? 'Capa aberta' : `Páginas ${par} e ${impar}`}
       data-abre-capitulo={abreCapitulo ? '' : undefined}
       data-capa={capa ? '' : undefined}
+      data-molde={molde}
     >
-      <DuplaContextoProvider value={{ folios: [par, impar], parte, capitulo }}>{children}</DuplaContextoProvider>
+      <DuplaContextoProvider value={{ folios: [par, impar], parte, capitulo, molde }}>{children}</DuplaContextoProvider>
     </div>
   )
 }

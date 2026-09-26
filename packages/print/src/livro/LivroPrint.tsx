@@ -62,6 +62,12 @@ export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carr
       data-ty-print-moldura={e.moldura && e.moldura !== 'nenhuma' ? e.moldura : undefined}
       data-ty-print-cabeco={e.cabeco && e.cabeco !== 'texto' ? e.cabeco : undefined}
       data-ty-print-titulo={e.tituloEstilo && e.tituloEstilo !== 'normal' ? e.tituloEstilo : undefined}
+      data-ty-print-fundo-painel={e.fundoPainel}
+      data-ty-print-veredito={e.veredito}
+      data-ty-print-costura={e.costura}
+      data-ty-print-manchete={e.manchete}
+      data-ty-print-rastro={e.rastro && e.rastro !== 'lista' ? e.rastro : undefined}
+      data-ty-print-numeros-marcados={e.numerosMarcados ? '' : undefined}
     >
       {fontes ? <link rel="stylesheet" href={fontes} /> : null}
       <style dangerouslySetInnerHTML={{ __html: css }} />

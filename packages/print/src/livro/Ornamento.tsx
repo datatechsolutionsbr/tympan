@@ -11,7 +11,9 @@ import { semente } from '../rough.ts'
 const W = 170
 const H = 240
 const n = (v: number) => Math.round(v * 100) / 100
-const orn = (i: 1 | 2 | 3 | 4) => `var(--ty-print-ornamento-${i})`
+// Styles without ornament colours fall back to their highlight colours (still never data: margins only).
+const RESERVA = ['var(--ty-print-marca-texto)', 'var(--ty-print-destaque-2)', 'var(--ty-print-destaque)', 'var(--ty-print-tinta-3)']
+const orn = (i: 1 | 2 | 3 | 4) => `var(--ty-print-ornamento-${i}, ${RESERVA[i - 1]})`
 const TINTA = 'var(--ty-print-tinta)'
 
 function aleatorio(chave: string) {
@@ -160,6 +162,12 @@ function pagina(moldura: Moldura, lado: 'par' | 'impar'): ReactNode {
       ) : (
         <polygon points={`${W},0 ${W - 96},0 ${W - 81},15 ${W},15`} fill={orn(2)} />
       )
+    case 'quartos':
+      // Herbert Bayer: a quarter circle in the outer corner of each page (ochre at the foot, blue at the head).
+      return lado === 'par' ? <path d={`M 0 ${H - 22} A 22 22 0 0 1 22 ${H} L 0 ${H} Z`} fill={orn(1)} /> : <path d={`M ${W - 20} 0 A 20 20 0 0 0 ${W} 20 L ${W} 0 Z`} fill={orn(2)} />
+    case 'reticula':
+      // Pop art: a burst at the foot of the even page, outside the type area.
+      return lado === 'par' ? <polygon points={estrela(76, 232, 7.5, 4, 12)} fill={orn(2)} stroke={TINTA} strokeWidth={0.35} /> : null
     case 'formas':
       return lado === 'par' ? (
         <g transform="translate(124 3)">
@@ -171,6 +179,17 @@ function pagina(moldura: Moldura, lado: 'par' | 'impar'): ReactNode {
     default:
       return null
   }
+}
+
+/** Points of a burst (star) with `k` spikes. */
+function estrela(cx: number, cy: number, R: number, r: number, k: number): string {
+  const out: string[] = []
+  for (let i = 0; i < k * 2; i++) {
+    const a = (Math.PI * i) / k - Math.PI / 2
+    const raio = i % 2 ? r : R
+    out.push(`${n(cx + raio * Math.cos(a))},${n(cy + raio * Math.sin(a))}`)
+  }
+  return out.join(' ')
 }
 
 /** The page ornament of the current style, if any. */

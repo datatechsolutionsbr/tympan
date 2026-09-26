@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
-import { usePrint } from '../contexto.tsx'
+import { useAreaNome, useLado, usePrint } from '../contexto.tsx'
+import { Emblema } from '../marca/Emblema.tsx'
 import { cx } from '../util.ts'
 import { comColchetes } from './comum.tsx'
 import { larguraColunas } from './Painel.tsx'
@@ -27,8 +28,13 @@ export function Texto({ eyebrow, titulo, nivel = 2, variante = 'corpo', paragraf
   const { estilo } = usePrint()
   const recorte = estilo.estrutura.tituloEstilo === 'recorte' && nivel <= 2
   const Lista = lista?.ordenada ? 'ol' : 'ul'
+  // The spread title on the left page carries the style's emblem, as in the studies.
+  const area = useAreaNome()
+  const lado = useLado()
+  const comEmblema = Boolean(estilo.estrutura.emblema && titulo && nivel <= 2 && area === 'titulo' && lado === 'par')
   return (
-    <div className={cx('ty-print-texto', className)} data-variante={variante} data-nivel={nivel} style={larguraColunas(largura)}>
+    <div className={cx('ty-print-texto', className)} data-variante={variante} data-nivel={nivel} data-emblema={comEmblema ? '' : undefined} style={larguraColunas(largura)}>
+      {comEmblema ? <Emblema /> : null}
       {eyebrow ? <p className="ty-print-sobretitulo">{comColchetes(eyebrow)}</p> : null}
       {titulo ? (
         <H className="ty-print-titulo">
