@@ -27,8 +27,8 @@ export type Side = 'start' | 'end' | 'top' | 'bottom'
 /** Direction used by the editor state and the command bar. */
 export type LayoutDirection = 'down' | 'right'
 
-/** Direction used by AutoLayout. */
-export type RankDirection = 'top-down' | 'left-right'
+/** Direction used by AutoLayout ('right-left' is the RTL reading of 'left-right'). */
+export type RankDirection = 'top-down' | 'left-right' | 'right-left'
 
 /** A step on a canvas. `data` belongs to the node kind. */
 export interface FlowNode<D extends Record<string, unknown> = Record<string, unknown>> {

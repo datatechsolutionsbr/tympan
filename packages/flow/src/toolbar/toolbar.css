@@ -14,13 +14,15 @@
   .fk-canvas-toolbar[aria-orientation='vertical'] {
     flex-direction: column;
   }
+  /* Centred along the bottom edge in either reading direction. */
   .fk-canvas-toolbar[data-placement='dock'] {
     position: absolute;
     inset-block-end: max(var(--fk-space-3), env(safe-area-inset-bottom, 0px));
-    inset-inline-start: 50%;
+    inset-inline: 0;
     z-index: 3;
+    inline-size: fit-content;
     max-inline-size: calc(100% - var(--fk-space-6));
-    translate: -50% 0;
+    margin-inline: auto;
     flex-wrap: wrap;
     justify-content: center;
   }

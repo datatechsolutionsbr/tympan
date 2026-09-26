@@ -38,10 +38,14 @@
     fill: var(--fk-flow-grid-dot);
   }
 
+  /* The plane, the links layer and node boxes are placed from the canvas
+     coordinate origin, which is geometric (SVG and pointer maths), not text
+     layout; it stays at the physical top-left in both reading directions.
+     Mirroring for right-to-left happens in the layout (rank direction) and in
+     the logical port sides, not by flipping the plane. */
   .fk-surface__plane {
     position: absolute;
-    inset-block-start: 0;
-    inset-inline-start: 0;
+    inset: 0 auto auto 0;
     inline-size: 0;
     block-size: 0;
     transform-origin: 0 0;
@@ -49,8 +53,7 @@
 
   .fk-surface__links {
     position: absolute;
-    inset-block-start: 0;
-    inset-inline-start: 0;
+    inset: 0 auto auto 0;
     inline-size: 1px;
     block-size: 1px;
     overflow: visible;
@@ -70,8 +73,7 @@
 
   .fk-surface__node {
     position: absolute;
-    inset-block-start: 0;
-    inset-inline-start: 0;
+    inset: 0 auto auto 0;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -92,6 +94,7 @@
 
   .fk-surface__marquee {
     position: absolute;
+    /* Placed from pointer coordinates (physical), like the plane. */
     border: 1px dashed var(--fk-accent);
     background: var(--fk-flow-marquee);
     pointer-events: none;

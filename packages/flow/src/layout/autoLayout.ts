@@ -43,7 +43,7 @@ export function autoLayout<N extends LayoutNode>(nodes: readonly N[], connectors
 
   const g = new Graph({ multigraph: false, compound: false })
   g.setGraph({
-    rankdir: direction === 'left-right' ? 'LR' : 'TB',
+    rankdir: direction === 'left-right' ? 'LR' : direction === 'right-left' ? 'RL' : 'TB',
     ranksep: options.rankGap ?? DEFAULTS.rankGap,
     nodesep: options.siblingGap ?? DEFAULTS.siblingGap,
     marginx: options.margin ?? DEFAULTS.margin,
@@ -69,7 +69,11 @@ export function autoLayout<N extends LayoutNode>(nodes: readonly N[], connectors
   })
 }
 
-/** Maps the editor's direction names onto AutoLayout's. */
-export function rankDirectionOf(direction: 'down' | 'right'): RankDirection {
-  return direction === 'right' ? 'left-right' : 'top-down'
+/**
+ * Maps the editor's direction names onto AutoLayout's. A horizontal flow reads
+ * in the text direction: right-to-left in RTL locales unless `keepLtr`.
+ */
+export function rankDirectionOf(direction: 'down' | 'right', rtl = false, keepLtr = false): RankDirection {
+  if (direction !== 'right') return 'top-down'
+  return rtl && !keepLtr ? 'right-left' : 'left-right'
 }

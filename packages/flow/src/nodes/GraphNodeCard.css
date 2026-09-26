@@ -121,20 +121,29 @@
     gap: 2px;
     min-inline-size: 0;
   }
+  /* Clamp by lines, never by characters, so CJK, Thai and Arabic wrap at
+     their own break opportunities; the full value stays in the accessible
+     name and the title attribute. */
   .fk-node-card__title {
+    display: -webkit-box;
     overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
     font-weight: var(--fk-font-weight-semibold);
     color: var(--fk-ink);
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    overflow-wrap: anywhere;
   }
   .fk-node-card__description {
+    display: -webkit-box;
     overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
     color: var(--fk-ink-3);
     font-size: var(--fk-font-size-meta);
     line-height: var(--fk-font-line-height-meta);
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    overflow-wrap: anywhere;
   }
 
   /* The title button is the card's one primary control, stretched over it. */

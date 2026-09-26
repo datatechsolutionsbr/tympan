@@ -27,8 +27,9 @@ import { ConnectionPreviewLine } from '../connectors/ConnectionPreviewLine'
 import { connectorCurve, type CurveEnd } from '../geometry/curve'
 import { centreOf, enclosingRect, exitPoint, pointOnSide, rectsOverlap } from '../geometry/rect'
 import { DEFAULT_ZOOM_LIMITS, clampZoom, fitBounds, ladderStep, revealRect, screenToCanvas, visibleArea, zoomAt, type ZoomLimits } from '../geometry/viewport'
+import { useFlowLocale } from '../internal/labels'
 import { useControllable } from '../internal/useControllable'
-import type { Point, Rect, Size, Viewport } from '../model/types'
+import type { Point, Rect, Side, Size, Viewport } from '../model/types'
 import { OverviewMap } from './OverviewMap'
 import { SurfaceContext, type SurfaceContextValue } from './SurfaceContext'
 import type { CanvasApi, ConnectOptions, ConnectValidity, ConnectorParts, ConnectorShape, NodeDragEvent, PortAnchor, PortRef, SurfaceConnector, SurfaceNode } from './types'
@@ -44,9 +45,14 @@ export interface CanvasSurfaceProps {
   connectors?: readonly SurfaceConnector[]
   renderNode: (node: SurfaceNode) => ReactNode
   renderConnector?: (connector: SurfaceConnector, shape: ConnectorShape) => ConnectorParts
-  /** Where a connector touches its nodes. 'border' attaches to the nearest border point. */
+  /**
+   * Where a connector touches its nodes. Sides are logical: in a right-to-left
+   * canvas 'start' is the right side. 'border' attaches to the nearest border point.
+   */
   portAnchor?: (nodeId: string, portId: string | undefined, role: 'source' | 'target') => PortAnchor | 'border'
   floating?: boolean
+  /** Reading direction; defaults to the provider locale's. */
+  direction?: 'ltr' | 'rtl'
 
   viewport?: Viewport
   defaultViewport?: Viewport
@@ -92,6 +98,12 @@ export interface CanvasSurfaceProps {
 }
 
 const DRAG_THRESHOLD = 4
+
+/** Logical side → physical side of the (always left-to-right) canvas geometry. */
+export function physicalSide(side: Side, rtl: boolean): Side {
+  if (!rtl) return side
+  return side === 'start' ? 'end' : side === 'end' ? 'start' : side
+}
 const GRID_STEP = 24
 const NO_DRAG = 'input, textarea, select, [contenteditable="true"], [data-fk-no-drag], [data-fk-port]'
 
@@ -112,6 +124,7 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
     renderConnector,
     portAnchor,
     floating = false,
+    direction,
     zoomLimits = DEFAULT_ZOOM_LIMITS,
     fit = 'mount',
     fitKey,
@@ -142,6 +155,8 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
   } = props
 
   const paneRef = useRef<HTMLDivElement>(null)
+  const localeDirection = useFlowLocale().direction
+  const rtl = (direction ?? localeDirection) === 'rtl'
   const container = useElementSize(paneRef)
   const [viewport, setViewport] = useControllable<Viewport>(props.viewport, props.defaultViewport ?? { x: 0, y: 0, zoom: 1 }, props.onViewportChange)
   const viewportRef = useRef(viewport)
@@ -223,9 +238,11 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
       if (!r) return null
       const anchor = floating ? 'border' : (portAnchor?.(nodeId, portId, role) ?? { side: role === 'source' ? 'end' : 'start', along: 0.5 })
       if (anchor === 'border') return exitPoint(r, centreOf(other))
-      return { point: pointOnSide(r, anchor.side, anchor.along), side: anchor.side }
+      // Geometry is physical (start = left); logical sides mirror in RTL.
+      const side = physicalSide(anchor.side, rtl)
+      return { point: pointOnSide(r, side, anchor.along), side }
     },
-    [placed, portAnchor, floating],
+    [placed, portAnchor, floating, rtl],
   )
 
   const shapes = useMemo(() => {
@@ -554,6 +571,7 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
         aria-roledescription={roleDescription}
         tabIndex={0}
         data-mode={mode}
+        data-direction={rtl ? 'rtl' : 'ltr'}
         data-dragging={dragging || undefined}
         data-connecting={connecting ? 'true' : undefined}
         onPointerDownCapture={onPointerDownCapture}

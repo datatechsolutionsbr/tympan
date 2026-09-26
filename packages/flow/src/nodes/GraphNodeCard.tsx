@@ -9,7 +9,7 @@ import { TriangleAlert, Trash2 } from 'lucide-react'
 import { Button, type IconComponent } from '@fakhir/design-system'
 import { nodeStateAttributes, type NodeProofState, type NodeRunState } from '../catalog/nodeState'
 import type { ToneName } from '../catalog/palette'
-import { fill, useLabels } from '../internal/labels'
+import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { useSurface } from '../surface/SurfaceContext'
 
 export type CardWidth = 'narrow' | 'standard' | 'wide'
@@ -39,20 +39,52 @@ export interface GraphNodeCardLabels {
   skipped: string
 }
 
-export const defaultGraphNodeCardLabels: GraphNodeCardLabels = {
-  name: '{kind}: {title}',
-  rename: 'Rename {title}',
-  renameField: 'Name of {title}',
-  remove: 'Remove {title}',
-  problem: 'Needs attention',
-  selected: 'selected',
-  locked: 'read only',
-  dimmed: 'not run',
-  running: 'running',
-  succeeded: 'succeeded',
-  failed: 'failed',
-  skipped: 'skipped',
-}
+export const graphNodeCardLabels = defineLabels<GraphNodeCardLabels>('GraphNodeCard', {
+  en: {
+    name: '{kind}: {title}',
+    rename: 'Rename {title}',
+    renameField: 'Name of {title}',
+    remove: 'Remove {title}',
+    problem: 'Needs attention',
+    selected: 'selected',
+    locked: 'read only',
+    dimmed: 'not run',
+    running: 'running',
+    succeeded: 'succeeded',
+    failed: 'failed',
+    skipped: 'skipped',
+  },
+  'pt-BR': {
+    name: '{kind}: {title}',
+    rename: 'Renomear {title}',
+    renameField: 'Nome de {title}',
+    remove: 'Remover {title}',
+    problem: 'Precisa de atenção',
+    selected: 'selecionado',
+    locked: 'somente leitura',
+    dimmed: 'não executado',
+    running: 'em execução',
+    succeeded: 'concluído',
+    failed: 'falhou',
+    skipped: 'ignorado',
+  },
+  es: {
+    name: '{kind}: {title}',
+    rename: 'Cambiar el nombre de {title}',
+    renameField: 'Nombre de {title}',
+    remove: 'Quitar {title}',
+    problem: 'Requiere atención',
+    selected: 'seleccionado',
+    locked: 'solo lectura',
+    dimmed: 'no ejecutado',
+    running: 'en ejecución',
+    succeeded: 'completado',
+    failed: 'falló',
+    skipped: 'omitido',
+  },
+})
+
+export const defaultGraphNodeCardLabels: GraphNodeCardLabels = graphNodeCardLabels.bundles.en
 
 export interface GraphNodeCardProps {
   /** Kind key (tone, test hooks). */
@@ -135,7 +167,8 @@ export function GraphNodeCard(props: GraphNodeCardProps) {
     className,
     onKeyDown,
   } = props
-  const l = useLabels(defaultGraphNodeCardLabels, props.labels)
+  const l = useLabels(graphNodeCardLabels, props.labels)
+  const { locale } = useFlowLocale()
   const surface = useSurface()
   const stateId = useId()
   const problemId = useId()
@@ -144,7 +177,7 @@ export function GraphNodeCard(props: GraphNodeCardProps) {
   const [draft, setDraft] = useState(title)
   const canRename = !!onRename && !locked
 
-  const name = accessibleName ?? fill(l.name, { kind: kindLabel ?? kind, title })
+  const name = accessibleName ?? fill(l.name, { kind: kindLabel ?? kind, title }, locale)
   const words = [
     ...(selected ? [l.selected] : []),
     ...(runState !== 'idle' ? [l[runState]] : []),
@@ -175,8 +208,8 @@ export function GraphNodeCard(props: GraphNodeCardProps) {
   }
 
   const titleNode = renaming ? (
-    <AriaTextField className="fk-node-card__rename" value={draft} onChange={setDraft} autoFocus aria-label={fill(l.renameField, { title })}>
-      <Label className="fk-visually-hidden">{fill(l.renameField, { title })}</Label>
+    <AriaTextField className="fk-node-card__rename" value={draft} onChange={setDraft} autoFocus aria-label={fill(l.renameField, { title }, locale)}>
+      <Label className="fk-visually-hidden">{fill(l.renameField, { title }, locale)}</Label>
       <Input
         className="fk-node-card__rename-input"
         data-fk-no-drag=""
@@ -255,7 +288,7 @@ export function GraphNodeCard(props: GraphNodeCardProps) {
           <div className="fk-node-card__actions">
             {headerActions}
             {onDelete && !locked ? (
-              <Button className="fk-node-card__delete" variant="quiet" size="compact" shape="circle" iconOnly accessibleLabel={fill(l.remove, { title })} leadingIcon={<Trash2 />} onPress={onDelete} />
+              <Button className="fk-node-card__delete" variant="quiet" size="compact" shape="circle" iconOnly accessibleLabel={fill(l.remove, { title }, locale)} leadingIcon={<Trash2 />} onPress={onDelete} />
             ) : null}
           </div>
         ) : null}
