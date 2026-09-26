@@ -41,6 +41,42 @@ export interface ChartProps {
 /** viewBox width and the gutters around the plot, in viewBox units. */
 const CANVAS = 640
 const GUTTER = { head: 16, foot: 36, axisSide: 52, farSide: 20 }
+/** Tick label size (CSS 12px = 12 viewBox units) and the room kept beside it. */
+const TICK_EM = 12
+const TICK_GAP = 14
+/** Widest value gutter; a unit that would need more moves to a caption above the axis. */
+const AXIS_MAX = 176
+/** Extra head room for that caption. */
+const UNIT_CAPTION = 18
+
+/**
+ * Estimated advance of a tick label in viewBox units: about 0.6 em per
+ * grapheme, a full em for wide (CJK, fullwidth) ones. Deliberately generous,
+ * so a label is never cut at the edge of the drawing.
+ */
+export function estimateTickWidth(text: string): number {
+  const segmenter = typeof Intl.Segmenter === 'function' ? new Intl.Segmenter(undefined, { granularity: 'grapheme' }) : null
+  const parts = segmenter ? Array.from(segmenter.segment(text), (s) => s.segment) : Array.from(text)
+  return Math.ceil(parts.reduce((w, g) => w + ((g.codePointAt(0) ?? 0) >= 0x2e80 ? 1 : 0.62) * TICK_EM, 0))
+}
+
+/** Tick labels with and without the unit, for the gutter decision. */
+export interface TickText {
+  withUnit: (v: number) => string
+  bare: (v: number) => string
+}
+
+/**
+ * Value-axis layout: the gutter grows with the widest tick label. When the
+ * unit would push it past AXIS_MAX, ticks show numbers only and the unit is
+ * written once above the axis (never clipped).
+ */
+export function valueAxisLayout(ticks: number[], text: TickText, hasUnit: boolean) {
+  const widest = (say: (v: number) => string) => Math.max(0, ...ticks.map((t) => estimateTickWidth(say(t))))
+  const inline = widest(text.withUnit) + TICK_GAP
+  if (!hasUnit || inline <= AXIS_MAX) return { gutter: Math.max(GUTTER.axisSide, inline), unitCaption: false, label: text.withUnit }
+  return { gutter: Math.max(GUTTER.axisSide, Math.min(AXIS_MAX, widest(text.bare) + TICK_GAP)), unitCaption: true, label: text.bare }
+}
 
 interface Frame {
   rtl: boolean
@@ -55,14 +91,20 @@ interface Frame {
   valueY: (reading: number) => number
   floorY: number
   ticks: number[]
+  /** Tick label text (with the unit unless it moved to the caption). */
+  tickLabel: (v: number) => string
+  /** The unit is written once above the value axis. */
+  unitCaption: boolean
 }
 
-function frameFor(plot: Plot, aspect: number, rtl: boolean): Frame {
+function frameFor(plot: Plot, aspect: number, rtl: boolean, text: TickText): Frame {
   const tall = Math.round(CANVAS / aspect)
+  const ticks = niceTicks(plot.span, 5)
+  const axis = valueAxisLayout(ticks, text, !!plot.unit)
   // The value axis sits on the inline start, so its wide gutter changes side in RTL.
-  const x0 = rtl ? GUTTER.farSide : GUTTER.axisSide
-  const x1 = CANVAS - (rtl ? GUTTER.axisSide : GUTTER.farSide)
-  const y0 = GUTTER.head
+  const x0 = rtl ? GUTTER.farSide : axis.gutter
+  const x1 = CANVAS - (rtl ? axis.gutter : GUTTER.farSide)
+  const y0 = GUTTER.head + (axis.unitCaption ? UNIT_CAPTION : 0)
   const y1 = tall - GUTTER.foot
   const slotWidth = (x1 - x0) / Math.max(plot.stops.length, 1)
   const valueY = linear(plot.span, [y1, y0])
@@ -78,7 +120,9 @@ function frameFor(plot: Plot, aspect: number, rtl: boolean): Frame {
     slotX: (slot) => (rtl ? x1 - slotWidth * (slot + 0.5) : x0 + slotWidth * (slot + 0.5)),
     valueY,
     floorY: valueY(Math.min(Math.max(0, low), high)),
-    ticks: niceTicks(plot.span, 5),
+    ticks,
+    tickLabel: axis.label,
+    unitCaption: axis.unitCaption,
   }
 }
 
@@ -138,7 +182,7 @@ interface LayerProps {
   say: (reading: number) => string
 }
 
-function GridLayer({ plot, frame, say }: LayerProps) {
+function GridLayer({ plot, frame }: LayerProps) {
   const shown = visibleLabelIndices(plot.stops.length, frame.x1 - frame.x0)
   const tickX = frame.rtl ? frame.x1 + 8 : frame.x0 - 8
   return (
@@ -147,10 +191,21 @@ function GridLayer({ plot, frame, say }: LayerProps) {
         <g key={t}>
           <line className="fk-chart__grid" x1={frame.x0} x2={frame.x1} y1={frame.valueY(t)} y2={frame.valueY(t)} />
           <text className="fk-chart__tick" x={tickX} y={frame.valueY(t)} textAnchor="end" dominantBaseline="middle">
-            {say(t)}
+            {frame.tickLabel(t)}
           </text>
         </g>
       ))}
+      {frame.unitCaption && plot.unit ? (
+        <text
+          className="fk-chart__tick fk-chart__unit"
+          x={frame.rtl ? CANVAS - GUTTER.farSide : GUTTER.farSide}
+          y={GUTTER.head}
+          textAnchor={frame.rtl ? 'end' : 'start'}
+          dominantBaseline="middle"
+        >
+          {plot.unit}
+        </text>
+      ) : null}
       <line className="fk-chart__baseline" x1={frame.x0} x2={frame.x1} y1={frame.y1} y2={frame.y1} />
       {shown.map((slot) => (
         <text key={slot} className="fk-chart__tick" x={frame.slotX(slot)} y={frame.y1 + 20} textAnchor="middle">
@@ -293,7 +348,6 @@ export function Chart(props: ChartProps) {
   const base = useId()
   const live = props.interactive ?? true
   const plot = useMemo(() => toPlot(props.figure), [props.figure])
-  const frame = useMemo(() => frameFor(plot, props.aspect ?? 16 / 9, rtl), [plot, props.aspect, rtl])
   const [ownFace, setOwnFace] = useState<ChartFace>(props.defaultFace ?? 'drawing')
   const view = props.face ?? ownFace
   const [cursor, dispatch] = useReducer(steer, null)
@@ -305,6 +359,10 @@ export function Chart(props: ChartProps) {
     const unit = plot.unit
     return (v: number) => (unit ? joiner.format([digits.format(v), unit]) : digits.format(v))
   }, [locale, plot.unit])
+  const frame = useMemo(() => {
+    const digits = new Intl.NumberFormat(locale, { maximumFractionDigits: 2 })
+    return frameFor(plot, props.aspect ?? 16 / 9, rtl, { withUnit: say, bare: (v) => digits.format(v) })
+  }, [plot, props.aspect, rtl, say, locale])
 
   const blank = plot.stops.length === 0 || plot.tracks.length === 0
   const ids = { title: `${base}-title`, hint: `${base}-hint` }

@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
-import { Chart, type ChartFigure } from './Chart'
+import { Chart, estimateTickWidth, valueAxisLayout, type ChartFigure } from './Chart'
 import { niceTicks } from './chartMath'
 import { toPlot } from './plot'
 
@@ -143,5 +143,45 @@ describe('Chart', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('Chart value axis with a long unit', () => {
+  /** Left edge of the plot, read from the baseline (LTR). */
+  const plotStart = (container: HTMLElement) => Number(container.querySelector('.fk-chart__baseline')!.getAttribute('x1'))
+  const ticks = (container: HTMLElement) => Array.from(container.querySelectorAll('.fk-chart__axes > g > text.fk-chart__tick'), (t) => t.textContent ?? '')
+
+  it('widens the gutter so every tick label with its unit fits beside the axis', () => {
+    const short = render(<Chart figure={line} />)
+    const narrow = plotStart(short.container)
+    short.unmount()
+    const { container } = render(<Chart figure={{ ...line, up: { caption: 'Cases', unit: 'thousand people' } }} />)
+    const wide = plotStart(container)
+    expect(wide).toBeGreaterThan(narrow)
+    // Tick labels end 8 units before the plot and must start inside the drawing.
+    for (const label of ticks(container)) {
+      expect(label).toContain('thousand people')
+      expect(wide - 8 - estimateTickWidth(label)).toBeGreaterThanOrEqual(0)
+    }
+  })
+
+  it('moves a unit too long for the gutter to one caption above the axis, never clipped', () => {
+    const unit = 'registered public-service conversations per thousand residents'
+    const { container } = render(<Chart figure={{ ...line, up: { caption: 'Cases', unit } }} />)
+    const caption = container.querySelector('.fk-chart__unit')
+    expect(caption?.textContent).toBe(unit)
+    for (const label of ticks(container)) {
+      expect(label).not.toContain(unit)
+      expect(plotStart(container) - 8 - estimateTickWidth(label)).toBeGreaterThanOrEqual(0)
+    }
+    // The table view still carries the unit with each value.
+    fireEvent.click(screen.getByRole('radio', { name: /table/i }))
+    expect(screen.getAllByText(new RegExp(unit)).length).toBeGreaterThan(1)
+  })
+
+  it('keeps the default gutter for short labels', () => {
+    const layout = valueAxisLayout([0, 10, 20], { withUnit: (v) => `${v} cases`, bare: String }, true)
+    expect(layout).toMatchObject({ gutter: Math.max(52, estimateTickWidth('20 cases') + 14), unitCaption: false })
+    expect(valueAxisLayout([0, 5], { withUnit: String, bare: String }, false).gutter).toBe(52)
   })
 })
