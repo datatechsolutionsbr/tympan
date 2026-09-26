@@ -136,6 +136,6 @@ Deliberate differences:
 - Interaction mocks are shown only while interacting: the "+" on links
   appears on hover or focus, and the dragged palette entry is highlighted by
   the browser drag, not in a still frame.
-- The design system's select trigger is 48px with its value at the top; the
-  side panel scopes it to 40px with the value centred (to be fixed upstream).
+- The side panel's selects use the design system's trigger as is (40px on
+  desktop, 44px below 1024px, value centred), fixed upstream.
 - Picker descriptions reuse the palette's (slightly longer) descriptions.

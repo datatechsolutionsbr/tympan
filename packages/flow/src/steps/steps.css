@@ -678,19 +678,6 @@
       display: none;
     }
   }
-  /* The design system's select trigger is 48px with its value pinned to
-       the top (reported upstream); here it matches the 40px text fields. */
-  .fk-flow-side__field {
-    & .fk-listbox-select__trigger {
-      min-block-size: 40px;
-      block-size: 40px;
-    }
-    & .fk-listbox-select__value {
-      display: flex;
-      align-items: center;
-      block-size: auto;
-    }
-  }
   .fk-flow-side__preview {
     overflow: auto;
     max-block-size: 240px;
