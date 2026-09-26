@@ -1,2 +1,15 @@
 // @fakhir/flow-canvas: expressions group barrel.
-export {}
+export * from './model'
+export * from './labels'
+export * from './catalogContext'
+export * from './exampleCatalog'
+export * from './ExpressionBuilder'
+export * from './ExpressionField'
+export * from './ComputeNodeForm'
+export * from './SimulationNodeForm'
+export * from './ruleActions'
+export * from './ruleCondition'
+export * from './RuleEditor'
+export * from './RuleNodeForm'
+export * from './trace'
+export * from './TraceTree'
