@@ -59,6 +59,8 @@ function Marker({ shape, cx: x, cy: y, r, active }: { shape: (typeof SHAPES)[num
 }
 
 interface Geometry {
+  /** Categories run from the inline start: right to left under dir=rtl. */
+  rtl: boolean
   height: number
   plotLeft: number
   plotRight: number
@@ -71,10 +73,11 @@ interface Geometry {
   base: number
 }
 
-function measure(spec: ChartSpec, aspect: number): Geometry {
+function measure(spec: ChartSpec, aspect: number, rtl: boolean): Geometry {
   const height = Math.round(FRAME.width / aspect)
-  const plotLeft = FRAME.left
-  const plotRight = FRAME.width - FRAME.right
+  // The value axis sits on the inline-start side, so the frame's wide margin swaps sides in RTL.
+  const plotLeft = rtl ? FRAME.right : FRAME.left
+  const plotRight = FRAME.width - (rtl ? FRAME.left : FRAME.right)
   const plotTop = FRAME.top
   const plotBottom = height - FRAME.bottom
   const n = Math.max(spec.data.length, 1)
@@ -83,13 +86,14 @@ function measure(spec: ChartSpec, aspect: number): Geometry {
   const y = linear(domain, [plotBottom, plotTop])
   const floor = Math.min(Math.max(0, domain[0]), domain[1])
   return {
+    rtl,
     height,
     plotLeft,
     plotRight,
     plotTop,
     plotBottom,
     band,
-    centre: (i) => plotLeft + band * (i + 0.5),
+    centre: (i) => (rtl ? plotRight - band * (i + 0.5) : plotLeft + band * (i + 0.5)),
     y,
     ticks: niceTicks(domain, 5),
     base: y(floor),
@@ -113,7 +117,7 @@ function SeriesMarks({ spec, g, active }: { spec: ChartSpec; g: Geometry; active
             <g key={s.name} data-series={s.name} data-index={si} style={{ color: colour }} data-kind={spec.type}>
               {values.map((v, ci) => {
                 if (v === null) return null
-                const left = touching ? g.plotLeft + g.band * ci : g.centre(ci) - groupWidth / 2 + width * si
+                const left = touching ? g.centre(ci) - g.band / 2 : g.rtl ? g.centre(ci) + groupWidth / 2 - width * (si + 1) : g.centre(ci) - groupWidth / 2 + width * si
                 const top = Math.min(g.y(v), g.base)
                 return (
                   <rect
@@ -171,7 +175,7 @@ function Axes({ spec, g, format }: { spec: ChartSpec; g: Geometry; format: (v: n
       {g.ticks.map((t) => (
         <g key={t}>
           <line className="fk-chart__grid" x1={g.plotLeft} x2={g.plotRight} y1={g.y(t)} y2={g.y(t)} />
-          <text className="fk-chart__tick" x={g.plotLeft - 8} y={g.y(t)} textAnchor="end" dominantBaseline="middle">
+          <text className="fk-chart__tick" x={g.rtl ? g.plotRight + 8 : g.plotLeft - 8} y={g.y(t)} textAnchor="end" dominantBaseline="middle">
             {format(t)}
           </text>
         </g>
@@ -197,7 +201,7 @@ function Annotations({ spec, g }: { spec: ChartSpec; g: Geometry }) {
       {placed.map((a) => (
         <g key={`${a.i}-${a.label}`} className="fk-chart__annotation" data-category={cats[a.i]}>
           <line x1={g.centre(a.i)} x2={g.centre(a.i)} y1={g.plotTop} y2={g.plotBottom} />
-          <text x={g.centre(a.i) + 4} y={g.plotTop + 10}>
+          <text x={g.centre(a.i) + (g.rtl ? -4 : 4)} y={g.plotTop + 10}>
             {a.label}
           </text>
         </g>
@@ -225,7 +229,8 @@ function Legend({ series, label }: { series: ChartSeries[]; label: string }) {
 export function Chart(props: ChartProps) {
   const { spec, aspect = 16 / 9, interactive = true } = props
   const m = useMessages().chart
-  const { locale } = useLocale()
+  const { locale, direction } = useLocale()
+  const rtl = direction === 'rtl'
   const uid = useId()
   const [innerView, setInnerView] = useState<ChartView>(props.defaultView ?? 'chart')
   const view = props.view ?? innerView
@@ -234,8 +239,9 @@ export function Chart(props: ChartProps) {
 
   const numberFormat = useMemo(() => new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }), [locale])
   const unit = spec.yAxis.unit
-  const format = (v: number) => `${numberFormat.format(v)}${unit ? ` ${unit}` : ''}`
-  const g = useMemo(() => measure(spec, aspect), [spec, aspect])
+  const withUnit = useMemo(() => new Intl.ListFormat(locale, { type: 'unit', style: 'narrow' }), [locale])
+  const format = (v: number) => (unit ? withUnit.format([numberFormat.format(v), unit]) : numberFormat.format(v))
+  const g = useMemo(() => measure(spec, aspect, rtl), [spec, aspect, rtl])
   const empty = spec.data.length === 0 || spec.series.length === 0
 
   const switchView = (next: string) => {
@@ -256,8 +262,8 @@ export function Chart(props: ChartProps) {
     const last = spec.data.length - 1
     const current = pointer ?? { cat: 0, ser: 0 }
     const moves: Record<string, () => Pointer> = {
-      ArrowRight: () => ({ ...current, cat: Math.min(last, current.cat + 1) }),
-      ArrowLeft: () => ({ ...current, cat: Math.max(0, current.cat - 1) }),
+      [rtl ? 'ArrowLeft' : 'ArrowRight']: () => ({ ...current, cat: Math.min(last, current.cat + 1) }),
+      [rtl ? 'ArrowRight' : 'ArrowLeft']: () => ({ ...current, cat: Math.max(0, current.cat - 1) }),
       ArrowDown: () => ({ ...current, ser: Math.min(spec.series.length - 1, current.ser + 1) }),
       ArrowUp: () => ({ ...current, ser: Math.max(0, current.ser - 1) }),
       Home: () => ({ ...current, cat: 0 }),
@@ -277,7 +283,8 @@ export function Chart(props: ChartProps) {
     if (!box.width) return
     const vx = ((e.clientX - box.left) / box.width) * FRAME.width
     const vy = ((e.clientY - box.top) / box.height) * g.height
-    const cat = Math.max(0, Math.min(spec.data.length - 1, Math.floor((vx - g.plotLeft) / g.band)))
+    const along = g.rtl ? g.plotRight - vx : vx - g.plotLeft
+    const cat = Math.max(0, Math.min(spec.data.length - 1, Math.floor(along / g.band)))
     let ser = 0
     let best = Infinity
     spec.series.forEach((s, i) => {
@@ -324,6 +331,7 @@ export function Chart(props: ChartProps) {
         className="fk-chart__svg"
         viewBox={`0 0 ${FRAME.width} ${g.height}`}
         preserveAspectRatio="xMidYMid meet"
+        direction={rtl ? 'rtl' : 'ltr'}
         role={interactive ? undefined : 'img'}
         aria-label={interactive ? undefined : spec.title}
         aria-hidden={interactive ? true : undefined}
@@ -342,7 +350,7 @@ export function Chart(props: ChartProps) {
         <div
           className="fk-chart__readout"
           aria-hidden="true"
-          style={{ insetInlineStart: `${(g.centre(pointer.cat) / FRAME.width) * 100}%` }}
+          style={{ insetInlineStart: `${((rtl ? FRAME.width - g.centre(pointer.cat) : g.centre(pointer.cat)) / FRAME.width) * 100}%` }}
           data-edge={pointer.cat > spec.data.length / 2 ? 'end' : 'start'}
         >
           {readout}
@@ -374,7 +382,7 @@ export function Chart(props: ChartProps) {
   }
 
   return (
-    <figure className={cx('fk-chart', props.className)} aria-labelledby={titleId} data-view={view} data-kind={spec.type}>
+    <figure className={cx('fk-chart', props.className)} aria-labelledby={titleId} data-view={view} data-kind={spec.type} data-direction={direction}>
       <figcaption className="fk-chart__caption">
         <span id={titleId} className="fk-chart__title">
           {spec.title}

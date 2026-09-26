@@ -1,3 +1,4 @@
+import { I18nProvider } from 'react-aria-components'
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
@@ -173,6 +174,27 @@ describe('RegionMap', () => {
       </>,
     )
     await waitFor(() => expect(container.querySelectorAll('.fk-region-map__marker')).toHaveLength(4))
+    await expectNoAxeViolations(container)
+  })
+})
+
+describe('RegionMap in right-to-left locales', () => {
+  it('moves to the next marker with Left Arrow, keeps panning physical, formats counts and passes axe', async () => {
+    mockFetch()
+    const { container } = render(
+      <I18nProvider locale="ar-EG">
+        <div dir="rtl" lang="ar">
+          <Harness />
+        </div>
+      </I18nProvider>,
+    )
+    await waitFor(() => expect(markers()).toHaveLength(2))
+    act(() => (markers()[0] as SVGGElement).focus())
+    await userEvent.keyboard('{ArrowLeft}')
+    expect(markers()[1]).toHaveFocus()
+    await userEvent.keyboard('{ArrowRight}')
+    expect(markers()[0]).toHaveFocus()
+    expect(container.querySelector('.fk-region-map__legend-count')!.textContent).toMatch(/[٠-٩]/)
     await expectNoAxeViolations(container)
   })
 })

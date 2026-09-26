@@ -1,5 +1,6 @@
 import { geoEqualEarth, geoMercator, geoPath, type GeoProjection } from 'd3-geo'
 import { Minus, Plus } from 'lucide-react'
+import { useLocale } from 'react-aria-components'
 import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
 import { cx } from '../../internal/cx'
 import type { ChartsGeoMessages } from '../../internal/messages/charts-geo'
@@ -105,6 +106,8 @@ function buildProjection(kind: 'mercator' | 'equal-area', collection: GeoCollect
 export function RegionMap<T>(props: RegionMapProps<T>) {
   const { regionProperty = 'code', projection = 'mercator', legendLimit = 5 } = props
   const copy = useMessages().regionMap
+  const { locale, direction } = useLocale()
+  const figures = useMemo(() => new Intl.NumberFormat(locale), [locale])
   const labels = { ...copy, ...props.labels }
   const uid = useId()
   const state = useRegionMapState({
@@ -212,8 +215,9 @@ export function RegionMap<T>(props: RegionMapProps<T>) {
       const d: Record<string, [number, number]> = { ArrowLeft: [PAN_STEP, 0], ArrowRight: [-PAN_STEP, 0], ArrowUp: [0, PAN_STEP], ArrowDown: [0, -PAN_STEP] }
       const step = d[e.key]
       if (step) state.panBy(step[0], step[1])
-    } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') focusMarker(i >= last ? 0 : i + 1)
-    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') focusMarker(i <= 0 ? last : i - 1)
+    } else if (e.key === (direction === 'rtl' ? 'ArrowLeft' : 'ArrowRight') || e.key === 'ArrowDown') focusMarker(i >= last ? 0 : i + 1)
+    else if (e.key === (direction === 'rtl' ? 'ArrowRight' : 'ArrowLeft') || e.key === 'ArrowUp') focusMarker(i <= 0 ? last : i - 1)
+    // Shift+arrows pan the geography itself, which is never mirrored.
     else if (e.key === 'Home') focusMarker(0)
     else if (e.key === 'End') focusMarker(last)
     else if (e.key === 'Enter' || e.key === ' ') {
@@ -310,7 +314,7 @@ export function RegionMap<T>(props: RegionMapProps<T>) {
                   <circle className="fk-region-map__hit" r={Math.max(r, 22 / state.zoom)} />
                   <circle className="fk-region-map__dot" r={r} style={{ color: toneOf(group.code) }} />
                   <text className="fk-region-map__count" textAnchor="middle" dominantBaseline="central" style={{ fontSize: `${12 / state.zoom}px` }}>
-                    {group.count}
+                    {figures.format(group.count)}
                   </text>
                 </g>
               )
@@ -361,7 +365,7 @@ export function RegionMap<T>(props: RegionMapProps<T>) {
                     <span className="fk-region-map__swatch" style={{ background: toneOf(g.code) }} aria-hidden="true" />
                   )}
                   <span>{flag ? null : nameOf(g.code)}</span>
-                  <span className="fk-region-map__legend-count">{g.count}</span>
+                  <span className="fk-region-map__legend-count">{figures.format(g.count)}</span>
                 </li>
               )
             })}

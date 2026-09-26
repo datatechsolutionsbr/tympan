@@ -154,6 +154,16 @@
   .fk-chart__readout[data-edge='start'] {
     translate: 0 0;
   }
+  /* The bubble is placed from the inline start; its own shift mirrors in RTL. */
+  [dir='rtl'] .fk-chart__readout {
+    translate: 50% 0;
+  }
+  [dir='rtl'] .fk-chart__readout[data-edge='end'] {
+    translate: 100% 0;
+  }
+  [dir='rtl'] .fk-chart__readout[data-edge='start'] {
+    translate: 0 0;
+  }
 
   .fk-chart__missing {
     color: var(--fk-ink-3);

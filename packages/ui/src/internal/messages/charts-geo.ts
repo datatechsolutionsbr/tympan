@@ -1,6 +1,6 @@
 // Copy of the "charts-geo" group (wave 2/4): Chart, ReportView,
 // LiveReportView, RegionMap and the subdivision kinds of RegionThemeData.
-// English and Brazilian Portuguese. Merged into `Messages` by ../messages.ts.
+// English, Brazilian Portuguese and Spanish. Merged into `Messages` by ../messages.ts.
 
 export type SubdivisionKind =
   | 'state'
@@ -43,7 +43,8 @@ export interface ChartsGeoMessages {
     document: { identifier: string; accessKey: string; number: string; series: string; environment: string; open: string }
     lifecycle: Record<'complete' | 'current' | 'upcoming', string>
     score: { outOf: (score: number) => string; reasoning: string }
-    duration: (seconds: string) => string
+    /** Receives the number of seconds; the catalogue formats it with Intl. */
+    duration: (seconds: number) => string
     meta: string
   }
   liveReport: {
@@ -103,8 +104,8 @@ export const chartsGeoEn: ChartsGeoMessages = {
     approval: { approved: 'Approved', rejected: 'Rejected', pending: 'Pending', by: (who) => `by ${who}`, prompt: 'Original request', reason: 'Reason' },
     document: { identifier: 'Identifier', accessKey: 'Access key', number: 'Number', series: 'Series', environment: 'Environment', open: 'Open document' },
     lifecycle: { complete: 'complete', current: 'current', upcoming: 'upcoming' },
-    score: { outOf: (score) => `${score} of 100`, reasoning: 'Reasoning' },
-    duration: (s) => `${s} s`,
+    score: { outOf: (score) => `${new Intl.NumberFormat('en').format(score)} of ${new Intl.NumberFormat('en').format(100)}`, reasoning: 'Reasoning' },
+    duration: (s) => new Intl.NumberFormat('en', { style: 'unit', unit: 'second', unitDisplay: 'short' }).format(s),
     meta: 'Report details',
   },
   liveReport: {
@@ -121,11 +122,11 @@ export const chartsGeoEn: ChartsGeoMessages = {
     map: 'Map of regions',
     zoomIn: 'Zoom in',
     zoomOut: 'Zoom out',
-    zoomValue: (p) => `Zoom ${p}%`,
+    zoomValue: (p) => `Zoom ${new Intl.NumberFormat('en', { style: 'percent' }).format(p / 100)}`,
     legendTitle: 'Regions with most items',
-    more: (n) => `+${n} more`,
+    more: (n) => `+${new Intl.NumberFormat('en').format(n)} more`,
     regionList: 'Regions',
-    regionItems: (name, count) => `${name}, ${count} ${count === 1 ? 'item' : 'items'}`,
+    regionItems: (name, count) => `${name}, ${new Intl.NumberFormat('en').format(count)} ${new Intl.PluralRules('en').select(count) === 'one' ? 'item' : 'items'}`,
     loadError: 'The map shapes could not be loaded. The list of regions still works.',
     loading: 'Loading the map',
   },
@@ -175,8 +176,8 @@ export const chartsGeoPtBR: ChartsGeoMessages = {
     approval: { approved: 'Aprovado', rejected: 'Rejeitado', pending: 'Pendente', by: (who) => `por ${who}`, prompt: 'Pedido original', reason: 'Motivo' },
     document: { identifier: 'Identificador', accessKey: 'Chave de acesso', number: 'Número', series: 'Série', environment: 'Ambiente', open: 'Abrir documento' },
     lifecycle: { complete: 'concluída', current: 'atual', upcoming: 'próxima' },
-    score: { outOf: (score) => `${score} de 100`, reasoning: 'Justificativa' },
-    duration: (s) => `${s} s`,
+    score: { outOf: (score) => `${new Intl.NumberFormat('pt-BR').format(score)} de ${new Intl.NumberFormat('pt-BR').format(100)}`, reasoning: 'Justificativa' },
+    duration: (s) => new Intl.NumberFormat('pt-BR', { style: 'unit', unit: 'second', unitDisplay: 'short' }).format(s),
     meta: 'Detalhes do relatório',
   },
   liveReport: {
@@ -193,11 +194,11 @@ export const chartsGeoPtBR: ChartsGeoMessages = {
     map: 'Mapa das regiões',
     zoomIn: 'Aproximar',
     zoomOut: 'Afastar',
-    zoomValue: (p) => `Zoom ${p}%`,
+    zoomValue: (p) => `Zoom ${new Intl.NumberFormat('pt-BR', { style: 'percent' }).format(p / 100)}`,
     legendTitle: 'Regiões com mais itens',
-    more: (n) => `+${n} outras`,
+    more: (n) => `+${new Intl.NumberFormat('pt-BR').format(n)} outras`,
     regionList: 'Regiões',
-    regionItems: (name, count) => `${name}, ${count} ${count === 1 ? 'item' : 'itens'}`,
+    regionItems: (name, count) => `${name}, ${new Intl.NumberFormat('pt-BR').format(count)} ${new Intl.PluralRules('pt-BR').select(count) === 'one' ? 'item' : 'itens'}`,
     loadError: 'Não foi possível carregar as formas do mapa. A lista de regiões continua funcionando.',
     loading: 'Carregando o mapa',
   },
@@ -215,5 +216,74 @@ export const chartsGeoPtBR: ChartsGeoMessages = {
   },
 }
 
-/** Spanish (placeholder until translated: falls back to English). */
-export const chartsGeoEs: ChartsGeoMessages = chartsGeoEn
+export const chartsGeoEs: ChartsGeoMessages = {
+  chart: {
+    viewSwitch: 'Mostrar como',
+    chartView: 'Gráfico',
+    tableView: 'Tabla',
+    noData: 'No hay datos para el gráfico',
+    noDataHint: 'El gráfico aparece cuando el análisis devuelve valores.',
+    plotHint: (title) => `${title}. Use las flechas para leer cada valor.`,
+    readout: (category, series, value) => `${category}, ${series}: ${value}`,
+    missing: 'sin valor',
+    categoryColumn: 'Categoría',
+    legend: 'Leyenda',
+  },
+  report: {
+    empty: 'Este informe está vacío',
+    emptyHint: 'El contenido aparece aquí cuando la ejecución lo produce.',
+    noValue: 'sin valor',
+    recommendation: 'Recomendación',
+    unknownSection: (kind) => `Sección de un tipo desconocido (${kind})`,
+    inputRequestPending: 'Esperando respuesta',
+    receipt: {
+      description: 'Descripción',
+      quantity: 'Cantidad',
+      unitPrice: 'Precio unitario',
+      total: 'Total',
+      subtotal: 'Subtotal',
+      tax: 'Impuesto',
+      grandTotal: 'Total a pagar',
+    },
+    approval: { approved: 'Aprobado', rejected: 'Rechazado', pending: 'Pendiente', by: (who) => `por ${who}`, prompt: 'Solicitud original', reason: 'Motivo' },
+    document: { identifier: 'Identificador', accessKey: 'Clave de acceso', number: 'Número', series: 'Serie', environment: 'Entorno', open: 'Abrir documento' },
+    lifecycle: { complete: 'concluida', current: 'actual', upcoming: 'siguiente' },
+    score: { outOf: (score) => `${new Intl.NumberFormat('es').format(score)} de ${new Intl.NumberFormat('es').format(100)}`, reasoning: 'Justificación' },
+    duration: (s) => new Intl.NumberFormat('es', { style: 'unit', unit: 'second', unitDisplay: 'short' }).format(s),
+    meta: 'Detalles del informe',
+  },
+  liveReport: {
+    phase: { pending: 'Pendiente', running: 'En ejecución', paused: 'En pausa', completed: 'Completada', failed: 'Falló', cancelled: 'Cancelada' },
+    step: { running: 'en ejecución', done: 'hecho', failed: 'falló', paused: 'en pausa' },
+    steps: 'Pasos',
+    waiting: 'Esperando datos',
+    pausedWaiting: 'En pausa, esperando respuesta',
+    failed: 'La ejecución falló',
+    approve: 'Aprobar',
+    reject: 'Rechazar',
+  },
+  regionMap: {
+    map: 'Mapa de las regiones',
+    zoomIn: 'Acercar',
+    zoomOut: 'Alejar',
+    zoomValue: (p) => `Zoom ${new Intl.NumberFormat('es', { style: 'percent' }).format(p / 100)}`,
+    legendTitle: 'Regiones con más elementos',
+    more: (n) => `+${new Intl.NumberFormat('es').format(n)} más`,
+    regionList: 'Regiones',
+    regionItems: (name, count) => `${name}, ${new Intl.NumberFormat('es').format(count)} ${new Intl.PluralRules('es').select(count) === 'one' ? 'elemento' : 'elementos'}`,
+    loadError: 'No se pudieron cargar las formas del mapa. La lista de regiones sigue funcionando.',
+    loading: 'Cargando el mapa',
+  },
+  regionKind: {
+    state: 'Estado',
+    province: 'Provincia',
+    region: 'Región',
+    department: 'Departamento',
+    governorate: 'Gobernación',
+    prefecture: 'Prefectura',
+    county: 'Condado',
+    voivodeship: 'Voivodato',
+    district: 'Distrito',
+    nation: 'Nación',
+  },
+}

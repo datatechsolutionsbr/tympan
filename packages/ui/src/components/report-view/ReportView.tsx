@@ -57,6 +57,7 @@ function DefaultKpi({ kpi, fmt }: { kpi: ReportKpi; fmt: Formatters }) {
   const value = typeof kpi.value === 'number' ? fmt.number(kpi.value) : kpi.value
   const d = kpi.delta
   const Trend = d === undefined || d === 0 ? ArrowRight : d > 0 ? ArrowUpRight : ArrowDownRight
+  // Sideways parts of the trend arrow follow the reading direction (up stays up).
   return (
     <div className="fk-report__kpi" data-tone={kpi.tone ?? 'neutral'}>
       <span className="fk-report__kpi-label">{kpi.label}</span>
@@ -66,7 +67,7 @@ function DefaultKpi({ kpi, fmt }: { kpi: ReportKpi; fmt: Formatters }) {
       </span>
       {d !== undefined ? (
         <span className="fk-report__kpi-delta">
-          <Trend className="fk-icon" aria-hidden="true" focusable="false" />
+          <Trend className="fk-icon fk-mirror-rtl" aria-hidden="true" focusable="false" />
           {`${d > 0 ? '+' : ''}${fmt.number(d)}${kpi.deltaUnit ?? ''}`}
         </span>
       ) : null}
@@ -78,10 +79,8 @@ function TableBlock({ table, fmt, noValue, fallbackCaption }: { table: ReportTab
   const cell = (raw: unknown, type: string | undefined): ReactNode => {
     if (raw === null || raw === undefined || raw === '') {
       return (
-        <>
-          <span aria-hidden="true">–</span>
-          <span className="fk-visually-hidden">{noValue}</span>
-        </>
+        // §2.13: no dash as decoration; the empty-value word is shown in the muted tone.
+        <span className="fk-report__no-value">{noValue}</span>
       )
     }
     if (typeof raw !== 'number') return String(raw)

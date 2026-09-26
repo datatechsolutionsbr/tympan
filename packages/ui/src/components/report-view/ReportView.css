@@ -316,4 +316,8 @@
       border-inline-start-color: CanvasText;
     }
   }
+  .fk-report__no-value {
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+  }
 }

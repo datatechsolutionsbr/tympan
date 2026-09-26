@@ -59,7 +59,7 @@ const narrative: Renderer = (d, ctx) => {
       {actor?.name || seconds !== null ? (
         <div className="fk-report__byline">
           {actor?.name ? <ActorChip kind={actor.kind ?? 'agent'} name={actor.name} compact /> : null}
-          {seconds !== null ? <span className="fk-report__muted">{ctx.copy.duration(ctx.number(seconds))}</span> : null}
+          {seconds !== null ? <span className="fk-report__muted">{ctx.copy.duration(seconds)}</span> : null}
         </div>
       ) : null}
       {text(d.text ?? d.body)

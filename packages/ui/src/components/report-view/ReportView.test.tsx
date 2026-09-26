@@ -84,10 +84,11 @@ describe('ReportView', () => {
     expect(within(region).getByText('current').closest('li')).toHaveAttribute('aria-current', 'step')
   })
 
-  it('shows empty cells as a dash with a hidden "no value"', () => {
+  it('shows empty cells with the visible empty-value word, never a dash (§2.13)', () => {
     render(<ReportView report={full} currency="BRL" />)
     const table = screen.getByRole('table', { name: 'Budget by country' })
-    expect(within(table).getByText('no value')).toHaveClass('fk-visually-hidden')
+    expect(within(table).getByText('no value')).toHaveClass('fk-report__no-value')
+    expect(table.textContent).not.toContain('–')
   })
 
   it('renders an unknown section kind as a neutral note', () => {
