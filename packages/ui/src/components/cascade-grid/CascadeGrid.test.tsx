@@ -7,7 +7,7 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { setMedia } from '../../../test/media'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { DecorativeMotion } from '../../utilities/motion-foundation/motion'
-import { CascadeGrid, cascadeDelays } from './CascadeGrid'
+import { CascadeGrid, entranceSchedule } from './CascadeGrid'
 
 const items = (n: number) => Array.from({ length: n }, (_, i) => <p key={`i${i}`}>Item {i + 1}</p>)
 const css = cssOf('components/cascade-grid/CascadeGrid.css')
@@ -43,7 +43,7 @@ describe('CascadeGrid', () => {
   })
 
   it('starts the last of twenty items within maxTotalMs', () => {
-    expect(cascadeDelays(20, 90, 240).at(-1)).toBeLessThanOrEqual(240)
+    expect(entranceSchedule(20, 90, 240).at(-1)).toBeLessThanOrEqual(240)
     const { container } = render(
       <DecorativeMotion enabled>
         <CascadeGrid cascade maxTotalMs={240}>

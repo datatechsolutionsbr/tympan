@@ -1,5 +1,9 @@
-// ViewTransition (spec: wave-2/view-transition.md). Uses the native View
-// Transitions API when it is safe, applies the update instantly otherwise.
+// ViewTransition (spec: wave-2/view-transition.md).
+//
+// A change is "staged": either handed to the browser's own animated swap, or
+// applied on the spot. Staging on the spot happens without browser support,
+// under reduced motion, or when the caller opts out. While the browser swap
+// runs, <html> carries a flag naming the style so transition CSS applies.
 import { useCallback, useMemo } from 'react'
 import { prefersReducedMotion } from '../../internal/media'
 
@@ -18,68 +22,93 @@ export interface ViewTransitionHandle {
 /** Root attribute present only while a transition runs; transition CSS keys off it. */
 export const VIEW_TRANSITION_MARKER = 'data-fk-view-transition'
 
-interface NativeTransition {
-  finished: Promise<unknown>
-  skipTransition: () => void
-}
-type Starter = (cb: () => void | Promise<void>) => NativeTransition
+type Change = () => void | Promise<void>
 
-function nativeStarter(): Starter | null {
-  if (typeof document === 'undefined') return null
-  const fn = (document as Document & { startViewTransition?: Starter }).startViewTransition
-  return typeof fn === 'function' ? (cb) => fn.call(document, cb) : null
+/** The subset of the browser's transition object this module talks to. */
+interface BrowserSwap {
+  finished: PromiseLike<unknown>
+  skipTransition(): void
+}
+
+type SwapEngine = (change: Change) => BrowserSwap
+
+/** The browser's swap function bound to the document, or undefined (server, old browsers). */
+function engine(): SwapEngine | undefined {
+  const doc = typeof document === 'undefined' ? undefined : (document as Document & { startViewTransition?: SwapEngine })
+  const native = doc?.startViewTransition
+  if (typeof native !== 'function') return undefined
+  return (change) => native.call(doc, change)
 }
 
 /** Feature detection, safe on the server. */
 export function supportsViewTransitions(): boolean {
-  return nativeStarter() !== null
+  return engine() !== undefined
 }
 
-function instant(update: () => void | Promise<void>): ViewTransitionHandle {
-  let result: void | Promise<void>
-  try {
-    result = update()
-  } catch (error) {
-    return { finished: Promise.reject(error), skip: () => {} }
+const noop = () => {}
+
+/** Applies the change now; the handle settles with the change (or its error). */
+function onTheSpot(change: Change): ViewTransitionHandle {
+  const settled = new Promise<void>((resolve, reject) => {
+    try {
+      Promise.resolve(change()).then(() => resolve(), reject)
+    } catch (problem) {
+      reject(problem)
+    }
+  })
+  return { finished: settled, skip: noop }
+}
+
+/** Sets and removes the root flag; removal is idempotent. */
+class RootFlag {
+  private raised = false
+  constructor(private readonly style: ViewTransitionKind) {}
+  raise(): void {
+    document.documentElement.setAttribute(VIEW_TRANSITION_MARKER, this.style)
+    this.raised = true
   }
-  return { finished: Promise.resolve(result).then(() => undefined), skip: () => {} }
+  lower = (): void => {
+    if (!this.raised) return
+    this.raised = false
+    document.documentElement.removeAttribute(VIEW_TRANSITION_MARKER)
+  }
 }
 
 /** Runs `update` inside a native view transition, or instantly. */
-export function runWithTransition(update: () => void | Promise<void>, options: ViewTransitionOptions = {}): ViewTransitionHandle {
-  const start = nativeStarter()
-  if (!start || options.skipAnimation || prefersReducedMotion()) return instant(update)
+export function runWithTransition(update: Change, options: ViewTransitionOptions = {}): ViewTransitionHandle {
+  const swap = engine()
+  const animate = swap !== undefined && !options.skipAnimation && !prefersReducedMotion()
+  if (!animate) return onTheSpot(update)
 
-  const root = document.documentElement
-  root.setAttribute(VIEW_TRANSITION_MARKER, options.kind ?? 'fade')
-  const clear = () => root.removeAttribute(VIEW_TRANSITION_MARKER)
-
-  let native: NativeTransition
+  const flag = new RootFlag(options.kind ?? 'fade')
+  flag.raise()
+  let running: BrowserSwap
   try {
-    native = start(update)
+    running = swap(update)
   } catch {
-    clear()
-    return instant(update)
+    flag.lower()
+    return onTheSpot(update)
   }
-  const finished = Promise.resolve(native.finished).then(
-    () => clear(),
-    () => clear(),
-  )
-  return {
-    finished,
-    skip: () => {
-      try {
-        native.skipTransition()
-      } finally {
-        clear()
-      }
-    },
+  // Success or failure of the animation both end the flagged period.
+  const done = new Promise<void>((resolve) => {
+    Promise.resolve(running.finished).then(
+      () => resolve(flag.lower()),
+      () => resolve(flag.lower()),
+    )
+  })
+  const cut = () => {
+    try {
+      running.skipTransition()
+    } finally {
+      flag.lower()
+    }
   }
+  return { finished: done, skip: cut }
 }
 
 /** Hook form with a stable function identity. */
 export function useViewTransition(): { runWithTransition: typeof runWithTransition; isSupported: boolean } {
-  const run = useCallback((u: () => void | Promise<void>, o?: ViewTransitionOptions) => runWithTransition(u, o), [])
-  const isSupported = supportsViewTransitions()
-  return useMemo(() => ({ runWithTransition: run, isSupported }), [run, isSupported])
+  const stable = useCallback((change: Change, opts?: ViewTransitionOptions) => runWithTransition(change, opts), [])
+  const available = supportsViewTransitions()
+  return useMemo(() => ({ runWithTransition: stable, isSupported: available }), [stable, available])
 }

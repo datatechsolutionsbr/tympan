@@ -1,11 +1,11 @@
 import { act, renderHook, waitFor } from '@testing-library/react'
 import { forwardRef, type ReactNode } from 'react'
 import { describe, expect, it, vi } from 'vitest'
-import { RouterAdapterProvider, type AdapterLinkProps, type RouterAdapterValue } from '../router-adapter/RouterAdapter'
+import { RouterAdapterProvider, type RouteAnchorProps, type NavigationAdapter } from '../router-adapter/RouterAdapter'
 import { useEntityListLoader } from './useEntityListLoader'
 
-const Link = forwardRef<HTMLAnchorElement, AdapterLinkProps>((p, ref) => <a ref={ref} {...p} />)
-const adapterAt = (locationKey: string): RouterAdapterValue => ({
+const Link = forwardRef<HTMLAnchorElement, RouteAnchorProps>((p, ref) => <a ref={ref} {...p} />)
+const adapterAt = (locationKey: string): NavigationAdapter => ({
   pathname: '/list',
   locationKey,
   navigate: () => {},

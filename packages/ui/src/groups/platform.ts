@@ -34,11 +34,11 @@ export {
   usePathname,
   useLink,
   useLocationKey,
-  PlainLink,
-  type RouterAdapterValue,
-  type RouterApi,
-  type AdapterLink,
-  type AdapterLinkProps,
+  FallbackAnchor,
+  type NavigationAdapter,
+  type NavigationCommands,
+  type RouteAnchor,
+  type RouteAnchorProps,
 } from '../utilities/router-adapter/RouterAdapter'
 export {
   I18nAdapterProvider,
@@ -53,7 +53,7 @@ export {
   type LocaleFormatter,
 } from '../utilities/i18n-adapter/I18nAdapter'
 export { formatMessage, type MessageParams } from '../utilities/i18n-adapter/icu'
-export { useEntityListLoader, type EntityListOptions, type EntityListState } from '../utilities/entity-list-loader/useEntityListLoader'
+export { useEntityListLoader, type ListLoaderOptions, type ListLoaderResult } from '../utilities/entity-list-loader/useEntityListLoader'
 export {
   formatMoney,
   formatPercent,

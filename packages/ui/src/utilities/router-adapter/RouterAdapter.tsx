@@ -1,7 +1,10 @@
-// RouterAdapter (spec: wave-2/router-adapter.md). The host hands one adapter
-// to the root; every library component navigates through it. The same adapter
-// drives React Aria's RouterProvider, so RAC links and menu items follow it.
-// Without an adapter, browser location and history are used.
+// RouterAdapter (spec: wave-2/router-adapter.md).
+//
+// The host installs one navigation adapter at the root. Everything the
+// library needs from routing goes through a small `Navigator` object built
+// from that adapter, or from the browser's own location and history when no
+// adapter is installed (stories, tests, isolated use). The same adapter also
+// feeds React Aria's RouterProvider, so RAC links and menu items follow it.
 import {
   createContext,
   forwardRef,
@@ -14,21 +17,23 @@ import {
 } from 'react'
 import { RouterProvider } from 'react-aria-components'
 
-export type AdapterLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & { href: string; children?: ReactNode }
-export type AdapterLink = ForwardRefExoticComponent<AdapterLinkProps & RefAttributes<HTMLAnchorElement>>
+export type RouteAnchorProps = AnchorHTMLAttributes<HTMLAnchorElement> & { href: string; children?: ReactNode }
+export type RouteAnchor = ForwardRefExoticComponent<RouteAnchorProps & RefAttributes<HTMLAnchorElement>>
 
-export interface RouterAdapterValue {
+/** What the host supplies (field names fixed by the spec). */
+export interface NavigationAdapter {
   pathname: string
   navigate: (href: string) => void
   replace: (href: string) => void
   back: () => void
   forward: () => void
   prefetch: (href: string) => void
-  Link: AdapterLink
+  Link: RouteAnchor
   locationKey?: string
 }
 
-export interface RouterApi {
+/** What `useRouter()` hands to components. */
+export interface NavigationCommands {
   push: (href: string) => void
   replace: (href: string) => void
   back: () => void
@@ -37,78 +42,93 @@ export interface RouterApi {
   prefetch: (href: string) => void
 }
 
-const AdapterContext = createContext<RouterAdapterValue | null>(null)
-
-/** Plain anchor used when no adapter is present (stories, tests, isolation). */
-export const PlainLink: AdapterLink = forwardRef<HTMLAnchorElement, AdapterLinkProps>(function PlainLink(props, ref) {
+/** Plain anchor used when no adapter is present. */
+export const FallbackAnchor: RouteAnchor = forwardRef<HTMLAnchorElement, RouteAnchorProps>(function FallbackAnchor(props, ref) {
   return <a ref={ref} {...props} />
 })
 
-const browser = {
-  path: () => (typeof window === 'undefined' ? '/' : window.location.pathname),
-  go(href: string, mode: 'push' | 'replace') {
-    if (typeof window === 'undefined') return
-    if (mode === 'replace') window.location.replace(href)
-    else window.location.assign(href)
-  },
-  history(step: -1 | 1) {
-    if (typeof window !== 'undefined') window.history.go(step)
-  },
-  reload() {
-    if (typeof window !== 'undefined') window.location.reload()
-  },
+/** One place that answers every routing question, whatever the source. */
+interface Navigator {
+  commands: NavigationCommands
+  where(): string
+  stamp(): string
+  anchor: RouteAnchor
 }
 
-export function RouterAdapterProvider({ adapter, children }: { adapter: RouterAdapterValue; children: ReactNode }) {
+const hasWindow = () => typeof window !== 'undefined'
+const ignore = () => {}
+
+function fromWindow(): Navigator {
+  const step = (delta: number) => () => {
+    if (hasWindow()) window.history.go(delta)
+  }
+  const where = () => (hasWindow() ? window.location.pathname : '/')
+  return {
+    commands: {
+      push: (href) => hasWindow() && window.location.assign(href),
+      replace: (href) => hasWindow() && window.location.replace(href),
+      back: step(-1),
+      forward: step(1),
+      refresh: () => hasWindow() && window.location.reload(),
+      prefetch: ignore,
+    },
+    where,
+    stamp: where,
+    anchor: FallbackAnchor,
+  }
+}
+
+function fromAdapter(source: NavigationAdapter): Navigator {
+  return {
+    commands: {
+      push: source.navigate,
+      replace: source.replace,
+      back: source.back,
+      forward: source.forward,
+      // Re-enter the current route through the adapter.
+      refresh: () => source.replace(source.pathname),
+      prefetch: source.prefetch,
+    },
+    where: () => source.pathname,
+    stamp: () => source.locationKey ?? source.pathname,
+    anchor: source.Link,
+  }
+}
+
+const Installed = createContext<NavigationAdapter | null>(null)
+
+export function RouterAdapterProvider({ adapter, children }: { adapter: NavigationAdapter; children: ReactNode }) {
+  const go = (href: string, opts?: { replace?: boolean }) => (opts?.replace ? adapter.replace : adapter.navigate)(href)
   return (
-    <AdapterContext.Provider value={adapter}>
-      <RouterProvider navigate={(href, options) => (options?.replace ? adapter.replace(href) : adapter.navigate(href))}>
-        {children}
-      </RouterProvider>
-    </AdapterContext.Provider>
+    <Installed.Provider value={adapter}>
+      <RouterProvider navigate={go}>{children}</RouterProvider>
+    </Installed.Provider>
   )
 }
 
 /** The adapter in scope, or null. */
-export function useRouterAdapter(): RouterAdapterValue | null {
-  return useContext(AdapterContext)
+export function useRouterAdapter(): NavigationAdapter | null {
+  return useContext(Installed)
 }
 
-export function useRouter(): RouterApi {
-  const a = useContext(AdapterContext)
-  return useMemo<RouterApi>(() => {
-    if (!a) {
-      return {
-        push: (h) => browser.go(h, 'push'),
-        replace: (h) => browser.go(h, 'replace'),
-        back: () => browser.history(-1),
-        forward: () => browser.history(1),
-        refresh: browser.reload,
-        prefetch: () => {},
-      }
-    }
-    return {
-      push: a.navigate,
-      replace: a.replace,
-      back: a.back,
-      forward: a.forward,
-      // "Refresh" re-enters the current route through the adapter.
-      refresh: () => a.replace(a.pathname),
-      prefetch: a.prefetch,
-    }
-  }, [a])
+function useNavigator(): Navigator {
+  const source = useContext(Installed)
+  return useMemo(() => (source ? fromAdapter(source) : fromWindow()), [source])
+}
+
+export function useRouter(): NavigationCommands {
+  return useNavigator().commands
 }
 
 export function usePathname(): string {
-  return useContext(AdapterContext)?.pathname ?? browser.path()
+  return useNavigator().where()
 }
 
-export function useLink(): AdapterLink {
-  return useContext(AdapterContext)?.Link ?? PlainLink
+export function useLink(): RouteAnchor {
+  return useNavigator().anchor
 }
 
 /** Changes on every navigation: the adapter key, else the pathname. */
 export function useLocationKey(): string {
-  const a = useContext(AdapterContext)
-  return a ? (a.locationKey ?? a.pathname) : browser.path()
+  return useNavigator().stamp()
 }

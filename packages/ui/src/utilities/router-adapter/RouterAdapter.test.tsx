@@ -3,10 +3,10 @@ import userEvent from '@testing-library/user-event'
 import { forwardRef, type ReactNode } from 'react'
 import { Link as AriaLink } from 'react-aria-components'
 import { describe, expect, it, vi } from 'vitest'
-import { PlainLink, RouterAdapterProvider, useLink, useLocationKey, usePathname, useRouter, type AdapterLinkProps, type RouterAdapterValue } from './RouterAdapter'
+import { FallbackAnchor, RouterAdapterProvider, useLink, useLocationKey, usePathname, useRouter, type RouteAnchorProps, type NavigationAdapter } from './RouterAdapter'
 
-function makeAdapter(patch: Partial<RouterAdapterValue> = {}): RouterAdapterValue {
-  const Link = forwardRef<HTMLAnchorElement, AdapterLinkProps>((p, ref) => <a ref={ref} data-router="yes" {...p} />)
+function makeAdapter(patch: Partial<NavigationAdapter> = {}): NavigationAdapter {
+  const Link = forwardRef<HTMLAnchorElement, RouteAnchorProps>((p, ref) => <a ref={ref} data-router="yes" {...p} />)
   return {
     pathname: '/projects',
     navigate: vi.fn(),
@@ -19,7 +19,7 @@ function makeAdapter(patch: Partial<RouterAdapterValue> = {}): RouterAdapterValu
   }
 }
 
-const wrap = (adapter: RouterAdapterValue) =>
+const wrap = (adapter: NavigationAdapter) =>
   function W({ children }: { children: ReactNode }) {
     return <RouterAdapterProvider adapter={adapter}>{children}</RouterAdapterProvider>
   }
@@ -35,7 +35,7 @@ describe('RouterAdapter', () => {
   it('falls back to the browser path and a plain anchor', () => {
     const { result } = renderHook(() => ({ path: usePathname(), Link: useLink() }))
     expect(result.current.path).toBe(window.location.pathname)
-    expect(result.current.Link).toBe(PlainLink)
+    expect(result.current.Link).toBe(FallbackAnchor)
     const L = result.current.Link
     render(<L href="/a">A</L>)
     expect(screen.getByRole('link', { name: 'A' })).toHaveAttribute('href', '/a')
