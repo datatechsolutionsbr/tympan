@@ -26,10 +26,15 @@
     color: var(--fk-ink-3);
   }
 
+  /* CSS-only ring: a full faint circle with one solid quarter arc. */
   .fk-spinner__ring {
+    box-sizing: border-box;
     flex: none;
     inline-size: var(--fk-spinner-size);
     block-size: var(--fk-spinner-size);
+    border: max(2px, calc(var(--fk-spinner-size) / 9)) solid color-mix(in srgb, currentColor 25%, transparent);
+    border-block-start-color: currentColor;
+    border-radius: 50%;
     animation: fk-spinner-rotate 900ms linear infinite;
   }
 
@@ -117,6 +122,10 @@
     }
     .fk-spinner__dot {
       background: CanvasText;
+    }
+    .fk-spinner__ring {
+      border-color: GrayText;
+      border-block-start-color: CanvasText;
     }
     .fk-spinner-overlay__card {
       border-color: CanvasText;

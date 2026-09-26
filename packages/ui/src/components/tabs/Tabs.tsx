@@ -29,46 +29,49 @@ export interface TabsProps {
   className?: string
 }
 
-const KeepMountedContext = createContext(false)
+/** Panel policy shared with every TabPanel below one Tabs. */
+const PanelPolicy = createContext({ forceMount: false })
+
+function TabLabel({ item }: { item: TabItem }) {
+  const Glyph = item.icon
+  const counted = typeof item.count === 'number'
+  return (
+    <Tab id={item.id} className="fk-tabs__tab">
+      {Glyph && <Glyph className="fk-icon fk-tabs__icon" aria-hidden="true" focusable="false" />}
+      <span className="fk-tabs__label">{item.label}</span>
+      {counted && ' '}
+      {counted && <span className="fk-tabs__count">{item.count}</span>}
+    </Tab>
+  )
+}
+
+/** Only the selection props the host actually set are forwarded (RAC treats `undefined` as controlled). */
+function selectionOf(p: TabsProps): { selectedKey?: string; defaultSelectedKey?: string } {
+  const out: { selectedKey?: string; defaultSelectedKey?: string } = {}
+  if (p.selectedKey !== undefined) out.selectedKey = p.selectedKey
+  if (p.defaultSelectedKey !== undefined) out.defaultSelectedKey = p.defaultSelectedKey
+  return out
+}
 
 /** Sibling views of one object, one panel at a time (spec: wave-1/tabs.md). */
 export function Tabs(props: TabsProps) {
-  const {
-    label,
-    tabs,
-    selectedKey,
-    defaultSelectedKey,
-    onSelectionChange,
-    orientation = 'horizontal',
-    activation = 'automatic',
-    keepMounted = false,
-    children,
-    className,
-  } = props
-  const disabledKeys = tabs.filter((t) => t.disabled).map((t) => t.id)
+  const blocked = props.tabs.reduce<string[]>((acc, t) => (t.disabled ? [...acc, t.id] : acc), [])
+  const report = (key: Key) => props.onSelectionChange?.(`${key}`)
   return (
     <AriaTabs
-      className={cx('fk-tabs', className)}
-      orientation={orientation}
-      keyboardActivation={activation}
-      disabledKeys={disabledKeys}
-      {...(selectedKey !== undefined ? { selectedKey } : {})}
-      {...(defaultSelectedKey !== undefined ? { defaultSelectedKey } : {})}
-      onSelectionChange={(key: Key) => onSelectionChange?.(String(key))}
+      {...selectionOf(props)}
+      className={cx('fk-tabs', props.className)}
+      orientation={props.orientation ?? 'horizontal'}
+      keyboardActivation={props.activation ?? 'automatic'}
+      disabledKeys={blocked}
+      onSelectionChange={report}
     >
-      <TabList aria-label={label} className="fk-tabs__list">
-        {tabs.map((tab) => {
-          const Icon = tab.icon
-          return (
-            <Tab key={tab.id} id={tab.id} className="fk-tabs__tab">
-              {Icon ? <Icon className="fk-icon fk-tabs__icon" aria-hidden="true" focusable="false" /> : null}
-              <span className="fk-tabs__label">{tab.label}</span>
-              {tab.count !== undefined ? <> <span className="fk-tabs__count">{tab.count}</span></> : null}
-            </Tab>
-          )
-        })}
+      <TabList aria-label={props.label} className="fk-tabs__list">
+        {props.tabs.map((item) => (
+          <TabLabel key={item.id} item={item} />
+        ))}
       </TabList>
-      <KeepMountedContext.Provider value={keepMounted}>{children}</KeepMountedContext.Provider>
+      <PanelPolicy.Provider value={{ forceMount: props.keepMounted === true }}>{props.children}</PanelPolicy.Provider>
     </AriaTabs>
   )
 }
@@ -81,11 +84,11 @@ export interface TabPanelProps {
 }
 
 /** Content of one tab. */
-export function TabPanel({ id, children, className }: TabPanelProps) {
-  const keepMounted = useContext(KeepMountedContext)
+export function TabPanel(props: TabPanelProps) {
+  const policy = useContext(PanelPolicy)
   return (
-    <AriaTabPanel id={id} className={cx('fk-tabs__panel', className)} shouldForceMount={keepMounted}>
-      {children}
+    <AriaTabPanel id={props.id} shouldForceMount={policy.forceMount} className={cx('fk-tabs__panel', props.className)}>
+      {props.children}
     </AriaTabPanel>
   )
 }

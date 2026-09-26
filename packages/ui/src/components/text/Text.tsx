@@ -21,36 +21,51 @@ export interface TextProps extends Omit<HTMLAttributes<HTMLElement>, 'children'>
   children: ReactNode
 }
 
+type OwnKeys = 'size' | 'tone' | 'as' | 'measure' | 'truncate' | 'numeric' | 'children' | 'className' | 'style' | 'title'
+
+/** Number of visible lines requested by `truncate` (0 = no truncation). */
+function lineBudget(truncate: TextProps['truncate']): number {
+  if (typeof truncate === 'number') return truncate
+  return truncate === true ? 1 : 0
+}
+
+/** Everything the element carries besides its children, derived from the props in one place. */
+function presentation(props: TextProps) {
+  const lines = lineBudget(props.truncate)
+  const plain = ['string', 'number'].includes(typeof props.children) ? String(props.children) : undefined
+  const style: CSSProperties | undefined = lines < 2 ? props.style : { ...props.style, ['--fk-text-lines' as string]: `${lines}` }
+  const truncation = lines === 0 ? undefined : lines === 1 ? 'line' : 'clamp'
+  return {
+    className: cx('fk-text', props.className),
+    style,
+    title: props.title ?? (truncation ? plain : undefined),
+    'data-size': props.size ?? 'body',
+    'data-tone': props.tone ?? 'default',
+    'data-measure': props.measure && props.measure !== 'none' ? props.measure : undefined,
+    'data-truncate': truncation,
+    'data-numeric': props.numeric ? true : undefined,
+  }
+}
+
+function passthrough(props: TextProps): Omit<TextProps, OwnKeys> {
+  const out: Record<string, unknown> = { ...props }
+  for (const key of ['size', 'tone', 'as', 'measure', 'truncate', 'numeric', 'children', 'className', 'style', 'title'] satisfies OwnKeys[]) delete out[key]
+  return out
+}
+
 /** Running text in the type scale (spec: wave-1/text.md). */
-export const Text = forwardRef<HTMLElement, TextProps>(function Text(
-  { size = 'body', tone = 'default', as: Element = 'p', measure = 'none', truncate = false, numeric = false, className, style, title, children, ...rest },
-  ref,
-) {
-  const lines = typeof truncate === 'number' ? truncate : truncate ? 1 : 0
-  const fullText = typeof children === 'string' || typeof children === 'number' ? String(children) : undefined
-  const mergedStyle: CSSProperties | undefined =
-    lines > 1 ? { ...style, ['--fk-text-lines' as string]: String(lines) } : style
+export const Text = forwardRef<HTMLElement, TextProps>(function Text(props, ref) {
+  const Tag = props.as ?? 'p'
   return (
-    <Element
-      {...rest}
-      ref={ref as never}
-      className={cx('fk-text', className)}
-      style={mergedStyle}
-      title={title ?? (lines > 0 ? fullText : undefined)}
-      data-size={size}
-      data-tone={tone}
-      data-measure={measure !== 'none' ? measure : undefined}
-      data-truncate={lines === 1 ? 'line' : lines > 1 ? 'clamp' : undefined}
-      data-numeric={numeric || undefined}
-    >
-      {children}
-    </Element>
+    <Tag {...passthrough(props)} {...presentation(props)} ref={ref as never}>
+      {props.children}
+    </Tag>
   )
 })
 
 /** Inline emphasis with semantic importance. */
-export function Strong({ children, className }: { children: ReactNode; className?: string }) {
-  return <strong className={cx('fk-strong', className)}>{children}</strong>
+export function Strong(props: { children: ReactNode; className?: string }) {
+  return <strong className={cx('fk-strong', props.className)}>{props.children}</strong>
 }
 
 export interface CodeProps {
@@ -64,6 +79,6 @@ export interface CodeProps {
 }
 
 /** Inline monospace fragment for identifiers, keys and hashes. */
-export function Code({ children, className }: CodeProps) {
-  return <code className={cx('fk-code', className)}>{children}</code>
+export function Code(props: CodeProps) {
+  return <code className={cx('fk-code', props.className)}>{props.children}</code>
 }

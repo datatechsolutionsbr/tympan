@@ -21,29 +21,41 @@ export interface SectionHeadingProps {
   className?: string
 }
 
-/** Heads a section inside a page or a sheet (spec: wave-1/section-heading.md). */
-export function SectionHeading({ title, level = 2, subtitle, icon: Icon, trailing, children, id, truncate = false, className }: SectionHeadingProps) {
-  const generated = `fk-section-heading-${useId().replace(/:/g, '')}`
-  const headingId = id ?? generated
+/** Wraps an optional slot in its element, or renders nothing when the slot is empty. */
+function slot(content: ReactNode, part: string) {
+  return content == null ? null : <div className={`fk-section-heading__${part}`}>{content}</div>
+}
+
+function TitleBlock(p: { id: string; level: 2 | 3 | 4; title: string; subtitle?: string; clip: boolean }) {
   return (
-    <div className={cx('fk-section-heading', className)} data-level={level}>
+    <div className="fk-section-heading__text">
+      <AriaHeading level={p.level} id={p.id} className="fk-section-heading__title" data-truncate={p.clip || undefined} title={p.clip ? p.title : undefined}>
+        {p.title}
+      </AriaHeading>
+      {p.subtitle ? <p className="fk-section-heading__subtitle">{p.subtitle}</p> : null}
+    </div>
+  )
+}
+
+/** Heads a section inside a page or a sheet (spec: wave-1/section-heading.md). */
+export function SectionHeading(props: SectionHeadingProps) {
+  const auto = useId()
+  const level = props.level ?? 2
+  const Glyph = props.icon
+  return (
+    <div className={cx('fk-section-heading', props.className)} data-level={level}>
       <div className="fk-section-heading__row">
-        {Icon ? <Icon className="fk-icon fk-section-heading__icon" aria-hidden="true" focusable="false" /> : null}
-        <div className="fk-section-heading__text">
-          <AriaHeading
-            level={level}
-            id={headingId}
-            className="fk-section-heading__title"
-            data-truncate={truncate || undefined}
-            title={truncate ? title : undefined}
-          >
-            {title}
-          </AriaHeading>
-          {subtitle ? <p className="fk-section-heading__subtitle">{subtitle}</p> : null}
-        </div>
-        {trailing != null ? <div className="fk-section-heading__trailing">{trailing}</div> : null}
+        {Glyph ? <Glyph className="fk-icon fk-section-heading__icon" aria-hidden="true" focusable="false" /> : null}
+        <TitleBlock
+          id={props.id ?? `fk-section-heading-${auto.replace(/:/g, '')}`}
+          level={level}
+          title={props.title}
+          subtitle={props.subtitle}
+          clip={props.truncate === true}
+        />
+        {slot(props.trailing, 'trailing')}
       </div>
-      {children != null ? <div className="fk-section-heading__extra">{children}</div> : null}
+      {slot(props.children, 'extra')}
     </div>
   )
 }

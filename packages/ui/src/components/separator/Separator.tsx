@@ -15,25 +15,32 @@ export interface SeparatorProps {
   className?: string
 }
 
+const Stroke = () => <span className="fk-separator__line" aria-hidden="true" />
+
 /** Thin rule between groups of content (spec: wave-1/separator.md). */
-export function Separator({ orientation = 'horizontal', emphasis = 'regular', caption, semantic = false, spacing = 'regular', className }: SeparatorProps) {
-  const data = {
+export function Separator(props: SeparatorProps) {
+  const orientation = props.orientation ?? 'horizontal'
+  const shared = {
     'data-orientation': orientation,
-    'data-emphasis': emphasis,
-    'data-spacing': spacing,
+    'data-emphasis': props.emphasis ?? 'regular',
+    'data-spacing': props.spacing ?? 'regular',
   }
-  if (caption != null) {
-    // A captioned rule keeps the caption readable; the line parts are decorative.
+  const captioned = props.caption !== undefined && props.caption !== null
+
+  // Three renderings: captioned (text stays readable, strokes are decoration),
+  // semantic (separator role) and purely decorative.
+  if (captioned) {
     return (
-      <div className={cx('fk-separator', 'fk-separator--captioned', className)} {...data}>
-        <span className="fk-separator__line" aria-hidden="true" />
-        <span className="fk-separator__caption">{caption}</span>
-        <span className="fk-separator__line" aria-hidden="true" />
+      <div {...shared} className={cx('fk-separator', 'fk-separator--captioned', props.className)}>
+        <Stroke />
+        <span className="fk-separator__caption">{props.caption}</span>
+        <Stroke />
       </div>
     )
   }
-  if (semantic) {
-    return <AriaSeparator elementType="div" orientation={orientation} className={cx('fk-separator', className)} {...data} />
-  }
-  return <div aria-hidden="true" className={cx('fk-separator', className)} {...data} />
+  return props.semantic ? (
+    <AriaSeparator {...shared} elementType="div" orientation={orientation} className={cx('fk-separator', props.className)} />
+  ) : (
+    <div {...shared} className={cx('fk-separator', props.className)} aria-hidden="true" />
+  )
 }
