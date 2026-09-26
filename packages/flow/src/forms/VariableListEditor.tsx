@@ -1,11 +1,13 @@
-// VariableListEditor: a short ordered list of unique names (flow inputs,
-// outputs, aggregated values). Rows can be renamed in place; a trailing field
-// adds a name; a polite region says what was added or removed.
+// VariableListEditor: an ordered list of unique names (flow inputs, outputs,
+// aggregated values) edited in place. The rules and the typing state live in
+// nameListModel.ts; this file only lays out three parts: the caption, the
+// list of slots and the entry for a new name, plus one polite region.
 
-import { useId, useRef, useState, type KeyboardEvent, type RefObject } from 'react'
+import { Fragment, useId, useReducer, useRef, type KeyboardEvent, type ReactNode, type Ref } from 'react'
 import { Plus, X } from 'lucide-react'
 import { Button, TextField } from '@fakhir/design-system'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
+import { admit, EMPTY_ENTRY, focusTargetAfter, issueAt, nameListStep, replaceAt, withoutAt } from './nameListModel'
 
 export type VariableListTone = 'input' | 'output' | 'aggregate' | 'terminal' | 'neutral'
 
@@ -79,163 +81,199 @@ export interface VariableListEditorProps {
   labels?: Partial<VariableListEditorLabels>
 }
 
-/** Tone → categorical token name for the marker only (decorative). */
-const MARKER_TONE: Record<VariableListTone, string> = {
-  input: 'categorical-3',
-  output: 'categorical-1',
-  aggregate: 'categorical-8',
-  terminal: 'categorical-6',
+/** Marker colour per role (decorative; the name carries the meaning). */
+const ROLE_SWATCH: Readonly<Record<VariableListTone, string>> = {
   neutral: 'neutral',
+  input: 'categorical-3',
+  aggregate: 'categorical-8',
+  output: 'categorical-1',
+  terminal: 'categorical-6',
 }
 
-type Focusable = HTMLButtonElement | HTMLAnchorElement | null
+type RemoveHandle = HTMLButtonElement | HTMLAnchorElement | null
 
-/** What is wrong with row `i`, if anything: a blank name or a repeat of an earlier row. */
-function rowProblem(names: readonly string[], i: number): 'blank' | 'duplicate' | null {
-  const name = names[i] ?? ''
-  if (!name.trim()) return 'blank'
-  return names.indexOf(name) === i ? null : 'duplicate'
-}
-
-/** After removing row `gone` from a list that now has `left` rows: the index whose remove button takes focus, or -1 for the add field. */
-function focusAfterRemoval(gone: number, left: number): number {
-  if (gone < left) return gone
-  return gone > 0 ? gone - 1 : -1
-}
-
-interface RowProps {
-  index: number
-  name: string
-  names: readonly string[]
+interface SlotContext {
+  list: readonly string[]
   numbered: boolean
   editable: boolean
-  removable: boolean
+  canRemove: boolean
   locale: string
-  l: VariableListEditorLabels
-  buttons: RefObject<Focusable[]>
-  onRename: (index: number, name: string) => void
-  onRemove: (index: number) => void
+  text: VariableListEditorLabels
+  keepHandle: (position: number, el: RemoveHandle) => void
+  rename: (position: number, name: string) => void
+  remove: (position: number) => void
 }
 
-function NameRow({ index, name, names, numbered, editable, removable, locale, l, buttons, onRename, onRemove }: RowProps) {
-  const problem = editable ? rowProblem(names, index) : null
+function slotMarker(ctx: SlotContext, position: number): ReactNode {
   return (
-    <li className="fk-var-list__row">
-      <span className="fk-var-list__marker" aria-hidden={numbered ? undefined : true} data-numbered={numbered || undefined}>
-        {numbered ? new Intl.NumberFormat(locale).format(index + 1) : ''}
+    <span className="fk-var-list__marker" aria-hidden={ctx.numbered ? undefined : true} data-numbered={ctx.numbered || undefined}>
+      {ctx.numbered ? new Intl.NumberFormat(ctx.locale).format(position + 1) : ''}
+    </span>
+  )
+}
+
+function slotName(ctx: SlotContext, position: number, name: string): ReactNode {
+  if (!ctx.editable) {
+    return (
+      <span className="fk-var-list__name fk-mono fk-ltr-text" dir="ltr">
+        {name}
       </span>
-      {editable ? (
-        <TextField
-          className="fk-var-list__name-field"
-          accessibleLabel={fill(l.rowField, { n: index + 1 }, locale)}
-          value={name}
-          onChange={(v) => onRename(index, v)}
-          {...(problem ? { errorMessage: problem === 'blank' ? l.blank : l.duplicate } : {})}
-        />
-      ) : (
-        <span className="fk-var-list__name fk-mono fk-ltr-text" dir="ltr">
-          {name}
-        </span>
-      )}
-      {removable && (
-        <Button
-          ref={(el) => {
-            buttons.current[index] = el
-          }}
-          variant="quiet"
-          size="compact"
-          shape="circle"
-          iconOnly
-          accessibleLabel={fill(l.remove, { name }, locale)}
-          leadingIcon={<X />}
-          onPress={() => onRemove(index)}
-        />
-      )}
-    </li>
+    )
+  }
+  const issue = issueAt(ctx.list, position)
+  const message = issue === 'blank' ? ctx.text.blank : issue === 'duplicate' ? ctx.text.duplicate : null
+  return (
+    <TextField
+      className="fk-var-list__name-field"
+      accessibleLabel={fill(ctx.text.rowField, { n: position + 1 }, ctx.locale)}
+      value={name}
+      onChange={(v) => ctx.rename(position, v)}
+      {...(message ? { errorMessage: message } : {})}
+    />
+  )
+}
+
+function slotRemove(ctx: SlotContext, position: number, name: string): ReactNode {
+  if (!ctx.canRemove) return null
+  return (
+    <Button
+      ref={(el) => ctx.keepHandle(position, el)}
+      variant="quiet"
+      size="compact"
+      shape="circle"
+      iconOnly
+      accessibleLabel={fill(ctx.text.remove, { name }, ctx.locale)}
+      leadingIcon={<X />}
+      onPress={() => ctx.remove(position)}
+    />
+  )
+}
+
+/** The parts of one row, in order; each is a function of the row. */
+const SLOT_PARTS = [
+  (ctx: SlotContext, position: number) => slotMarker(ctx, position),
+  (ctx: SlotContext, position: number, name: string) => slotName(ctx, position, name),
+  (ctx: SlotContext, position: number, name: string) => slotRemove(ctx, position, name),
+] as const
+
+interface EntryProps {
+  draft: string
+  complaint: string | null
+  fieldLabel: string
+  placeholder: string
+  buttonText: string
+  fieldRef: Ref<HTMLInputElement>
+  onType: (text: string) => void
+  onCommit: () => void
+}
+
+function NewNameEntry(p: EntryProps) {
+  const commitOnEnter = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' && (e.target as HTMLElement).tagName === 'INPUT') {
+      e.preventDefault()
+      p.onCommit()
+    }
+  }
+  return (
+    <div className="fk-var-list__add" onKeyDown={commitOnEnter}>
+      <TextField ref={p.fieldRef} accessibleLabel={p.fieldLabel} placeholder={p.placeholder} value={p.draft} onChange={p.onType} {...(p.complaint ? { errorMessage: p.complaint } : {})} />
+      <Button variant="secondary" leadingIcon={<Plus />} disabled={p.draft.trim() === ''} onPress={p.onCommit}>
+        {p.buttonText}
+      </Button>
+    </div>
   )
 }
 
 export function VariableListEditor(props: VariableListEditorProps) {
-  const { value: names, onChange, label, tone = 'input', numbered = false, editable = false, max = 0, readOnly = false } = props
-  const l = useLabels(variableListEditorLabels, props.labels)
+  const text = useLabels(variableListEditorLabels, props.labels)
   const { locale } = useFlowLocale()
-  const titleId = useId()
-  const [typed, setTyped] = useState('')
-  const [complaint, setComplaint] = useState<string | null>(null)
-  const [said, setSaid] = useState('')
-  const field = useRef<HTMLInputElement>(null)
-  const buttons = useRef<Focusable[]>([])
-  const open = !readOnly && !(max > 0 && names.length >= max)
+  const captionId = useId()
+  const [entry, dispatch] = useReducer(nameListStep, EMPTY_ENTRY)
+  const entryField = useRef<HTMLInputElement>(null)
+  const handles = useRef(new Map<number, RemoveHandle>())
 
-  const append = () => {
-    const name = typed.trim()
-    if (!name) return
-    if (names.includes(name)) return setComplaint(l.duplicate)
-    onChange([...names, name])
-    setTyped('')
-    setComplaint(null)
-    setSaid(fill(l.added, { name }, locale))
-    field.current?.focus()
+  const list = props.value
+  const limit = props.max ?? 0
+  const accepting = !props.readOnly && (limit <= 0 || list.length < limit)
+
+  const commit = () => {
+    const verdict = admit(list, entry.draft)
+    if (verdict.kind === 'empty') return
+    if (verdict.kind === 'taken') {
+      dispatch({ type: 'refused' })
+      return
+    }
+    props.onChange(verdict.next)
+    dispatch({ type: 'accepted', name: verdict.name })
+    entryField.current?.focus()
   }
 
-  const drop = (index: number) => {
-    const rest = names.filter((_, i) => i !== index)
-    onChange(rest)
-    setSaid(fill(l.removed, { name: names[index]! }, locale))
-    const next = focusAfterRemoval(index, rest.length)
-    requestAnimationFrame(() => {
-      const target = next >= 0 ? buttons.current[next] : null
-      if (target?.isConnected) target.focus()
-      else field.current?.focus()
-    })
+  const ctx: SlotContext = {
+    list,
+    numbered: props.numbered ?? false,
+    editable: props.editable ?? false,
+    canRemove: !props.readOnly,
+    locale,
+    text,
+    keepHandle: (position, el) => {
+      if (el) handles.current.set(position, el)
+      else handles.current.delete(position)
+    },
+    rename: (position, name) => props.onChange(replaceAt(list, position, name)),
+    remove: (position) => {
+      const rest = withoutAt(list, position)
+      props.onChange(rest)
+      dispatch({ type: 'dropped', name: list[position]! })
+      const target = focusTargetAfter(position, rest.length)
+      requestAnimationFrame(() => {
+        const handle = target >= 0 ? handles.current.get(target) : null
+        ;(handle?.isConnected ? handle : entryField.current)?.focus()
+      })
+    },
   }
 
-  const rename = (index: number, name: string) => onChange(names.map((n, i) => (i === index ? name : n)))
+  const spoken = entry.spoken ? fill(entry.spoken.kind === 'added' ? text.added : text.removed, { name: entry.spoken.name }, locale) : ''
+  const caption = props.label ? (
+    <span id={captionId} className="fk-var-list__label">
+      {props.label}
+    </span>
+  ) : null
 
-  const enterAdds = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.key !== 'Enter' || (e.target as HTMLElement).tagName !== 'INPUT') return
-    e.preventDefault()
-    append()
+  let listing: ReactNode = null
+  if (list.length) {
+    listing = (
+      <ul className="fk-var-list__rows" role="list" aria-labelledby={props.label ? captionId : undefined}>
+        {list.map((name, position) => (
+          <li key={position} className="fk-var-list__row">
+            {SLOT_PARTS.map((part, i) => (
+              <Fragment key={i}>{part(ctx, position, name)}</Fragment>
+            ))}
+          </li>
+        ))}
+      </ul>
+    )
+  } else if (!accepting) {
+    listing = <p className="fk-var-list__empty">{text.empty}</p>
   }
-
-  const rows = names.map((name, index) => (
-    <NameRow key={index} index={index} name={name} names={names} numbered={numbered} editable={editable} removable={!readOnly} locale={locale} l={l} buttons={buttons} onRename={rename} onRemove={drop} />
-  ))
 
   return (
-    <div className="fk-var-list" data-tone={MARKER_TONE[tone]}>
-      {label && (
-        <span id={titleId} className="fk-var-list__label">
-          {label}
-        </span>
-      )}
-      {rows.length > 0 ? (
-        <ul className="fk-var-list__rows" role="list" aria-labelledby={label ? titleId : undefined}>
-          {rows}
-        </ul>
-      ) : (
-        !open && <p className="fk-var-list__empty">{l.empty}</p>
-      )}
-      {open && (
-        <div className="fk-var-list__add" onKeyDown={enterAdds}>
-          <TextField
-            ref={field}
-            accessibleLabel={l.addField}
-            placeholder={props.placeholder ?? l.placeholder}
-            value={typed}
-            onChange={(v) => {
-              setTyped(v)
-              setComplaint(null)
-            }}
-            {...(complaint ? { errorMessage: complaint } : {})}
-          />
-          <Button variant="secondary" leadingIcon={<Plus />} disabled={!typed.trim()} onPress={append}>
-            {props.addLabel ?? l.add}
-          </Button>
-        </div>
-      )}
+    <div className="fk-var-list" data-tone={ROLE_SWATCH[props.tone ?? 'input']}>
+      {caption}
+      {listing}
+      {accepting ? (
+        <NewNameEntry
+          draft={entry.draft}
+          complaint={entry.complaint ? text.duplicate : null}
+          fieldLabel={text.addField}
+          placeholder={props.placeholder ?? text.placeholder}
+          buttonText={props.addLabel ?? text.add}
+          fieldRef={entryField}
+          onType={(t) => dispatch({ type: 'typed', text: t })}
+          onCommit={commit}
+        />
+      ) : null}
       <p className="fk-visually-hidden" role="status" aria-live="polite">
-        {said}
+        {spoken}
       </p>
     </div>
   )

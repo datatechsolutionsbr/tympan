@@ -1,14 +1,16 @@
-// RunRewindDialog: starts a corrected run from a finished step of an earlier
-// one. Recorded outputs up to and including the chosen step are reused;
-// every later step runs again. Only finished steps can be chosen.
+// RunRewindDialog: the dialog around rewindPlan.ts. It asks for the last
+// step to keep and an optional reason, previews what is reused and what runs
+// again, and sends the fork request. The rules live in rewindPlan.ts.
 
-import { useEffect, useReducer, type ComponentType, type SVGProps } from 'react'
-import { History, RotateCw } from 'lucide-react'
+import type { ReactNode } from 'react'
+import { History, RotateCw, type LucideIcon } from 'lucide-react'
 import { Button, InlineNotice, NativeSelect, TextField } from '@fakhir/design-system'
 import { SectionedModal } from '../internal/SectionedModal'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
-import { normaliseStatus } from './lineage'
+import { useRewindPlan, type RewindNode } from './rewindPlan'
 import { ShortId } from './ShortId'
+
+export { splitAtCut, canCutAt, type RewindNode } from './rewindPlan'
 
 export interface RunRewindDialogLabels {
   title: string
@@ -79,12 +81,6 @@ export const runRewindDialogLabels = defineLabels<RunRewindDialogLabels>('run-re
 })
 export const defaultRunRewindDialogLabels: RunRewindDialogLabels = runRewindDialogLabels.bundles.en
 
-export interface RewindNode {
-  nodeId: string
-  nodeKind: string
-  status: string
-}
-
 export interface RunRewindDialogProps {
   open: boolean
   onClose: () => void
@@ -95,134 +91,107 @@ export interface RunRewindDialogProps {
   labels?: Partial<RunRewindDialogLabels>
 }
 
-const finished = (step: RewindNode) => normaliseStatus(step.status) === 'completed'
+/** The two preview columns, described once and drawn the same way. */
+const PREVIEW_COLUMNS: ReadonlyArray<{ id: string; icon: LucideIcon; heading: 'keptHeading' | 'rerunHeading'; pick: 'kept' | 'rerun' }> = [
+  { id: 'fk-rewind-kept', icon: History, heading: 'keptHeading', pick: 'kept' },
+  { id: 'fk-rewind-rerun', icon: RotateCw, heading: 'rerunHeading', pick: 'rerun' },
+]
 
-/** Reused = finished steps at or before the chosen step; again = every step after it, whatever its state. */
-export function splitAtCut(steps: readonly RewindNode[], cut: string | null): { kept: RewindNode[]; rerun: RewindNode[] } {
-  const position = steps.findIndex((s) => s.nodeId === cut)
-  return position < 0 ? { kept: [], rerun: [...steps] } : { kept: steps.slice(0, position + 1).filter(finished), rerun: steps.slice(position + 1) }
-}
-
-interface Plan {
-  cut: string | null
-  note: string
-  sending: boolean
-  failure: string | null
-  /** Counts sentence for the polite region, set when the person changes the cut. */
-  spoken: string
-}
-
-type PlanChange = Partial<Plan>
-const revise = (plan: Plan, change: PlanChange): Plan => ({ ...plan, ...change })
-const FRESH: Plan = { cut: null, note: '', sending: false, failure: null, spoken: '' }
-
-function StepGroup({ id, heading, Icon, steps, emptyWord }: { id: string; heading: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; steps: RewindNode[]; emptyWord: string }) {
+function stepLines(steps: readonly RewindNode[], labelledBy: string, emptyWord: string): ReactNode {
+  if (!steps.length) return <p className="fk-run-hint">{emptyWord}</p>
   return (
-    <section className="fk-run-rewind__list" aria-labelledby={id}>
-      <h3 id={id} className="fk-run-section__title">
-        <Icon aria-hidden="true" focusable="false" className="fk-run-rewind__icon" />
-        {heading}
-      </h3>
-      {steps.length === 0 ? (
-        <p className="fk-run-hint">{emptyWord}</p>
-      ) : (
-        <ul aria-labelledby={id} className="fk-run-rewind__items">
-          {steps.map((s) => (
-            <li key={s.nodeId}>
-              <code className="fk-run-mono">{s.nodeId}</code> <span className="fk-run-row__kind">{s.nodeKind}</span>
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
+    <ul aria-labelledby={labelledBy} className="fk-run-rewind__items">
+      {steps.map(({ nodeId, nodeKind }) => (
+        <li key={nodeId}>
+          <code className="fk-run-mono">{nodeId}</code> <span className="fk-run-row__kind">{nodeKind}</span>
+        </li>
+      ))}
+    </ul>
   )
 }
 
-export function RunRewindDialog({ open, onClose, runId, nodes, initialNodeId, onRewind, labels }: RunRewindDialogProps) {
-  const l = useLabels(runRewindDialogLabels, labels)
+export function RunRewindDialog(props: RunRewindDialogProps) {
+  const text = useLabels(runRewindDialogLabels, props.labels)
   const { locale } = useFlowLocale()
-  const choosable = nodes.filter(finished)
-  const [plan, change] = useReducer(revise, FRESH)
+  const { eligible, draft, act, split, moveCut } = useRewindPlan(props.open, props.nodes, props.initialNodeId)
+  const sending = draft.phase.name === 'sending'
+  const nothingToKeep = eligible.length === 0
 
-  // Every opening starts over, at the requested step when it can be chosen.
-  useEffect(() => {
-    if (!open) return
-    const wanted = choosable.find((s) => s.nodeId === initialNodeId) ?? choosable[0]
-    change({ ...FRESH, cut: wanted?.nodeId ?? null })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open])
-
-  const { kept, rerun } = splitAtCut(nodes, plan.cut)
-
-  const pick = (cut: string) => {
-    const preview = splitAtCut(nodes, cut)
-    change({ cut, spoken: fill(l.counts, { kept: preview.kept.length, rerun: preview.rerun.length }, locale) })
-  }
-
-  const go = async () => {
-    if (!plan.cut) return
-    change({ sending: true, failure: null })
-    const note = plan.note.trim()
+  const submit = async () => {
+    const cut = draft.cut
+    if (!cut) return
+    const reason = draft.reason.trim()
+    act({ kind: 'send' })
     try {
-      await onRewind(note ? { resetToNode: plan.cut, reason: note } : { resetToNode: plan.cut })
-      change({ sending: false })
-      onClose()
-    } catch (why) {
-      change({ sending: false, failure: why instanceof Error ? why.message : String(why) })
+      await props.onRewind(reason ? { resetToNode: cut, reason } : { resetToNode: cut })
+      act({ kind: 'sent' })
+      props.onClose()
+    } catch (problem) {
+      act({ kind: 'fail', message: problem instanceof Error ? problem.message : String(problem) })
     }
   }
 
-  const body =
-    choosable.length === 0 ? (
-      <InlineNotice tone="warning">{l.noEligible}</InlineNotice>
-    ) : (
-      <div className="fk-run-form">
-        {plan.failure && (
-          <InlineNotice tone="danger" urgency="assertive">
-            {plan.failure}
-          </InlineNotice>
-        )}
-        <NativeSelect label={l.picker} options={choosable.map((s) => ({ value: s.nodeId, label: `${s.nodeId}, ${s.nodeKind}` }))} value={plan.cut ?? ''} onChange={pick} />
-        <TextField label={l.reason} placeholder={l.reasonPlaceholder} value={plan.note} onChange={(note) => change({ note })} />
-        <div className="fk-run-rewind__preview">
-          <StepGroup id="fk-rewind-kept" heading={fill(l.keptHeading, { count: kept.length }, locale)} Icon={History} steps={kept} emptyWord={l.none} />
-          <StepGroup id="fk-rewind-rerun" heading={fill(l.rerunHeading, { count: rerun.length }, locale)} Icon={RotateCw} steps={rerun} emptyWord={l.none} />
-        </div>
-        <p className="fk-visually-hidden" role="status" aria-live="polite">
-          {plan.spoken}
-        </p>
-      </div>
+  const preview = PREVIEW_COLUMNS.map((col) => {
+    const steps = split[col.pick]
+    const Icon = col.icon
+    return (
+      <section key={col.id} className="fk-run-rewind__list" aria-labelledby={col.id}>
+        <h3 id={col.id} className="fk-run-section__title">
+          <Icon aria-hidden="true" focusable="false" className="fk-run-rewind__icon" />
+          {fill(text[col.heading], { count: steps.length }, locale)}
+        </h3>
+        {stepLines(steps, col.id, text.none)}
+      </section>
     )
+  })
+
+  const form = (
+    <div className="fk-run-form">
+      {draft.phase.name === 'failed' ? (
+        <InlineNotice tone="danger" urgency="assertive">
+          {draft.phase.message}
+        </InlineNotice>
+      ) : null}
+      <NativeSelect label={text.picker} options={eligible.map((s) => ({ value: s.nodeId, label: `${s.nodeId}, ${s.nodeKind}` }))} value={draft.cut ?? ''} onChange={moveCut} />
+      <TextField label={text.reason} placeholder={text.reasonPlaceholder} value={draft.reason} onChange={(t) => act({ kind: 'reason', text: t })} />
+      <div className="fk-run-rewind__preview">{preview}</div>
+      <p className="fk-visually-hidden" role="status" aria-live="polite">
+        {draft.echo ? fill(text.counts, draft.echo, locale) : ''}
+      </p>
+    </div>
+  )
+
+  const footer = (
+    <div className="fk-run-dialog-footer">
+      <span className="fk-run-dialog-footer__ids">
+        <ShortId id={props.runId} label={text.run} />
+      </span>
+      <Button variant="quiet" onPress={props.onClose} disabled={sending}>
+        {text.cancel}
+      </Button>
+      {nothingToKeep ? null : (
+        <Button variant="primary" onPress={() => void submit()} disabled={!draft.cut} busy={sending} busyLabel={text.confirming}>
+          {text.confirm}
+        </Button>
+      )}
+    </div>
+  )
 
   return (
     <SectionedModal
-      isOpen={open}
-      onOpenChange={(stillOpen) => {
-        if (!stillOpen && !plan.sending) onClose()
+      isOpen={props.open}
+      onOpenChange={(stays) => {
+        if (!stays && !sending) props.onClose()
       }}
-      title={l.title}
-      subtitle={l.subtitle}
+      title={text.title}
+      subtitle={text.subtitle}
       tone="warning"
       width="wide"
-      busy={plan.sending}
+      busy={sending}
       className="fk-run-rewind"
-      footer={
-        <div className="fk-run-dialog-footer">
-          <span className="fk-run-dialog-footer__ids">
-            <ShortId id={runId} label={l.run} />
-          </span>
-          <Button variant="quiet" onPress={onClose} disabled={plan.sending}>
-            {l.cancel}
-          </Button>
-          {choosable.length > 0 && (
-            <Button variant="primary" onPress={() => void go()} disabled={!plan.cut} busy={plan.sending} busyLabel={l.confirming}>
-              {l.confirm}
-            </Button>
-          )}
-        </div>
-      }
+      footer={footer}
     >
-      {body}
+      {nothingToKeep ? <InlineNotice tone="warning">{text.noEligible}</InlineNotice> : form}
     </SectionedModal>
   )
 }
