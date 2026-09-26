@@ -5,8 +5,9 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    inline-size: var(--fk-evidence-width, 420px);
-    min-inline-size: 340px;
+    /* Never wider than the space it is docked in (a split pane, the aside slot). */
+    inline-size: min(var(--fk-evidence-width, 420px), 100%);
+    min-inline-size: min(340px, 100%);
     max-inline-size: 420px;
     block-size: 100%;
     min-block-size: 0;

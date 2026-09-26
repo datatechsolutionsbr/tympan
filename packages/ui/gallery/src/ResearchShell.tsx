@@ -113,7 +113,7 @@ function Account() {
   return (
     <div className="fk-demo-account">
       <div className="fk-demo-account__who">
-        <ProfileAvatar name="Natalia Mesquita" decorative />
+        <ProfileAvatar name="Natalia Mesquita" size="sm" decorative />
         <span className="fk-demo-account__name">
           <strong>Natalia Mesquita</strong>
           <span>Owner</span>

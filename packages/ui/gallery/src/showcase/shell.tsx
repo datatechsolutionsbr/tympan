@@ -22,8 +22,7 @@ const now = new Date('2026-09-26T12:00:00Z')
 
 export function ShellShowcase({ scope }: { scope: string }) {
   const id = (s: string) => `${scope}-${s}`
-  const [split, setSplit] = useState(320)
-  const [width, setWidth] = useState(380)
+  const [split, setSplit] = useState(380)
   return (
     <div className="fk-gallery-showcase">
       <Section id={id('page-header-editorial')} title="PageHeader (editorial variant)">
@@ -147,8 +146,8 @@ export function ShellShowcase({ scope }: { scope: string }) {
             label={`Resize the evidence ${scope}`}
             size={split}
             onSizeChange={setSplit}
-            min={240}
-            max={480}
+            min={340}
+            max={420}
             stackBelow={640}
             primary={
               <div className="fk-gallery-stack">
@@ -165,8 +164,6 @@ export function ShellShowcase({ scope }: { scope: string }) {
                 open
                 placement="docked"
                 onOpenChange={() => undefined}
-                width={width}
-                onWidthChange={setWidth}
                 proof={{ state: 'proved', provedBy: 'Reviewer B', at: '23 Sep 2026', rule: 'compile@1' }}
               >
                 <Text>“…completes services on a platform of more than 900 services.”</Text>

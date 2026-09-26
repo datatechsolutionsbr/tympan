@@ -38,7 +38,8 @@
     content: '';
     position: absolute;
     inset-block-start: 50%;
-    inset-inline-start: 50%;
+    /* physical: centring pairs with the physical translate below */
+    left: 50%;
     inline-size: max(100%, var(--fk-control-target));
     block-size: max(100%, var(--fk-control-target));
     transform: translate(-50%, -50%);

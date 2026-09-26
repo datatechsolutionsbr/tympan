@@ -51,7 +51,7 @@ No fork or commercial template material was used for any row.
 
 Foundations: `ThemeProvider`/`useTheme`/`themeInitScript` (5 tests),
 `variants()` (2 tests), token contract (40 tests: every `var(--fk-*)` read by
-a stylesheet exists). Total: 424 tests in the design system, 24 in the tokens
+a stylesheet exists). Total at the end of wave 1: 424 tests in the design system, 24 in the tokens
 package.
 
 ## Waves 2 and 4 (branch `ds/wave-2`)
@@ -234,6 +234,8 @@ At the coordinator's request (outside similarity audit), Spinner (now a CSS-only
 - **Copy**: one catalogue per group (`src/internal/messages/<group>.ts`) merged into `Messages`; `messagesPtBR`, `messagesEs` and English ship as defaults, `catalogueForLocale()` picks one from the provider's locale, `icuMessages` accepts ICU MessageFormat strings (function keys take `{0}`, `{1}` positionally) and `pseudo` pseudo-localizes every string.
 - **Right to left**: layout CSS is logical only (`check:logical-css`); directional glyphs carry `fk-mirror-rtl`; every gallery page renders and passes axe in Arabic (`test/i18n-rtl.test.tsx`).
 - **Scripts**: `@fakhir/tokens` emits `:lang()` blocks that put the script's Noto family first, relax line heights, drop tracking where it breaks joining and set CJK/Thai line breaking.
+- **Retrofit for languages** (after the first pass): Spanish catalogues for every group, counts and plurals through `Intl.PluralRules`, locale digits everywhere (including typed input in CurrencyField and TimeField), Unicode-aware CommandPalette matching, script-preserving slugs in LegalDocumentFrame, charts running in the reading direction, and one right-to-left test per component (`test/rtl.tsx`, `test/rtl-b.tsx` helpers).
+- **Totals on `ds/wave-2`**: 1621 tests in the design system (198 files), 25 in the tokens package.
 - **Dependencies added**: `react-aria` (hooks), `@internationalized/date`, `d3-geo` (see THIRD_PARTY_NOTICES.md).
 
 ## Ambiguities resolved (summary)
