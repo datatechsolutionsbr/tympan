@@ -2,11 +2,28 @@
 // this catalogue through `useMessages()`, and hosts override any entry through
 // `<FakhirProvider messages={…}>` (for example from their own i18n adapter).
 
+import { formsAEn, formsAEs, formsAPtBR, type FormsAMessages } from './messages/forms-a'
+import { formsBEn, formsBEs, formsBPtBR, type FormsBMessages } from './messages/forms-b'
+import { overlaysNavEn, overlaysNavEs, overlaysNavPtBR, type OverlaysNavMessages } from './messages/overlays-nav'
+import { dataAEn, dataAEs, dataAPtBR, type DataAMessages } from './messages/data-a'
+import { dataBEn, dataBEs, dataBPtBR, type DataBMessages } from './messages/data-b'
+import { chartsGeoEn, chartsGeoEs, chartsGeoPtBR, type ChartsGeoMessages } from './messages/charts-geo'
+import { authBrandEn, authBrandEs, authBrandPtBR, type AuthBrandMessages } from './messages/auth-brand'
+import { platformEn, platformEs, platformPtBR, type PlatformMessages } from './messages/platform'
+import { showcaseEn, showcaseEs, showcasePtBR, type ShowcaseMessages } from './messages/showcase'
+import { shellEn, shellEs, shellPtBR, type ShellMessages } from './messages/shell'
+import { coreEs } from './messages/core-es'
+
 export type ProofStateKey = 'proved' | 'pending' | 'refuted' | 'not_disclosed' | 'none'
 export type ErrorKind = 'generic' | 'network' | 'server' | 'permission' | 'not-found' | 'conflict'
 export type EmptyReason = 'no-data' | 'no-results' | 'offline'
 
-export interface Messages {
+/** Group catalogues of waves 2 and 4 (see ./messages/). */
+export type GroupMessages = FormsAMessages & FormsBMessages & OverlaysNavMessages & DataAMessages & DataBMessages & ChartsGeoMessages & AuthBrandMessages & PlatformMessages & ShowcaseMessages & ShellMessages
+
+/** Wave 1 copy plus one interface per wave 2/4 group (see ./messages/). */
+export interface Messages
+  extends FormsAMessages, FormsBMessages, OverlaysNavMessages, DataAMessages, DataBMessages, ChartsGeoMessages, AuthBrandMessages, PlatformMessages, ShowcaseMessages, ShellMessages {
   close: string
   dismiss: string
   loading: string
@@ -69,6 +86,16 @@ export interface Messages {
 }
 
 export const defaultMessages: Messages = {
+  ...formsAEn,
+  ...formsBEn,
+  ...overlaysNavEn,
+  ...dataAEn,
+  ...dataBEn,
+  ...chartsGeoEn,
+  ...authBrandEn,
+  ...platformEn,
+  ...showcaseEn,
+  ...shellEn,
   close: 'Close',
   dismiss: 'Dismiss',
   loading: 'Loading',
@@ -158,6 +185,16 @@ export const defaultMessages: Messages = {
 
 /** Portuguese (Brazil) catalogue, the platform's first language. */
 export const messagesPtBR: Messages = {
+  ...formsAPtBR,
+  ...formsBPtBR,
+  ...overlaysNavPtBR,
+  ...dataAPtBR,
+  ...dataBPtBR,
+  ...chartsGeoPtBR,
+  ...authBrandPtBR,
+  ...platformPtBR,
+  ...showcasePtBR,
+  ...shellPtBR,
   close: 'Fechar',
   dismiss: 'Dispensar',
   loading: 'Carregando',
@@ -243,6 +280,32 @@ export const messagesPtBR: Messages = {
     rule: (rule) => `regra ${rule}`,
   },
   actor: { person: 'pessoa', agent: 'agente', system: 'sistema' },
+}
+
+export const messagesEs: Messages = {
+  ...formsAEs,
+  ...formsBEs,
+  ...overlaysNavEs,
+  ...dataAEs,
+  ...dataBEs,
+  ...chartsGeoEs,
+  ...authBrandEs,
+  ...platformEs,
+  ...showcaseEs,
+  ...shellEs,
+  ...coreEs,
+}
+
+/** The wave-1 part of the catalogue (the keys not owned by a group). */
+export type CoreMessages = Omit<Messages, keyof GroupMessages>
+
+/** Catalogues shipped as defaults. Other locales fall back to English copy with locale-aware formatting. */
+export const shippedCatalogues = { en: defaultMessages, 'pt-BR': messagesPtBR, es: messagesEs } as const
+
+/** Default catalogue for a BCP 47 locale: Portuguese and Spanish by language subtag, English otherwise. */
+export function catalogueForLocale(locale: string | undefined): Messages {
+  const language = (locale ?? 'en').toLowerCase().split(/[-_]/)[0]
+  return language === 'pt' ? messagesPtBR : language === 'es' ? messagesEs : defaultMessages
 }
 
 type DeepPartial<T> = { [K in keyof T]?: T[K] extends (...args: never[]) => unknown ? T[K] : T[K] extends object ? DeepPartial<T[K]> : T[K] }

@@ -42,10 +42,14 @@
   },
   "dependencies": {
     "@fakhir/tokens": "0.1.0",
+    "@internationalized/date": "^3.12.4",
+    "d3-geo": "^3.1.1",
     "lucide-react": "^1.48.0",
+    "react-aria": "^3.52.1",
     "react-aria-components": "^1.21.1"
   },
   "devDependencies": {
+    "@types/d3-geo": "^3.1.1",
     "axe-core": "^4.13.0"
   }
 }

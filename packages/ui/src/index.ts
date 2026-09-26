@@ -2,7 +2,8 @@
 
 // Foundations
 export { FakhirProvider, useMessages, type FakhirProviderProps, type RouterNavigateOptions } from './internal/provider'
-export { defaultMessages, messagesPtBR, mergeMessages, type Messages, type MessageOverrides, type ProofStateKey } from './internal/messages'
+export { catalogueForLocale, defaultMessages, messagesEs, messagesPtBR, mergeMessages, shippedCatalogues, type Messages, type MessageOverrides, type ProofStateKey } from './internal/messages'
+export { compileIcuMessages, pseudoLocalize, pseudoString, type IcuCatalogue } from './internal/icuCatalogue'
 export { ThemeProvider, useTheme, themeInitScript, type ThemeProviderProps, type ThemeState, type ThemeMode, type ThemeDensity } from './internal/theme'
 export { ThemeScope, type ThemeScopeProps } from './internal/ThemeScope'
 export { VisuallyHidden } from './internal/VisuallyHidden'
@@ -50,3 +51,15 @@ export * from './components/text-area/TextArea'
 export * from './components/text-field/TextField'
 export * from './components/text/Text'
 export * from './components/toast/Toast'
+
+// Wave 2 and wave 4 (one barrel per group)
+export * from './groups/forms-a'
+export * from './groups/forms-b'
+export * from './groups/overlays-nav'
+export * from './groups/data-a'
+export * from './groups/data-b'
+export * from './groups/charts-geo'
+export * from './groups/auth-brand'
+export * from './groups/platform'
+export * from './groups/showcase'
+export * from './groups/shell'

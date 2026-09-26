@@ -35,4 +35,15 @@
     height: 1.15em;
     pointer-events: none;
   }
+
+  /* A subtree in another language re-resolves the per-script stacks of @fakhir/tokens (:lang overrides). */
+  [lang] {
+    font-family: var(--fk-font-sans);
+  }
+
+  /* Directional icons (chevrons, arrows, "back", "next") mirror in right-to-left text. */
+  :dir(rtl) .fk-mirror-rtl,
+  [dir='rtl'] .fk-mirror-rtl {
+    scale: -1 1;
+  }
 }
