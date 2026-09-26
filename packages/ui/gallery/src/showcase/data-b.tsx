@@ -105,7 +105,7 @@ export function DataBShowcase({ scope }: { scope: string }) {
       <Section id={id('insight')} title="InsightCard">
         <InsightCard
           actor={{ kind: 'agent', name: 'stage-coder', agentKey: 'ak_12' }}
-          title="Stage of TAMM AI Assistant"
+          title="Stage of Case A"
           value="4 Executes services"
           delta={{ value: 1, unit: 'number' }}
           measures={[
@@ -128,9 +128,9 @@ export function DataBShowcase({ scope }: { scope: string }) {
           title="Transparency, per case"
           icon={Landmark}
           entries={[
-            { id: 'ee', name: 'Bürokratt', qualifier: 'Estonia', value: '0.81', change: { value: '+0.04', direction: 'up', sentiment: 'positive' } },
-            { id: 'uk', name: 'GOV.UK Chat', qualifier: 'United Kingdom', value: '0.77', change: { value: '−0.02', direction: 'down', sentiment: 'negative' } },
-            { id: 'sp', name: 'SP156', qualifier: 'São Paulo', value: '0.64', change: { value: '0.00', direction: 'flat' } },
+            { id: 'ee', name: 'Case C', qualifier: 'Country C', value: '0.81', change: { value: '+0.04', direction: 'up', sentiment: 'positive' } },
+            { id: 'uk', name: 'Case D', qualifier: 'Country D', value: '0.77', change: { value: '−0.02', direction: 'down', sentiment: 'negative' } },
+            { id: 'sp', name: 'Case E', qualifier: 'City E', value: '0.64', change: { value: '0.00', direction: 'flat' } },
           ]}
           asOf="As of edition 2026-09-20"
           seeAll={{ label: 'See all cases', href: '#/cases' }}

@@ -136,16 +136,16 @@ export function OverlaysNavShowcase({ scope }: { scope: string }) {
               scopeId: 'records',
               items: [
                 {
-                  id: 'tamm',
-                  label: 'TAMM AI Assistant',
-                  description: 'United Arab Emirates, stage 4',
+                  id: 'case a',
+                  label: 'Case A',
+                  description: 'Country A, stage 4',
                   onSelect: () => {},
                   actions: [
                     { id: 'prov', label: 'Open provenance', onSelect: () => {} },
                     { id: 'copy', label: 'Copy link', shortcut: 'C', onSelect: () => {} },
                   ],
                 },
-                { id: 'boti', label: 'Boti', description: 'Argentina, stage 4', onSelect: () => {} },
+                { id: 'boti', label: 'Case B', description: 'Country B, stage 4', onSelect: () => {} },
               ],
             },
           ]}
@@ -186,7 +186,7 @@ export function OverlaysNavShowcase({ scope }: { scope: string }) {
         >
           <label className="fk-gallery-stack">
             URL
-            <input className="fk-gallery-native-input" defaultValue="https://tamm.abudhabi" />
+            <input className="fk-gallery-native-input" defaultValue="https://example.org" />
           </label>
         </SectionedModal>
         <SettingsDialog

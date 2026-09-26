@@ -76,8 +76,8 @@ const report: Report = {
       { key: 'share', label: 'Share', type: 'percent' },
     ],
     rows: [
-      { case: 'TAMM AI Assistant', budget: 125000, share: 41.2 },
-      { case: 'Boti', budget: null, share: 12.5 },
+      { case: 'Case A', budget: 125000, share: 41.2 },
+      { case: 'Case B', budget: null, share: 12.5 },
     ],
   },
   recommendation: 'Verify the twelve pending claims of table 2 before freezing the next edition.',

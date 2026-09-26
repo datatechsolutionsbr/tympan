@@ -85,7 +85,7 @@ export function DataAShowcase({ scope }: { scope: string }) {
           </ListPanelRow>
         </ListPanel>
         <ListPanel as="feed" label={`Recent activity (${scope})`} elevation="raised">
-          <ListPanelRow leading={<ActorChip kind="person" name="Ana Lima" />}>Coded the stage of TAMM</ListPanelRow>
+          <ListPanelRow leading={<ActorChip kind="person" name="Ana Lima" />}>Coded the stage of Case A</ListPanelRow>
           <ListPanelRow leading={<ActorChip kind="agent" name="stage-counter" />}>Ran the stage count</ListPanelRow>
         </ListPanel>
       </Section>
@@ -128,7 +128,7 @@ export function DataAShowcase({ scope }: { scope: string }) {
           <ProfileAvatar name="Maria Souza" size="sm" />
           <ProfileAvatar email="joao@example.org" size="md" />
           <ProfileAvatar size="lg" />
-          <CopyIdentifier value="ae-tamm-4-0-9f2c7d1e3b5a" />
+          <CopyIdentifier value="case-a-example-9f2c7d1e3b5a" />
           <CopyIdentifier value="r115b" />
         </div>
       </Section>
@@ -148,7 +148,7 @@ export function DataAShowcase({ scope }: { scope: string }) {
               ),
               end: <ProofBadge state="proved" />,
               summary: 'Verified the launch year against the service page.',
-              details: <p>Source: tamm.abudhabi, retrieved 12 Sep, sha256 9f2c…</p>,
+              details: <p>Source: example.org, retrieved 12 Sep, sha256 9f2c…</p>,
             },
             {
               id: `${scope}-h2`,
@@ -170,8 +170,8 @@ export function DataAShowcase({ scope }: { scope: string }) {
         <GroupedDisclosureList
           headingLevel={3}
           groups={[
-            { key: 'proved', header: <ProofBadge state="proved" detail="2" />, items: ['TAMM AI Assistant', 'Bürokratt'] },
-            { key: 'pending', header: <ProofBadge state="pending" detail="1" />, items: ['Boti'] },
+            { key: 'proved', header: <ProofBadge state="proved" detail="2" />, items: ['Case A', 'Case C'] },
+            { key: 'pending', header: <ProofBadge state="pending" detail="1" />, items: ['Case B'] },
           ]}
           defaultCollapsedKeys={['pending']}
           getItemKey={(name) => name}

@@ -31,7 +31,7 @@ const categories = [
   { key: 'br', code: 'BR', name: 'BR Brasil', marker: 1 as const },
   { key: 'ee', code: 'EE', name: 'EE Estonia', marker: 3 as const },
   { key: 'uk', code: 'UK', name: 'UK United Kingdom', marker: 5 as const },
-  { key: 'ae', code: 'AE', name: 'AE United Arab Emirates', marker: 7 as const },
+  { key: 'ae', code: 'AE', name: 'AE Country A', marker: 7 as const },
 ]
 const locales = [
   { code: 'pt-BR', nativeName: 'Português', shortCode: 'PT' },
@@ -141,7 +141,7 @@ export function FormsBShowcase({ scope }: { scope: string }) {
           request={{
             stepId: 'verify-launch',
             prompt: 'Does the source confirm the launch year?',
-            description: 'TAMM, Abu Dhabi. Value coded in the edition: 2024.',
+            description: 'Case A, example city. Value coded in the edition: 2024.',
             fields: [
               { key: 'verdict', kind: 'choice', label: 'Verdict', required: true, options: [{ value: 'proved', label: 'Yes, proved' }, { value: 'refuted', label: 'No, refuted' }, { value: 'not_disclosed', label: 'The source does not say' }] },
               { key: 'excerpt', kind: 'longText', label: 'Excerpt that proves it', rows: 2 },

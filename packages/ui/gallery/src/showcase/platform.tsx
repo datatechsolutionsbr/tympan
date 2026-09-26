@@ -25,7 +25,7 @@ import {
 } from '../../../src'
 import { Section } from '../Section'
 
-const cases = ['TAMM AI Assistant', 'Boti', 'Bürokratt']
+const cases = ['Case A', 'Case B', 'Case C']
 
 export function PlatformShowcase({ scope }: { scope: string }) {
   const id = (s: string) => `${scope}-${s}`

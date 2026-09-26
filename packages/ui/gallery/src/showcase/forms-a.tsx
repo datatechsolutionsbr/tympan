@@ -37,7 +37,7 @@ export function FormsAShowcase({ scope }: { scope: string }) {
   const [active, setActive] = useState(true)
   const [code, setCode] = useState('12')
   const [password, setPassword] = useState('abcdefg1')
-  const [query, setQuery] = useState('tamm')
+  const [query, setQuery] = useState('case a')
   const [filters, setFilters] = useState(startFilters)
   const [dialog, setDialog] = useState(false)
   const [filterText, setFilterText] = useState('ana')

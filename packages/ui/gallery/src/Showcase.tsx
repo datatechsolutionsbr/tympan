@@ -53,9 +53,9 @@ import {
 import { Section } from './Section'
 
 const rows = [
-  { id: 'tamm', cells: { name: 'TAMM AI Assistant', country: 'United Arab Emirates', stage: '4', proof: <ProofBadge state="proved" size="compact" detail="6/6" /> }, label: 'TAMM AI Assistant' },
-  { id: 'boti', cells: { name: 'Boti', country: 'Argentina', stage: '4', proof: <ProofBadge state="pending" size="compact" detail="4/6" /> }, label: 'Boti' },
-  { id: 'burokratt', cells: { name: 'Bürokratt', country: 'Estonia', stage: '3', proof: <ProofBadge state="not_disclosed" size="compact" detail="3/6" /> }, label: 'Bürokratt' },
+  { id: 'case a', cells: { name: 'Case A', country: 'Country A', stage: '4', proof: <ProofBadge state="proved" size="compact" detail="6/6" /> }, label: 'Case A' },
+  { id: 'boti', cells: { name: 'Case B', country: 'Country B', stage: '4', proof: <ProofBadge state="pending" size="compact" detail="4/6" /> }, label: 'Case B' },
+  { id: 'burokratt', cells: { name: 'Case C', country: 'Country C', stage: '3', proof: <ProofBadge state="not_disclosed" size="compact" detail="3/6" /> }, label: 'Case C' },
 ]
 
 export function Showcase({ scope }: { scope: string }) {
@@ -69,7 +69,7 @@ export function Showcase({ scope }: { scope: string }) {
   const [segment, setSegment] = useState('Week')
   const [tags, setTags] = useState([
     { id: 'sp', label: 'São Paulo' },
-    { id: 'ee', label: 'Estonia', tone: 'category' as const, categoryIndex: 2 },
+    { id: 'ee', label: 'Country C', tone: 'category' as const, categoryIndex: 2 },
     { id: 'uk', label: 'United Kingdom', tone: 'category' as const, categoryIndex: 5 },
   ])
 
@@ -83,7 +83,7 @@ export function Showcase({ scope }: { scope: string }) {
           A calm, editorial reading summary that says what the screen shows.
         </Text>
         <Text>
-          Running text with <Strong>strong emphasis</Strong> and an identifier <Code>ae-tamm-4-0</Code>.
+          Running text with <Strong>strong emphasis</Strong> and an identifier <Code>case-a-example</Code>.
         </Text>
         <Text size="meta" tone="muted">
           Meta text, 12/18, ink-3.
@@ -129,7 +129,7 @@ export function Showcase({ scope }: { scope: string }) {
 
       <Section id={id('forms')} title="Field, TextField, TextArea, NativeSelect, ListboxSelect">
         <FieldStack>
-          <TextField label="Name of the case" hint="As published by the government." defaultValue="TAMM AI Assistant" />
+          <TextField label="Name of the case" hint="As published by the government." defaultValue="Case A" />
           <TextField label="Search" mode="search" placeholder="Search by name" />
           <TextField label="Password" mode="password" defaultValue="correct horse" />
           <TextField label="E-mail" inputType="email" defaultValue="not-an-email" errorMessage="Enter an e-mail address." />
