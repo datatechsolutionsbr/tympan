@@ -32,7 +32,8 @@ draws state.
 
 | Group | Components (spec) | Tests | Sources | Decisions |
 |---|---|---|---|---|
-| Provenance | ProvenanceGraph, ProvenanceTree, ProvenanceInspector, ProvenanceFilters, ProvenanceLegend, ProvenanceNode, model helpers (no spec; brief priority 1) | 20 | W3C PROV-O/PROV-DM; DD §2.11, §3.7, §3.13; RAC Tree, Popover, Select; APG Tree View | Relations drawn from the older to the newer item, arrows in PROV direction; actors as chips, optionally as nodes with `wasAttributedTo`; list synced with the canvas; arrows on a node follow relations; vertical orientation by default (`orientation="horizontal"` flips to right-to-left in RTL unless `keepLtr`); list is the default below 1024 px |
+| Provenance | ProvenanceGraph (question bar and five views), ProvenanceTree, ProvenanceInspector, ProvenanceFilters, ProvenanceLegend, ProvenanceNode, HashCheck, model helpers (`provenanceView`, `proofPath`, `bandLayout`, `bandGeometryFrom`) (no spec; brief priority 1 and the author's storyboards) | 44 | W3C PROV-O/PROV-DM; DD §2.11, §3.7, §3.13; RAC ComboBox, Tree, Popover; APG Combobox, Tree View | Bands stacked top to bottom in research order, only bands with items; proof path down column 0, off-path dimmed with the word "off the proof path", focus halo, "only the proof path" hides the rest; relation shown by line style (derived solid, used dashed, attributed dotted, generated dash-dot) with the word in the legend, inspector and tree, not on the line (it covered cards between close bands); arrows point back to origins as in PROV diagrams; band sizes read from `--fk-flow-*` tokens; steps back and forward are separate; tree is the default below 1024 px and the inspector opens on selection there; Enter in the tree shows the node in the graph |
+| Provenance side views | ProvenanceTimeline, ProvenanceCertificate, EditionCompare, NumberTrace (storyboards; types in `proofTypes.ts`) | 19 | RAC Tree; DS ActorChip, ProofBadge, SegmentedControl; APG Tree View, Radio Group, Disclosure | Timeline: one lane per actor, close events stacked in rows, axis inset so no event hangs over an edge; certificate states the verifier is deterministic and uses no language model; comparison marks changes by icon, word and border style and shows before/after cards; number trace opens a non-modal region and returns focus to the number |
 | Nodes | GenericNode, AgentNode, RuleNode, NoteNode, GroupNode, DataSourceNode (wave-4), NodeRunIndicator, ConnectionPorts, AgentIdentity, AlignmentGuides, DecisionNode (B-002) | 48 + 10 | RAC Button, Toolbar, Switch, TextField, ComboBox; DD §2.3, §2.11 | Agent avatar is a geometric mark from a hash of the name (no external service); source marks from a local registry with a database glyph fallback, dialect always text; decision probabilities as text plus bar, "needs review" word |
 | Connectors | ConditionalConnector, ConnectorInsertMenu, `splitConnector`, Connect to command | 18 | RAC Button, Autocomplete, ListBox, Popover; DS Drawer; APG Combobox | Branch word is the focusable handle (Delete removes, Enter opens insert); true solid, false dashed, loop dotted; bottom drawer below 640 px |
 | Editor | FlowEditor, FlowEditorProvider, AutosaveController, EditorShortcuts, SelectionArrange, CanvasContextMenus, CanvasCommandBar, NodePalette, FlowOutline, FlowPreview, FlowSwitcherBar, SaveStatus, RunControls | 19 + 42 | DS ActionMenu; RAC Toolbar, Popover, GridList (drag and drop), Disclosure, SearchField; APG Toolbar, Menu, Dialog | Shortcuts listen in the capture phase scoped to the canvas; Escape clears then leaves to the toolbar; the L key is not implemented (auto-layout is a tool); step list as keyboard alternative, open by default below 1024 px |
@@ -43,7 +44,19 @@ draws state.
 | Agents | AgentEditorDialog, AgentCreationWizard (with local StepList, ChoiceTiles, TagInput) | 18 | RAC Slider, ToggleButtonGroup, Tabs (vertical), RadioGroup, Disclosure; APG Dialog, Tabs, Slider, Radio Group | Capability tiers and presets come from props; slider value text names the tier; wizard Enter advances only outside fields |
 | Assistant and report | useAssistantChat, AssistantConversation, MarkdownView, AssistantVisualBlock (+ `parseAssistantVisual`, `envelopeToReport`), ConversationShell (+ `groupConversationsByDate`, ConversationMetaLine), ReportView | 39 | RAC TextField, ToggleButton; DS Drawer, Skeleton; APG log region | Composer stays editable while busy; pt, en and es payload key aliases; currency only when the host gives a code; date groups by calendar day in a time zone |
 
-Total: 483 tests in 35 files (Vitest count; the per-group numbers above count `it` blocks).
+Total: 508 tests in 36 files (Vitest count; the per-group numbers above count `it` blocks).
+
+## Similarity rework
+
+After the coordinator's outside audit, 23 files were restructured with
+their own vocabulary and decomposition (reducers and lookup tables instead
+of chained state and switches, extracted pure helpers and subcomponents):
+run lineage, run data, run types, the run input, replay and rewind dialogs,
+the number input, the assistant hook and conversation shell, announcer,
+confirm, render catalog, schema and start forms, variable list, agent
+parts, expression builder, compute form, trace client, flow settings,
+autosave, auto-layout and the provenance legend. Behaviour and tests were
+kept.
 
 ## Ambiguities resolved (summary)
 
@@ -66,5 +79,7 @@ variants and the `[data-tone]` mapping; `--fk-flow-connector`, `-active`,
 `--fk-flow-node-border`, `-border-hover`, `-surface`, `-radius`,
 `--fk-flow-ring-selected`, `-running`, `-succeeded`, `-failed`; canvas
 `--fk-flow-plane`, `--fk-flow-grid-dot`, `--fk-flow-guide`,
-`--fk-flow-marquee`. All are defined in `src/tokens.css` on existing `--fk-*`
+`--fk-flow-marquee`; provenance bands `--fk-flow-band` (96px),
+`--fk-flow-band-label` (130px), `--fk-flow-node-h` (72px), `--fk-flow-node-w`
+(236px), `--fk-flow-col-gap` (56px). All are defined in `src/tokens.css` on existing `--fk-*`
 roles.

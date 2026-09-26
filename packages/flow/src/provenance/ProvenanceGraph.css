@@ -898,6 +898,19 @@
     .fk-prov-tree .fk-prov-tree__row {
       flex-wrap: wrap;
     }
+    .fk-prov-tree .fk-prov-tree__text {
+      flex: 1 1 0;
+    }
+    .fk-prov__views {
+      max-inline-size: 100%;
+      overflow-x: auto;
+    }
+    .fk-prov__views label,
+    .fk-prov__views label * {
+      flex: none;
+      overflow: visible;
+      text-overflow: clip;
+    }
     .fk-prov-tree .fk-prov-tree__facts {
       flex-basis: 100%;
       justify-content: flex-start;

@@ -99,6 +99,7 @@ interface Lane {
   undated: ProvItem[]
 }
 
+const ROW_HEIGHT = 64
 const TICKS = 4
 
 function laneKey(a: ProvActor | undefined): string {
@@ -139,7 +140,19 @@ export function ProvenanceTimeline({ items, selectedId: selectedProp, defaultSel
   }, [items])
 
   const span = Number.isFinite(min) && max > min ? max - min : 0
-  const at = (t: number) => (span ? ((t - min) / span) * 100 : 50)
+  // Events keep a margin at both ends of the axis so none hangs over the edge.
+  const at = (t: number) => (span ? 9 + ((t - min) / span) * 82 : 50)
+  /** Stack events that are close in time into rows so they never overlap. */
+  const rowsOf = (dated: ReadonlyArray<{ item: ProvItem; time: number }>) => {
+    const ends: number[] = []
+    return dated.map(({ time }) => {
+      const x = at(time)
+      let row = ends.findIndex((end) => x - end >= 14)
+      if (row < 0) row = ends.length
+      ends[row] = x
+      return row
+    })
+  }
   const dateFmt = useMemo(() => new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }), [locale])
   const timeFmt = useMemo(() => new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }), [locale])
   const ticks = Number.isFinite(min) ? Array.from({ length: span ? TICKS + 1 : 1 }, (_, i) => (span ? min + (span * i) / TICKS : min)) : []
@@ -183,11 +196,11 @@ export function ProvenanceTimeline({ items, selectedId: selectedProp, defaultSel
     next?.focus()
   }
 
-  const eventButton = (item: ProvItem, time: number | null) => {
+  const eventButton = (item: ProvItem, time: number | null, row = 0) => {
     const proofKey = item.proofState ?? 'none'
     const name = fill(l.event, { kind: kindWord(item.kind), title: item.title, proof: l.proof[proofKey], time: time === null ? l.undated : timeFmt.format(time) }, locale)
     return (
-      <li key={item.id} className="fk-prov-timeline__slot" style={time === null ? undefined : { insetInlineStart: `${at(time)}%` }}>
+      <li key={item.id} className="fk-prov-timeline__slot" data-row={row} style={time === null ? undefined : { insetInlineStart: `${at(time)}%`, insetBlockStart: `${8 + row * ROW_HEIGHT}px` }}>
         <button
           type="button"
           className="fk-prov-timeline__event"
@@ -238,6 +251,8 @@ export function ProvenanceTimeline({ items, selectedId: selectedProp, defaultSel
       ) : null}
       {lanes.map((lane) => {
         const headingId = `fk-prov-timeline-${lane.key.replace(/[^\w-]/g, '_')}`
+        const rows = rowsOf(lane.dated)
+        const rowCount = Math.max(1, ...rows.map((r) => r + 1))
         const count = lane.dated.length + lane.undated.length
         return (
           <div key={lane.key} className="fk-prov-timeline__lane" data-fk-prov-timeline-lane="" data-actor-kind={lane.actor?.kind ?? 'system'}>
@@ -255,8 +270,8 @@ export function ProvenanceTimeline({ items, selectedId: selectedProp, defaultSel
                 )}
               </span>
             </h3>
-            <ol className="fk-prov-timeline__track" aria-labelledby={headingId}>
-              {lane.dated.map(({ item, time }) => eventButton(item, time))}
+            <ol className="fk-prov-timeline__track" aria-labelledby={headingId} style={{ minBlockSize: `${Math.max(110, 32 + rowCount * ROW_HEIGHT)}px` }}>
+              {lane.dated.map(({ item, time }, i) => eventButton(item, time, rows[i]))}
             </ol>
             {lane.undated.length ? (
               <div className="fk-prov-timeline__undated">

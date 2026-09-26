@@ -140,7 +140,8 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
   const [onlyPath, setOnlyPath] = useControllable<boolean>(props.onlyProofPath, props.defaultOnlyProofPath ?? false, props.onOnlyProofPathChange)
   const [view, setView] = useControllable<ProvenanceViewMode>(props.view, () => props.defaultView ?? (initialMatch('(min-width: 1024px)', true) ? 'graph' : 'tree'), props.onViewChange)
   const [filters, setFilters] = useControllable<ProvFilters>(props.filters, props.defaultFilters ?? EMPTY_FILTERS, props.onFiltersChange)
-  const [inspectorOpen, setInspectorOpen] = useState(true)
+  // On phones the inspector is a sheet over the page: it opens on selection only.
+  const [inspectorOpen, setInspectorOpen] = useState(() => initialMatch('(min-width: 1024px)', true))
   const [mode, setMode] = useState<'select' | 'pan'>('select')
   const [zoom, setZoom] = useState(1)
   const [searchOpen, setSearchOpen] = useState(false)
