@@ -74,10 +74,10 @@ export function StepListView({ nodes, locked, activeId, onConfigure, onMove, onR
 
   return (
     <section className="fk-flow-list" aria-labelledby="fk-flow-list-title">
-      <h2 id="fk-flow-list-title" className="fk-flow-list__title">
+      <h2 id="fk-flow-list-title" className="fk-visually-hidden">
         {w.listTitle}
       </h2>
-      <p className="fk-flow-list__hint" id="fk-flow-list-hint">
+      <p className="fk-visually-hidden" id="fk-flow-list-hint">
         {w.listHint}
       </p>
       <ol className="fk-flow-list__rows">
@@ -113,7 +113,7 @@ export function StepListView({ nodes, locked, activeId, onConfigure, onMove, onR
                 </span>
                 <span className="fk-flow-list__title-text" dir="auto">{title}</span>
                 <span className="fk-flow-list__line" dir="auto">{line ?? w.notSet}</span>
-                {spec && !spec.primitive ? <ShapeFlow inputs={spec.inputs} output={spec.output} words={rt.shapes} labels={w} /> : null}
+                {spec && !spec.primitive ? <ShapeFlow inputs={spec.inputs} output={spec.output} words={rt.shapes} labels={w} bare /> : null}
               </button>
               {!locked ? (
                 <ActionMenu

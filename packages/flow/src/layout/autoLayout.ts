@@ -3,6 +3,7 @@
 // module only chooses who takes part, feeds sizes in and reads corners out.
 // Pure: the input list is never changed.
 
+import { placeChain } from './chainLayout'
 import { Graph, layout } from '@dagrejs/dagre'
 import { sizeOf } from '../geometry/rect'
 import type { Point, RankDirection, Size } from '../model/types'
@@ -32,6 +33,13 @@ export interface AutoLayoutOptions {
   fixedKinds?: readonly string[]
   /** Size to assume when a node has neither measured nor declared size. */
   fallbackSize?: Size
+  /**
+   * `start` (top-down only) keeps a chain on one line and puts branches after
+   * it toward the inline end, which `rtl` flips (see chainLayout.ts);
+   * `centre` (default) centres parents over their children.
+   */
+  alignment?: 'centre' | 'start'
+  rtl?: boolean
 }
 
 const RANKDIR: Record<RankDirection, 'TB' | 'LR' | 'RL'> = { 'top-down': 'TB', 'left-right': 'LR', 'right-left': 'RL' }
@@ -40,7 +48,13 @@ const RANKDIR: Record<RankDirection, 'TB' | 'LR' | 'RL'> = { 'top-down': 'TB', '
 function placeRanked(members: readonly LayoutNode[], links: readonly LayoutEdge[], direction: RankDirection, o: AutoLayoutOptions): Map<string, Point> {
   const g = new Graph()
   const edgeGap = o.margin ?? 24
-  g.setGraph({ rankdir: RANKDIR[direction], ranksep: o.rankGap ?? 64, nodesep: o.siblingGap ?? 32, marginx: edgeGap, marginy: edgeGap })
+  g.setGraph({
+    rankdir: RANKDIR[direction],
+    ranksep: o.rankGap ?? 64,
+    nodesep: o.siblingGap ?? 32,
+    marginx: edgeGap,
+    marginy: edgeGap,
+  })
   g.setDefaultEdgeLabel(() => ({}))
   const sizes = new Map(members.map((m) => [m.id, sizeOf(m, o.fallbackSize)]))
   sizes.forEach((s, id) => g.setNode(id, { width: s.width, height: s.height }))
@@ -58,7 +72,11 @@ function placeRanked(members: readonly LayoutNode[], links: readonly LayoutEdge[
 export function autoLayout<N extends LayoutNode>(nodes: readonly N[], connectors: readonly LayoutEdge[], direction: RankDirection, options: AutoLayoutOptions = {}): N[] {
   const staysPut = new Set(options.fixedKinds ?? ['note'])
   const members = nodes.filter((n) => n.parentId === undefined && !staysPut.has(n.kind))
-  const corners = members.length ? placeRanked(members, connectors, direction, options) : new Map<string, Point>()
+  const corners = !members.length
+    ? new Map<string, Point>()
+    : options.alignment === 'start' && direction === 'top-down'
+      ? placeChain(new Map(members.map((m) => [m.id, sizeOf(m, options.fallbackSize)])), connectors, { rankGap: options.rankGap ?? 64, siblingGap: options.siblingGap ?? 32, margin: options.margin ?? 24, rtl: !!options.rtl })
+      : placeRanked(members, connectors, direction, options)
   return nodes.map((n) => {
     const corner = corners.get(n.id)
     return corner ? { ...n, position: corner } : n

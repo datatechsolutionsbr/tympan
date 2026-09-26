@@ -2,28 +2,31 @@
    run controls, save status, preview. Logical properties only; the palette
    docks at inline-start and the outline at inline-end, so both mirror in RTL. */
 @layer fakhir.components {
+  /* Flush columns separated by rules: palette | canvas | side panel. */
   .fk-editor {
+    --fk-flow-plane: transparent;
+    --fk-flow-grid-dot: var(--fk-line-strong);
     position: relative;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--fk-space-3);
     inline-size: 100%;
     block-size: 100%;
     min-block-size: 480px;
   }
   @media (min-width: 1024px) {
     .fk-editor[data-palette='shown'][data-side='shown'] {
-      grid-template-columns: 300px minmax(0, 1fr) 320px;
+      grid-template-columns: 300px minmax(0, 1fr) 384px;
     }
     .fk-editor[data-palette='shown'][data-side='none'] {
       grid-template-columns: 300px minmax(0, 1fr);
     }
     .fk-editor[data-palette='none'][data-side='shown'] {
-      grid-template-columns: minmax(0, 1fr) 320px;
+      grid-template-columns: minmax(0, 1fr) 384px;
     }
   }
   .fk-editor__palette-open {
     justify-self: start;
+    margin: var(--fk-space-3);
   }
   .fk-editor__canvas {
     position: relative;
@@ -31,8 +34,10 @@
     flex-direction: column;
     min-block-size: 480px;
     overflow: hidden;
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-card);
+  }
+  .fk-editor__canvas > .fk-surface {
+    flex: 1;
+    min-block-size: 0;
   }
   .fk-editor__palette,
   .fk-editor__side,
@@ -40,13 +45,19 @@
     min-block-size: 0;
     max-block-size: 100%;
     overflow: auto;
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-card);
-    background: var(--fk-surface-raised);
   }
-  .fk-editor__canvas > .fk-surface {
-    flex: 1;
-    min-block-size: 0;
+  .fk-editor__palette {
+    border-inline-end: 1px solid var(--fk-line);
+  }
+  .fk-editor__side {
+    border-inline-start: 1px solid var(--fk-line);
+    background: var(--fk-surface-solid);
+  }
+  @media (max-width: 1023px) {
+    .fk-editor__side {
+      border-inline-start: 0;
+      border-block-start: 1px solid var(--fk-line);
+    }
   }
   .fk-editor__node {
     display: contents;
@@ -54,7 +65,6 @@
   .fk-editor__canvas[data-view='list'] {
     display: flex;
     flex-direction: column;
-    background: var(--fk-surface);
   }
   .fk-editor__list-dock {
     position: absolute;

@@ -3,10 +3,11 @@
 // close. A popover on wide screens, a bottom drawer below 640 px.
 
 import { useMemo, useState, type RefObject } from 'react'
-import { Autocomplete, Dialog, Heading, Input, Label, ListBox, ListBoxItem, Popover, SearchField, Text, useFilter } from 'react-aria-components'
+import { Autocomplete, Dialog, Heading, Input, ListBox, ListBoxItem, Popover, SearchField, Text, useFilter } from 'react-aria-components'
+import { Search } from 'lucide-react'
 import { Drawer, useMediaQuery } from '@fakhir/design-system'
 import { fill, useFlowLocale } from '../internal/labels'
-import { ShapeChip, ShapeFlow } from './ShapeChip'
+import { ShapeChip } from './ShapeChip'
 import type { DataShape } from './shapes'
 import type { ReadyStep } from './researchSteps'
 import { useSteps } from './StepsContext'
@@ -14,6 +15,8 @@ import { useSteps } from './StepsContext'
 export interface AddStepPickerProps {
   /** Heading: after a step, between two steps, or free. */
   title: string
+  /** Search placeholder (defaults to the title). */
+  placeholder?: string
   /** Shape arriving at the new step (undefined: anything). */
   arriving?: DataShape | null
   options: readonly ReadyStep[]
@@ -22,7 +25,7 @@ export interface AddStepPickerProps {
   onClose: () => void
 }
 
-function PickerBody({ title, arriving, options, onPick, onClose, headed }: Omit<AddStepPickerProps, 'triggerRef'> & { headed: boolean }) {
+function PickerBody({ title, placeholder, arriving, options, onPick, onClose, headed }: Omit<AddStepPickerProps, 'triggerRef'> & { headed: boolean }) {
   const rt = useSteps()
   const w = rt.words
   const { locale } = useFlowLocale()
@@ -32,21 +35,21 @@ function PickerBody({ title, arriving, options, onPick, onClose, headed }: Omit<
   return (
     <div className="fk-add-picker__body">
       {headed ? (
-        <Heading slot="title" className="fk-add-picker__title">
+        <Heading slot="title" className="fk-visually-hidden">
           {title}
         </Heading>
       ) : null}
-      {arriving ? (
-        <p className="fk-add-picker__arriving">
-          <span>{w.inputs}</span>
-          <ShapeChip shapes={[arriving]} words={rt.shapes} />
-        </p>
-      ) : null}
       <Autocomplete inputValue={query} onInputChange={setQuery} filter={() => true}>
-        <SearchField className="fk-add-picker__field" autoFocus aria-label={w.pickerSearch}>
-          <Label className="fk-visually-hidden">{w.pickerSearch}</Label>
-          <Input className="fk-add-picker__input" placeholder={w.pickerSearch} />
+        <SearchField className="fk-add-picker__field" autoFocus aria-label={title}>
+          <Search className="fk-add-picker__glass" aria-hidden="true" focusable="false" />
+          <Input className="fk-add-picker__input" placeholder={placeholder ?? title} />
         </SearchField>
+        {arriving ? (
+          <p className="fk-add-picker__only">
+            <span>{w.pickerOnly}</span>
+            <ShapeChip shapes={[arriving]} words={rt.shapes} />
+          </p>
+        ) : null}
         <ListBox
           className="fk-add-picker__list"
           aria-label={title}
@@ -67,14 +70,17 @@ function PickerBody({ title, arriving, options, onPick, onClose, headed }: Omit<
                 <Text slot="label" className="fk-add-picker__name">
                   {item.name}
                 </Text>
-                <Text slot="description" className="fk-add-picker__flow">
-                  <ShapeFlow inputs={item.inputs} output={item.output} words={rt.shapes} labels={w} />
+                <Text slot="description" className="fk-add-picker__about">
+                  {item.description}
                 </Text>
               </ListBoxItem>
             )
           }}
         </ListBox>
       </Autocomplete>
+      <p className="fk-add-picker__keys" aria-hidden="true">
+        {w.pickerKeys}
+      </p>
       <p className="fk-visually-hidden" role="status">
         {fill(w.results, { count: shown.length }, locale)}
       </p>
@@ -93,7 +99,7 @@ export function AddStepPicker(props: AddStepPickerProps) {
     )
   }
   return (
-    <Popover isOpen onOpenChange={(open) => !open && onClose()} triggerRef={triggerRef} placement="bottom" offset={8} className="fk-add-picker">
+    <Popover isOpen onOpenChange={(open) => !open && onClose()} triggerRef={triggerRef} placement="bottom start" offset={10} className="fk-add-picker">
       <Dialog className="fk-add-picker__dialog">
         <PickerBody {...props} headed />
       </Dialog>

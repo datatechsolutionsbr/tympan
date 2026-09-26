@@ -1,92 +1,155 @@
-// Gallery: an analysis flow of research steps. Known values only: the frozen
+// Gallery: the analysis flow editor inside the research shell, in the states
+// of the storyboards (#/editor?state=…): canvas (F2), picker (Q2), drag (Q3),
+// search (Q4), mismatch (Q5), list (Q6). Known values only: the frozen
 // edition 2026-09-20 with 582 records and the counts per phase 9 · 26 · 24 ·
-// 18. Everything else (criteria, captions, phase names, version, seed) is a
-// neutral placeholder, and the page carries the "Dados de exemplo" badge.
+// 18; everything else is a neutral placeholder.
 
-import { useMemo, useState } from 'react'
-import { FakhirProvider, SegmentedControl, Switch, Tag, messagesPtBR } from '@fakhir/design-system'
+import { useEffect, useMemo, useState } from 'react'
+import { createPortal } from 'react-dom'
+import { ArrowRight, Check } from 'lucide-react'
+import { Button, FakhirProvider, Tag, messagesPtBR } from '@fakhir/design-system'
 import { FlowEditor } from '../../../src/editor/FlowEditor'
 import { autoLayout } from '../../../src/layout/autoLayout'
 import type { FlowConnector, FlowNode } from '../../../src/model/types'
-import type { RunSummary } from '../../../src/run/types'
+import { STEP_MEDIA_TYPE, stepDragType } from '../../../src/steps/StepPalette'
 import { createFlowEditorStore } from '../../../src/state/editorState'
+import { CanvasToolbar } from '../../../src/toolbar/CanvasToolbar'
+import { useHashParams } from '../shell/params'
+import { ResearchShell } from '../shell/ResearchShell'
 
-type Locale = 'pt-BR' | 'en' | 'ar' | 'ja'
+type Words = Record<string, string>
 
-const TEXT: Record<Locale, Record<string, string>> = {
-  'pt-BR': { badge: 'Dados de exemplo', title: 'Análise de exemplo', group: 'Agrupar por país e fase', count: 'Contagem por fase', keys: 'país, fase', phaseColumn: 'fase', criterion: '[critério]', caption: '[legenda]', phase: '[fase {n}]', broken: 'Mostrar uma ligação incompatível', noAgents: 'Projeto sem agentes' },
-  en: { badge: 'Sample data', title: 'Sample analysis', group: 'Group by country and phase', count: 'Count per phase', keys: 'country, phase', phaseColumn: 'phase', criterion: '[criterion]', caption: '[caption]', phase: '[phase {n}]', broken: 'Show a mismatched link', noAgents: 'Project without agents' },
-  ar: { badge: 'بيانات تجريبية', title: 'تحليل تجريبي', group: 'تجميع حسب البلد والمرحلة', count: 'العدد حسب المرحلة', keys: 'البلد، المرحلة', phaseColumn: 'المرحلة', criterion: '[معيار]', caption: '[تعليق]', phase: '[المرحلة {n}]', broken: 'إظهار رابط غير متوافق', noAgents: 'مشروع بلا وكلاء' },
-  ja: { badge: 'サンプルデータ', title: 'サンプル分析', group: '国と段階でグループ化', count: '段階ごとの件数', keys: '国, 段階', phaseColumn: '段階', criterion: '[条件]', caption: '[キャプション]', phase: '[段階 {n}]', broken: '不整合なリンクを表示', noAgents: 'エージェントなしのプロジェクト' },
+const TEXT: Record<string, Words> = {
+  'pt-BR': {
+    crumbs: 'each-usp / censo-ia-gov / análises', title: 'Casos por fase e país', saved: 'salvo', run: 'Executar', sample: 'Dados de exemplo',
+    group: 'Agrupar por país e fase', count: 'Contagem por fase', keys: 'país, fase', groups: '[n] grupos', table: 'hash [sha256]', chart: 'Vega-Lite · barras',
+    version: 'v[n] · rascunho', runsOn: 'edição 2026-09-20', perField: 'α por campo', country: 'país', phase: 'fase', tools: 'Ferramentas do canvas',
+    drag: 'Arraste da paleta, use + entre dois passos, ou A para adicionar onde está o foco.',
+    list: 'Mesma informação do canvas, navegável por teclado: ↑↓ move, Alt+↑↓ reordena, A adiciona, Enter configura.',
+  },
+  en: {
+    crumbs: 'each-usp / censo-ia-gov / analyses', title: 'Cases by phase and country', saved: 'saved', run: 'Run', sample: 'Sample data',
+    group: 'Group by country and phase', count: 'Count per phase', keys: 'country, phase', groups: '[n] groups', table: 'hash [sha256]', chart: 'Vega-Lite · bars',
+    version: 'v[n] · draft', runsOn: 'edition 2026-09-20', perField: 'α per field', country: 'country', phase: 'phase', tools: 'Canvas tools',
+    drag: 'Drag from the palette, use + between two steps, or A to add where the focus is.',
+    list: 'The same as the canvas, by keyboard: ↑↓ moves, Alt+↑↓ reorders, A adds, Enter configures.',
+  },
 }
 
 const COUNTS = [9, 26, 24, 18]
-
 const link = (id: string, source: string, target: string): FlowConnector => ({ id, source, target, sourcePort: 'out', targetPort: 'in-0' })
 
-function buildFlow(t: Record<string, string>, broken: boolean): { nodes: FlowNode[]; connectors: FlowConnector[] } {
+function buildFlow(t: Words, mismatch: boolean, rtl: boolean): { nodes: FlowNode[]; connectors: FlowConnector[] } {
   const at = { x: 0, y: 0 }
   const nodes: FlowNode[] = [
     { id: 'edition', kind: 'step', position: at, data: { stepId: 'frozen-edition', edition: '2026-09-20', count: 582 } },
-    { id: 'filter', kind: 'step', position: at, data: { stepId: 'filter', criterion: t.criterion, before: 582, after: '[n]' } },
-    { id: 'group', kind: 'step', position: at, data: { stepId: 'group', label: t.group, keys: t.keys } },
-    { id: 'count', kind: 'step', position: at, data: { stepId: 'describe', label: t.count, counts: COUNTS.join(' · ') } },
-    { id: 'table', kind: 'step', position: at, data: { stepId: 'citable-table', caption: t.caption } },
-    { id: 'chart', kind: 'step', position: at, data: { stepId: 'citable-chart', caption: t.caption } },
+    { id: 'filter', kind: 'step', position: at, data: { stepId: 'filter', before: 582, after: '[n]' } },
+    { id: 'group', kind: 'step', position: at, data: { stepId: 'group', label: t.group, keys: t.keys, aggregate: 'count', line: t.groups } },
+    mismatch
+      ? { id: 'count', kind: 'step', position: at, data: { stepId: 'reliability', line: t.perField } }
+      : { id: 'count', kind: 'step', position: at, data: { stepId: 'describe', label: t.count, counts: COUNTS.join(' · ') } },
+    { id: 'table', kind: 'step', position: at, data: { stepId: 'citable-table', line: t.table } },
+    { id: 'chart', kind: 'step', position: at, data: { stepId: 'citable-chart', line: t.chart } },
   ]
   const connectors = [link('l1', 'edition', 'filter'), link('l2', 'filter', 'group'), link('l3', 'group', 'count'), link('l4', 'count', 'table'), link('l5', 'count', 'chart')]
-  if (broken) {
-    nodes.push({ id: 'number', kind: 'step', position: at, data: { stepId: 'manuscript-number' } })
-    connectors.push(link('l6', 'table', 'number'))
-  }
-  // Unplaced steps: lay them out once, top to bottom.
-  return { nodes: autoLayout(nodes.map((n) => ({ ...n, size: { width: 250, height: 86 } })), connectors, 'top-down'), connectors }
+  return { nodes: autoLayout(nodes.map((n) => ({ ...n, size: { width: 250, height: 86 } })), connectors, 'top-down', { rankGap: 54, siblingGap: 24, alignment: 'start', rtl }), connectors }
 }
 
-const RUNS: RunSummary[] = [
-  { id: 'run-sample-2', status: 'COMPLETED', startedAt: '2026-01-02T10:00:00Z', durationMs: 3400, nodeResults: [] } as RunSummary,
-  { id: 'run-sample-1', status: 'COMPLETED', startedAt: '2026-01-01T10:00:00Z', durationMs: 3100, nodeResults: [] } as RunSummary,
-]
+/** Puts the page in a storyboard state once it has rendered. */
+function useStoryState(state: string, key: string) {
+  useEffect(() => {
+    const later = (fn: () => void, ms = 350) => window.setTimeout(fn, ms)
+    const timers: number[] = []
+    if (state === 'picker') {
+      timers.push(later(() => document.querySelector<HTMLElement>('[data-fk-add-after="group"]')?.click(), 600))
+    }
+    if (state === 'search') {
+      timers.push(
+        later(() => {
+          const input = document.querySelector<HTMLInputElement>('.fk-step-palette__input')
+          if (!input) return
+          Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(input, 'conf')
+          input.dispatchEvent(new Event('input', { bubbles: true }))
+        }),
+      )
+    }
+    if (state === 'drag') {
+      timers.push(
+        later(() => {
+          const canvas = document.querySelector<HTMLElement>('.fk-editor__canvas')
+          if (!canvas) return
+          const r = canvas.getBoundingClientRect()
+          const data = new DataTransfer()
+          data.setData(STEP_MEDIA_TYPE, JSON.stringify({ stepId: 'recode' }))
+          data.setData(stepDragType('recode'), '')
+          canvas.dispatchEvent(new DragEvent('dragover', { bubbles: true, cancelable: true, dataTransfer: data, clientX: r.right - 80, clientY: r.top + 400 }))
+        }, 700),
+      )
+    }
+    return () => timers.forEach((id) => window.clearTimeout(id))
+  }, [state, key])
+}
 
 export function FlowEditorPage() {
-  const [locale, setLocale] = useState<Locale>('pt-BR')
-  const [broken, setBroken] = useState(false)
-  const [noAgents, setNoAgents] = useState(false)
-  const t = TEXT[locale]
+  const params = useHashParams()
+  const locale = params.get('lang') ?? 'pt-BR'
+  const state = params.get('state') ?? 'canvas'
+  const t = TEXT[locale] ?? TEXT.en!
   const rtl = locale === 'ar'
-  // One editor per locale and example so the sample titles follow the switch.
+  const [dock, setDock] = useState<HTMLDivElement | null>(null)
+  const selectedAtStart = state === 'picker' || state === 'search' || state === 'list' || state === 'selected'
   const store = useMemo(() => {
-    const g = buildFlow(t, broken)
+    const g = buildFlow(t, state === 'mismatch', rtl)
     const s = createFlowEditorStore({ initial: { nodes: g.nodes, connectors: g.connectors, layoutDirection: 'down' } })
-    for (const id of ['edition', 'filter', 'group', 'count']) s.actions.setNodeResult(id, { status: 'success' })
-    s.actions.setNodeResult('table', { status: 'running' })
+    for (const id of state === 'mismatch' ? ['edition', 'filter', 'group'] : ['edition', 'filter', 'group', 'count']) s.actions.setNodeResult(id, { status: 'success' })
+    if (selectedAtStart) s.actions.select(['group'])
     return s
-  }, [t, broken])
+  }, [t, state, selectedAtStart, rtl])
+  useStoryState(state, locale)
 
+  const description = state === 'drag' ? t.drag : state === 'list' ? t.list : undefined
   return (
-    <div className="fk-gallery-page" lang={locale} dir={rtl ? 'rtl' : 'ltr'}>
-      <div className="fk-gallery-page__bar">
-        <h1>{t.title}</h1>
-        <Tag tone="accent">{t.badge}</Tag>
-        <SegmentedControl label="Idioma / Language" size="compact" options={['pt-BR', 'en', 'ar', 'ja']} value={locale} onChange={(v) => setLocale(v as Locale)} />
-        <Switch label={t.broken} size="small" isSelected={broken} onChange={setBroken} />
-        <Switch label={t.noAgents} size="small" isSelected={noAgents} onChange={setNoAgents} />
-      </div>
-      <FakhirProvider locale={locale} {...(locale === 'pt-BR' ? { baseMessages: messagesPtBR } : {})}>
-        <div className="fk-gallery-page__stage">
+    <FakhirProvider locale={locale} {...(locale === 'pt-BR' ? { baseMessages: messagesPtBR } : {})}>
+      <div lang={locale} dir={rtl ? 'rtl' : 'ltr'} className="fk-gallery-story">
+        <ResearchShell
+          locale={locale}
+          area="analyses"
+          crumbs={t.crumbs!}
+          title={t.title!}
+          {...(description ? { description } : {})}
+          actions={
+            <>
+              <Tag>{t.sample}</Tag>
+              <span className="fk-shell-action">
+                <Check aria-hidden="true" />
+                {t.saved}
+              </span>
+              <Button variant="primary" leadingIcon={<ArrowRight />}>
+                {t.run}
+              </Button>
+            </>
+          }
+          dockSlot={setDock}
+        >
           <FlowEditor
-            key={`${locale}-${broken}`}
+            key={`${locale}-${state}`}
             flowId="sample-analysis"
             store={store}
-            agentsAllowed={!noAgents}
-            flowFacts={{ version: '[versão]', runsOverEdition: RUNS.length, deterministic: true, seed: '[semente]' }}
+            defaultListView={state === 'list'}
+            flowFacts={{ name: t.title, version: t.version, runsOn: t.runsOn, deterministic: true, seed: '[seed]' }}
             onRunFlow={() => undefined}
             onTestStep={() => undefined}
-            outputPreview={(id) => (id === 'count' ? { columns: [t.phaseColumn!, 'n'], rows: COUNTS.map((n, i) => [t.phase!.replace('{n}', String(i + 1)), n]) } : null)}
-            runs={{ loadRuns: async () => RUNS }}
+            outputPreview={(id) =>
+              id === 'group'
+                ? { columns: [t.country!, t.phase!, 'n'], rows: [[`[${t.country}]`, `[${t.phase}]`, '[n]'], [`[${t.country}]`, `[${t.phase}]`, '[n]']] }
+                : id === 'count'
+                  ? { columns: [t.phase!, 'n'], rows: COUNTS.map((n, i) => [`[${t.phase} ${i + 1}]`, n]) }
+                  : null
+            }
+            renderTools={(items) => (dock ? createPortal(<CanvasToolbar items={items} label={t.tools!} placement="dock" />, dock) : null)}
           />
-        </div>
-      </FakhirProvider>
-    </div>
+        </ResearchShell>
+      </div>
+    </FakhirProvider>
   )
 }

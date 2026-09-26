@@ -16,6 +16,11 @@
   }
   /* Centred along the bottom edge in either reading direction. */
   .fk-canvas-toolbar[data-placement='dock'] {
+    gap: 4px;
+    padding-block: 6px;
+    padding-inline: 8px;
+    border-radius: 18px;
+    box-shadow: 0 12px 32px -10px rgb(15 23 42 / 0.22);
     position: absolute;
     inset-block-end: max(var(--fk-space-3), env(safe-area-inset-bottom, 0px));
     inset-inline: 0;
@@ -27,9 +32,10 @@
     justify-content: center;
   }
   .fk-canvas-toolbar__divider {
-    align-self: stretch;
+    align-self: center;
     inline-size: 1px;
-    margin-block: var(--fk-space-1);
+    block-size: 24px;
+    margin-block: 0;
     border: 0;
     background: var(--fk-line);
   }
@@ -40,11 +46,11 @@
     align-items: center;
     justify-content: center;
     gap: var(--fk-space-1);
-    min-inline-size: 40px;
-    block-size: 40px;
+    min-inline-size: 44px;
+    block-size: 44px;
     padding-inline: var(--fk-space-2);
     border: 1px solid transparent;
-    border-radius: var(--fk-radius-control);
+    border-radius: 12px;
     background: transparent;
     color: var(--fk-ink-2);
     font: inherit;
@@ -69,7 +75,7 @@
     outline-offset: 2px;
   }
   .fk-canvas-tool[data-selected] {
-    border-color: var(--fk-accent);
+    border-color: transparent;
     background: var(--fk-accent-soft);
     color: var(--fk-accent);
   }

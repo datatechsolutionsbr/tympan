@@ -5,7 +5,7 @@
 import { createContext, useContext, useMemo, type ReactNode } from 'react'
 import { useLabels } from '../internal/labels'
 import { readyCatalog, researchStepCatalog, researchStepWords, type ReadyShelf, type ReadyStep, type StepCatalog } from './researchSteps'
-import { shapeWords, type ShapeWords } from './shapes'
+import { shapeCountWords, shapeWords, type ShapeWords } from './shapes'
 import { stepEditorWords, type StepEditorWords } from './stepLabels'
 import type { WiringIssue } from './wiring'
 
@@ -16,6 +16,8 @@ export interface StepsRuntime {
   aiAllowed: boolean
   words: StepEditorWords
   shapes: ShapeWords
+  /** Counted shape messages (ICU, `n`). */
+  counts: ShapeWords
   /** Wiring issues by receiving node id. */
   issues: ReadonlyMap<string, WiringIssue[]>
   /** Opens the add picker after a node, anchored to `trigger`. */
@@ -43,9 +45,10 @@ export function StepsProvider({ catalog, aiAllowed = true, issues, addAfter, wor
   const ready = useReadyCatalog(catalog)
   const w = useLabels(stepEditorWords, words)
   const shapes = useLabels(shapeWords, undefined)
+  const counts = useLabels(shapeCountWords, undefined)
   const value = useMemo<StepsRuntime>(
-    () => ({ ...ready, aiAllowed, words: w, shapes, issues: issues ?? new Map(), ...(addAfter ? { addAfter } : {}) }),
-    [ready, aiAllowed, w, shapes, issues, addAfter],
+    () => ({ ...ready, aiAllowed, words: w, shapes, counts, issues: issues ?? new Map(), ...(addAfter ? { addAfter } : {}) }),
+    [ready, aiAllowed, w, shapes, counts, issues, addAfter],
   )
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>
 }
@@ -58,5 +61,6 @@ export function useSteps(): StepsRuntime {
   const ready = useReadyCatalog()
   const words = useLabels(stepEditorWords, undefined)
   const shapes = useLabels(shapeWords, undefined)
-  return got ?? { ...ready, aiAllowed: true, words, shapes, issues: EMPTY_ISSUES }
+  const counts = useLabels(shapeCountWords, undefined)
+  return got ?? { ...ready, aiAllowed: true, words, shapes, counts, issues: EMPTY_ISSUES }
 }

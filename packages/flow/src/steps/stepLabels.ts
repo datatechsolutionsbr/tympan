@@ -32,6 +32,19 @@ export interface StepEditorWords {
   mismatch: string
   nothing: string
   inputs: string
+  origin: string
+  pickerOnly: string
+  pickerKeys: string
+  eyebrowFlow: string
+  eyebrowStep: string
+  runsOn: string
+  nothingSelected: string
+  saved: string
+  issueSentence: string
+  andGets: string
+  fixReplace: string
+  stepName: string
+  moreStep: string
   output: string
   dropHere: string
   issueCount: string
@@ -78,6 +91,7 @@ export interface StepEditorWords {
 
 export const stepEditorWords = defineLabels<StepEditorWords>('stepEditor', {
   en: {
+    origin: 'start', pickerOnly: 'Only steps that take', pickerKeys: '↑↓ choose · Enter adds and links · Esc closes', eyebrowFlow: 'Flow', eyebrowStep: 'Selected step', runsOn: 'Runs on', nothingSelected: 'Nothing selected. Click a step to configure it, or use + to add one.', saved: 'saved', issueSentence: '“{to}” expects', andGets: 'and gets', fixReplace: 'Replace with {step}', stepName: 'Step name', moreStep: 'More for this step', 
     paletteTitle: 'Steps', search: 'Find a step', searchKey: 'Shortcut: /', show: 'Show', all: 'All', noAI: 'Without AI', recent: 'Recent',
     ai: 'AI', aiOff: 'AI is off in this project', noMatch: 'No step matches “{query}”', noRecent: 'Steps you add appear here',
     dragHint: 'Drag onto the canvas or press Enter', addNamed: 'Add {name}',
@@ -85,7 +99,7 @@ export const stepEditorWords = defineLabels<StepEditorWords>('stepEditor', {
     accepts: 'Takes {shape}', nothingAccepts: 'No step takes {shape}', results: '{count, plural, =0 {No steps} one {# step} other {# steps}}',
     addAfter: 'Add a step after “{name}”', notSet: 'not configured', runOk: 'ok', runRunning: 'running', runFailed: 'failed',
     mismatch: 'expects {expects}; gets {gets}', nothing: 'nothing', inputs: 'Takes', output: 'Gives', dropHere: 'Drop to add “{name}”',
-    issueCount: '{count, plural, one {# link with a mismatched type} other {# links with mismatched types}}',
+    issueCount: '{count, plural, one {# problem} other {# problems}}',
     fixInsert: 'Insert “{step}” between “{from}” and “{to}”', fixUnlink: 'Remove the link from “{from}” to “{to}”', flowOk: 'Every link fits',
     summaryTitle: 'Flow summary', version: 'Version', runs: 'Runs over the edition', stepCount: 'Steps', usesAI: 'Uses AI', yes: 'yes', no: 'no',
     deterministic: 'Deterministic', seed: 'seed {seed}', citable: 'Citable outputs', none: 'none', runFlow: 'Run over the edition', validate: 'Validate flow',
@@ -97,6 +111,7 @@ export const stepEditorWords = defineLabels<StepEditorWords>('stepEditor', {
     added: '{name} added', moved: '{name} moved to position {position}',
   },
   'pt-BR': {
+    origin: 'início', pickerOnly: 'Só passos que aceitam', pickerKeys: '↑↓ escolhe · Enter adiciona e liga · Esc fecha', eyebrowFlow: 'Fluxo', eyebrowStep: 'Passo selecionado', runsOn: 'Roda sobre', nothingSelected: 'Nada selecionado. Clique num passo para configurá-lo, ou use + para adicionar.', saved: 'salvo', issueSentence: '“{to}” espera', andGets: 'e recebe', fixReplace: 'Trocar por {step}', stepName: 'Nome do passo', moreStep: 'Mais ações do passo', 
     paletteTitle: 'Passos', search: 'Buscar passo', searchKey: 'Atalho: /', show: 'Mostrar', all: 'Todos', noAI: 'Sem IA', recent: 'Recentes',
     ai: 'IA', aiOff: 'IA desativada neste projeto', noMatch: 'Nenhum passo corresponde a “{query}”', noRecent: 'Os passos que você adicionar aparecem aqui',
     dragHint: 'Arraste para o canvas ou pressione Enter', addNamed: 'Adicionar {name}',
@@ -104,7 +119,7 @@ export const stepEditorWords = defineLabels<StepEditorWords>('stepEditor', {
     accepts: 'Recebe {shape}', nothingAccepts: 'Nenhum passo recebe {shape}', results: '{count, plural, =0 {Nenhum passo} one {# passo} other {# passos}}',
     addAfter: 'Adicionar passo depois de “{name}”', notSet: 'não configurado', runOk: 'ok', runRunning: 'rodando', runFailed: 'falhou',
     mismatch: 'espera {expects}; recebe {gets}', nothing: 'nada', inputs: 'Recebe', output: 'Entrega', dropHere: 'Solte para adicionar “{name}”',
-    issueCount: '{count, plural, one {# ligação com tipo incompatível} other {# ligações com tipos incompatíveis}}',
+    issueCount: '{count, plural, one {# problema} other {# problemas}}',
     fixInsert: 'Inserir “{step}” entre “{from}” e “{to}”', fixUnlink: 'Remover a ligação de “{from}” para “{to}”', flowOk: 'Todas as ligações encaixam',
     summaryTitle: 'Resumo do fluxo', version: 'Versão', runs: 'Execuções sobre a edição', stepCount: 'Passos', usesAI: 'Usa IA', yes: 'sim', no: 'não',
     deterministic: 'Determinístico', seed: 'semente {seed}', citable: 'Saídas citáveis', none: 'nenhuma', runFlow: 'Executar sobre a edição', validate: 'Validar fluxo',
@@ -116,6 +131,7 @@ export const stepEditorWords = defineLabels<StepEditorWords>('stepEditor', {
     added: '{name} adicionado', moved: '{name} movido para a posição {position}',
   },
   es: {
+    origin: 'inicio', pickerOnly: 'Solo pasos que aceptan', pickerKeys: '↑↓ elige · Enter añade y enlaza · Esc cierra', eyebrowFlow: 'Flujo', eyebrowStep: 'Paso seleccionado', runsOn: 'Se ejecuta sobre', nothingSelected: 'Nada seleccionado. Haz clic en un paso para configurarlo, o usa + para añadir.', saved: 'guardado', issueSentence: '“{to}” espera', andGets: 'y recibe', fixReplace: 'Cambiar por {step}', stepName: 'Nombre del paso', moreStep: 'Más acciones del paso', 
     paletteTitle: 'Pasos', search: 'Buscar paso', searchKey: 'Atajo: /', show: 'Mostrar', all: 'Todos', noAI: 'Sin IA', recent: 'Recientes',
     ai: 'IA', aiOff: 'IA desactivada en este proyecto', noMatch: 'Ningún paso coincide con “{query}”', noRecent: 'Los pasos que añadas aparecen aquí',
     dragHint: 'Arrastra al lienzo o pulsa Enter', addNamed: 'Añadir {name}',
@@ -123,7 +139,7 @@ export const stepEditorWords = defineLabels<StepEditorWords>('stepEditor', {
     accepts: 'Recibe {shape}', nothingAccepts: 'Ningún paso recibe {shape}', results: '{count, plural, =0 {Ningún paso} one {# paso} other {# pasos}}',
     addAfter: 'Añadir paso después de “{name}”', notSet: 'sin configurar', runOk: 'ok', runRunning: 'en curso', runFailed: 'falló',
     mismatch: 'espera {expects}; recibe {gets}', nothing: 'nada', inputs: 'Recibe', output: 'Entrega', dropHere: 'Suelta para añadir “{name}”',
-    issueCount: '{count, plural, one {# enlace con tipo incompatible} other {# enlaces con tipos incompatibles}}',
+    issueCount: '{count, plural, one {# problema} other {# problemas}}',
     fixInsert: 'Insertar “{step}” entre “{from}” y “{to}”', fixUnlink: 'Quitar el enlace de “{from}” a “{to}”', flowOk: 'Todos los enlaces encajan',
     summaryTitle: 'Resumen del flujo', version: 'Versión', runs: 'Ejecuciones sobre la edición', stepCount: 'Pasos', usesAI: 'Usa IA', yes: 'sí', no: 'no',
     deterministic: 'Determinista', seed: 'semilla {seed}', citable: 'Salidas citables', none: 'ninguna', runFlow: 'Ejecutar sobre la edición', validate: 'Validar flujo',

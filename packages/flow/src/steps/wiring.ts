@@ -39,6 +39,7 @@ export function stepsAccepting(shape: DataShape | null | undefined, steps: reado
 }
 
 export type Repair =
+  | { kind: 'replace'; nodeId: string; stepId: string }
   | { kind: 'insert'; connectorId: string; stepId: string }
   | { kind: 'unlink'; connectorId: string }
 
@@ -65,15 +66,19 @@ export function wiringIssues(nodes: readonly FlowNode[], connectors: readonly Fl
     const expects = acceptedShapes(to, specs, c.targetPort)
     if (gets === undefined || expects === undefined) continue
     if (gets !== null && expects.includes(gets)) continue
-    // A bridge takes what arrives and gives what the receiver wants.
-    const bridge = gets === null ? undefined : stepsAccepting(gets, steps, aiAllowed).find((s) => s.output !== null && expects.includes(s.output))
+    // First choice: a step of the same kind of work that takes what arrives;
+    // then a bridge that takes it and gives what the receiver wants.
+    const receiver = specOfNode(to, specs)
+    const takers = gets === null ? [] : stepsAccepting(gets, steps, aiAllowed)
+    const twin = takers.find((s) => s.verb === receiver?.verb && s.id !== receiver?.id)
+    const bridge = takers.find((s) => s.output !== null && expects.includes(s.output))
     found.push({
       connectorId: c.id,
       nodeId: to.id,
       sourceId: from.id,
       expects,
       gets,
-      repair: bridge ? { kind: 'insert', connectorId: c.id, stepId: bridge.id } : { kind: 'unlink', connectorId: c.id },
+      repair: twin ? { kind: 'replace', nodeId: to.id, stepId: twin.id } : bridge ? { kind: 'insert', connectorId: c.id, stepId: bridge.id } : { kind: 'unlink', connectorId: c.id },
     })
   }
   return found

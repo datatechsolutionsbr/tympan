@@ -81,6 +81,12 @@
     --fk-flow-node-h: 72px;
     --fk-flow-node-w: 236px;
     --fk-flow-step-w: 250px;
+    /* Data shapes on step ports (colour always paired with the shape word). */
+    --fk-flow-shape-records: var(--fk-accent);
+    --fk-flow-shape-table: var(--fk-categorical-1);
+    --fk-flow-shape-number: var(--fk-warning);
+    --fk-flow-shape-chart: var(--fk-categorical-8);
+    --fk-flow-shape-decision: var(--fk-danger);
     --fk-flow-step-h: 86px;
     --fk-flow-col-gap: 56px;
   }

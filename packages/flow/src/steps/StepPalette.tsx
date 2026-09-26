@@ -6,22 +6,7 @@
 // folded shelf. Enter or a tap places a step; a drag drops it on the canvas.
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import {
-  Button as AriaButton,
-  Disclosure,
-  DisclosurePanel,
-  GridList,
-  GridListItem,
-  Heading,
-  Input,
-  Label,
-  SearchField,
-  ToggleButton,
-  ToggleButtonGroup,
-  useDragAndDrop,
-  useFilter,
-  type Key,
-} from 'react-aria-components'
+import { Button as AriaButton, Disclosure, DisclosurePanel, GridList, GridListItem, Heading, Input, Label, SearchField, ToggleButton, ToggleButtonGroup, useDragAndDrop, useFilter, type Key } from 'react-aria-components'
 import { ChevronDown, Search } from 'lucide-react'
 import { fill, useFlowLocale } from '../internal/labels'
 import { ShapeFlow } from './ShapeChip'
@@ -30,6 +15,16 @@ import { useSteps } from './StepsContext'
 
 /** Drag payload type of a palette step. */
 export const STEP_MEDIA_TYPE = 'application/x-fakhir-step'
+
+/** A second, empty drag type that names the step, readable while dragging over (payloads are not). */
+export const stepDragType = (stepId: string) => `${STEP_MEDIA_TYPE}-${stepId.toLowerCase()}`
+
+/** The step id a drag names, if any. */
+export function stepOfDrag(types: readonly string[]): string | null {
+  const prefix = `${STEP_MEDIA_TYPE}-`
+  const hit = types.find((t) => t.startsWith(prefix))
+  return hit ? hit.slice(prefix.length) : null
+}
 
 export type PaletteFilter = 'all' | 'no-ai' | 'recent'
 
@@ -84,57 +79,64 @@ export function StepPalette({ onPlace, recent = [], onDragChange, className }: S
 
   return (
     <section className={['fk-step-palette', className].filter(Boolean).join(' ')} aria-label={w.paletteTitle}>
-      <SearchField className="fk-step-palette__search" value={query} onChange={setQuery}>
-        <Label className="fk-visually-hidden">{w.search}</Label>
-        <Search className="fk-step-palette__search-icon" aria-hidden="true" focusable="false" />
-        <Input ref={fieldRef} className="fk-step-palette__input" placeholder={w.search} aria-keyshortcuts="/" />
-        <kbd className="fk-step-palette__key" title={w.searchKey}>
-          /
-        </kbd>
-      </SearchField>
-      <ToggleButtonGroup
-        className="fk-step-palette__filters"
-        aria-label={w.show}
-        selectionMode="single"
-        disallowEmptySelection
-        selectedKeys={[filter]}
-        onSelectionChange={(keys) => {
-          const next = [...keys][0]
-          if (next) setFilter(next as PaletteFilter)
-        }}
-      >
-        <ToggleButton id="all" className="fk-step-palette__filter">
-          {w.all}
-        </ToggleButton>
-        <ToggleButton id="no-ai" className="fk-step-palette__filter">
-          {w.noAI}
-        </ToggleButton>
-        <ToggleButton id="recent" className="fk-step-palette__filter">
-          {w.recent}
-        </ToggleButton>
-      </ToggleButtonGroup>
-      {!rt.aiAllowed ? <p className="fk-step-palette__note">{w.aiOff}</p> : null}
+      <div className="fk-step-palette__top">
+        <SearchField className="fk-step-palette__search" value={query} onChange={setQuery}>
+          <Label className="fk-visually-hidden">{w.search}</Label>
+          <Search className="fk-step-palette__search-icon" aria-hidden="true" focusable="false" />
+          <Input ref={fieldRef} className="fk-step-palette__input" placeholder={w.search} aria-keyshortcuts="/" />
+          <kbd className="fk-step-palette__key" title={w.searchKey}>
+            /
+          </kbd>
+        </SearchField>
+        <ToggleButtonGroup
+          className="fk-step-palette__filters"
+          aria-label={w.show}
+          selectionMode="single"
+          disallowEmptySelection
+          selectedKeys={[filter]}
+          onSelectionChange={(keys) => {
+            const next = [...keys][0]
+            if (next) setFilter(next as PaletteFilter)
+          }}
+        >
+          <ToggleButton id="all" className="fk-step-palette__filter">
+            {w.all}
+          </ToggleButton>
+          <ToggleButton id="no-ai" className="fk-step-palette__filter">
+            {w.noAI}
+          </ToggleButton>
+          <ToggleButton id="recent" className="fk-step-palette__filter">
+            {w.recent}
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </div>
       <div className="fk-step-palette__shelves">
+        {!rt.aiAllowed ? <p className="fk-step-palette__note">{w.aiOff}</p> : null}
         {shelves.length ? (
           shelves.map((sh) =>
             sh.folded && !query ? (
               <Disclosure key={sh.id} className="fk-step-palette__shelf" data-folded="true">
-                <Heading level={3} className="fk-step-palette__shelf-head">
-                  <AriaButton slot="trigger" className="fk-step-palette__fold">
-                    <ChevronDown className="fk-step-palette__chevron" aria-hidden="true" focusable="false" />
-                    {sh.title}
-                  </AriaButton>
-                </Heading>
+                <div className="fk-step-palette__shelf-head">
+                  <Heading level={3} className="fk-step-palette__shelf-title">
+                    <AriaButton slot="trigger" className="fk-step-palette__fold">
+                      <ChevronDown className="fk-step-palette__chevron" aria-hidden="true" focusable="false" />
+                      {sh.title}
+                    </AriaButton>
+                  </Heading>
+                  {sh.purpose ? <span className="fk-step-palette__purpose">{sh.purpose}</span> : null}
+                </div>
                 <DisclosurePanel>
                   <ShelfList shelf={sh} onPlace={onPlace} {...(onDragChange ? { onDragChange } : {})} />
                 </DisclosurePanel>
               </Disclosure>
             ) : (
               <section key={sh.id} className="fk-step-palette__shelf" aria-labelledby={`fk-shelf-${sh.id}`}>
-                <h3 id={`fk-shelf-${sh.id}`} className="fk-step-palette__shelf-head">
-                  {sh.title}
-                </h3>
-                {sh.purpose ? <p className="fk-step-palette__purpose">{sh.purpose}</p> : null}
+                <div className="fk-step-palette__shelf-head">
+                  <h3 id={`fk-shelf-${sh.id}`} className="fk-step-palette__shelf-title">
+                    {sh.title}
+                  </h3>
+                  {sh.purpose ? <span className="fk-step-palette__purpose">{sh.purpose}</span> : null}
+                </div>
                 <ShelfList shelf={sh} onPlace={onPlace} {...(onDragChange ? { onDragChange } : {})} />
               </section>
             ),
@@ -155,20 +157,17 @@ function ShelfList({ shelf, onPlace, onDragChange }: { shelf: ReadyShelf; onPlac
     getItems: (keys) =>
       shelf.steps
         .filter((s) => keys.has(s.id))
-        .map((s) => ({ [STEP_MEDIA_TYPE]: JSON.stringify({ stepId: s.id }), 'text/plain': s.name })),
+        .map((s) => ({
+          [STEP_MEDIA_TYPE]: JSON.stringify({ stepId: s.id }),
+          [stepDragType(s.id)]: '',
+          'text/plain': s.name,
+        })),
     onDragStart: (e) => onDragChange?.(String([...e.keys][0] ?? '')),
     onDragEnd: () => onDragChange?.(null),
   })
   const disabled: Key[] = shelf.steps.filter(blocked).map((s) => s.id)
   return (
-    <GridList
-      className="fk-step-palette__list"
-      aria-label={shelf.title}
-      items={shelf.steps}
-      disabledKeys={disabled}
-      dragAndDropHooks={dragAndDropHooks}
-      onAction={(key) => onPlace(String(key))}
-    >
+    <GridList className="fk-step-palette__list" aria-label={shelf.title} items={shelf.steps} disabledKeys={disabled} dragAndDropHooks={dragAndDropHooks} onAction={(key) => onPlace(String(key))}>
       {(s) => {
         const Icon = s.icon
         return (

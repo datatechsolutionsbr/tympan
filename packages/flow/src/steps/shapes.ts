@@ -3,7 +3,7 @@
 
 import { ChartColumn, Hash, Rows3, Split, Table2 } from 'lucide-react'
 import type { IconComponent } from '@fakhir/design-system'
-import { defineLabels } from '../internal/labels'
+import { defineLabels, fill } from '../internal/labels'
 
 export type DataShape = 'records' | 'table' | 'number' | 'chart' | 'decision'
 
@@ -17,7 +17,7 @@ export const shapeWords = defineLabels<ShapeWords>('dataShapes', {
   es: { records: 'registros', table: 'tabla', number: 'número', chart: 'gráfico', decision: 'decisión' },
 })
 
-/** Glyph and categorical tone of each shape. */
+/** Glyph of each shape (lists and menus; the chips carry the word only). */
 export const SHAPE_LOOK: Readonly<Record<DataShape, { icon: IconComponent; tone: string }>> = Object.freeze({
   records: { icon: Rows3, tone: 'categorical-1' },
   table: { icon: Table2, tone: 'categorical-3' },
@@ -29,4 +29,18 @@ export const SHAPE_LOOK: Readonly<Record<DataShape, { icon: IconComponent; tone:
 /** "records / table": the shapes one input accepts, in the reader's words. */
 export function shapeList(shapes: readonly DataShape[], words: ShapeWords): string {
   return shapes.map((s) => words[s]).join(' / ')
+}
+
+/** Counted shapes ("1 table · 2 charts"), one ICU message per shape. */
+export const shapeCountWords = defineLabels<ShapeWords>('dataShapeCounts', {
+  en: { records: '{n, plural, one {# record set} other {# record sets}}', table: '{n, plural, one {# table} other {# tables}}', number: '{n, plural, one {# number} other {# numbers}}', chart: '{n, plural, one {# chart} other {# charts}}', decision: '{n, plural, one {# decision} other {# decisions}}' },
+  'pt-BR': { records: '{n, plural, one {# conjunto de registros} other {# conjuntos de registros}}', table: '{n, plural, one {# tabela} other {# tabelas}}', number: '{n, plural, one {# número} other {# números}}', chart: '{n, plural, one {# gráfico} other {# gráficos}}', decision: '{n, plural, one {# decisão} other {# decisões}}' },
+  es: { records: '{n, plural, one {# conjunto de registros} other {# conjuntos de registros}}', table: '{n, plural, one {# tabla} other {# tablas}}', number: '{n, plural, one {# número} other {# números}}', chart: '{n, plural, one {# gráfico} other {# gráficos}}', decision: '{n, plural, one {# decisión} other {# decisiones}}' },
+})
+
+/** "1 table · 1 chart" for a list of output shapes, in shape order. */
+export function shapeCounts(shapes: readonly DataShape[], words: ShapeWords, locale: string): string {
+  return DATA_SHAPES.filter((s) => shapes.includes(s))
+    .map((s) => fill(words[s], { n: shapes.filter((x) => x === s).length }, locale))
+    .join(' · ')
 }

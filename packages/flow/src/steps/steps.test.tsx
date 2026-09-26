@@ -9,7 +9,8 @@ import { FlowEditor } from '../editor/FlowEditor'
 import { researchStepWords, readyCatalog, researchStepCatalog, summaryLine } from './researchSteps'
 import type { FlowConnector, FlowNode } from '../model/types'
 import { createFlowEditorStore } from '../state/editorState'
-import { StepPalette, STEP_MEDIA_TYPE } from './StepPalette'
+import { StepPalette, STEP_MEDIA_TYPE, stepDragType, stepOfDrag } from './StepPalette'
+import { autoLayout } from '../layout/autoLayout'
 import { StepsProvider } from './StepsContext'
 import { stepToolItems } from './stepTools'
 import { stepEditorWords } from './stepLabels'
@@ -30,7 +31,7 @@ const flow = () => ({
 describe('typed wiring', () => {
   it('offers only the steps whose input takes the arriving shape, and no AI step when agents are off', () => {
     const afterTable = ids(stepsAccepting('table', en.steps))
-    expect(afterTable).toEqual(expect.arrayContaining(['describe', 'composite-index', 'person-decision', 'citable-table', 'citable-chart']))
+    expect(afterTable).toEqual(expect.arrayContaining(['join', 'describe', 'reliability', 'composite-index', 'citable-table', 'citable-chart']))
     expect(afterTable).not.toContain('filter')
     expect(ids(stepsAccepting('records', en.steps))).toContain('agent-decision')
     expect(ids(stepsAccepting('records', en.steps, false))).not.toContain('agent-decision')
@@ -41,7 +42,8 @@ describe('typed wiring', () => {
     const nodes = [step('t', 'citable-table'), step('n', 'manuscript-number'), step('c', 'citable-chart'), step('r', 'reliability')]
     const found = wiringIssues(nodes, [wire('x', 't', 'n'), wire('y', 'c', 'r')], en.steps)
     expect(found).toHaveLength(2)
-    expect(found[0]).toMatchObject({ nodeId: 'n', gets: 'table', expects: ['number'], repair: { kind: 'insert', stepId: 'composite-index' } })
+    // Same kind of work that takes a table: swap the step.
+    expect(found[0]).toMatchObject({ nodeId: 'n', gets: 'table', expects: ['number'], repair: { kind: 'replace', nodeId: 'n', stepId: 'citable-table' } })
     expect(found[1]).toMatchObject({ nodeId: 'r', gets: 'chart', repair: { kind: 'unlink', connectorId: 'y' } })
     expect(wiringIssues(flow().nodes, flow().connectors, en.steps)).toEqual([])
   })
@@ -53,6 +55,29 @@ describe('typed wiring', () => {
     const swapped = swapNeighbours(flow().connectors, 'flt', 'grp')!
     expect(swapped.map((c) => `${c.source}>${c.target}`)).toEqual(['ed>grp', 'grp>flt', 'flt>cnt'])
     expect(swapNeighbours(flow().connectors, 'ed', 'cnt')).toBeNull()
+  })
+
+  it('lets the host word the line, and names a dragged step in its drag types', () => {
+    expect(summaryLine(en.byId.get('group')!, { keys: 'phase', line: '[n] groups' }, 'en')).toBe('[n] groups')
+    expect(stepOfDrag([STEP_MEDIA_TYPE, stepDragType('recode'), 'text/plain'])).toBe('recode')
+    expect(stepOfDrag(['text/plain'])).toBeNull()
+  })
+
+  it('keeps a chain on one line and puts a branch after it (mirrored in RTL)', () => {
+    const size = { width: 250, height: 86 }
+    const nodes = ['a', 'b', 'c', 'd'].map((id) => ({ id, kind: 'step', position: { x: 0, y: 0 }, size }))
+    const links = [
+      { source: 'a', target: 'b' },
+      { source: 'b', target: 'c' },
+      { source: 'b', target: 'd' },
+    ]
+    const at = Object.fromEntries(autoLayout(nodes, links, 'top-down', { rankGap: 54, siblingGap: 24, alignment: 'start' }).map((n) => [n.id, n.position]))
+    expect(at.a!.x).toBe(at.b!.x)
+    expect(at.c!.x).toBe(at.b!.x)
+    expect(at.d!.x).toBe(at.c!.x + 250 + 24)
+    expect(at.c!.y).toBe(at.d!.y)
+    const rtl = Object.fromEntries(autoLayout(nodes, links, 'top-down', { rankGap: 54, siblingGap: 24, alignment: 'start', rtl: true }).map((n) => [n.id, n.position]))
+    expect(rtl.d!.x).toBeLessThan(rtl.c!.x)
   })
 
   it('writes the one-line summary only when every value it names is set', () => {
@@ -87,7 +112,8 @@ describe('StepPalette', () => {
       </StepsProvider>,
     )
     for (const shelf of ['Entrada', 'Preparar', 'Analisar', 'Decidir', 'Saída']) expect(screen.getByRole('heading', { name: shelf })).toBeInTheDocument()
-    expect(screen.getByText('De onde vêm os dados do fluxo')).toBeInTheDocument()
+    expect(screen.getByText('Onde os dados entram')).toBeInTheDocument()
+    expect(screen.getByRole('row', { name: 'Edição congelada' })).toHaveTextContent('início')
     expect(container).not.toHaveTextContent(/Control flow|Data processing|0 itens|Nenhum .* ainda/)
     const filterRow = screen.getByRole('row', { name: 'Filtrar' })
     expect(filterRow).toHaveTextContent('Recebe: registros')
@@ -160,6 +186,8 @@ describe('FlowEditor with research steps', () => {
     const dialog = await screen.findByRole('dialog', { name: 'Add after “Count per phase”' })
     const names = within(dialog).getAllByRole('option').map((o) => o.getAttribute('aria-label') ?? o.textContent)
     expect(names.some((n) => /Filter/.test(n!))).toBe(false)
+    // A join needs a second input, so it is not offered after one step.
+    expect(names.some((n) => /Join/.test(n!))).toBe(false)
     expect(names.some((n) => /Citable table/.test(n!))).toBe(true)
     await userEvent.type(within(dialog).getByRole('searchbox'), 'citable t')
     await userEvent.keyboard('{ArrowDown}{Enter}')
@@ -192,16 +220,16 @@ describe('FlowEditor with research steps', () => {
     expect(store.getState().connectors.find((c) => c.target === chart.id)?.source).toBe('cnt')
   })
 
-  it('marks a mismatched link on the step and repairs it from the status bar in one press', async () => {
+  it('marks a mismatched link on the step and repairs it from the status bar in one press (swap for a fitting step)', async () => {
     const g = flow()
     g.nodes.push(step('num', 'manuscript-number'))
     g.connectors.push(wire('bad', 'cnt', 'num'))
     const { store, container } = mount(g)
     expect(container.querySelector('[data-fk-node-id="num"] .fk-step')).toHaveAttribute('data-issue', 'true')
-    expect(container.querySelector('[data-fk-node-id="num"] .fk-step__problem')).toHaveTextContent('expects number; gets table')
-    expect(container.querySelector('.fk-issue-bar')).toHaveTextContent('1 link with a mismatched type')
-    await userEvent.click(screen.getByRole('button', { name: 'Insert “Composite index” between “Count per phase” and “Number for the manuscript”' }))
-    expect(store.getState().nodes.some((n) => n.data.stepId === 'composite-index')).toBe(true)
+    expect(container.querySelector('[data-fk-node-id="num"] .fk-step__line')).toHaveTextContent('expects number; gets table')
+    expect(container.querySelector('.fk-issue-bar')).toHaveTextContent('1 problem: “Number for the manuscript” expects number and gets table.')
+    await userEvent.click(screen.getByRole('button', { name: 'Replace with Citable table' }))
+    expect(store.getState().nodes.find((n) => n.id === 'num')!.data.stepId).toBe('citable-table')
     expect(container.querySelector('.fk-issue-bar')).toBeNull()
   })
 

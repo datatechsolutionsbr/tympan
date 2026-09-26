@@ -74,7 +74,7 @@ export interface CanvasSurfaceProps {
    * Where a fitted graph sits: centred, or against the reading-start and top
    * edges (no empty margin before the content; right edge in RTL).
    */
-  fitAlign?: 'center' | 'start'
+  fitAlign?: 'center' | 'start' | 'top'
   /** Extra canvas area a fit must include besides the nodes (band labels, frames). */
   fitInclude?: Rect
 
@@ -199,6 +199,10 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
     if (b && minFitZoom !== undefined && v.zoom < minFitZoom) {
       const zoom = clampZoom(minFitZoom, zoomLimits)
       v = { zoom, x: container.width / 2 - (b.x + b.width / 2) * zoom, y: container.height / 2 - (b.y + b.height / 2) * zoom }
+    }
+    if (b && fitAlign === 'top') {
+      // Centred across, from the top edge down (flows that read downwards).
+      v = { zoom: v.zoom, y: fitPadding + 16 - b.y * v.zoom, x: v.x }
     }
     if (b && fitAlign === 'start') {
       const pad = Math.min(fitPadding, 16)

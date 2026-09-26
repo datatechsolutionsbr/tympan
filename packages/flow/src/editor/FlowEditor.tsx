@@ -55,7 +55,7 @@ import { researchStepCatalog, specOfNode, STEP_KIND, type ReadyStep, type StepCa
 import type { DataShape } from '../steps/shapes'
 import { alongEdge, STEP_CARD_SIZE, StepCard } from '../steps/StepCard'
 import { StepListView } from '../steps/StepListView'
-import { StepPalette, STEP_MEDIA_TYPE, type StepPaletteProps } from '../steps/StepPalette'
+import { StepPalette, STEP_MEDIA_TYPE, stepOfDrag, type StepPaletteProps } from '../steps/StepPalette'
 import { StepsProvider, useReadyCatalog } from '../steps/StepsContext'
 import { stepEditorWords } from '../steps/stepLabels'
 import { stepToolItems } from '../steps/stepTools'
@@ -289,6 +289,8 @@ export function FlowEditor(props: FlowEditorProps) {
 
 const LAYOUT_TO_CYCLE: Record<string, LayoutCycle> = { down: 'top-down', right: 'left-right' }
 const NUDGE = 8
+/** Step flows keep their main chain on one line with branches after it. */
+const STEP_SPACING = (rtl: boolean) => ({ rankGap: 54, siblingGap: 24, alignment: 'start' as const, rtl })
 const DRAWN = (n: FlowNode) => n.kind !== 'note' && n.kind !== 'group'
 const isTyping = (el: HTMLElement) => !!el.closest('input, textarea, select, [contenteditable="true"]')
 const plainA = (e: KeyboardEvent<HTMLElement>) => (e.key === 'a' || e.key === 'A') && !e.metaKey && !e.ctrlKey && !e.altKey
@@ -298,6 +300,8 @@ type Placement = { after: string } | { through: string } | { near: Point }
 
 interface PickerState {
   title: string
+  /** Shorter title for the search placeholder. */
+  placeholder?: string
   arriving?: DataShape | null
   options: ReadyStep[]
   place: (stepId: string) => void
@@ -450,7 +454,7 @@ function EditorBody(props: FlowEditorProps & { reference: FlowReferenceData }) {
       const dir = cycle === 'left-right' ? 'right' : 'down'
       actions.setLayoutDirection(dir)
       const sized = store.getState().nodes.map((n) => ({ ...n, size: sizeOf(n) }))
-      const laid = autoLayout(sized, store.getState().connectors, rankDirectionOf(dir, rtl, keepLtrLayout))
+      const laid = autoLayout(sized, store.getState().connectors, rankDirectionOf(dir, rtl, keepLtrLayout), STEP_SPACING(rtl && !keepLtrLayout))
       if (snapshot) actions.snapshot()
       const moved = new Map(laid.map((n) => [n.id, n.position]))
       actions.setNodes((prev) => prev.map((n) => (moved.get(n.id) === n.position ? n : { ...n, position: moved.get(n.id) ?? n.position })))
@@ -560,10 +564,13 @@ function EditorBody(props: FlowEditorProps & { reference: FlowReferenceData }) {
       const n = store.getState().nodes.find((x) => x.id === nodeId)
       if (!n || store.getState().locked) return
       const shape = givenShape(n, ready.byId)
+      const name = nameOf(nodeId)
       openPicker(trigger, {
-        title: fill(sw.pickerAfter, { name: nameOf(nodeId) }, locale),
+        title: fill(sw.pickerAfter, { name }, locale),
+        placeholder: fill(sw.pickerAfter, { name: [...name].length > 14 ? `${[...name].slice(0, 7).join('').trimEnd()}...` : name }, locale),
         arriving: shape,
-        options: shape === null ? [] : stepsAccepting(shape, ready.steps, aiAllowed),
+        // After one step: steps with a single input (a join also needs its second input).
+        options: shape === null ? [] : stepsAccepting(shape, ready.steps, aiAllowed).filter((st) => st.inputs.length === 1),
         place: (id) => insertStep(id, { after: nodeId }),
       })
     },
@@ -659,7 +666,12 @@ function EditorBody(props: FlowEditorProps & { reference: FlowReferenceData }) {
   )
 
   const repair = (issue: WiringIssue) => {
-    if (issue.repair.kind === 'insert') insertStep(issue.repair.stepId, { through: issue.connectorId })
+    const fix = issue.repair
+    if (fix.kind === 'replace') {
+      actions.snapshot()
+      actions.setNodes((prev) => prev.map((n) => (n.id === fix.nodeId ? { ...n, data: { stepId: fix.stepId } } : n)))
+      announce(fill(sw.added, { name: ready.byId.get(fix.stepId)?.name ?? fix.stepId }, locale))
+    } else if (fix.kind === 'insert') insertStep(fix.stepId, { through: issue.connectorId })
     else actions.removeConnector(issue.connectorId)
   }
   const validate = () => {
@@ -788,8 +800,13 @@ function EditorBody(props: FlowEditorProps & { reference: FlowReferenceData }) {
       e.dataTransfer.dropEffect = 'copy'
     }
     if (types.includes(STEP_MEDIA_TYPE) && canvasRef.current) {
+      const named = stepOfDrag(types)
+      if (named && named !== dragStep) setDragStep(ready.steps.find((st) => st.id.toLowerCase() === named)?.id ?? null)
       const r = canvasRef.current.getBoundingClientRect()
-      setDropAt({ start: rtl ? r.right - e.clientX : e.clientX - r.left, top: e.clientY - r.top })
+      // The drop outline stays whole inside the canvas.
+      const half = { w: STEP_CARD_SIZE.width / 2 + 8, h: STEP_CARD_SIZE.height / 2 + 8 }
+      const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), Math.max(lo, hi))
+      setDropAt({ start: clamp(rtl ? r.right - e.clientX : e.clientX - r.left, half.w, r.width - half.w), top: clamp(e.clientY - r.top, half.h, r.height - half.h) })
     }
   }
   const onDragLeave = (e: DragEvent<HTMLDivElement>) => {
@@ -913,10 +930,10 @@ function EditorBody(props: FlowEditorProps & { reference: FlowReferenceData }) {
         className={['fk-editor', props.className].filter(Boolean).join(' ')}
         data-view={listView ? 'list' : 'canvas'}
         data-side={props.sidePanel === false ? 'none' : 'shown'}
-        data-palette={props.palette === false ? 'none' : 'shown'}
+        data-palette={props.palette === false || (listView && wide) ? 'none' : 'shown'}
         data-locked={locked ? 'true' : 'false'}
       >
-        {props.palette !== false && wide ? <aside className="fk-editor__palette" aria-label={l.palette}>{paletteBody}</aside> : null}
+        {props.palette !== false && wide && !listView ? <aside className="fk-editor__palette" aria-label={l.palette}>{paletteBody}</aside> : null}
         {props.palette !== false && !wide ? (
           <>
             <Button className="fk-editor__palette-open" variant="secondary" leadingIcon={<Plus />} onPress={() => setPaletteOpen(true)}>
@@ -975,7 +992,8 @@ function EditorBody(props: FlowEditorProps & { reference: FlowReferenceData }) {
               viewport={viewport}
               onViewportChange={setViewport}
               fit="resize"
-              fitPadding={96}
+              fitPadding={24}
+              fitAlign="top"
               mode={mode}
               dragNodes={!locked}
               marquee
@@ -1094,6 +1112,7 @@ function EditorBody(props: FlowEditorProps & { reference: FlowReferenceData }) {
         {picker ? (
           <AddStepPicker
             title={picker.title}
+            {...(picker.placeholder ? { placeholder: picker.placeholder } : {})}
             {...(picker.arriving !== undefined ? { arriving: picker.arriving } : {})}
             options={picker.options}
             triggerRef={pickerAnchor}
