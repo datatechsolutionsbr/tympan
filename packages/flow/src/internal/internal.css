@@ -96,6 +96,7 @@
   .fk-docked-panel__title {
     flex: 1 1 auto;
     min-inline-size: 0;
+    overflow-wrap: anywhere;
     margin: 0;
     color: var(--fk-ink);
     font-family: var(--fk-font-serif);
