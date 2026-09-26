@@ -15,7 +15,7 @@ Tailwind-free code, written only from behaviour specifications.
 | Role | Who | Read | Did not read |
 |---|---|---|---|
 | Spec writer | a separate agent session, before this work | the fork's sources, stories and tests | n/a (does not implement) |
-| Implementer (coordinating) | Claude (agent session `01Ui9nSds3quCVK9RtvTPvgj`), acting for Guilherme Baufaker Rêgo | the allowed inputs below | the fork, its `dist` or stylesheet, any `ui-components` folder, `~/datatech/astrlabe*`, the old platform, any commercial template material or archive |
+| Implementer (coordinating) | Claude (agent session `01Ui9nSds3quCVK9RtvTPvgj`), acting for Natalia Mesquita (author of the Fakhir UI) | the allowed inputs below | the fork, its `dist` or stylesheet, any `ui-components` folder, `~/datatech/astrlabe*`, the old platform, any commercial template material or archive |
 | Implementer (sub-sessions A–D) | four forked sub-sessions of the same implementer, each writing one group of components | the same allowed inputs, plus the code the implementer had already written in this worktree | same exclusions |
 | Coordinator | the session that assigned the work | both sides; runs the similarity check from outside the clean room | n/a |
 
@@ -60,6 +60,20 @@ resolved from the design direction and recorded in `PROVENANCE.md`.
 5. Guardrails `check:no-tailwind` and `check:provenance` run in `npm run check`.
    The similarity comparison against the fork is described in
    `tools/provenance/README.md` and is run by the coordinator.
+
+## Waves 2 and 4 (branch `ds/wave-2`)
+
+Same roles and exclusions. Allowed inputs added: `docs/clean-room/specs/wave-2/*.md`
+and `wave-4/*.md`, public ISO 3166-2 / IBGE / ISO 4217 / CLDR facts for the
+Brazil data module (cited in the module), MDN `Intl.*` documentation, and the
+Fakhir OpenAPI contract of this repository (run event vocabulary). Nine
+sub-sessions implemented one group each in their own folders; the coordinating
+implementer wrote the research-shell group and its nine specs (from the
+approved storyboards described in writing and the design direction; no fork
+counterpart exists), and integrated. Eight wave-1 files were restructured after
+the coordinator's outside similarity audit (target: winnowed containment
+< 0.03 and structural 6-gram Jaccard < 0.20 per file), again without reading
+the fork. `check:logical-css` joined the guardrails.
 
 ## Statement
 

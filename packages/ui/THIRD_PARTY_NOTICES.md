@@ -1,7 +1,7 @@
 # Third-party notices
 
 `@fakhir/design-system` and `@fakhir/tokens` are MIT-licensed (Copyright (c)
-2026 Guilherme Baufaker Rêgo). They depend on, but do not copy, the packages
+2026 Natalia Mesquita). They depend on, but do not copy, the packages
 below. Versions are those resolved on 2026-09-26.
 
 ## Runtime dependencies
@@ -10,6 +10,9 @@ below. Versions are those resolved on 2026-09-26.
 |---|---|---|---|
 | react-aria-components (and its react-aria / react-stately / @internationalized dependencies) | 1.21.1 | Apache-2.0 | accessible primitives (Button, Link, Menu, Popover, Dialog, Modal, Select, ListBox, Table, Tabs, TagGroup, TextField, SearchField, Checkbox, Switch, RadioGroup, ProgressBar, Disclosure, Tooltip, Breadcrumbs, RouterProvider, I18nProvider) |
 | lucide-react | 1.48.0 | ISC | icons (design direction §4.4) |
+| react-aria (hooks: useLink, useButton, useLongPress, mergeProps) | 3.52.1 | Apache-2.0 | roving-focus items of FloatingActionBar |
+| @internationalized/date | 3.12 | Apache-2.0 | calendar dates in DateField (external) |
+| d3-geo | 3.1.1 | ISC | projection and path generation in RegionMap (external, not bundled) |
 | react, react-dom (peer) | 19.x | MIT | rendering |
 
 Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0. Copyright
@@ -22,6 +25,9 @@ Bemis 2013-2022 as part of Feather (MIT); all other copyright for Lucide is
 held by Lucide Contributors 2022. Icons are imported as components and not
 bundled into `dist/`.
 
+ISC licence (d3-geo): Copyright 2010-2024 Mike Bostock. Declared as a
+dependency and marked external; no d3 code is copied into `dist/`.
+
 ## Build and test tools (not shipped)
 
 | Package | Licence |
@@ -30,6 +36,7 @@ bundled into `dist/`.
 | tsdown, vite, @vitejs/plugin-react, vitest | MIT |
 | typescript | Apache-2.0 |
 | axe-core 4.13 | MPL-2.0 (used unmodified as a test dependency) |
+| @types/d3-geo | MIT |
 | @testing-library/react, user-event, jest-dom, jsdom | MIT |
 
 ## Methods implemented from public descriptions
