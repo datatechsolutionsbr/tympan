@@ -1,9 +1,14 @@
+// GroupedDisclosureList (spec: wave-2/grouped-disclosure-list.md).
+//
+// Items in named sections whose bodies open and close independently. The
+// public API speaks in collapsed keys (all open by default); React Aria's
+// DisclosureGroup speaks in expanded keys; `complement` turns one into the other.
 import { ChevronDown } from 'lucide-react'
-import { createElement, useMemo, type KeyboardEvent, type ReactNode } from 'react'
+import { useMemo, type KeyboardEvent, type ReactNode } from 'react'
 import { Button, Disclosure, DisclosureGroup, DisclosurePanel } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 
-export interface DisclosureListGroup<T, M = unknown> {
+export interface ItemSection<T, M = unknown> {
   key: string
   header: ReactNode
   items: T[]
@@ -11,8 +16,8 @@ export interface DisclosureListGroup<T, M = unknown> {
 }
 
 export interface GroupedDisclosureListProps<T, M = unknown> {
-  groups: DisclosureListGroup<T, M>[]
-  renderItem: (item: T, group: DisclosureListGroup<T, M>) => ReactNode
+  groups: ItemSection<T, M>[]
+  renderItem: (item: T, group: ItemSection<T, M>) => ReactNode
   getItemKey: (item: T) => string
   collapsedKeys?: string[]
   defaultCollapsedKeys?: string[]
@@ -21,88 +26,74 @@ export interface GroupedDisclosureListProps<T, M = unknown> {
   className?: string
 }
 
-const HEADER_SELECTOR = '.fk-grouped-list__trigger'
+type Level = NonNullable<GroupedDisclosureListProps<unknown>['headingLevel']>
+const HEADING_TAG = { 2: 'h2', 3: 'h3', 4: 'h4', 5: 'h5', 6: 'h6' } as const satisfies Record<Level, string>
 
-/** Up/Down move between group headers, Home/End to the first and last (APG accordion, optional keys). */
-function moveBetweenHeaders(event: KeyboardEvent<HTMLDivElement>) {
-  const target = event.target as HTMLElement
-  if (!target.matches(HEADER_SELECTOR)) return
-  const headers = Array.from(event.currentTarget.querySelectorAll<HTMLElement>(HEADER_SELECTOR))
-  const at = headers.indexOf(target)
-  const jumps: Record<string, number | undefined> = {
-    ArrowDown: (at + 1) % headers.length,
-    ArrowUp: (at - 1 + headers.length) % headers.length,
-    Home: 0,
-    End: headers.length - 1,
-  }
-  const next = jumps[event.key]
-  if (next === undefined) return
-  event.preventDefault()
-  headers[next]?.focus()
+const TOGGLE_ATTR = 'data-fk-section-toggle'
+
+/** Where each optional accordion key sends focus, given the current index and the count. */
+const HOPS: Record<string, (i: number, n: number) => number> = {
+  ArrowDown: (i, n) => (i + 1) % n,
+  ArrowUp: (i, n) => (i + n - 1) % n,
+  Home: () => 0,
+  End: (_i, n) => n - 1,
 }
 
-function GroupItems<T, M>({
-  group,
-  render,
-  keyOf,
-}: {
-  group: DisclosureListGroup<T, M>
-  render: GroupedDisclosureListProps<T, M>['renderItem']
-  keyOf: (item: T) => string
-}) {
+/** APG accordion's optional keys, handled in the capture phase (RAC buttons stop bubbling). */
+function hopBetweenToggles(event: KeyboardEvent<HTMLElement>) {
+  const hop = HOPS[event.key]
+  const from = event.target as HTMLElement
+  if (!hop || !from.hasAttribute(TOGGLE_ATTR)) return
+  const toggles = [...event.currentTarget.querySelectorAll<HTMLElement>(`[${TOGGLE_ATTR}]`)]
+  event.preventDefault()
+  toggles[hop(toggles.indexOf(from), toggles.length)]?.focus()
+}
+
+function SectionBody<T, M>(props: { section: ItemSection<T, M>; draw: GroupedDisclosureListProps<T, M>['renderItem']; idOf: (item: T) => string }) {
   return (
     <ul className="fk-grouped-list__items">
-      {group.items.map((item) => (
-        <li key={keyOf(item)} className="fk-grouped-list__item">
-          {render(item, group)}
+      {props.section.items.map((entry) => (
+        <li key={props.idOf(entry)} className="fk-grouped-list__item">
+          {props.draw(entry, props.section)}
         </li>
       ))}
     </ul>
   )
 }
 
-/**
- * Items in named groups whose bodies collapse independently
- * (spec: wave-2/grouped-disclosure-list.md).
- */
-export function GroupedDisclosureList<T, M = unknown>(props: GroupedDisclosureListProps<T, M>) {
-  const { groups, headingLevel = 3 } = props
-  const allKeys = useMemo(() => groups.map((g) => g.key), [groups])
-
-  // The list thinks in collapsed keys; RAC thinks in expanded keys.
-  const invert = (keys: Iterable<string>) => {
-    const out = new Set(keys)
-    return allKeys.filter((k) => !out.has(k))
-  }
-  const expansion =
-    props.collapsedKeys !== undefined
-      ? { expandedKeys: invert(props.collapsedKeys) }
-      : { defaultExpandedKeys: invert(props.defaultCollapsedKeys ?? []) }
-
-  // Capture phase: RAC buttons stop keyboard events from bubbling.
+function SectionHead({ level, children }: { level: Level; children: ReactNode }) {
+  const Tag = HEADING_TAG[level]
   return (
-    <div className={cx('fk-grouped-list', props.className)} onKeyDownCapture={moveBetweenHeaders}>
-      <DisclosureGroup
-        className="fk-grouped-list__groups"
-        allowsMultipleExpanded
-        onExpandedChange={(open) => props.onCollapsedChange?.(invert([...open].map(String)))}
-        {...expansion}
-      >
-        {groups.map((group) => (
-          <Disclosure key={group.key} id={group.key} className="fk-grouped-list__group">
+    <Tag className="fk-grouped-list__heading">
+      <Button slot="trigger" className="fk-grouped-list__trigger" {...{ [TOGGLE_ATTR]: '' }}>
+        <span className="fk-grouped-list__header">{children}</span>
+        <ChevronDown className="fk-icon fk-grouped-list__chevron" aria-hidden="true" focusable="false" />
+      </Button>
+    </Tag>
+  )
+}
+
+export function GroupedDisclosureList<T, M = unknown>(props: GroupedDisclosureListProps<T, M>) {
+  const every = useMemo(() => props.groups.map((section) => section.key), [props.groups])
+  const complement = (closed: Iterable<string>) => {
+    const outside = new Set(closed)
+    return every.filter((key) => !outside.has(key))
+  }
+  const openness =
+    props.collapsedKeys === undefined ? { defaultExpandedKeys: complement(props.defaultCollapsedKeys ?? []) } : { expandedKeys: complement(props.collapsedKeys) }
+  const report = (open: Set<unknown>) => props.onCollapsedChange?.(complement(Array.from(open, String)))
+
+  return (
+    <div className={cx('fk-grouped-list', props.className)} onKeyDownCapture={hopBetweenToggles}>
+      <DisclosureGroup className="fk-grouped-list__groups" allowsMultipleExpanded onExpandedChange={report} {...openness}>
+        {props.groups.map((section) => (
+          <Disclosure key={section.key} id={section.key} className="fk-grouped-list__group">
             {({ isExpanded }) => (
               <>
-                {createElement(
-                  `h${headingLevel}`,
-                  { className: 'fk-grouped-list__heading' },
-                  <Button slot="trigger" className="fk-grouped-list__trigger">
-                    <span className="fk-grouped-list__header">{group.header}</span>
-                    <ChevronDown className="fk-icon fk-grouped-list__chevron" aria-hidden="true" focusable="false" />
-                  </Button>,
-                )}
-                {/* Collapsed bodies are not rendered at all: out of the tree and the tab order. */}
+                <SectionHead level={props.headingLevel ?? 3}>{section.header}</SectionHead>
+                {/* A closed body is not rendered: out of the tree and the tab order. */}
                 <DisclosurePanel className="fk-grouped-list__body">
-                  {isExpanded ? <GroupItems group={group} render={props.renderItem} keyOf={props.getItemKey} /> : null}
+                  {isExpanded && <SectionBody section={section} draw={props.renderItem} idOf={props.getItemKey} />}
                 </DisclosurePanel>
               </>
             )}

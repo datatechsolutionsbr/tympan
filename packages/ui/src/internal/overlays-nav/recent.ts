@@ -1,51 +1,73 @@
-// Recent-choice store for CommandPalette: id → { uses, last }, persisted as
-// JSON under a host key. Every storage access is guarded; a missing or
-// blocked storage simply behaves as an empty store.
+// Remembered choices of the CommandPalette.
+//
+// Persisted under a host key as one JSON object: { [id]: [timesChosen, lastChosenAt] }.
+// Storage may be missing, blocked or full; every access is guarded and a
+// broken store simply reads as empty.
 
-export interface RecentEntry {
+export interface ChoiceStat {
   id: string
-  uses: number
-  last: number
+  /** How many times it was chosen. */
+  count: number
+  /** When it was last chosen (epoch ms). */
+  at: number
 }
 
-function storage(): Storage | null {
+type Ledger = Record<string, [number, number]>
+
+function box(): Pick<Storage, 'getItem' | 'setItem'> | undefined {
   try {
-    return typeof window !== 'undefined' ? window.localStorage : null
+    return typeof window === 'undefined' ? undefined : window.localStorage
   } catch {
-    return null
+    return undefined
   }
 }
 
-export function loadRecent(key: string): RecentEntry[] {
+function readLedger(key: string): Ledger {
+  let text: string | null | undefined
   try {
-    const raw = storage()?.getItem(key)
-    const parsed: unknown = raw ? JSON.parse(raw) : []
-    if (!Array.isArray(parsed)) return []
-    return parsed.filter(
-      (e): e is RecentEntry => !!e && typeof e.id === 'string' && typeof e.uses === 'number' && typeof e.last === 'number',
-    )
+    text = box()?.getItem(key)
   } catch {
-    return []
+    return {}
+  }
+  if (!text) return {}
+  try {
+    const value: unknown = JSON.parse(text)
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return {}
+    const clean: Ledger = {}
+    for (const [id, pair] of Object.entries(value as Record<string, unknown>)) {
+      if (Array.isArray(pair) && typeof pair[0] === 'number' && typeof pair[1] === 'number') clean[id] = [pair[0], pair[1]]
+    }
+    return clean
+  } catch {
+    return {}
   }
 }
 
-/** Orders by use count, then by recency (newest first). */
-export function rankRecent(list: readonly RecentEntry[]): RecentEntry[] {
-  return [...list].sort((a, b) => b.uses - a.uses || b.last - a.last)
+const toStats = (ledger: Ledger): ChoiceStat[] => Object.entries(ledger).map(([id, [count, at]]) => ({ id, count, at }))
+
+/** Everything remembered under `key`. */
+export function readChoices(key: string): ChoiceStat[] {
+  return toStats(readLedger(key))
 }
 
-export function noteRecent(key: string, id: string, keep = 12, now = Date.now()): RecentEntry[] {
-  const list = loadRecent(key)
-  const found = list.find((e) => e.id === id)
-  if (found) {
-    found.uses += 1
-    found.last = now
-  } else list.push({ id, uses: 1, last: now })
-  const kept = [...list].sort((a, b) => b.last - a.last).slice(0, keep)
+/** Most chosen first; ties go to the most recent. */
+export function orderChoices(stats: readonly ChoiceStat[]): ChoiceStat[] {
+  return stats.slice().sort((x, y) => (x.count === y.count ? y.at - x.at : y.count - x.count))
+}
+
+/** Counts one more choice of `id`, keeps the `limit` most recent ids, returns the result. */
+export function recordChoice(key: string, id: string, limit = 12, when = Date.now()): ChoiceStat[] {
+  const ledger = readLedger(key)
+  const [times] = ledger[id] ?? [0, 0]
+  ledger[id] = [times + 1, when]
+  const newestFirst = toStats(ledger)
+    .sort((x, y) => y.at - x.at)
+    .slice(0, limit)
+  const trimmed: Ledger = Object.fromEntries(newestFirst.map((s) => [s.id, [s.count, s.at]]))
   try {
-    storage()?.setItem(key, JSON.stringify(kept))
+    box()?.setItem(key, JSON.stringify(trimmed))
   } catch {
-    /* storage full or blocked: keep working without it */
+    /* full or blocked: keep going without persistence */
   }
-  return kept
+  return newestFirst
 }

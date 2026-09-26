@@ -3,7 +3,7 @@
 // movement) grouped into sections (for rendering).
 import type { ReactNode } from 'react'
 import { fuzzyHit } from '../../internal/overlays-nav/fuzzy'
-import { rankRecent, type RecentEntry } from '../../internal/overlays-nav/recent'
+import { orderChoices, type ChoiceStat } from '../../internal/overlays-nav/recent'
 
 export interface CommandAction {
   id: string
@@ -70,7 +70,7 @@ export interface ViewInput {
   /** Item whose actions sub-list is open. */
   subItem: CommandItem | null
   fallbackActions: CommandAction[]
-  recent: RecentEntry[]
+  recent: ChoiceStat[]
   recentVisible: number
   headings: { recent: string; actionsFor: (label: string) => string; fallback: string }
   /** Locale for case folding and word breaks in matching. */
@@ -125,7 +125,7 @@ export function buildView(v: ViewInput): Section[] {
   if (!q) {
     const byId = new Map<string, CommandItem>()
     for (const g of v.groups) for (const it of g.items) if (inScope(v.scope, g, it)) byId.set(it.id, it)
-    const recentRows = rankRecent(v.recent)
+    const recentRows = orderChoices(v.recent)
       .map((r) => byId.get(r.id))
       .filter((it): it is CommandItem => !!it)
       .slice(0, v.recentVisible)

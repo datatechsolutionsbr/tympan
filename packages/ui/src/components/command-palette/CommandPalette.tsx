@@ -3,7 +3,7 @@ import { useEffect, useId, useMemo, useReducer, useRef, type KeyboardEvent } fro
 import { Button as AriaButton, Dialog, Modal, ModalOverlay, useLocale } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 import { markPieces } from '../../internal/overlays-nav/fuzzy'
-import { loadRecent, noteRecent, type RecentEntry } from '../../internal/overlays-nav/recent'
+import { readChoices, recordChoice, type ChoiceStat } from '../../internal/overlays-nav/recent'
 import { useHeldOrOwn } from '../../internal/overlays-nav/state'
 import { useMessages } from '../../internal/provider'
 import { Skeleton } from '../skeleton/Skeleton'
@@ -33,11 +33,11 @@ interface State {
   query: string
   cursor: number
   sub: CommandItem | null
-  recent: RecentEntry[]
+  recent: ChoiceStat[]
 }
 
 type Event =
-  | { type: 'reset'; recent: RecentEntry[] }
+  | { type: 'reset'; recent: ChoiceStat[] }
   | { type: 'type'; query: string }
   | { type: 'point'; cursor: number }
   | { type: 'open-sub'; item: CommandItem }
@@ -90,7 +90,7 @@ export function CommandPalette(props: CommandPaletteProps) {
   const storageKey = props.recent?.storageKey
 
   useEffect(() => {
-    if (props.open) send({ type: 'reset', recent: storageKey ? loadRecent(storageKey) : [] })
+    if (props.open) send({ type: 'reset', recent: storageKey ? readChoices(storageKey) : [] })
   }, [props.open, storageKey])
 
   const sections = useMemo(
@@ -125,7 +125,7 @@ export function CommandPalette(props: CommandPaletteProps) {
   }, [current?.key])
 
   const run = (row: Row) => {
-    if (row.kind === 'item' && row.item && storageKey) noteRecent(storageKey, row.item.id, props.recent?.keep ?? 12)
+    if (row.kind === 'item' && row.item && storageKey) recordChoice(storageKey, row.item.id, props.recent?.keep ?? 12)
     props.onClose()
     row.run()
   }
