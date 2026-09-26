@@ -1,2 +1,16 @@
 // @fakhir/flow-canvas: editor group barrel.
-export {}
+export * from './FlowEditor'
+export * from './AutosaveController'
+export * from './keyMap'
+export * from './useEditorShortcuts'
+export * from './useSelectionArrange'
+export * from './CanvasContextMenus'
+export * from './CanvasCommandBar'
+export * from './editorTools'
+export * from './NodePalette'
+export * from './FlowPreview'
+export * from './FlowOutline'
+export * from './FlowSwitcherBar'
+export * from './SaveStatus'
+export * from './RunControls'
+export { nodeTitle } from './nodeBridge'
