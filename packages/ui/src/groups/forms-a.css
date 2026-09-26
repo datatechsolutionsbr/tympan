@@ -1,0 +1,16 @@
+/* Stylesheets of the "forms-a" group (imported by src/styles.css). */
+@import '../internal/forms-a/shared.css';
+@import '../internal/forms-a/SearchInput.css';
+@import '../components/theme-switcher/ThemeSwitcher.css';
+@import '../components/state-switch/StateSwitch.css';
+@import '../components/one-time-code-field/OneTimeCodeField.css';
+@import '../components/password-strength/PasswordStrength.css';
+@import '../components/search-bar/SearchBar.css';
+@import '../components/filter-field/FilterField.css';
+@import '../components/filter-chips/FilterChips.css';
+@import '../components/filter-tile/FilterTile.css';
+@import '../components/choice-card/ChoiceCard.css';
+@import '../components/choice-tile/ChoiceTile.css';
+@import '../components/choice-grid/ChoiceGrid.css';
+@import '../components/chip-group/ChipGroup.css';
+@import '../components/flag-set-picker/FlagSetPicker.css';

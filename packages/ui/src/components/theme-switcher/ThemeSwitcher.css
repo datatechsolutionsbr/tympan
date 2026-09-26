@@ -1,0 +1,153 @@
+/* ThemeSwitcher (spec: wave-2/theme-switcher.md; design direction §2.3, §2.6, §2.7, §2.10). */
+@layer fakhir.components {
+  .fk-theme-switcher {
+    --fk-ts-track-w: 36px;
+    --fk-ts-track-h: 20px;
+    --fk-ts-knob: 16px;
+    position: relative;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fk-space-2);
+    min-block-size: var(--fk-control-target);
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--fk-ink-2);
+    font: inherit;
+    font-size: var(--fk-font-size-body);
+    cursor: pointer;
+    outline: none;
+  }
+
+  /* Compact: a 40 px round button whose hit area grows to 44 px. */
+  .fk-theme-switcher[data-variant='compact'] {
+    justify-content: center;
+    inline-size: var(--fk-control-height);
+    min-block-size: var(--fk-control-height);
+    border: 1px solid var(--fk-line-strong);
+    border-radius: var(--fk-radius-pill);
+    background: var(--fk-secondary);
+    color: var(--fk-ink-2);
+  }
+  .fk-theme-switcher[data-variant='compact']::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: max(100%, var(--fk-control-target));
+    block-size: max(100%, var(--fk-control-target));
+    transform: translate(-50%, -50%);
+  }
+  .fk-theme-switcher[data-variant='compact'][data-hovered] {
+    border-color: var(--fk-ink-3);
+  }
+
+  .fk-theme-switcher__glyph {
+    display: inline-flex;
+    color: var(--fk-ink-3);
+    opacity: 0.6;
+    transition: opacity var(--fk-dur-quick) var(--fk-ease), color var(--fk-dur-quick) var(--fk-ease);
+  }
+  .fk-theme-switcher__glyph[data-active] {
+    color: var(--fk-ink);
+    opacity: 1;
+  }
+  .fk-theme-switcher__glyph > svg {
+    inline-size: 18px;
+    block-size: 18px;
+  }
+
+  .fk-theme-switcher__track {
+    position: relative;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    inline-size: var(--fk-ts-track-w);
+    block-size: var(--fk-ts-track-h);
+    padding-inline: 1px;
+    border: 1px solid var(--fk-line-strong);
+    border-radius: var(--fk-radius-pill);
+    background: var(--fk-surface-sunken);
+    transition: background-color var(--fk-dur-quick) var(--fk-ease);
+  }
+  .fk-theme-switcher__knob {
+    display: inline-grid;
+    place-items: center;
+    inline-size: var(--fk-ts-knob);
+    block-size: var(--fk-ts-knob);
+    border-radius: var(--fk-radius-pill);
+    background: var(--fk-ink-3);
+    transition: translate var(--fk-dur-quick) var(--fk-ease);
+  }
+  .fk-theme-switcher__knob-check {
+    inline-size: 10px;
+    block-size: 10px;
+    visibility: hidden;
+  }
+  .fk-theme-switcher[data-selected] .fk-theme-switcher__track {
+    border-color: var(--fk-accent);
+    background: var(--fk-accent);
+  }
+  .fk-theme-switcher[data-selected] .fk-theme-switcher__knob {
+    background: var(--fk-accent-ink);
+    color: var(--fk-accent);
+    translate: calc(var(--fk-ts-track-w) - var(--fk-ts-knob) - 4px) 0;
+  }
+  .fk-theme-switcher[data-selected] .fk-theme-switcher__knob-check {
+    visibility: visible;
+  }
+  .fk-theme-switcher__name {
+    color: var(--fk-ink);
+    font-weight: var(--fk-font-weight-semibold);
+  }
+
+  .fk-theme-switcher[data-focus-visible][data-variant='compact'],
+  .fk-theme-switcher[data-focus-visible] .fk-theme-switcher__track {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+  .fk-theme-switcher[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-theme-switcher__glyph,
+    .fk-theme-switcher__track,
+    .fk-theme-switcher__knob {
+      transition: none;
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .fk-theme-switcher[data-variant='compact'] {
+      background: var(--fk-surface-solid);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-theme-switcher__track,
+    .fk-theme-switcher[data-variant='compact'] {
+      border: 1px solid ButtonText;
+      background: ButtonFace;
+      forced-color-adjust: none;
+    }
+    .fk-theme-switcher__knob {
+      background: ButtonText;
+      color: ButtonFace;
+    }
+    .fk-theme-switcher[data-selected] .fk-theme-switcher__track {
+      border-color: Highlight;
+      background: ButtonFace;
+    }
+    .fk-theme-switcher[data-selected] .fk-theme-switcher__knob {
+      background: Highlight;
+      color: HighlightText;
+    }
+    .fk-theme-switcher[data-focus-visible][data-variant='compact'],
+    .fk-theme-switcher[data-focus-visible] .fk-theme-switcher__track {
+      outline-color: Highlight;
+    }
+  }
+}

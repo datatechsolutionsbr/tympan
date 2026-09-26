@@ -1,0 +1,11 @@
+/* FilterField (spec: wave-2/filter-field.md). The well itself is internal/forms-a/shared.css. */
+@layer fakhir.components {
+  .fk-filter-field {
+    inline-size: min(100%, 360px);
+  }
+  @media (max-width: 639.98px) {
+    .fk-filter-field {
+      inline-size: 100%;
+    }
+  }
+}

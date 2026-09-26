@@ -1,0 +1,62 @@
+/* OneTimeCodeField (spec: wave-2/one-time-code-field.md; design direction §2.6, §2.10). */
+@layer fakhir.components {
+  .fk-otc {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-2);
+  }
+  .fk-otc__group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--fk-space-2);
+  }
+  .fk-otc__box {
+    box-sizing: border-box;
+    flex: 1 1 0;
+    min-inline-size: var(--fk-control-target);
+    max-inline-size: 56px;
+    min-block-size: calc(var(--fk-control-target) + var(--fk-space-2));
+    padding: 0;
+    border: 1px solid var(--fk-input);
+    border-radius: var(--fk-radius-control);
+    background: var(--fk-surface-solid);
+    color: var(--fk-ink);
+    font-family: var(--fk-font-mono);
+    font-size: var(--fk-font-size-h3);
+    text-align: center;
+    caret-color: var(--fk-accent);
+    outline: none;
+  }
+  .fk-otc__box[data-focused],
+  .fk-otc__box:focus-visible {
+    border-color: var(--fk-accent);
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+  .fk-otc[data-invalid] .fk-otc__box {
+    border-width: 2px;
+    border-color: var(--fk-danger);
+  }
+  .fk-otc__box:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+  .fk-otc__error {
+    margin: 0;
+    color: var(--fk-danger);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+
+  @media (forced-colors: active) {
+    .fk-otc__box {
+      border-color: FieldText;
+    }
+    .fk-otc[data-invalid] .fk-otc__box {
+      border: 3px solid Mark;
+    }
+    .fk-otc__box:focus-visible {
+      outline-color: Highlight;
+    }
+  }
+}

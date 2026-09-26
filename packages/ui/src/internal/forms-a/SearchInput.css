@@ -1,0 +1,124 @@
+/* SearchInput: the search well of FilterField and SearchBar. */
+@layer fakhir.components {
+  .fk-search-input {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-1);
+    min-inline-size: 0;
+  }
+  .fk-search-input__label {
+    color: var(--fk-ink);
+    font-size: var(--fk-font-size-label);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-label);
+  }
+  .fk-search-input__well {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: var(--fk-space-2);
+    min-block-size: var(--fk-control-height);
+    padding-inline: var(--fk-space-3) var(--fk-space-1);
+    border: 1px solid var(--fk-input);
+    border-radius: var(--fk-radius-control);
+    background: var(--fk-surface);
+    color: var(--fk-ink);
+    transition: border-color var(--fk-dur-instant) var(--fk-ease);
+  }
+  .fk-search-input__well:hover {
+    border-color: var(--fk-ink-3);
+  }
+  .fk-search-input__well:has(input[data-focus-visible]),
+  .fk-search-input__well:has(input:focus-visible) {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+  .fk-search-input[data-disabled] .fk-search-input__well {
+    opacity: 0.55;
+  }
+  .fk-search-input__glyph {
+    flex: none;
+    inline-size: 16px;
+    block-size: 16px;
+    color: var(--fk-ink-3);
+  }
+  .fk-search-input__input {
+    flex: 1;
+    min-inline-size: 0;
+    min-block-size: calc(var(--fk-control-height) - 2px);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: var(--fk-font-size-body);
+    outline: none;
+  }
+  .fk-search-input__input::-webkit-search-cancel-button {
+    appearance: none;
+  }
+  .fk-search-input__input::placeholder {
+    color: var(--fk-ink-3);
+  }
+  .fk-search-input__clear {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    inline-size: 28px;
+    block-size: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--fk-radius-pill);
+    background: transparent;
+    color: var(--fk-ink-3);
+    cursor: pointer;
+    outline: none;
+  }
+  .fk-search-input__clear::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: max(100%, var(--fk-control-target));
+    block-size: max(100%, var(--fk-control-target));
+    transform: translate(-50%, -50%);
+  }
+  .fk-search-input__clear[data-hovered] {
+    background: var(--fk-surface-sunken);
+    color: var(--fk-ink);
+  }
+  .fk-search-input__clear[data-focus-visible] {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  }
+  .fk-search-input__clear > svg {
+    inline-size: 16px;
+    block-size: 16px;
+  }
+  @media (max-width: 1023.98px) {
+    .fk-search-input__well {
+      min-block-size: var(--fk-control-height-touch);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fk-search-input__well {
+      transition: none;
+    }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .fk-search-input__well {
+      background: var(--fk-surface-solid);
+    }
+  }
+  @media (forced-colors: active) {
+    .fk-search-input__well {
+      border-color: FieldText;
+    }
+    .fk-search-input__glyph {
+      color: FieldText;
+    }
+    .fk-search-input__well:has(input:focus-visible) {
+      outline-color: Highlight;
+    }
+  }
+}

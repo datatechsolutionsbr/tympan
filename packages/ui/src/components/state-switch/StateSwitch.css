@@ -1,0 +1,107 @@
+/* StateSwitch (spec: wave-2/state-switch.md; design direction §2.3, §2.6, §2.7). */
+@layer fakhir.components {
+  .fk-state-switch {
+    display: inline-flex;
+  }
+  .fk-state-switch__control {
+    --fk-ss-w: 36px;
+    --fk-ss-h: 20px;
+    --fk-ss-thumb: 14px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fk-space-2);
+    min-block-size: var(--fk-control-target);
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-label);
+    line-height: var(--fk-font-line-height-label);
+    cursor: pointer;
+    outline: none;
+  }
+  .fk-state-switch__side {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fk-space-1);
+    color: var(--fk-ink-3);
+    font-weight: var(--fk-font-weight-regular);
+  }
+  .fk-state-switch__side[data-current] {
+    color: var(--fk-ink);
+    font-weight: var(--fk-font-weight-semibold);
+  }
+  .fk-state-switch__side-icon {
+    inline-size: 14px;
+    block-size: 14px;
+  }
+  .fk-state-switch__track {
+    position: relative;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    inline-size: var(--fk-ss-w);
+    block-size: var(--fk-ss-h);
+    padding-inline: 2px;
+    border: 1px solid var(--fk-line-strong);
+    border-radius: var(--fk-radius-pill);
+    background: var(--fk-surface-sunken);
+  }
+  /* The switch alone reaches 44 x 44 by an invisible area. */
+  .fk-state-switch__track::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: max(100%, var(--fk-control-target));
+    block-size: max(100%, var(--fk-control-target));
+    transform: translate(-50%, -50%);
+  }
+  .fk-state-switch__thumb {
+    inline-size: var(--fk-ss-thumb);
+    block-size: var(--fk-ss-thumb);
+    border-radius: var(--fk-radius-pill);
+    background: var(--fk-ink-3);
+    transition: translate var(--fk-dur-instant) var(--fk-ease);
+  }
+  .fk-state-switch__control[data-selected] .fk-state-switch__track {
+    border-color: var(--fk-accent);
+    background: var(--fk-accent);
+  }
+  .fk-state-switch__control[data-selected] .fk-state-switch__thumb {
+    background: var(--fk-accent-ink);
+    translate: calc(var(--fk-ss-w) - var(--fk-ss-thumb) - 6px) 0;
+  }
+  .fk-state-switch__control[data-focus-visible] .fk-state-switch__track {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+  .fk-state-switch__control[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+  .fk-state-switch__control[data-pending] {
+    cursor: progress;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-state-switch__thumb {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-state-switch__track {
+      border-color: ButtonText;
+      background: ButtonFace;
+      forced-color-adjust: none;
+    }
+    .fk-state-switch__thumb {
+      background: ButtonText;
+    }
+    .fk-state-switch__control[data-selected] .fk-state-switch__thumb {
+      background: Highlight;
+    }
+    .fk-state-switch__control[data-focus-visible] .fk-state-switch__track {
+      outline-color: Highlight;
+    }
+  }
+}
