@@ -1,0 +1,78 @@
+/* ShowcaseBackdrop and AccentBand (spec: wave-4/showcase-backdrop.md; design direction §2.3, §2.5). */
+@layer fakhir.components {
+  .fk-showcase-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+  .fk-showcase-backdrop__glow {
+    --fk-glow-x: 85%;
+    --fk-glow-y: 0%;
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 55% 60% at var(--fk-glow-x) var(--fk-glow-y), var(--fk-glow-hue), transparent 70%);
+  }
+  .fk-showcase-backdrop__glow[data-hue='1'] {
+    --fk-glow-hue: var(--fk-ambient-1);
+  }
+  .fk-showcase-backdrop__glow[data-hue='2'] {
+    --fk-glow-hue: var(--fk-ambient-2);
+    --fk-glow-x: 15%;
+    --fk-glow-y: 100%;
+  }
+  .fk-showcase-backdrop[data-placement='top'] .fk-showcase-backdrop__glow[data-hue='1'] {
+    --fk-glow-x: 30%;
+  }
+  .fk-showcase-backdrop[data-placement='top'] .fk-showcase-backdrop__glow[data-hue='2'] {
+    --fk-glow-x: 70%;
+    --fk-glow-y: 0%;
+  }
+  .fk-showcase-backdrop[data-placement='bottom'] .fk-showcase-backdrop__glow[data-hue='1'] {
+    --fk-glow-x: 70%;
+    --fk-glow-y: 100%;
+  }
+  .fk-showcase-backdrop[data-intensity='faint'] {
+    opacity: 0.5;
+  }
+
+  .fk-accent-band {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: 0;
+    z-index: 1;
+    block-size: var(--fk-space-1);
+    background: linear-gradient(to right, var(--fk-accent), var(--fk-accent-soft));
+    pointer-events: none;
+  }
+  .fk-accent-band[data-edge='bottom'] {
+    inset-block: auto 0;
+  }
+
+  /* Fixed, never animated (§2.5). Opaque surfaces: no glow; the band turns solid. */
+  @media (prefers-reduced-transparency: reduce) {
+    .fk-showcase-backdrop {
+      display: none;
+    }
+    .fk-accent-band {
+      background: var(--fk-accent);
+    }
+  }
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .fk-showcase-backdrop {
+      display: none;
+    }
+    .fk-accent-band {
+      background: var(--fk-accent);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-showcase-backdrop,
+    .fk-accent-band {
+      display: none;
+    }
+  }
+}

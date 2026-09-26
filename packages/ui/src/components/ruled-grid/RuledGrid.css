@@ -1,0 +1,86 @@
+/* RuledGrid, RuledGridRow, RuledGridCell (spec: wave-4/ruled-grid.md; design direction §2.1, §2.5, §2.8). */
+@layer fakhir.components {
+  .fk-ruled-grid {
+    --fk-ruled-mark: 9px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .fk-ruled-grid[data-outer] {
+    border-block: 1px solid var(--fk-line);
+  }
+
+  .fk-ruled-grid__row {
+    display: grid;
+    grid-template-columns: var(--fk-ruled-columns, repeat(auto-fit, minmax(12rem, 1fr)));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .fk-ruled-grid__row + .fk-ruled-grid__row {
+    border-block-start: 1px solid var(--fk-line);
+  }
+
+  .fk-ruled-grid__cell {
+    position: relative;
+    min-inline-size: 0;
+    padding: var(--fk-space-5);
+  }
+  .fk-ruled-grid__cell + .fk-ruled-grid__cell {
+    border-inline-start: 1px solid var(--fk-line);
+  }
+  .fk-ruled-grid[data-outer] .fk-ruled-grid__cell:first-child {
+    border-inline-start: 1px solid var(--fk-line);
+  }
+  .fk-ruled-grid[data-outer] .fk-ruled-grid__cell:last-child {
+    border-inline-end: 1px solid var(--fk-line);
+  }
+
+  /* A small cross centred on each corner of a cell; shared corners overlap exactly. */
+  .fk-ruled-grid__mark {
+    position: absolute;
+    z-index: 1;
+    inline-size: var(--fk-ruled-mark);
+    block-size: var(--fk-ruled-mark);
+    background:
+      linear-gradient(var(--fk-line-strong), var(--fk-line-strong)) center / 100% 1px no-repeat,
+      linear-gradient(var(--fk-line-strong), var(--fk-line-strong)) center / 1px 100% no-repeat;
+    margin-block-start: calc(var(--fk-ruled-mark) / -2);
+    margin-inline-start: calc(var(--fk-ruled-mark) / -2);
+    pointer-events: none;
+  }
+  .fk-ruled-grid__mark[data-corner^='start'] {
+    inset-block-start: 0;
+  }
+  .fk-ruled-grid__mark[data-corner^='end'] {
+    inset-block-start: 100%;
+  }
+  .fk-ruled-grid__mark[data-corner$='-start'] {
+    inset-inline-start: 0;
+  }
+  .fk-ruled-grid__mark[data-corner$='-end'] {
+    inset-inline-start: 100%;
+  }
+
+  /* Phones: one column; vertical rules turn into horizontal rules between stacked cells. */
+  @media (max-width: 639.98px) {
+    .fk-ruled-grid__row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .fk-ruled-grid__cell + .fk-ruled-grid__cell {
+      border-inline-start: 0;
+      border-block-start: 1px solid var(--fk-line);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-ruled-grid[data-outer],
+    .fk-ruled-grid__row + .fk-ruled-grid__row,
+    .fk-ruled-grid__cell {
+      border-color: CanvasText;
+    }
+    .fk-ruled-grid__mark {
+      display: none;
+    }
+  }
+}

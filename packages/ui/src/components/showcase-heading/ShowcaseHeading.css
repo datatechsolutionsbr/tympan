@@ -1,0 +1,65 @@
+/* ShowcaseHeading, Kicker, Lead (spec: wave-4/showcase-heading.md; design direction §2.2, §2.3, §2.8). */
+@layer fakhir.components {
+  .fk-showcase-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--fk-space-3);
+    text-align: start;
+  }
+  .fk-showcase-heading[data-align='center'] {
+    align-items: center;
+    text-align: center;
+  }
+
+  .fk-showcase-heading__title {
+    margin: 0;
+    color: var(--fk-ink);
+    font-family: var(--fk-font-serif);
+    font-size: var(--fk-font-size-display);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-display);
+    text-wrap: balance;
+    overflow-wrap: break-word;
+  }
+  .fk-showcase-heading__title[data-align='center'] {
+    text-align: center;
+  }
+
+  .fk-kicker {
+    margin: 0;
+    color: var(--fk-accent);
+    font-family: var(--fk-font-sans);
+    font-size: var(--fk-font-size-eyebrow);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-eyebrow);
+    letter-spacing: var(--fk-font-tracking-eyebrow);
+    text-transform: uppercase;
+  }
+
+  .fk-lead {
+    margin: 0;
+    max-inline-size: calc(var(--fk-measure-prose) * 1ch);
+    color: var(--fk-ink-2);
+    font-family: var(--fk-font-sans);
+    font-size: var(--fk-font-size-body-lg);
+    line-height: var(--fk-font-line-height-body-lg);
+    text-wrap: pretty;
+  }
+
+  /* One step down below 640 px: display becomes h1 (§2.2, §2.8). */
+  @media (max-width: 639.98px) {
+    .fk-showcase-heading__title {
+      font-size: var(--fk-font-size-h1);
+      line-height: var(--fk-font-line-height-h1);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-showcase-heading__title,
+    .fk-kicker,
+    .fk-lead {
+      color: CanvasText;
+    }
+  }
+}

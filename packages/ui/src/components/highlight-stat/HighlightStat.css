@@ -1,0 +1,50 @@
+/* HighlightStat (spec: wave-4/highlight-stat.md; design direction §2.2, §2.5, §3.5). */
+@layer fakhir.components {
+  .fk-highlight-stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-1);
+    color: var(--fk-ink-2);
+  }
+  .fk-highlight-stat[data-surface='raised'] {
+    padding: var(--fk-space-5);
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-card);
+    background: var(--fk-surface-raised);
+    box-shadow: var(--fk-shadow-raised);
+  }
+  .fk-highlight-stat__value {
+    order: 0;
+    margin: 0;
+    color: var(--fk-ink);
+    font-family: var(--fk-font-serif);
+    font-size: var(--fk-font-size-display);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-display);
+    font-variant-numeric: tabular-nums;
+  }
+  .fk-highlight-stat__label {
+    margin: 0;
+    font-size: var(--fk-font-size-body);
+    line-height: var(--fk-font-line-height-body);
+  }
+  .fk-highlight-stat__source {
+    margin: 0;
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .fk-highlight-stat[data-surface='raised'] {
+      background: var(--fk-surface-raised-solid);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-highlight-stat[data-surface='raised'] {
+      border-color: CanvasText;
+      box-shadow: none;
+    }
+  }
+}

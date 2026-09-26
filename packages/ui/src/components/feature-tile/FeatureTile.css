@@ -1,0 +1,111 @@
+/* FeatureTile and FeatureTileGrid (spec: wave-4/feature-tile.md; design direction §2.2, §2.3, §2.7, §2.8). */
+@layer fakhir.components {
+  .fk-feature-tile-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--fk-space-6) var(--fk-space-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .fk-feature-tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-2);
+    color: var(--fk-ink-2);
+  }
+  .fk-feature-tile[data-surface='raised'] {
+    padding: var(--fk-space-5);
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-card);
+    background: var(--fk-surface-raised);
+    box-shadow: var(--fk-shadow-raised);
+  }
+  .fk-feature-tile:has(.fk-feature-tile__link[data-focus-visible]) {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 4px;
+    border-radius: var(--fk-radius-control);
+  }
+
+  /* Same badge for every tile: accent on accent-soft (§2.3). */
+  .fk-feature-tile__badge {
+    display: inline-grid;
+    place-items: center;
+    inline-size: var(--fk-control-height);
+    block-size: var(--fk-control-height);
+    border-radius: var(--fk-radius-control);
+    background: var(--fk-accent-soft);
+    color: var(--fk-accent);
+  }
+  .fk-feature-tile__badge .fk-icon {
+    inline-size: 20px;
+    block-size: 20px;
+  }
+
+  .fk-feature-tile__title {
+    margin: 0;
+    color: var(--fk-ink);
+    font-family: var(--fk-font-serif);
+    font-size: var(--fk-font-size-h3);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-h3);
+  }
+  .fk-feature-tile__link {
+    color: inherit;
+    text-decoration: none;
+    outline: none;
+  }
+  .fk-feature-tile__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .fk-feature-tile__link[data-hovered] {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .fk-feature-tile__link[data-pressed] {
+    color: var(--fk-accent-strong);
+  }
+  .fk-feature-tile__description {
+    max-inline-size: calc(var(--fk-measure-prose) * 1ch);
+    font-size: var(--fk-font-size-body);
+    line-height: var(--fk-font-line-height-body);
+  }
+  .fk-feature-tile__description > p {
+    margin: 0;
+  }
+
+  @media (min-width: 640px) {
+    .fk-feature-tile-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1024px) {
+    .fk-feature-tile-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .fk-feature-tile[data-surface='raised'] {
+      background: var(--fk-surface-raised-solid);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-feature-tile__badge {
+      border: 1px solid CanvasText;
+      color: CanvasText;
+    }
+    .fk-feature-tile[data-surface='raised'] {
+      border-color: CanvasText;
+      box-shadow: none;
+    }
+    .fk-feature-tile:has(.fk-feature-tile__link[data-focus-visible]) {
+      outline-color: Highlight;
+    }
+  }
+}
