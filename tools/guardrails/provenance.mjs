@@ -1,6 +1,7 @@
 // check:provenance — hard-fail markers that would suggest material from the
 // forked component library or commercial templates leaked into the clean room.
-// Scans every file of packages/tokens and packages/design-system except build
+// Scans every file of packages/tokens, packages/design-system and
+// packages/flow-canvas except build
 // output and node_modules. The similarity comparison against the fork runs
 // outside the clean room (see tools/provenance/README.md).
 import { lineOf, read, rel, report, walk } from './lib.mjs'

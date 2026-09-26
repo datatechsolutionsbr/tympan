@@ -1,0 +1,197 @@
+/* CanvasSurface: plane, grid, connectors layer, overview map, marquee. */
+@layer fakhir.components {
+  .fk-surface {
+    position: relative;
+    overflow: hidden;
+    inline-size: 100%;
+    block-size: 100%;
+    min-block-size: 240px;
+    background: var(--fk-flow-plane);
+    touch-action: none;
+    user-select: none;
+    outline: none;
+    border-radius: inherit;
+    cursor: default;
+  }
+  .fk-surface:focus-visible {
+    outline: var(--fk-focus-width, 2px) solid var(--fk-focus-ring, var(--fk-accent));
+    outline-offset: -2px;
+  }
+  .fk-surface[data-mode='pan'] {
+    cursor: grab;
+  }
+  .fk-surface[data-dragging] {
+    cursor: grabbing;
+  }
+  .fk-surface[data-connecting] {
+    cursor: crosshair;
+  }
+
+  .fk-surface__grid {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    pointer-events: none;
+  }
+  .fk-surface__grid circle {
+    fill: var(--fk-flow-grid-dot);
+  }
+
+  .fk-surface__plane {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    inline-size: 0;
+    block-size: 0;
+    transform-origin: 0 0;
+  }
+
+  .fk-surface__links {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .fk-surface__links * {
+    pointer-events: visiblePainted;
+  }
+  .fk-surface__connector {
+    fill: none;
+    stroke: var(--fk-flow-connector);
+    stroke-width: var(--fk-flow-connector-width);
+  }
+  .fk-surface__arrowhead {
+    fill: var(--fk-flow-connector);
+  }
+
+  .fk-surface__node {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+  }
+  .fk-surface__node > * {
+    flex: 1 1 auto;
+  }
+  .fk-surface__node[data-layer='0'] {
+    z-index: 0;
+  }
+  .fk-surface__node:focus-within {
+    z-index: 2;
+  }
+
+  .fk-surface__connector-html {
+    display: contents;
+  }
+
+  .fk-surface__marquee {
+    position: absolute;
+    border: 1px dashed var(--fk-accent);
+    background: var(--fk-flow-marquee);
+    pointer-events: none;
+  }
+
+  .fk-surface__overview {
+    position: absolute;
+    inset-block-end: var(--fk-space-3);
+    inset-inline-end: var(--fk-space-3);
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-control);
+    background: var(--fk-surface-raised-solid);
+    box-shadow: var(--fk-shadow-raised);
+    cursor: pointer;
+  }
+  .fk-surface__overview-node {
+    fill: var(--fk-flow-tone, var(--fk-flow-tone-neutral));
+  }
+  .fk-surface__overview-view {
+    fill: var(--fk-accent-soft);
+    stroke: var(--fk-accent);
+    stroke-width: 1.5;
+  }
+
+  /* ConnectionPreviewLine */
+  .fk-connection-preview__path {
+    fill: none;
+    stroke: var(--fk-accent);
+    stroke-width: 2;
+    stroke-dasharray: 6 5;
+    animation: fk-connection-dash 0.8s linear infinite;
+  }
+  .fk-connection-preview__dot {
+    fill: var(--fk-accent);
+  }
+  .fk-connection-preview[data-validity='invalid'] .fk-connection-preview__path {
+    stroke: var(--fk-danger);
+  }
+  .fk-connection-preview[data-validity='invalid'] .fk-connection-preview__dot {
+    fill: var(--fk-danger);
+  }
+  .fk-connection-preview__refusal circle,
+  .fk-connection-preview__refusal line {
+    fill: var(--fk-surface-solid);
+    stroke: var(--fk-danger);
+    stroke-width: 2;
+  }
+  @keyframes fk-connection-dash {
+    to {
+      stroke-dashoffset: -22;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-connection-preview__path {
+      animation: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-surface {
+      background: Canvas;
+    }
+    .fk-surface__grid circle {
+      fill: GrayText;
+    }
+    .fk-surface__connector {
+      stroke: CanvasText;
+    }
+    .fk-surface__arrowhead {
+      fill: CanvasText;
+    }
+    .fk-surface__marquee {
+      border-color: Highlight;
+      background: transparent;
+    }
+    .fk-surface__overview {
+      border-color: CanvasText;
+      background: Canvas;
+    }
+    .fk-surface__overview-node,
+    .fk-surface__overview-node[data-tone] {
+      fill: Canvas;
+      stroke: CanvasText;
+    }
+    .fk-surface__overview-view {
+      fill: transparent;
+      stroke: Highlight;
+    }
+    .fk-connection-preview__path,
+    .fk-connection-preview[data-validity='invalid'] .fk-connection-preview__path {
+      stroke: Highlight;
+    }
+    .fk-connection-preview__dot {
+      fill: Highlight;
+    }
+    .fk-connection-preview__refusal circle,
+    .fk-connection-preview__refusal line {
+      fill: Canvas;
+      stroke: CanvasText;
+    }
+  }
+}
