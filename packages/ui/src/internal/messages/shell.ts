@@ -41,7 +41,7 @@ export interface ShellMessages {
     actionTarget: (title: string) => string
   }
   activityFeed: { empty: string }
-  phaseBar: { part: (label: string, value: string) => string; empty: string }
+  phaseBar: { part: (label: string, value: string) => string; empty: string; named: (label: string, parts: string) => string }
 }
 
 export const shellEn: ShellMessages = {
@@ -74,7 +74,7 @@ export const shellEn: ShellMessages = {
     actionTarget: (title) => `: ${title}`,
   },
   activityFeed: { empty: 'No activity yet.' },
-  phaseBar: { part: (label, value) => `${label} ${value}`, empty: 'No data yet' },
+  phaseBar: { part: (label, value) => `${label} ${value}`, empty: 'No data yet', named: (label, parts) => `${label}: ${parts}` },
 }
 
 export const shellPtBR: ShellMessages = {
@@ -107,7 +107,7 @@ export const shellPtBR: ShellMessages = {
     actionTarget: (title) => `: ${title}`,
   },
   activityFeed: { empty: 'Ainda não há atividade.' },
-  phaseBar: { part: (label, value) => `${label} ${value}`, empty: 'Ainda sem dados' },
+  phaseBar: { part: (label, value) => `${label} ${value}`, empty: 'Ainda sem dados', named: (label, parts) => `${label}: ${parts}` },
 }
 
 export const shellEs: ShellMessages = {
@@ -140,5 +140,5 @@ export const shellEs: ShellMessages = {
     actionTarget: (title) => `: ${title}`,
   },
   activityFeed: { empty: 'Todavía no hay actividad.' },
-  phaseBar: { part: (label, value) => `${label} ${value}`, empty: 'Todavía sin datos' },
+  phaseBar: { part: (label, value) => `${label} ${value}`, empty: 'Todavía sin datos', named: (label, parts) => `${label}: ${parts}` },
 }

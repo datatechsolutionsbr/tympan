@@ -1,5 +1,6 @@
 import { Link as AriaLink, useLocale } from 'react-aria-components'
 import { cx } from '../../internal/cx'
+import { useLocaleText } from '../../internal/speech'
 import { ProofBadge, type ProofState } from '../proof-badge/ProofBadge'
 
 export interface StatStripItem {
@@ -28,6 +29,7 @@ const shown = (value: number | string, locale: string, format?: Intl.NumberForma
 export function StatStrip({ items, label, locale, className }: StatStripProps) {
   const fromAdapter = useLocale().locale
   const lang = locale ?? fromAdapter
+  const speech = useLocaleText()
   return (
     <div role="group" aria-label={label} className={cx('fk-stat-strip', className)}>
       <dl className="fk-stat-strip__list">
@@ -38,7 +40,7 @@ export function StatStrip({ items, label, locale, className }: StatStripProps) {
               <dt className="fk-stat-strip__label">{stat.label}</dt>
               <dd className="fk-stat-strip__value">
                 {stat.href ? (
-                  <AriaLink className="fk-stat-strip__link" href={stat.href} aria-label={`${text} ${stat.label}`}>
+                  <AriaLink className="fk-stat-strip__link" href={stat.href} aria-label={speech.pair(text, stat.label)}>
                     {text}
                   </AriaLink>
                 ) : (

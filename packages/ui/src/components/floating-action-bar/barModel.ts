@@ -112,11 +112,6 @@ export function ariaShortcut(text: string): string {
     .join('+')
 }
 
-/** Visible badge text: counts above 99 are capped. */
-export function badgeText(count: number): string {
-  return count > 99 ? '99+' : String(count)
-}
-
 type Step = 'next' | 'previous' | 'first' | 'last' | 'menu' | null
 
 /** Maps a key to a roving step for the bar's orientation and reading direction. */

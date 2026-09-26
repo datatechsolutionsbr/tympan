@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react'
 import { useLocale } from 'react-aria-components'
 import { cx } from '../../internal/cx'
+import { useLocaleText } from '../../internal/speech'
 import { useMessages } from '../../internal/provider'
 import type { ProofState } from '../proof-badge/ProofBadge'
 
@@ -31,12 +32,14 @@ export function shares(values: number[]): number[] {
 /** One bar split by share, with a textual legend (spec: wave-4/phase-bar.md; §2.11 textures). */
 export function PhaseBar({ segments, label, caption, locale, className }: PhaseBarProps) {
   const words = useMessages().phaseBar
-  const fmt = new Intl.NumberFormat(locale ?? useLocale().locale)
+  const adapter = useLocale().locale
+  const fmt = new Intl.NumberFormat(locale ?? adapter)
   const percent = shares(segments.map((s) => s.value))
-  const spoken = segments.length ? segments.map((s) => words.part(s.label, fmt.format(s.value))).join(', ') : words.empty
+  const speech = useLocaleText()
+  const spoken = segments.length ? speech.join(...segments.map((s) => words.part(s.label, fmt.format(s.value)))) : words.empty
   return (
     <figure className={cx('fk-phase-bar', className)}>
-      <div className="fk-phase-bar__track" role="img" aria-label={`${label}: ${spoken}`}>
+      <div className="fk-phase-bar__track" role="img" aria-label={words.named(label, spoken)}>
         {segments.map((segment, i) =>
           segment.value > 0 ? (
             <span

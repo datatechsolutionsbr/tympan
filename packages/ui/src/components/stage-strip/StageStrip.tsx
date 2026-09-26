@@ -65,7 +65,7 @@ export function StageStrip({ stages, label, title, className }: StageStripProps)
                   </span>
                 ) : null}
               </div>
-              {index < last ? <ArrowRight className="fk-icon fk-stage-strip__arrow" aria-hidden="true" focusable="false" /> : null}
+              {index < last ? <ArrowRight className="fk-icon fk-stage-strip__arrow fk-mirror-rtl" aria-hidden="true" focusable="false" /> : null}
             </li>
           )
         })}

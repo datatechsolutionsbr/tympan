@@ -17,12 +17,12 @@ import { Menu, MenuItem, Popover, useLocale } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 import { breakpoints, useMinWidth, useReducedMotion } from '../../internal/media'
 import { useMessages } from '../../internal/provider'
+import { useLocaleText } from '../../internal/speech'
 import { useAppFrame } from '../app-frame/frameContext'
 import { Button } from '../button/Button'
 import { ModalDialog } from '../modal-dialog/ModalDialog'
 import {
   ariaShortcut,
-  badgeText,
   chordMatches,
   effectiveEdge,
   isHorizontal,
@@ -153,6 +153,8 @@ interface SlotProps {
   onFocusIndex: (index: number) => void
   registerRef: (index: number, el: HTMLElement | null) => void
   nameOf: (item: ActionBarItem) => string
+  numberText: (n: number) => string
+  capText: string
   chevronName: (item: ActionBarItem) => string
 }
 
@@ -226,7 +228,7 @@ function BarSlot(props: SlotProps) {
         {tabBar ? <span className="fk-action-bar__caption" aria-hidden="true">{item.label}</span> : null}
         {count ? (
           <span className="fk-action-bar__count" aria-hidden="true">
-            {badgeText(count)}
+            {count > 99 ? props.capText : props.numberText(count)}
           </span>
         ) : null}
       </Tag>
@@ -240,7 +242,7 @@ function BarSlot(props: SlotProps) {
           aria-expanded={menuOpen}
           onClick={() => control.current && props.onOpenMenu(item.id, control.current)}
         >
-          <ChevronDown className="fk-icon" aria-hidden="true" />
+          <ChevronDown className="fk-icon fk-mirror-rtl" aria-hidden="true" />
         </button>
       ) : null}
       {tip === 'shown' && !tabBar ? (
@@ -412,7 +414,8 @@ export function FloatingActionBar(props: FloatingActionBarProps) {
 
   usePublishedInset(barRef, edge, tabBar, !loading)
 
-  const nameOf = (item: ActionBarItem) => (item.count && item.count > 0 ? `${item.label}, ${text.count(item.count)}` : item.label)
+  const speech = useLocaleText()
+  const nameOf = (item: ActionBarItem) => (item.count && item.count > 0 ? speech.join(item.label, text.count(item.count)) : item.label)
   const itemById = (id: string) => [...plan.shown, ...plan.overflow].find((p) => p.item.id === id)?.item
 
   const openMenuOf = (id: string, trigger: HTMLElement) => {
@@ -541,6 +544,8 @@ export function FloatingActionBar(props: FloatingActionBarProps) {
                 onFocusIndex={setRover}
                 registerRef={(i, el) => (refs.current[i] = el)}
                 nameOf={nameOf}
+                numberText={speech.number}
+                capText={text.capped(speech.number(99))}
                 chevronName={(item) => text.openMenu(item.label)}
               />
             </FragmentWithSeparator>

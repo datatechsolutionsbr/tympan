@@ -1,3 +1,4 @@
+import { I18nProvider } from 'react-aria-components'
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
@@ -63,6 +64,21 @@ describe('AttentionList', () => {
       </>,
       { navigate: vi.fn() },
     )
+    await expectNoAxeViolations(container)
+  })
+})
+
+describe('AttentionList in right-to-left', () => {
+  it('renders and passes axe under dir="rtl"', async () => {
+    const { container } = renderWithProvider(
+      <I18nProvider locale="ar">
+        <div dir="rtl" lang="ar">
+          <AttentionList items={items} label="ما يحتاجك" />
+        </div>
+      </I18nProvider>,
+      { navigate: vi.fn() },
+    )
+    expect(screen.getAllByRole('listitem')).toHaveLength(4)
     await expectNoAxeViolations(container)
   })
 })

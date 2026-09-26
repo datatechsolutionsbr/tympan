@@ -204,7 +204,7 @@
   @keyframes fk-app-frame-in {
     from {
       opacity: 0;
-      translate: var(--fk-frame-enter-x, 0) var(--fk-frame-enter-y, 0);
+      translate: calc(var(--fk-frame-enter-x, 0px) * var(--fk-inline-sign)) var(--fk-frame-enter-y, 0);
     }
   }
   @keyframes fk-app-frame-fade {

@@ -1,3 +1,4 @@
+import { I18nProvider } from 'react-aria-components'
 import { render, screen, within } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { expectNoAxeViolations } from '../../../test/axe'
@@ -68,6 +69,21 @@ describe('ActivityFeed', () => {
       </>,
       { navigate: vi.fn() },
     )
+    await expectNoAxeViolations(container)
+  })
+})
+
+describe('ActivityFeed in right-to-left', () => {
+  it('writes relative time in the locale and passes axe', async () => {
+    const { container } = renderWithProvider(
+      <I18nProvider locale="ar">
+        <div dir="rtl" lang="ar">
+          <ActivityFeed entries={entries} label="النشاط" now={now} />
+        </div>
+      </I18nProvider>,
+      { navigate: vi.fn() },
+    )
+    expect(container.querySelector('time')!.textContent).toMatch(/دقائق|دقيقة/)
     await expectNoAxeViolations(container)
   })
 })

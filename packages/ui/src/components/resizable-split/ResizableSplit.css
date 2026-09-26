@@ -33,7 +33,7 @@
     inset-block: 0;
     inset-inline-start: 50%;
     inline-size: var(--fk-control-target);
-    translate: -50% 0;
+    translate: calc(-50% * var(--fk-inline-sign)) 0;
   }
   .fk-split__handle:hover {
     background: var(--fk-line-strong);

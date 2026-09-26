@@ -1,3 +1,4 @@
+import { I18nProvider } from 'react-aria-components'
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { CalendarDays, FileText } from 'lucide-react'
@@ -165,5 +166,20 @@ describe('PageHeader', () => {
       )
       await expectNoAxeViolations(container, ['landmark-unique'])
     })
+  })
+})
+
+describe('PageHeader in right-to-left', () => {
+  it('keeps trail order and passes axe under dir="rtl"', async () => {
+    const { container } = renderWithProvider(
+      <I18nProvider locale="ar">
+        <div dir="rtl" lang="ar">
+          <PageHeader variant="editorial" title="نظرة عامة" trail={[{ label: 'EACH/USP', href: '/o' }, { label: 'نظرة عامة' }]} lead="سجل عالمي." />
+        </div>
+      </I18nProvider>,
+      { navigate: vi.fn() },
+    )
+    expect(screen.getByRole('heading', { level: 1, name: 'نظرة عامة' })).toBeInTheDocument()
+    await expectNoAxeViolations(container)
   })
 })

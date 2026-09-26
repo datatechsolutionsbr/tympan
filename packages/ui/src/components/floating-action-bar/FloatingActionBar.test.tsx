@@ -1,3 +1,4 @@
+import { I18nProvider } from 'react-aria-components'
 import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { BookOpen, CheckSquare, FileText, Home, Map, Network, Settings, User, Users } from 'lucide-react'
@@ -260,5 +261,33 @@ describe('bar model', () => {
     expect(stepFor('ArrowDown', 'bottom', false)).toBe('menu')
     expect(stepFor('ArrowRight', 'start', false)).toBe('menu')
     expect(stepFor('ArrowLeft', 'end', false)).toBe('menu')
+  })
+})
+
+describe('FloatingActionBar in right-to-left', () => {
+  it('reverses the arrow keys of a horizontal bar and passes axe', async () => {
+    const { container } = render(
+      <I18nProvider locale="ar">
+        <div dir="rtl" lang="ar">
+          <FloatingActionBar destinations={five} edge="bottom" />
+        </div>
+      </I18nProvider>,
+    )
+    await userEvent.tab()
+    await userEvent.keyboard('{ArrowLeft}')
+    expect(screen.getByRole('link', { name: 'Sources' })).toHaveFocus()
+    await userEvent.keyboard('{ArrowRight}')
+    expect(screen.getByRole('link', { name: 'Overview' })).toHaveFocus()
+    expect(cssOf('components/floating-action-bar/FloatingActionBar.css')).toMatch(/translate:\s*calc\(-50% \* var\(--fk-inline-sign\)\) 0/)
+    await expectNoAxeViolations(container)
+  })
+
+  it('formats counts with the locale digits and joins the name with the locale list style', () => {
+    render(
+      <I18nProvider locale="ar-EG">
+        <FloatingActionBar destinations={[{ id: 'v', label: 'Verification', icon: CheckSquare, href: '/v', count: 7 }]} edge="bottom" />
+      </I18nProvider>,
+    )
+    expect(screen.getByRole('link')).toHaveTextContent('٧')
   })
 })

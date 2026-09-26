@@ -1,3 +1,4 @@
+import { I18nProvider } from 'react-aria-components'
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { expectNoAxeViolations } from '../../../test/axe'
@@ -47,6 +48,20 @@ describe('PhaseBar', () => {
         ))}
       </>,
     )
+    await expectNoAxeViolations(container)
+  })
+})
+
+describe('PhaseBar in right-to-left', () => {
+  it('names the bar with the locale list style and passes axe', async () => {
+    const { container } = render(
+      <I18nProvider locale="ar-EG">
+        <div dir="rtl" lang="ar">
+          <PhaseBar segments={segments.slice(0, 2)} label="الإثبات" />
+        </div>
+      </I18nProvider>,
+    )
+    expect(screen.getByRole('img').getAttribute('aria-label')).toMatch(/٥١٢/)
     await expectNoAxeViolations(container)
   })
 })

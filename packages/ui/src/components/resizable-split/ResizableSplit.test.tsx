@@ -1,3 +1,4 @@
+import { I18nProvider } from 'react-aria-components'
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
@@ -88,6 +89,20 @@ describe('ResizableSplit', () => {
         ))}
       </>,
     )
+    await expectNoAxeViolations(container)
+  })
+})
+
+describe('ResizableSplit in right-to-left', () => {
+  it('mirrors the arrow keys and passes axe', async () => {
+    const { container } = render(
+      <I18nProvider locale="he">
+        <div dir="rtl" lang="he">{split()}</div>
+      </I18nProvider>,
+    )
+    await userEvent.tab()
+    await userEvent.keyboard('{ArrowRight}')
+    expect(screen.getByRole('separator')).toHaveAttribute('aria-valuenow', '368')
     await expectNoAxeViolations(container)
   })
 })

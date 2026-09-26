@@ -1,3 +1,4 @@
+import { I18nProvider } from 'react-aria-components'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useRef, useState } from 'react'
@@ -107,6 +108,23 @@ describe('EvidencePanel', () => {
         ))}
       </>,
     )
+    await expectNoAxeViolations(container)
+  })
+})
+
+describe('EvidencePanel in right-to-left', () => {
+  it('grows with Right Arrow (the panel sits on the inline end, now the left) and passes axe', async () => {
+    const { container } = render(
+      <I18nProvider locale="ar">
+        <div dir="rtl" lang="ar">
+          <Host />
+        </div>
+      </I18nProvider>,
+    )
+    const handle = screen.getByRole('separator', { name: 'Resize panel' })
+    handle.focus()
+    await userEvent.keyboard('{ArrowRight}')
+    expect(handle).toHaveAttribute('aria-valuenow', '388')
     await expectNoAxeViolations(container)
   })
 })

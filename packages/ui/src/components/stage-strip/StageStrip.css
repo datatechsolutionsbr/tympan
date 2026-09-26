@@ -113,9 +113,6 @@
     .fk-stage-strip__arrow {
       rotate: none;
     }
-    [dir='rtl'] .fk-stage-strip__arrow {
-      rotate: 180deg;
-    }
   }
 
   @media (forced-colors: active) {

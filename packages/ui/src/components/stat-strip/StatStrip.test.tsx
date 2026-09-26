@@ -1,3 +1,4 @@
+import { I18nProvider } from 'react-aria-components'
 import { render, screen, within } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { expectNoAxeViolations } from '../../../test/axe'
@@ -55,6 +56,20 @@ describe('StatStrip', () => {
       </>,
       { navigate: vi.fn() },
     )
+    await expectNoAxeViolations(container)
+  })
+})
+
+describe('StatStrip in right-to-left', () => {
+  it('uses the locale digits and passes axe under dir="rtl"', async () => {
+    const { container } = render(
+      <I18nProvider locale="ar-EG">
+        <div dir="rtl" lang="ar">
+          <StatStrip items={[{ id: 'a', value: 94, label: 'سجلات' }]} label="الحالة" />
+        </div>
+      </I18nProvider>,
+    )
+    expect(screen.getByText('٩٤')).toBeInTheDocument()
     await expectNoAxeViolations(container)
   })
 })

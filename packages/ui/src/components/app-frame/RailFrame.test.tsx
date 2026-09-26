@@ -1,3 +1,4 @@
+import { I18nProvider } from 'react-aria-components'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { BookOpen, CheckSquare, Home } from 'lucide-react'
@@ -139,5 +140,20 @@ describe('AppFrame rail layout', () => {
       await expectNoAxeViolations(container)
       unmount()
     }
+  })
+})
+
+describe('AppFrame rail layout in right-to-left', () => {
+  it('renders the shell under dir="rtl" with the inset bar on the inline start, and passes axe', async () => {
+    const { container } = render(
+      <I18nProvider locale="he">
+        <div dir="rtl" lang="he">
+          <Shell dock={dock} />
+        </div>
+      </I18nProvider>,
+    )
+    expect(screen.getByRole('navigation', { name: 'Main' })).toBeInTheDocument()
+    expect(cssOf('components/app-frame/AppFrameRail.css')).toMatch(/\.fk-rail-item\[data-current\]::before\s*\{[^}]*inset-inline-start:\s*0/)
+    await expectNoAxeViolations(container)
   })
 })

@@ -33,12 +33,12 @@ export interface AttentionListProps {
   className?: string
 }
 
-function RowAction({ action, title }: { action: AttentionAction; title: string }) {
+function RowAction({ action, title, suffix }: { action: AttentionAction; title: string; suffix: (title: string) => string }) {
   // Visible label stays short; the hidden suffix makes the name unique ("Verify: TAMM").
   const label = (
     <>
       {action.label}
-      <VisuallyHidden>{`: ${title}`}</VisuallyHidden>
+      <VisuallyHidden>{suffix(title)}</VisuallyHidden>
     </>
   )
   return (
@@ -67,7 +67,7 @@ export function AttentionList(props: AttentionListProps) {
                 <span className="fk-attention__title">{row.title}</span>
                 {row.detail ? <span className="fk-attention__detail">{row.detail}</span> : null}
               </div>
-              {row.action ? <RowAction action={row.action} title={row.title} /> : null}
+              {row.action ? <RowAction action={row.action} title={row.title} suffix={words.actionTarget} /> : null}
             </li>
           ))}
         </ul>

@@ -1,3 +1,4 @@
+import { I18nProvider } from 'react-aria-components'
 import { render, screen, within } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { expectNoAxeViolations } from '../../../test/axe'
@@ -62,6 +63,20 @@ describe('StageStrip', () => {
       </>,
       { navigate: vi.fn() },
     )
+    await expectNoAxeViolations(container)
+  })
+})
+
+describe('StageStrip in right-to-left', () => {
+  it('mirrors the arrows and passes axe', async () => {
+    const { container } = render(
+      <I18nProvider locale="ar">
+        <div dir="rtl" lang="ar">
+          <StageStrip stages={stages} label="المراحل" />
+        </div>
+      </I18nProvider>,
+    )
+    expect(container.querySelector('.fk-stage-strip__arrow')).toHaveClass('fk-mirror-rtl')
     await expectNoAxeViolations(container)
   })
 })

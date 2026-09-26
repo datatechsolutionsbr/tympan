@@ -3,6 +3,7 @@ import { forwardRef, useId, type ReactNode } from 'react'
 import { Button as AriaButton, Link as AriaLink } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 import { useMessages } from '../../internal/provider'
+import { useLocaleText } from '../../internal/speech'
 import type { IconComponent } from '../../internal/types'
 
 /*
@@ -48,14 +49,14 @@ export interface RailNavItemProps {
   countLabel?: string
 }
 
-function ItemBody({ icon: Glyph, label, count }: { icon?: IconComponent; label: string; count?: number }) {
+function ItemBody({ icon: Glyph, label, count }: { icon?: IconComponent; label: string; count?: string }) {
   return (
     <>
       {Glyph ? <Glyph className="fk-icon fk-rail-item__icon" aria-hidden="true" focusable="false" /> : null}
       <span className="fk-rail-item__label">{label}</span>
       {count ? (
         <span className="fk-rail-item__count" aria-hidden="true">
-          {count > 999 ? '999+' : count}
+          {count}
         </span>
       ) : null}
     </>
@@ -65,8 +66,10 @@ function ItemBody({ icon: Glyph, label, count }: { icon?: IconComponent; label: 
 /** One rail destination (link) or action (button). */
 export function RailNavItem(props: RailNavItemProps) {
   const words = useMessages().rail
-  const name = props.count ? `${props.label}, ${props.countLabel ?? words.count(props.count)}` : undefined
-  const body = <ItemBody icon={props.icon} label={props.label} count={props.count} />
+  const speech = useLocaleText()
+  const name = props.count ? speech.join(props.label, props.countLabel ?? words.count(props.count)) : undefined
+  const shown = props.count ? (props.count > 999 ? words.capped(speech.number(999)) : speech.number(props.count)) : undefined
+  const body = <ItemBody icon={props.icon} label={props.label} count={shown} />
   const shared = { className: 'fk-rail-item', 'aria-label': name, 'data-current': props.current || undefined }
   return (
     <li className="fk-rail-section__entry">
@@ -102,8 +105,9 @@ export const RailContextButton = forwardRef<HTMLButtonElement, RailContextButton
   { scope, name, onPress, accessibleLabel, className },
   ref,
 ) {
+  const speech = useLocaleText()
   return (
-    <AriaButton ref={ref} className={cx('fk-rail-context', className)} onPress={onPress} aria-label={accessibleLabel ?? `${scope}, ${name}`}>
+    <AriaButton ref={ref} className={cx('fk-rail-context', className)} onPress={onPress} aria-label={accessibleLabel ?? speech.join(scope, name)}>
       <span className="fk-rail-context__lines">
         <span className="fk-rail-context__scope">{scope}</span>
         <span className="fk-rail-context__name">{name}</span>

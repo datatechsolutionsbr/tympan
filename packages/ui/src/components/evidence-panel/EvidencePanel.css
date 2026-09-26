@@ -22,7 +22,7 @@
   @keyframes fk-evidence-in {
     from {
       opacity: 0;
-      translate: 16px 0;
+      translate: calc(16px * var(--fk-inline-sign)) 0;
     }
   }
 
@@ -91,7 +91,7 @@
     inset-block: 0;
     inset-inline-start: 50%;
     inline-size: var(--fk-control-target);
-    translate: -50% 0;
+    translate: calc(-50% * var(--fk-inline-sign)) 0;
   }
   .fk-evidence__handle:hover {
     background: var(--fk-line-strong);
