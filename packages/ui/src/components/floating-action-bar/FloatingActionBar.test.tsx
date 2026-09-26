@@ -213,6 +213,22 @@ describe('FloatingActionBar', () => {
     expect(nav.querySelector('.fk-action-bar__ghosts')).toHaveAttribute('aria-hidden', 'true')
   })
 
+  it('exposes contextual toggles with aria-pressed and divides contextual groups', () => {
+    const tools: ActionBarItem[] = [
+      { id: 'select', label: 'Select', icon: Home, onPress: () => {}, pressed: true, group: 'mode' },
+      { id: 'pan', label: 'Pan', icon: Map, onPress: () => {}, pressed: false, group: 'mode' },
+      { id: 'fit', label: 'Fit', icon: Network, onPress: () => {}, group: 'view' },
+      { id: 'find', label: 'Find', icon: BookOpen, onPress: () => {}, group: 'find' },
+    ]
+    const { container } = render(<FloatingActionBar destinations={five.slice(0, 1)} contextual={tools} edge="bottom" />)
+    expect(screen.getByRole('button', { name: 'Select' })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('button', { name: 'Pan' })).toHaveAttribute('aria-pressed', 'false')
+    expect(screen.getByRole('button', { name: 'Fit' })).not.toHaveAttribute('aria-pressed')
+    expect(screen.getByRole('button', { name: 'Select' })).not.toHaveAttribute('aria-current')
+    // One separator before the contextual run, then one per group change (mode | view | find).
+    expect(container.querySelectorAll('.fk-action-bar__separator')).toHaveLength(3)
+  })
+
   it('exposes item shortcuts with aria-keyshortcuts', () => {
     render(<FloatingActionBar destinations={[{ ...five[0]!, shortcut: 'Alt+1' }]} edge="bottom" />)
     expect(screen.getByRole('link', { name: 'Overview' })).toHaveAttribute('aria-keyshortcuts', 'Alt+1')

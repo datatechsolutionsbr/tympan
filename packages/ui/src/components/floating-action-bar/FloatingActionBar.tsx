@@ -69,6 +69,10 @@ export interface ActionBarItem {
   menu?: ActionBarMenuEntry[]
   /** Own shortcut (registered by the host), exposed with aria-keyshortcuts and in the tooltip. */
   shortcut?: string
+  /** Contextual toggle state (aria-pressed), e.g. a canvas mode; destinations use `active`. */
+  pressed?: boolean
+  /** Contextual items of different groups are divided by a separator. */
+  group?: string
 }
 
 export interface FloatingActionBarProps {
@@ -218,8 +222,9 @@ function BarSlot(props: SlotProps) {
         className="fk-action-bar__item"
         tabIndex={tabbable ? 0 : -1}
         data-bar-index={index}
-        data-active={item.active || undefined}
+        data-active={item.active || (kind === 'contextual' && item.pressed) || undefined}
         aria-current={kind === 'destination' && item.active ? 'page' : undefined}
+        aria-pressed={kind === 'contextual' && item.pressed !== undefined ? item.pressed : undefined}
         aria-label={props.nameOf(item)}
         aria-keyshortcuts={shortcutText}
         aria-haspopup={hasMenu ? 'menu' : undefined}
@@ -508,6 +513,14 @@ export function FloatingActionBar(props: FloatingActionBarProps) {
   }
 
   const firstContextual = plan.shown.findIndex((p) => p.kind === 'contextual')
+  /** A separator opens the contextual run and each new contextual group. */
+  const startsGroup = (index: number) => {
+    if (index === 0) return false
+    if (index === firstContextual) return true
+    const here = plan.shown[index]!
+    const before = plan.shown[index - 1]!
+    return here.kind === 'contextual' && before.kind === 'contextual' && here.item.group !== undefined && before.item.group !== undefined && here.item.group !== before.item.group
+  }
   const placement = ({ bottom: 'top', top: 'bottom', start: 'end', end: 'start' } as const)[edge]
 
   return (
@@ -534,7 +547,7 @@ export function FloatingActionBar(props: FloatingActionBarProps) {
           onKeyDown={onToolbarKey}
         >
           {plan.shown.map((placed, index) => (
-            <FragmentWithSeparator key={placed.item.id} before={index === firstContextual && index > 0} horizontal={horizontal}>
+            <FragmentWithSeparator key={placed.item.id} before={startsGroup(index)} horizontal={horizontal}>
               <BarSlot
                 placed={placed}
                 index={index}
