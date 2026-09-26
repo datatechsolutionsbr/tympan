@@ -37,7 +37,7 @@
     font-family: var(--fk-font-serif);
     font-size: var(--fk-brand-mark-type);
     font-weight: var(--fk-font-weight-semibold);
-    letter-spacing: -0.01em;
+    letter-spacing: var(--fk-font-tracking-h1);
     white-space: nowrap;
   }
   .fk-brand-logo {

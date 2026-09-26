@@ -9,17 +9,23 @@ export interface ContentsEntry {
   text: string
 }
 
-// A few letters NFD cannot split into base + mark.
+// Latin letters NFD cannot split into base + mark.
 const TRANSLIT: Record<string, string> = { ß: 'ss', æ: 'ae', ø: 'o', œ: 'oe', ł: 'l', đ: 'd', ð: 'd', þ: 'th', ı: 'i' }
 
-/** Stable slug for a heading text; `fallback` when nothing ASCII remains. */
+/**
+ * Stable slug for a heading text in any script. Latin accents are folded
+ * ("Ação" → "acao"); letters, marks and digits of other scripts are kept as
+ * they are (Arabic, Devanagari, CJK… are valid fragment identifiers); runs of
+ * anything else become one dash. `fallback` only when nothing is left.
+ */
 export function slugForHeading(text: string, fallback: string): string {
-  const ascii = text
-    .toLowerCase()
+  const folded = text
+    .toLocaleLowerCase()
     .normalize('NFD')
-    .replace(/\p{M}+/gu, '')
-    .replace(/[^\x00-\x7f]/g, (ch) => TRANSLIT[ch] ?? ' ')
-  const slug = ascii.replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+    .replace(/(\p{Script=Latin})\p{M}+/gu, '$1')
+    .replace(/[ßæøœłđðþı]/g, (ch) => TRANSLIT[ch] ?? ch)
+    .normalize('NFC')
+  const slug = folded.replace(/[^\p{L}\p{M}\p{N}]+/gu, '-').replace(/^-+|-+$/g, '')
   return slug || fallback
 }
 

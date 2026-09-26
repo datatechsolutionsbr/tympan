@@ -39,7 +39,10 @@ describe('LegalDocumentFrame', () => {
     expect(heading.id).toBe('data-we-collect')
     expect(screen.getByRole('link', { name: 'Data we collect' })).toHaveAttribute('href', '#data-we-collect')
     expect(slugForHeading('Ação é “já”', 'x')).toBe('acao-e-ja')
-    expect(slugForHeading('データ', 'section-4')).toBe('section-4')
+    expect(slugForHeading('データの扱い', 'section-4')).toBe('データの扱い')
+    expect(slugForHeading('حماية البيانات', 'x')).toBe('حماية-البيانات')
+    expect(slugForHeading('डेटा सुरक्षा', 'x')).toBe('डेटा-सुरक्षा')
+    expect(slugForHeading('— · —', 'section-4')).toBe('section-4')
   })
 
   it('gives duplicate headings different ids', () => {

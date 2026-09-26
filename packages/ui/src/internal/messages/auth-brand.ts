@@ -1,5 +1,5 @@
 // Copy of the "auth-brand" group (wave 2/4). One namespace per component,
-// English and Brazilian Portuguese. Merged into `Messages` by ../messages.ts.
+// English, Brazilian Portuguese and Spanish. Merged into `Messages` by ../messages.ts.
 
 export type HttpErrorKind = 'not-found' | 'bad-request' | 'server-error'
 
@@ -119,5 +119,43 @@ export const authBrandPtBR: AuthBrandMessages = {
   legalDocument: { contents: 'Sumário', showContents: 'Mostrar sumário' },
 }
 
-/** Spanish (placeholder until translated: falls back to English). */
-export const authBrandEs: AuthBrandMessages = authBrandEn
+export const authBrandEs: AuthBrandMessages = {
+  brand: { productName: 'Fakhir' },
+  federatedSignIn: { continueWith: (p) => `Continuar con ${p}`, groupLabel: 'Otras formas de iniciar sesión' },
+  providerMark: { otherProvider: 'Otro proveedor' },
+  upgradeGate: {
+    eyebrow: 'Suscripción',
+    title: 'Su organización no tiene un plan activo',
+    description: 'Elija un plan para seguir trabajando. Esta pantalla permanece hasta que haya un plan activo.',
+    cannotDismiss: 'Este mensaje no se puede cerrar.',
+    noticeTitle: 'Los proyectos son de solo lectura',
+    noticeBody: 'Todavía puede cerrar la sesión. Los datos de la investigación se conservan y no se borra nada.',
+    viewPlans: 'Ver planes',
+    signOut: 'Cerrar sesión',
+  },
+  httpError: {
+    'not-found': { title: 'Página no encontrada', message: 'La dirección puede estar mal, o la página se movió o se eliminó.' },
+    'bad-request': { title: 'No se pudo leer la solicitud', message: 'Algo en la dirección o en el formulario no se entendió. Revíselo e inténtelo de nuevo.' },
+    'server-error': { title: 'El servidor falló', message: 'El servidor no completó la solicitud. Inténtelo de nuevo en un momento.' },
+    codeLabel: (code) => `Error ${code}`,
+    problemType: 'Tipo de problema',
+  },
+  routeProgress: { label: 'Cargando la página' },
+  consent: {
+    label: 'Elección de cookies',
+    message: 'Usamos cookies esenciales para mantener su sesión. Con su consentimiento también medimos cómo se usa la plataforma.',
+    learnMore: 'Política de privacidad',
+    accept: 'Aceptar la medición',
+    reject: 'Solo cookies esenciales',
+  },
+  environment: {
+    label: 'Entorno',
+    message: 'No es la plataforma de producción. Los datos pueden ser simulados.',
+    appName: 'Aplicación',
+    port: 'Puerto',
+    apiBase: 'API',
+    email: 'Usuario',
+    role: 'Rol',
+  },
+  legalDocument: { contents: 'Índice', showContents: 'Mostrar el índice' },
+}
