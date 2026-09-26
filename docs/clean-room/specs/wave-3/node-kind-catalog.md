@@ -12,7 +12,7 @@ The single place that tells canvas components how to present each node kind: lab
 - **Floating connections flag**: when on, connectors attach to the nearest border point and ports become invisible but keep their ids.
 - **Icon registry**: maps an icon key to an icon from the product icon set (lucide, §4.4); unknown keys map to a neutral generic icon.
 - **Port topology**: inputs and outputs, each with id, side (start, end, top, bottom), optional offset along the side as a percentage, optional label and tone.
-- Tones come from the categorical tokens of §2.3; the catalog never carries raw colour values.
+- Tones come from the categorical tokens of §2.3; the catalog never carries raw colour values. How a tone becomes bubble, badge, minimap, port and connector tokens is in `wave-4/flow-palette-tokens.md`; node frame states are in `wave-4/node-state-styles.md`; provider marks in `wave-4/third-party-mark-slot.md`.
 
 ## Properties and events
 | name | type | default | meaning |

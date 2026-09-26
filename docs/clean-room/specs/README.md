@@ -1,6 +1,7 @@
 # Clean-room specifications for the Fakhir component library
 
-Date: 2026-09-26. Branch: `ds/clean-room`.
+Date: 2026-09-26. Branch: `ds/clean-room` (waves 1 to 3); wave 4 on
+`ds/specs-extra`.
 
 ## Why these files exist
 
@@ -51,15 +52,51 @@ work is split in two roles:
 ## Layout of this folder
 
 - `INVENTORY.md`: every export of both packages, its new name, category,
-  wave, whether apps use it today, and the spec file (or why it is dropped).
+  wave, whether apps use it today, and the spec file. Nothing is dropped:
+  every fork export maps to a spec.
 - `wave-1/`: the core that depends only on the tokens (36 specs).
 - `wave-2/`: the rest of the general UI library.
 - `wave-3/`: the workflow canvas, run inspection and assistant chat.
+- `wave-4/`: the complete-port wave (25 specs). It covers every item earlier
+  marked "drop unless needed" and resolves the four pending decisions:
+  - public showcase pieces, written from the intent of the design direction
+    (§2, §6) and not from the template they came from: ShowcaseHeading,
+    RevealNumber, ShowcaseBackdrop and AccentBand, FeatureShowcaseCard,
+    RuledGrid, HighlightStat, FeatureTile. They are for public pages (login,
+    public project page); inside the app the wave-1/2 equivalents apply;
+  - generalised cards: InsightCard (a proposal by an agent or rule with
+    host actions) and TickerCard (named entries with value and change);
+  - CascadeGrid (off by default; design direction §2.7 discourages it) and
+    GlassCheckToggle (developer only);
+  - token and utility APIs replacing style-string helpers: ToneTint,
+    SkeletonFill, NodeStateStyles, FlowPaletteTokens;
+  - LoaderPresets (generic; only the Fakhir preset ships);
+  - data: RegionThemeRegistry, RegionThemeData and CountryProfileData
+    (30 countries, every value regenerated from public, cited sources);
+  - LegacyAliasMap (decision record: no aliases shipped, all mapped to
+    tokens);
+  - ThirdPartyMarkSlot and ProviderMark (marks only from an openly licensed
+    set or host-licensed assets, never redrawn; the name is always text);
+  - resolved decisions: RunViewModes (panel and drawer both kept),
+    FloatingActionBar full feature with keyboard path, RuleActionCatalog
+    (host catalog with a default generic set), DataSourceNode full feature
+    (optional host logo slot, text fallback).
+  Two earlier files are superseded and kept only for history:
+  `wave-2/floating-action-bar.md` and `wave-3/data-source-node.md`. Build
+  from their wave-4 versions.
 
-Items marked "drop unless needed" (marketing blocks, product demos,
-developer toggles, third-party brand glyphs, per-country palette data) have no
-detailed spec. If one is needed later, it gets a fresh spec written from the
-design direction, not from the fork.
+Additional rules for wave 4:
+
+- Showcase pieces never use the CTA gradient, never add hues beyond the
+  accent and the two Ambient hues, and never animate on hover (§2.3, §2.5,
+  §2.7).
+- Third-party marks: the library ships no mark data. Hosts register marks
+  from a CC0 or otherwise openly licensed set (for example Simple Icons) or
+  from assets they hold a licence for, list them in their notices, and fall
+  back to the neutral glyph when a brand is not available. Marks are shown
+  only next to the product's name and are never modified.
+- Data modules (regions, countries) cite a public source per field group and
+  are regenerated, not transcribed from the fork.
 
 ## Spec template
 

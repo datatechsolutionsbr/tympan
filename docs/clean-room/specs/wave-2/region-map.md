@@ -58,4 +58,4 @@ Groups items by region (sorted by count, descending), holds zoom (bounded range,
 - Given a drag gesture, when released over a region, then no toggle fires.
 
 ## Open questions
-- The fork's map is pointer-only (no keyboard access, no text alternative); both are new requirements. Per-country shape and palette data is out of scope (see INVENTORY).
+- The fork's map is pointer-only (no keyboard access, no text alternative); both are new requirements. Per-country identity data comes from `wave-4/region-theme-registry.md` and `wave-4/region-theme-data.md` (opt-in identity mode).

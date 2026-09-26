@@ -55,3 +55,4 @@ Changing the action kind resets its parameters to that kind's defaults.
 
 ## Open questions
 - The fork ships a fixed list of commerce-specific action kinds; the clean version moves all non-custom kinds to `actionCatalog`. Fakhir must decide which actions its rules need.
+- Resolved in wave 4: host-supplied catalog with a default generic set; see `wave-4/rule-action-catalog.md`.

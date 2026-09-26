@@ -15,7 +15,9 @@ loading, notice, empty state and a visually-hidden helper; these are marked
 
 Legend. Category: primitive, form, overlay, navigation, data display,
 feedback, layout, chart, canvas, marketing, utility. Wave: 1 core on tokens,
-2 remaining UI, 3 workflow and canvas. Apps: `yes` = imported by an app,
+2 remaining UI, 3 workflow and canvas, 4 the items formerly marked "drop
+unless needed" plus the four pieces whose open decisions were resolved
+(complete port: nothing is dropped any more). Apps: `yes` = imported by an app,
 `local eq.` = the app has its own copy, `no` = unused by apps.
 
 ## @fakhir/ui
@@ -76,7 +78,7 @@ feedback, layout, chart, canvas, marketing, utility. Wave: 1 core on tokens,
 | NavTrigger | ToolbarTrigger | navigation | 2 | no | wave-2/toolbar-trigger.md |
 | AppNavigation, navigation builders (buildDockActions, buildLaunchpadItems, buildFlyoutNavItems, filterByPermission, NavigationItem types) | AppNavigation | navigation | 2 | no | wave-2/app-navigation.md |
 | LaunchpadGrid | AppLauncherGrid | navigation | 2 | no | wave-2/app-launcher-grid.md |
-| Dock, DockContainer, DockSkeleton | FloatingActionBar | navigation | 2 | no | wave-2/floating-action-bar.md |
+| Dock, DockContainer, DockSkeleton | FloatingActionBar | navigation | 4 (was 2) | no | wave-4/floating-action-bar.md (supersedes wave-2/floating-action-bar.md) |
 | CommandPalette, fuzzyMatch, useRecentCommands, recordRecent, orderRecentIds, recent constants | CommandPalette and recent-command store | overlay | 2 | no | wave-2/command-palette.md |
 | SearchBar | SearchBar | form | 2 | no | wave-2/search-bar.md |
 | LiquidFilterInput | FilterField | form | 2 | no | wave-2/filter-field.md |
@@ -128,7 +130,7 @@ feedback, layout, chart, canvas, marketing, utility. Wave: 1 core on tokens,
 | ContactCard, OfficeCard, ContactSection | ContactCard | data display | 2 | no | wave-2/contact-card.md |
 | SubscriptionPaywall | UpgradeGate | feedback | 2 | no | wave-2/upgrade-gate.md |
 | NotFoundPage, BadRequestPage, ServerErrorPage | HttpErrorPage | feedback | 2 | no | wave-2/http-error-page.md |
-| BrandedLoader | BrandLoader | feedback | 2 | no | wave-2/brand-loader.md |
+| BrandedLoader | BrandLoader | feedback | 2 | no | wave-2/brand-loader.md (presets: wave-4/loader-presets.md) |
 | AppLogo, brand module (app themes, logo files, default app id) | BrandMark | primitive | 2 | no | wave-2/brand-mark.md |
 | NavigationProgress | RouteProgress | feedback | 2 | no | wave-2/route-progress.md |
 | CookieConsent | ConsentBanner | feedback | 2 | no | wave-2/consent-banner.md |
@@ -148,19 +150,32 @@ feedback, layout, chart, canvas, marketing, utility. Wave: 1 core on tokens,
 | formatCurrency, formatPercentage, formatDate, getStatusColor, country-config formatters (formatCountryCurrency, formatAddress, getCountryConfig, registerCountry, getAllCountries) | Formatters | utility | 2 | no | wave-2/formatters.md |
 | APIError, isAPIError, getAPIErrorStatus, getAPIErrorCode, HttpResponseError, run domain types | ApiErrorModel | utility | 2 | no | wave-2/api-error-model.md |
 
-### @fakhir/ui items dropped unless needed
+### @fakhir/ui wave 4 (formerly dropped, now specified)
 
-| Fork export(s) | Reason | Proposed name if revived |
-|---|---|---|
-| RadiantHeading, RadiantSubheading, Lead, AnimatedNumber, Gradient, GradientBackground, BentoCard, PlusGrid, PlusGridRow, PlusGridItem, RadiantStatCard, FeatureCard | marketing blocks from a commercial template; no product use | MarketingHeading, FeatureTile, DecorativeBackdrop |
-| RecommendationCard | landing and pricing demo tile | SuggestionCard |
-| MarketPricesCard | domain demo from another product | none |
-| StaggerGrid | decorative entrance motion; design direction §2.7 and Phase 3 remove it | none (use a plain grid) |
-| GlassTestToggle | developer-only visual check | none |
-| resolveGlassAccentRgb, shimmer class helpers, NODE state class constants | style strings, not behaviour | tokens from design direction |
-| KORI_ERP_LOADER, WIRE_LOADER presets of the branded loader | presets for other products | BrandLoader with Fakhir mark only |
-| registerSubdivisionTheme and helpers; 30 per-country theme modules (palettes, accents, coordinates, macro-regions, flag URLs, validators) | data, not components; regenerate from public sources (ISO 3166-2, national statistics offices) if RegionMap needs them | RegionThemeRegistry (data module) |
-| iosColors, swipe constants, legacy animation aliases | superseded by MotionFoundation and tokens | none |
+Marketing pieces are specified from the intent of design direction §2 and
+§6 (public pages only: login and the public project page), not from the
+template's look.
+
+| Fork export(s) | New name | Category | Wave | Apps | Spec |
+|---|---|---|---|---|---|
+| RadiantHeading, RadiantSubheading, Lead | ShowcaseHeading (with Kicker and Lead) | marketing | 4 | no | wave-4/showcase-heading.md |
+| AnimatedNumber | RevealNumber | marketing | 4 | no | wave-4/reveal-number.md |
+| Gradient, GradientBackground | ShowcaseBackdrop and AccentBand | marketing | 4 | no | wave-4/showcase-backdrop.md |
+| BentoCard | FeatureShowcaseCard | marketing | 4 | no | wave-4/feature-showcase-card.md |
+| PlusGrid, PlusGridRow, PlusGridItem | RuledGrid (RuledGrid, RuledGridRow, RuledGridCell) | marketing | 4 | no | wave-4/ruled-grid.md |
+| RadiantStatCard | HighlightStat | marketing | 4 | no | wave-4/highlight-stat.md |
+| FeatureCard | FeatureTile | marketing | 4 | no | wave-4/feature-tile.md |
+| RecommendationCard | InsightCard (generalised: proposal by an agent or rule, host actions) | data display | 4 | no | wave-4/insight-card.md |
+| MarketPricesCard | TickerCard (generalised: named entries with value and change) | data display | 4 | no | wave-4/ticker-card.md |
+| StaggerGrid | CascadeGrid (off by default; global `decorativeMotion` switch; reduced motion always off) | layout | 4 | no | wave-4/cascade-grid.md |
+| GlassTestToggle | GlassCheckToggle (developer only) | utility | 4 | no | wave-4/glass-check-toggle.md |
+| resolveGlassAccentRgb | ToneTint resolver | utility | 4 | no | wave-4/tone-tint-resolver.md |
+| shimmer class helpers (shimmerClass, shimmerWhiteClass) | SkeletonFill | utility | 4 | no | wave-4/skeleton-fill.md |
+| KORI_ERP_LOADER, WIRE_LOADER presets of the branded loader | LoaderPresets (generic mechanism; only the Fakhir preset ships) | utility | 4 | no | wave-4/loader-presets.md |
+| registerSubdivisionTheme and query helpers (palette, flag URL, hex, gradient, colours, accent, validity) | RegionThemeRegistry | utility | 4 | no | wave-4/region-theme-registry.md |
+| 30 per-country theme modules (palettes, accents, coordinates, map centre, macro-regions, flag URL templates, bound helpers) | RegionThemeData (format plus 30 country modules regenerated from public sources) | utility | 4 | no | wave-4/region-theme-data.md |
+| country configuration data for the same 30 countries (names, emoji flag, languages, locale, currency, address, tax labels, geometry path, projection) | CountryProfileData | utility | 4 | no | wave-4/country-profile-data.md |
+| iosColors, swipe constants, pageControlDot, legacy animation aliases (durations, durationsReduced, easings, springPresets and reduced copies, card hover and press presets, notification banner, listItem, staggerContainer, createMotionProps, getVariants) | LegacyAliasMap (decision record: no aliases shipped, mapped to tokens) | utility | 4 | no | wave-4/legacy-alias-map.md |
 
 ## @fakhir/workflow
 
@@ -178,7 +193,7 @@ feedback, layout, chart, canvas, marketing, utility. Wave: 1 core on tokens,
 | RuleFlowNode | RuleNode | canvas | 3 | no | wave-3/rule-node.md |
 | NoteFlowNode | NoteNode | canvas | 3 | no | wave-3/note-node.md |
 | GroupFlowNode | GroupNode | canvas | 3 | no | wave-3/group-node.md |
-| datasource flow node (internal) | DataSourceNode | canvas | 3 | no | wave-3/data-source-node.md |
+| datasource flow node (internal) | DataSourceNode | canvas | 4 (was 3) | no | wave-4/data-source-node.md (supersedes wave-3/data-source-node.md) |
 | NodeRunningIndicator | NodeRunIndicator | canvas | 3 | no | wave-3/node-run-indicator.md |
 | WorkflowHandle, WorkflowDynamicTargetHandles, WorkflowDynamicHandles | ConnectionPorts | canvas | 3 | no | wave-3/connection-ports.md |
 | ConditionalEdge, floating edge geometry (internal) | ConditionalConnector | canvas | 3 | no | wave-3/conditional-connector.md |
@@ -191,8 +206,8 @@ feedback, layout, chart, canvas, marketing, utility. Wave: 1 core on tokens,
 | RunPanel | RunPanel | data display | 3 | no | wave-3/run-panel.md |
 | VariableInspector | VariableInspector | data display | 3 | no | wave-3/variable-inspector.md |
 | RunInputDialog | RunInputDialog | overlay | 3 | no | wave-3/run-input-dialog.md |
-| PreviewPanel | RunPreviewPanel | data display | 3 | no | wave-3/run-preview-panel.md |
-| WorkflowRunDrawer | RunDrawer | overlay | 3 | no | wave-3/run-drawer.md |
+| PreviewPanel | RunPreviewPanel | data display | 3 | no | wave-3/run-preview-panel.md; coexistence with RunDrawer: wave-4/run-view-modes.md |
+| WorkflowRunDrawer | RunDrawer | overlay | 3 | no | wave-3/run-drawer.md; coexistence with RunPreviewPanel: wave-4/run-view-modes.md |
 | SaveStatusBadge | SaveStatus | feedback | 3 | no | wave-3/save-status.md |
 | AutoSaveWorkspace | AutosaveController | utility | 3 | no | wave-3/autosave-controller.md |
 | NodeContextMenu, SelectionContextMenu, getNodeDimensions, AlignDirection, DistributeDirection, PanelContextMenu | CanvasContextMenus | overlay | 3 | no | wave-3/canvas-context-menus.md |
@@ -220,7 +235,7 @@ feedback, layout, chart, canvas, marketing, utility. Wave: 1 core on tokens,
 | AslExpressionBuilder, AslNode model, ASL_MAX_DEPTH, ASL_PREDICATE_OPS | ExpressionBuilder | form | 3 | no | wave-3/expression-builder.md |
 | TraceViewer, runCodeDryRun, DryRunError, trace types | TraceTree and dry-run client | data display | 3 | no | wave-3/trace-tree.md |
 | ExecutionTimelinePanel, attachAuditEvents, timeline types | ExecutionTimeline | data display | 3 | no | wave-3/execution-timeline.md |
-| RuleForm, defaultRuleForm, RuleConditionBuilder, defaultRuleCondition, RuleActionBuilder, defaultRuleAction, normalizeRuleCondition, rule types | RuleEditor | form | 3 | no | wave-3/rule-editor.md |
+| RuleForm, defaultRuleForm, RuleConditionBuilder, defaultRuleCondition, RuleActionBuilder, defaultRuleAction, normalizeRuleCondition, rule types | RuleEditor | form | 3 | no | wave-3/rule-editor.md; action kinds: wave-4/rule-action-catalog.md |
 | useWorkflowStore, useModalStore, useCanUndo, useCanRedo, useHasCopied, useContextMenu, useEditingNodeId, useSelectedNodeCount, useIsRunning, useNodeResults, store types | FlowEditorState | utility | 3 | no | wave-3/flow-editor-state.md |
 | useUndoRedo, useClipboard, useCanvasShortcuts | EditorShortcuts (history, clipboard, keys) | utility | 3 | no | wave-3/editor-shortcuts.md |
 | useCanvasSelectionActions | SelectionArrange | utility | 3 | no | wave-3/selection-arrange.md |
@@ -231,18 +246,34 @@ feedback, layout, chart, canvas, marketing, utility. Wave: 1 core on tokens,
 | ConversationalShell, ConversationMeta, groupConversationsByDate | ConversationShell | layout | 3 | no | wave-3/conversation-shell.md |
 | contract and node data types (WorkflowGraph, WorkflowEdge, EdgeCondition, node data types, AgentNodeConfig, …) | derived from the Fakhir OpenAPI contract, not specified here | utility | 3 | yes (types) | n/a |
 
-### @fakhir/workflow items dropped unless needed
+### @fakhir/workflow wave 4 (formerly dropped or pending, now specified)
 
-| Fork export(s) | Reason | Proposed name if revived |
-|---|---|---|
-| AnthropicModelIcon, AmazonNovaIcon, MetaLlamaIcon, getModelIcon | third-party brand glyphs (trademarks, copied vector art) | ProviderGlyph with a neutral icon and the provider name as text |
-| LOGIC_NODE_GRADIENTS, LOGIC_NODE_BADGE_COLORS, LOGIC_NODE_BADGE_SOFT_COLORS, MINIMAP_NODE_COLORS, LOGIC_NODE_HANDLE_COLORS, NODE_EXECUTION_ACCENT_COLORS, NODE_SELECTED_CLASS, NODE_HOVER_CLASS, getNodeStateClass, entity colour getters | style values; replaced by the categorical tokens of design direction §2.3, described behaviourally in NodeKindCatalog | none |
+| Fork export(s) | New name | Category | Wave | Apps | Spec |
+|---|---|---|---|---|---|
+| AnthropicModelIcon, AmazonNovaIcon, MetaLlamaIcon, OpenAIModelIcon, GoogleGeminiIcon, getModelIcon | ThirdPartyMarkSlot and ProviderMark (marks from an openly licensed set supplied by the host; never redrawn; text name always shown) | primitive | 4 | no | wave-4/third-party-mark-slot.md |
+| DEFAULT_NODE_GRADIENT, LOGIC_NODE_GRADIENTS, LOGIC_NODE_BADGE_COLORS, LOGIC_NODE_BADGE_SOFT_COLORS, MINIMAP_NODE_COLORS, NODE_EXECUTION_ACCENT_COLORS, getNodeExecutionAccent(Rgb), LOGIC_NODE_HANDLE_COLORS, GRAPH_*_EDGE_COLOR, CATEGORY_COLORS, CATEGORY_PILL_COLORS, ADJUSTMENT_GRADIENT, ADJUSTMENT_PILL, entity colour getters | FlowPaletteTokens | utility | 4 | no | wave-4/flow-palette-tokens.md |
+| NODE_SELECTED_CLASS, NODE_HOVER_CLASS, NODE_BORDER_COLORS, getNodeStateClass | NodeStateStyles | utility | 4 | no | wave-4/node-state-styles.md |
+| PreviewPanel together with WorkflowRunDrawer (pending decision: keep both) | RunViewModes | canvas | 4 | no | wave-4/run-view-modes.md |
+| rule action kinds of RuleActionBuilder (pending decision: host catalog) | RuleActionCatalog (default generic set plus host kinds) | form | 4 | no | wave-4/rule-action-catalog.md |
+| datasource flow node dialect logo map (pending decision: logos) | part of DataSourceNode via ThirdPartyMarkSlot | canvas | 4 | no | wave-4/data-source-node.md |
+| Dock keyboard access (pending decision: right-click-only menus) | part of FloatingActionBar | navigation | 4 | no | wave-4/floating-action-bar.md |
 
 ## Counts
 
-| | Wave 1 | Wave 2 | Wave 3 | Dropped groups |
-|---|---|---|---|---|
-| Spec files | 36 | 89 | 63 | 11 |
+| | Wave 1 | Wave 2 | Wave 3 | Wave 4 | Dropped |
+|---|---|---|---|---|---|
+| Spec files | 36 | 89 | 63 | 25 | 0 |
+
+Wave 4 breaks down as 21 specs for formerly dropped items (7 marketing
+pieces; 2 generalised cards; CascadeGrid; GlassCheckToggle; 3 token and
+utility specs for style helpers: ToneTint, SkeletonFill, NodeStateStyles;
+LoaderPresets; RegionThemeRegistry; RegionThemeData; CountryProfileData;
+LegacyAliasMap;
+ThirdPartyMarkSlot; FlowPaletteTokens) and 4 resolutions of pending decisions
+(RunViewModes, FloatingActionBar full, RuleActionCatalog, DataSourceNode
+full). Two wave-2/3 files are superseded by their wave-4 versions
+(`wave-2/floating-action-bar.md`, `wave-3/data-source-node.md`) and stay only
+for history; build from wave 4.
 
 (Counts are of spec files; each groups one or more fork exports. Fork size for
 reference: about 150 exported UI symbols excluding per-country data, about 76

@@ -6,7 +6,7 @@ Wave 1 · feedback · Status: specified
 Placeholders that take the shape of the content being loaded, so the page keeps its layout and the reader knows what is coming (design direction §2.12: every loading state is a skeleton; no loose spinner).
 
 ## Anatomy
-- **Block**: a single placeholder shape (text line, heading line, circle for an avatar, rectangle for media or a chart).
+- **Block**: a single placeholder shape (text line, heading line, circle for an avatar, rectangle for media or a chart). Its fill and pulse come from SkeletonFill (`wave-4/skeleton-fill.md`), shared with every other placeholder.
 - **Presets** composed from blocks:
   - text lines (three widths, as §2.12 asks);
   - stat tiles row (icon circle, value line, label line) with a configurable count and column count;

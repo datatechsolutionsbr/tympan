@@ -56,3 +56,6 @@ A docked drawer beside the editor that consolidates everything about execution: 
 - Given focus on the Live tab, when Right Arrow is pressed, then History is focused and selected.
 - Given loadRuns rejects, when History opens, then an error message with retry appears.
 - Given one node failed, when metrics render, then the error count reads 1 with icon and word.
+
+## Open questions
+- Resolved in wave 4: RunDrawer and RunPreviewPanel coexist as the full and compact modes of one feature; see `wave-4/run-view-modes.md`.

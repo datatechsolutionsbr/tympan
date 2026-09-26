@@ -1,6 +1,6 @@
 # DataSourceNode
 
-Wave 3 · canvas · Status: specified
+Wave 3 · canvas · Status: superseded by `wave-4/data-source-node.md` (optional host logo slot, text fallback); build from the wave-4 file
 
 ## Purpose
 A node that reads rows from a connected data source (database table or similar) and summarises what it will read.
@@ -45,4 +45,4 @@ Interactive card is a RAC Button (APG Button) named "data source: title, table".
 - Given no onConfigure, when rendered, then the card is not focusable as a button.
 
 ## Open questions
-- Whether the host should supply dialect logos at all; the default is text only.
+- Resolved in wave 4: optional host-supplied marks through ThirdPartyMarkSlot, dialect always as text; see `wave-4/data-source-node.md`.

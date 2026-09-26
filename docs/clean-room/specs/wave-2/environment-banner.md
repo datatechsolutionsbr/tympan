@@ -24,7 +24,7 @@ Hidden in production; shown otherwise.
 
 ## Keyboard and ARIA
 - Region landmark labelled "Environment" placed before the main content; not a live region.
-- No interactive controls in the base spec (the fork's glass test toggle is dropped).
+- No interactive controls in the base spec; a host may place GlassCheckToggle (`wave-4/glass-check-toggle.md`) inside the banner.
 - No APG pattern.
 
 ## Responsive, touch, motion, forced colours

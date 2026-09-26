@@ -51,4 +51,4 @@ Reads isRunning and live node results from FlowEditorState.
 - Given a run just finished, when isRunning becomes false, then loadRuns is called again.
 
 ## Open questions
-- The fork has both this panel and RunDrawer, which supersedes it. Keep only RunDrawer unless a host needs the floating variant.
+- Resolved in wave 4: both views are kept as two modes of one feature; see `wave-4/run-view-modes.md` (shared selection, switch controls, retry on loader error).
