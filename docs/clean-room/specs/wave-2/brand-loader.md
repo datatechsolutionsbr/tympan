@@ -39,4 +39,4 @@ Loading only; the host unmounts it when ready.
 - Given inline layout, then the loader does not cover the viewport.
 
 ## Open questions
-- Presets for other products (other gradients) are dropped; one brand only.
+- The library ships one preset (Fakhir). Hosts register their own presets through `wave-4/loader-presets.md`; no other product's preset is shipped.

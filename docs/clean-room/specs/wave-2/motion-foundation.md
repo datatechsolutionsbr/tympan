@@ -37,4 +37,4 @@ Not applicable.
 - Given any preset's reduced variant, then it contains no translate or scale.
 
 ## Open questions
-- The fork's extra tokens (a longer duration, several spring and easing names, platform colour constants) are not carried over; add tokens here only through the design direction.
+- The fork's extra tokens (a longer duration, several spring and easing names, platform colour constants) are not carried over; add tokens here only through the design direction. The mapping of every old alias is recorded in `wave-4/legacy-alias-map.md`; wave 4 adds one flag, `decorativeMotion` (default false), used only by `wave-4/cascade-grid.md`.

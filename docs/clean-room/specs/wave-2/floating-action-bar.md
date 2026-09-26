@@ -1,6 +1,6 @@
 # FloatingActionBar
 
-Wave 2 · navigation · Status: specified
+Wave 2 · navigation · Status: superseded by `wave-4/floating-action-bar.md` (full feature with keyboard path); build from the wave-4 file
 
 ## Purpose
 A floating bar of icon buttons pinned to one edge of the viewport, holding primary destinations and contextual actions, with an optional per-item menu and auto-hide. Kept for products that want it; design direction §5 says the Fakhir research app does not use it, so it is low priority.
@@ -51,3 +51,4 @@ Item rest, hover (label tooltip), focus-visible (tooltip), active (persistent la
 
 ## Open questions
 - The fork opens item menus only on right-click, which is unreachable by keyboard and touch; the spec adds a chevron and the context-menu key.
+- Resolved in wave 4: kept as a full feature; see `wave-4/floating-action-bar.md`.

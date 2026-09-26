@@ -41,4 +41,4 @@ Not applicable.
 
 ## Open questions
 - The fork's two money formatters (by currency and by country) are merged; the country form is `formatMoney(value, country.currency.code, country.locale)`.
-- Country data itself (30 countries) is out of scope; see INVENTORY dropped items.
+- Country data itself (30 countries) is specified in `wave-4/country-profile-data.md` (currency presentation derived from the locale, not stored).
