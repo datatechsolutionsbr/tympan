@@ -1,0 +1,108 @@
+/* CategoryTabs and CategoryLabel (spec: wave-2/category-tabs.md; design direction §2.3, §2.6, §2.10). */
+@layer fakhir.components {
+  .fk-category-tabs {
+    position: relative;
+    min-inline-size: 0;
+  }
+  .fk-category-tabs__row {
+    display: flex;
+    gap: var(--fk-space-2);
+    overflow-x: auto;
+    padding: var(--fk-space-1);
+    scrollbar-width: thin;
+  }
+  .fk-category-tabs__item {
+    --fk-category-marker: var(--fk-ink-3);
+    position: relative;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: var(--fk-space-2);
+    min-block-size: var(--fk-control-target);
+    padding-inline: var(--fk-space-3);
+    border: 1px solid transparent;
+    border-radius: var(--fk-radius-control);
+    background: transparent;
+    color: var(--fk-ink-3);
+    font: inherit;
+    font-size: var(--fk-font-size-body);
+    white-space: nowrap;
+    cursor: pointer;
+    outline: none;
+    transition:
+      color var(--fk-dur-instant) var(--fk-ease),
+      border-color var(--fk-dur-instant) var(--fk-ease),
+      background-color var(--fk-dur-instant) var(--fk-ease);
+  }
+  .fk-category-tabs__item[data-hovered] {
+    color: var(--fk-ink-2);
+    background: var(--fk-surface-sunken);
+  }
+  .fk-category-tabs__item[data-selected] {
+    border-color: var(--fk-line-strong);
+    background: var(--fk-surface-solid);
+    color: var(--fk-ink);
+  }
+  .fk-category-tabs__item[data-focus-visible] {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+  .fk-category-tabs__item[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+  .fk-category-tabs__marker {
+    flex: none;
+    inline-size: var(--fk-space-2);
+    block-size: var(--fk-space-2);
+    border-radius: 2px;
+    background: var(--fk-category-marker);
+    visibility: hidden;
+  }
+  .fk-category-tabs__item[data-selected] .fk-category-tabs__marker,
+  .fk-category-label .fk-category-tabs__marker {
+    visibility: visible;
+  }
+  .fk-category-tabs__code {
+    font-weight: var(--fk-font-weight-semibold);
+  }
+
+  .fk-category-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fk-space-1);
+    color: var(--fk-ink-2);
+    font-size: var(--fk-font-size-label);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-label);
+  }
+  .fk-category-label[data-size='small'] {
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+
+  /* Phones: horizontal scroll with a visible edge fade. */
+  @media (max-width: 639.98px) {
+    .fk-category-tabs__row {
+      mask-image: linear-gradient(to right, transparent, #000 var(--fk-space-4), #000 calc(100% - var(--fk-space-5)), transparent);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-category-tabs__item {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-category-tabs__item {
+      border: 1px solid ButtonText;
+    }
+    .fk-category-tabs__item[data-selected] {
+      border: 2px solid Highlight;
+    }
+    .fk-category-tabs__marker {
+      forced-color-adjust: none;
+    }
+  }
+}

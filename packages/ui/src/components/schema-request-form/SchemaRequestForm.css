@@ -1,0 +1,75 @@
+/* SchemaRequestForm (spec: wave-2/schema-request-form.md; design direction §2.1, §2.3, §2.4, §2.10). */
+@layer fakhir.components {
+  .fk-request-form {
+    --fk-request-accent: var(--fk-info);
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-4);
+    padding: var(--fk-space-5);
+    border: 1px solid var(--fk-line);
+    border-inline-start: 3px solid var(--fk-request-accent);
+    border-radius: var(--fk-radius-card);
+    background: var(--fk-surface-raised);
+    box-shadow: var(--fk-shadow-raised);
+  }
+  .fk-request-form[data-tone='warning'] {
+    --fk-request-accent: var(--fk-warning);
+  }
+  .fk-request-form[data-tone='success'] {
+    --fk-request-accent: var(--fk-success);
+  }
+  .fk-request-form[data-tone='danger'] {
+    --fk-request-accent: var(--fk-danger);
+  }
+  .fk-request-form__prompt {
+    margin: 0;
+    color: var(--fk-ink);
+    font-family: var(--fk-font-serif);
+    font-size: var(--fk-font-size-h3);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-h3);
+  }
+  .fk-request-form__description {
+    max-inline-size: calc(var(--fk-measure-prose) * 1ch);
+    color: var(--fk-ink-2);
+    font-size: var(--fk-font-size-body);
+    line-height: var(--fk-font-line-height-body);
+  }
+  .fk-request-form__form,
+  .fk-request-form__fields {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-4);
+  }
+  .fk-request-form__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--fk-space-3);
+  }
+  .fk-request-form__resolution {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--fk-space-2);
+    margin: 0;
+    color: var(--fk-ink-2);
+  }
+
+  @media (max-width: 639.98px) {
+    .fk-request-form__actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .fk-request-form__actions > * {
+      inline-size: 100%;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-request-form {
+      border: 1px solid CanvasText;
+      border-inline-start-width: 3px;
+    }
+  }
+}

@@ -1,0 +1,91 @@
+/* LocalePicker (spec: wave-2/locale-picker.md; design direction §2.3, §2.6, §2.10).
+   Surfaces come from Drawer and ModalDialog; this styles the list. */
+@layer fakhir.components {
+  .fk-locale-picker {
+    display: inline-flex;
+  }
+  .fk-locale-picker__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-4);
+  }
+  .fk-locale-picker__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-1);
+    outline: none;
+  }
+  .fk-locale-picker__list[data-layout='grid'] {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .fk-locale-picker__option {
+    display: flex;
+    align-items: center;
+    gap: var(--fk-space-3);
+    min-block-size: var(--fk-control-target);
+    padding-inline: var(--fk-space-3);
+    border: 1px solid transparent;
+    border-radius: var(--fk-radius-control);
+    color: var(--fk-ink-2);
+    cursor: pointer;
+    outline: none;
+  }
+  .fk-locale-picker__option[data-hovered] {
+    background: var(--fk-surface-sunken);
+  }
+  .fk-locale-picker__option[data-selected] {
+    border-color: var(--fk-accent);
+    background: var(--fk-accent-soft);
+    color: var(--fk-on-accent-soft);
+    font-weight: var(--fk-font-weight-semibold);
+  }
+  .fk-locale-picker__option[data-focus-visible] {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: -2px;
+  }
+  .fk-locale-picker__flag {
+    flex: none;
+    font-size: var(--fk-font-size-body-lg);
+  }
+  .fk-locale-picker__name {
+    flex: 1;
+    min-inline-size: 0;
+  }
+  .fk-locale-picker__code {
+    color: var(--fk-ink-3);
+    font-family: var(--fk-font-mono);
+    font-size: var(--fk-font-size-meta);
+  }
+  .fk-locale-picker__check {
+    inline-size: 16px;
+    block-size: 16px;
+    visibility: hidden;
+  }
+  .fk-locale-picker__check[data-shown] {
+    visibility: visible;
+  }
+  .fk-locale-picker__footer {
+    margin: 0;
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+
+  @media (min-width: 640px) {
+    .fk-locale-picker__list[data-layout='grid'] {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-locale-picker__option[data-selected] {
+      background: Highlight;
+      color: HighlightText;
+      forced-color-adjust: none;
+    }
+    .fk-locale-picker__option[data-focus-visible] {
+      outline: 2px solid Highlight;
+    }
+  }
+}

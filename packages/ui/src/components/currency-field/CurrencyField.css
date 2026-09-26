@@ -1,0 +1,87 @@
+/* CurrencyField (spec: wave-2/currency-field.md; design direction §2.2, §2.6, §2.10). */
+@layer fakhir.components {
+  .fk-currency-field__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-1);
+    min-inline-size: 0;
+  }
+  .fk-currency-field {
+    --fk-currency-size: var(--fk-font-size-body);
+    --fk-currency-height: var(--fk-control-height);
+  }
+  .fk-currency-field[data-size='small'] {
+    --fk-currency-size: var(--fk-font-size-label);
+    --fk-currency-height: var(--fk-control-height-compact);
+  }
+  .fk-currency-field[data-size='large'] {
+    --fk-currency-size: var(--fk-font-size-body-lg);
+    --fk-currency-height: calc(var(--fk-control-height) + var(--fk-space-2));
+  }
+  .fk-currency-field[data-size='display'] {
+    --fk-currency-size: var(--fk-font-size-h1);
+    --fk-currency-height: calc(var(--fk-control-height) * 1.5);
+  }
+  .fk-currency-field__box {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: var(--fk-space-2);
+    min-block-size: max(var(--fk-currency-height), var(--fk-control-target));
+    padding-inline: var(--fk-space-3);
+    border: 1px solid var(--fk-input);
+    border-radius: var(--fk-radius-control);
+    background: var(--fk-surface-solid);
+    color: var(--fk-ink);
+    font-size: var(--fk-currency-size);
+  }
+  .fk-currency-field__box:has(input[data-focus-visible]),
+  .fk-currency-field__box:focus-within {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+  .fk-currency-field[data-invalid] .fk-currency-field__box {
+    border-color: var(--fk-danger);
+  }
+  .fk-currency-field__symbol {
+    flex: none;
+    color: var(--fk-ink-3);
+  }
+  .fk-currency-field__input {
+    flex: 1;
+    min-inline-size: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-variant-numeric: tabular-nums;
+    outline: none;
+  }
+  .fk-currency-field[data-size='display'] .fk-currency-field__input {
+    font-family: var(--fk-font-serif);
+    font-weight: var(--fk-font-weight-semibold);
+  }
+  .fk-currency-field__input[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  @media (max-width: 1023.98px) {
+    .fk-currency-field:not([data-size='small']) {
+      --fk-currency-height: var(--fk-control-height-touch);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-currency-field__box {
+      border: 1px solid FieldText;
+    }
+    .fk-currency-field__symbol {
+      color: FieldText;
+    }
+    .fk-currency-field__box:focus-within {
+      outline: 2px solid Highlight;
+    }
+  }
+}

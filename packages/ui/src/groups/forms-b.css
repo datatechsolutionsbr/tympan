@@ -1,0 +1,14 @@
+/* Stylesheets of the "forms-b" group (imported by src/styles.css). */
+@import '../internal/forms-b/forms-b.css';
+@import '../components/category-tabs/CategoryTabs.css';
+@import '../components/currency-field/CurrencyField.css';
+@import '../components/date-field/DateField.css';
+@import '../components/form-actions/FormActions.css';
+@import '../components/form-layout/FormLayout.css';
+@import '../components/image-picker/ImagePicker.css';
+@import '../components/locale-picker/LocalePicker.css';
+@import '../components/month-field/MonthField.css';
+@import '../components/schema-request-form/SchemaRequestForm.css';
+@import '../components/tag-field/TagField.css';
+@import '../components/time-field/TimeField.css';
+@import '../components/wheel-picker/WheelPicker.css';

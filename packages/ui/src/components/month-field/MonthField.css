@@ -1,0 +1,11 @@
+/* MonthField (spec: wave-2/month-field.md). Trigger, surface, grid and chips
+   come from the shared forms-b parts; only the trigger width is specific. */
+@layer fakhir.components {
+  .fk-month-field {
+    inline-size: auto;
+    min-inline-size: 12rem;
+  }
+  .fk-month-field[data-embedded] {
+    min-inline-size: 0;
+  }
+}
