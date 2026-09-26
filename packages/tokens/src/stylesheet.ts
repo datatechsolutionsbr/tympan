@@ -25,6 +25,13 @@ export interface StylesheetInput {
   /** Theme applied to `:root` without attributes. `null` scopes every theme to its attribute. */
   defaultTheme?: string | null
   densities?: Partial<Record<Density, VarList>>
+  /**
+   * Component tokens that reference theme roles through var(). Declared on
+   * every theme and mode scope so a nested theme re-resolves them.
+   */
+  components?: VarList
+  /** Extra component rules emitted after the component tokens (e.g. the flow tone mapping). */
+  componentRules?: string
   /** Cascade layer; `null` for none. */
   layer?: string | null
   banner?: string
@@ -136,6 +143,11 @@ export function buildStylesheet(input: StylesheetInput): string {
     const v = densities[d]
     if (v) parts.push(rule([`[data-fk-density="${d}"]`], decls(v)))
   }
+
+  if (input.components?.length) {
+    parts.push(`/* component tokens */\n${rule(ANY_SCOPE, decls(input.components))}`)
+  }
+  if (input.componentRules) parts.push(input.componentRules)
 
   for (const theme of input.themes) {
     parts.push(`/* theme: ${theme.name} */`)

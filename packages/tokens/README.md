@@ -59,6 +59,20 @@ heights, weights and tracking (§2.2), prose measures, durations and easings
 `--fk-control-height`, `--fk-control-height-touch`, `--fk-control-height-compact`
 and `--fk-density`. The 44 px hit area never changes.
 
+**Canvas component tokens (`src/flow.ts`, `--fk-flow-*`)**, used by
+`@fakhir/flow-canvas`: kind tones `tone-{categorical-1..8,neutral}` with
+`-ink`, `-soft` (a 14 % oklab mix) and `-text`, and the `[data-tone]` mapping
+that sets `--fk-flow-tone`, `-ink`, `-soft`, `-text` on any element;
+connectors (`connector`, `-active`, `-true`, `-false`, `-rule`, `-width`,
+`-width-active`); node frame (`node-border`, `-border-hover`, `-surface`,
+`-radius`) and state rings (`ring-{selected,running,succeeded,failed}`);
+canvas plane (`plane`, `grid-dot`, `guide`, `marquee`); provenance bands
+(`band` 96, `band-label` 130, `node-h` 72, `node-w` 236 px); research steps
+(`step-w` 250, `step-h` 86, `col-gap` 56 px) and data shapes
+(`shape-{records,table,number,chart,decision}`). Colours are DTCG aliases of
+theme roles (`dist/dtcg/flow.tokens.json`) emitted as `var(--fk-role)`, and are
+declared on every theme and mode scope so a nested theme re-resolves them.
+
 ## Theming attributes
 
 ```html
