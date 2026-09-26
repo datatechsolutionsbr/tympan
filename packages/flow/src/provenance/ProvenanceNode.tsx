@@ -55,7 +55,7 @@ export function ProvenanceNode({ item, labels: l, locale, selected, dimmed, onAc
           {item.meta?.length ? (
             <span className="fk-prov-node__ids">
               {item.meta.slice(0, 2).map((m) => (
-                <code key={m} className="fk-prov-node__id" title={m}>
+                <code key={m} className="fk-prov-node__id" title={m} dir="ltr">
                   {m}
                 </code>
               ))}

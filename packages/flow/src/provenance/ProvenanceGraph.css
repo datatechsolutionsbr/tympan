@@ -265,7 +265,7 @@
   }
   .fk-prov-tree__row {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: var(--fk-space-2);
     min-block-size: 44px;
     padding-block: var(--fk-space-1);
@@ -333,11 +333,13 @@
     font-weight: var(--fk-font-weight-semibold);
     overflow-wrap: anywhere;
   }
+  /* Proof and actor sit under the title so long titles keep the row width. */
   .fk-prov-tree__facts {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: var(--fk-space-1);
+    align-items: center;
+    gap: var(--fk-space-1) var(--fk-space-2);
+    margin-block-start: var(--fk-space-1);
   }
   .fk-prov-tree__empty {
     margin: 0;

@@ -64,13 +64,13 @@ export function ProvenanceTree({ view, focusId, direction, selectedId, onSelect,
                 {via ? <span className="fk-prov-tree__via">{via}</span> : null}
                 <span className="fk-prov-tree__kind">{vertex.type === 'item' ? l.kinds[vertex.item.kind] : l.actorKinds[vertex.actor.kind]}</span>
                 <span className="fk-prov-tree__title">{vertex.type === 'item' ? vertex.item.title : vertex.actor.name}</span>
+                {vertex.type === 'item' ? (
+                  <span className="fk-prov-tree__facts">
+                    <ProofBadge state={vertex.item.proofState ?? null} size="inline" label={l.proof[proofKeyOf(vertex.item)]} />
+                    {vertex.item.actor ? <ActorChip kind={vertex.item.actor.kind} name={vertex.item.actor.name} compact /> : null}
+                  </span>
+                ) : null}
               </span>
-              {vertex.type === 'item' ? (
-                <span className="fk-prov-tree__facts">
-                  <ProofBadge state={vertex.item.proofState ?? null} size="inline" label={l.proof[proofKeyOf(vertex.item)]} />
-                  {vertex.item.actor ? <ActorChip kind={vertex.item.actor.kind} name={vertex.item.actor.name} compact /> : null}
-                </span>
-              ) : null}
             </div>
           )}
         </TreeItemContent>

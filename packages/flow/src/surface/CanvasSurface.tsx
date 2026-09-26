@@ -65,6 +65,11 @@ export interface CanvasSurfaceProps {
   fitPadding?: number
   /** Highest zoom a fit may choose (1 keeps text at its natural size). */
   maxFitZoom?: number
+  /**
+   * Lowest zoom a fit may choose, so text stays readable; a larger graph is
+   * then centred and reached by panning (the overview map and the list help).
+   */
+  minFitZoom?: number
 
   mode?: 'select' | 'pan'
   dragNodes?: boolean
@@ -130,6 +135,7 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
     fitKey,
     fitPadding = 48,
     maxFitZoom = 1,
+    minFitZoom,
     mode = 'select',
     dragNodes = false,
     marquee = false,
@@ -178,7 +184,15 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
 
   // ---- viewport helpers -------------------------------------------------
   const bounds = useCallback(() => enclosingRect([...placed.values()]), [placed])
-  const fitNow = useCallback(() => setViewport(fitBounds(bounds(), container, fitPadding, zoomLimits, maxFitZoom)), [bounds, container, fitPadding, zoomLimits, maxFitZoom, setViewport])
+  const fitNow = useCallback(() => {
+    const b = bounds()
+    let v = fitBounds(b, container, fitPadding, zoomLimits, maxFitZoom)
+    if (b && minFitZoom !== undefined && v.zoom < minFitZoom) {
+      const zoom = clampZoom(minFitZoom, zoomLimits)
+      v = { zoom, x: container.width / 2 - (b.x + b.width / 2) * zoom, y: container.height / 2 - (b.y + b.height / 2) * zoom }
+    }
+    setViewport(v)
+  }, [bounds, container, fitPadding, zoomLimits, maxFitZoom, minFitZoom, setViewport])
   const centrePivot = useCallback((): Point => ({ x: container.width / 2, y: container.height / 2 }), [container])
 
   const didFit = useRef(false)

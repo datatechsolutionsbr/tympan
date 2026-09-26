@@ -67,6 +67,12 @@ export interface ProvenanceGraphProps {
   onRetry?: () => void
   /** Keep the graph left-to-right even in RTL locales. */
   keepLtr?: boolean
+  /**
+   * Reading axis of the graph: 'vertical' (origins on top, the default, like
+   * the list) or 'horizontal' (origins at the reading start: left in LTR,
+   * right in RTL unless keepLtr).
+   */
+  orientation?: 'vertical' | 'horizontal'
   labels?: Partial<ProvenanceLabels>
   className?: string
 }
@@ -78,7 +84,7 @@ function initialMatch(query: string, fallback: boolean): boolean {
 }
 
 export function ProvenanceGraph(props: ProvenanceGraphProps) {
-  const { items, statements, actors = [], maxHops = 8, loading = false, error = null, onRetry, keepLtr = false, className } = props
+  const { items, statements, actors = [], maxHops = 8, loading = false, error = null, onRetry, keepLtr = false, orientation = 'vertical', className } = props
   const l = useLabels(provenanceLabels, props.labels)
   const { locale, rtl } = useFlowLocale()
   const wide = useMediaQuery('(min-width: 1024px)', true)
@@ -117,7 +123,7 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
   )
 
   // Positions: ranked layout (origins at the reading start), then any node the person moved.
-  const layoutDirection = rtl && !keepLtr ? 'right-left' : 'left-right'
+  const layoutDirection = orientation === 'vertical' ? 'top-down' : rtl && !keepLtr ? 'right-left' : 'left-right'
   const laidOut = useMemo(() => {
     const nodes = provView.vertices.map((v) => ({ id: v.id, kind: v.type === 'item' ? v.item.kind : 'actor', position: { x: 0, y: 0 }, size: v.type === 'item' ? { ...PROV_CARD } : { ...ACTOR_CARD } }))
     return autoLayout(nodes, provView.links, layoutDirection)
@@ -360,6 +366,9 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
               renderNode={renderNode}
               renderConnector={renderConnector}
               fitKey={layoutKey}
+              minFitZoom={0.6}
+              minimap
+              portAnchor={orientation === 'vertical' ? (_id, _port, role) => ({ side: role === 'source' ? 'bottom' : 'top', along: 0.5 }) : undefined}
               mode={mode}
               dragNodes={mode === 'select'}
               onNodeDrag={onNodeDrag}
