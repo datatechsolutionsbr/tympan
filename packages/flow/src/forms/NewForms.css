@@ -1,0 +1,256 @@
+/* DataSourceNodeForm, ReportOutputNodeForm and DecisionNodeForm. Logical
+   properties only; selected tiles and rows carry a check mark, not colour
+   alone. */
+@layer fakhir.components {
+  .fk-ds-form__pane {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-4);
+    min-inline-size: 0;
+  }
+  .fk-ds-form__tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--fk-space-3);
+  }
+  .fk-ds-form__tile,
+  .fk-ds-form__option {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--fk-space-3);
+    min-block-size: 44px;
+    padding: var(--fk-space-3);
+    border: 1px solid var(--fk-line-strong);
+    border-radius: var(--fk-radius-control);
+    background: var(--fk-surface-solid);
+    color: var(--fk-ink-2);
+    cursor: pointer;
+    outline: none;
+  }
+  .fk-ds-form__option {
+    padding-block: var(--fk-space-2);
+    border-color: transparent;
+  }
+  .fk-ds-form__tile[data-selected],
+  .fk-ds-form__option[data-selected] {
+    border-color: var(--fk-accent);
+    background: var(--fk-accent-soft);
+    font-weight: var(--fk-font-weight-semibold);
+  }
+  .fk-ds-form__tile[data-focus-visible],
+  .fk-ds-form__option[data-focus-visible] {
+    outline: 2px solid var(--fk-accent);
+    outline-offset: 2px;
+  }
+  .fk-ds-form__tile[data-disabled],
+  .fk-ds-form__option[data-disabled] {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  .fk-ds-form__tile-icon {
+    flex: none;
+    inline-size: 20px;
+    block-size: 20px;
+    color: var(--fk-ink-3);
+  }
+  .fk-ds-form__tile-text {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+  .fk-ds-form__tile-name {
+    color: var(--fk-ink);
+    overflow-wrap: anywhere;
+  }
+  .fk-ds-form__tile-meta {
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+  }
+  .fk-ds-form__tile-check {
+    flex: none;
+    inline-size: 16px;
+    block-size: 16px;
+    margin-inline-start: auto;
+    color: var(--fk-accent);
+  }
+  .fk-ds-form__list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-block-size: 320px;
+    overflow: auto;
+  }
+  .fk-ds-form__option-name {
+    font-family: var(--fk-font-mono);
+    overflow-wrap: anywhere;
+  }
+  .fk-ds-form__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--fk-space-2);
+  }
+  .fk-ds-form__count {
+    color: var(--fk-ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+  .fk-ds-form__filter,
+  .fk-decision-form__option {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--fk-space-3);
+    align-items: end;
+    margin: 0;
+    padding: var(--fk-space-3);
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-control);
+  }
+  .fk-ds-form__legend,
+  .fk-decision-form__legend {
+    padding-inline: var(--fk-space-1);
+    color: var(--fk-ink);
+    font-size: var(--fk-font-size-label);
+    font-weight: var(--fk-font-weight-semibold);
+  }
+  .fk-ds-form__summary dl {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: var(--fk-space-1) var(--fk-space-4);
+    margin: 0;
+  }
+  .fk-ds-form__summary dt {
+    color: var(--fk-ink-3);
+  }
+  .fk-ds-form__summary dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .fk-report-form__label,
+  .fk-decision-form__heading {
+    margin: 0;
+    color: var(--fk-ink);
+    font-size: var(--fk-font-size-label);
+    font-weight: var(--fk-font-weight-semibold);
+  }
+  .fk-report-form__source {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-2);
+  }
+  .fk-report-form__radios {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--fk-space-2);
+  }
+  .fk-report-form__radio {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fk-space-2);
+    min-block-size: 44px;
+    padding-inline: var(--fk-space-3);
+    border: 1px solid var(--fk-line-strong);
+    border-radius: var(--fk-radius-control);
+    cursor: pointer;
+  }
+  .fk-report-form__radio::before {
+    content: '';
+    inline-size: 14px;
+    block-size: 14px;
+    border: 1.5px solid var(--fk-input);
+    border-radius: 50%;
+  }
+  .fk-report-form__radio[data-selected]::before {
+    border: 4px solid var(--fk-accent);
+  }
+  .fk-report-form__radio[data-focus-visible],
+  .fk-report-form__toggle[data-focus-visible] {
+    outline: 2px solid var(--fk-accent);
+    outline-offset: 2px;
+  }
+  .fk-report-form__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fk-space-2);
+    min-block-size: 44px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--fk-ink);
+    font: inherit;
+    font-weight: var(--fk-font-weight-semibold);
+    cursor: pointer;
+  }
+  .fk-report-form__chevron {
+    inline-size: 16px;
+    block-size: 16px;
+    rotate: -90deg;
+    transition: rotate var(--fk-dur-quick) var(--fk-ease);
+  }
+  :dir(rtl) .fk-report-form__chevron {
+    rotate: 90deg;
+  }
+  .fk-report-form__chevron[data-open] {
+    rotate: 0deg;
+  }
+  .fk-report-form__preview-body {
+    max-block-size: 420px;
+    overflow: auto;
+    padding: var(--fk-space-3);
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-control);
+  }
+
+  .fk-decision-form__input,
+  .fk-decision-form__options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-3);
+  }
+  .fk-decision-form__refs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--fk-space-2);
+  }
+  .fk-decision-form__model {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--fk-space-4);
+  }
+
+  @media (min-width: 768px) {
+    .fk-ds-form__filter {
+      grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+    }
+    .fk-decision-form__option {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
+    }
+    .fk-decision-form__model {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fk-report-form__chevron {
+      transition: none;
+    }
+  }
+  @media (forced-colors: active) {
+    .fk-ds-form__tile,
+    .fk-report-form__radio,
+    .fk-ds-form__filter,
+    .fk-decision-form__option,
+    .fk-report-form__preview-body {
+      border-color: CanvasText;
+    }
+    .fk-ds-form__tile[data-selected],
+    .fk-ds-form__option[data-selected] {
+      outline: 2px solid Highlight;
+    }
+    .fk-report-form__radio[data-selected]::before {
+      border-color: Highlight;
+    }
+  }
+}

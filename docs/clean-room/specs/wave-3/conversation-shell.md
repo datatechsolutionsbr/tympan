@@ -49,3 +49,6 @@ Canvas rule: the latest successful graph-producing tool result (create, edit, ad
 - Given a tool result carrying a graph, then the canvas panel opens; when closed, it stays closed until a newer graph result arrives.
 - Given the canvas is closed with an artifact available, then the composer shows "open canvas", which reopens it.
 - Given a narrow viewport, then the history is reachable through a Drawer.
+
+## Renamed in implementation
+Props `chat` → `session`, `conversations` → `threads` (`ThreadSummary`; `boundFlowId`/`boundFlowName` → `flowId`/`flowName`), `onSelect`/`onDelete`/`onNew` → `onOpenThread`/`onRemoveThread`/`onStartThread`, `favourites` → `starred`. Helpers `groupByDate`/`groupConversationsByDate` → `groupThreadsByDay` (returns `{ bucket, threads }`), `ConversationMetaLine` → `ThreadMetaLine`. The history and the live canvas are the separate components `ThreadHistory` and `LiveCanvasPanel`. Behaviour is unchanged.

@@ -1,0 +1,10 @@
+// @fakhir/flow-canvas: assistant group barrel (session hook, conversation, visual answers, workspace).
+export * from './MarkdownView'
+export * from './visual'
+export * from './useAssistantSession'
+export * from './AssistantVisualBlock'
+export * from './AssistantConversation'
+export * from './threadDays'
+export * from './ThreadHistory'
+export * from './LiveCanvasPanel'
+export * from './ConversationShell'

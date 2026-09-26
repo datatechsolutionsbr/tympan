@@ -1,0 +1,54 @@
+{
+  "name": "@fakhir/flow-canvas",
+  "version": "0.1.0",
+  "description": "Fakhir flow and provenance canvas: accessible React 19 graph viewer and DAG editor (W3C PROV provenance graph with a synced tree, workflow editor, run inspection), on @fakhir/design-system. Pure CSS in @layer fakhir.components. No Tailwind.",
+  "license": "MIT",
+  "author": "Natalia Mesquita",
+  "private": true,
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "fakhir-source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "scripts": {
+    "prebuild": "npm run build -w @fakhir/tokens",
+    "build": "tsdown && node scripts/build-css.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "gallery": "npm run build -w @fakhir/tokens && vite --config gallery/vite.config.ts",
+    "gallery:build": "npm run build -w @fakhir/tokens && vite build --config gallery/vite.config.ts",
+    "pretest": "npm run build -w @fakhir/tokens",
+    "pretypecheck": "npm run build -w @fakhir/tokens"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "dependencies": {
+    "@dagrejs/dagre": "^3.1.1",
+    "@fakhir/design-system": "0.1.0",
+    "@fakhir/tokens": "0.1.0",
+    "lucide-react": "^1.48.0",
+    "react-aria-components": "^1.21.1"
+  },
+  "devDependencies": {
+    "axe-core": "^4.13.0"
+  }
+}

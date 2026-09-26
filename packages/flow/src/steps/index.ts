@@ -1,0 +1,15 @@
+// Research steps: typed steps shelved by research verb and the editor parts
+// built on them (palette, add picker, card, issue bar, side panel, list view).
+export * from './shapes'
+export * from './researchSteps'
+export * from './stepLabels'
+export * from './wiring'
+export { StepsProvider, useSteps, useReadyCatalog, type StepsRuntime, type StepsProviderProps } from './StepsContext'
+export { ShapeChip, ShapeFlow, type ShapeChipProps } from './ShapeChip'
+export { StepCard, STEP_CARD_SIZE, alongEdge } from './StepCard'
+export { StepPalette, STEP_MEDIA_TYPE, stepDragType, stepOfDrag, type StepPaletteProps, type PaletteFilter } from './StepPalette'
+export { AddStepPicker, type AddStepPickerProps } from './AddStepPicker'
+export { IssueBar, type IssueBarProps } from './IssueBar'
+export { FlowSidePanel, type FlowSidePanelProps, type FlowFacts, type OutputPreview } from './FlowSidePanel'
+export { StepListView, type StepListViewProps } from './StepListView'
+export { stepToolItems, type StepToolOptions } from './stepTools'
