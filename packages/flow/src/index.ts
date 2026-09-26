@@ -31,6 +31,8 @@ export { ConfirmProvider, useConfirm, type ConfirmFn, type ConfirmOptions } from
 export { SectionedModal, type SectionedModalProps, type ModalSection } from './internal/SectionedModal'
 export { DockedPanel, type DockedPanelProps } from './internal/DockedPanel'
 export { formatDuration, formatRelative, formatDateTime } from './internal/format'
+/** Host i18n adapter: `messages[componentKey]` overrides a component's labels (ICU templates). */
+export { FlowMessagesProvider } from './internal/labels'
 
 // Canvas surface
 export * from './surface/types'
