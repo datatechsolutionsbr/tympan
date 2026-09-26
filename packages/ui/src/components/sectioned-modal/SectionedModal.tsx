@@ -124,9 +124,12 @@ export function SectionedModal(props: SectionedModalProps) {
   useEffect(() => {
     if (!props.open) return
     const frame = requestAnimationFrame(() => {
+      // The person may already have moved into the body (a click before this
+      // frame): never take focus away from them.
+      if (bodyRef.current?.contains(document.activeElement)) return
       const field = bodyRef.current?.querySelector<HTMLElement>(FIELD)
       if (field) field.focus()
-      else if (!bodyRef.current?.contains(document.activeElement)) headingRef.current?.focus()
+      else headingRef.current?.focus()
     })
     return () => cancelAnimationFrame(frame)
   }, [props.open])

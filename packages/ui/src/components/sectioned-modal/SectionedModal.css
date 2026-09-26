@@ -1,33 +1,11 @@
 /*
  * SectionedModal (spec: wave-2/sectioned-modal.md; design direction §2.4, §2.5, §2.7, §2.8).
- * Layout is driven by a handful of local custom properties set on the panel;
- * the breakpoints only change those properties, the rules below stay put.
+ * Organised by part. Each part carries its own states, breakpoints and
+ * preference queries nested inside it; sizes and layout switches are read
+ * from --fk-smd-* properties so a breakpoint only has to change a value.
  */
 @layer fakhir.components {
-  /* ---- Local variables ---------------------------------------------------- */
-  .fk-sectioned-modal {
-    --fk-sm-cap: 52rem; /* panel width cap */
-    --fk-sm-gutter: var(--fk-space-6); /* inline padding of head, body, foot */
-    --fk-sm-outer: var(--fk-space-5); /* space between panel and viewport */
-    --fk-sm-flow: row; /* frame: rail beside or above the content */
-    --fk-sm-rail-size: 15rem;
-    --fk-sm-marker: inset calc(3px * var(--fk-inline-sign)) 0 0 var(--fk-accent);
-  }
-  .fk-sectioned-modal[data-size='sm'] {
-    --fk-sm-cap: 28rem;
-  }
-  .fk-sectioned-modal[data-size='md'] {
-    --fk-sm-cap: 40rem;
-  }
-  .fk-sectioned-modal[data-size='xl'] {
-    --fk-sm-cap: 68rem;
-  }
-  .fk-sectioned-modal[data-size='full'] {
-    --fk-sm-cap: 100%;
-    block-size: 100%;
-  }
-
-  /* ---- Overlay and panel (level 4) --------------------------------------- */
+  /* Veil behind the panel. */
   .fk-sectioned-modal__backdrop {
     position: fixed;
     inset: 0;
@@ -36,66 +14,117 @@
     place-items: center;
     padding: var(--fk-space-5);
     background: var(--fk-backdrop);
-  }
-  .fk-sectioned-modal {
-    box-sizing: border-box;
-    display: flex;
-    inline-size: min(var(--fk-sm-cap), 100%);
-    max-block-size: calc(100dvh - 2 * var(--fk-sm-outer));
-    overflow: hidden;
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-sheet);
-    background: var(--fk-surface-raised);
-    box-shadow: var(--fk-shadow-modal);
-    color: var(--fk-on-surface-raised);
-    outline: none;
-    backdrop-filter: blur(var(--fk-glass-blur-floating)) saturate(var(--fk-glass-saturate));
-    -webkit-backdrop-filter: blur(var(--fk-glass-blur-floating)) saturate(var(--fk-glass-saturate));
+
+    &[data-entering] {
+      animation: fk-smd-fade var(--fk-dur-base) var(--fk-ease);
+    }
+    @media (prefers-reduced-transparency: reduce) {
+      background: rgb(15 23 42 / 0.6);
+    }
   }
 
-  /* Columns that must be allowed to shrink. */
-  .fk-sectioned-modal__dialog,
-  .fk-sectioned-modal__form,
-  .fk-sectioned-modal__body {
+  /* Panel (level 4). */
+  .fk-sectioned-modal {
+    --fk-smd-width: 52rem;
+    --fk-smd-pad-x: var(--fk-space-6);
+    --fk-smd-margin: var(--fk-space-5);
+    --fk-smd-direction: row;
+    --fk-smd-nav-width: 15rem;
+    --fk-smd-current: inset calc(3px * var(--fk-inline-sign)) 0 0 var(--fk-accent);
+
+    display: flex;
+    box-sizing: border-box;
+    inline-size: min(var(--fk-smd-width), 100%);
+    max-block-size: calc(100dvh - var(--fk-smd-margin) * 2);
+    overflow: hidden;
+    color: var(--fk-on-surface-raised);
+    background: var(--fk-surface-raised);
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-sheet);
+    box-shadow: var(--fk-shadow-modal);
+    backdrop-filter: blur(var(--fk-glass-blur-floating)) saturate(var(--fk-glass-saturate));
+    -webkit-backdrop-filter: blur(var(--fk-glass-blur-floating)) saturate(var(--fk-glass-saturate));
+    outline: none;
+
+    &[data-size='sm'] {
+      --fk-smd-width: 28rem;
+    }
+    &[data-size='md'] {
+      --fk-smd-width: 40rem;
+    }
+    &[data-size='xl'] {
+      --fk-smd-width: 68rem;
+    }
+    &[data-size='full'] {
+      --fk-smd-width: 100%;
+      block-size: 100%;
+    }
+    &[data-entering] {
+      animation: fk-smd-lift var(--fk-dur-base) var(--fk-ease);
+    }
+
+    @media (max-width: 1023.98px) {
+      --fk-smd-direction: column;
+      --fk-smd-nav-width: auto;
+      --fk-smd-current: inset 0 -3px 0 var(--fk-accent);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      &[data-entering] {
+        animation: fk-smd-fade var(--fk-dur-base) linear;
+      }
+    }
+    @media (prefers-reduced-transparency: reduce) {
+      background: var(--fk-surface-raised-solid);
+      backdrop-filter: none;
+    }
+    @media (forced-colors: active) {
+      border: 1px solid CanvasText;
+      backdrop-filter: none;
+    }
+  }
+
+  /* Shrinkable columns and the frame that places navigation and content. */
+  :is(.fk-sectioned-modal__dialog, .fk-sectioned-modal__form, .fk-sectioned-modal__body) {
     display: flex;
     flex: 1;
     flex-direction: column;
-    min-block-size: 0;
     min-inline-size: 0;
+    min-block-size: 0;
     outline: none;
   }
   .fk-sectioned-modal__frame {
     display: flex;
     flex: 1;
-    flex-direction: var(--fk-sm-flow);
+    flex-direction: var(--fk-smd-direction);
     min-block-size: 0;
   }
 
-  /* ---- Head --------------------------------------------------------------- */
+  /* Header block. */
   .fk-sectioned-modal__head {
     position: relative;
     display: flex;
     align-items: flex-start;
     gap: var(--fk-space-3);
-    padding: var(--fk-space-5) var(--fk-sm-gutter);
+    padding: var(--fk-space-5) var(--fk-smd-pad-x);
     border-block-end: 1px solid var(--fk-line);
-  }
-  .fk-sectioned-modal__head[data-accent]::before {
-    content: '';
-    position: absolute;
-    inset-block-start: 0;
-    inset-inline: 0;
-    block-size: 3px;
-    background: var(--fk-accent);
+
+    &[data-accent]::before {
+      content: '';
+      position: absolute;
+      inset-inline: 0;
+      inset-block-start: 0;
+      block-size: 3px;
+      background: var(--fk-accent);
+    }
   }
   .fk-sectioned-modal__head-icon {
     display: inline-grid;
     place-items: center;
     inline-size: 40px;
     block-size: 40px;
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-surface-sunken);
     color: var(--fk-ink-2);
+    background: var(--fk-surface-sunken);
+    border-radius: var(--fk-radius-control);
   }
   .fk-sectioned-modal__titles {
     flex: 1;
@@ -109,10 +138,11 @@
     font-weight: var(--fk-font-weight-semibold);
     line-height: var(--fk-font-line-height-h2);
     outline: none;
-  }
-  .fk-sectioned-modal__title:focus-visible {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
-    outline-offset: 2px;
+
+    &:focus-visible {
+      outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+      outline-offset: 2px;
+    }
   }
   .fk-sectioned-modal__subtitle {
     margin: var(--fk-space-1) 0 0;
@@ -122,10 +152,7 @@
     display: flex;
     gap: var(--fk-space-2);
   }
-
-  /* Eyebrow-style labels share one treatment. */
-  .fk-sectioned-modal__eyebrow,
-  .fk-sectioned-modal__group-name {
+  :is(.fk-sectioned-modal__eyebrow, .fk-sectioned-modal__group-name) {
     margin: 0;
     color: var(--fk-ink-3);
     font-size: var(--fk-font-size-eyebrow);
@@ -133,36 +160,54 @@
     letter-spacing: var(--fk-font-tracking-eyebrow);
     text-transform: uppercase;
   }
-  .fk-sectioned-modal__group-name {
-    margin-block-end: var(--fk-space-1);
-    padding-inline: var(--fk-space-3);
-  }
 
-  /* ---- Section navigation (rail) ------------------------------------------ */
+  /* Navigation between sections. */
   .fk-sectioned-modal__rail {
     display: flex;
     flex: none;
     flex-direction: column;
     gap: var(--fk-space-4);
-    inline-size: var(--fk-sm-rail-size);
+    inline-size: var(--fk-smd-nav-width);
     padding: var(--fk-space-4);
     overflow-y: auto;
-    border-inline-end: 1px solid var(--fk-line);
     background: var(--fk-surface-sunken);
-  }
-  .fk-sectioned-modal__nav,
-  .fk-sectioned-modal__list {
-    display: flex;
-    flex-direction: column;
+    border-inline-end: 1px solid var(--fk-line);
+
+    @media (max-width: 1023.98px) {
+      flex-direction: row;
+      align-items: center;
+      padding: var(--fk-space-2) var(--fk-space-4);
+      overflow-x: auto;
+      border-inline-end: 0;
+      border-block-end: 1px solid var(--fk-line);
+    }
   }
   .fk-sectioned-modal__nav {
+    display: flex;
+    flex-direction: column;
     gap: var(--fk-space-4);
   }
   .fk-sectioned-modal__list {
+    display: flex;
+    flex-direction: column;
     gap: 2px;
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+  :is(.fk-sectioned-modal__nav, .fk-sectioned-modal__list) {
+    @media (max-width: 1023.98px) {
+      flex-direction: row;
+    }
+  }
+  .fk-sectioned-modal__group-name {
+    margin-block-end: var(--fk-space-1);
+    padding-inline: var(--fk-space-3);
+  }
+  :is(.fk-sectioned-modal__group-name, .fk-sectioned-modal__identity) {
+    @media (max-width: 1023.98px) {
+      display: none;
+    }
   }
   .fk-sectioned-modal__item {
     position: relative;
@@ -172,27 +217,38 @@
     inline-size: 100%;
     min-block-size: var(--fk-control-target);
     padding: 0 var(--fk-space-3);
-    border: 0;
-    border-radius: var(--fk-radius-control);
-    background: transparent;
     color: var(--fk-ink-2);
     font: inherit;
     text-align: start;
+    background: transparent;
+    border: 0;
+    border-radius: var(--fk-radius-control);
     cursor: pointer;
     outline: none;
-  }
-  .fk-sectioned-modal__item[data-hovered] {
-    background: var(--fk-surface);
-  }
-  .fk-sectioned-modal__item[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
-    outline-offset: -2px;
-  }
-  .fk-sectioned-modal__item[data-active] {
-    background: var(--fk-accent-soft);
-    box-shadow: var(--fk-sm-marker);
-    color: var(--fk-accent);
-    font-weight: var(--fk-font-weight-semibold);
+
+    &[data-hovered] {
+      background: var(--fk-surface);
+    }
+    &[data-focus-visible] {
+      outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+      outline-offset: -2px;
+    }
+    &[data-active] {
+      color: var(--fk-accent);
+      font-weight: var(--fk-font-weight-semibold);
+      background: var(--fk-accent-soft);
+      box-shadow: var(--fk-smd-current);
+    }
+    @media (max-width: 1023.98px) {
+      white-space: nowrap;
+    }
+    @media (forced-colors: active) {
+      &[data-active] {
+        outline: 2px solid Highlight;
+        outline-offset: -2px;
+        box-shadow: none;
+      }
+    }
   }
   .fk-sectioned-modal__item-icon > svg {
     inline-size: 18px;
@@ -210,70 +266,8 @@
     margin-block-start: auto;
     padding-block-start: var(--fk-space-3);
     border-block-start: 1px solid var(--fk-line);
-  }
 
-  /* ---- Body and footer ---------------------------------------------------- */
-  .fk-sectioned-modal__body {
-    gap: var(--fk-space-4);
-    padding: var(--fk-space-6) var(--fk-sm-gutter);
-    overflow-y: auto;
-  }
-  .fk-sectioned-modal__foot {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: var(--fk-space-3);
-    padding-block: var(--fk-space-4) calc(var(--fk-space-4) + env(safe-area-inset-bottom, 0px));
-    padding-inline: var(--fk-sm-gutter);
-    border-block-start: 1px solid var(--fk-line);
-  }
-
-  /* ---- Motion ------------------------------------------------------------- */
-  @keyframes fk-smodal-rise {
-    from {
-      opacity: 0;
-      translate: 0 12px;
-    }
-  }
-  @keyframes fk-smodal-appear {
-    from {
-      opacity: 0;
-    }
-  }
-  .fk-sectioned-modal[data-entering] {
-    animation: fk-smodal-rise var(--fk-dur-base) var(--fk-ease);
-  }
-  .fk-sectioned-modal__backdrop[data-entering] {
-    animation: fk-smodal-appear var(--fk-dur-base) var(--fk-ease);
-  }
-
-  /* ---- Below 1024 px: navigation becomes a scrollable row on top ---------- */
-  @media (max-width: 1023.98px) {
-    .fk-sectioned-modal {
-      --fk-sm-flow: column;
-      --fk-sm-rail-size: auto;
-      --fk-sm-marker: inset 0 -3px 0 var(--fk-accent);
-    }
-    .fk-sectioned-modal__rail,
-    .fk-sectioned-modal__nav,
-    .fk-sectioned-modal__list {
-      flex-direction: row;
-    }
-    .fk-sectioned-modal__rail {
-      align-items: center;
-      padding: var(--fk-space-2) var(--fk-space-4);
-      overflow-x: auto;
-      border-inline-end: 0;
-      border-block-end: 1px solid var(--fk-line);
-    }
-    .fk-sectioned-modal__item {
-      white-space: nowrap;
-    }
-    .fk-sectioned-modal__group-name,
-    .fk-sectioned-modal__identity {
-      display: none;
-    }
-    .fk-sectioned-modal__rail-foot {
+    @media (max-width: 1023.98px) {
       margin: 0;
       margin-inline-start: auto;
       padding: 0;
@@ -281,11 +275,27 @@
     }
   }
 
-  /* ---- Below 640 px: full screen, footer pinned above the safe area ------- */
+  /* Content and actions. */
+  .fk-sectioned-modal__body {
+    gap: var(--fk-space-4);
+    padding: var(--fk-space-6) var(--fk-smd-pad-x);
+    overflow-y: auto;
+  }
+  .fk-sectioned-modal__foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--fk-space-3);
+    padding-inline: var(--fk-smd-pad-x);
+    padding-block: var(--fk-space-4) calc(var(--fk-space-4) + env(safe-area-inset-bottom, 0px));
+    border-block-start: 1px solid var(--fk-line);
+  }
+
+  /* Phones: the panel fills the screen and the footer stays above the safe area. */
   @media (max-width: 639.98px) {
     .fk-sectioned-modal {
-      --fk-sm-gutter: var(--fk-space-4);
-      --fk-sm-outer: 0px;
+      --fk-smd-pad-x: var(--fk-space-4);
+      --fk-smd-margin: 0px;
       inline-size: 100%;
       block-size: 100dvh;
       max-block-size: 100dvh;
@@ -301,30 +311,15 @@
     }
   }
 
-  /* ---- Preferences -------------------------------------------------------- */
-  @media (prefers-reduced-motion: reduce) {
-    .fk-sectioned-modal[data-entering] {
-      animation: fk-smodal-appear var(--fk-dur-base) linear;
+  @keyframes fk-smd-lift {
+    from {
+      opacity: 0;
+      translate: 0 12px;
     }
   }
-  @media (prefers-reduced-transparency: reduce) {
-    .fk-sectioned-modal {
-      background: var(--fk-surface-raised-solid);
-      backdrop-filter: none;
-    }
-    .fk-sectioned-modal__backdrop {
-      background: rgb(15 23 42 / 0.6);
-    }
-  }
-  @media (forced-colors: active) {
-    .fk-sectioned-modal {
-      border: 1px solid CanvasText;
-      backdrop-filter: none;
-    }
-    .fk-sectioned-modal__item[data-active] {
-      outline: 2px solid Highlight;
-      outline-offset: -2px;
-      box-shadow: none;
+  @keyframes fk-smd-fade {
+    from {
+      opacity: 0;
     }
   }
 }

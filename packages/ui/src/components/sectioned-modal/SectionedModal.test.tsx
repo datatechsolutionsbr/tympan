@@ -57,6 +57,26 @@ describe('SectionedModal', () => {
     expect(onSubmit).toHaveBeenCalledTimes(1)
   })
 
+  it('does not pull focus back to the first field after the person moved into the body', async () => {
+    const raf = vi.spyOn(window, 'requestAnimationFrame')
+    render(
+      <SectionedModal open onClose={() => {}} title="Note" onSubmit={() => {}} formFooter={{}}>
+        <label>
+          Title <input />
+        </label>
+        <label>
+          Body <textarea />
+        </label>
+      </SectionedModal>,
+    )
+    const body = screen.getByRole('textbox', { name: 'Body' })
+    body.focus()
+    // Run the pending initial-focus frame now, after the person's move.
+    for (const [cb] of raf.mock.calls) cb(performance.now())
+    raf.mockRestore()
+    expect(body).toHaveFocus()
+  })
+
   it('shows Save busy and disabled while pending', () => {
     render(<SectionedModal open onClose={() => {}} title="Note" onSubmit={() => {}} formFooter={{ pending: true }} />)
     const save = screen.getByRole('button', { name: 'Save' })

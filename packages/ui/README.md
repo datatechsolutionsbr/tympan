@@ -112,7 +112,7 @@ export function App() {
 - **`FakhirProvider`**: copy (`messages` overrides on top of `baseMessages`,
   English by default, `messagesPtBR` included) and the router adapter
   (`navigate`, `useHref`) used by every link-like component. Components hold no
-  hard-coded copy. `I18nAdapterProvider` and `RouterAdapterProvider` (wave 2)
+  hard-coded copy. `I18nAdapterProvider` and `RoutingProvider` (wave 2)
   plug a host i18n library or router in without FakhirProvider.
 - **`ThemeProvider` / `useTheme`**: sets `data-fk-theme` (`fakhir`, `neutral`,
   `high-contrast` or a generated theme), `data-fk-mode` (`system`, `light`,
@@ -169,7 +169,7 @@ specs), grouped as in the gallery:
   RouteProgress, ConsentBanner, EnvironmentBanner, AmbientBackdrop,
   LegalDocumentFrame, SkeletonFill, ThirdPartyMarkSlot/ProviderMark.
 - **Touch and utilities**: SwipeRow, PullToRefresh, EdgeSwipeBack,
-  SafeAreaInset, Haptics, ViewTransition, EntityListLoader, RouterAdapter,
+  SafeAreaInset, Haptics, animateChange (view transitions), EntityListLoader, Routing (router adapter),
   I18nAdapter, MotionFoundation, Formatters, ApiErrorModel, GlassCheckToggle
   (developer only), CascadeGrid (off unless `decorativeMotion`), and the
   LegacyAliasMap decision record (no aliases exported).
