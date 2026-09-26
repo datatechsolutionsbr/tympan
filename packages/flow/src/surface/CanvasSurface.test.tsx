@@ -44,7 +44,7 @@ describe('CanvasSurface', () => {
 
   it('draws a connector path for each visible connector', () => {
     const { container } = render(<CanvasSurface label="Flow" nodes={nodes} connectors={[{ id: 'c', source: 'a', target: 'b' }]} renderNode={(n) => <Node id={n.id} />} />)
-    expect(container.querySelectorAll('.fk-surface__connector')).toHaveLength(1)
+    expect(container.querySelectorAll('.fk-flow-surface__connector')).toHaveLength(1)
   })
 
   it('fits on mount and zooms with the ladder through its handle', () => {

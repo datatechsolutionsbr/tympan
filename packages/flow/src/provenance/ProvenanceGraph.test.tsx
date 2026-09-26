@@ -137,7 +137,7 @@ describe('ProvenanceGraph', () => {
   it('keeps the tools in one row above the canvas, not over it', () => {
     const { container } = renderGraph()
     const row = container.querySelector('.fk-prov__tools')!
-    expect(row.nextElementSibling).toHaveClass('fk-surface')
+    expect(row.nextElementSibling).toHaveClass('fk-flow-surface')
     expect(within(row as HTMLElement).getByLabelText('Steps back')).toBeInTheDocument()
     expect(within(row as HTMLElement).getByLabelText('Steps forward')).toBeInTheDocument()
     expect(row.querySelector('.fk-prov-legend')).not.toBeNull()

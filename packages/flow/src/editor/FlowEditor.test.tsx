@@ -271,10 +271,10 @@ describe('AutosaveController', () => {
       )
     }
     render(<Host />)
-    const canvasBefore = document.querySelector('.fk-surface')
+    const canvasBefore = document.querySelector('.fk-flow-surface')
     act(() => store.actions.select(['sum']))
     act(() => screen.getByText('swap').click())
-    expect(document.querySelector('.fk-surface')).toBe(canvasBefore)
+    expect(document.querySelector('.fk-flow-surface')).toBe(canvasBefore)
     act(() => store.actions.setNodes((ns) => ns.slice(0, 2)))
     expect(first).not.toHaveBeenCalled()
     expect(second).toHaveBeenCalledTimes(1)

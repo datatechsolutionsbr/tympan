@@ -16,6 +16,7 @@ export interface StepEditorWords {
   noMatch: string
   noRecent: string
   dragHint: string
+  dragItem: string
   addNamed: string
   pickerAfter: string
   pickerBetween: string
@@ -93,7 +94,7 @@ export const stepEditorWords = defineLabels<StepEditorWords>('stepEditor', {
   en: {
     origin: 'start', pickerOnly: 'Only steps that take', pickerKeys: '↑↓ choose · Enter adds and links · Esc closes', eyebrowFlow: 'Flow', eyebrowStep: 'Selected step', runsOn: 'Runs on', nothingSelected: 'Nothing selected. Click a step to configure it, or use + to add one.', saved: 'saved', issueSentence: '“{to}” expects', andGets: 'and gets', fixReplace: 'Replace with {step}', stepName: 'Step name', moreStep: 'More for this step', 
     paletteTitle: 'Steps', search: 'Find a step', searchKey: 'Shortcut: /', show: 'Show', all: 'All', noAI: 'Without AI', recent: 'Recent',
-    ai: 'AI', aiOff: 'AI is off in this project', noMatch: 'No step matches “{query}”', noRecent: 'Steps you add appear here',
+    ai: 'AI', aiOff: 'AI is off in this project', noMatch: 'No step matches “{query}”', noRecent: 'Steps you add appear here', dragItem: 'Drag {name}',
     dragHint: 'Drag onto the canvas or press Enter', addNamed: 'Add {name}',
     pickerAfter: 'Add after “{name}”', pickerBetween: 'Insert between “{from}” and “{to}”', pickerFree: 'Add a step', pickerSearch: 'Find a step',
     accepts: 'Takes {shape}', nothingAccepts: 'No step takes {shape}', results: '{count, plural, =0 {No steps} one {# step} other {# steps}}',
@@ -113,7 +114,7 @@ export const stepEditorWords = defineLabels<StepEditorWords>('stepEditor', {
   'pt-BR': {
     origin: 'início', pickerOnly: 'Só passos que aceitam', pickerKeys: '↑↓ escolhe · Enter adiciona e liga · Esc fecha', eyebrowFlow: 'Fluxo', eyebrowStep: 'Passo selecionado', runsOn: 'Roda sobre', nothingSelected: 'Nada selecionado. Clique num passo para configurá-lo, ou use + para adicionar.', saved: 'salvo', issueSentence: '“{to}” espera', andGets: 'e recebe', fixReplace: 'Trocar por {step}', stepName: 'Nome do passo', moreStep: 'Mais ações do passo', 
     paletteTitle: 'Passos', search: 'Buscar passo', searchKey: 'Atalho: /', show: 'Mostrar', all: 'Todos', noAI: 'Sem IA', recent: 'Recentes',
-    ai: 'IA', aiOff: 'IA desativada neste projeto', noMatch: 'Nenhum passo corresponde a “{query}”', noRecent: 'Os passos que você adicionar aparecem aqui',
+    ai: 'IA', aiOff: 'IA desativada neste projeto', noMatch: 'Nenhum passo corresponde a “{query}”', noRecent: 'Os passos que você adicionar aparecem aqui', dragItem: 'Arrastar {name}',
     dragHint: 'Arraste para o canvas ou pressione Enter', addNamed: 'Adicionar {name}',
     pickerAfter: 'Adicionar depois de “{name}”', pickerBetween: 'Inserir entre “{from}” e “{to}”', pickerFree: 'Adicionar passo', pickerSearch: 'Buscar passo',
     accepts: 'Recebe {shape}', nothingAccepts: 'Nenhum passo recebe {shape}', results: '{count, plural, =0 {Nenhum passo} one {# passo} other {# passos}}',
@@ -133,7 +134,7 @@ export const stepEditorWords = defineLabels<StepEditorWords>('stepEditor', {
   es: {
     origin: 'inicio', pickerOnly: 'Solo pasos que aceptan', pickerKeys: '↑↓ elige · Enter añade y enlaza · Esc cierra', eyebrowFlow: 'Flujo', eyebrowStep: 'Paso seleccionado', runsOn: 'Se ejecuta sobre', nothingSelected: 'Nada seleccionado. Haz clic en un paso para configurarlo, o usa + para añadir.', saved: 'guardado', issueSentence: '“{to}” espera', andGets: 'y recibe', fixReplace: 'Cambiar por {step}', stepName: 'Nombre del paso', moreStep: 'Más acciones del paso', 
     paletteTitle: 'Pasos', search: 'Buscar paso', searchKey: 'Atajo: /', show: 'Mostrar', all: 'Todos', noAI: 'Sin IA', recent: 'Recientes',
-    ai: 'IA', aiOff: 'IA desactivada en este proyecto', noMatch: 'Ningún paso coincide con “{query}”', noRecent: 'Los pasos que añadas aparecen aquí',
+    ai: 'IA', aiOff: 'IA desactivada en este proyecto', noMatch: 'Ningún paso coincide con “{query}”', noRecent: 'Los pasos que añadas aparecen aquí', dragItem: 'Arrastrar {name}',
     dragHint: 'Arrastra al lienzo o pulsa Enter', addNamed: 'Añadir {name}',
     pickerAfter: 'Añadir después de “{name}”', pickerBetween: 'Insertar entre “{from}” y “{to}”', pickerFree: 'Añadir paso', pickerSearch: 'Buscar paso',
     accepts: 'Recibe {shape}', nothingAccepts: 'Ningún paso recibe {shape}', results: '{count, plural, =0 {Ningún paso} one {# paso} other {# pasos}}',

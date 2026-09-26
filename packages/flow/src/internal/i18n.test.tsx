@@ -97,8 +97,8 @@ describe('i18n foundations', () => {
       </FakhirProvider>,
     )
     // Source leaves a's physical left edge (x = 400) toward b's right edge (x = 200).
-    expect(container.querySelector('.fk-surface__connector')!.getAttribute('d')!.startsWith('M400,40 ')).toBe(true)
-    expect(container.querySelector('.fk-surface')).toHaveAttribute('data-direction', 'rtl')
+    expect(container.querySelector('.fk-flow-surface__connector')!.getAttribute('d')!.startsWith('M400,40 ')).toBe(true)
+    expect(container.querySelector('.fk-flow-surface')).toHaveAttribute('data-direction', 'rtl')
   })
 
   it('names canvas tools in the requested locale', () => {

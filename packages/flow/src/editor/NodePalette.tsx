@@ -3,7 +3,7 @@
 // keyboard or tap through `onPlace` (Enter on an item).
 
 import { useMemo, useState, type ReactNode } from 'react'
-import { Bot, ChevronRight, Database, Plus, Scale, Server } from 'lucide-react'
+import { Bot, ChevronRight, Database, GripVertical, Plus, Scale, Server } from 'lucide-react'
 import { Button as AriaButton, Disclosure, DisclosurePanel, GridList, GridListItem, Heading, useDragAndDrop } from 'react-aria-components'
 import { Button, TextField, type IconComponent } from '@fakhir/design-system'
 import { useRenderCatalog } from '../catalog/RenderCatalog'
@@ -68,6 +68,7 @@ export interface NodePaletteLabels {
   needsSetup: string
   models: string
   count: string
+  dragItem: string
 }
 
 export const nodePaletteLabels = defineLabels<NodePaletteLabels>('NodePalette', {
@@ -89,6 +90,7 @@ export const nodePaletteLabels = defineLabels<NodePaletteLabels>('NodePalette', 
     emptyDataSources: 'No data sources yet',
     emptyProviders: 'No providers yet',
     emptySteps: 'Loading the step catalogue',
+    dragItem: 'Drag {name}',
     on: 'on',
     off: 'off',
     configured: 'configured',
@@ -114,6 +116,7 @@ export const nodePaletteLabels = defineLabels<NodePaletteLabels>('NodePalette', 
     emptyDataSources: 'Nenhuma fonte de dados ainda',
     emptyProviders: 'Nenhum provedor ainda',
     emptySteps: 'Carregando o catálogo de passos',
+    dragItem: 'Arrastar {name}',
     on: 'ligada',
     off: 'desligada',
     configured: 'configurado',
@@ -139,6 +142,7 @@ export const nodePaletteLabels = defineLabels<NodePaletteLabels>('NodePalette', 
     emptyDataSources: 'Aún no hay fuentes de datos',
     emptyProviders: 'Aún no hay proveedores',
     emptySteps: 'Cargando el catálogo de pasos',
+    dragItem: 'Arrastrar {name}',
     on: 'activada',
     off: 'desactivada',
     configured: 'configurado',
@@ -188,7 +192,7 @@ export function paletteDragItems(payload: PalettePayload) {
   return [{ [PALETTE_MEDIA_TYPE]: JSON.stringify(payload), 'text/plain': payload.label }]
 }
 
-function Items({ label, items, onPlace, emptyText }: { label: string; items: PaletteItem[]; onPlace?: NodePaletteProps['onPlace']; emptyText: string }) {
+function Items({ label, items, onPlace, emptyText, dragLabel }: { label: string; items: PaletteItem[]; onPlace?: NodePaletteProps['onPlace']; emptyText: string; dragLabel: (name: string) => string }) {
   const { dragAndDropHooks } = useDragAndDrop({
     getItems: (keys) => items.filter((i) => keys.has(i.key)).flatMap((i) => paletteDragItems(i.payload)),
     getAllowedDropOperations: () => ['copy'],
@@ -196,10 +200,10 @@ function Items({ label, items, onPlace, emptyText }: { label: string; items: Pal
   return (
     <GridList
       aria-label={label}
-      className="fk-palette__list"
+      className="fk-flow-palette__list"
       items={items}
       dragAndDropHooks={dragAndDropHooks}
-      renderEmptyState={() => <p className="fk-palette__empty">{emptyText}</p>}
+      renderEmptyState={() => <p className="fk-flow-palette__empty">{emptyText}</p>}
       onAction={(key) => {
         const item = items.find((i) => i.key === key)
         if (!item) return
@@ -210,15 +214,18 @@ function Items({ label, items, onPlace, emptyText }: { label: string; items: Pal
       {(item) => {
         const Icon = item.icon
         return (
-          <GridListItem id={item.key} textValue={item.name} className="fk-palette__item">
-            <span className="fk-palette__bubble" data-tone={item.tone} aria-hidden="true">
+          <GridListItem id={item.key} textValue={item.name} className="fk-flow-palette__item">
+            <AriaButton slot="drag" className="fk-flow-palette__grip" aria-label={dragLabel(item.name)}>
+              <GripVertical aria-hidden="true" focusable="false" />
+            </AriaButton>
+            <span className="fk-flow-palette__bubble" data-tone={item.tone} aria-hidden="true">
               {Icon ? <Icon focusable="false" /> : null}
             </span>
-            <span className="fk-palette__text">
-              <span className="fk-palette__name">{item.name}</span>
-              {item.description ? <span className="fk-palette__description">{item.description}</span> : null}
+            <span className="fk-flow-palette__text">
+              <span className="fk-flow-palette__name">{item.name}</span>
+              {item.description ? <span className="fk-flow-palette__description">{item.description}</span> : null}
             </span>
-            {item.extra ? <span className="fk-palette__extra">{item.extra}</span> : null}
+            {item.extra ? <span className="fk-flow-palette__extra">{item.extra}</span> : null}
           </GridListItem>
         )
       }}
@@ -242,19 +249,19 @@ function Section({ id, title, icon: Icon, count, addLabel, onAdd, expanded, onEx
   const { locale } = useFlowLocale()
   const l = useLabels(nodePaletteLabels, undefined)
   return (
-    <Disclosure id={id} className="fk-palette__section" isExpanded={expanded} onExpandedChange={onExpandedChange}>
-      <div className="fk-palette__header">
-        <Heading level={3} className="fk-palette__heading">
-          <AriaButton slot="trigger" className="fk-palette__trigger">
-            <ChevronRight className="fk-palette__chevron" aria-hidden="true" focusable="false" />
-            {Icon ? <Icon className="fk-palette__section-icon" aria-hidden="true" focusable="false" /> : null}
+    <Disclosure id={id} className="fk-flow-palette__section" isExpanded={expanded} onExpandedChange={onExpandedChange}>
+      <div className="fk-flow-palette__header">
+        <Heading level={3} className="fk-flow-palette__heading">
+          <AriaButton slot="trigger" className="fk-flow-palette__trigger">
+            <ChevronRight className="fk-flow-palette__chevron" aria-hidden="true" focusable="false" />
+            {Icon ? <Icon className="fk-flow-palette__section-icon" aria-hidden="true" focusable="false" /> : null}
             <span>{title}</span>
-            <span className="fk-palette__count">{fill(l.count, { count }, locale)}</span>
+            <span className="fk-flow-palette__count">{fill(l.count, { count }, locale)}</span>
           </AriaButton>
         </Heading>
         {onAdd && addLabel ? <Button variant="quiet" size="compact" iconOnly accessibleLabel={addLabel} leadingIcon={<Plus />} onPress={onAdd} /> : null}
       </div>
-      <DisclosurePanel className="fk-palette__panel">{children}</DisclosurePanel>
+      <DisclosurePanel className="fk-flow-palette__panel">{children}</DisclosurePanel>
     </Disclosure>
   )
 }
@@ -299,7 +306,7 @@ export function NodeKindList({ kinds, onPlace, emptyMessage, store = nodeKindCat
   const catalog = useRenderCatalog()
   useCatalogVersion(store)
   const entries = (kinds ? kinds.map((k) => store.entry(k)).filter((e): e is NodeKindEntry => !!e) : placeableKinds(store)).filter((e) => e.label.toLocaleLowerCase().includes(query.toLocaleLowerCase()))
-  return <Items label={label ?? l.palette} items={kindItems(entries, store, catalog)} {...(onPlace ? { onPlace } : {})} emptyText={emptyMessage ?? (store.isLoaded() ? l.noResults : l.emptySteps)} />
+  return <Items label={label ?? l.palette} items={kindItems(entries, store, catalog)} {...(onPlace ? { onPlace } : {})} emptyText={emptyMessage ?? (store.isLoaded() ? l.noResults : l.emptySteps)} dragLabel={(name) => fill(l.dragItem, { name })} />
 }
 
 export interface NodePaletteProps {
@@ -324,7 +331,7 @@ export interface NodePaletteProps {
 }
 
 export function NodePalette(props: NodePaletteProps) {
-  const { agents = [], rules = [], entities = [], modelProviders = [], onPlace, store = nodeKindCatalog, storage = safeLocalStorage, storageKey = 'fk-palette' } = props
+  const { agents = [], rules = [], entities = [], modelProviders = [], onPlace, store = nodeKindCatalog, storage = safeLocalStorage, storageKey = 'fk-flow-palette' } = props
   const l = useLabels(nodePaletteLabels, props.labels)
   const { locale } = useFlowLocale()
   const catalog = useRenderCatalog()
@@ -352,7 +359,7 @@ export function NodePalette(props: NodePaletteProps) {
         icon: Bot,
         tone: catalog.tone('agent'),
         payload: { kind: 'agent', label: a.name, entityId: a.id, config: { agentRef: a.id } },
-        ...(a.tier ? { extra: <span className="fk-palette__tag">{a.tier}</span> } : {}),
+        ...(a.tier ? { extra: <span className="fk-flow-palette__tag">{a.tier}</span> } : {}),
       })),
       ...(props.onCreateAgent ? { addLabel: l.addAgent, onAdd: props.onCreateAgent } : {}),
       empty: l.emptyAgents,
@@ -367,7 +374,7 @@ export function NodePalette(props: NodePaletteProps) {
         icon: Scale,
         tone: catalog.tone('rule'),
         payload: { kind: 'rule', label: r.name, entityId: r.id, config: { ruleId: r.id } },
-        extra: <span className="fk-palette__state" data-on={r.enabled || undefined}>{r.enabled ? l.on : l.off}</span>,
+        extra: <span className="fk-flow-palette__state" data-on={r.enabled || undefined}>{r.enabled ? l.on : l.off}</span>,
       })),
       ...(props.onCreateRule ? { addLabel: l.addRule, onAdd: props.onCreateRule } : {}),
       empty: l.emptyRules,
@@ -424,15 +431,15 @@ export function NodePalette(props: NodePaletteProps) {
   const total = sections.reduce((n, s) => n + s.items.length, 0)
 
   return (
-    <section className={['fk-palette', props.className].filter(Boolean).join(' ')} aria-label={l.palette}>
+    <section className={['fk-flow-palette', props.className].filter(Boolean).join(' ')} aria-label={l.palette}>
       <TextField mode="search" label={l.search} value={query} onChange={setQuery} />
       <p className="fk-visually-hidden" role="status" aria-live="polite">
         {q ? fill(l.results, { count: total }, locale) : ''}
       </p>
-      {q && total === 0 ? <p className="fk-palette__no-results">{l.noResults}</p> : null}
+      {q && total === 0 ? <p className="fk-flow-palette__no-results">{l.noResults}</p> : null}
       {sections.map((s) => (
         <Section key={s.id} id={s.id} title={s.title} {...(s.icon ? { icon: s.icon } : {})} count={s.items.length} {...(s.addLabel && s.onAdd ? { addLabel: s.addLabel, onAdd: s.onAdd } : {})} expanded={q ? true : isOpen(s.id)} onExpandedChange={toggle(s.id)}>
-          <Items label={s.title} items={s.items} {...(onPlace ? { onPlace } : {})} emptyText={q ? l.noResults : s.empty} />
+          <Items label={s.title} items={s.items} {...(onPlace ? { onPlace } : {})} emptyText={q ? l.noResults : s.empty} dragLabel={(name) => fill(l.dragItem, { name })} />
         </Section>
       ))}
     </section>

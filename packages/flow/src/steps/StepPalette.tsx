@@ -7,7 +7,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Button as AriaButton, Disclosure, DisclosurePanel, GridList, GridListItem, Heading, Input, Label, SearchField, ToggleButton, ToggleButtonGroup, useDragAndDrop, useFilter, type Key } from 'react-aria-components'
-import { ChevronDown, Search } from 'lucide-react'
+import { ChevronDown, GripVertical, Search } from 'lucide-react'
 import { fill, useFlowLocale } from '../internal/labels'
 import { ShapeFlow } from './ShapeChip'
 import type { ReadyShelf, ReadyStep } from './researchSteps'
@@ -172,6 +172,9 @@ function ShelfList({ shelf, onPlace, onDragChange }: { shelf: ReadyShelf; onPlac
         const Icon = s.icon
         return (
           <GridListItem id={s.id} textValue={s.name} className="fk-step-palette__item" data-ai={s.usesAI ? 'true' : undefined}>
+            <AriaButton slot="drag" className="fk-step-palette__grip" aria-label={fill(w.dragItem, { name: s.name })}>
+              <GripVertical aria-hidden="true" focusable="false" />
+            </AriaButton>
             <span className="fk-step-palette__tile" aria-hidden="true">
               <Icon focusable="false" />
             </span>

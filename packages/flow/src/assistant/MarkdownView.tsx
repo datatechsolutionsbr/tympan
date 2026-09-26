@@ -114,7 +114,7 @@ export interface MarkdownViewProps {
 export function MarkdownView({ source, baseHeadingLevel = 3, className }: MarkdownViewProps) {
   const blocks = markdownBlocks(source)
   return (
-    <div className={['fk-markdown', className].filter(Boolean).join(' ')}>
+    <div className={['fk-flow-markdown', className].filter(Boolean).join(' ')}>
       {blocks.map((b, i) => {
         const key = `b${i}`
         switch (b.kind) {
@@ -122,7 +122,7 @@ export function MarkdownView({ source, baseHeadingLevel = 3, className }: Markdo
             const level = Math.min(6, baseHeadingLevel + b.level - 1)
             const H = `h${level}` as 'h2'
             return (
-              <H key={key} className="fk-markdown__heading">
+              <H key={key} className="fk-flow-markdown__heading">
                 {renderInline(b.text, key)}
               </H>
             )
@@ -130,7 +130,7 @@ export function MarkdownView({ source, baseHeadingLevel = 3, className }: Markdo
           case 'list': {
             const L = b.ordered ? 'ol' : 'ul'
             return (
-              <L key={key} className="fk-markdown__list">
+              <L key={key} className="fk-flow-markdown__list">
                 {b.items.map((item, j) => (
                   <li key={j}>{renderInline(item, `${key}-${j}`)}</li>
                 ))}
@@ -139,19 +139,19 @@ export function MarkdownView({ source, baseHeadingLevel = 3, className }: Markdo
           }
           case 'code':
             return (
-              <pre key={key} className="fk-markdown__code" tabIndex={0} data-lang={b.lang || undefined}>
+              <pre key={key} className="fk-flow-markdown__code" tabIndex={0} data-lang={b.lang || undefined}>
                 <code>{b.text}</code>
               </pre>
             )
           case 'quote':
             return (
-              <blockquote key={key} className="fk-markdown__quote">
+              <blockquote key={key} className="fk-flow-markdown__quote">
                 {renderInline(b.text, key)}
               </blockquote>
             )
           default:
             return (
-              <p key={key} className="fk-markdown__paragraph">
+              <p key={key} className="fk-flow-markdown__paragraph">
                 {renderInline(b.text, key)}
               </p>
             )

@@ -949,7 +949,7 @@ function EditorBody(props: FlowEditorProps & { reference: FlowReferenceData }) {
             className="fk-editor__canvas"
             data-view="list"
             onKeyDown={(e) => {
-              if (plainA(e) && !locked && !isTyping(e.target as HTMLElement) && !(e.target as HTMLElement).closest('.fk-step-list__main')) {
+              if (plainA(e) && !locked && !isTyping(e.target as HTMLElement) && !(e.target as HTMLElement).closest('.fk-flow-step-list__main')) {
                 e.preventDefault()
                 addFromDock()
               }

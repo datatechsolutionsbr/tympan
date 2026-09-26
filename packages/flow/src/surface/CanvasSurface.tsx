@@ -584,9 +584,9 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
   const svgParts: ReactNode[] = []
   const htmlParts: ReactNode[] = []
   for (const { c, shape } of shapes) {
-    const parts: ConnectorParts = renderConnector ? renderConnector(c, shape) : { svg: <path className="fk-surface__connector" d={shape.d} markerEnd="url(#fk-surface-arrow)" /> }
+    const parts: ConnectorParts = renderConnector ? renderConnector(c, shape) : { svg: <path className="fk-flow-surface__connector" d={shape.d} markerEnd="url(#fk-surface-arrow)" /> }
     if (parts.svg) svgParts.push(<g key={c.id}>{parts.svg}</g>)
-    if (parts.html) htmlParts.push(<div key={c.id} className="fk-surface__connector-html">{parts.html}</div>)
+    if (parts.html) htmlParts.push(<div key={c.id} className="fk-flow-surface__connector-html">{parts.html}</div>)
   }
 
   const transform = `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`
@@ -596,7 +596,7 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
     <SurfaceContext.Provider value={ctx}>
       <div
         ref={paneRef}
-        className={['fk-surface', className].filter(Boolean).join(' ')}
+        className={['fk-flow-surface', className].filter(Boolean).join(' ')}
         role="group"
         aria-label={label}
         aria-roledescription={roleDescription}
@@ -623,7 +623,7 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
         {...data}
       >
         {grid ? (
-          <svg className="fk-surface__grid" aria-hidden="true" focusable="false">
+          <svg className="fk-flow-surface__grid" aria-hidden="true" focusable="false">
             <defs>
               <pattern id="fk-surface-grid" patternUnits="userSpaceOnUse" x={viewport.x % gridSize} y={viewport.y % gridSize} width={gridSize} height={gridSize}>
                 <circle cx={gridSize / 2} cy={gridSize / 2} r={Math.max(0.6, 1 * viewport.zoom)} />
@@ -632,11 +632,11 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
             <rect width="100%" height="100%" fill="url(#fk-surface-grid)" />
           </svg>
         ) : null}
-        <div className="fk-surface__plane" style={{ transform }}>
-          <svg className="fk-surface__links" aria-hidden="true" focusable="false">
+        <div className="fk-flow-surface__plane" style={{ transform }}>
+          <svg className="fk-flow-surface__links" aria-hidden="true" focusable="false">
             <defs>
               <marker id="fk-surface-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-                <path d="M0,0 L10,5 L0,10 z" className="fk-surface__arrowhead" />
+                <path d="M0,0 L10,5 L0,10 z" className="fk-flow-surface__arrowhead" />
               </marker>
             </defs>
             {svgParts}
@@ -647,7 +647,7 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
             return (
               <div
                 key={n.id}
-                className="fk-surface__node"
+                className="fk-flow-surface__node"
                 data-fk-node-id={n.id}
                 data-layer={n.layer ?? 1}
                 style={{ transform: `translate(${r.x}px, ${r.y}px)`, width: r.width, ...(n.fixedHeight ? { height: r.height } : { minHeight: r.height }) }}
@@ -661,7 +661,7 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
           {overlay}
           {htmlParts}
         </div>
-        {marqueeBox ? <div className="fk-surface__marquee" aria-hidden="true" style={{ left: marqueeBox.x, top: marqueeBox.y, width: marqueeBox.width, height: marqueeBox.height }} /> : null}
+        {marqueeBox ? <div className="fk-flow-surface__marquee" aria-hidden="true" style={{ left: marqueeBox.x, top: marqueeBox.y, width: marqueeBox.width, height: marqueeBox.height }} /> : null}
         {minimap ? <OverviewMap nodes={ordered} rects={placed} viewport={viewport} container={container} onCentre={(p) => setViewport({ ...viewportRef.current, x: container.width / 2 - p.x * viewportRef.current.zoom, y: container.height / 2 - p.y * viewportRef.current.zoom })} /> : null}
         {children}
         <div className="fk-visually-hidden" role="status" aria-live="polite">

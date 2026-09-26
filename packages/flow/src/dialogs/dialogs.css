@@ -101,10 +101,10 @@
 
   /* Phones: the dialogs fill the screen (SectionedModal widens them to xwide). */
   @media (max-width: 639px) {
-    .fk-sectioned-modal.fk-flow-settings,
-    .fk-sectioned-modal.fk-definition-export,
-    .fk-sectioned-modal.fk-definition-import,
-    .fk-sectioned-modal.fk-node-config-dialog {
+    .fk-flow-sectioned-modal.fk-flow-settings,
+    .fk-flow-sectioned-modal.fk-definition-export,
+    .fk-flow-sectioned-modal.fk-definition-import,
+    .fk-flow-sectioned-modal.fk-node-config-dialog {
       inline-size: 100vw;
       max-inline-size: 100vw;
       min-block-size: 100dvh;

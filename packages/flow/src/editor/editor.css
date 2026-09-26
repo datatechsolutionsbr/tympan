@@ -35,7 +35,7 @@
     min-block-size: 480px;
     overflow: hidden;
   }
-  .fk-editor__canvas > .fk-surface {
+  .fk-editor__canvas > .fk-flow-surface {
     flex: 1;
     min-block-size: 0;
   }
@@ -189,26 +189,26 @@
   }
 
   /* ---- palette ---- */
-  .fk-palette {
+  .fk-flow-palette {
     display: flex;
     flex-direction: column;
     gap: var(--fk-space-2);
     padding: var(--fk-space-3);
   }
-  .fk-palette__section {
+  .fk-flow-palette__section {
     border-block-end: 1px solid var(--fk-line);
   }
-  .fk-palette__header {
+  .fk-flow-palette__header {
     display: flex;
     align-items: center;
     gap: var(--fk-space-1);
   }
-  .fk-palette__heading {
+  .fk-flow-palette__heading {
     flex: 1 1 auto;
     margin: 0;
     font-size: var(--fk-font-size-label);
   }
-  .fk-palette__trigger {
+  .fk-flow-palette__trigger {
     all: unset;
     display: flex;
     align-items: center;
@@ -219,45 +219,45 @@
     font-weight: var(--fk-font-weight-semibold);
     cursor: pointer;
   }
-  .fk-palette__trigger[data-focus-visible] {
+  .fk-flow-palette__trigger[data-focus-visible] {
     outline: 2px solid var(--fk-accent);
     outline-offset: 2px;
   }
-  .fk-palette__chevron {
+  .fk-flow-palette__chevron {
     inline-size: 16px;
     block-size: 16px;
     transition: rotate var(--fk-dur-quick) var(--fk-ease);
   }
-  .fk-palette__chevron:dir(rtl) {
+  .fk-flow-palette__chevron:dir(rtl) {
     scale: -1 1;
   }
-  .fk-palette__section[data-expanded] .fk-palette__chevron {
+  .fk-flow-palette__section[data-expanded] .fk-flow-palette__chevron {
     rotate: 90deg;
   }
-  .fk-palette__section[data-expanded] .fk-palette__chevron:dir(rtl) {
+  .fk-flow-palette__section[data-expanded] .fk-flow-palette__chevron:dir(rtl) {
     rotate: -90deg;
   }
-  .fk-palette__section-icon {
+  .fk-flow-palette__section-icon {
     inline-size: 16px;
     block-size: 16px;
     color: var(--fk-ink-3);
   }
-  .fk-palette__count,
-  .fk-palette__state,
-  .fk-palette__tag,
-  .fk-palette__description,
-  .fk-palette__empty,
-  .fk-palette__no-results {
+  .fk-flow-palette__count,
+  .fk-flow-palette__state,
+  .fk-flow-palette__tag,
+  .fk-flow-palette__description,
+  .fk-flow-palette__empty,
+  .fk-flow-palette__no-results {
     color: var(--fk-ink-3);
     font-size: var(--fk-font-size-meta);
   }
-  .fk-palette__list {
+  .fk-flow-palette__list {
     display: flex;
     flex-direction: column;
     gap: 2px;
     padding-block-end: var(--fk-space-2);
   }
-  .fk-palette__item {
+  .fk-flow-palette__item {
     display: flex;
     align-items: center;
     gap: var(--fk-space-2);
@@ -266,18 +266,34 @@
     border-radius: var(--fk-radius-control);
     cursor: grab;
   }
-  .fk-palette__item[data-hovered],
-  .fk-palette__item[data-focused] {
+  /* The drag handle react-aria asks for: the row itself stays draggable; the handle gives keyboard and AT users a named drag control. */
+  .fk-flow-palette__grip {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    inline-size: 20px;
+    block-size: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--fk-radius-control);
+    background: transparent;
+    color: var(--fk-ink-2);
+    cursor: grab;
+    & svg { inline-size: 14px; block-size: 14px; }
+    &[data-focus-visible] { outline: var(--fk-focus-width) solid var(--fk-focus-ring); outline-offset: 1px; }
+  }
+  .fk-flow-palette__item[data-hovered],
+  .fk-flow-palette__item[data-focused] {
     background: var(--fk-accent-soft);
   }
-  .fk-palette__item[data-focus-visible] {
+  .fk-flow-palette__item[data-focus-visible] {
     outline: 2px solid var(--fk-accent);
     outline-offset: -2px;
   }
-  .fk-palette__item[data-dragging] {
+  .fk-flow-palette__item[data-dragging] {
     opacity: 0.6;
   }
-  .fk-palette__bubble {
+  .fk-flow-palette__bubble {
     display: inline-grid;
     flex: none;
     place-items: center;
@@ -287,21 +303,21 @@
     background: var(--fk-flow-tone, var(--fk-flow-tone-neutral));
     color: var(--fk-flow-tone-ink, var(--fk-surface-solid));
   }
-  .fk-palette__bubble svg {
+  .fk-flow-palette__bubble svg {
     inline-size: 16px;
     block-size: 16px;
   }
-  .fk-palette__text {
+  .fk-flow-palette__text {
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
     min-inline-size: 0;
   }
-  .fk-palette__name {
+  .fk-flow-palette__name {
     color: var(--fk-ink);
     overflow-wrap: anywhere;
   }
-  .fk-palette__description {
+  .fk-flow-palette__description {
     display: -webkit-box;
     overflow: hidden;
     -webkit-box-orient: vertical;
@@ -510,7 +526,7 @@
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .fk-palette__chevron,
+    .fk-flow-palette__chevron,
     .fk-save-status {
       transition: none;
     }
@@ -541,10 +557,10 @@
     .fk-flow-switcher__item[data-current] {
       border: 3px solid Highlight;
     }
-    .fk-palette__item[data-focused] {
+    .fk-flow-palette__item[data-focused] {
       outline: 2px solid Highlight;
     }
-    .fk-palette__bubble,
+    .fk-flow-palette__bubble,
     .fk-flow-outline__bubble {
       border: 1px solid CanvasText;
       background: Canvas;

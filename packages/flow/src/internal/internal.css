@@ -1,11 +1,11 @@
 /* Shared pieces: SectionedModal stand-in and DockedPanel. */
 @layer fakhir.components {
-  .fk-sectioned-modal__heading {
+  .fk-flow-sectioned-modal__heading {
     display: inline-flex;
     align-items: center;
     gap: var(--fk-space-3);
   }
-  .fk-sectioned-modal__icon {
+  .fk-flow-sectioned-modal__icon {
     display: inline-grid;
     place-items: center;
     inline-size: 36px;
@@ -14,15 +14,15 @@
     background: var(--fk-flow-tone, var(--fk-flow-tone-neutral));
     color: var(--fk-flow-tone-ink, var(--fk-surface-solid));
   }
-  .fk-sectioned-modal__icon svg {
+  .fk-flow-sectioned-modal__icon svg {
     inline-size: 18px;
     block-size: 18px;
   }
-  .fk-sectioned-modal__titles {
+  .fk-flow-sectioned-modal__titles {
     display: flex;
     flex-direction: column;
   }
-  .fk-sectioned-modal__eyebrow {
+  .fk-flow-sectioned-modal__eyebrow {
     color: var(--fk-ink-3);
     font-family: var(--fk-font-sans);
     font-size: var(--fk-font-size-eyebrow);
@@ -31,12 +31,12 @@
     letter-spacing: var(--fk-font-tracking-eyebrow);
     text-transform: uppercase;
   }
-  .fk-sectioned-modal__body {
+  .fk-flow-sectioned-modal__body {
     display: flex;
     flex-direction: column;
     gap: var(--fk-space-5);
   }
-  .fk-sectioned-modal__rail-layout[data-rail='side'] {
+  .fk-flow-sectioned-modal__rail-layout[data-rail='side'] {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: var(--fk-space-4);
@@ -143,7 +143,7 @@
       border-color: CanvasText;
       background: Canvas;
     }
-    .fk-sectioned-modal__icon {
+    .fk-flow-sectioned-modal__icon {
       border: 1px solid CanvasText;
       background: Canvas;
       color: CanvasText;

@@ -1,6 +1,6 @@
 /* CanvasSurface: plane, grid, connectors layer, overview map, marquee. */
 @layer fakhir.components {
-  .fk-surface {
+  .fk-flow-surface {
     position: relative;
     overflow: hidden;
     inline-size: 100%;
@@ -13,28 +13,28 @@
     border-radius: inherit;
     cursor: default;
   }
-  .fk-surface:focus-visible {
+  .fk-flow-surface:focus-visible {
     outline: var(--fk-focus-width, 2px) solid var(--fk-focus-ring, var(--fk-accent));
     outline-offset: -2px;
   }
-  .fk-surface[data-mode='pan'] {
+  .fk-flow-surface[data-mode='pan'] {
     cursor: grab;
   }
-  .fk-surface[data-dragging] {
+  .fk-flow-surface[data-dragging] {
     cursor: grabbing;
   }
-  .fk-surface[data-connecting] {
+  .fk-flow-surface[data-connecting] {
     cursor: crosshair;
   }
 
-  .fk-surface__grid {
+  .fk-flow-surface__grid {
     position: absolute;
     inset: 0;
     inline-size: 100%;
     block-size: 100%;
     pointer-events: none;
   }
-  .fk-surface__grid circle {
+  .fk-flow-surface__grid circle {
     fill: var(--fk-flow-grid-dot);
   }
 
@@ -43,7 +43,7 @@
      layout; it stays at the physical top-left in both reading directions.
      Mirroring for right-to-left happens in the layout (rank direction) and in
      the logical port sides, not by flipping the plane. */
-  .fk-surface__plane {
+  .fk-flow-surface__plane {
     position: absolute;
     inset: 0 auto auto 0;
     inline-size: 0;
@@ -51,7 +51,7 @@
     transform-origin: 0 0;
   }
 
-  .fk-surface__links {
+  .fk-flow-surface__links {
     position: absolute;
     inset: 0 auto auto 0;
     inline-size: 1px;
@@ -59,40 +59,40 @@
     overflow: visible;
     pointer-events: none;
   }
-  .fk-surface__links * {
+  .fk-flow-surface__links * {
     pointer-events: visiblePainted;
   }
-  .fk-surface__connector {
+  .fk-flow-surface__connector {
     fill: none;
     stroke: var(--fk-flow-connector);
     stroke-width: var(--fk-flow-connector-width);
   }
-  .fk-surface__arrowhead {
+  .fk-flow-surface__arrowhead {
     fill: var(--fk-flow-connector);
   }
 
-  .fk-surface__node {
+  .fk-flow-surface__node {
     position: absolute;
     inset: 0 auto auto 0;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
   }
-  .fk-surface__node > * {
+  .fk-flow-surface__node > * {
     flex: 1 1 auto;
   }
-  .fk-surface__node[data-layer='0'] {
+  .fk-flow-surface__node[data-layer='0'] {
     z-index: 0;
   }
-  .fk-surface__node:focus-within {
+  .fk-flow-surface__node:focus-within {
     z-index: 2;
   }
 
-  .fk-surface__connector-html {
+  .fk-flow-surface__connector-html {
     display: contents;
   }
 
-  .fk-surface__marquee {
+  .fk-flow-surface__marquee {
     position: absolute;
     /* Placed from pointer coordinates (physical), like the plane. */
     border: 1px dashed var(--fk-accent);
@@ -100,7 +100,7 @@
     pointer-events: none;
   }
 
-  .fk-surface__overview {
+  .fk-flow-surface__overview {
     position: absolute;
     inset-block-end: var(--fk-space-3);
     inset-inline-end: var(--fk-space-3);
@@ -110,10 +110,10 @@
     box-shadow: var(--fk-shadow-raised);
     cursor: pointer;
   }
-  .fk-surface__overview-node {
+  .fk-flow-surface__overview-node {
     fill: var(--fk-flow-tone, var(--fk-flow-tone-neutral));
   }
-  .fk-surface__overview-view {
+  .fk-flow-surface__overview-view {
     fill: var(--fk-accent-soft);
     stroke: var(--fk-accent);
     stroke-width: 1.5;
@@ -155,32 +155,32 @@
   }
 
   @media (forced-colors: active) {
-    .fk-surface {
+    .fk-flow-surface {
       background: Canvas;
     }
-    .fk-surface__grid circle {
+    .fk-flow-surface__grid circle {
       fill: GrayText;
     }
-    .fk-surface__connector {
+    .fk-flow-surface__connector {
       stroke: CanvasText;
     }
-    .fk-surface__arrowhead {
+    .fk-flow-surface__arrowhead {
       fill: CanvasText;
     }
-    .fk-surface__marquee {
+    .fk-flow-surface__marquee {
       border-color: Highlight;
       background: transparent;
     }
-    .fk-surface__overview {
+    .fk-flow-surface__overview {
       border-color: CanvasText;
       background: Canvas;
     }
-    .fk-surface__overview-node,
-    .fk-surface__overview-node[data-tone] {
+    .fk-flow-surface__overview-node,
+    .fk-flow-surface__overview-node[data-tone] {
       fill: Canvas;
       stroke: CanvasText;
     }
-    .fk-surface__overview-view {
+    .fk-flow-surface__overview-view {
       fill: transparent;
       stroke: Highlight;
     }

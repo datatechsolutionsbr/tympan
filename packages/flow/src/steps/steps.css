@@ -368,7 +368,25 @@
     flex-direction: column;
     outline: none;
   }
+  .fk-step-palette__grip {
+    position: absolute;
+    inset-block-start: 6px;
+    inset-inline-end: 6px;
+    display: inline-grid;
+    place-items: center;
+    inline-size: 20px;
+    block-size: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--fk-ink-2);
+    cursor: grab;
+    & svg { inline-size: 14px; block-size: 14px; }
+    &[data-focus-visible] { outline: var(--fk-focus-width) solid var(--fk-focus-ring); outline-offset: 1px; }
+  }
   .fk-step-palette__item {
+    position: relative;
     --edge: transparent;
     --edge-width: 1px;
     --tint: transparent;

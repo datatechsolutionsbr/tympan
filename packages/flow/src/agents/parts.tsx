@@ -42,27 +42,27 @@ const stepState = (n: number, current: number, reached: number): StepState => (n
 export function StepList({ steps, current, reached, label, completedWord, onJump, locale }: StepListProps) {
   const numeral = new Intl.NumberFormat(locale)
   return (
-    <ol className="fk-step-list" aria-label={label}>
+    <ol className="fk-flow-step-list" aria-label={label}>
       {steps.map((title, index) => {
         const n = index + 1
         const state = stepState(n, current, reached)
         const face = (
           <>
-            <span className="fk-step-list__marker" aria-hidden="true">
+            <span className="fk-flow-step-list__marker" aria-hidden="true">
               {state === 'done' ? <Check focusable="false" /> : numeral.format(n)}
             </span>
-            <span className="fk-step-list__name">{title}</span>
+            <span className="fk-flow-step-list__name">{title}</span>
           </>
         )
         return (
-          <li key={title} className="fk-step-list__item" data-state={state} aria-current={state === 'current' ? 'step' : undefined}>
+          <li key={title} className="fk-flow-step-list__item" data-state={state} aria-current={state === 'current' ? 'step' : undefined}>
             {state === 'done' ? (
-              <AriaButton className="fk-step-list__jump" onPress={() => onJump(n)}>
+              <AriaButton className="fk-flow-step-list__jump" onPress={() => onJump(n)}>
                 {face}
                 <span className="fk-visually-hidden">, {completedWord}</span>
               </AriaButton>
             ) : (
-              <span className="fk-step-list__static">{face}</span>
+              <span className="fk-flow-step-list__static">{face}</span>
             )}
           </li>
         )
@@ -82,15 +82,15 @@ function TileFace({ tile, chosen }: { tile: ChoiceTile; chosen: boolean }) {
   return (
     <>
       {tile.icon ? (
-        <span className="fk-choice-tile__icon" aria-hidden="true">
+        <span className="fk-flow-choice-tile__icon" aria-hidden="true">
           {tile.icon}
         </span>
       ) : null}
-      <span className="fk-choice-tile__text">
-        <span className="fk-choice-tile__title">{tile.title}</span>
-        {tile.detail ? <span className="fk-choice-tile__detail">{tile.detail}</span> : null}
+      <span className="fk-flow-choice-tile__text">
+        <span className="fk-flow-choice-tile__title">{tile.title}</span>
+        {tile.detail ? <span className="fk-flow-choice-tile__detail">{tile.detail}</span> : null}
       </span>
-      <span className="fk-choice-tile__check" aria-hidden="true">
+      <span className="fk-flow-choice-tile__check" aria-hidden="true">
         {chosen ? <Check focusable="false" /> : null}
       </span>
     </>
@@ -105,7 +105,7 @@ export function ChoiceTiles({ label, tiles, value, onChange, hideLabel = false }
       {!hideLabel && <Label className="fk-choice-tiles__label">{label}</Label>}
       <div className="fk-choice-tiles__grid">
         {tiles.map((tile) => (
-          <Radio key={tile.value} value={tile.value} className="fk-choice-tile" aria-label={[tile.title, tile.detail].filter(Boolean).join(', ')}>
+          <Radio key={tile.value} value={tile.value} className="fk-flow-choice-tile" aria-label={[tile.title, tile.detail].filter(Boolean).join(', ')}>
             {({ isSelected }) => <TileFace tile={tile} chosen={isSelected} />}
           </Radio>
         ))}
