@@ -51,7 +51,7 @@ export function ActorChip({ kind, name, email, avatarSrc, initials, avatar = tru
         <Avatar actorKind="agent" decorative size={compact ? 'xsmall' : 'small'} />
         <span className="fk-actor-chip__text">
           <span className="fk-actor-chip__line">
-            <span className="fk-actor-chip__name">{name}</span>
+            <span className="fk-actor-chip__name">{name}</span>{' '}
             <span className="fk-actor-chip__kind">{messages.actor.agent}</span>
           </span>
           {!compact && meta.length > 0 ? (
@@ -74,7 +74,7 @@ export function ActorChip({ kind, name, email, avatarSrc, initials, avatar = tru
         <Server className="fk-actor-chip__icon" aria-hidden="true" focusable="false" />
         <span className="fk-actor-chip__text">
           <span className="fk-actor-chip__line">
-            <span className="fk-actor-chip__kind">{messages.actor.system}</span>
+            <span className="fk-actor-chip__kind">{messages.actor.system}</span>{' '}
             <code className="fk-actor-chip__mono fk-actor-chip__rule">{name}</code>
           </span>
         </span>

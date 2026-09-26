@@ -1,0 +1,90 @@
+/* AttentionList (spec: wave-4/attention-list.md; design direction §2.3, §2.11, §3.5). */
+@layer fakhir.components {
+  .fk-attention {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-3);
+  }
+  .fk-attention__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .fk-attention__row {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--fk-space-2) var(--fk-space-4);
+    padding-block: var(--fk-space-3);
+    border-block-end: 1px solid var(--fk-line);
+  }
+  .fk-attention__row:first-child {
+    border-block-start: 1px solid var(--fk-line);
+  }
+  .fk-attention__proof {
+    justify-self: start;
+  }
+  .fk-attention__text {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+  .fk-attention__title {
+    color: var(--fk-ink);
+    font-size: var(--fk-font-size-body);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-body);
+    overflow-wrap: anywhere;
+  }
+  .fk-attention__detail {
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+  .fk-attention__empty {
+    margin: 0;
+    color: var(--fk-ink-3);
+  }
+  .fk-attention__more {
+    position: relative;
+    align-self: flex-end;
+    color: var(--fk-accent);
+    font-size: var(--fk-font-size-label);
+    font-weight: var(--fk-font-weight-semibold);
+    text-decoration: none;
+    outline: none;
+  }
+  .fk-attention__more::after {
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    inline-size: max(100%, var(--fk-control-target));
+    block-size: var(--fk-control-target);
+    translate: -50% -50%;
+  }
+  .fk-attention__more[data-hovered] {
+    color: var(--fk-accent-strong);
+    text-decoration: underline;
+  }
+  .fk-attention__more[data-focus-visible] {
+    border-radius: 4px;
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 639.98px) {
+    .fk-attention__row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .fk-attention__action {
+      justify-self: start;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-attention__row,
+    .fk-attention__row:first-child {
+      border-color: CanvasText;
+    }
+  }
+}

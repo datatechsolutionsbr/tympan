@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { CalendarDays, FileText } from 'lucide-react'
 import { useState } from 'react'
@@ -7,6 +7,7 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { setViewportWidth } from '../../../test/media'
 import { renderWithProvider } from '../../../test/render'
+import { ThemeScope } from '../../internal/ThemeScope'
 import { Button } from '../button/Button'
 import { PageHeader } from './PageHeader'
 
@@ -118,5 +119,51 @@ describe('PageHeader', () => {
       { navigate: vi.fn() },
     )
     await expectNoAxeViolations(container)
+  })
+  describe('editorial variant', () => {
+    const trail = [
+      { label: 'EACH/USP', href: '/org' },
+      { label: 'Census', href: '/org/census' },
+      { label: 'Overview' },
+    ]
+
+    it('puts a mono trail before the h1, with the last level current and not a link', () => {
+      const { container } = renderWithProvider(<PageHeader variant="editorial" title="Overview" trail={trail} />, { navigate: vi.fn() })
+      const nav = screen.getByRole('navigation', { name: 'Breadcrumb' })
+      const heading = screen.getByRole('heading', { level: 1, name: 'Overview' })
+      expect(nav.compareDocumentPosition(heading) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+      expect(within(nav).getAllByRole('link')).toHaveLength(2)
+      expect(within(nav).getByText('Overview')).toHaveAttribute('aria-current', 'page')
+      expect(container.querySelector('.fk-page-header')).toHaveAttribute('data-divider')
+      expect(cssOf('components/page-header/PageHeader.css')).toMatch(/\.fk-page-header__trail-list\s*\{[^}]*font-family:\s*var\(--fk-font-mono\)/)
+    })
+
+    it('renders the lead after the title, limited to 68ch', () => {
+      render(<PageHeader variant="editorial" title="Overview" lead="Where the research stands and what is left to prove." />)
+      const lead = screen.getByText('Where the research stands and what is left to prove.')
+      expect(screen.getByRole('heading', { level: 1 }).compareDocumentPosition(lead) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+      expect(cssOf('components/page-header/PageHeader.css')).toMatch(/\.fk-page-header__lead\s*\{[^}]*max-inline-size:\s*68ch/)
+    })
+
+    it('puts actions after the title and can drop the divider', () => {
+      const { container } = render(<PageHeader variant="editorial" title="Overview" divider={false} actions={<Button variant="primary">Verify 12</Button>} />)
+      const action = screen.getByRole('button', { name: 'Verify 12' })
+      expect(screen.getByRole('heading', { level: 1 }).compareDocumentPosition(action) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+      expect(container.querySelector('.fk-page-header')).not.toHaveAttribute('data-divider')
+    })
+
+    it('has no axe violations, light and dark', async () => {
+      const { container } = renderWithProvider(
+        <>
+          {(['light', 'dark'] as const).map((scheme) => (
+            <ThemeScope key={scheme} scheme={scheme}>
+              <PageHeader variant="editorial" headingLevel={scheme === 'light' ? 1 : 2} title="Overview" trail={trail} lead="Lead." actions={<Button>Export</Button>} />
+            </ThemeScope>
+          ))}
+        </>,
+        { navigate: vi.fn() },
+      )
+      await expectNoAxeViolations(container, ['landmark-unique'])
+    })
   })
 })

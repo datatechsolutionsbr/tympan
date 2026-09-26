@@ -1,0 +1,56 @@
+/* ResizableSplit (spec: wave-4/resizable-split.md; APG Window Splitter; design direction §2.6). */
+@layer fakhir.components {
+  .fk-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto var(--fk-split-size);
+    min-block-size: 0;
+  }
+  .fk-split[data-side='start'] {
+    grid-template-columns: var(--fk-split-size) auto minmax(0, 1fr);
+  }
+  .fk-split[data-stacked] {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--fk-space-5);
+  }
+  .fk-split__pane {
+    min-inline-size: 0;
+    min-block-size: 0;
+  }
+
+  /* A 1 px line with a 44 px invisible hit area. */
+  .fk-split__handle {
+    position: relative;
+    inline-size: 1px;
+    margin-inline: var(--fk-space-3);
+    background: var(--fk-line);
+    cursor: col-resize;
+    touch-action: none;
+    outline: none;
+  }
+  .fk-split__handle::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 50%;
+    inline-size: var(--fk-control-target);
+    translate: -50% 0;
+  }
+  .fk-split__handle:hover {
+    background: var(--fk-line-strong);
+  }
+  .fk-split__handle:focus-visible {
+    background: var(--fk-accent);
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+
+  @media (forced-colors: active) {
+    .fk-split__handle {
+      background: CanvasText;
+    }
+    .fk-split__handle:focus-visible {
+      background: Highlight;
+      outline-color: Highlight;
+    }
+  }
+}

@@ -1,0 +1,10 @@
+/* Stylesheets of the "shell" group (imported by src/styles.css). */
+@import '../components/app-frame/AppFrameRail.css';
+@import '../components/floating-action-bar/FloatingActionBar.css';
+@import '../components/evidence-panel/EvidencePanel.css';
+@import '../components/resizable-split/ResizableSplit.css';
+@import '../components/stat-strip/StatStrip.css';
+@import '../components/stage-strip/StageStrip.css';
+@import '../components/attention-list/AttentionList.css';
+@import '../components/activity-feed/ActivityFeed.css';
+@import '../components/phase-bar/PhaseBar.css';

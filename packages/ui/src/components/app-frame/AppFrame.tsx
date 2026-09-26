@@ -1,5 +1,5 @@
 import { Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
-import { createContext, Suspense, useContext, useId, type ReactNode } from 'react'
+import { Suspense, useId, type ReactNode } from 'react'
 import { Dialog, Heading, Modal, ModalOverlay } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 import { breakpoints, useMinWidth } from '../../internal/media'
@@ -7,22 +7,12 @@ import { useMessages } from '../../internal/provider'
 import { Button } from '../button/Button'
 import { PageLoadingState } from '../skeleton/Skeleton'
 import { SkipLink } from '../skip-link/SkipLink'
+import { FrameContext, useAppFrame, type AppFrameLayout, type FrameState } from './frameContext'
+import { RailFrame } from './RailFrame'
+
+export { useAppFrame, type AppFrameLayout, type FrameState } from './frameContext'
 
 export type AppFrameWidth = 'reading' | 'data' | 'full'
-
-interface FrameState {
-  /** True when the navigation shows as the icon rail. */
-  navCollapsed: boolean
-  /** Where the navigation currently renders. */
-  navPlacement: 'column' | 'drawer'
-}
-
-const FrameContext = createContext<FrameState>({ navCollapsed: false, navPlacement: 'column' })
-
-/** Navigation state for items rendered inside the frame (rail labels, tooltips). */
-export function useAppFrame(): FrameState {
-  return useContext(FrameContext)
-}
 
 /**
  * Label of a navigation item. In the collapsed rail it is visually hidden but
@@ -34,6 +24,21 @@ export function FrameNavLabel({ children }: { children: ReactNode }) {
 }
 
 export interface AppFrameProps {
+  /**
+   * `rail` (the research shell: rail, glass sheet, bottom dock, no top bar) or
+   * `topbar` (wave 1). Defaults to `topbar` when a `topBar` is given, else `rail`.
+   */
+  layout?: AppFrameLayout
+  /** Rail layout: brand at the top of the rail. */
+  brand?: ReactNode
+  /** Rail layout: context switcher (organization → project). */
+  context?: ReactNode
+  /** Rail layout: account slot at the bottom of the rail. */
+  account?: ReactNode
+  /** Rail layout: the action dock (a FloatingActionBar with `anchor="container"`). */
+  dock?: ReactNode
+  /** Rail layout: id of the dock landmark, for the second skip link. */
+  dockId?: string
   navigation: ReactNode
   topBar?: ReactNode
   children: ReactNode
@@ -62,8 +67,16 @@ export interface AppFrameProps {
   className?: string
 }
 
-/** Outer frame of every authenticated screen (spec: wave-1/app-frame.md). */
-export function AppFrame({
+/**
+ * Outer frame of every authenticated screen (specs: wave-1/app-frame.md and
+ * wave-4/app-frame-rail.md). Chooses the layout, then renders it.
+ */
+export function AppFrame(props: AppFrameProps) {
+  const layout = props.layout ?? (props.topBar !== undefined ? 'topbar' : 'rail')
+  return layout === 'rail' ? <RailFrame {...props} /> : <TopBarFrame {...props} />
+}
+
+function TopBarFrame({
   navigation,
   topBar,
   children,
@@ -93,7 +106,7 @@ export function AppFrame({
   const asideTitleId = useId()
   const label = loadingLabel ?? m.frame.loadingPage
   const collapsed = desktop && navCollapsed
-  const state: FrameState = { navCollapsed: collapsed, navPlacement: desktop ? 'column' : 'drawer' }
+  const state: FrameState = { navCollapsed: collapsed, navPlacement: desktop ? 'column' : 'drawer', layout: 'topbar' }
 
   const asidePlacement = !aside || !asideOpen ? 'closed' : wide ? 'column' : desktop ? 'overlay' : 'sheet'
   const closeAside = () => onAsideOpenChange?.(false)

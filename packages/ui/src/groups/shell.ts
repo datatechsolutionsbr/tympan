@@ -1,0 +1,10 @@
+// Public exports of the "shell" group: the research shell (wave 4).
+export * from '../components/activity-feed/ActivityFeed'
+export * from '../components/app-frame/RailNav'
+export * from '../components/attention-list/AttentionList'
+export * from '../components/evidence-panel/EvidencePanel'
+export * from '../components/floating-action-bar/FloatingActionBar'
+export * from '../components/phase-bar/PhaseBar'
+export * from '../components/resizable-split/ResizableSplit'
+export * from '../components/stage-strip/StageStrip'
+export * from '../components/stat-strip/StatStrip'

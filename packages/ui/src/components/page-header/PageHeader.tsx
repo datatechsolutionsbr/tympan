@@ -1,7 +1,8 @@
 import { useId, type ReactNode } from 'react'
-import { Heading, Input, Label, TextField } from 'react-aria-components'
+import { Heading, Input, Label, Link as AriaLink, TextField } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 import { breakpoints, useMinWidth } from '../../internal/media'
+import { useMessages } from '../../internal/provider'
 import type { IconComponent } from '../../internal/types'
 import { VisuallyHidden } from '../../internal/VisuallyHidden'
 import { Breadcrumbs } from '../breadcrumbs/Breadcrumbs'
@@ -21,13 +22,30 @@ export interface PageHeaderEditableTitle {
   errorMessage?: string
 }
 
+export interface PageHeaderTrailLevel {
+  label: string
+  /** Omit on the last level (the current page). */
+  href?: string
+}
+
 export interface PageHeaderProps {
   title: string
   headingLevel?: 1 | 2 | 3
   /** `page` uses the h1 step, `display` the display step (login, public page), `section` the h3 step. */
   scale?: 'page' | 'display' | 'section'
+  /**
+   * `standard` (wave 1) or `editorial` (wave 4, the head of the research
+   * sheet: mono trail line, serif title, lead, actions at the end, divider).
+   */
+  variant?: 'standard' | 'editorial'
   eyebrow?: string
   summary?: string
+  /** Lead paragraph (body-lg, 68ch). */
+  lead?: ReactNode
+  /** Mono breadcrumb line; the last level is the current page. */
+  trail?: PageHeaderTrailLevel[]
+  /** Hairline under the block (default: true for `editorial`). */
+  divider?: boolean
   icon?: IconComponent
   breadcrumbs?: Array<{ label: string; href: string }>
   meta?: PageHeaderMetaItem[]
@@ -40,60 +58,119 @@ export interface PageHeaderProps {
   className?: string
 }
 
-/** The top-of-page block naming the page (spec: wave-1/page-header.md). */
-export function PageHeader({
-  title,
-  headingLevel = 1,
-  scale = 'page',
-  eyebrow,
-  summary,
-  icon: Icon,
-  breadcrumbs,
-  meta,
-  actions,
-  children,
-  headingId,
-  editableTitle,
-  className,
-}: PageHeaderProps) {
-  const generated = useId()
-  const id = headingId ?? `fk-page-header-${generated.replace(/:/g, '')}`
-  const errorId = `${id}-error`
-  const wide = useMinWidth(breakpoints.sm)
+type Part = readonly [slot: string, node: ReactNode]
 
-  const titleNode = editableTitle ? (
+/** Keeps the parts that have content, in the given order. */
+function present(parts: Part[]): Part[] {
+  return parts.filter(([, node]) => node !== null && node !== undefined && node !== false)
+}
+
+function TrailLine({ levels, label }: { levels: PageHeaderTrailLevel[]; label: string }) {
+  const lastIndex = levels.length - 1
+  return (
+    <nav className="fk-page-header__trail" aria-label={label}>
+      <ol className="fk-page-header__trail-list">
+        {levels.map((level, index) => {
+          const isHere = index === lastIndex
+          return (
+            <li key={`${index}:${level.label}`} className="fk-page-header__trail-level" data-here={isHere || undefined}>
+              {isHere || !level.href ? (
+                <span aria-current={isHere ? 'page' : undefined}>{level.label}</span>
+              ) : (
+                <AriaLink className="fk-page-header__trail-link" href={level.href}>
+                  {level.label}
+                </AriaLink>
+              )}
+            </li>
+          )
+        })}
+      </ol>
+    </nav>
+  )
+}
+
+function MetaRow({ items }: { items: PageHeaderMetaItem[] }) {
+  return (
+    <ul className="fk-page-header__meta">
+      {items.map((entry, position) => {
+        const Glyph = entry.icon
+        return (
+          <li key={position + entry.text} className="fk-page-header__meta-item">
+            {Glyph ? <Glyph className="fk-icon" aria-hidden="true" focusable="false" /> : null}
+            <span>{entry.text}</span>
+          </li>
+        )
+      })}
+    </ul>
+  )
+}
+
+function EditableTitle({ level, id, edit }: { level: 1 | 2 | 3; id: string; edit: PageHeaderEditableTitle }) {
+  const errorId = `${id}-error`
+  const invalid = Boolean(edit.errorMessage)
+  return (
     <>
-      {/* The outline keeps one heading; the editable field carries its own name. */}
-      <Heading level={headingLevel} id={id} className="fk-visually-hidden">
-        {editableTitle.value || editableTitle.placeholder}
+      {/* The outline keeps one heading; the field carries its own name. */}
+      <Heading level={level} id={id} className="fk-visually-hidden">
+        {edit.value || edit.placeholder}
       </Heading>
-      <TextField
-        className="fk-page-header__edit"
-        value={editableTitle.value}
-        onChange={editableTitle.onChange}
-        isInvalid={!!editableTitle.errorMessage}
-        aria-describedby={editableTitle.errorMessage ? errorId : undefined}
-      >
+      <TextField className="fk-page-header__edit" value={edit.value} onChange={edit.onChange} isInvalid={invalid} aria-describedby={invalid ? errorId : undefined}>
         <Label>
-          <VisuallyHidden>{editableTitle.label}</VisuallyHidden>
+          <VisuallyHidden>{edit.label}</VisuallyHidden>
         </Label>
-        <Input className="fk-page-header__title fk-page-header__title-input" placeholder={editableTitle.placeholder} />
+        <Input className="fk-page-header__title fk-page-header__title-input" placeholder={edit.placeholder} />
       </TextField>
-      {editableTitle.errorMessage ? (
+      {invalid ? (
         <p id={errorId} className="fk-page-header__error">
-          {editableTitle.errorMessage}
+          {edit.errorMessage}
         </p>
       ) : null}
     </>
+  )
+}
+
+/** The top-of-page block naming the page (specs: wave-1/page-header.md, wave-4/page-header-editorial.md). */
+export function PageHeader(props: PageHeaderProps) {
+  const copy = useMessages()
+  const autoId = useId()
+  const roomy = useMinWidth(breakpoints.sm)
+  const level = props.headingLevel ?? 1
+  const editorial = props.variant === 'editorial'
+  const titleId = props.headingId ?? `fk-page-header-${autoId.replace(/:/g, '')}`
+  const Icon = props.icon
+
+  const title = props.editableTitle ? (
+    <EditableTitle level={level} id={titleId} edit={props.editableTitle} />
   ) : (
-    <Heading level={headingLevel} id={id} className="fk-page-header__title">
-      {title}
+    <Heading level={level} id={titleId} className="fk-page-header__title">
+      {props.title}
     </Heading>
   )
 
+  const textParts = present([
+    ['eyebrow', props.eyebrow ? <p className="fk-page-header__eyebrow">{props.eyebrow}</p> : null],
+    ['title', title],
+    ['summary', props.summary ? <p className="fk-page-header__summary">{props.summary}</p> : null],
+    ['lead', props.lead ? <div className="fk-page-header__lead">{props.lead}</div> : null],
+    ['meta', props.meta?.length ? <MetaRow items={props.meta} /> : null],
+  ])
+
+  const above = present([
+    ['trail', props.trail?.length ? <TrailLine levels={props.trail} label={copy.pageTrail.label} /> : null],
+    ['breadcrumbs', props.breadcrumbs?.length ? <Breadcrumbs items={props.breadcrumbs} className="fk-page-header__breadcrumbs" /> : null],
+  ])
+
   return (
-    <div className={cx('fk-page-header', className)} data-scale={scale} data-layout={wide ? 'inline' : 'stacked'}>
-      {breadcrumbs?.length ? <Breadcrumbs items={breadcrumbs} className="fk-page-header__breadcrumbs" /> : null}
+    <div
+      className={cx('fk-page-header', props.className)}
+      data-scale={props.scale ?? 'page'}
+      data-variant={editorial ? 'editorial' : undefined}
+      data-divider={(props.divider ?? editorial) || undefined}
+      data-layout={roomy ? 'inline' : 'stacked'}
+    >
+      {above.map(([slot, node]) => (
+        <SlotFragment key={slot}>{node}</SlotFragment>
+      ))}
       <div className="fk-page-header__row">
         {Icon ? (
           <span className="fk-page-header__icon" aria-hidden="true">
@@ -101,23 +178,17 @@ export function PageHeader({
           </span>
         ) : null}
         <div className="fk-page-header__text">
-          {eyebrow ? <p className="fk-page-header__eyebrow">{eyebrow}</p> : null}
-          {titleNode}
-          {summary ? <p className="fk-page-header__summary">{summary}</p> : null}
-          {meta?.length ? (
-            <ul className="fk-page-header__meta">
-              {meta.map(({ icon: MetaIcon, text }, i) => (
-                <li key={`${text}-${i}`} className="fk-page-header__meta-item">
-                  {MetaIcon ? <MetaIcon className="fk-icon" aria-hidden="true" focusable="false" /> : null}
-                  <span>{text}</span>
-                </li>
-              ))}
-            </ul>
-          ) : null}
+          {textParts.map(([slot, node]) => (
+            <SlotFragment key={slot}>{node}</SlotFragment>
+          ))}
         </div>
-        {actions ? <div className="fk-page-header__actions">{actions}</div> : null}
+        {props.actions ? <div className="fk-page-header__actions">{props.actions}</div> : null}
       </div>
-      {children ? <div className="fk-page-header__extra">{children}</div> : null}
+      {props.children ? <div className="fk-page-header__extra">{props.children}</div> : null}
     </div>
   )
+}
+
+function SlotFragment({ children }: { children: ReactNode }) {
+  return <>{children}</>
 }
