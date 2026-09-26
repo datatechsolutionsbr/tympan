@@ -20,164 +20,155 @@ export interface OneTimeCodeFieldProps {
   className?: string
 }
 
-const ACCEPT: Record<CodeCharacters, RegExp> = { digits: /^\p{Nd}$/u, alphanumeric: /^(?:\p{Nd}|[a-z])$/iu }
+/* ---------------------------------------------------------- characters -- */
 
-/** Any script's decimal digit as its ASCII digit (codes are issued in ASCII). */
-function asciiDigit(ch: string): string {
-  if (!/^\p{Nd}$/u.test(ch) || /^[0-9]$/.test(ch)) return ch
-  const cp = ch.codePointAt(0)!
-  // Unicode decimal digits come in contiguous runs of ten starting at a zero.
-  for (let zero = cp; zero > cp - 10; zero--) {
-    if (!/^\p{Nd}$/u.test(String.fromCodePoint(zero - 1))) return String(cp - zero)
-  }
-  return String((cp - 0x30) % 10)
+const ALLOWED: Record<CodeCharacters, RegExp> = { digits: /^\p{Nd}$/u, alphanumeric: /^(?:\p{Nd}|[a-z])$/iu }
+
+/**
+ * Any script's decimal digit as its ASCII digit (codes are issued in ASCII).
+ * Unicode decimal digits come in runs of ten starting at a zero, so the digit
+ * is the distance to the start of its run.
+ */
+function westernDigit(glyph: string): string {
+  if (/^[0-9]$/.test(glyph) || !/^\p{Nd}$/u.test(glyph)) return glyph
+  const point = glyph.codePointAt(0)!
+  let runStart = point
+  while (point - runStart < 9 && /^\p{Nd}$/u.test(String.fromCodePoint(runStart - 1))) runStart--
+  return String(point - runStart)
 }
 
-/** Keeps only accepted characters, in order, with digits normalised to ASCII. */
-function sanitize(raw: string, kind: CodeCharacters): string[] {
-  return Array.from(raw)
-    .filter((ch) => ACCEPT[kind].test(ch))
-    .map(asciiDigit)
+/** The accepted characters of a text, in order, digits in ASCII. */
+const cleaned = (text: string, kind: CodeCharacters) => [...text].filter((g) => ALLOWED[kind].test(g)).map(westernDigit)
+
+/* --------------------------------------------------------------- cells -- */
+
+/** A code as one cell per box ('' when empty), and where focus should go after an edit. */
+type Edit = { cells: string[]; focus: number }
+
+const blank = (size: number) => Array.from({ length: size }, () => '')
+const cellsOf = (code: string, size: number) => blank(size).map((_, k) => code[k] ?? '')
+
+/** Writes characters from `at` onwards (a start at 0 replaces the whole code); focus the first gap. */
+function write(cells: string[], at: number, glyphs: string[]): Edit {
+  const out = at === 0 ? blank(cells.length) : cells.slice()
+  glyphs.slice(0, cells.length - at).forEach((g, k) => (out[at + k] = g))
+  const gap = out.indexOf('')
+  return { cells: out, focus: gap < 0 ? cells.length - 1 : gap }
 }
 
-/** Slot model: one entry per box, '' for an empty box. */
-function toSlots(value: string, size: number): string[] {
-  return Array.from({ length: size }, (_, i) => value[i] ?? '')
+/** Backspace: clears this cell, or the previous one when this is already empty. */
+function erase(cells: string[], at: number): Edit | null {
+  const target = cells[at] ? at : at - 1
+  if (target < 0) return null
+  const out = cells.slice()
+  out[target] = ''
+  return { cells: out, focus: target }
 }
+
+/** What an input event added to a cell that held `before`. */
+function added(before: string, now: string): string {
+  if (before && now.startsWith(before)) return now.slice(before.length)
+  return now.replace(before, '')
+}
+
+/* ----------------------------------------------------------- component -- */
 
 /** One character per box, with paste and autofill (spec: wave-2/one-time-code-field.md). */
-export function OneTimeCodeField({
-  value,
-  onChange,
-  onComplete,
-  length = 6,
-  characters = 'digits',
-  label,
-  boxLabel,
-  errorText,
-  disabled = false,
-  autoFocus = false,
-  className,
-}: OneTimeCodeFieldProps) {
+export function OneTimeCodeField(props: OneTimeCodeFieldProps) {
+  const size = props.length ?? 6
+  const kind = props.characters ?? 'digits'
+  const off = props.disabled ?? false
   const copy = useMessages().oneTimeCode
-  const { direction } = useLocale()
-  const ahead = direction === 'rtl' ? -1 : 1
-  const errorId = useId()
-  const boxes = useRef<Array<HTMLInputElement | null>>([])
-  const [slots, setSlots] = useState(() => toSlots(value, length))
+  const forward = useLocale().direction === 'rtl' ? -1 : 1
+  const faultId = useId()
+  const refs = useRef<Array<HTMLInputElement | null>>([])
+  const [cells, setCells] = useState(() => cellsOf(props.value, size))
 
   // Follow the controlled value when the host changes it from outside.
   useEffect(() => {
-    setSlots((cur) => (cur.join('') === value && cur.length === length ? cur : toSlots(value, length)))
-  }, [value, length])
+    setCells((mine) => (mine.length === size && mine.join('') === props.value ? mine : cellsOf(props.value, size)))
+  }, [props.value, size])
 
   useEffect(() => {
-    if (autoFocus) boxes.current[0]?.focus()
-  }, [autoFocus])
+    if (props.autoFocus) refs.current[0]?.focus()
+  }, [props.autoFocus])
 
-  const focusBox = (i: number) => boxes.current[Math.max(0, Math.min(length - 1, i))]?.focus()
+  const focusCell = (k: number) => refs.current[Math.min(size - 1, Math.max(0, k))]?.focus()
 
-  const commit = (next: string[]) => {
-    setSlots(next)
-    const code = next.join('')
-    onChange(code)
-    const full = next.every(Boolean)
-    if (full) {
+  /** Applies an edit: state, host callbacks, haptics, focus. */
+  const apply = (edit: Edit, feel: 'light' | 'none') => {
+    if (feel !== 'none') requestHaptic(feel)
+    setCells(edit.cells)
+    const code = edit.cells.join('')
+    props.onChange(code)
+    if (edit.cells.every((c) => c !== '')) {
       requestHaptic('medium')
-      onComplete?.(code)
+      props.onComplete?.(code)
     }
-    return full
+    focusCell(edit.focus)
   }
 
-  const fillFrom = (start: number, chars: string[]) => {
-    if (!chars.length) return
-    const next = start === 0 ? toSlots('', length) : [...slots]
-    chars.slice(0, length - start).forEach((ch, k) => (next[start + k] = ch))
-    requestHaptic('light')
-    commit(next)
-    const empty = next.findIndex((s) => !s)
-    focusBox(empty === -1 ? length - 1 : empty)
+  const onInput = (k: number, now: string) => {
+    const glyphs = cleaned(added(cells[k] ?? '', now), kind)
+    if (glyphs.length === 0) return
+    // Several characters at once (autofill) are handled like a paste from the start.
+    if (glyphs.length > 1) return apply(write(cells, 0, glyphs), 'light')
+    const next = cells.slice()
+    next[k] = glyphs[0]!
+    apply({ cells: next, focus: k < size - 1 ? k + 1 : k }, 'light')
   }
 
-  const onType = (i: number, raw: string) => {
-    const previous = slots[i] ?? ''
-    const typed = previous && raw.startsWith(previous) ? raw.slice(previous.length) : raw.replace(previous, '')
-    const chars = sanitize(typed, characters)
-    if (!chars.length) return
-    if (chars.length > 1) {
-      // Autofill or a multi-character entry: treat as a paste from the start.
-      fillFrom(0, chars)
-      return
-    }
-    const next = [...slots]
-    next[i] = chars[0]!
-    requestHaptic('light')
-    commit(next)
-    if (i < length - 1) focusBox(i + 1)
-  }
-
-  const keyMap: Record<string, (i: number) => boolean> = {
-    Backspace: (i) => {
-      const next = [...slots]
-      const target = next[i] ? i : i - 1
-      if (target < 0) return true
-      next[target] = ''
-      commit(next)
-      focusBox(target)
-      return true
+  const keys: Record<string, (k: number) => void> = {
+    Backspace: (k) => {
+      const edit = erase(cells, k)
+      if (edit) apply(edit, 'none')
     },
-    // Inline-axis keys follow the reading direction.
-    ArrowLeft: (i) => (focusBox(i - ahead), true),
-    ArrowRight: (i) => (focusBox(i + ahead), true),
+    ArrowLeft: (k) => focusCell(k - forward),
+    ArrowRight: (k) => focusCell(k + forward),
   }
 
-  const onKey = (i: number, e: KeyboardEvent<HTMLInputElement>) => {
-    const handler = keyMap[e.key]
-    if (handler && handler(i)) e.preventDefault()
+  const onKeyDown = (k: number, event: KeyboardEvent<HTMLInputElement>) => {
+    const act = keys[event.key]
+    if (!act) return
+    event.preventDefault()
+    act(k)
   }
 
-  const onPaste = (e: ClipboardEvent<HTMLInputElement>) => {
-    e.preventDefault()
-    fillFrom(0, sanitize(e.clipboardData.getData('text'), characters))
+  const onPaste = (event: ClipboardEvent<HTMLInputElement>) => {
+    event.preventDefault()
+    const glyphs = cleaned(event.clipboardData.getData('text'), kind)
+    if (glyphs.length) apply(write(cells, 0, glyphs), 'light')
   }
 
-  const nameOf = boxLabel ?? copy.box
-  const invalid = Boolean(errorText)
+  const naming = props.boxLabel ?? copy.box
+  const fault = props.errorText
 
   return (
-    <div className={cx('fk-otc', className)} data-invalid={invalid || undefined}>
-      <Group
-        className="fk-otc__group"
-        aria-label={label ?? copy.label}
-        aria-describedby={invalid ? errorId : undefined}
-        isDisabled={disabled}
-        isInvalid={invalid}
-      >
-        {slots.map((ch, i) => (
+    <div className={cx('fk-otc', props.className)} data-invalid={fault ? true : undefined}>
+      <Group className="fk-otc__group" aria-label={props.label ?? copy.label} aria-describedby={fault ? faultId : undefined} isDisabled={off} isInvalid={!!fault}>
+        {cells.map((glyph, k) => (
           <Input
-            key={i}
-            ref={(el) => {
-              boxes.current[i] = el
-            }}
+            key={k}
+            ref={(node) => void (refs.current[k] = node)}
             className="fk-otc__box"
-            value={ch}
-            aria-label={nameOf(i + 1, length)}
-            aria-invalid={invalid || undefined}
-            disabled={disabled}
-            inputMode={characters === 'digits' ? 'numeric' : 'text'}
-            autoComplete={i === 0 ? 'one-time-code' : 'off'}
+            value={glyph}
+            aria-label={naming(k + 1, size)}
+            aria-invalid={fault ? true : undefined}
+            disabled={off}
+            inputMode={kind === 'digits' ? 'numeric' : 'text'}
+            autoComplete={k === 0 ? 'one-time-code' : 'off'}
             autoCapitalize="off"
             spellCheck={false}
-            onChange={(e) => onType(i, e.target.value)}
-            onKeyDown={(e) => onKey(i, e)}
+            onFocus={(event) => event.target.select()}
+            onChange={(event) => onInput(k, event.target.value)}
+            onKeyDown={(event) => onKeyDown(k, event)}
             onPaste={onPaste}
-            onFocus={(e) => e.target.select()}
           />
         ))}
       </Group>
-      {invalid ? (
-        <p id={errorId} className="fk-otc__error" role="alert">
-          {errorText}
+      {fault ? (
+        <p id={faultId} className="fk-otc__error" role="alert">
+          {fault}
         </p>
       ) : null}
     </div>

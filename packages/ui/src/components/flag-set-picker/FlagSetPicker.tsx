@@ -28,52 +28,63 @@ export interface FlagSetPickerProps {
   className?: string
 }
 
-/** Keys that are on, in label order. */
-const onKeys = (labels: Record<string, string>, values: FlagSet) => Object.keys(labels).filter((k) => values[k])
+/** One option row derived from the labels (which also fix the order). */
+type Row = { key: string; text: string; hint?: string; on: boolean }
 
-/** Named on/off options with optional presets (spec: wave-2/flag-set-picker.md). */
-export function FlagSetPicker(props: FlagSetPickerProps) {
-  const copy = useMessages().flagSetPicker
-  const titleId = useId()
-  const presets = props.presets ?? []
+function rowsOf(props: FlagSetPickerProps): Row[] {
+  return Object.entries(props.labels).map(([key, text]) => ({ key, text, hint: props.descriptions?.[key], on: Boolean(props.values[key]) }))
+}
 
-  const applyPreset = (id: string) => {
-    const preset = presets.find((p) => p.id === id)
+/**
+ * Reconciles a new checked list with the rows: the single row whose state
+ * differs is the edit (a group reports one toggle at a time).
+ */
+function toggledRow(rows: Row[], checked: readonly string[]): Row | undefined {
+  const now = new Set(checked)
+  return rows.find((row) => row.on !== now.has(row.key))
+}
+
+function PresetChoices({ props, name }: { props: FlagSetPickerProps; name: string }) {
+  const list = props.presets ?? []
+  if (list.length === 0) return null
+  const choose = (id: string) => {
+    const preset = list.find((candidate) => candidate.id === id)
     if (!preset) return
     props.onChange({ ...preset.values })
     props.onPresetChange?.(preset.id)
   }
+  return (
+    <ChoiceCardGroup className="fk-flag-set__presets" label={name} arrangement="inline" value={props.presetId ?? null} onChange={choose}>
+      {list.map((preset) => (
+        <ChoiceCard key={preset.id} value={preset.id} label={preset.label} description={preset.description} />
+      ))}
+    </ChoiceCardGroup>
+  )
+}
 
-  // A manual edit merges the one change and leaves any preset.
-  const applyKeys = (keys: string[]) => {
-    const wanted = new Set(keys)
-    const changed = Object.keys(props.labels).find((k) => Boolean(props.values[k]) !== wanted.has(k))
-    if (changed === undefined) return
-    props.onChange({ ...props.values, [changed]: wanted.has(changed) })
+/** Named on/off options with optional presets (spec: wave-2/flag-set-picker.md). */
+export function FlagSetPicker(props: FlagSetPickerProps) {
+  const words = useMessages().flagSetPicker
+  const headId = useId()
+  const rows = rowsOf(props)
+
+  // A manual edit changes one key and leaves any preset.
+  const edit = (checked: string[]) => {
+    const row = toggledRow(rows, checked)
+    if (!row) return
+    props.onChange({ ...props.values, [row.key]: !row.on })
     props.onPresetChange?.(null)
   }
 
   return (
-    <div role="group" aria-labelledby={titleId} className={cx('fk-flag-set', props.className)}>
-      <span id={titleId} className="fk-flag-set__title">
+    <div className={cx('fk-flag-set', props.className)} role="group" aria-labelledby={headId}>
+      <span className="fk-flag-set__title" id={headId}>
         {props.label}
       </span>
-      {presets.length ? (
-        <ChoiceCardGroup
-          className="fk-flag-set__presets"
-          label={props.presetsLabel ?? copy.presets}
-          value={props.presetId ?? null}
-          onChange={applyPreset}
-          arrangement="inline"
-        >
-          {presets.map((p) => (
-            <ChoiceCard key={p.id} value={p.id} label={p.label} description={p.description} />
-          ))}
-        </ChoiceCardGroup>
-      ) : null}
-      <CheckboxGroup label={props.optionsLabel ?? copy.options} value={onKeys(props.labels, props.values)} onChange={applyKeys}>
-        {Object.entries(props.labels).map(([key, text]) => (
-          <Checkbox key={key} value={key} label={text} description={props.descriptions?.[key]} />
+      <PresetChoices props={props} name={props.presetsLabel ?? words.presets} />
+      <CheckboxGroup label={props.optionsLabel ?? words.options} value={rows.filter((r) => r.on).map((r) => r.key)} onChange={edit}>
+        {rows.map((row) => (
+          <Checkbox key={row.key} value={row.key} label={row.text} description={row.hint} />
         ))}
       </CheckboxGroup>
     </div>

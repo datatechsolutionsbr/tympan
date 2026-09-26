@@ -1,6 +1,6 @@
 import { Check } from 'lucide-react'
-import { useId, useRef, type CSSProperties } from 'react'
-import { Radio, RadioGroup } from 'react-aria-components'
+import { useId, useRef, type CSSProperties, type ReactNode } from 'react'
+import { Radio, RadioGroup, type RadioRenderProps } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 import { useDomAttributes } from '../../internal/dom'
 import type { IconComponent } from '../../internal/types'
@@ -24,52 +24,60 @@ export interface ChoiceGridProps {
   className?: string
 }
 
-function Cell({ option }: { option: ChoiceGridOption }) {
+/** Body of one tile, as a function of the radio's render state. */
+const tileBody =
+  (option: ChoiceGridOption) =>
+  (state: RadioRenderProps): ReactNode => [
+    option.symbol ? (
+      <span key="s" className="fk-choice-grid__symbol" aria-hidden="true">
+        {option.symbol}
+      </span>
+    ) : null,
+    <span key="l" className="fk-choice-grid__label">
+      {option.label}
+    </span>,
+    state.isSelected ? <Check key="c" className="fk-choice-grid__check" aria-hidden="true" focusable="false" /> : null,
+  ]
+
+function Heading({ id, title, Icon }: { id: string; title: string; Icon?: IconComponent }) {
   return (
-    <Radio className="fk-choice-grid__cell" value={option.value}>
-      {({ isSelected }) => (
-        <>
-          {option.symbol ? (
-            <span className="fk-choice-grid__symbol" aria-hidden="true">
-              {option.symbol}
-            </span>
-          ) : null}
-          <span className="fk-choice-grid__label">{option.label}</span>
-          {isSelected ? <Check className="fk-choice-grid__check" aria-hidden="true" focusable="false" /> : null}
-        </>
-      )}
-    </Radio>
+    <div className="fk-choice-grid__header">
+      {Icon && <Icon className="fk-choice-grid__icon" aria-hidden="true" focusable="false" />}
+      <span id={id} className="fk-choice-grid__title">
+        {title}
+      </span>
+    </div>
   )
 }
 
 /** Titled grid of mutually exclusive short options (spec: wave-2/choice-grid.md). */
-export function ChoiceGrid({ title, icon: Icon, options, value, onChange, columns = 2, arrangement = 'inline', busy = false, className }: ChoiceGridProps) {
-  const titleId = useId()
-  const groupRef = useRef<HTMLDivElement>(null)
-  useDomAttributes(groupRef, { 'aria-busy': busy ? 'true' : undefined })
+export function ChoiceGrid(props: ChoiceGridProps) {
+  const headingId = useId()
+  const host = useRef<HTMLDivElement>(null)
+  const locked = props.busy === true
+  useDomAttributes(host, { 'aria-busy': locked ? 'true' : undefined })
+  // Only real changes reach the host, and none while busy.
+  const pick = (next: string) => void (!locked && next !== props.value && props.onChange(next))
+  const layout = { '--fk-choice-grid-columns': String(props.columns ?? 2) } as CSSProperties
+
   return (
     <RadioGroup
-      ref={groupRef}
-      className={cx('fk-choice-grid', className)}
-      aria-labelledby={titleId}
-      value={value}
-      onChange={(next) => {
-        if (!busy && next !== value) onChange(next)
-      }}
-      isDisabled={busy}
+      ref={host}
+      className={cx('fk-choice-grid', props.className)}
+      aria-labelledby={headingId}
       orientation="horizontal"
-      data-arrangement={arrangement}
-      style={{ '--fk-choice-grid-columns': String(columns) } as CSSProperties}
+      value={props.value}
+      onChange={pick}
+      isDisabled={locked}
+      data-arrangement={props.arrangement ?? 'inline'}
+      style={layout}
     >
-      <div className="fk-choice-grid__header">
-        {Icon ? <Icon className="fk-choice-grid__icon" aria-hidden="true" focusable="false" /> : null}
-        <span id={titleId} className="fk-choice-grid__title">
-          {title}
-        </span>
-      </div>
+      <Heading id={headingId} title={props.title} Icon={props.icon} />
       <div className="fk-choice-grid__cells">
-        {options.map((o) => (
-          <Cell key={o.value} option={o} />
+        {props.options.map((option) => (
+          <Radio key={option.value} value={option.value} className="fk-choice-grid__cell">
+            {tileBody(option)}
+          </Radio>
         ))}
       </div>
     </RadioGroup>

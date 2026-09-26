@@ -1,228 +1,240 @@
-/* TagField (spec: wave-2/tag-field.md; design direction §2.3, §2.4, §2.5, §2.6, §2.10). */
+/* TagField (spec: wave-2/tag-field.md; design direction §2.3, §2.4, §2.5, §2.6, §2.10).
+   State is carried by custom properties: tone sets the chip paint, the well's
+   edge colour follows focus and validity. */
 @layer fakhir.components {
+  /* Paint per tone. */
   .fk-tag-field {
     --fk-tag-field-tint: var(--fk-ink-3);
-    --fk-tag-field-fill: var(--fk-surface-sunken);
-    --fk-tag-field-ink: var(--fk-ink-2);
-    display: flex;
-    flex-direction: column;
-    gap: var(--fk-space-1);
-    min-inline-size: 0;
+    --fk-tag-field-chip-bg: var(--fk-surface-sunken);
+    --fk-tag-field-chip-fg: var(--fk-ink-2);
+    --fk-tag-field-edge: var(--fk-input);
+    --fk-tag-field-well-min: var(--fk-control-height);
   }
   .fk-tag-field[data-tone='accent'] {
     --fk-tag-field-tint: var(--fk-accent);
-    --fk-tag-field-fill: var(--fk-accent-soft);
-    --fk-tag-field-ink: var(--fk-on-accent-soft);
+    --fk-tag-field-chip-bg: var(--fk-accent-soft);
+    --fk-tag-field-chip-fg: var(--fk-on-accent-soft);
   }
-  .fk-tag-field__label {
-    color: var(--fk-ink);
+  .fk-tag-field:focus-within {
+    --fk-tag-field-edge: var(--fk-accent);
+  }
+  .fk-tag-field[data-invalid] {
+    --fk-tag-field-edge: var(--fk-danger);
+  }
+
+  /* Column of caption, well and the two text lines. */
+  .fk-tag-field {
+    display: grid;
+    gap: var(--fk-space-1);
+    min-inline-size: 0;
+  }
+  .fk-tag-field__caption {
     font-size: var(--fk-font-size-label);
     font-weight: var(--fk-font-weight-semibold);
     line-height: var(--fk-font-line-height-label);
+    color: var(--fk-ink);
   }
-  .fk-tag-field__box {
-    box-sizing: border-box;
+  .fk-tag-field__note,
+  .fk-tag-field__fault {
+    margin: 0;
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+    color: var(--fk-ink-3);
+  }
+  .fk-tag-field__fault {
+    color: var(--fk-danger);
+  }
+
+  /* The well: chips flow with the typing box at the end. */
+  .fk-tag-field__well {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--fk-space-1);
-    min-block-size: var(--fk-control-height);
+    box-sizing: border-box;
+    min-block-size: var(--fk-tag-field-well-min);
     padding: var(--fk-space-1) var(--fk-space-2);
-    border: 1px solid var(--fk-input);
-    border-radius: var(--fk-radius-control);
     background: var(--fk-surface-solid);
+    border: 1px solid var(--fk-tag-field-edge);
+    border-radius: var(--fk-radius-control);
   }
-  .fk-tag-field__box:focus-within {
-    border-color: var(--fk-accent);
-  }
-  .fk-tag-field[data-invalid] .fk-tag-field__box {
-    border-color: var(--fk-danger);
-  }
-  .fk-tag-field__pills,
-  .fk-tag-field__list {
+  .fk-tag-field__chips,
+  .fk-tag-field__chip-list {
     display: contents;
   }
-  .fk-tag-field__pill {
+  .fk-tag-field__typing-host,
+  .fk-tag-field__typing {
+    flex: 1 0 8rem;
+    min-inline-size: 8rem;
+  }
+  .fk-tag-field__typing-host {
+    display: flex;
+  }
+  .fk-tag-field__typing {
+    min-block-size: calc(var(--fk-tag-field-well-min) - 2 * var(--fk-space-1) - 2px);
+    padding: 0 var(--fk-space-1);
+    font: inherit;
+    font-size: var(--fk-font-size-body);
+    color: var(--fk-ink);
+    background: transparent;
+    border: 0;
+    outline: none;
+  }
+  .fk-tag-field__typing[data-disabled] {
+    cursor: not-allowed;
+  }
+
+  /* Chips. */
+  .fk-tag-field__chip {
     display: inline-flex;
     align-items: center;
     gap: var(--fk-space-1);
     max-inline-size: 100%;
     padding-inline: var(--fk-space-2) 0;
-    border: 1px solid transparent;
-    border-radius: var(--fk-radius-pill);
-    background: var(--fk-tag-field-fill);
-    color: var(--fk-tag-field-ink);
     font-size: var(--fk-font-size-label);
     line-height: var(--fk-font-line-height-label);
+    color: var(--fk-tag-field-chip-fg);
+    background: var(--fk-tag-field-chip-bg);
+    border: 1px solid transparent;
+    border-radius: var(--fk-radius-pill);
     outline: none;
   }
-  .fk-tag-field[data-tone='category'] .fk-tag-field__pill::before {
+  .fk-tag-field__chip[data-focus-visible] {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+  .fk-tag-field[data-tone='category'] .fk-tag-field__chip::before {
     content: '';
     flex: none;
     inline-size: var(--fk-space-2);
     block-size: var(--fk-space-2);
-    border-radius: 2px;
     background: var(--fk-tag-field-tint);
+    border-radius: 2px;
   }
-  .fk-tag-field__pill[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
-    outline-offset: 2px;
-  }
-  .fk-tag-field__pill-text {
+  .fk-tag-field__chip-text {
     overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
+    text-overflow: ellipsis;
   }
-  .fk-tag-field__remove {
+
+  /* Remove control: 28 px visible, 44 px hit area. */
+  .fk-tag-field__drop {
+    --fk-tag-field-drop: calc(var(--fk-space-5) + var(--fk-space-1));
     position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    inline-size: calc(var(--fk-space-5) + var(--fk-space-1));
-    block-size: calc(var(--fk-space-5) + var(--fk-space-1));
+    display: inline-grid;
+    place-items: center;
+    inline-size: var(--fk-tag-field-drop);
+    block-size: var(--fk-tag-field-drop);
     padding: 0;
+    color: inherit;
+    background: transparent;
     border: 0;
     border-radius: var(--fk-radius-pill);
-    background: transparent;
-    color: inherit;
     cursor: pointer;
     outline: none;
   }
-  .fk-tag-field__remove::before {
+  .fk-tag-field__drop::before {
     content: '';
     position: absolute;
-    inset-block-start: 50%;
     /* physical: centring with translate(-50%) is the same in both directions */
     left: 50%;
+    inset-block-start: 50%;
     inline-size: max(100%, var(--fk-control-target));
     block-size: max(100%, var(--fk-control-target));
     transform: translate(-50%, -50%);
   }
-  .fk-tag-field__remove[data-hovered] {
-    background: var(--fk-line);
-  }
-  .fk-tag-field__remove[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
-    outline-offset: 1px;
-  }
-  .fk-tag-field__remove[data-disabled] {
-    cursor: not-allowed;
-    opacity: 0.55;
-  }
-  .fk-tag-field__remove .fk-icon {
+  .fk-tag-field__drop .fk-icon {
     inline-size: 14px;
     block-size: 14px;
   }
-  .fk-tag-field__control {
-    display: flex;
-    flex: 1 0 8rem;
-    min-inline-size: 8rem;
+  .fk-tag-field__drop[data-hovered] {
+    background: var(--fk-line);
   }
-  .fk-tag-field__entry {
-    flex: 1 0 8rem;
-    min-inline-size: 8rem;
-    min-block-size: calc(var(--fk-control-height) - 2 * var(--fk-space-1) - 2px);
-    padding: 0 var(--fk-space-1);
-    border: 0;
-    background: transparent;
-    color: var(--fk-ink);
-    font: inherit;
-    font-size: var(--fk-font-size-body);
-    outline: none;
+  .fk-tag-field__drop[data-focus-visible] {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 1px;
   }
-  .fk-tag-field__entry[data-disabled] {
+  .fk-tag-field__drop[data-disabled] {
+    opacity: 0.55;
     cursor: not-allowed;
   }
-  .fk-tag-field__helper,
-  .fk-tag-field__error {
-    margin: 0;
-  }
-  .fk-tag-field__helper {
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
-  }
-  .fk-tag-field__error {
-    color: var(--fk-danger);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
-  }
 
-  .fk-tag-field__popover {
+  /* Suggestion menu (level 3). */
+  .fk-tag-field__menu-layer {
+    z-index: var(--fk-z-popover);
     box-sizing: border-box;
     inline-size: var(--trigger-width);
     max-block-size: 18rem;
     overflow-y: auto;
     padding: var(--fk-space-1);
+    background: var(--fk-surface-raised);
     border: 1px solid var(--fk-line);
     border-radius: var(--fk-radius-card);
-    background: var(--fk-surface-raised);
     box-shadow: var(--fk-shadow-floating);
-    backdrop-filter: blur(var(--fk-glass-blur-floating));
     -webkit-backdrop-filter: blur(var(--fk-glass-blur-floating));
-    z-index: var(--fk-z-popover);
+    backdrop-filter: blur(var(--fk-glass-blur-floating));
   }
-  .fk-tag-field__popover[data-entering] {
-    animation: fk-tag-field-fade var(--fk-dur-quick) var(--fk-ease);
+  .fk-tag-field__menu-layer[data-entering] {
+    animation: fk-tag-field-appear var(--fk-dur-quick) var(--fk-ease);
   }
-  @keyframes fk-tag-field-fade {
+  @keyframes fk-tag-field-appear {
     from {
       opacity: 0;
     }
   }
-  .fk-tag-field__options {
+  .fk-tag-field__menu {
     outline: none;
   }
-  .fk-tag-field__option {
+  .fk-tag-field__choice {
     display: flex;
     align-items: center;
     min-block-size: var(--fk-control-target);
     padding-inline: var(--fk-space-3);
-    border-radius: var(--fk-radius-control);
     color: var(--fk-ink-2);
+    border-radius: var(--fk-radius-control);
     cursor: pointer;
     outline: none;
   }
-  .fk-tag-field__option[data-focused] {
-    background: var(--fk-accent-soft);
+  .fk-tag-field__choice[data-focused] {
     color: var(--fk-on-accent-soft);
+    background: var(--fk-accent-soft);
   }
 
   @media (max-width: 1023.98px) {
-    .fk-tag-field__box {
-      min-block-size: var(--fk-control-height-touch);
+    .fk-tag-field {
+      --fk-tag-field-well-min: var(--fk-control-height-touch);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-tag-field__popover[data-entering] {
+    .fk-tag-field__menu-layer[data-entering] {
       animation: none;
     }
   }
 
   @media (prefers-reduced-transparency: reduce) {
-    .fk-tag-field__popover {
+    .fk-tag-field__menu-layer {
       background: var(--fk-surface-raised-solid);
-      backdrop-filter: none;
       -webkit-backdrop-filter: none;
+      backdrop-filter: none;
     }
   }
 
   @media (forced-colors: active) {
-    .fk-tag-field__box {
+    .fk-tag-field__well {
       border: 1px solid FieldText;
     }
-    .fk-tag-field__pill {
+    .fk-tag-field__chip,
+    .fk-tag-field__menu-layer {
       border: 1px solid CanvasText;
     }
-    .fk-tag-field__popover {
-      border: 1px solid CanvasText;
+    .fk-tag-field__menu-layer {
       background: Canvas;
     }
-    .fk-tag-field__option[data-focused] {
-      background: Highlight;
-      color: HighlightText;
+    .fk-tag-field__choice[data-focused] {
       forced-color-adjust: none;
+      color: HighlightText;
+      background: Highlight;
     }
   }
 }

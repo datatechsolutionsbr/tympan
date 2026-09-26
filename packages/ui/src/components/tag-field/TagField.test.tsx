@@ -127,7 +127,7 @@ describe('TagField', () => {
 
   it('keeps 44 px remove targets and highlights options in forced colours', () => {
     const css = cssOf('components/tag-field/TagField.css')
-    expect(css).toMatch(/\.fk-tag-field__remove::before\s*\{[^}]*inline-size:\s*max\(100%,\s*var\(--fk-control-target\)\)/)
+    expect(css).toMatch(/\.fk-tag-field__drop::before\s*\{[^}]*inline-size:\s*max\(100%,\s*var\(--fk-control-target\)\)/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/Highlight/)
     expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/animation:\s*none/)
   })

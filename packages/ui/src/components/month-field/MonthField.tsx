@@ -23,94 +23,101 @@ export interface MonthFieldProps {
   className?: string
 }
 
-const yearOf = (key: string) => Number(key.slice(0, 4))
+/** A "YYYY-MM" key split into numbers. */
+const parts = (key: string) => ({ y: Number(key.slice(0, 4)), m: Number(key.slice(5, 7)) })
 
-/** The data years, newest first, and the year a fresh opening should show. */
-function useYears(value: string, available: string[]) {
-  return useMemo(() => {
-    const years = [...new Set(available.map(yearOf))].filter(Number.isFinite).sort((a, b) => b - a)
-    const start = value ? yearOf(value) : (years[0] ?? new Date().getFullYear())
-    return { years, start }
-  }, [value, available])
+/** What the month data allows: the years with data (newest first), their bounds and the lookup set. */
+function calendarOf(months: string[]) {
+  const years = [...new Set(months.map((k) => parts(k).y))].filter(Number.isFinite).sort((a, b) => b - a)
+  return {
+    years,
+    newest: years[0] as number | undefined,
+    oldest: years.at(-1),
+    has: new Set(months),
+  }
+}
+
+/** Keeps a year inside the data years (free when there is no data). */
+const clampYear = (year: number, low?: number, high?: number) => (low === undefined || high === undefined ? year : Math.min(high, Math.max(low, year)))
+
+function YearChips({ years, shown, label, onPick }: { years: number[]; shown: number; label: string; onPick: (y: number) => void }) {
+  if (years.length < 2) return null
+  return (
+    <div className="fk-fb-chips" role="group" aria-label={label}>
+      {years.map((y) => (
+        <AriaButton key={y} className="fk-fb-chip" aria-pressed={y === shown} onPress={() => onPick(y)}>
+          {y}
+        </AriaButton>
+      ))}
+    </div>
+  )
 }
 
 /** One month with data, chosen from a year grid (spec: wave-2/month-field.md). */
 export function MonthField(props: MonthFieldProps) {
-  const t = useMessages().monthField
-  const { locale: contextLocale } = useLocale()
-  const locale = props.locale ?? contextLocale
-  const { years, start } = useYears(props.value, props.availableMonths)
+  const copy = useMessages().monthField
+  const ambient = useLocale().locale
+  const lang = props.locale ?? ambient
+  const cal = useMemo(() => calendarOf(props.availableMonths), [props.availableMonths])
+  const home = props.value ? parts(props.value).y : (cal.newest ?? new Date().getFullYear())
   const [open, setOpen] = useState(false)
-  const [year, setYear] = useState(start)
-  const available = useMemo(() => new Set(props.availableMonths), [props.availableMonths])
+  const [shownYear, setShownYear] = useState(home)
 
-  const text = props.value
-    ? new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(Date.UTC(yearOf(props.value), Number(props.value.slice(5)) - 1, 15))
-    : (props.placeholder ?? t.placeholder)
-  const oldest = years[years.length - 1]
-  const newest = years[0]
-  const step = (delta: number) =>
-    setYear((y) => {
-      const next = y + delta
-      return oldest != null && newest != null ? Math.min(newest, Math.max(oldest, next)) : next
-    })
+  const caption = (() => {
+    if (!props.value) return props.placeholder ?? copy.placeholder
+    const { y, m } = parts(props.value)
+    return new Intl.DateTimeFormat(lang, { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(Date.UTC(y, m - 1, 15))
+  })()
+  const move = (by: number) => setShownYear((y) => clampYear(y + by, cal.oldest, cal.newest))
+  const toggle = (next: boolean) => {
+    if (next) setShownYear(home) // every opening starts on the value's year
+    setOpen(next)
+  }
+
+  const face = props.triggerContent ?? (
+    <>
+      <span className="fk-fb-trigger__glyph" aria-hidden="true">
+        <CalendarDays />
+      </span>
+      <span className="fk-fb-trigger__text" data-placeholder={props.value ? undefined : true}>
+        {caption}
+      </span>
+    </>
+  )
 
   return (
-    <DialogTrigger
-      isOpen={open}
-      onOpenChange={(next) => {
-        if (next) setYear(start)
-        setOpen(next)
-      }}
-    >
+    <DialogTrigger isOpen={open} onOpenChange={toggle}>
       <AriaButton
         className={cx('fk-fb-trigger', 'fk-month-field', props.className)}
-        data-embedded={props.embedded || undefined}
+        aria-label={`${props.label}, ${caption}`}
         isDisabled={props.disabled}
-        aria-label={`${props.label}, ${text}`}
+        data-embedded={props.embedded || undefined}
       >
-        {props.triggerContent ?? (
-          <>
-            <span className="fk-fb-trigger__glyph" aria-hidden="true">
-              <CalendarDays />
-            </span>
-            <span className="fk-fb-trigger__text" data-placeholder={props.value ? undefined : true}>
-              {text}
-            </span>
-          </>
-        )}
+        {face}
       </AriaButton>
       <FloatSurface label={props.label} side={props.placement ?? 'bottom'}>
         <StepperHeader
-          heading={year}
-          previousLabel={t.previousYear}
-          nextLabel={t.nextYear}
-          previousDisabled={oldest == null || year <= oldest}
-          nextDisabled={newest == null || year >= newest}
-          onPrevious={() => step(-1)}
-          onNext={() => step(1)}
+          heading={shownYear}
+          previousLabel={copy.previousYear}
+          nextLabel={copy.nextYear}
+          previousDisabled={cal.oldest === undefined || shownYear <= cal.oldest}
+          nextDisabled={cal.newest === undefined || shownYear >= cal.newest}
+          onPrevious={() => move(-1)}
+          onNext={() => move(1)}
         />
         <MonthGrid
-          year={year}
-          locale={locale}
-          label={t.months}
-          isAvailable={(key) => available.has(key)}
+          year={shownYear}
+          locale={lang}
+          label={copy.months}
           selected={props.value || null}
+          isAvailable={(key) => cal.has.has(key)}
+          onYearStep={move}
           onChoose={(key) => {
             props.onChange(key)
             setOpen(false)
           }}
-          onYearStep={step}
         />
-        {years.length > 1 ? (
-          <div className="fk-fb-chips" role="group" aria-label={t.years}>
-            {years.map((y) => (
-              <AriaButton key={y} className="fk-fb-chip" aria-pressed={y === year} onPress={() => setYear(y)}>
-                {y}
-              </AriaButton>
-            ))}
-          </div>
-        ) : null}
+        <YearChips years={cal.years} shown={shownYear} label={copy.years} onPick={setShownYear} />
       </FloatSurface>
     </DialogTrigger>
   )
