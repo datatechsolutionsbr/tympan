@@ -1,0 +1,13 @@
+{
+  "$description": "Stacking order. Not in the design direction; chosen by the implementer.",
+  "z": {
+    "$type": "number",
+    "base": { "$value": 0 },
+    "sticky": { "$value": 100 },
+    "nav-drawer": { "$value": 400 },
+    "modal": { "$value": 500 },
+    "popover": { "$value": 600 },
+    "toast": { "$value": 700 },
+    "skip-link": { "$value": 800 }
+  }
+}

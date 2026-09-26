@@ -1,0 +1,15 @@
+{
+  "$description": "Motion (design direction §2.7). Durations drop to zero under prefers-reduced-motion.",
+  "duration": {
+    "$type": "duration",
+    "instant": { "$value": { "value": 90, "unit": "ms" }, "$description": "Hover, press." },
+    "quick": { "$value": { "value": 150, "unit": "ms" }, "$description": "Open a menu, switch a tab." },
+    "base": { "$value": { "value": 240, "unit": "ms" }, "$description": "Drawer and evidence panel entry." },
+    "pulse": { "$value": { "value": 1600, "unit": "ms" }, "$description": "Skeleton opacity pulse period (§2.12)." }
+  },
+  "ease": {
+    "$type": "cubicBezier",
+    "enter": { "$value": [0.2, 0, 0, 1], "$description": "Entries." },
+    "exit": { "$value": [0.4, 0, 1, 1], "$description": "Exits." }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "$description": "Typography (design direction §2.2).",
+  "font": {
+    "family": {
+      "$type": "fontFamily",
+      "serif": { "$value": ["Source Serif 4", "Source Serif Pro", "Georgia", "serif"], "$description": "Headings h1 to h3 and KPI numbers only." },
+      "sans": { "$value": ["IBM Plex Sans", "system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"] },
+      "mono": { "$value": ["IBM Plex Mono", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"], "$description": "Identifiers, hashes, keys, versions only." }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "regular": { "$value": 400 },
+      "semibold": { "$value": 600 },
+      "bold": { "$value": 700 }
+    },
+    "size": {
+      "$type": "dimension",
+      "display": { "$value": { "value": 36, "unit": "px" } },
+      "h1": { "$value": { "value": 30, "unit": "px" } },
+      "h1-narrow": { "$value": { "value": 24, "unit": "px" } },
+      "h2": { "$value": { "value": 22, "unit": "px" } },
+      "h3": { "$value": { "value": 18, "unit": "px" } },
+      "body-lg": { "$value": { "value": 16, "unit": "px" } },
+      "body": { "$value": { "value": 14, "unit": "px" } },
+      "label": { "$value": { "value": 13, "unit": "px" } },
+      "meta": { "$value": { "value": 12, "unit": "px" } },
+      "eyebrow": { "$value": { "value": 12, "unit": "px" } }
+    },
+    "line-height": {
+      "$type": "dimension",
+      "display": { "$value": { "value": 44, "unit": "px" } },
+      "h1": { "$value": { "value": 38, "unit": "px" } },
+      "h1-narrow": { "$value": { "value": 32, "unit": "px" } },
+      "h2": { "$value": { "value": 30, "unit": "px" } },
+      "h3": { "$value": { "value": 26, "unit": "px" } },
+      "body-lg": { "$value": { "value": 26, "unit": "px" } },
+      "body": { "$value": { "value": 22, "unit": "px" } },
+      "label": { "$value": { "value": 18, "unit": "px" } },
+      "meta": { "$value": { "value": 18, "unit": "px" } },
+      "eyebrow": { "$value": { "value": 16, "unit": "px" } }
+    },
+    "tracking": {
+      "$type": "dimension",
+      "h1": { "$value": { "value": -0.01, "unit": "rem" }, "$description": "-0.01em per §2.2; stored in rem for DTCG, emitted as em." },
+      "eyebrow": { "$value": { "value": 0.08, "unit": "rem" }, "$description": "0.08em per §2.2; stored in rem for DTCG, emitted as em." }
+    }
+  },
+  "measure": {
+    "$type": "number",
+    "prose": { "$value": 68, "$description": "Prose max width in ch." },
+    "summary": { "$value": 60, "$description": "Reading summary max width in ch." }
+  }
+}
