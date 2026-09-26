@@ -34,3 +34,14 @@ Not applicable. After a route transition, focus management remains the router's 
 - Given reduced motion, then the native API is not called.
 - Given support, then the root marker is set during the transition and removed after `finished`, including when `skip()` is called or the transition rejects.
 - Given the hook, then the returned function identity is stable across renders.
+
+## Renamed in implementation (2026-09-26)
+Same behaviour and acceptance tests:
+
+| Spec name | Implementation |
+|---|---|
+| `runWithTransition(update, options)` → `{ finished, skip() }` | `animateChange(change, options)` → `{ done, cancel() }` |
+| `options.kind` / `options.skipAnimation` | `options.style` / `options.instant` |
+| `supportsViewTransitions()` | `canAnimateChanges()` |
+| hook → `{ runWithTransition, isSupported }` | `useAnimatedChange()` → `{ animateChange, available }` |
+| root marker | `data-fk-change-style` (`CHANGE_STYLE_ATTRIBUTE`) |

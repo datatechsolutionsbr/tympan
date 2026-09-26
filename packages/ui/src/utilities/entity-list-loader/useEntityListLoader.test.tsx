@@ -1,20 +1,11 @@
 import { act, renderHook, waitFor } from '@testing-library/react'
 import { forwardRef, type ReactNode } from 'react'
 import { describe, expect, it, vi } from 'vitest'
-import { RouterAdapterProvider, type RouteAnchorProps, type NavigationAdapter } from '../router-adapter/RouterAdapter'
+import { RoutingProvider, type AnchorProps, type RouteHost } from '../router-adapter/Routing'
 import { useEntityListLoader } from './useEntityListLoader'
 
-const Link = forwardRef<HTMLAnchorElement, RouteAnchorProps>((p, ref) => <a ref={ref} {...p} />)
-const adapterAt = (locationKey: string): NavigationAdapter => ({
-  pathname: '/list',
-  locationKey,
-  navigate: () => {},
-  replace: () => {},
-  back: () => {},
-  forward: () => {},
-  prefetch: () => {},
-  Link,
-})
+const Anchor = forwardRef<HTMLAnchorElement, AnchorProps>((p, ref) => <a ref={ref} {...p} />)
+const hostAt = (visit: string): RouteHost => ({ path: '/list', visit, go: () => {}, step: () => {}, warm: () => {}, Anchor })
 
 describe('useEntityListLoader', () => {
   it('loads two items and stops loading', async () => {
@@ -27,7 +18,7 @@ describe('useEntityListLoader', () => {
   it('refetches when the location key changes', async () => {
     const fetcher = vi.fn(() => Promise.resolve(['a']))
     let key = 'k1'
-    const wrapper = ({ children }: { children: ReactNode }) => <RouterAdapterProvider adapter={adapterAt(key)}>{children}</RouterAdapterProvider>
+    const wrapper = ({ children }: { children: ReactNode }) => <RoutingProvider host={hostAt(key)}>{children}</RoutingProvider>
     const { result, rerender } = renderHook(() => useEntityListLoader(fetcher), { wrapper })
     await waitFor(() => expect(result.current.loading).toBe(false))
     key = 'k2'

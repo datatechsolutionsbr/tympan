@@ -19,27 +19,27 @@ export {
 } from '../utilities/motion-foundation/motion'
 export { playHaptic, cancelHaptic, hapticsSupported, useHaptics, HapticsPreference, type HapticPattern, type HapticsApi } from '../utilities/haptics/haptics'
 export {
-  runWithTransition,
-  supportsViewTransitions,
-  useViewTransition,
-  VIEW_TRANSITION_MARKER,
-  type ViewTransitionHandle,
-  type ViewTransitionKind,
-  type ViewTransitionOptions,
-} from '../utilities/view-transition/viewTransition'
+  animateChange,
+  canAnimateChanges,
+  useAnimatedChange,
+  CHANGE_STYLE_ATTRIBUTE,
+  type ChangeRun,
+  type ChangeStyle,
+  type AnimateOptions,
+} from '../utilities/view-transition/animatedChange'
 export {
-  RouterAdapterProvider,
-  useRouterAdapter,
-  useRouter,
-  usePathname,
-  useLink,
-  useLocationKey,
-  FallbackAnchor,
-  type NavigationAdapter,
-  type NavigationCommands,
-  type RouteAnchor,
-  type RouteAnchorProps,
-} from '../utilities/router-adapter/RouterAdapter'
+  RoutingProvider,
+  useRouteHost,
+  useRouting,
+  useCurrentPath,
+  useRouteAnchor,
+  useVisitKey,
+  PlainAnchor,
+  type RouteHost,
+  type RouteMoves,
+  type AnchorComponent,
+  type AnchorProps,
+} from '../utilities/router-adapter/Routing'
 export {
   I18nAdapterProvider,
   createI18nValue,

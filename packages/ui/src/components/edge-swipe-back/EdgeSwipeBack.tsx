@@ -7,7 +7,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useLocale } from 'react-aria-components'
 import { advanceTrack, beginTrack, firstTouch, type Track } from '../../internal/platform/touchTrack'
 import { playHaptic } from '../../utilities/haptics/haptics'
-import { useRouter } from '../../utilities/router-adapter/RouterAdapter'
+import { useRouting } from '../../utilities/router-adapter/Routing'
 
 /** Default width (CSS px) of the start-edge zone: one 24 px spacing step. */
 export const EDGE_ZONE = 24
@@ -30,11 +30,11 @@ function readRtl(ariaDirection: string): boolean {
 }
 
 export function EdgeSwipeBack({ enabled = true, onBack, edgeZone = EDGE_ZONE, commitDistance = EDGE_COMMIT, children }: EdgeSwipeBackProps) {
-  const router = useRouter()
+  const router = useRouting()
   const rtl = readRtl(useLocale().direction)
   const [cue, setCue] = useState<Cue>(null)
   const back = useRef<() => void>(() => {})
-  back.current = onBack ?? router.back
+  back.current = onBack ?? router.goBack
 
   useEffect(() => {
     if (!enabled || typeof window === 'undefined') return

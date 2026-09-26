@@ -37,3 +37,19 @@ Not applicable.
 - Given no provider, then `usePathname()` returns the browser path and `useLink()` renders an anchor.
 - Given an adapter without `locationKey`, then `useLocationKey()` equals the pathname.
 - Given RAC links inside the provider, when activated, then navigation goes through the adapter.
+
+## Renamed in implementation (2026-09-26)
+Same behaviour and acceptance tests; the library is new, so the names are its own:
+
+| Spec name | Implementation |
+|---|---|
+| provider + `adapter` value | `RoutingProvider` with `host: RouteHost` |
+| `adapter.pathname` | `host.path` |
+| `adapter.navigate(href)` / `replace(href)` | `host.go(href, { swap? })` |
+| `adapter.back()` / `forward()` | `host.step(-1 \| 1)` |
+| `adapter.prefetch(href)` | `host.warm(href)` |
+| `adapter.Link` | `host.Anchor` |
+| `adapter.locationKey` | `host.visit` |
+| `useRouter()` → `{ push, replace, back, forward, refresh, prefetch }` | `useRouting()` → `{ open, swap, goBack, goOn, reload, warm }` |
+| `usePathname()`, `useLink()`, `useLocationKey()` | `useCurrentPath()`, `useRouteAnchor()`, `useVisitKey()` |
+| plain anchor fallback | `PlainAnchor`; `useRouteHost()` returns the host or null |

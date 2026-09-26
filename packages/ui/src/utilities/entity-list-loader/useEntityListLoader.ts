@@ -4,7 +4,7 @@
 // counter kept outside React; a response only lands when its generation is
 // still the newest and the host component is still mounted.
 import { useCallback, useEffect, useReducer, useRef, type Dispatch, type SetStateAction } from 'react'
-import { useLocationKey } from '../router-adapter/RouterAdapter'
+import { useVisitKey } from '../router-adapter/Routing'
 
 export interface ListLoaderOptions<T> {
   initial?: T[]
@@ -71,7 +71,7 @@ function generations() {
 }
 
 export function useEntityListLoader<T>(fetcher: () => Promise<T[] | null | undefined>, options: ListLoaderOptions<T> = {}): ListLoaderResult<T> {
-  const routeStamp = useLocationKey()
+  const routeStamp = useVisitKey()
   const trigger = options.revalidationKey === undefined ? routeStamp : options.revalidationKey
   const [snap, send] = useReducer(step<T>, undefined, () => ({ rows: options.initial ?? [], busy: trigger !== null, failure: null }))
 
