@@ -28,7 +28,7 @@ export interface CapaProps {
   /** Back cover seal lines. */
   selo?: string[]
   isbn?: string
-  /** Print the publisher's mark (Datatech Solutions), small. */
+  /** Print the publisher's mark (Datatech Solutions), small; off by default because content places LogoDatatech itself. */
   editora?: boolean
   className?: string
 }
@@ -67,7 +67,7 @@ function Grafismo({ cortes, legenda }: { cortes: number[]; legenda?: string }) {
 }
 
 /** Front or back cover, printed on the ink colour (inverted). */
-export function Capa({ face = 'primeira', eyebrow, titulo, subtitulo, autora, chamada, paragrafos, destaque, cortes, legendaGrafismo, selo, isbn, editora = true, className }: CapaProps) {
+export function Capa({ face = 'primeira', eyebrow, titulo, subtitulo, autora, chamada, paragrafos, destaque, cortes, legendaGrafismo, selo, isbn, editora = false, className }: CapaProps) {
   return (
     <div className={cx('ty-print-capa', className)} data-face={face}>
       {eyebrow ? <p className="ty-print-capa-eyebrow">{comColchetes(eyebrow)}</p> : null}
@@ -377,7 +377,7 @@ export function Mapa({ titulo, alt, exemplo = false, legenda, comoLer, naoMostra
       <figcaption className="ty-print-figura-cabeca">
         <span className="ty-print-figura-titulo">{comColchetes(titulo)}</span>
       </figcaption>
-      <svg viewBox={`0 0 ${w} ${h}`} role="img" aria-label={alt} style={{ maxInlineSize: sangria ? '100%' : `${w * 1.2}mm` }}>
+      <svg viewBox={`0 0 ${w} ${h}`} role="img" aria-label={alt} style={{ maxInlineSize: sangria ? '100%' : '58mm' }}>
         <defs>
           {Array.from({ length: classes }, (_, k) => (
             <pattern key={k} id={`${id}-c${k}`} width={1.2} height={1.2} patternUnits="userSpaceOnUse" patternTransform="rotate(45)">

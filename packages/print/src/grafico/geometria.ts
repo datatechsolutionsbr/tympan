@@ -465,13 +465,13 @@ export function layoutSerie(spec: SpecSerie, largura: number, alturaPlot = 44): 
   const marcasYv = marcasEixo(spec.escala, 4)
   const x0 = r3(Math.max(...marcasYv.map((v) => larguraTexto(numeroBr(v), TEXTO_PEQUENO))) + 2.4)
   const x1 = r3(largura - 10)
-  const temFaixa = Boolean(spec.faixas?.length)
-  const y0 = r3(temFaixa ? 8 : 4)
+  const y0 = 5
   const y1 = r3(y0 + alturaPlot)
   const x = escalaLinear(spec.eixoX, [x0, x1])
   const y = escalaLinear(spec.escala, [y1, y0])
   const pontos = spec.pontos.map((p, i) => ({ i, x: x(p.x), y: y(p.y), vx: p.x, vy: p.y, rotulo: p.rotulo, chamada: p.chamada }))
-  const anos = marcasEixo(spec.eixoX, Math.max(3, Math.floor((x1 - x0) / 16)))
+  // Years: whole-number steps only.
+  const anos = marcasEixo(spec.eixoX, Math.max(3, Math.floor((x1 - x0) / 16))).filter((v) => Number.isInteger(v))
   const { postas, fim } = anotar(
     spec.anotacoes,
     (i) => {

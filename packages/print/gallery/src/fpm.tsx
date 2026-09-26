@@ -131,8 +131,8 @@ export function DuplaFpm({ grafico = 'halteres' }: { grafico?: TipoGraficoFpm })
           paragrafos={['A descontinuidade compara quem está logo acima com quem está logo abaixo do corte, e só vale se os dois lados forem parecidos. Antes de medir o dinheiro, contam-se os municípios de cada lado.']}
         />
         <Painel letra="d" titulo="O gráfico do método: quantos municípios de cada lado do corte">
-          <GraficoMetodo spec={g1} alt={ACHADOS[0]} largura={132} local />
-          <GraficoMetodo spec={g2} alt={ACHADOS[1]} largura={132} />
+          <GraficoMetodo spec={g1} alt={ACHADOS[0]} local />
+          <GraficoMetodo spec={g2} alt={ACHADOS[1]} />
           <TabelaDados
             colunas={['Base', 'Cortes', { rotulo: 'Até 3% abaixo', numerica: true }, { rotulo: 'Até 3% acima', numerica: true }, 'Lake']}
             linhas={[

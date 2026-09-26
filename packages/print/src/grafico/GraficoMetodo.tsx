@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { usePrint } from '../contexto.tsx'
+import { useLarguraDisponivel, usePrint } from '../contexto.tsx'
 import { TabelaDados, type TabelaDadosProps } from '../paineis/Metodo.tsx'
 import { comColchetes } from '../paineis/comum.tsx'
 import { semente } from '../rough.ts'
@@ -10,6 +10,7 @@ import {
   layoutHalteres,
   layoutSerie,
   linhasDe,
+  larguraTexto,
   numeroBr,
   TEXTO,
   type AnotacaoPosta,
@@ -28,7 +29,7 @@ export interface GraficoMetodoProps {
   tabela?: TabelaDadosProps
   /** The figure uses numbers from the local backfill lake, not published: tagged "lake local, não publicado". */
   local?: boolean
-  /** Figure width in mm (default 128). */
+  /** Figure width in mm (default: the panel's inner width, or 128). */
   largura?: number
   className?: string
 }
@@ -333,7 +334,7 @@ function Serie({ c, spec, largura }: { c: Ctx; spec: SpecSerie; largura: number 
         {L.faixas.map((f, k) => (
           <g key={k} className="ty-print-g-faixa">
             <rect x={f.x0} y={y0} width={n(f.x1 - f.x0)} height={n(y1 - y0)} style={{ fill: 'var(--ty-print-marca-texto)' }} />
-            <text x={f.x0} y={n(y0 - 1.4)}>
+            <text x={n(f.x0 + 0.8)} y={n(y1 - 1.2)}>
               {f.rotulo}
             </text>
           </g>
@@ -378,10 +379,10 @@ function Serie({ c, spec, largura }: { c: Ctx; spec: SpecSerie; largura: number 
             <g className="ty-print-ponto" data-linha={p.i} data-serie="b" data-valor={p.vy} data-cx={p.x} data-cy={p.y} transform={`translate(${p.x} ${p.y})`}>
               {c.p.ponto(c, { chave: `p-${p.i}`, r: 1, cor: 'destaque', cheio: true })}
             </g>
-            <text className="ty-print-g-valor" x={p.x} y={n(p.y - 2)} textAnchor="middle" data-cor="tinta">
+            <text className="ty-print-g-valor" x={n(p.x + 1.4)} y={n(p.y - 1.6)} data-cor="tinta">
               {p.rotulo ?? numeroBr(p.vy)}
             </text>
-            {p.chamada !== undefined ? <Chamada x={n(p.x + 4.6)} y={n(p.y - 2.7)} texto={String(p.chamada)} /> : null}
+            {p.chamada !== undefined ? <Chamada x={n(p.x + 1.4 + larguraTexto(p.rotulo ?? numeroBr(p.vy)) + 2.4)} y={n(p.y - 2.4)} texto={String(p.chamada)} /> : null}
           </g>
         ))}
         <Anotacoes c={c} postas={L.anotacoes} marcas={spec.pontos.map((p) => (p.chamada !== undefined ? String(p.chamada) : undefined))} />
@@ -444,7 +445,7 @@ function Esquema({ c, spec, largura }: { c: Ctx; spec: SpecEsquema; largura: num
     )
     if (r[0]) partes.push(<text key="r0" className="ty-print-g-anotacao-texto" x={n(xc + 3)} y={n((ya + yb) / 2 + 0.8)}>{r[0]}</text>)
     if (r[1]) partes.push(<text key="r1" className="ty-print-g-nota" x={n(xc + 1)} y={n(y0 - 1.6)}>{r[1]}</text>)
-    if (r[2]) partes.push(<text key="r2" className="ty-print-g-nota" x={xc} y={n(y1 - 1.4)} textAnchor="middle">{r[2]}</text>)
+    if (r[2]) partes.push(<text key="r2" className="ty-print-g-nota" x={n(xc - jan + 0.8)} y={n(y1 - 1.4)}>{r[2]}</text>)
     if (r[3]) partes.push(<text key="r3" className="ty-print-g-eixo-texto" x={x1} y={n(y1 + 3.6)} textAnchor="end">{r[3]}</text>)
     if (r[4]) partes.push(<text key="r4" className="ty-print-g-eixo-texto" x={n(x0 + 1)} y={n(y0 - 1.6)}>{r[4]}</text>)
   } else if (spec.nome === 'densidade-no-corte') {
@@ -489,8 +490,10 @@ function Esquema({ c, spec, largura }: { c: Ctx; spec: SpecEsquema; largura: num
  * washed, grained, pictorial). Every figure has an accessible name that
  * states the finding and a data table (visible, or for assistive technology).
  */
-export function GraficoMetodo({ spec, renderizador, alt, tabela, local = false, largura = 128, className }: GraficoMetodoProps) {
+export function GraficoMetodo({ spec, renderizador, alt, tabela, local = false, largura: larguraProp, className }: GraficoMetodoProps) {
   const { estilo } = usePrint()
+  const disponivel = useLarguraDisponivel()
+  const largura = larguraProp ?? Math.min(132, disponivel ?? 128)
   const id = useIdSeguro('ty-print-g')
   const nome = renderizador ?? estilo.grafico
   const p = PINCEIS[nome]

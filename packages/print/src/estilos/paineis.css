@@ -54,7 +54,7 @@
     margin-block-start: 1.6mm;
   }
 
-  .ty-print-texto[data-variante='lead'] p {
+  .ty-print-texto[data-variante='lead'] > p:not(.ty-print-sobretitulo) {
     font-size: 9pt;
     line-height: 1.42;
   }
@@ -64,13 +64,13 @@
     color: var(--ty-print-tinta-2);
   }
 
-  .ty-print-texto[data-variante='frase'] p {
+  .ty-print-texto[data-variante='frase'] > p:not(.ty-print-sobretitulo) {
     font: italic 400 11pt/1.3 var(--ty-print-fonte-titulo);
     padding-inline-start: 3mm;
     border-inline-start: 0.8mm solid var(--ty-print-destaque);
   }
 
-  .ty-print-texto[data-variante='display'] p {
+  .ty-print-texto[data-variante='display'] > p:not(.ty-print-sobretitulo) {
     font: 600 16pt/1.15 var(--ty-print-fonte-titulo);
   }
 
@@ -290,7 +290,9 @@
   }
 
   .ty-print-livro .ty-print-painel[data-variante='cidade'] {
-    border-style: dashed;
+    padding: 2.4mm 3mm;
+    border: 0.25mm dashed var(--ty-print-tinta-2);
+    outline: 0;
   }
 
   .ty-print-livro .ty-print-painel[data-variante='bolso'] {

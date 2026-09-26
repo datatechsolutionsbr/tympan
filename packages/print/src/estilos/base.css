@@ -121,7 +121,11 @@
     color: var(--ty-print-papel);
   }
 
+  /* On the inverted cover, secondary inks are the paper colour at lower strength. */
   .ty-print-pagina[data-variante='capa'] .ty-print-mancha {
+    --ty-print-tinta-2: color-mix(in srgb, var(--ty-print-papel) 85%, transparent);
+    --ty-print-tinta-3: color-mix(in srgb, var(--ty-print-papel) 75%, transparent);
+    --ty-print-linha: var(--ty-print-papel);
     inset-block: 16mm 14mm;
     inset-inline: 16mm;
     grid-template-rows: 1fr auto;

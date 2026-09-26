@@ -155,7 +155,7 @@
     fill: var(--ty-print-tinta);
     paint-order: stroke;
     stroke: var(--ty-print-papel);
-    stroke-width: 0.5;
+    stroke-width: 0.35;
   }
 
   /* The range frame is only for figure 'amplitude' (Tufte): no grid, the axis spans the data. */
@@ -175,5 +175,16 @@
   .ty-print-livro[data-ty-print-tremor] .ty-print-grafico :is(.ty-print-g-rotulo, .ty-print-g-anotacao text, .ty-print-g-anotacao-texto) {
     font-family: var(--ty-print-fonte-anotacao);
     font-style: normal;
+  }
+}
+
+@layer tympan-print {
+  /* A plate (prancha) gives the figure the whole type area. */
+  .ty-print-pagina[data-variante='prancha'] .ty-print-mancha {
+    align-content: center;
+  }
+
+  .ty-print-pagina[data-variante='prancha'] .ty-print-grafico {
+    inline-size: 100% !important;
   }
 }

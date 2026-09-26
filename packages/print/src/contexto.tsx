@@ -36,3 +36,11 @@ export const FundoEscuroProvider = FundoCtx.Provider
 export function useFundoEscuroForcado(): boolean | null {
   return useContext(FundoCtx)
 }
+
+const LarguraCtx = createContext<number | null>(null)
+/** Width (mm) available to a figure inside a panel; set by Painel from its column span. */
+export const LarguraProvider = LarguraCtx.Provider
+
+export function useLarguraDisponivel(): number | null {
+  return useContext(LarguraCtx)
+}

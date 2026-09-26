@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react'
-import { usePrint } from '../contexto.tsx'
+import { LarguraProvider, usePrint } from '../contexto.tsx'
 import { cx, useIdSeguro } from '../util.ts'
 import { BordaMao } from './comum.tsx'
 
@@ -27,13 +27,25 @@ export function larguraColunas(largura?: number): CSSProperties | undefined {
   return { gridColumn: `span ${Math.max(1, Math.round(largura))}` }
 }
 
+/** Type area 138 mm, six columns with 5 mm gutters. */
+const COLUNA = (138 - 5 * 5) / 6
+
+/** Inner width of a panel in mm, from its span and frame (figures size themselves to it). */
+export function larguraUtil(largura: number | undefined, moldura: string, variante: VariantePainel): number {
+  const n = Math.max(1, Math.min(6, Math.round(largura ?? 6)))
+  const bruto = COLUNA * n + 5 * (n - 1)
+  const semMoldura = moldura === 'fio' || moldura === 'fio-grosso' || moldura === 'nenhum' || variante === 'pilha' || variante === 'filete' || variante === 'filete-forte'
+  const recuo = semMoldura ? 0 : moldura === 'caixa-grossa' ? 9 : 7
+  return Math.round((bruto - recuo) * 10) / 10
+}
+
 /** A lettered dashboard panel; its frame follows the style (rule, box, card, band, drafting board). */
 export function Painel({ letra, titulo, eyebrow, largura, variante = 'normal', nivel = 2, className, style, children }: PainelProps) {
   const H = `h${nivel}` as 'h2' | 'h3' | 'h4'
   const { estilo } = usePrint()
   const id = useIdSeguro('ty-print-painel')
   const moldura = estilo.estrutura.painel
-  const mao = estilo.traco.tremor > 0 && (moldura === 'caixa' || moldura === 'caixa-grossa') && variante !== 'pilha'
+  const mao = estilo.traco.tremor > 0 && (moldura === 'caixa' || moldura === 'caixa-grossa') && variante !== 'pilha' && variante !== 'filete' && variante !== 'filete-forte'
   const temCabeca = Boolean(letra || titulo)
   return (
     <section
@@ -51,7 +63,9 @@ export function Painel({ letra, titulo, eyebrow, largura, variante = 'normal', n
           {titulo ? <span className="ty-print-painel-nome">{titulo}</span> : null}
         </H>
       ) : null}
-      <div className="ty-print-painel-corpo">{children}</div>
+      <div className="ty-print-painel-corpo">
+        <LarguraProvider value={larguraUtil(largura, moldura, variante)}>{children}</LarguraProvider>
+      </div>
     </section>
   )
 }
