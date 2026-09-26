@@ -75,10 +75,17 @@ export function tintasDoEstilo(estilo: Pick<PrintStyle, 'cor' | 'logo'>): Tintas
   return { badge: mono, texto: mono, solOp: 1 }
 }
 
-type Chave = keyof typeof DATATECH
+type Chave = keyof typeof DATATECH | 'badge-mono-claro'
+
+/** Mark data by key; the light mono badge is the dark one with its ink turned white (same master, same mask). */
+function dadosDe(chave: Chave): { viewBox: string; inner: string; ids: readonly string[] } {
+  if (chave !== 'badge-mono-claro') return DATATECH[chave]
+  const base = DATATECH['badge-mono-escuro']
+  return { ...base, inner: base.inner.replace('fill="#000000" mask=', 'fill="#ffffff" mask=') }
+}
 
 function resolver(variante: Exclude<VarianteDatatech, 'tinta' | 'duotom' | 'estilo'>, pb: boolean, escuro: boolean): Chave {
-  if (variante === 'badge') return pb ? 'badge-mono-escuro' : 'badge'
+  if (variante === 'badge') return pb ? (escuro ? 'badge-mono-claro' : 'badge-mono-escuro') : 'badge'
   if (pb) return escuro ? 'mono-claro' : 'mono-escuro'
   if (escuro && variante === 'cor') return 'cor-fundo-escuro'
   if (escuro && variante === 'mono-escuro') return 'mono-claro'
@@ -93,7 +100,7 @@ export function LogoDatatech({ variante = 'cor', largura, cor, cor2, rotulo, tex
   const id = useIdSeguro('ty-print-dt')
   const tingido = variante === 'tinta' || variante === 'duotom' || variante === 'estilo'
   const chave = tingido ? 'mono-escuro' : resolver(variante, pb || estilo.logo === 'mono', escuro)
-  const dados = DATATECH[chave]
+  const dados = dadosDe(chave)
   const [, , vw = 42, vh = 42] = dados.viewBox.split(' ').map(Number)
   const w = Math.max(largura ?? (chave.startsWith('badge') ? (texto ? 3.6 : 6) : 30), chave.startsWith('badge') ? 3.6 : 25)
   const h = Math.round(((w * vh) / vw) * 100) / 100
@@ -128,6 +135,7 @@ export function LogoDatatech({ variante = 'cor', largura, cor, cor2, rotulo, tex
     <span
       className={cx('ty-print-logo', 'ty-print-logo--datatech', texto && 'ty-print-assinatura', className)}
       data-versao={tingido ? variante : chave}
+      data-fundo={escuro ? 'escuro' : undefined}
       style={protecao ? { padding: `${Math.round(h * 0.5 * 100) / 100}mm` } : undefined}
     >
       {rotulo ? <span className="ty-print-logo-rotulo">{rotulo}</span> : null}

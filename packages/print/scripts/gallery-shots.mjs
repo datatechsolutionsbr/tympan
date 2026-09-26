@@ -1,7 +1,8 @@
 // Renders the gallery spread of every preset in headless Chrome and saves
 // gallery/shots/<preset>.png (and <preset>-pb.png with --pb). Builds the
 // gallery first, serves dist-gallery on a local port, then calls Chrome.
-//   node scripts/gallery-shots.mjs [--pb] [--only jornal,tufte] [--grafico halteres]
+//   node scripts/gallery-shots.mjs [--pb] [--only jornal,tufte] [--grafico halteres|mapa]
+// `--grafico mapa` shoots the map spread as <preset>-mapa.png.
 import { execFileSync } from 'node:child_process'
 import { createReadStream, existsSync, mkdirSync, statSync } from 'node:fs'
 import { createServer } from 'node:http'
@@ -17,6 +18,7 @@ const valor = (k) => {
 }
 const comPb = args.includes('--pb')
 const grafico = valor('--grafico') ?? 'estudo'
+const sufixo = grafico === 'mapa' ? '-mapa' : ''
 
 if (!args.includes('--no-build')) execFileSync('npx', ['vite', 'build', '--config', 'gallery/vite.config.ts', '--logLevel', 'warn'], { cwd: pkg, stdio: 'inherit' })
 
@@ -49,14 +51,14 @@ try {
   await pagina.setViewport({ width: 1286, height: 908, deviceScaleFactor: 2 })
   for (const nome of nomes) {
     for (const pb of comPb ? [false, true] : [false]) {
-      const arquivo = join(saida, `${nome}${pb ? '-pb' : ''}.png`)
+      const arquivo = join(saida, `${nome}${sufixo}${pb ? '-pb' : ''}.png`)
       const url = `http://127.0.0.1:${porta}/?foto=1&estilo=${nome}&grafico=${grafico}${pb ? '&pb=1' : ''}`
       await pagina.goto(url, { waitUntil: 'networkidle0', timeout: 60000 })
       await pagina.evaluate(() => document.fonts.ready)
       await new Promise((r) => setTimeout(r, 300))
       const dupla = await pagina.$('.ty-print-dupla')
       await (dupla ?? pagina).screenshot({ path: arquivo })
-      console.log(`gallery/shots/${nome}${pb ? '-pb' : ''}.png`)
+      console.log(`gallery/shots/${nome}${sufixo}${pb ? '-pb' : ''}.png`)
     }
   }
 } finally {

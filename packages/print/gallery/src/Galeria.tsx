@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react'
 import { PRINT_PRESET_NAMES, printPresets, type PrintPresetName } from '@datatechsolutions/tympan-tokens'
 import { LivroPrint } from '../../src/index.ts'
 import { DuplaFpm, GRAFICO_DO_ESTUDO, type TipoGraficoFpm } from './fpm.tsx'
+import { DuplaMapas } from './mapas.tsx'
 
-type Grafico = 'estudo' | TipoGraficoFpm
+type Grafico = 'estudo' | 'mapa' | TipoGraficoFpm
 
 function lerUrl() {
   const q = new URLSearchParams(window.location.search)
@@ -17,7 +18,8 @@ function lerUrl() {
 }
 
 /**
- * The FPM method spread in each of the book styles, with P&B. `?foto=1`
+ * The FPM method spread (or, with `?grafico=mapa`, the map spread) in each
+ * of the book styles, with P&B. `?foto=1`
  * renders only the spread (used by scripts/gallery-shots.mjs).
  */
 export function Galeria() {
@@ -31,10 +33,10 @@ export function Galeria() {
     window.history.replaceState(null, '', `?${q.toString()}`)
   }, [estilo, pb, grafico, inicial.foto])
 
-  const tipo: TipoGraficoFpm = grafico === 'estudo' ? (GRAFICO_DO_ESTUDO[estilo] ?? 'halteres') : grafico
+  const tipo: TipoGraficoFpm = grafico === 'estudo' || grafico === 'mapa' ? (GRAFICO_DO_ESTUDO[estilo] ?? 'halteres') : grafico
   const livro = (
     <LivroPrint estilo={estilo} pb={pb}>
-      <DuplaFpm grafico={tipo} />
+      {grafico === 'mapa' ? <DuplaMapas /> : <DuplaFpm grafico={tipo} />}
     </LivroPrint>
   )
   if (inicial.foto) return <main className="ty-print-galeria-foto">{livro}</main>
@@ -60,6 +62,7 @@ export function Galeria() {
             <option value="halteres">halteres</option>
             <option value="barras">barras</option>
             <option value="contagem">contagem</option>
+            <option value="mapa">mapas (malha IBGE)</option>
           </select>
         </label>
         <label>

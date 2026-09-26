@@ -1,7 +1,6 @@
 import type { EstadoProva } from '@datatechsolutions/tympan-tokens'
 import type { ReactNode } from 'react'
 import { LogoDatatech } from '../marca/LogoDatatech.tsx'
-import { semente } from '../rough.ts'
 import { cx, formatarNumero, useIdSeguro } from '../util.ts'
 import { comColchetes, NumeroChamada } from './comum.tsx'
 import { MarcaProva } from './MarcaProva.tsx'
@@ -327,100 +326,5 @@ export function LinhaDoTempo({ titulo, de, ate, alt, volumes, eventos, herdadas,
       {herdadas ? <p className="ty-print-linha-tempo-nota">{comColchetes(herdadas)}</p> : null}
       {nota ? <p className="ty-print-linha-tempo-nota">{comColchetes(nota)}</p> : null}
     </section>
-  )
-}
-
-// ---------------------------------------------------------------------------
-// Mapa (schematic tile map)
-// ---------------------------------------------------------------------------
-
-/** Schematic tile grid of the 27 federative units (column, row). */
-const LADRILHOS: Array<[string, number, number]> = [
-  ['RR', 1, 0], ['AP', 3, 0],
-  ['AC', 0, 1], ['AM', 1, 1], ['PA', 2, 1], ['MA', 3, 1], ['CE', 4, 1], ['RN', 5, 1],
-  ['RO', 1, 2], ['MT', 2, 2], ['TO', 3, 2], ['PI', 4, 2], ['PE', 5, 2], ['PB', 6, 2],
-  ['MS', 2, 3], ['GO', 3, 3], ['DF', 4, 3], ['BA', 5, 3], ['AL', 6, 3],
-  ['PR', 2, 4], ['SP', 3, 4], ['MG', 4, 4], ['ES', 5, 4], ['SE', 6, 4],
-  ['SC', 2, 5], ['RJ', 4, 5],
-  ['RS', 2, 6],
-]
-
-export interface MapaProps {
-  titulo: string
-  /** What the map shows, for assistive technology. */
-  alt: string
-  /** Example data (schematic, deterministic): prints the "Dados de exemplo" tag. */
-  exemplo?: boolean
-  /** Classes of the legend, from low to high; tiles use as many shades as there are classes. */
-  legenda?: string[]
-  comoLer?: string
-  naoMostra?: string
-  /** Full-bleed plate. */
-  sangria?: boolean
-  className?: string
-}
-
-/**
- * Schematic tile map (one tile per federative unit, not the municipal mesh).
- * Classes print as fill patterns, so the map reads in black and white.
- */
-export function Mapa({ titulo, alt, exemplo = false, legenda, comoLer, naoMostra, sangria = false, className }: MapaProps) {
-  const id = useIdSeguro('ty-print-mapa')
-  const classes = Math.max(2, Math.min(6, legenda?.length ?? 5))
-  const t = 9
-  const g = 0.8
-  const w = 7 * (t + g)
-  const h = 7 * (t + g)
-  const classe = (uf: string) => (exemplo ? semente(`${titulo}|${uf}`) % classes : -1)
-  return (
-    <figure className={cx('ty-print-mapa', className)} data-sangria={sangria ? '' : undefined} data-exemplo={exemplo ? '' : undefined}>
-      <figcaption className="ty-print-figura-cabeca">
-        <span className="ty-print-figura-titulo">{comColchetes(titulo)}</span>
-      </figcaption>
-      <svg viewBox={`0 0 ${w} ${h}`} role="img" aria-label={alt} style={{ maxInlineSize: sangria ? '100%' : '58mm' }}>
-        <defs>
-          {Array.from({ length: classes }, (_, k) => (
-            <pattern key={k} id={`${id}-c${k}`} width={1.2} height={1.2} patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-              <rect width={1.2} height={1.2} style={{ fill: 'var(--ty-print-papel)' }} />
-              <rect width={(1.2 * k) / Math.max(1, classes - 1)} height={1.2} style={{ fill: 'var(--ty-print-destaque)' }} />
-            </pattern>
-          ))}
-        </defs>
-        {LADRILHOS.map(([uf, c, r]) => {
-          const k = classe(uf)
-          return (
-            <g key={uf} transform={`translate(${c * (t + g)} ${r * (t + g)})`} data-uf={uf} data-classe={k}>
-              <rect width={t} height={t} className="ty-print-ladrilho" style={{ fill: k >= 0 ? `url(#${id}-c${k})` : 'var(--ty-print-papel)' }} />
-              <text x={t / 2} y={t / 2 + 1.1} textAnchor="middle" className="ty-print-ladrilho-uf">
-                {uf}
-              </text>
-            </g>
-          )
-        })}
-      </svg>
-      {legenda?.length ? (
-        <ul className="ty-print-mapa-legenda">
-          {legenda.map((l, k) => (
-            <li key={k}>
-              <svg viewBox="0 0 6 6" aria-hidden="true" focusable="false">
-                <rect width={6} height={6} className="ty-print-ladrilho" style={{ fill: `url(#${id}-c${k})` }} />
-              </svg>
-              {comColchetes(l)}
-            </li>
-          ))}
-        </ul>
-      ) : null}
-      {comoLer ? (
-        <p className="ty-print-mapa-nota">
-          <span className="ty-print-margem-titulo">Como ler</span> {comColchetes(comoLer)}
-        </p>
-      ) : null}
-      {naoMostra ? (
-        <p className="ty-print-mapa-nota">
-          <span className="ty-print-margem-titulo">O que o mapa não mostra</span> {comColchetes(naoMostra)}
-        </p>
-      ) : null}
-      {exemplo ? <p className="ty-print-selo-exemplo">Dados de exemplo</p> : null}
-    </figure>
   )
 }

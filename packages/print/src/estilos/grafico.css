@@ -142,12 +142,45 @@
     font-weight: 700;
   }
 
-  .ty-print-ladrilho {
-    stroke: var(--ty-print-linha);
-    stroke-width: 0.25;
+  /* Map (src/mapa): the areas are the projected mesh; only inks and strokes vary. */
+  .ty-print-mapa-areas path {
+    stroke: none;
   }
 
-  .ty-print-grafico .ty-print-ladrilho-uf,
+  .ty-print-mapa-municipais {
+    fill: none;
+    stroke: var(--ty-print-papel);
+    stroke-linejoin: round;
+  }
+
+  .ty-print-mapa-bordas,
+  .ty-print-mapa-bordas path {
+    fill: none;
+    stroke: var(--ty-print-tinta-2);
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .ty-print-mapa-contorno,
+  .ty-print-mapa-contorno path {
+    fill: none;
+    stroke: var(--ty-print-tinta);
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .ty-print-mapa-destaque path,
+  .ty-print-mapa-destaque circle,
+  .ty-print-mapa-destaque line {
+    fill: none;
+    stroke: var(--ty-print-destaque);
+  }
+
+  .ty-print-mapa-amostra {
+    stroke: var(--ty-print-linha);
+    stroke-width: 0.3;
+  }
+
   .ty-print-mapa svg text {
     font-family: var(--ty-print-fonte-rotulo);
     font-size: 2.6px;
@@ -156,6 +189,16 @@
     paint-order: stroke;
     stroke: var(--ty-print-papel);
     stroke-width: 0.35;
+  }
+
+  .ty-print-mapa svg .ty-print-mapa-rotulo {
+    font-size: 2.1px;
+  }
+
+  .ty-print-mapa svg .ty-print-mapa-titulo-celula {
+    font-size: 2.5px;
+    font-weight: 700;
+    stroke: none;
   }
 
   /* The range frame is only for figure 'amplitude' (Tufte): no grid, the axis spans the data. */

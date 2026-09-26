@@ -221,6 +221,10 @@
     color: var(--ty-print-tinta-2);
   }
 
+  .ty-print-assinatura[data-fundo='escuro'] .ty-print-assinatura-texto {
+    color: var(--ty-print-papel);
+  }
+
   @media print {
     .ty-print-dupla {
       display: contents;

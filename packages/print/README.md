@@ -4,7 +4,7 @@ Static React components for data books (React 18.3 or 19): spreads of two
 170 × 240 mm pages, lettered dashboard panels, the method chart, proof-state
 marks, the number trace, the source line with the lakebrasil seal, the
 lakebrasil and Datatech marks, cover, part opening, reading guide, timeline and
-schematic map, plus page ornaments (`Ornamento`) for the styles that have them. Every component renders on the server
+the real map of Brazil (IBGE 2022 municipal mesh, Albers), plus page ornaments (`Ornamento`) for the styles that have them. Every component renders on the server
 (`renderToStaticMarkup`) with no `window` or `document`, and the output is
 deterministic, so the same content gives the same PDF and EPUB bytes. Styles
 come from the book-style presets of `@datatechsolutions/tympan-tokens`
@@ -71,7 +71,7 @@ component would not read. `ref` in content (Rastro) maps to `referencia`.
 | `Veredito`, `Testes`, `MarcaProva`, `NaoDaParaAfirmar`, `QuandoODadoChegar` | verdict, tests, proof-state mark (word always printed; shape `pilula`, `carimbo`, `circulo`, `sublinhado`, `barra`, `etiqueta`) |
 | `Rastro`, `Fonte`, `SeloLakebrasil` | number trace; source line with the "Dados lakebrasil · lake AAAA-MM-DD" seal |
 | `LogoLakebrasil`, `LogoDatatech` | the official marks (outlined text); colour by default, mono in P&B and one-ink styles |
-| `Capa`, `AberturaParte`, `ComoLer`, `LinhaDoTempo`, `Mapa` | cover, part opening, reading guide, timeline of laws, schematic tile map |
+| `Capa`, `AberturaParte`, `ComoLer`, `LinhaDoTempo`, `Mapa` | cover, part opening, reading guide, timeline of laws, choropleth map of Brazil by UF or municipality (IBGE 2022 mesh, Albers equal-area conic; breaks or quantiles; highlights by code or "Nome/UF"; `recorte` by region or UFs; `multiplos` for small multiples with one legend; `altura` caps the height; flat colour, P&B hatches or dot screens by renderer, a 'sem dado' texture) |
 | `DesenhoPublicado`, `NaSuaCidade`, `ManchetaIlustrativa`, `ProximoCapitulo`, `Ficha` | pre-registered design, "in your city" card, illustrative headline, next chapter, term list |
 
 Positions and lengths in charts come from the data through linear scales in

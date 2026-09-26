@@ -57,9 +57,14 @@
   },
   "dependencies": {
     "@datatechsolutions/tympan-tokens": "0.1.0",
-    "roughjs": "4.6.6"
+    "d3-geo": "3.1.1",
+    "roughjs": "4.6.6",
+    "topojson-client": "3.1.0"
   },
   "devDependencies": {
+    "@types/d3-geo": "^3.1.1",
+    "@types/topojson-client": "^3.1.5",
+    "@types/topojson-specification": "^1.0.5",
     "axe-core": "^4.13.0",
     "puppeteer-core": "^25.12.0"
   }

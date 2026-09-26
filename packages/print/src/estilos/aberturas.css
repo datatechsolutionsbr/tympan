@@ -338,11 +338,13 @@
     display: block;
     inline-size: 100%;
     block-size: auto;
+    margin-inline: auto;
   }
 
   .ty-print-mapa-legenda {
     display: grid;
-    gap: 0.6mm;
+    grid-template-columns: repeat(auto-fill, minmax(34mm, 1fr));
+    gap: 0.6mm 2mm;
     font: 400 6.4pt/1.3 var(--ty-print-fonte-rotulo);
   }
 

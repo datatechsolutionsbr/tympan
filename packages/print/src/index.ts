@@ -46,14 +46,15 @@ export {
   AberturaParte,
   ComoLer,
   LinhaDoTempo,
-  Mapa,
   type CapaProps,
   type AberturaParteProps,
   type ComoLerProps,
   type LinhaDoTempoProps,
   type StatusLei,
-  type MapaProps,
 } from './paineis/Aberturas.tsx'
+export { Mapa, type MapaProps } from './mapa/Mapa.tsx'
+export { ALBERS_BRASIL, REGIOES, projecaoBrasil, municipios, ufs, ufsDoRecorte, type NivelMapa, type Recorte, type Regiao } from './mapa/malha.ts'
+export { quantis, classeDe, rotulosLimites } from './mapa/classes.ts'
 export { LogoLakebrasil, SeloLakebrasil, type LogoLakebrasilProps, type SeloLakebrasilProps, type VarianteLogo } from './marca/LogoLakebrasil.tsx'
 export { LogoDatatech, tintasDoEstilo, type LogoDatatechProps, type VarianteDatatech } from './marca/LogoDatatech.tsx'
 export { GraficoMetodo, type GraficoMetodoProps } from './grafico/GraficoMetodo.tsx'

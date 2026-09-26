@@ -11,7 +11,8 @@ import { LivroPrint } from './livro/LivroPrint.tsx'
 import { Pagina } from './livro/Pagina.tsx'
 import { LogoDatatech } from './marca/LogoDatatech.tsx'
 import { LogoLakebrasil } from './marca/LogoLakebrasil.tsx'
-import { AberturaParte, Capa, ComoLer, LinhaDoTempo, Mapa } from './paineis/Aberturas.tsx'
+import { Mapa } from './mapa/Mapa.tsx'
+import { AberturaParte, Capa, ComoLer, LinhaDoTempo } from './paineis/Aberturas.tsx'
 import { MarcaProva } from './paineis/MarcaProva.tsx'
 import {
   DesenhoPublicado,
@@ -132,7 +133,13 @@ export const COMPONENTES: Record<string, Registro> = {
     props: ['face', 'eyebrow', 'titulo', 'subtitulo', 'autora', 'chamada', 'paragrafos', 'destaque', 'cortes', 'legendaGrafismo', 'selo', 'isbn', 'editora', 'className'],
   },
   ComoLer: { componente: ComoLer, props: ['secao', 'titulo', 'letras', 'estados', 'itens', 'regra', 'className'] },
-  Mapa: { componente: Mapa, props: ['titulo', 'alt', 'exemplo', 'legenda', 'comoLer', 'naoMostra', 'sangria', 'className'] },
+  Mapa: {
+    componente: Mapa,
+    props: [
+      'titulo', 'alt', 'nivel', 'valores', 'classes', 'limites', 'unidade', 'escala', 'destaques', 'recorte', 'exemplo', 'legenda', 'semDado',
+      'rotulos', 'comoLer', 'naoMostra', 'tabela', 'renderizador', 'largura', 'altura', 'multiplos', 'colunas', 'sangria', 'className',
+    ],
+  },
   Testes: { componente: Testes, props: ['titulo', 'itens', 'className'] },
   DesenhoPublicado: { componente: DesenhoPublicado, props: ['titulo', 'itens', 'className'] },
   NaSuaCidade: { componente: NaSuaCidade, props: ['titulo', 'campos', 'nota', 'url', 'versaoLake', 'className'] },
