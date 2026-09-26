@@ -21,8 +21,8 @@ function hasContent(r: Loose): boolean {
 function chartIssues(charts: unknown[]): ReportIssue[] {
   const out: ReportIssue[] = []
   charts.forEach((chart, index) => {
-    const series = isObject(chart) ? chart.series : undefined
-    if (!Array.isArray(series) || series.length === 0) out.push({ code: 'chartSeriesMissing', index })
+    const layers = isObject(chart) ? chart.layers : undefined
+    if (!Array.isArray(layers) || layers.length === 0) out.push({ code: 'chartLayersMissing', index })
   })
   return out
 }

@@ -18,20 +18,20 @@ import { EmptyState } from '../empty-state/EmptyState'
 import { SegmentedControl } from '../segmented-control/SegmentedControl'
 import { linear, niceTicks, segments, visibleLabelIndices } from './chartMath'
 import { toPlot } from './plot'
-import type { ChartSpec, ChartView, Glyph, Plot, Track } from './types'
+import type { ChartFace, ChartFigure, Glyph, Plot, Track } from './types'
 
-export type { ChartKind, ChartRow, ChartSeries, ChartSpec, ChartView } from './types'
+export type { ChartFace, ChartFigure, ChartForm, ChartLayer, ChartNote, ChartRecord } from './types'
 
 export interface ChartProps {
-  spec: ChartSpec
-  view?: ChartView
-  defaultView?: ChartView
-  onViewChange?: (view: ChartView) => void
+  figure: ChartFigure
+  face?: ChartFace
+  defaultFace?: ChartFace
+  onFaceChange?: (face: ChartFace) => void
   /** Width-to-height ratio of the plot; the chart always fills its container width. */
   aspect?: number
   /** Keyboard and pointer reading of points (default true). Static charts are one image. */
   interactive?: boolean
-  /** Hide the chart/table switch (the table stays reachable through `view`). */
+  /** Hide the chart/table switch (the table stays reachable through `face`). */
   hideViewSwitch?: boolean
   className?: string
 }
@@ -292,10 +292,10 @@ export function Chart(props: ChartProps) {
   const rtl = direction === 'rtl'
   const base = useId()
   const live = props.interactive ?? true
-  const plot = useMemo(() => toPlot(props.spec), [props.spec])
+  const plot = useMemo(() => toPlot(props.figure), [props.figure])
   const frame = useMemo(() => frameFor(plot, props.aspect ?? 16 / 9, rtl), [plot, props.aspect, rtl])
-  const [ownView, setOwnView] = useState<ChartView>(props.defaultView ?? 'chart')
-  const view = props.view ?? ownView
+  const [ownFace, setOwnFace] = useState<ChartFace>(props.defaultFace ?? 'drawing')
+  const view = props.face ?? ownFace
   const [cursor, dispatch] = useReducer(steer, null)
   const canvas = useRef<SVGSVGElement>(null)
 
@@ -319,8 +319,8 @@ export function Chart(props: ChartProps) {
   })()
 
   const chooseView = (next: string) => {
-    if (props.view === undefined) setOwnView(next as ChartView)
-    props.onViewChange?.(next as ChartView)
+    if (props.face === undefined) setOwnFace(next as ChartFace)
+    props.onFaceChange?.(next as ChartFace)
   }
 
   const onKey = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -354,7 +354,7 @@ export function Chart(props: ChartProps) {
         preserveAspectRatio="xMidYMid meet"
         direction={rtl ? 'rtl' : 'ltr'}
         role={live ? undefined : 'img'}
-        aria-label={live ? undefined : props.spec.title}
+        aria-label={live ? undefined : props.figure.heading}
         aria-hidden={live ? true : undefined}
         focusable="false"
         {...(live ? { onPointerMove: aim, onPointerDown: aim, onPointerLeave: () => dispatch({ type: 'set', to: null }) } : {})}
@@ -396,7 +396,7 @@ export function Chart(props: ChartProps) {
           </div>
         ) : null}
         <span id={ids.hint} className="fk-visually-hidden">
-          {copy.plotHint(props.spec.title)}
+          {copy.plotHint(props.figure.heading)}
         </span>
       </div>
     )
@@ -405,12 +405,12 @@ export function Chart(props: ChartProps) {
   const body: ReactNode = blank ? (
     <EmptyState reason="custom" framing="inline" title={copy.noData} description={copy.noDataHint} headingLevel={4} />
   ) : view === 'table' ? (
-    <TableView plot={plot} caption={props.spec.title} say={say} copy={copy} />
+    <TableView plot={plot} caption={props.figure.heading} say={say} copy={copy} />
   ) : (
     plotArea()
   )
 
-  const { title, subtitle, finding } = props.spec
+  const { heading: title, aside: subtitle, reading: finding } = props.figure
   return (
     <figure className={cx('fk-chart', props.className)} aria-labelledby={ids.title} data-view={view} data-kind={plot.kind} data-direction={direction}>
       <figcaption className="fk-chart__caption">
@@ -426,7 +426,7 @@ export function Chart(props: ChartProps) {
             size="compact"
             label={copy.viewSwitch}
             options={[
-              { value: 'chart', label: copy.chartView },
+              { value: 'drawing', label: copy.chartView },
               { value: 'table', label: copy.tableView },
             ]}
             value={view}
@@ -434,7 +434,7 @@ export function Chart(props: ChartProps) {
           />
         </div>
       )}
-      {!blank && view === 'chart' ? <Key plot={plot} name={copy.legend} /> : null}
+      {!blank && view === 'drawing' ? <Key plot={plot} name={copy.legend} /> : null}
       {body}
       <div className="fk-visually-hidden" role="status" aria-live="polite" aria-atomic="true">
         {readoutText}

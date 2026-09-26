@@ -11,37 +11,37 @@ import {
   createRegionThemeRegistry,
   tintStyle,
   toneNames,
-  type ChartSpec,
+  type ChartFigure,
   type OpenRunStream,
   type Report,
   type RunEvent,
 } from '../../../src'
 import { Section } from '../Section'
 
-const stages: ChartSpec = {
-  type: 'line',
-  title: 'Cases by stage',
-  finding: 'Stages 3 and 4 add up to 37 of the 94 cases.',
-  xAxis: { key: 'x', label: 'Year' },
-  yAxis: { label: 'Cases', unit: 'cases' },
-  series: [{ name: 'Stage 3' }, { name: 'Stage 4' }, { name: 'Projection', dashed: true }],
-  data: [
+const stages: ChartFigure = {
+  form: 'trend',
+  heading: 'Cases by stage',
+  reading: 'Stages 3 and 4 add up to 37 of the 94 cases.',
+  across: { field: 'x', caption: 'Year' },
+  up: { caption: 'Cases', unit: 'cases' },
+  layers: [{ field: 'Stage 3' }, { field: 'Stage 4' }, { field: 'Projection', projected: true }],
+  records: [
     { x: '2022', 'Stage 3': 4, 'Stage 4': 1, Projection: 'n/a' },
     { x: '2023', 'Stage 3': 9, 'Stage 4': 6, Projection: 'n/a' },
     { x: '2024', 'Stage 3': 14, 'Stage 4': 12, Projection: 12 },
     { x: '2025', 'Stage 3': 20, 'Stage 4': 17, Projection: 19 },
     { x: '2026', 'Stage 3': 'n/a', 'Stage 4': 'n/a', Projection: 25 },
   ],
-  annotations: [{ x: '2024', label: 'Rule v2' }],
+  notes: [{ at: '2024', text: 'Rule v2' }],
 }
 
-const bars: ChartSpec = {
-  type: 'bar',
-  title: 'Capability by region',
-  xAxis: { key: 'x' },
-  yAxis: { unit: 'cases' },
-  series: [{ name: 'Informs' }, { name: 'Transacts' }],
-  data: [
+const bars: ChartFigure = {
+  form: 'columns',
+  heading: 'Capability by region',
+  across: { field: 'x' },
+  up: { unit: 'cases' },
+  layers: [{ field: 'Informs' }, { field: 'Transacts' }],
+  records: [
     { x: 'Americas', Informs: 12, Transacts: 7 },
     { x: 'Europe', Informs: 18, Transacts: 9 },
     { x: 'Asia', Informs: 15, Transacts: 11 },
@@ -49,13 +49,12 @@ const bars: ChartSpec = {
   ],
 }
 
-const histogram: ChartSpec = {
-  type: 'histogram',
-  title: 'Answers per claim',
-  xAxis: { key: 'x' },
-  yAxis: {},
-  series: [{ name: 'Claims' }],
-  data: ['0', '1', '2', '3', '4', '5', '6'].map((x, i) => ({ x, Claims: [3, 8, 14, 22, 17, 9, 4][i]! })),
+const histogram: ChartFigure = {
+  form: 'bins',
+  heading: 'Answers per claim',
+  across: { field: 'x' },
+  layers: [{ field: 'Claims' }],
+  records: ['0', '1', '2', '3', '4', '5', '6'].map((x, i) => ({ x, Claims: [3, 8, 14, 22, 17, 9, 4][i]! })),
 }
 
 const report: Report = {
@@ -140,10 +139,10 @@ export function ChartsGeoShowcase({ scope }: { scope: string }) {
   return (
     <div className="fk-gallery-showcase">
       <Section id={id('chart')} title="Chart (line, bar, histogram; table view)">
-        <Chart spec={stages} />
-        <Chart spec={bars} />
-        <Chart spec={histogram} defaultView="table" />
-        <Chart spec={{ ...bars, title: 'Empty chart', data: [] }} />
+        <Chart figure={stages} />
+        <Chart figure={bars} />
+        <Chart figure={histogram} defaultFace="table" />
+        <Chart figure={{ ...bars, heading: 'Empty chart', records: [] }} />
       </Section>
 
       <Section id={id('report')} title="ReportView">

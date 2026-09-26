@@ -1,55 +1,58 @@
 // Two vocabularies live here (spec: wave-2/chart.md).
 //
-// 1. The *input description* hosts and agents send. Its field names are the
-//    host contract fixed by the spec, so they are declared once, as small
-//    pieces composed into `ChartSpec`.
+// 1. The *figure* hosts and agents send (`ChartFigure`), with its own names;
+//    the mapping from the spec's names is in docs (chart.md, "Renamed in
+//    implementation").
 // 2. The *drawing model* (`Plot`) the component actually works on: plain
 //    numbers per track, resolved paint, placed pins and a resolved value span.
 //    Only `toPlot()` (plot.ts) crosses from one to the other.
 
 /* ---------------------------------------------------------------- input -- */
 
-/** Kinds that join the readings of a track with a path. */
-type PathKind = 'line' | 'area'
-/** Kinds that stand a block on the floor for every reading. */
-type BlockKind = 'bar' | 'histogram'
+/**
+ * Figure forms (spec names in brackets): `trend` [line], `band` [area],
+ * `columns` [bar], `bins` [histogram].
+ */
+export type ChartForm = 'trend' | 'band' | 'columns' | 'bins'
 
-export type ChartKind = PathKind | BlockKind
-
-/** One declared series: name, optional paint token, optional dashed stroke. */
-export interface ChartSeries {
-  name: string
-  /** A chart or categorical token name: `chart-3`, `categorical-5`. */
-  colorToken?: string
-  /** Estimates or projections. */
-  dashed?: boolean
+/** One measured layer. `field` is both its label and the record key read. */
+export interface ChartLayer {
+  field: string
+  /** Paint token name: `chart-3`, `categorical-5`. */
+  tone?: string
+  /** Estimates or projections: drawn with a dash pattern. */
+  projected?: boolean
 }
 
-/** One row: the category plus one cell per series name. */
-export type ChartRow = { x: string | number } & Record<string, string | number | null | undefined>
+/** One record: the category field plus one value per layer field. */
+export type ChartRecord = Record<string, string | number | null | undefined>
 
-type CaptionPart = {
-  title: string
-  subtitle?: string
-  /** Finding sentence under the title (design direction §5). */
-  finding?: string
+/** A labelled rule at one category. */
+export interface ChartNote {
+  at: string | number
+  text: string
 }
 
-type AxisPart = {
-  xAxis: { key: string; label?: string }
-  yAxis: { label?: string; unit?: string; domain?: [number, number] }
+/** The declarative figure a Chart draws (renamed from the spec's chart description). */
+export interface ChartFigure {
+  form: ChartForm
+  /** Visible name of the figure. */
+  heading: string
+  /** Secondary line under the heading. */
+  aside?: string
+  /** Reading sentence under the heading (design direction §5). */
+  reading?: string
+  /** The category dimension: which record field, and its caption. */
+  across: { field: string; caption?: string }
+  /** The value dimension: caption, unit and optional fixed bounds [low, high]. */
+  up?: { caption?: string; unit?: string; bounds?: [number, number] }
+  layers: ChartLayer[]
+  records: ChartRecord[]
+  notes?: ChartNote[]
 }
 
-type ContentPart = {
-  series: ChartSeries[]
-  data: ChartRow[]
-  annotations?: Array<{ x: string | number; label: string }>
-}
-
-/** The declarative description a Chart renders. */
-export type ChartSpec = { type: ChartKind } & CaptionPart & AxisPart & ContentPart
-
-export type ChartView = 'chart' | 'table'
+/** Which face of the figure is shown. */
+export type ChartFace = 'drawing' | 'table'
 
 /* -------------------------------------------------------- drawing model -- */
 
@@ -80,7 +83,7 @@ export interface Pin {
 }
 
 export interface Plot {
-  kind: ChartKind
+  kind: ChartForm
   stroke: Stroke
   /** Category labels, one per row, in data order. */
   stops: string[]

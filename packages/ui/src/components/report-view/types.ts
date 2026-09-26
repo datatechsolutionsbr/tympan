@@ -1,7 +1,7 @@
 // The report document ReportView renders (spec: wave-2/report-view.md).
 // Top-level keys are the host contract named by the spec; every block is
 // declared on its own and the document is their composition.
-import type { ChartSpec } from '../chart/types'
+import type { ChartFigure } from '../chart/types'
 
 /* ---------------------------------------------------------- vocabularies -- */
 
@@ -46,7 +46,7 @@ type Heading = { title: string; subtitle?: string }
 
 type Blocks = {
   kpis?: ReportKpi[]
-  charts?: ChartSpec[]
+  charts?: ChartFigure[]
   table?: ReportTable
   recommendation?: string
   sections?: ReportSection[]
@@ -65,7 +65,7 @@ export type Report = Heading & Blocks & Presentation
 /** Extra facts per issue code; `validateReport` returns one entry per problem. */
 type IssueFacts = {
   empty: object
-  chartSeriesMissing: { index: number }
+  chartLayersMissing: { index: number }
   tableColumnMissing: { key: string }
 }
 

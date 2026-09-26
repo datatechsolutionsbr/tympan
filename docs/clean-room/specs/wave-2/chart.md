@@ -59,3 +59,21 @@ Renders a declarative chart description (produced by analyses and agents) as an 
 ## Open questions
 - The fork offers neither keyboard access to points nor a table view; both are new requirements.
 - The fork substitutes zero for non-numeric values; this spec treats them as missing.
+
+## Renamed in implementation
+
+The library (a new package with no consumers yet) gives the input description
+its own vocabulary. Behaviour is unchanged.
+
+| Spec name | Implementation name |
+|---|---|
+| chart description (`ChartSpec`) | `ChartFigure` |
+| `type`: line, area, bar, histogram | `form`: `trend`, `band`, `columns`, `bins` |
+| `title`, `subtitle`, `finding` | `heading`, `aside`, `reading` |
+| `xAxis { key, label }` | `across { field, caption }` |
+| `yAxis { label, unit, domain }` | `up { caption, unit, bounds }` (optional) |
+| `series [{ name, colorToken, dashed }]` | `layers [{ field, tone, projected }]` |
+| `data` rows (category also readable as `x`) | `records` (category read only from `across.field`) |
+| `annotations [{ x, label }]` | `notes [{ at, text }]` |
+| Chart props `spec`, `view`/`defaultView`/`onViewChange` (`chart` \| `table`) | `figure`, `face`/`defaultFace`/`onFaceChange` (`drawing` \| `table`) |
+| types `ChartKind`, `ChartSeries`, `ChartRow`, `ChartView` | `ChartForm`, `ChartLayer`, `ChartRecord`, `ChartFace` (plus `ChartNote`) |

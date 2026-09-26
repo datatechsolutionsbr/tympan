@@ -1,5 +1,5 @@
 // Public exports of the "charts-geo" group (re-exported by src/index.ts).
-export { Chart, type ChartKind, type ChartProps, type ChartRow, type ChartSeries, type ChartSpec, type ChartView } from '../components/chart/Chart'
+export { Chart, type ChartFace, type ChartFigure, type ChartForm, type ChartLayer, type ChartNote, type ChartProps, type ChartRecord } from '../components/chart/Chart'
 export {
   ReportView,
   validateReport,

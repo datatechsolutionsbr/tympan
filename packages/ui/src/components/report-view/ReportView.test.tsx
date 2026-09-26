@@ -14,7 +14,7 @@ const full: Report = {
     { label: 'Stage 4', value: 17, unit: 'cases' },
   ],
   charts: [
-    { type: 'bar', title: 'Cases per stage', xAxis: { key: 'x' }, yAxis: {}, series: [{ name: 'Cases' }], data: [{ x: '1', Cases: 18 }, { x: '2', Cases: 20 }] },
+    { form: 'columns', heading: 'Cases per stage', across: { field: 'x' }, layers: [{ field: 'Cases' }], records: [{ x: '1', Cases: 18 }, { x: '2', Cases: 20 }] },
   ],
   table: {
     title: 'Budget by country',
@@ -49,8 +49,8 @@ describe('validateReport', () => {
     expect(validateReport({ title: 'x' })).toEqual([{ code: 'empty' }])
   })
 
-  it('reports a chart whose series is not a list, without throwing', () => {
-    expect(validateReport({ title: 'x', charts: [{ series: [{ name: 'a' }] }, { series: 'nope' }] })).toEqual([{ code: 'chartSeriesMissing', index: 1 }])
+  it('reports a chart whose layers are not a list, without throwing', () => {
+    expect(validateReport({ title: 'x', charts: [{ layers: [{ field: 'a' }] }, { layers: 'nope' }] })).toEqual([{ code: 'chartLayersMissing', index: 1 }])
   })
 
   it('reports an undeclared column key once', () => {
@@ -131,7 +131,7 @@ describe('ReportView', () => {
       <>
         {(['light', 'dark'] as const).map((s) => (
           <ThemeScope key={s} scheme={s}>
-            <ReportView report={{ ...full, title: `Report ${s}`, charts: [{ ...full.charts![0]!, title: `Chart ${s}` }] }} currency="BRL" />
+            <ReportView report={{ ...full, title: `Report ${s}`, charts: [{ ...full.charts![0]!, heading: `Chart ${s}` }] }} currency="BRL" />
           </ThemeScope>
         ))}
       </>,

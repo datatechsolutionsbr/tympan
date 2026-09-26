@@ -155,7 +155,7 @@ export function ReportView(props: ReportViewProps) {
       {charts.length ? (
         <div className="fk-report__charts">
           {charts.map((c, i) =>
-            Array.isArray(c.series) && c.series.length ? <Chart key={`${c.title}-${i}`} spec={c} /> : null,
+            Array.isArray(c.layers) && c.layers.length ? <Chart key={`${c.heading}-${i}`} figure={c} /> : null,
           )}
         </div>
       ) : null}

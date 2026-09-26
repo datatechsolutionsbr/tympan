@@ -68,3 +68,10 @@ The validator must tolerate arbitrary JSON (pasted by hand) without throwing.
 
 ## Open questions
 - The fork formats currency and numbers with a fixed English locale and has hard-coded Portuguese strings; this spec requires i18n.
+
+## Renamed in implementation
+
+Report `charts` entries follow the Chart renames (see `chart.md`: `ChartFigure`
+with `form`, `heading`, `across`, `up`, `layers`, `records`, `notes`). The
+validation issue for a chart without a list of layers is `chartLayersMissing`
+(the spec's "series missing").

@@ -3,15 +3,15 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { expectNoAxeViolations } from '../../../test/axe'
 import { inRtl } from '../../../test/rtl-b'
-import { Chart, type ChartSpec } from './Chart'
+import { Chart, type ChartFigure } from './Chart'
 
-const spec: ChartSpec = {
-  type: 'bar',
-  title: 'الحالات حسب السنة',
-  xAxis: { key: 'x' },
-  yAxis: { unit: 'حالة' },
-  series: [{ name: 'المرحلة ٣' }],
-  data: [
+const figure: ChartFigure = {
+  form: 'columns',
+  heading: 'الحالات حسب السنة',
+  across: { field: 'x' },
+  up: { unit: 'حالة' },
+  layers: [{ field: 'المرحلة ٣' }],
+  records: [
     { x: '2022', 'المرحلة ٣': 4 },
     { x: '2023', 'المرحلة ٣': 9 },
     { x: '2024', 'المرحلة ٣': 14 },
@@ -20,7 +20,7 @@ const spec: ChartSpec = {
 
 describe('Chart in right-to-left locales', () => {
   it('runs categories from the inline start (right) and puts the value axis on the right', () => {
-    const { container } = inRtl(<Chart spec={spec} />, 'ar-EG')
+    const { container } = inRtl(<Chart figure={figure} />, 'ar-EG')
     expect(container.querySelector('.fk-chart')).toHaveAttribute('data-direction', 'rtl')
     const bars = [...container.querySelectorAll<SVGRectElement>('.fk-chart__bar')].map((b) => Number(b.getAttribute('x')))
     expect(bars[0]).toBeGreaterThan(bars[1]!)
@@ -31,8 +31,8 @@ describe('Chart in right-to-left locales', () => {
   })
 
   it('moves to the next category with Left Arrow and passes axe', async () => {
-    const { container } = inRtl(<Chart spec={spec} />, 'ar-EG')
-    act(() => screen.getByRole('group', { name: spec.title }).focus())
+    const { container } = inRtl(<Chart figure={figure} />, 'ar-EG')
+    act(() => screen.getByRole('group', { name: figure.heading }).focus())
     await userEvent.keyboard('{ArrowLeft}')
     expect(screen.getByRole('status')).toHaveTextContent('2023')
     await userEvent.keyboard('{ArrowRight}')
