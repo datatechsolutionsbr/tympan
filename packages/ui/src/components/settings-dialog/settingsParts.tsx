@@ -1,138 +1,117 @@
-// Building blocks of SettingsDialog: one field, the copy action, the
-// password change form, a choice set and the profile picture line.
+// Controls of SettingsDialog, one per item type, plus the copy action and
+// the passphrase form.
 import { Copy } from 'lucide-react'
 import { useReducer, useState, type FormEvent, type ReactNode } from 'react'
 import { Label, Radio, RadioGroup, Text } from 'react-aria-components'
 import { useMessages } from '../../internal/provider'
 import { Avatar } from '../avatar/Avatar'
 import { Button } from '../button/Button'
+import { NativeSelect } from '../native-select/NativeSelect'
+import { Switch } from '../switch/Switch'
 import { TextArea } from '../text-area/TextArea'
 import { TextField } from '../text-field/TextField'
-import type { PasswordWording, PreferenceChoiceSet, ProfileSetup, SettingField, SettingFieldKind } from './settingsTypes'
+import type { EntryFormat, EntryItem, PassphraseItem, PickItem, SettingsItem } from './settingsModel'
 
-type Shared = {
-  label: string
-  hint?: string
-  value: string
-  onChange?: (value: string) => void
-  readOnly?: boolean
-  placeholder?: string
-  name: string
+type Wire = { label: string; hint?: string; value: string; onChange?: (v: string) => void; readOnly?: boolean; placeholder?: string; name: string }
+
+const BY_FORMAT: { [F in EntryFormat]: (w: Wire) => ReactNode } = {
+  plain: (w) => <TextField {...w} inputType="text" />,
+  mail: (w) => <TextField {...w} inputType="email" />,
+  link: (w) => <TextField {...w} inputType="url" />,
+  secret: (w) => <TextField {...w} mode="password" />,
+  paragraph: (w) => <TextArea {...w} rows={3} />,
 }
 
-/** The control for each field kind. */
-const CONTROL_BY_KIND: Record<SettingFieldKind, (shared: Shared) => ReactNode> = {
-  multiline: (s) => <TextArea {...s} rows={3} />,
-  password: (s) => <TextField {...s} mode="password" />,
-  text: (s) => <TextField {...s} inputType="text" />,
-  email: (s) => <TextField {...s} inputType="email" />,
-  url: (s) => <TextField {...s} inputType="url" />,
-}
-
-function CopyValue({ what, text }: { what: string; text: string }) {
+function Copier({ caption, text }: { caption: string; text: string }) {
   const words = useMessages().settingsDialog
-  const [confirmed, setConfirmed] = useState(false)
-  const onCopy = () => {
-    const clip = typeof navigator === 'undefined' ? undefined : navigator.clipboard
-    if (!clip) return setConfirmed(false)
-    clip.writeText(text).then(
-      () => setConfirmed(true),
-      () => setConfirmed(false),
-    )
+  const [said, setSaid] = useState('')
+  const run = async () => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setSaid(words.copied)
+    } catch {
+      setSaid('')
+    }
   }
   return (
     <>
-      <Button size="compact" iconOnly leadingIcon={<Copy />} accessibleLabel={words.copy(what)} onPress={onCopy} />
+      <Button size="compact" iconOnly leadingIcon={<Copy />} accessibleLabel={words.copy(caption)} onPress={() => void run()} />
       <span role="status" className="fk-visually-hidden">
-        {confirmed ? words.copied : ''}
+        {said}
       </span>
     </>
   )
 }
 
-export function SettingFieldRow({ field }: { field: SettingField }) {
-  const control = CONTROL_BY_KIND[field.kind]({
-    label: field.label,
-    hint: field.description,
-    value: field.value,
-    onChange: field.onChange,
-    readOnly: field.readOnly,
-    placeholder: field.placeholder,
-    name: field.key,
-  })
+function Entry({ item }: { item: EntryItem }) {
+  const draw = BY_FORMAT[item.format ?? 'plain']
   return (
-    <div className="fk-settings-dialog__field" data-copyable={field.copyable ? '' : undefined}>
-      <div className="fk-settings-dialog__field-control">{control}</div>
-      {field.copyable && <CopyValue what={field.label} text={field.value} />}
+    <div className="fk-settings-dialog__field" data-copyable={item.copy ? '' : undefined}>
+      <div className="fk-settings-dialog__field-control">
+        {draw({ label: item.caption, hint: item.help, value: item.text, onChange: item.onText, readOnly: item.locked, placeholder: item.example, name: item.id })}
+      </div>
+      {item.copy ? <Copier caption={item.caption} text={item.text} /> : null}
     </div>
   )
 }
 
-interface Secrets {
-  current: string
-  next: string
-  confirm: string
-  clash: boolean
-}
-type SecretEdit = { slot: 'current' | 'next' | 'confirm'; text: string } | { slot: 'clash' }
+type Slot = 'old' | 'fresh' | 'again'
+type Draft = Record<Slot, string> & { differ: boolean }
+type Change = [Slot, string] | 'differ'
 
-function secretsStep(state: Secrets, edit: SecretEdit): Secrets {
-  if (edit.slot === 'clash') return { ...state, clash: true }
-  // Editing the new password or its confirmation clears the mismatch notice.
-  return { ...state, [edit.slot]: edit.text, clash: edit.slot === 'current' ? state.clash : false }
-}
+const draftAfter = (draft: Draft, change: Change): Draft =>
+  change === 'differ'
+    ? { ...draft, differ: true }
+    : // Touching either new value clears the "different" notice.
+      { ...draft, [change[0]]: change[1], differ: change[0] === 'old' && draft.differ }
 
-export function PasswordChange({ wording, onSubmit }: { wording?: PasswordWording; onSubmit: (current: string, next: string, confirm: string) => void }) {
+function Passphrase({ item }: { item: PassphraseItem }) {
   const words = useMessages().settingsDialog
-  const [secrets, edit] = useReducer(secretsStep, { current: '', next: '', confirm: '', clash: false })
-  const title = {
-    current: wording?.current ?? words.currentPassword,
-    next: wording?.next ?? words.newPassword,
-    confirm: wording?.confirm ?? words.confirmPassword,
-    submit: wording?.submit ?? words.changePassword,
-  }
-  const submit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    if (secrets.next === secrets.confirm) onSubmit(secrets.current, secrets.next, secrets.confirm)
-    else edit({ slot: 'clash' })
-  }
-  const box = (slot: 'current' | 'next' | 'confirm', autoComplete: string, error?: string) => (
+  const [draft, apply] = useReducer(draftAfter, { old: '', fresh: '', again: '', differ: false })
+  const caption = (slot: Slot | 'save') =>
+    item.captions?.[slot] ?? { old: words.currentPassword, fresh: words.newPassword, again: words.confirmPassword, save: words.changePassword }[slot]
+  const box = (slot: Slot, autoComplete: string) => (
     <TextField
       mode="password"
-      label={title[slot]}
-      value={secrets[slot]}
-      onChange={(text) => edit({ slot, text })}
+      label={caption(slot)}
+      value={draft[slot]}
       autoComplete={autoComplete}
-      errorMessage={error}
+      onChange={(text) => apply([slot, text])}
+      errorMessage={slot === 'again' && draft.differ ? words.passwordMismatch : undefined}
     />
   )
+  const send = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (draft.fresh !== draft.again) return apply('differ')
+    item.onSave(draft.old, draft.fresh, draft.again)
+  }
   return (
-    <form noValidate className="fk-settings-dialog__password" onSubmit={submit}>
-      {box('current', 'current-password')}
-      {box('next', 'new-password')}
-      {box('confirm', 'new-password', secrets.clash ? words.passwordMismatch : undefined)}
+    <form noValidate className="fk-settings-dialog__password" onSubmit={send}>
+      {box('old', 'current-password')}
+      {box('fresh', 'new-password')}
+      {box('again', 'new-password')}
       <div>
-        <Button type="submit">{title.submit}</Button>
+        <Button type="submit">{caption('save')}</Button>
       </div>
     </form>
   )
 }
 
-export function ChoiceSet({ set, asCards }: { set: PreferenceChoiceSet; asCards: boolean }) {
+function Pick({ item }: { item: PickItem }) {
   return (
-    <RadioGroup className="fk-settings-dialog__choices" data-cards={asCards ? '' : undefined} value={set.value} onChange={set.onChange}>
-      <Label className="fk-settings-dialog__legend">{set.label}</Label>
+    <RadioGroup className="fk-settings-dialog__choices" data-cards={item.look === 'cards' ? '' : undefined} value={item.chosen} onChange={item.onPick}>
+      <Label className="fk-settings-dialog__legend">{item.caption}</Label>
       <div className="fk-settings-dialog__choice-grid">
-        {set.options.map((option) => (
-          <Radio key={option.value} value={option.value} className="fk-settings-dialog__choice">
+        {item.answers.map((answer) => (
+          <Radio key={answer.id} value={answer.id} className="fk-settings-dialog__choice">
             <span aria-hidden="true" className="fk-settings-dialog__choice-mark" />
             <span className="fk-settings-dialog__choice-text">
-              <span className="fk-settings-dialog__choice-label">{option.label}</span>
-              {option.description && (
+              <span className="fk-settings-dialog__choice-label">{answer.caption}</span>
+              {answer.help ? (
                 <Text slot="description" className="fk-settings-dialog__choice-hint">
-                  {option.description}
+                  {answer.help}
                 </Text>
-              )}
+              ) : null}
             </span>
           </Radio>
         ))}
@@ -141,12 +120,30 @@ export function ChoiceSet({ set, asCards }: { set: PreferenceChoiceSet; asCards:
   )
 }
 
-export function PictureLine({ setup }: { setup: ProfileSetup }) {
+function Portrait({ src, initials, onReplace }: { src?: string; initials: string; onReplace?: () => void }) {
   const words = useMessages().settingsDialog
   return (
     <div className="fk-settings-dialog__picture">
-      <Avatar decorative size="large" src={setup.pictureUrl} fallbackText={setup.fallbackText} />
-      {setup.onChangePicture && <Button onPress={setup.onChangePicture}>{words.changePicture}</Button>}
+      <Avatar decorative size="large" src={src} fallbackText={initials} />
+      {onReplace ? <Button onPress={onReplace}>{words.changePicture}</Button> : null}
     </div>
   )
+}
+
+/** Draws one item by its type. */
+export function ItemControl({ item }: { item: SettingsItem }) {
+  switch (item.type) {
+    case 'entry':
+      return <Entry item={item} />
+    case 'toggle':
+      return <Switch label={item.caption} description={item.help} isSelected={item.on} onChange={item.onFlip} />
+    case 'pick':
+      return <Pick item={item} />
+    case 'language':
+      return <NativeSelect label={item.caption} value={item.chosen} options={item.answers.map((a) => ({ value: a.id, label: a.caption }))} onChange={item.onPick} />
+    case 'portrait':
+      return <Portrait src={item.src} initials={item.initials} onReplace={item.onReplace} />
+    case 'passphrase':
+      return <Passphrase item={item} />
+  }
 }

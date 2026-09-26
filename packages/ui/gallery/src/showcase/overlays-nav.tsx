@@ -193,31 +193,42 @@ export function OverlaysNavShowcase({ scope }: { scope: string }) {
           open={settings}
           onClose={() => setSettings(false)}
           title="Settings"
-          sections={[
+          outline={[
             { id: 'profile', label: 'Profile', group: 'Account' },
             { id: 'preferences', label: 'Preferences', group: 'Account' },
             { id: 'workspace', label: 'Workspace', group: 'Project' },
           ]}
-          profile={{ title: 'Profile', fallbackText: 'AS', onChangePicture: () => {}, fields: [{ key: 'name', label: 'Name', value: 'Ana Souza', kind: 'text' }], password: { onSubmit: () => {} } }}
-          workspace={{ title: 'Workspace', fields: [{ key: 'id', label: 'Workspace id', value: 'ws-9f2c', kind: 'text', readOnly: true, copyable: true }] }}
-          preferences={{
-            title: 'Preferences',
-            switches: [{ key: 'haptics', label: 'Haptics', value: true, onChange: () => {} }],
-            choiceGroups: [
-              {
-                key: 'density',
-                label: 'Table density',
-                value: 'default',
-                onChange: () => {},
-                options: [
-                  { value: 'compact', label: 'Compact', description: '36 px rows' },
-                  { value: 'default', label: 'Default', description: '44 px rows' },
-                  { value: 'comfortable', label: 'Comfortable', description: '52 px rows' },
-                ],
-              },
-            ],
+          content={{
+            profile: {
+              heading: 'Profile',
+              items: [
+                { type: 'portrait', id: 'face', initials: 'AS', onReplace: () => {} },
+                { type: 'entry', id: 'name', caption: 'Name', text: 'Ana Souza' },
+                { type: 'passphrase', id: 'pass', onSave: () => {} },
+              ],
+            },
+            workspace: { heading: 'Workspace', items: [{ type: 'entry', id: 'id', caption: 'Workspace id', text: 'ws-9f2c', locked: true, copy: true }] },
+            preferences: {
+              heading: 'Preferences',
+              items: [
+                { type: 'toggle', id: 'haptics', caption: 'Haptics', on: true, onFlip: () => {} },
+                {
+                  type: 'pick',
+                  id: 'density',
+                  caption: 'Table density',
+                  look: 'cards',
+                  chosen: 'default',
+                  onPick: () => {},
+                  answers: [
+                    { id: 'compact', caption: 'Compact', help: '36 px rows' },
+                    { id: 'default', caption: 'Default', help: '44 px rows' },
+                    { id: 'comfortable', caption: 'Comfortable', help: '52 px rows' },
+                  ],
+                },
+              ],
+            },
           }}
-          signOut={{ label: 'Sign out', icon: <LogOut />, onPress: () => setSettings(false) }}
+          exit={{ label: 'Sign out', icon: <LogOut />, onPress: () => setSettings(false) }}
         />
         <CompactConfirm open={compact} title="Sign out?" message="You will need to sign in again." sourceLabel="Fakhir" onConfirm={() => setCompact(false)} onCancel={() => setCompact(false)} tone="neutral" />
       </Section>

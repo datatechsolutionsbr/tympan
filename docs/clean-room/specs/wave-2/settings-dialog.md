@@ -57,3 +57,23 @@ As SectionedModal, plus: field edited, copy done ("Copied" announced), password 
 
 ## Open questions
 - The fork passes the password values to the host without checking the confirmation; the spec adds the local mismatch check.
+
+## Renamed in implementation (2026-09-26)
+The library is new and has no consumers, so the configuration was redesigned
+around typed items (behaviour and acceptance tests unchanged):
+
+| Spec name | Implementation |
+|---|---|
+| `sections` | `outline` (`SettingsOutlineEntry[]`) |
+| `initialSection` | `startAt` |
+| `identity` | `whoCard` |
+| `profile`, `workspace`, `preferences` | `content: Record<pageId, SettingsPage>`; a page is `{ heading; lead?; items: SettingsItem[] }` and works for any page id |
+| `SettingField` (`kind` text/email/password/url/multiline) | `EntryItem` (`type: 'entry'`, `format` plain/mail/secret/link/paragraph; `caption`, `help`, `text`, `onText`, `locked`, `copy`, `example`) |
+| `switches` | `ToggleItem` (`type: 'toggle'`, `on`, `onFlip`) |
+| `radioGroups`, `choiceGroups` | `PickItem` (`type: 'pick'`, `look: 'list' \| 'cards'`, `chosen`, `answers`, `onPick`) |
+| `locale` | `LanguageItem` (`type: 'language'`) |
+| picture / `onChangePicture` / `fallbackText` | `PortraitItem` (`type: 'portrait'`, `src`, `initials`, `onReplace`) |
+| `password.onSubmit(current, next, confirm)` | `PassphraseItem` (`type: 'passphrase'`, `onSave(old, fresh, again)`, `captions`) |
+| `renderSection`, `placeholderText` | `renderPage`, `emptyText` |
+| `accessDenied { title; description; icon }` | `locked { heading; reason; glyph }` |
+| `signOut` | `exit` |
