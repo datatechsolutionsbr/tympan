@@ -2,6 +2,8 @@ import { act, fireEvent, render, renderHook, screen } from '@testing-library/rea
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
+import { resetUserGestureForTests } from '../../internal/haptics'
+import { HapticsPreference } from '../../utilities/haptics/haptics'
 import { ToastProvider, useToast, type ToastApi, type ToastProviderProps } from './Toast'
 
 import * as rtlDom from '@testing-library/react'
@@ -204,6 +206,52 @@ describe('Toast', () => {
       api().error('Failed', { action: { label: 'Retry', onPress: () => {} } })
     })
     await expectNoAxeViolations(container.ownerDocument.body)
+  })
+})
+
+describe('Toast haptics', () => {
+  let vibrate: ReturnType<typeof vi.fn>
+  const press = () => document.body.dispatchEvent(new Event('pointerdown', { bubbles: true }))
+  beforeEach(() => {
+    resetUserGestureForTests()
+    vibrate = vi.fn(() => true)
+    Object.defineProperty(navigator, 'vibrate', { configurable: true, value: vibrate })
+  })
+  afterEach(() => {
+    Reflect.deleteProperty(navigator, 'vibrate')
+    resetUserGestureForTests()
+  })
+
+  it('never vibrates for a toast shown before any user gesture', () => {
+    const { api } = setup()
+    act(() => void api().show({ title: 'Saved', tone: 'success' }))
+    expect(screen.getByText('Saved')).toBeInTheDocument()
+    expect(vibrate).not.toHaveBeenCalled()
+  })
+
+  it('vibrates lightly after a user gesture', () => {
+    const { api } = setup()
+    press()
+    act(() => void api().show({ title: 'Saved', tone: 'success' }))
+    expect(vibrate).toHaveBeenCalledTimes(1)
+  })
+
+  it('honours the haptics preference', () => {
+    let api!: ToastApi
+    function Grab() {
+      api = useToast()
+      return null
+    }
+    render(
+      <HapticsPreference enabled={false}>
+        <ToastProvider>
+          <Grab />
+        </ToastProvider>
+      </HapticsPreference>,
+    )
+    press()
+    act(() => void api.show({ title: 'Saved', tone: 'success' }))
+    expect(vibrate).not.toHaveBeenCalled()
   })
 })
 

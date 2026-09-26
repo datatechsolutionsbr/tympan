@@ -1,6 +1,7 @@
 // Haptics (spec: wave-2/haptics.md). Named vibration patterns through the
 // Vibration API; silent (returns false) wherever it is missing.
-import { createContext, useCallback, useContext, useMemo, type ReactNode } from 'react'
+import { useCallback, useContext, useMemo, type ReactNode } from 'react'
+import { gatedVibrate, HapticsEnabledContext } from '../../internal/haptics'
 import { prefersReducedMotion } from '../../internal/media'
 
 export type HapticPattern = 'tap' | 'impact' | 'heavy' | 'success' | 'warning' | 'error' | 'selection'
@@ -38,7 +39,8 @@ export function hapticsSupported(): boolean {
  */
 export function playHaptic(pattern: HapticPattern = 'tap', options: { enabled?: boolean } = {}): boolean {
   if (options.enabled === false) return false
-  const run = vibrator()
+  // Nothing vibrates before the page has had a user gesture.
+  const run = gatedVibrate()
   if (!run) return false
   if (prefersReducedMotion() && !OUTCOMES.has(pattern)) return false
   try {
@@ -51,17 +53,15 @@ export function playHaptic(pattern: HapticPattern = 'tap', options: { enabled?: 
 /** Stops a running vibration. */
 export function cancelHaptic(): void {
   try {
-    vibrator()?.(0)
+    gatedVibrate()?.(0)
   } catch {
     /* ignore */
   }
 }
 
-const HapticsEnabled = createContext(true)
-
 /** Host switch: pass the person's "haptics" preference. */
 export function HapticsPreference({ enabled, children }: { enabled: boolean; children: ReactNode }) {
-  return <HapticsEnabled.Provider value={enabled}>{children}</HapticsEnabled.Provider>
+  return <HapticsEnabledContext.Provider value={enabled}>{children}</HapticsEnabledContext.Provider>
 }
 
 export interface HapticsApi {
@@ -72,7 +72,7 @@ export interface HapticsApi {
 
 /** Hook form: honours the nearest `HapticsPreference` (or an explicit `enabled`). */
 export function useHaptics(enabled?: boolean): HapticsApi {
-  const fromHost = useContext(HapticsEnabled)
+  const fromHost = useContext(HapticsEnabledContext)
   const on = enabled ?? fromHost
   const play = useCallback((pattern?: HapticPattern) => playHaptic(pattern, { enabled: on }), [on])
   return useMemo(() => ({ play, cancel: cancelHaptic, isSupported: hapticsSupported() }), [play])

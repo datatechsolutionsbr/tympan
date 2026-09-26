@@ -1,5 +1,6 @@
 import { renderHook } from '@testing-library/react'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { resetUserGestureForTests } from '../../internal/haptics'
 import { setMedia } from '../../../test/media'
 import { cancelHaptic, HapticsPreference, playHaptic, useHaptics } from './haptics'
 
@@ -9,8 +10,17 @@ function installVibrate(impl?: (p: unknown) => boolean) {
   return fn
 }
 
+/** A first press on the page (opens the user-gesture gate). */
+function press() {
+  document.body.dispatchEvent(new Event('pointerdown', { bubbles: true }))
+}
+
+beforeEach(() => press())
+
 afterEach(() => {
   Reflect.deleteProperty(navigator, 'vibrate')
+  Reflect.deleteProperty(navigator, 'userActivation')
+  resetUserGestureForTests()
 })
 
 describe('Haptics', () => {
@@ -55,6 +65,28 @@ describe('Haptics', () => {
     expect(result.current.isSupported).toBe(true)
     expect(result.current.play('tap')).toBe(false)
     expect(vibrate).not.toHaveBeenCalled()
+  })
+
+  it('never vibrates (nor cancels) before a user gesture', () => {
+    resetUserGestureForTests()
+    const vibrate = installVibrate()
+    expect(playHaptic('success')).toBe(false)
+    cancelHaptic()
+    expect(vibrate).not.toHaveBeenCalled()
+    press()
+    expect(playHaptic('success')).toBe(true)
+    expect(vibrate).toHaveBeenCalledTimes(1)
+  })
+
+  it('follows the User Activation API where it exists', () => {
+    resetUserGestureForTests()
+    const vibrate = installVibrate()
+    const activation = { hasBeenActive: false }
+    Object.defineProperty(navigator, 'userActivation', { configurable: true, value: activation })
+    expect(playHaptic('tap')).toBe(false)
+    activation.hasBeenActive = true
+    expect(playHaptic('tap')).toBe(true)
+    expect(vibrate).toHaveBeenCalledTimes(1)
   })
 
   it('imports and runs without a navigator-level API (server-like)', async () => {

@@ -2,7 +2,7 @@ import { CircleHelp, TriangleAlert } from 'lucide-react'
 import { useEffect, useId, type ReactNode } from 'react'
 import { Dialog, Heading, Modal, ModalOverlay } from 'react-aria-components'
 import { cx } from '../../internal/cx'
-import { requestHaptic } from '../../internal/haptics'
+import { requestHaptic, useHapticsEnabled } from '../../internal/haptics'
 import { useMessages } from '../../internal/provider'
 import { Button } from '../button/Button'
 
@@ -20,7 +20,10 @@ export interface CompactConfirmProps {
   icon?: ReactNode
   /** App or module name shown above the question. */
   sourceLabel?: string
-  /** Warning haptic when it opens (where supported). */
+  /**
+   * Warning haptic when it opens (where supported). Also needs the person's
+   * haptics preference on and a user gesture on the page before.
+   */
   haptic?: boolean
   className?: string
 }
@@ -43,7 +46,8 @@ export function CompactConfirm(props: CompactConfirmProps) {
   const tone = props.tone ?? 'danger'
   const titleId = useId()
   const messageId = useId()
-  const wantsHaptic = props.haptic ?? true
+  const hapticsOn = useHapticsEnabled()
+  const wantsHaptic = (props.haptic ?? true) && hapticsOn
 
   useEffect(() => {
     if (props.open && wantsHaptic) requestHaptic('medium')

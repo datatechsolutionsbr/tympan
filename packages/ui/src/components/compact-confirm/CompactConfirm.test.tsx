@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { resetUserGestureForTests } from '../../internal/haptics'
+import { HapticsPreference } from '../../utilities/haptics/haptics'
 import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { CompactConfirm } from './CompactConfirm'
@@ -62,11 +64,39 @@ describe('CompactConfirm', () => {
     expect(a!.getAttribute('aria-labelledby')).not.toEqual(b!.getAttribute('aria-labelledby'))
   })
 
-  it('requests one warning haptic when opening', () => {
-    const vibrate = vi.fn(() => true)
-    Object.defineProperty(navigator, 'vibrate', { configurable: true, value: vibrate })
-    render(<CompactConfirm {...base} open />)
-    expect(vibrate).toHaveBeenCalledTimes(1)
+  describe('haptics', () => {
+    const install = () => {
+      const vibrate = vi.fn(() => true)
+      Object.defineProperty(navigator, 'vibrate', { configurable: true, value: vibrate })
+      return vibrate
+    }
+    const press = () => document.body.dispatchEvent(new Event('pointerdown', { bubbles: true }))
+    beforeEach(() => resetUserGestureForTests())
+    afterEach(() => resetUserGestureForTests())
+
+    it('requests one warning haptic when opening after a user gesture', () => {
+      const vibrate = install()
+      press()
+      render(<CompactConfirm {...base} open />)
+      expect(vibrate).toHaveBeenCalledTimes(1)
+    })
+
+    it('never vibrates before any user gesture', () => {
+      const vibrate = install()
+      render(<CompactConfirm {...base} open />)
+      expect(vibrate).not.toHaveBeenCalled()
+    })
+
+    it('honours the haptics preference', () => {
+      const vibrate = install()
+      press()
+      render(
+        <HapticsPreference enabled={false}>
+          <CompactConfirm {...base} open />
+        </HapticsPreference>,
+      )
+      expect(vibrate).not.toHaveBeenCalled()
+    })
   })
 
   it('moves by opacity only under reduced motion', () => {

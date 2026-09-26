@@ -12,7 +12,7 @@ import {
   type ReactNode,
 } from 'react'
 import { cx } from '../../internal/cx'
-import { requestHaptic } from '../../internal/haptics'
+import { requestHaptic, useHapticsEnabled } from '../../internal/haptics'
 import { useMessages } from '../../internal/provider'
 import { Button } from '../button/Button'
 
@@ -86,6 +86,9 @@ export function ToastProvider({ maxVisible = 3, historyLimit = 50, placement = '
   const pauseReasons = useRef(new Set<string>())
   const onDismissRef = useRef(onDismiss)
   onDismissRef.current = onDismiss
+  // The person's haptics preference, read when a toast is shown.
+  const hapticsOn = useRef(true)
+  hapticsOn.current = useHapticsEnabled()
 
   const clearTimer = (id: string) => {
     const t = timers.current.get(id)
@@ -152,7 +155,8 @@ export function ToastProvider({ maxVisible = 3, historyLimit = 50, placement = '
       clearTimer(id)
       setQueue((q) => (q.some((t) => t.id === id) ? q.map((t) => (t.id === id ? record : t)) : [...q, record]))
       setHistory((h) => [record, ...h.filter((t) => t.id !== id)].slice(0, historyLimit))
-      requestHaptic('light')
+      // Silent before any user gesture (a toast can appear on its own).
+      requestHaptic('light', { enabled: hapticsOn.current })
       return id
     },
     [historyLimit],
