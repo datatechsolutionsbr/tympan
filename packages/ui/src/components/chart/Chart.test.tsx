@@ -5,7 +5,8 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { Chart, type ChartSpec } from './Chart'
-import { niceTicks, valueDomain } from './chartMath'
+import { niceTicks } from './chartMath'
+import { toPlot } from './plot'
 
 const line: ChartSpec = {
   type: 'line',
@@ -117,9 +118,9 @@ describe('Chart', () => {
   })
 
   it('computes domains and ticks', () => {
-    expect(valueDomain({ ...line, yAxis: { domain: [0, 50] } })).toEqual([0, 50])
-    expect(valueDomain({ ...line, data: [] })).toEqual([0, 1])
-    const flat = valueDomain({ ...line, series: [{ name: 'a' }], data: [{ x: 1, a: 5 }, { x: 2, a: 5 }] })
+    expect(toPlot({ ...line, yAxis: { domain: [0, 50] } }).span).toEqual([0, 50])
+    expect(toPlot({ ...line, data: [] }).span).toEqual([0, 1])
+    const flat = toPlot({ ...line, series: [{ name: 'a' }], data: [{ x: 1, a: 5 }, { x: 2, a: 5 }] }).span
     expect(5 - flat[0]).toBeCloseTo(flat[1] - 5)
     expect(niceTicks([0, 100], 5)).toEqual([0, 25, 50, 75, 100])
   })

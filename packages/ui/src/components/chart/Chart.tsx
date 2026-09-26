@@ -1,12 +1,24 @@
-import { useId, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
+import {
+  useId,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type PointerEvent as ReactPointerEvent,
+  type ReactElement,
+  type ReactNode,
+} from 'react'
 import { useLocale } from 'react-aria-components'
 import { cx } from '../../internal/cx'
+import type { ChartsGeoMessages } from '../../internal/messages/charts-geo'
 import { useMessages } from '../../internal/provider'
 import { DataTable } from '../data-table/DataTable'
 import { EmptyState } from '../empty-state/EmptyState'
 import { SegmentedControl } from '../segmented-control/SegmentedControl'
-import { linear, niceTicks, segments, toNumber, valueDomain, visibleLabelIndices } from './chartMath'
-import type { ChartRow, ChartSeries, ChartSpec, ChartView } from './types'
+import { linear, niceTicks, segments, visibleLabelIndices } from './chartMath'
+import { toPlot } from './plot'
+import type { ChartSpec, ChartView, Glyph, Plot, Track } from './types'
 
 export type { ChartKind, ChartRow, ChartSeries, ChartSpec, ChartView } from './types'
 
@@ -24,143 +36,143 @@ export interface ChartProps {
   className?: string
 }
 
-// Plot frame in viewBox units; the SVG scales to the container.
-const FRAME = { width: 640, top: 16, right: 20, bottom: 36, left: 52 }
-const SHAPES = ['circle', 'square', 'triangle', 'diamond'] as const
-const DASHES = ['6 4', '2 3', '10 3 2 3', '4 4']
-const TOKEN = /^(?:--fk-)?(chart|categorical)-([1-8])$/
+/* ---------------------------------------------------------------- frame -- */
 
-type Pointer = { cat: number; ser: number } | null
+/** viewBox width and the gutters around the plot, in viewBox units. */
+const CANVAS = 640
+const GUTTER = { head: 16, foot: 36, axisSide: 52, farSide: 20 }
 
-function paint(series: ChartSeries, index: number): string {
-  const m = series.colorToken ? TOKEN.exec(series.colorToken) : null
-  return m ? `var(--fk-${m[1]}-${m[2]})` : `var(--fk-chart-${(index % 8) + 1})`
-}
-
-function categoryOf(row: ChartRow, key: string): string {
-  const raw = row[key] ?? row.x
-  return raw === null || raw === undefined ? '' : String(raw)
-}
-
-/** Shape drawn at a datum: shape varies by series so colour is never alone. */
-function Marker({ shape, cx: x, cy: y, r, active }: { shape: (typeof SHAPES)[number]; cx: number; cy: number; r: number; active: boolean }) {
-  const size = active ? r * 1.6 : r
-  const common = { className: 'fk-chart__mark', 'data-active': active || undefined }
-  switch (shape) {
-    case 'square':
-      return <rect {...common} x={x - size} y={y - size} width={size * 2} height={size * 2} />
-    case 'triangle':
-      return <polygon {...common} points={`${x},${y - size * 1.2} ${x + size * 1.1},${y + size * 0.9} ${x - size * 1.1},${y + size * 0.9}`} />
-    case 'diamond':
-      return <polygon {...common} points={`${x},${y - size * 1.3} ${x + size * 1.3},${y} ${x},${y + size * 1.3} ${x - size * 1.3},${y}`} />
-    default:
-      return <circle {...common} cx={x} cy={y} r={size} />
-  }
-}
-
-interface Geometry {
-  /** Categories run from the inline start: right to left under dir=rtl. */
+interface Frame {
   rtl: boolean
-  height: number
-  plotLeft: number
-  plotRight: number
-  plotTop: number
-  plotBottom: number
-  band: number
-  centre: (i: number) => number
-  y: (v: number) => number
+  tall: number
+  /** Plot box in viewBox units (x0 always the physical left edge). */
+  x0: number
+  x1: number
+  y0: number
+  y1: number
+  slotWidth: number
+  slotX: (slot: number) => number
+  valueY: (reading: number) => number
+  floorY: number
   ticks: number[]
-  base: number
 }
 
-function measure(spec: ChartSpec, aspect: number, rtl: boolean): Geometry {
-  const height = Math.round(FRAME.width / aspect)
-  // The value axis sits on the inline-start side, so the frame's wide margin swaps sides in RTL.
-  const plotLeft = rtl ? FRAME.right : FRAME.left
-  const plotRight = FRAME.width - (rtl ? FRAME.left : FRAME.right)
-  const plotTop = FRAME.top
-  const plotBottom = height - FRAME.bottom
-  const n = Math.max(spec.data.length, 1)
-  const band = (plotRight - plotLeft) / n
-  const domain = valueDomain(spec)
-  const y = linear(domain, [plotBottom, plotTop])
-  const floor = Math.min(Math.max(0, domain[0]), domain[1])
+function frameFor(plot: Plot, aspect: number, rtl: boolean): Frame {
+  const tall = Math.round(CANVAS / aspect)
+  // The value axis sits on the inline start, so its wide gutter changes side in RTL.
+  const x0 = rtl ? GUTTER.farSide : GUTTER.axisSide
+  const x1 = CANVAS - (rtl ? GUTTER.axisSide : GUTTER.farSide)
+  const y0 = GUTTER.head
+  const y1 = tall - GUTTER.foot
+  const slotWidth = (x1 - x0) / Math.max(plot.stops.length, 1)
+  const valueY = linear(plot.span, [y1, y0])
+  const [low, high] = plot.span
   return {
     rtl,
-    height,
-    plotLeft,
-    plotRight,
-    plotTop,
-    plotBottom,
-    band,
-    centre: (i) => (rtl ? plotRight - band * (i + 0.5) : plotLeft + band * (i + 0.5)),
-    y,
-    ticks: niceTicks(domain, 5),
-    base: y(floor),
+    tall,
+    x0,
+    x1,
+    y0,
+    y1,
+    slotWidth,
+    slotX: (slot) => (rtl ? x1 - slotWidth * (slot + 0.5) : x0 + slotWidth * (slot + 0.5)),
+    valueY,
+    floorY: valueY(Math.min(Math.max(0, low), high)),
+    ticks: niceTicks(plot.span, 5),
   }
 }
 
-function SeriesMarks({ spec, g, active }: { spec: ChartSpec; g: Geometry; active: Pointer }) {
-  const perSeries = spec.series.length
+/* --------------------------------------------------------------- cursor -- */
+
+/** Focused reading: slot (category) and lane (series), or none. */
+type Cursor = { slot: number; lane: number } | null
+
+type CursorEvent = { type: 'key'; key: string; rtl: boolean; slots: number; lanes: number } | { type: 'set'; to: Cursor }
+
+function steer(cursor: Cursor, event: CursorEvent): Cursor {
+  if (event.type === 'set') return event.to
+  const at = cursor ?? { slot: 0, lane: 0 }
+  const lastSlot = event.slots - 1
+  const clampSlot = (s: number) => Math.min(lastSlot, Math.max(0, s))
+  const forward = event.rtl ? 'ArrowLeft' : 'ArrowRight'
+  const back = event.rtl ? 'ArrowRight' : 'ArrowLeft'
+  switch (event.key) {
+    case forward:
+      return { ...at, slot: clampSlot(at.slot + 1) }
+    case back:
+      return { ...at, slot: clampSlot(at.slot - 1) }
+    case 'ArrowDown':
+      return { ...at, lane: Math.min(event.lanes - 1, at.lane + 1) }
+    case 'ArrowUp':
+      return { ...at, lane: Math.max(0, at.lane - 1) }
+    case 'Home':
+      return { ...at, slot: 0 }
+    case 'End':
+      return { ...at, slot: lastSlot }
+    case 'Escape':
+      return null
+    default:
+      return cursor
+  }
+}
+
+const STEERING_KEYS = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'Escape'])
+
+/* --------------------------------------------------------------- glyphs -- */
+
+type GlyphDraw = (x: number, y: number, r: number, attrs: Record<string, unknown>) => ReactElement
+
+const GLYPHS: Record<Glyph, GlyphDraw> = {
+  dot: (x, y, r, attrs) => <circle {...attrs} cx={x} cy={y} r={r} />,
+  box: (x, y, r, attrs) => <rect {...attrs} x={x - r} y={y - r} width={r * 2} height={r * 2} />,
+  wedge: (x, y, r, attrs) => <polygon {...attrs} points={`${x},${y - r * 1.2} ${x + r * 1.1},${y + r * 0.9} ${x - r * 1.1},${y + r * 0.9}`} />,
+  rhomb: (x, y, r, attrs) => <polygon {...attrs} points={`${x},${y - r * 1.3} ${x + r * 1.3},${y} ${x},${y + r * 1.3} ${x - r * 1.3},${y}`} />,
+}
+
+/* --------------------------------------------------------------- layers -- */
+
+interface LayerProps {
+  plot: Plot
+  frame: Frame
+  cursor: Cursor
+  say: (reading: number) => string
+}
+
+function GridLayer({ plot, frame, say }: LayerProps) {
+  const shown = visibleLabelIndices(plot.stops.length, frame.x1 - frame.x0)
+  const tickX = frame.rtl ? frame.x1 + 8 : frame.x0 - 8
   return (
-    <g className="fk-chart__marks">
-      {spec.series.map((s, si) => {
-        const colour = paint(s, si)
-        const values = spec.data.map((row) => toNumber(row[s.name]))
-        const hit = (ci: number) => active?.cat === ci && active.ser === si
+    <g className="fk-chart__axes" aria-hidden="true">
+      {frame.ticks.map((t) => (
+        <g key={t}>
+          <line className="fk-chart__grid" x1={frame.x0} x2={frame.x1} y1={frame.valueY(t)} y2={frame.valueY(t)} />
+          <text className="fk-chart__tick" x={tickX} y={frame.valueY(t)} textAnchor="end" dominantBaseline="middle">
+            {say(t)}
+          </text>
+        </g>
+      ))}
+      <line className="fk-chart__baseline" x1={frame.x0} x2={frame.x1} y1={frame.y1} y2={frame.y1} />
+      {shown.map((slot) => (
+        <text key={slot} className="fk-chart__tick" x={frame.slotX(slot)} y={frame.y1 + 20} textAnchor="middle">
+          {plot.stops[slot]}
+        </text>
+      ))}
+    </g>
+  )
+}
 
-        if (spec.type === 'bar' || spec.type === 'histogram') {
-          const touching = spec.type === 'histogram'
-          const groupWidth = touching ? g.band : g.band * 0.78
-          const width = touching ? g.band : groupWidth / perSeries
-          return (
-            <g key={s.name} data-series={s.name} data-index={si} style={{ color: colour }} data-kind={spec.type}>
-              {values.map((v, ci) => {
-                if (v === null) return null
-                const left = touching ? g.centre(ci) - g.band / 2 : g.rtl ? g.centre(ci) + groupWidth / 2 - width * (si + 1) : g.centre(ci) - groupWidth / 2 + width * si
-                const top = Math.min(g.y(v), g.base)
-                return (
-                  <rect
-                    key={ci}
-                    className="fk-chart__mark fk-chart__bar"
-                    data-active={hit(ci) || undefined}
-                    data-overlap={touching && perSeries > 1 ? '' : undefined}
-                    x={left}
-                    y={top}
-                    width={width}
-                    height={Math.max(Math.abs(g.base - g.y(v)), 0.5)}
-                  />
-                )
-              })}
-            </g>
-          )
-        }
-
-        const points = values.map((v, ci) => (v === null ? null : ([g.centre(ci), g.y(v), ci] as const)))
-        const runs = segments(points)
-        const shape = SHAPES[si % SHAPES.length]!
+function PinLayer({ plot, frame }: LayerProps) {
+  const nudge = frame.rtl ? -4 : 4
+  return (
+    <g className="fk-chart__annotations">
+      {plot.pins.map((pin) => {
+        const x = frame.slotX(pin.slot)
         return (
-          <g key={s.name} data-series={s.name} data-index={si} style={{ color: colour }} data-kind={spec.type}>
-            {spec.type === 'area'
-              ? runs.map((run, ri) => (
-                  <path
-                    key={`a${ri}`}
-                    className="fk-chart__area"
-                    d={`M${run[0]![0]},${g.base} ${run.map(([x, yv]) => `L${x},${yv}`).join(' ')} L${run[run.length - 1]![0]},${g.base} Z`}
-                  />
-                ))
-              : null}
-            {runs.map((run, ri) => (
-              <path
-                key={`l${ri}`}
-                className="fk-chart__line"
-                strokeDasharray={s.dashed ? DASHES[si % DASHES.length] : undefined}
-                d={run.map(([x, yv], k) => `${k === 0 ? 'M' : 'L'}${x},${yv}`).join(' ')}
-              />
-            ))}
-            {runs.flat().map(([x, yv, ci]) => (
-              <Marker key={ci} shape={shape} cx={x} cy={yv} r={3.5} active={hit(ci)} />
-            ))}
+          <g key={`${pin.slot}:${pin.text}`} className="fk-chart__annotation" data-category={plot.stops[pin.slot]}>
+            <line x1={x} x2={x} y1={frame.y0} y2={frame.y1} />
+            <text x={x + nudge} y={frame.y0 + 10}>
+              {pin.text}
+            </text>
           </g>
         )
       })}
@@ -168,246 +180,264 @@ function SeriesMarks({ spec, g, active }: { spec: ChartSpec; g: Geometry; active
   )
 }
 
-function Axes({ spec, g, format }: { spec: ChartSpec; g: Geometry; format: (v: number) => string }) {
-  const labelled = visibleLabelIndices(spec.data.length, g.plotRight - g.plotLeft)
+function blockTrack(track: Track, lane: number, { plot, frame, cursor }: LayerProps) {
+  const flush = plot.stroke.mode === 'block' && plot.stroke.flush
+  const lanes = plot.tracks.length
+  const group = flush ? frame.slotWidth : frame.slotWidth * 0.78
+  const width = flush ? frame.slotWidth : group / lanes
+  const leftOf = (slot: number) => {
+    const middle = frame.slotX(slot)
+    if (flush) return middle - frame.slotWidth / 2
+    return frame.rtl ? middle + group / 2 - width * (lane + 1) : middle - group / 2 + width * lane
+  }
+  return track.readings.map((reading, slot) =>
+    reading === null ? null : (
+      <rect
+        key={slot}
+        className="fk-chart__mark fk-chart__bar"
+        data-active={(cursor?.slot === slot && cursor.lane === lane) || undefined}
+        data-overlap={flush && lanes > 1 ? '' : undefined}
+        x={leftOf(slot)}
+        y={Math.min(frame.valueY(reading), frame.floorY)}
+        width={width}
+        height={Math.max(Math.abs(frame.floorY - frame.valueY(reading)), 0.5)}
+      />
+    ),
+  )
+}
+
+function pathTrack(track: Track, lane: number, { plot, frame, cursor }: LayerProps) {
+  const runs = segments(track.readings.map((reading, slot) => (reading === null ? null : { x: frame.slotX(slot), y: frame.valueY(reading), slot })))
+  const fill = plot.stroke.mode === 'path' && plot.stroke.fill
+  const draw = GLYPHS[track.glyph]
+  const trace = (run: (typeof runs)[number]) => run.map((p, k) => `${k ? 'L' : 'M'}${p.x},${p.y}`).join(' ')
   return (
-    <g className="fk-chart__axes" aria-hidden="true">
-      {g.ticks.map((t) => (
-        <g key={t}>
-          <line className="fk-chart__grid" x1={g.plotLeft} x2={g.plotRight} y1={g.y(t)} y2={g.y(t)} />
-          <text className="fk-chart__tick" x={g.rtl ? g.plotRight + 8 : g.plotLeft - 8} y={g.y(t)} textAnchor="end" dominantBaseline="middle">
-            {format(t)}
-          </text>
-        </g>
+    <>
+      {fill
+        ? runs.map((run, k) => (
+            <path key={`fill${k}`} className="fk-chart__area" d={`M${run[0]!.x},${frame.floorY} ${trace(run).replace(/^M/, 'L')} L${run.at(-1)!.x},${frame.floorY} Z`} />
+          ))
+        : null}
+      {runs.map((run, k) => (
+        <path key={`stroke${k}`} className="fk-chart__line" strokeDasharray={track.dash} d={trace(run)} />
       ))}
-      <line className="fk-chart__baseline" x1={g.plotLeft} x2={g.plotRight} y1={g.plotBottom} y2={g.plotBottom} />
-      {labelled.map((i) => (
-        <text key={i} className="fk-chart__tick" x={g.centre(i)} y={g.plotBottom + 20} textAnchor="middle">
-          {categoryOf(spec.data[i]!, spec.xAxis.key)}
-        </text>
+      {runs.flat().map((p) => {
+        const lit = cursor?.slot === p.slot && cursor.lane === lane
+        return <g key={p.slot}>{draw(p.x, p.y, lit ? 5.6 : 3.5, { className: 'fk-chart__mark', 'data-active': lit || undefined })}</g>
+      })}
+    </>
+  )
+}
+
+function TrackLayer(props: LayerProps) {
+  const drawTrack = props.plot.stroke.mode === 'block' ? blockTrack : pathTrack
+  return (
+    <g className="fk-chart__marks">
+      {props.plot.tracks.map((track, lane) => (
+        <g key={track.label} data-series={track.label} data-index={lane} data-kind={props.plot.kind} style={{ color: track.hue }}>
+          {drawTrack(track, lane, props)}
+        </g>
       ))}
     </g>
   )
 }
 
-function Annotations({ spec, g }: { spec: ChartSpec; g: Geometry }) {
-  const cats = spec.data.map((r) => categoryOf(r, spec.xAxis.key))
-  const placed = (spec.annotations ?? []).flatMap((a) => {
-    const i = cats.indexOf(String(a.x))
-    return i < 0 ? [] : [{ ...a, i }]
-  })
-  return (
-    <g className="fk-chart__annotations">
-      {placed.map((a) => (
-        <g key={`${a.i}-${a.label}`} className="fk-chart__annotation" data-category={cats[a.i]}>
-          <line x1={g.centre(a.i)} x2={g.centre(a.i)} y1={g.plotTop} y2={g.plotBottom} />
-          <text x={g.centre(a.i) + (g.rtl ? -4 : 4)} y={g.plotTop + 10}>
-            {a.label}
-          </text>
-        </g>
-      ))}
-    </g>
-  )
-}
+/** Drawing order: grid under pins under marks. */
+const LAYERS = [GridLayer, PinLayer, TrackLayer]
 
-function Legend({ series, label }: { series: ChartSeries[]; label: string }) {
+function Key({ plot, name }: { plot: Plot; name: string }) {
   return (
-    <ul className="fk-chart__legend" aria-label={label}>
-      {series.map((s, i) => (
-        <li key={s.name} className="fk-chart__legend-item" style={{ color: paint(s, i) }} data-dashed={s.dashed || undefined}>
+    <ul className="fk-chart__legend" aria-label={name}>
+      {plot.tracks.map((track) => (
+        <li key={track.label} className="fk-chart__legend-item" style={{ color: track.hue }} data-dashed={track.dash ? '' : undefined}>
           <svg className="fk-chart__swatch" viewBox="0 0 24 12" aria-hidden="true" focusable="false">
-            <line x1="1" x2="23" y1="6" y2="6" strokeDasharray={s.dashed ? '4 3' : undefined} />
+            <line x1="1" x2="23" y1="6" y2="6" strokeDasharray={track.dash ? '4 3' : undefined} />
           </svg>
-          <span className="fk-chart__legend-name">{s.name}</span>
+          <span className="fk-chart__legend-name">{track.label}</span>
         </li>
       ))}
     </ul>
   )
 }
 
+function TableView({ plot, caption, say, copy }: { plot: Plot; caption: string; say: (v: number) => string; copy: ChartsGeoMessages['chart'] }) {
+  const columnOf = (lane: number) => `lane-${lane}`
+  return (
+    <DataTable
+      caption={caption}
+      columns={[
+        { id: 'stop', header: plot.stopsHeader ?? copy.categoryColumn },
+        ...plot.tracks.map((track, lane) => ({ id: columnOf(lane), header: track.label, numeric: true, align: 'end' as const })),
+      ]}
+      rows={plot.stops.map((stop, slot) => ({
+        id: String(slot),
+        cells: Object.fromEntries([
+          ['stop', stop],
+          ...plot.tracks.map((track, lane) => {
+            const reading = track.readings[slot] ?? null
+            return [columnOf(lane), reading === null ? <span className="fk-chart__missing">{copy.missing}</span> : say(reading)]
+          }),
+        ]) as Record<string, ReactNode>,
+      }))}
+    />
+  )
+}
+
+/* ------------------------------------------------------------ component -- */
+
 /** Accessible figure for a declarative chart, with a complete table view (spec: wave-2/chart.md). */
 export function Chart(props: ChartProps) {
-  const { spec, aspect = 16 / 9, interactive = true } = props
-  const m = useMessages().chart
+  const copy = useMessages().chart
   const { locale, direction } = useLocale()
   const rtl = direction === 'rtl'
-  const uid = useId()
-  const [innerView, setInnerView] = useState<ChartView>(props.defaultView ?? 'chart')
-  const view = props.view ?? innerView
-  const [pointer, setPointer] = useState<Pointer>(null)
-  const svgRef = useRef<SVGSVGElement>(null)
+  const base = useId()
+  const live = props.interactive ?? true
+  const plot = useMemo(() => toPlot(props.spec), [props.spec])
+  const frame = useMemo(() => frameFor(plot, props.aspect ?? 16 / 9, rtl), [plot, props.aspect, rtl])
+  const [ownView, setOwnView] = useState<ChartView>(props.defaultView ?? 'chart')
+  const view = props.view ?? ownView
+  const [cursor, dispatch] = useReducer(steer, null)
+  const canvas = useRef<SVGSVGElement>(null)
 
-  const numberFormat = useMemo(() => new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }), [locale])
-  const unit = spec.yAxis.unit
-  const withUnit = useMemo(() => new Intl.ListFormat(locale, { type: 'unit', style: 'narrow' }), [locale])
-  const format = (v: number) => (unit ? withUnit.format([numberFormat.format(v), unit]) : numberFormat.format(v))
-  const g = useMemo(() => measure(spec, aspect, rtl), [spec, aspect, rtl])
-  const empty = spec.data.length === 0 || spec.series.length === 0
+  const say = useMemo(() => {
+    const digits = new Intl.NumberFormat(locale, { maximumFractionDigits: 2 })
+    const joiner = new Intl.ListFormat(locale, { type: 'unit', style: 'narrow' })
+    const unit = plot.unit
+    return (v: number) => (unit ? joiner.format([digits.format(v), unit]) : digits.format(v))
+  }, [locale, plot.unit])
 
-  const switchView = (next: string) => {
-    const v = next as ChartView
-    if (props.view === undefined) setInnerView(v)
-    props.onViewChange?.(v)
+  const blank = plot.stops.length === 0 || plot.tracks.length === 0
+  const ids = { title: `${base}-title`, hint: `${base}-hint` }
+
+  const readoutText = (() => {
+    if (!cursor) return ''
+    const track = plot.tracks[cursor.lane]
+    const stop = plot.stops[cursor.slot]
+    if (!track || stop === undefined) return ''
+    const reading = track.readings[cursor.slot] ?? null
+    return copy.readout(stop, track.label, reading === null ? copy.missing : say(reading))
+  })()
+
+  const chooseView = (next: string) => {
+    if (props.view === undefined) setOwnView(next as ChartView)
+    props.onViewChange?.(next as ChartView)
   }
 
-  const describe = (p: NonNullable<Pointer>) => {
-    const row = spec.data[p.cat]
-    const s = spec.series[p.ser]
-    if (!row || !s) return ''
-    const v = toNumber(row[s.name])
-    return m.readout(categoryOf(row, spec.xAxis.key), s.name, v === null ? m.missing : format(v))
+  const onKey = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (!STEERING_KEYS.has(event.key)) return
+    event.preventDefault()
+    dispatch({ type: 'key', key: event.key, rtl, slots: plot.stops.length, lanes: plot.tracks.length })
   }
 
-  const onKey = (e: KeyboardEvent<HTMLDivElement>) => {
-    const last = spec.data.length - 1
-    const current = pointer ?? { cat: 0, ser: 0 }
-    const moves: Record<string, () => Pointer> = {
-      [rtl ? 'ArrowLeft' : 'ArrowRight']: () => ({ ...current, cat: Math.min(last, current.cat + 1) }),
-      [rtl ? 'ArrowRight' : 'ArrowLeft']: () => ({ ...current, cat: Math.max(0, current.cat - 1) }),
-      ArrowDown: () => ({ ...current, ser: Math.min(spec.series.length - 1, current.ser + 1) }),
-      ArrowUp: () => ({ ...current, ser: Math.max(0, current.ser - 1) }),
-      Home: () => ({ ...current, cat: 0 }),
-      End: () => ({ ...current, cat: last }),
-      Escape: () => null,
-    }
-    const move = moves[e.key]
-    if (!move) return
-    e.preventDefault()
-    setPointer(move())
+  const aim = (event: ReactPointerEvent<SVGSVGElement>) => {
+    const box = canvas.current?.getBoundingClientRect()
+    if (!box?.width) return
+    const vx = ((event.clientX - box.left) / box.width) * CANVAS
+    const vy = ((event.clientY - box.top) / box.height) * frame.tall
+    const along = rtl ? frame.x1 - vx : vx - frame.x0
+    const slot = Math.max(0, Math.min(plot.stops.length - 1, Math.floor(along / frame.slotWidth)))
+    const nearest = plot.tracks
+      .map((track, lane) => ({ lane, reading: track.readings[slot] ?? null }))
+      .filter((c): c is { lane: number; reading: number } => c.reading !== null)
+      .sort((a, b) => Math.abs(frame.valueY(a.reading) - vy) - Math.abs(frame.valueY(b.reading) - vy))[0]
+    dispatch({ type: 'set', to: { slot, lane: nearest?.lane ?? 0 } })
   }
 
-  const fromPointer = (e: ReactPointerEvent<SVGSVGElement>) => {
-    const svg = svgRef.current
-    if (!svg) return
-    const box = svg.getBoundingClientRect()
-    if (!box.width) return
-    const vx = ((e.clientX - box.left) / box.width) * FRAME.width
-    const vy = ((e.clientY - box.top) / box.height) * g.height
-    const along = g.rtl ? g.plotRight - vx : vx - g.plotLeft
-    const cat = Math.max(0, Math.min(spec.data.length - 1, Math.floor(along / g.band)))
-    let ser = 0
-    let best = Infinity
-    spec.series.forEach((s, i) => {
-      const v = toNumber(spec.data[cat]?.[s.name])
-      if (v === null) return
-      const d = Math.abs(g.y(v) - vy)
-      if (d < best) {
-        best = d
-        ser = i
-      }
-    })
-    setPointer({ cat, ser })
-  }
+  const layerProps: LayerProps = { plot, frame, cursor, say }
 
-  const readout = pointer ? describe(pointer) : ''
-  const titleId = `${uid}-title`
-  const hintId = `${uid}-hint`
-
-  let body: ReactNode
-  if (empty) {
-    body = <EmptyState reason="custom" framing="inline" title={m.noData} description={m.noDataHint} headingLevel={4} />
-  } else if (view === 'table') {
-    body = (
-      <DataTable
-        caption={spec.title}
-        columns={[
-          { id: '__x', header: spec.xAxis.label ?? m.categoryColumn },
-          ...spec.series.map((s) => ({ id: `s:${s.name}`, header: s.name, numeric: true, align: 'end' as const })),
-        ]}
-        rows={spec.data.map((row, i) => {
-          const cells: Record<string, ReactNode> = { __x: categoryOf(row, spec.xAxis.key) }
-          for (const s of spec.series) {
-            const v = toNumber(row[s.name])
-            cells[`s:${s.name}`] = v === null ? <span className="fk-chart__missing">{m.missing}</span> : format(v)
-          }
-          return { id: String(i), cells }
-        })}
-      />
-    )
-  } else {
-    const svg = (
+  const plotArea = (): ReactNode => {
+    const drawing = (
       <svg
-        ref={svgRef}
+        ref={canvas}
         className="fk-chart__svg"
-        viewBox={`0 0 ${FRAME.width} ${g.height}`}
+        viewBox={`0 0 ${CANVAS} ${frame.tall}`}
         preserveAspectRatio="xMidYMid meet"
         direction={rtl ? 'rtl' : 'ltr'}
-        role={interactive ? undefined : 'img'}
-        aria-label={interactive ? undefined : spec.title}
-        aria-hidden={interactive ? true : undefined}
+        role={live ? undefined : 'img'}
+        aria-label={live ? undefined : props.spec.title}
+        aria-hidden={live ? true : undefined}
         focusable="false"
-        onPointerMove={interactive ? fromPointer : undefined}
-        onPointerDown={interactive ? fromPointer : undefined}
-        onPointerLeave={interactive ? () => setPointer(null) : undefined}
+        {...(live ? { onPointerMove: aim, onPointerDown: aim, onPointerLeave: () => dispatch({ type: 'set', to: null }) } : {})}
       >
-        <Axes spec={spec} g={g} format={format} />
-        <Annotations spec={spec} g={g} />
-        <SeriesMarks spec={spec} g={g} active={pointer} />
+        {LAYERS.map((Layer, depth) => (
+          <Layer key={depth} {...layerProps} />
+        ))}
       </svg>
     )
-    const bubble =
-      pointer && readout ? (
-        <div
-          className="fk-chart__readout"
-          aria-hidden="true"
-          style={{ insetInlineStart: `${((rtl ? FRAME.width - g.centre(pointer.cat) : g.centre(pointer.cat)) / FRAME.width) * 100}%` }}
-          data-edge={pointer.cat > spec.data.length / 2 ? 'end' : 'start'}
-        >
-          {readout}
+    if (!live) {
+      return (
+        <div className="fk-chart__plot" data-kind={plot.kind}>
+          {drawing}
         </div>
-      ) : null
-    body = interactive ? (
+      )
+    }
+    const bubbleAt = cursor ? (rtl ? CANVAS - frame.slotX(cursor.slot) : frame.slotX(cursor.slot)) / CANVAS : 0
+    return (
       <div
         className="fk-chart__plot"
         role="group"
         tabIndex={0}
-        aria-labelledby={titleId}
-        aria-describedby={hintId}
+        aria-labelledby={ids.title}
+        aria-describedby={ids.hint}
         onKeyDown={onKey}
-        onFocus={() => setPointer((p) => p ?? { cat: 0, ser: 0 })}
-        onBlur={() => setPointer(null)}
-        data-kind={spec.type}
+        onFocus={() => dispatch({ type: 'set', to: cursor ?? { slot: 0, lane: 0 } })}
+        onBlur={() => dispatch({ type: 'set', to: null })}
+        data-kind={plot.kind}
       >
-        {svg}
-        {bubble}
-        <span id={hintId} className="fk-visually-hidden">
-          {m.plotHint(spec.title)}
+        {drawing}
+        {cursor && readoutText ? (
+          <div
+            className="fk-chart__readout"
+            aria-hidden="true"
+            style={{ insetInlineStart: `${bubbleAt * 100}%` }}
+            data-edge={cursor.slot > plot.stops.length / 2 ? 'end' : 'start'}
+          >
+            {readoutText}
+          </div>
+        ) : null}
+        <span id={ids.hint} className="fk-visually-hidden">
+          {copy.plotHint(props.spec.title)}
         </span>
-      </div>
-    ) : (
-      <div className="fk-chart__plot" data-kind={spec.type}>
-        {svg}
       </div>
     )
   }
 
+  const body: ReactNode = blank ? (
+    <EmptyState reason="custom" framing="inline" title={copy.noData} description={copy.noDataHint} headingLevel={4} />
+  ) : view === 'table' ? (
+    <TableView plot={plot} caption={props.spec.title} say={say} copy={copy} />
+  ) : (
+    plotArea()
+  )
+
+  const { title, subtitle, finding } = props.spec
   return (
-    <figure className={cx('fk-chart', props.className)} aria-labelledby={titleId} data-view={view} data-kind={spec.type} data-direction={direction}>
+    <figure className={cx('fk-chart', props.className)} aria-labelledby={ids.title} data-view={view} data-kind={plot.kind} data-direction={direction}>
       <figcaption className="fk-chart__caption">
-        <span id={titleId} className="fk-chart__title">
-          {spec.title}
+        <span id={ids.title} className="fk-chart__title">
+          {title}
         </span>
-        {spec.subtitle ? <span className="fk-chart__subtitle">{spec.subtitle}</span> : null}
-        {spec.finding ? <span className="fk-chart__finding">{spec.finding}</span> : null}
+        {subtitle ? <span className="fk-chart__subtitle">{subtitle}</span> : null}
+        {finding ? <span className="fk-chart__finding">{finding}</span> : null}
       </figcaption>
-      {!empty && !props.hideViewSwitch ? (
+      {blank || props.hideViewSwitch ? null : (
         <div className="fk-chart__tools">
           <SegmentedControl
             size="compact"
-            label={m.viewSwitch}
+            label={copy.viewSwitch}
             options={[
-              { value: 'chart', label: m.chartView },
-              { value: 'table', label: m.tableView },
+              { value: 'chart', label: copy.chartView },
+              { value: 'table', label: copy.tableView },
             ]}
             value={view}
-            onChange={switchView}
+            onChange={chooseView}
           />
         </div>
-      ) : null}
-      {!empty && view === 'chart' ? <Legend series={spec.series} label={m.legend} /> : null}
+      )}
+      {!blank && view === 'chart' ? <Key plot={plot} name={copy.legend} /> : null}
       {body}
       <div className="fk-visually-hidden" role="status" aria-live="polite" aria-atomic="true">
-        {readout}
+        {readoutText}
       </div>
     </figure>
   )

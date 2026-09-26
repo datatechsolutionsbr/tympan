@@ -1,6 +1,4 @@
 // Pure geometry for Chart: value extraction, domain, ticks and label thinning.
-import type { ChartSpec } from './types'
-
 /** A datum value as a number, or null when it is missing or not numeric. */
 export function toNumber(raw: unknown): number | null {
   if (typeof raw === 'number') return Number.isFinite(raw) ? raw : null
@@ -11,39 +9,23 @@ export function toNumber(raw: unknown): number | null {
   return null
 }
 
-/** Every numeric value of every declared series. */
-export function collectValues(spec: Pick<ChartSpec, 'data' | 'series'>): number[] {
-  const out: number[] = []
-  for (const row of spec.data) {
-    for (const s of spec.series) {
-      const v = toNumber(row[s.name])
-      if (v !== null) out.push(v)
-    }
-  }
-  return out
-}
-
 /**
- * Value domain: an explicit domain wins; otherwise min..max with a 5 % margin
- * (bars and histograms keep zero as a floor when all values are positive);
- * a flat series gets a symmetric margin; no data gives [0, 1].
+ * Value span: an explicit pair wins when ordered; otherwise the readings'
+ * extent with a 5 % margin (a floor at zero when `floorAtZero` and every
+ * reading is non-negative); a flat extent gets a symmetric margin; no
+ * readings give [0, 1].
  */
-export function valueDomain(spec: Pick<ChartSpec, 'data' | 'series' | 'yAxis' | 'type'>): [number, number] {
-  const fixed = spec.yAxis.domain
-  if (fixed && fixed.length === 2 && fixed[0] < fixed[1]) return [fixed[0], fixed[1]]
-  const values = collectValues(spec)
-  if (values.length === 0) return [0, 1]
-  let lo = Math.min(...values)
-  let hi = Math.max(...values)
-  if (lo === hi) {
-    const pad = Math.abs(lo) * 0.1 || 1
-    return [lo - pad, hi + pad]
+export function spanOf(readings: readonly number[], explicit: readonly number[] | undefined, floorAtZero: boolean): [number, number] {
+  if (explicit?.length === 2 && explicit[0]! < explicit[1]!) return [explicit[0]!, explicit[1]!]
+  if (readings.length === 0) return [0, 1]
+  const low = Math.min(...readings)
+  const high = Math.max(...readings)
+  if (low === high) {
+    const room = Math.abs(low) * 0.1 || 1
+    return [low - room, high + room]
   }
-  const pad = (hi - lo) * 0.05
-  const anchored = spec.type === 'bar' || spec.type === 'histogram' || spec.type === 'area'
-  lo = anchored && lo >= 0 ? 0 : lo - pad
-  hi = hi + pad
-  return [lo, hi]
+  const room = (high - low) * 0.05
+  return [floorAtZero && low >= 0 ? 0 : low - room, high + room]
 }
 
 /** About `count` evenly spaced ticks on 1-2-5 steps covering the domain. */
