@@ -1,1 +1,209 @@
-/* toolbar group stylesheet barrel. */
+/* toolbar group: CanvasToolbar (dock-ready canvas tools) and CanvasNodeSearch. */
+@layer fakhir.components {
+  .fk-canvas-toolbar {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fk-space-1);
+    padding: var(--fk-space-1);
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-card);
+    background: var(--fk-surface-raised);
+    box-shadow: var(--fk-shadow-floating);
+    backdrop-filter: blur(var(--fk-glass-blur-floating, 24px));
+  }
+  .fk-canvas-toolbar[aria-orientation='vertical'] {
+    flex-direction: column;
+  }
+  .fk-canvas-toolbar[data-placement='dock'] {
+    position: absolute;
+    inset-block-end: max(var(--fk-space-3), env(safe-area-inset-bottom, 0px));
+    inset-inline-start: 50%;
+    z-index: 3;
+    max-inline-size: calc(100% - var(--fk-space-6));
+    translate: -50% 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .fk-canvas-toolbar__divider {
+    align-self: stretch;
+    inline-size: 1px;
+    margin-block: var(--fk-space-1);
+    border: 0;
+    background: var(--fk-line);
+  }
+
+  .fk-canvas-tool {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--fk-space-1);
+    min-inline-size: 40px;
+    block-size: 40px;
+    padding-inline: var(--fk-space-2);
+    border: 1px solid transparent;
+    border-radius: var(--fk-radius-control);
+    background: transparent;
+    color: var(--fk-ink-2);
+    font: inherit;
+    font-size: var(--fk-font-size-label);
+    cursor: pointer;
+    transition: background-color var(--fk-dur-instant) var(--fk-ease);
+  }
+  /* 44 px hit area even when the visible control is 40 px. */
+  .fk-canvas-tool::before {
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    inline-size: max(100%, var(--fk-control-target, 44px));
+    block-size: max(100%, var(--fk-control-target, 44px));
+    translate: -50% -50%;
+  }
+  .fk-canvas-tool[data-hovered] {
+    background: var(--fk-surface-sunken);
+  }
+  .fk-canvas-tool[data-focus-visible] {
+    outline: var(--fk-focus-width, 2px) solid var(--fk-focus-ring, var(--fk-accent));
+    outline-offset: 2px;
+  }
+  .fk-canvas-tool[data-selected] {
+    border-color: var(--fk-accent);
+    background: var(--fk-accent-soft);
+    color: var(--fk-accent);
+  }
+  .fk-canvas-tool[data-disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .fk-canvas-tool__icon {
+    flex: none;
+    inline-size: 18px;
+    block-size: 18px;
+  }
+  .fk-canvas-tool__text {
+    min-inline-size: 5ch;
+    font-family: var(--fk-font-mono);
+    font-size: var(--fk-font-size-meta);
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+  /* Name revealed inline beside the icon on hover and keyboard focus. */
+  .fk-canvas-tool__label {
+    display: none;
+    align-items: center;
+    gap: var(--fk-space-1);
+    white-space: nowrap;
+  }
+  .fk-canvas-tool[data-hovered] .fk-canvas-tool__label,
+  .fk-canvas-tool[data-focus-visible] .fk-canvas-tool__label {
+    display: inline-flex;
+  }
+  .fk-canvas-tool__keys {
+    padding-inline: 4px;
+    border: 1px solid var(--fk-line);
+    border-radius: 4px;
+    color: var(--fk-ink-3);
+    font-family: var(--fk-font-mono);
+    font-size: var(--fk-font-size-meta);
+  }
+
+  .fk-node-search {
+    inline-size: min(360px, calc(100vw - 32px));
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-card);
+    background: var(--fk-surface-raised-solid);
+    box-shadow: var(--fk-shadow-floating);
+  }
+  .fk-node-search__dialog {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-2);
+    padding: var(--fk-space-3);
+    outline: none;
+  }
+  .fk-node-search__label {
+    color: var(--fk-ink);
+    font-size: var(--fk-font-size-label);
+    font-weight: var(--fk-font-weight-semibold);
+  }
+  .fk-node-search__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-1);
+  }
+  .fk-node-search__input {
+    box-sizing: border-box;
+    inline-size: 100%;
+    block-size: 40px;
+    padding-inline: var(--fk-space-3);
+    border: 1px solid var(--fk-input);
+    border-radius: var(--fk-radius-control);
+    background: var(--fk-surface-solid);
+    color: var(--fk-ink);
+    font: inherit;
+  }
+  .fk-node-search__input[data-focused] {
+    outline: 2px solid var(--fk-accent);
+    outline-offset: 2px;
+  }
+  .fk-node-search__list {
+    max-block-size: 280px;
+    overflow: auto;
+  }
+  .fk-node-search__option {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-block-size: 44px;
+    padding-inline: var(--fk-space-3);
+    border-radius: var(--fk-radius-control);
+    cursor: pointer;
+  }
+  .fk-node-search__option[data-focused],
+  .fk-node-search__option[data-hovered] {
+    background: var(--fk-accent-soft);
+  }
+  .fk-node-search__option-label {
+    color: var(--fk-ink);
+  }
+  .fk-node-search__option-kind {
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+  }
+  .fk-node-search__empty {
+    margin: 0;
+    padding: var(--fk-space-3);
+    color: var(--fk-ink-3);
+  }
+
+  @media (max-width: 639px) {
+    .fk-canvas-tool {
+      block-size: 44px;
+      min-inline-size: 44px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fk-canvas-tool {
+      transition: none;
+    }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .fk-canvas-toolbar {
+      background: var(--fk-surface-raised-solid);
+      backdrop-filter: none;
+    }
+  }
+  @media (forced-colors: active) {
+    .fk-canvas-toolbar,
+    .fk-node-search {
+      border-color: CanvasText;
+      background: Canvas;
+    }
+    .fk-canvas-tool[data-selected] {
+      border: 2px solid Highlight;
+    }
+    .fk-node-search__option[data-focused] {
+      outline: 2px solid Highlight;
+    }
+  }
+}
