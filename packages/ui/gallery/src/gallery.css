@@ -25,6 +25,7 @@
     align-self: center;
   }
   .fk-gallery-toolbar__nav {
+    flex-wrap: wrap;
     display: flex;
     gap: var(--fk-space-4);
     align-self: center;
@@ -199,5 +200,88 @@
       position: static;
       max-block-size: none;
     }
+  }
+
+  /* Shell group samples. */
+  .fk-gallery-rail {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-4);
+    max-inline-size: 248px;
+  }
+  .fk-gallery-dock-stage {
+    position: relative;
+    block-size: 88px;
+    border: 1px dashed var(--fk-line);
+    border-radius: var(--fk-radius-card);
+  }
+  .fk-gallery-split-stage {
+    block-size: 360px;
+  }
+  .fk-gallery-split-stage .fk-split {
+    block-size: 100%;
+  }
+
+  /* Research shell demo (overview storyboard). */
+  .fk-demo-brand {
+    letter-spacing: -0.01em;
+  }
+  .fk-demo-account {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--fk-space-2);
+  }
+  .fk-demo-account__who {
+    display: flex;
+    align-items: center;
+    gap: var(--fk-space-2);
+    min-inline-size: 0;
+  }
+  .fk-demo-account__name {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+  .fk-demo-account__name strong {
+    color: var(--fk-ink);
+    font-size: var(--fk-font-size-label);
+  }
+  .fk-demo-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-6);
+  }
+  .fk-demo-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-4);
+    min-inline-size: 0;
+  }
+  .fk-demo-columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--fk-space-6);
+  }
+  @media (min-width: 1024px) {
+    .fk-demo-columns {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    }
+  }
+  .fk-demo-quote {
+    margin: 0;
+    color: var(--fk-ink);
+    font-family: var(--fk-font-serif);
+    font-size: var(--fk-font-size-body-lg);
+    font-style: italic;
+    line-height: var(--fk-font-line-height-body-lg);
+  }
+  .fk-demo-meta {
+    margin: 0;
+    color: var(--fk-ink-3);
+    font-family: var(--fk-font-mono);
+    font-size: var(--fk-font-size-meta);
   }
 }

@@ -1,7 +1,7 @@
 // Every wave-1 component (plus ProofBadge and ActorChip) in representative
 // states. A test harness for screenshots, not a documentation site.
 import { BookOpen, CalendarDays, Copy, Download, FileText, Pencil, Plus, Trash2 } from 'lucide-react'
-import { useState, type ReactNode } from 'react'
+import { useState } from 'react'
 import {
   ActionMenu,
   ActorChip,
@@ -50,17 +50,7 @@ import {
   useToast,
   type SortDirection,
 } from '../../src'
-
-function Section({ id, title, children }: { id: string; title: string; children: ReactNode }) {
-  return (
-    <section className="fk-gallery-section" aria-labelledby={id} data-component={title}>
-      <h2 id={id} className="fk-gallery-section__title">
-        {title}
-      </h2>
-      <div className="fk-gallery-section__body">{children}</div>
-    </section>
-  )
-}
+import { Section } from './Section'
 
 const rows = [
   { id: 'tamm', cells: { name: 'TAMM AI Assistant', country: 'United Arab Emirates', stage: '4', proof: <ProofBadge state="proved" size="compact" detail="6/6" /> }, label: 'TAMM AI Assistant' },
@@ -145,8 +135,8 @@ export function Showcase({ scope }: { scope: string }) {
           <TextField label="E-mail" inputType="email" defaultValue="not-an-email" errorMessage="Enter an e-mail address." />
           <TextField label="Key" successMessage="Key verified." defaultValue="ed25519:9f2c" />
           <TextArea label="Quoted evidence" rows={3} showCounter maxLength={280} defaultValue="…completes services on a platform of more than 900 services." />
-          <Field label="Launch year" hint="Four digits." required>
-            <input className="fk-gallery-native-input" defaultValue="2024" />
+          <Field label="Launch year" hint="Four digits." required controlId={id('launch-year')}>
+            <input id={id('launch-year')} className="fk-gallery-native-input" defaultValue="2024" />
           </Field>
           <NativeSelect label="Stage" options={['1', '2', '3', '4']} defaultValue="4" />
           <ListboxSelect
@@ -210,7 +200,7 @@ export function Showcase({ scope }: { scope: string }) {
         </div>
         <div className="fk-gallery-row">
           <Avatar name="Natália Mesquita" fallbackText="NM" />
-          <Avatar name="Guilherme Rêgo" fallbackText="GR" size="large" tint="neutral" />
+          <Avatar name="Natalia Mesquita" fallbackText="NM" size="large" tint="neutral" />
           <Avatar name="stage-counter" actorKind="agent" />
           <Avatar name="Natália Mesquita" fallbackText="NM" size="xsmall" onPress={() => toast.info('Profile')} />
         </div>

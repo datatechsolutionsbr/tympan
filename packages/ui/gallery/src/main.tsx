@@ -5,6 +5,7 @@ import './gallery.css'
 import { FakhirProvider, ThemeProvider, ToastProvider } from '../../src'
 import { Customizer } from './Customizer'
 import { Gallery } from './Gallery'
+import { ResearchShellDemo } from './ResearchShell'
 
 const STORAGE_KEY = 'fk-gallery-theme'
 
@@ -26,7 +27,15 @@ function App() {
   return (
     <FakhirProvider navigate={navigate}>
       <ThemeProvider storageKey={STORAGE_KEY}>
-        <ToastProvider>{hash.startsWith('#/customizer') ? <Customizer /> : <Gallery />}</ToastProvider>
+        <ToastProvider>
+          {hash.startsWith('#/customizer') ? (
+            <Customizer />
+          ) : hash.startsWith('#/research-shell') ? (
+            <ResearchShellDemo />
+          ) : (
+            <Gallery page={hash.match(/^#\/g\/([\w-]+)/)?.[1]} />
+          )}
+        </ToastProvider>
       </ThemeProvider>
     </FakhirProvider>
   )
