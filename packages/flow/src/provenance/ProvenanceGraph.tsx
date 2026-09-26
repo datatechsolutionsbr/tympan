@@ -1,40 +1,70 @@
-// ProvenanceGraph: follow an item back to its sources (or forward to where it
-// was used) and read the proof state of every step (design direction §3.13).
+// ProvenanceGraph: "where did this come from". One question bar picks the
+// item in focus (any value, record, number or manuscript sentence); five
+// views show the same data:
 //
-//   query bar   focus item · direction · steps · graph | list · filters
-//   body        [list]  canvas (legend, dock tools)  [evidence panel]
+//   Graph        horizontal bands in research order (search, reading,
+//                source, assertion, base and verification, analysis,
+//                edition, manuscript), the focus item's proof path down the
+//                first column, everything else dimmed or hidden.
+//   Tree         the keyboard and screen-reader alternative (APG tree).
+//   Timeline     one lane per actor on a time axis.
+//   Certificate  the obligation tree the verifier checked for a claim.
+//   Compare      what changed between two editions.
 //
-// The list (APG tree) shows the same subgraph and shares the selection with
-// the canvas, so the canvas is never the only way in. Below 1024 px the list
-// is the default view. Escape on the canvas returns focus to the query bar.
+// The evidence panel (inspector) stays beside the graph and the tree. The
+// graph's tools (filters, steps back and forward, "only the proof path",
+// legend, zoom) sit in one row above the canvas, never over it.
 //
-// Keys on a focused node: Left/Right follow the relations (towards the origin
-// is the reading-start side: Left in LTR, Right in RTL), Up/Down move to the
-// previous/next item of the same rank, Home/End to the first/last item,
-// Enter/Space select it and open the evidence panel.
+// Keys on a focused node: Up/Down move between bands along the relations
+// (towards the origin is Up), Left/Right move inside a band (mirrored in
+// RTL), Home/End go to the first/last node, Enter/Space select, Escape
+// returns to the question bar.
 
-import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
-import { Button, EmptyState, InlineNotice, ListboxSelect, NativeSelect, SegmentedControl, useMediaQuery } from '@fakhir/design-system'
-import { autoLayout } from '../layout/autoLayout'
-import type { HopDirection } from '../model/graph'
-import type { Point } from '../model/types'
+import { useCallback, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
+import { ComboBox, Input, Label, ListBox, ListBoxItem, Popover as AriaPopover, Button as AriaButton, Text } from 'react-aria-components'
+import { ChevronDown } from 'lucide-react'
+import { Button, EmptyState, InlineNotice, NativeSelect, SegmentedControl, Switch, useMediaQuery } from '@fakhir/design-system'
+import { kindTone } from '../catalog/palette'
 import { fill, useFlowLocale, useLabels } from '../internal/labels'
 import { useControllable } from '../internal/useControllable'
+import type { Point } from '../model/types'
 import { CanvasSurface } from '../surface/CanvasSurface'
 import type { CanvasApi, ConnectorShape, NodeDragEvent, SurfaceConnector, SurfaceNode } from '../surface/types'
 import { CanvasNodeSearch } from '../toolbar/CanvasNodeSearch'
 import { CanvasToolbar } from '../toolbar/CanvasToolbar'
 import { canvasToolItems } from '../toolbar/canvasTools'
-import { kindTone } from '../catalog/palette'
+import { EditionCompare } from './EditionCompare'
 import { provenanceLabels, type ProvenanceLabels } from './labels'
-import { EMPTY_FILTERS, isDeep, proofKeyOf, provenanceView, readingOrder, type ProofKey, type ProvActor, type ProvFilters, type ProvItem, type ProvLink, type ProvStatement, type ProvVertex } from './model'
+import {
+  bandGeometryFrom,
+  bandLayout,
+  DEFAULT_BANDS,
+  type BandGeometry,
+  EMPTY_FILTERS,
+  isDeep,
+  proofKeyOf,
+  proofPath,
+  provenanceView,
+  readingOrder,
+  searchableText,
+  type ProofKey,
+  type ProvActor,
+  type ProvFilters,
+  type ProvItem,
+  type ProvLink,
+  type ProvStatement,
+  type ProvVertex,
+} from './model'
+import type { EditionComparison, ProofCertificate } from './proofTypes'
+import { ProvenanceCertificate } from './ProvenanceCertificate'
 import { ProvenanceFilters } from './ProvenanceFilters'
 import { ProvenanceInspector } from './ProvenanceInspector'
 import { ProvenanceLegend } from './ProvenanceLegend'
-import { ACTOR_CARD, ActorNode, PROV_CARD, ProvenanceNode } from './ProvenanceNode'
+import { ActorNode, ProvenanceNode } from './ProvenanceNode'
+import { ProvenanceTimeline } from './ProvenanceTimeline'
 import { ProvenanceTree } from './ProvenanceTree'
 
-export type ProvenanceViewMode = 'graph' | 'tree'
+export type ProvenanceViewMode = 'graph' | 'tree' | 'timeline' | 'certificate' | 'compare'
 
 export interface ProvenanceGraphProps {
   items: readonly ProvItem[]
@@ -47,103 +77,125 @@ export interface ProvenanceGraphProps {
   selectedId?: string | null
   defaultSelectedId?: string | null
   onSelect?: (id: string | null) => void
-  hops?: number
-  defaultHops?: number
-  onHopsChange?: (hops: number) => void
-  direction?: HopDirection
-  defaultDirection?: HopDirection
-  onDirectionChange?: (d: HopDirection) => void
+  /** Steps towards origins. */
+  back?: number
+  defaultBack?: number
+  onBackChange?: (n: number) => void
+  /** Steps towards uses. */
+  forward?: number
+  defaultForward?: number
+  onForwardChange?: (n: number) => void
+  /** Show only the focus item's proof path. */
+  onlyProofPath?: boolean
+  defaultOnlyProofPath?: boolean
+  onOnlyProofPathChange?: (on: boolean) => void
   view?: ProvenanceViewMode
   defaultView?: ProvenanceViewMode
   onViewChange?: (v: ProvenanceViewMode) => void
   filters?: ProvFilters
   defaultFilters?: ProvFilters
   onFiltersChange?: (f: ProvFilters) => void
-  /** Largest number of steps offered in the query bar. */
+  /** Largest number of steps offered in each direction. */
   maxHops?: number
+  /** Certificates by claim id (the focus or the selected item). */
+  certificates?: Readonly<Record<string, ProofCertificate>>
+  onRerunCertificate?: (claimId: string) => void
+  onDownloadCertificate?: (claimId: string) => void
+  certificateBusy?: boolean
+  /** Two editions to compare. */
+  comparison?: EditionComparison | null
+  onReread?: (id: string) => void
+  onRequestVerification?: (id: string) => void
   loading?: boolean
   /** Error message in plain words (the view then shows it with a retry). */
   error?: string | null
   onRetry?: () => void
-  /** Keep the graph left-to-right even in RTL locales. */
+  /** Keep the graph's reading start on the left even in RTL locales. */
   keepLtr?: boolean
-  /**
-   * Reading axis of the graph: 'vertical' (origins on top, the default, like
-   * the list) or 'horizontal' (origins at the reading start: left in LTR,
-   * right in RTL unless keepLtr).
-   */
-  orientation?: 'vertical' | 'horizontal'
   labels?: Partial<ProvenanceLabels>
+  /** Page title shown at the start of the question row (for example "Proveniência"). */
+  title?: string
+  /** Mono breadcrumb above the title (organisation / project / id). */
+  breadcrumb?: string
   className?: string
 }
 
-const ALL = '__all__'
+const VIEWS: readonly ProvenanceViewMode[] = ['graph', 'tree', 'timeline', 'certificate', 'compare']
 
 function initialMatch(query: string, fallback: boolean): boolean {
   return typeof window !== 'undefined' && window.matchMedia ? window.matchMedia(query).matches : fallback
 }
 
 export function ProvenanceGraph(props: ProvenanceGraphProps) {
-  const { items, statements, actors = [], maxHops = 8, loading = false, error = null, onRetry, keepLtr = false, orientation = 'vertical', className } = props
+  const { items, statements, actors = [], maxHops = 8, loading = false, error = null, onRetry, keepLtr = false, className } = props
   const l = useLabels(provenanceLabels, props.labels)
   const { locale, rtl } = useFlowLocale()
+  const mirror = rtl && !keepLtr
   const wide = useMediaQuery('(min-width: 1024px)', true)
 
   const [focusId, setFocusId] = useControllable<string | null>(props.focusId, props.defaultFocusId ?? null, props.onFocusChange)
-  const [selectedId, setSelectedIdRaw] = useControllable<string | null>(props.selectedId, props.defaultSelectedId ?? null, props.onSelect)
-  const [hops, setHops] = useControllable<number>(props.hops, props.defaultHops ?? 2, props.onHopsChange)
-  const [direction, setDirection] = useControllable<HopDirection>(props.direction, props.defaultDirection ?? 'both', props.onDirectionChange)
+  const [selectedId, setSelectedIdRaw] = useControllable<string | null>(props.selectedId, props.defaultSelectedId ?? props.defaultFocusId ?? null, props.onSelect)
+  const [back, setBack] = useControllable<number>(props.back, props.defaultBack ?? 3, props.onBackChange)
+  const [forward, setForward] = useControllable<number>(props.forward, props.defaultForward ?? 1, props.onForwardChange)
+  const [onlyPath, setOnlyPath] = useControllable<boolean>(props.onlyProofPath, props.defaultOnlyProofPath ?? false, props.onOnlyProofPathChange)
   const [view, setView] = useControllable<ProvenanceViewMode>(props.view, () => props.defaultView ?? (initialMatch('(min-width: 1024px)', true) ? 'graph' : 'tree'), props.onViewChange)
   const [filters, setFilters] = useControllable<ProvFilters>(props.filters, props.defaultFilters ?? EMPTY_FILTERS, props.onFiltersChange)
-  const [listOpen, setListOpen] = useState(() => initialMatch('(min-width: 1280px)', true))
-  const [inspectorOpen, setInspectorOpen] = useState(!!(props.selectedId ?? props.defaultSelectedId))
+  const [inspectorOpen, setInspectorOpen] = useState(true)
   const [mode, setMode] = useState<'select' | 'pan'>('select')
   const [zoom, setZoom] = useState(1)
   const [searchOpen, setSearchOpen] = useState(false)
   const [moved, setMoved] = useState<ReadonlyMap<string, Point>>(new Map())
   const [layoutRun, setLayoutRun] = useState(0)
+  const pendingFocus = useRef<string | null>(null)
+  const rootRef = useRef<HTMLDivElement>(null)
+  const [geometry, setGeometry] = useState<BandGeometry>(DEFAULT_BANDS)
+  // Band sizes come from the --fk-flow-* tokens, so a theme or density can change them.
+  useLayoutEffect(() => {
+    const g = bandGeometryFrom(rootRef.current)
+    setGeometry((prev) => (JSON.stringify(prev) === JSON.stringify(g) ? prev : g))
+  }, [])
 
-  const api = useRef<CanvasApi>(null)
+  const api = useRef<CanvasApi | null>(null)
   const barRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLDivElement>(null)
   const searchAnchor = useRef<HTMLElement | null>(null)
   const dragBase = useRef<Map<string, Point>>(new Map())
 
-  const provView = useMemo(() => provenanceView(items, statements, actors, { focusId, hops, direction, filters }), [items, statements, actors, focusId, hops, direction, filters])
+  const fullView = useMemo(() => provenanceView(items, statements, actors, { focusId, back, forward, filters }), [items, statements, actors, focusId, back, forward, filters])
+  const path = useMemo(() => proofPath(fullView, focusId), [fullView, focusId])
+  const provView = useMemo(() => {
+    if (!onlyPath || !path.nodes.size) return fullView
+    return { ...fullView, vertices: fullView.vertices.filter((v) => path.nodes.has(v.id)), links: fullView.links.filter((lk) => path.links.has(lk.id)) }
+  }, [fullView, onlyPath, path])
   const byId = useMemo(() => new Map(provView.vertices.map((v) => [v.id, v])), [provView])
   const linkById = useMemo(() => new Map(provView.links.map((lk) => [lk.id, lk])), [provView])
   const ordered = useMemo(() => readingOrder(items, statements), [items, statements])
+  const hasPath = path.nodes.size > 1
 
   const setSelectedId = useCallback(
     (id: string | null) => {
       setSelectedIdRaw(id)
-      setInspectorOpen(id !== null)
+      if (id !== null) setInspectorOpen(true)
     },
     [setSelectedIdRaw],
   )
 
-  // Positions: ranked layout (origins at the reading start), then any node the person moved.
-  const layoutDirection = orientation === 'vertical' ? 'top-down' : rtl && !keepLtr ? 'right-left' : 'left-right'
-  const laidOut = useMemo(() => {
-    const nodes = provView.vertices.map((v) => ({ id: v.id, kind: v.type === 'item' ? v.item.kind : 'actor', position: { x: 0, y: 0 }, size: v.type === 'item' ? { ...PROV_CARD } : { ...ACTOR_CARD } }))
-    return autoLayout(nodes, provView.links, layoutDirection)
-  }, [provView, layoutDirection])
-  const layoutKey = `${focusId}|${hops}|${direction}|${JSON.stringify(filters)}|${layoutRun}|${view}`
-  useEffect(() => setMoved(new Map()), [layoutRun])
+  // Band placement, then any node the person moved by hand.
+  const bands = useMemo(() => bandLayout(provView, path.nodes, geometry, mirror), [provView, path, mirror, geometry])
+  const layoutKey = `${focusId}|${back}|${forward}|${onlyPath}|${JSON.stringify(filters)}|${layoutRun}|${view}|${mirror}`
 
   const surfaceNodes = useMemo<SurfaceNode[]>(
     () =>
-      laidOut.map((n) => {
-        const p = moved.get(n.id) ?? n.position
-        const v = byId.get(n.id)!
-        return { id: n.id, rect: { ...p, width: n.size!.width, height: n.size!.height }, selected: n.id === selectedId, tone: v.type === 'item' ? kindTone(v.item.kind) : 'neutral' }
+      provView.vertices.map((v) => {
+        const p = moved.get(v.id) ?? bands.positions.get(v.id) ?? { x: 0, y: 0 }
+        return { id: v.id, rect: { ...p, width: geometry.card.width, height: geometry.card.height }, selected: v.id === selectedId, tone: v.type === 'item' ? kindTone(v.item.kind) : 'neutral' }
       }),
-    [laidOut, moved, byId, selectedId],
+    [provView, moved, bands, selectedId, geometry],
   )
   const surfaceConnectors = useMemo<SurfaceConnector[]>(() => provView.links.map((lk) => ({ id: lk.id, source: lk.source, target: lk.target })), [provView])
 
   const leaveCanvas = useCallback(() => {
-    barRef.current?.querySelector<HTMLElement>('button, input, select, [tabindex="0"]')?.focus()
+    barRef.current?.querySelector<HTMLElement>('input, button, select, [tabindex="0"]')?.focus()
   }, [])
 
   const moveFocusTo = useCallback((id: string | undefined) => {
@@ -154,16 +206,20 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
 
   const onNodeKey = useCallback(
     (id: string) => (e: KeyboardEvent<HTMLElement>) => {
-      const originKey = rtl ? 'ArrowRight' : 'ArrowLeft'
-      const aheadKey = rtl ? 'ArrowLeft' : 'ArrowRight'
-      const layerOf = provView.layer.get(id)
-      const sameLayer = provView.vertices.filter((v) => provView.layer.get(v.id) === layerOf)
-      const index = sameLayer.findIndex((v) => v.id === id)
+      const here = bands.positions.get(id)
+      const sameBand = provView.vertices
+        .filter((v) => bands.positions.get(v.id)?.y === here?.y)
+        .sort((a, b) => (bands.positions.get(a.id)!.x - bands.positions.get(b.id)!.x) * (mirror ? -1 : 1))
+      const index = sameBand.findIndex((v) => v.id === id)
+      const nextInBand = mirror ? 'ArrowLeft' : 'ArrowRight'
+      const prevInBand = mirror ? 'ArrowRight' : 'ArrowLeft'
+      const yOf = (other: string) => bands.positions.get(other)?.y ?? 0
+      const neighbours = provView.links.flatMap((lk) => (lk.source === id ? [lk.target] : lk.target === id ? [lk.source] : []))
       let next: string | undefined
-      if (e.key === originKey) next = provView.links.find((lk) => lk.target === id)?.source
-      else if (e.key === aheadKey) next = provView.links.find((lk) => lk.source === id)?.target
-      else if (e.key === 'ArrowUp') next = sameLayer[index - 1]?.id
-      else if (e.key === 'ArrowDown') next = sameLayer[index + 1]?.id
+      if (e.key === 'ArrowUp') next = neighbours.filter((n) => yOf(n) < (here?.y ?? 0)).sort((a, b) => yOf(b) - yOf(a))[0]
+      else if (e.key === 'ArrowDown') next = neighbours.filter((n) => yOf(n) > (here?.y ?? 0)).sort((a, b) => yOf(a) - yOf(b))[0]
+      else if (e.key === nextInBand) next = sameBand[index + 1]?.id
+      else if (e.key === prevInBand) next = sameBand[index - 1]?.id
       else if (e.key === 'Home') next = provView.vertices[0]?.id
       else if (e.key === 'End') next = provView.vertices[provView.vertices.length - 1]?.id
       else if (e.key === 'Escape') {
@@ -174,7 +230,7 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
       e.preventDefault()
       moveFocusTo(next)
     },
-    [rtl, provView, leaveCanvas, moveFocusTo],
+    [bands, provView, mirror, leaveCanvas, moveFocusTo],
   )
 
   const onNodeDrag = useCallback(
@@ -195,37 +251,89 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
   const renderConnector = useCallback(
     (c: SurfaceConnector, shape: ConnectorShape) => {
       const link = linkById.get(c.id) as ProvLink
+      const onPathLink = path.links.has(link.id)
+      const dim = hasPath && !onPathLink
+      // The relation is carried by the line style (legend in the tool row) and
+      // spelled out in the inspector and the tree; no word sits on the line,
+      // so it never covers a card between two close bands.
       return {
-        svg: <path className="fk-prov-link" data-relation={link.relation} d={shape.d} markerStart="url(#fk-surface-arrow)" />,
-        html: (
-          <span className="fk-prov-link__label" data-relation={link.relation} aria-hidden="true" style={{ transform: `translate(${shape.mid.x}px, ${shape.mid.y}px) translate(-50%, -50%)` }}>
-            {l.relations[link.relation]}
-          </span>
+        svg: (
+          <path className="fk-prov-link" data-relation={link.relation} data-on-path={onPathLink ? 'true' : undefined} data-dimmed={dim ? 'true' : undefined} d={shape.d} markerStart="url(#fk-surface-arrow)">
+            <title>{l.relations[link.relation]}</title>
+          </path>
         ),
       }
     },
-    [linkById, l],
+    [linkById, l, path, hasPath],
   )
 
   const renderNode = useCallback(
     (n: SurfaceNode) => {
       const v = byId.get(n.id) as ProvVertex
       const activate = () => setSelectedId(n.id)
+      const onPathNode = path.nodes.has(n.id)
       return v.type === 'item' ? (
-        <ProvenanceNode item={v.item} labels={l} locale={locale} selected={n.id === selectedId} onActivate={activate} onKeyDown={onNodeKey(n.id)} />
+        <ProvenanceNode
+          item={v.item}
+          labels={l}
+          locale={locale}
+          selected={n.id === selectedId}
+          onPath={hasPath && onPathNode}
+          focused={n.id === focusId}
+          dimmed={hasPath && !onPathNode}
+          onActivate={activate}
+          onKeyDown={onNodeKey(n.id)}
+        />
       ) : (
         <ActorNode actor={v.actor} labels={l} locale={locale} selected={n.id === selectedId} onActivate={activate} onKeyDown={onNodeKey(n.id)} />
       )
     },
-    [byId, l, locale, selectedId, setSelectedId, onNodeKey],
+    [byId, l, locale, selectedId, setSelectedId, onNodeKey, path, hasPath, focusId],
   )
 
-  const pickFromList = useCallback(
+  // Band backgrounds and labels, drawn under the nodes in canvas units.
+  const bandOverlay = (
+    <div className="fk-prov-bands" aria-hidden="true">
+      {bands.bands.map((b) => (
+        <div
+          key={b.key}
+          className="fk-prov-band"
+          data-parity={b.row % 2 ? 'odd' : 'even'}
+          style={{ transform: `translate(${-4000}px, ${b.row * geometry.band}px)`, width: bands.width + 8000, height: geometry.band }}
+        />
+      ))}
+      {bands.bands.map((b) => (
+        <span
+          key={`label-${b.key}`}
+          className="fk-prov-band__label"
+          style={{ transform: `translate(${bands.labelX}px, ${b.row * geometry.band}px)`, width: geometry.label, height: geometry.band }}
+        >
+          <span className="fk-prov-band__number">{new Intl.NumberFormat(locale).format(b.row + 1)}</span>
+          <span className="fk-prov-band__name">{l.lanes[b.key]}</span>
+        </span>
+      ))}
+    </div>
+  )
+
+  const openInGraph = useCallback(
     (id: string) => {
       setSelectedId(id)
-      if (view === 'graph') api.current?.reveal(id)
+      pendingFocus.current = id
+      setView('graph')
     },
-    [setSelectedId, view],
+    [setSelectedId, setView],
+  )
+
+  const bindApi = useCallback(
+    (handle: CanvasApi | null) => {
+      api.current = handle
+      const id = pendingFocus.current
+      if (handle && id) {
+        pendingFocus.current = null
+        requestAnimationFrame(() => moveFocusTo(id))
+      }
+    },
+    [moveFocusTo],
   )
 
   const tools = canvasToolItems({
@@ -236,9 +344,12 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
     onZoomOut: () => api.current?.zoomOut(),
     onZoomReset: () => api.current?.zoomTo(1),
     onFit: () => api.current?.fit(),
-    onAutoLayout: () => setLayoutRun((r) => r + 1),
-    listView: listOpen,
-    onToggleListView: () => setListOpen((o) => !o),
+    onAutoLayout: () => {
+      setMoved(new Map())
+      setLayoutRun((r) => r + 1)
+    },
+    // Bands are fixed; pan by dragging the background. The tree is its own view.
+    omit: ['select', 'pan'],
     onSearch: () => {
       searchAnchor.current = canvasRef.current?.querySelector<HTMLElement>('[data-tool="search"]') ?? null
       setSearchOpen(true)
@@ -251,55 +362,40 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
     return (['proved', 'pending', 'refuted', 'not_disclosed', 'none'] as const).filter((k) => seen.has(k))
   }, [provView])
 
-  const selectedVertex = selectedId ? byId.get(selectedId) : undefined
-  const focusOptions = [{ value: ALL, label: l.focusAll }, ...ordered.map((i) => ({ value: i.id, label: `${l.kinds[i.kind]}: ${i.title}` }))]
-  const hopOptions = Array.from({ length: maxHops }, (_, i) => String(i + 1))
+  const selectedVertex = selectedId ? (byId.get(selectedId) ?? fullView.vertices.find((v) => v.id === selectedId)) : undefined
+  const hopOptions = Array.from({ length: maxHops + 1 }, (_, i) => String(i))
+  const viewNames: Record<ProvenanceViewMode, string> = { graph: l.viewGraph, tree: l.viewTree, timeline: l.viewTimeline, certificate: l.viewCertificate, compare: l.viewCompare }
 
-  const bar = (
+  const question = (
     <div className="fk-prov__bar" role="group" aria-label={l.queryBar} ref={barRef}>
-      <ListboxSelect
-        className="fk-prov__focus"
-        label={l.focus}
-        options={focusOptions}
-        value={focusId ?? ALL}
-        onChange={(v) => {
-          setFocusId(v === ALL ? null : v)
-          if (v !== ALL) setSelectedId(v)
+      {props.title ? (
+        <div className="fk-prov__heading">
+          {props.breadcrumb ? <p className="fk-prov__crumb">{props.breadcrumb}</p> : null}
+          <h1 className="fk-prov__title">{props.title}</h1>
+        </div>
+      ) : null}
+      <FocusQuestion
+        items={ordered}
+        value={focusId}
+        labels={l}
+        onChange={(id) => {
+          setFocusId(id)
+          setSelectedId(id)
         }}
       />
-      <SegmentedControl
-        label={l.direction}
-        size="compact"
-        options={[
-          { value: 'backward', label: l.backward },
-          { value: 'forward', label: l.forward },
-          { value: 'both', label: l.both },
-        ]}
-        value={direction}
-        onChange={(v) => setDirection(v as HopDirection)}
-        disabled={!focusId}
-      />
-      <NativeSelect className="fk-prov__hops" label={l.hops} options={hopOptions} value={String(hops)} onChange={(v) => setHops(Number(v))} disabled={!focusId} />
-      <SegmentedControl
-        label={l.view}
-        size="compact"
-        options={[
-          { value: 'graph', label: l.viewGraph },
-          { value: 'tree', label: l.viewTree },
-        ]}
-        value={view}
-        onChange={(v) => setView(v as ProvenanceViewMode)}
-      />
-      <ProvenanceFilters value={filters} onChange={setFilters} labels={l} locale={locale} canShowActors={actors.some((a) => !!a.id)} />
-      <p className="fk-prov__count" role="status">
-        {fill(l.count, { count: provView.vertices.length }, locale)}
-      </p>
+      <SegmentedControl className="fk-prov__views" label={l.view} size="compact" options={VIEWS.map((v) => ({ value: v, label: viewNames[v] }))} value={view} onChange={(v) => setView(v as ProvenanceViewMode)} />
     </div>
   )
 
+  const shell = (state: string, body: ReactNode) => (
+    <div className={['fk-prov', className].filter(Boolean).join(' ')} data-state={state} {...(state === 'loading' ? { 'aria-busy': true } : {})}>
+      {body}
+    </div>
+  )
   if (loading) {
-    return (
-      <div className={['fk-prov', className].filter(Boolean).join(' ')} data-state="loading" aria-busy="true">
+    return shell(
+      'loading',
+      <>
         <p className="fk-prov__status" role="status">
           {l.loading}
         </p>
@@ -308,100 +404,198 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
           <span className="fk-prov__ghost" />
           <span className="fk-prov__ghost" />
         </div>
-      </div>
+      </>,
     )
   }
   if (error) {
-    return (
-      <div className={['fk-prov', className].filter(Boolean).join(' ')} data-state="error">
-        <InlineNotice tone="danger" title={l.errorTitle} titleAs="h2" urgency="assertive" actions={onRetry ? <Button onPress={onRetry}>{l.retry}</Button> : undefined}>
-          {error}
-        </InlineNotice>
-      </div>
+    return shell(
+      'error',
+      <InlineNotice tone="danger" title={l.errorTitle} titleAs="h2" urgency="assertive" actions={onRetry ? <Button onPress={onRetry}>{l.retry}</Button> : undefined}>
+        {error}
+      </InlineNotice>,
     )
   }
-  if (!items.length) {
-    return (
-      <div className={['fk-prov', className].filter(Boolean).join(' ')} data-state="empty">
-        <EmptyState title={l.emptyTitle} description={l.emptyText} framing="section" />
-      </div>
-    )
-  }
+  if (!items.length) return shell('empty', <EmptyState title={l.emptyTitle} description={l.emptyText} framing="section" />)
 
   const notices: Array<{ key: string; tone: 'info' | 'warning'; text: string }> = []
-  if (provView.focusFiltered) notices.push({ key: 'filtered', tone: 'info', text: l.focusFiltered })
-  else if (provView.focusIsolated) notices.push({ key: 'isolated', tone: 'info', text: l.isolated })
+  if (fullView.focusFiltered) notices.push({ key: 'filtered', tone: 'info', text: l.focusFiltered })
+  else if (fullView.focusIsolated) notices.push({ key: 'isolated', tone: 'info', text: l.isolated })
   else if (!provView.vertices.length) notices.push({ key: 'none', tone: 'info', text: l.noMatches })
-  if (isDeep(provView, hops)) notices.push({ key: 'deep', tone: 'warning', text: fill(l.deep, { count: provView.vertices.length }, locale) })
+  if (isDeep(provView, Math.max(back, forward))) notices.push({ key: 'deep', tone: 'warning', text: fill(l.deep, { count: provView.vertices.length }, locale) })
 
-  const tree = (
-    <ProvenanceTree view={provView} focusId={focusId} direction={direction} selectedId={selectedId} onSelect={pickFromList} labels={l} locale={locale} />
+  const inspector =
+    inspectorOpen && selectedVertex ? (
+      <ProvenanceInspector
+        vertex={selectedVertex}
+        view={fullView}
+        labels={l}
+        locale={locale}
+        onSelect={(id) => setSelectedId(id)}
+        onClose={() => setInspectorOpen(false)}
+        {...(props.onReread ? { onReread: props.onReread } : {})}
+        {...(props.onRequestVerification ? { onRequestVerification: props.onRequestVerification } : {})}
+      />
+    ) : null
+
+  const graphRow = (
+    <div className="fk-prov__tools" data-fk-canvas-exit="">
+      <ProvenanceFilters value={filters} onChange={setFilters} labels={l} locale={locale} canShowActors={actors.some((a) => !!a.id)} />
+      <NativeSelect className="fk-prov__hops" label={l.hopsBack} options={hopOptions} value={String(back)} onChange={(v) => setBack(Number(v))} disabled={!focusId} />
+      <NativeSelect className="fk-prov__hops" label={l.hopsForward} options={hopOptions} value={String(forward)} onChange={(v) => setForward(Number(v))} disabled={!focusId} />
+      <Switch className="fk-prov__only-path" label={l.onlyPath} isSelected={onlyPath} onChange={setOnlyPath} disabled={!hasPath} />
+      <CanvasToolbar items={tools} label={l.graphName} placement="inline" exitTarget={false} />
+      <div className="fk-prov__legend-row">
+        <p className="fk-prov__count" role="status">
+          {fill(l.count, { count: provView.vertices.length }, locale)}
+        </p>
+        <ProvenanceLegend labels={l} states={presentProof.length ? presentProof : undefined} variant="inline" />
+      </div>
+    </div>
   )
 
+  const certificateFor = (focusId && props.certificates?.[focusId]) || (selectedId && props.certificates?.[selectedId]) || null
+
+  let main: ReactNode
+  if (view === 'graph') {
+    main = (
+      <div className="fk-prov__main" ref={canvasRef}>
+        {graphRow}
+        <CanvasSurface
+          label={l.graphName}
+          roleDescription={l.graphRole}
+          nodes={surfaceNodes}
+          connectors={surfaceConnectors}
+          renderNode={renderNode}
+          renderConnector={renderConnector}
+          overlay={bandOverlay}
+          floating
+          fitKey={layoutKey}
+          fit="resize"
+          fitAlign="start"
+          fitInclude={{ x: 0, y: 0, width: bands.width, height: bands.height }}
+          fitPadding={16}
+          minFitZoom={0.55}
+          minimap={provView.vertices.length > 12}
+          mode={mode}
+          dragNodes={mode === 'select'}
+          onNodeDrag={onNodeDrag}
+          onViewportChange={(v) => setZoom(v.zoom)}
+          onEscape={() => false}
+          onLeave={leaveCanvas}
+          direction={mirror ? 'rtl' : 'ltr'}
+          apiRef={bindApi}
+          className="fk-prov__canvas"
+          data={{ 'data-path': hasPath ? 'true' : undefined }}
+        >
+          <CanvasNodeSearch
+            isOpen={searchOpen}
+            onOpenChange={setSearchOpen}
+            triggerRef={searchAnchor}
+            nodes={provView.vertices.map((v) =>
+              v.type === 'item' ? { id: v.id, label: v.item.title, kindLabel: l.kinds[v.item.kind], keywords: v.item.meta?.join(' ') ?? '' } : { id: v.id, label: v.actor.name, kindLabel: l.actorKinds[v.actor.kind] },
+            )}
+            onPick={(id) => {
+              setSelectedId(id)
+              requestAnimationFrame(() => moveFocusTo(id))
+            }}
+          />
+        </CanvasSurface>
+      </div>
+    )
+  } else if (view === 'tree') {
+    main = (
+      <div className="fk-prov__main">
+        <div className="fk-prov__tree-only">
+          <ProvenanceTree view={fullView} focusId={focusId} selectedId={selectedId} onSelect={(id) => setSelectedId(id)} onOpenInGraph={openInGraph} labels={l} locale={locale} />
+        </div>
+      </div>
+    )
+  } else if (view === 'timeline') {
+    main = (
+      <div className="fk-prov__main">
+        <ProvenanceTimeline items={provView.vertices.flatMap((v) => (v.type === 'item' ? [v.item] : []))} selectedId={selectedId} onSelect={(id: string) => setSelectedId(id)} />
+      </div>
+    )
+  } else if (view === 'certificate') {
+    main = (
+      <div className="fk-prov__main">
+        <ProvenanceCertificate
+          certificate={certificateFor}
+          {...(certificateFor && props.onRerunCertificate ? { onRerun: () => props.onRerunCertificate!(certificateFor.claimId) } : {})}
+          {...(certificateFor && props.onDownloadCertificate ? { onDownload: () => props.onDownloadCertificate!(certificateFor.claimId) } : {})}
+          {...(props.certificateBusy !== undefined ? { busy: props.certificateBusy } : {})}
+        />
+      </div>
+    )
+  } else {
+    main = (
+      <div className="fk-prov__main">
+        {props.comparison ? <EditionCompare comparison={props.comparison} /> : <EmptyState title={l.viewCompare} description={l.noComparison} framing="section" />}
+      </div>
+    )
+  }
+
+  const showInspector = view === 'graph' || view === 'tree'
   return (
-    <div
-      className={['fk-prov', className].filter(Boolean).join(' ')}
-      data-view={view}
-      data-list-open={view === 'graph' && listOpen ? 'true' : 'false'}
-      data-inspector-open={inspectorOpen && selectedVertex ? 'true' : 'false'}
-      data-wide={wide ? 'true' : 'false'}
-    >
-      {bar}
+    <div ref={rootRef} className={['fk-prov', className].filter(Boolean).join(' ')} data-view={view} data-inspector-open={showInspector && inspector ? 'true' : 'false'} data-wide={wide ? 'true' : 'false'}>
+      {question}
       {notices.map((n) => (
         <InlineNotice key={n.key} tone={n.tone} urgency="polite" className="fk-prov__notice">
           {n.text}
         </InlineNotice>
       ))}
       <div className="fk-prov__body">
-        {view === 'graph' && listOpen ? <div className="fk-prov__list">{tree}</div> : null}
-        <div className="fk-prov__main" ref={canvasRef}>
-          {view === 'tree' ? (
-            <div className="fk-prov__tree-only">{tree}</div>
-          ) : (
-            <CanvasSurface
-              label={l.graphName}
-              roleDescription={l.graphRole}
-              nodes={surfaceNodes}
-              connectors={surfaceConnectors}
-              renderNode={renderNode}
-              renderConnector={renderConnector}
-              fitKey={layoutKey}
-              minFitZoom={0.6}
-              minimap
-              portAnchor={orientation === 'vertical' ? (_id, _port, role) => ({ side: role === 'source' ? 'bottom' : 'top', along: 0.5 }) : undefined}
-              mode={mode}
-              dragNodes={mode === 'select'}
-              onNodeDrag={onNodeDrag}
-              onViewportChange={(v) => setZoom(v.zoom)}
-              onEscape={() => false}
-              onLeave={leaveCanvas}
-              direction={keepLtr ? 'ltr' : rtl ? 'rtl' : 'ltr'}
-              apiRef={api}
-              className="fk-prov__canvas"
-            >
-              <ProvenanceLegend labels={l} states={presentProof.length ? presentProof : undefined} />
-              <CanvasToolbar items={tools} label={l.graphName} />
-              <CanvasNodeSearch
-                isOpen={searchOpen}
-                onOpenChange={setSearchOpen}
-                triggerRef={searchAnchor}
-                nodes={provView.vertices.map((v) =>
-                  v.type === 'item'
-                    ? { id: v.id, label: v.item.title, kindLabel: l.kinds[v.item.kind], keywords: v.item.meta?.join(' ') ?? '' }
-                    : { id: v.id, label: v.actor.name, kindLabel: l.actorKinds[v.actor.kind] },
-                )}
-                onPick={(id) => {
-                  setSelectedId(id)
-                  requestAnimationFrame(() => moveFocusTo(id))
-                }}
-              />
-            </CanvasSurface>
-          )}
-        </div>
-        {inspectorOpen && selectedVertex ? (
-          <ProvenanceInspector vertex={selectedVertex} view={provView} labels={l} locale={locale} onSelect={pickFromList} onClose={() => setInspectorOpen(false)} />
-        ) : null}
+        {main}
+        {showInspector ? inspector : null}
       </div>
     </div>
+  )
+}
+
+/** "Where did this come from [item]": a combobox over every item, matching titles, ids, values and quoted evidence. */
+function FocusQuestion({ items, value, labels: l, onChange }: { items: readonly ProvItem[]; value: string | null; labels: ProvenanceLabels; onChange: (id: string | null) => void }) {
+  const [input, setInput] = useState<string | null>(null)
+  const current = items.find((i) => i.id === value)
+  const shown = input ?? (current ? current.title : '')
+  const needle = (input ?? '').trim().toLocaleLowerCase()
+  const options = needle ? items.filter((i) => searchableText(i).toLocaleLowerCase().includes(needle) || l.kinds[i.kind].toLocaleLowerCase().includes(needle)) : items
+  return (
+    <ComboBox
+      className="fk-prov-question"
+      items={options}
+      selectedKey={value}
+      inputValue={shown}
+      onInputChange={setInput}
+      onSelectionChange={(key) => {
+        setInput(null)
+        if (key !== null) onChange(String(key))
+      }}
+      menuTrigger="focus"
+      allowsEmptyCollection
+    >
+      <Label className="fk-prov-question__label">{l.question}</Label>
+      <div className="fk-prov-question__field">
+        <Input className="fk-prov-question__input" placeholder={l.questionHint} dir="auto" onBlur={() => setInput(null)} />
+        <AriaButton className="fk-prov-question__button">
+          <ChevronDown aria-hidden="true" focusable="false" />
+        </AriaButton>
+      </div>
+      <AriaPopover className="fk-prov-question__popover" placement="bottom start">
+        <ListBox className="fk-prov-question__list" renderEmptyState={() => <p className="fk-prov-question__empty">{l.questionEmpty}</p>}>
+          {(item: ProvItem) => (
+            <ListBoxItem id={item.id} textValue={`${l.kinds[item.kind]}: ${item.title}`} className="fk-prov-question__option">
+              <Text slot="label" className="fk-prov-question__option-title">
+                <span className="fk-prov-question__option-kind">{l.kinds[item.kind]}</span> {item.title}
+              </Text>
+              {item.meta?.[0] ? (
+                <Text slot="description" className="fk-prov-question__option-meta">
+                  <code dir="ltr">{item.meta[0]}</code>
+                </Text>
+              ) : null}
+            </ListBoxItem>
+          )}
+        </ListBox>
+      </AriaPopover>
+    </ComboBox>
   )
 }

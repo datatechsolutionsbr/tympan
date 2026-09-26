@@ -3,7 +3,10 @@
 // §2.11), identifiers in mono, details, and the relations in both directions
 // as buttons that move the selection along the trail.
 
-import { ActorChip, ProofBadge } from '@fakhir/design-system'
+import { CircleCheck, CircleX, Hourglass, RefreshCw, ShieldQuestion } from 'lucide-react'
+import { ActorChip, Button, ProofBadge } from '@fakhir/design-system'
+import type { ObligationStatus, ProofObligation } from './proofTypes'
+import { HashCheck } from './ProvenanceNode'
 import { DockedPanel } from '../internal/DockedPanel'
 import { formatDateTime } from '../internal/format'
 import type { ProvenanceLabels } from './labels'
@@ -17,9 +20,40 @@ export interface ProvenanceInspectorProps {
   onSelect: (id: string) => void
   onClose?: () => void
   returnFocusTo?: HTMLElement | null
+  /** "Reread the source now" (retrievals and sources). */
+  onReread?: (id: string) => void
+  /** "Ask for verification". */
+  onRequestVerification?: (id: string) => void
 }
 
-export function ProvenanceInspector({ vertex, view, labels: l, locale, onSelect, onClose, returnFocusTo }: ProvenanceInspectorProps) {
+const OBLIGATION_ICON: Record<ObligationStatus, typeof CircleCheck> = { ok: CircleCheck, pending: Hourglass, failed: CircleX }
+
+function Obligations({ list, l }: { list: ProofObligation[]; l: ProvenanceLabels }) {
+  return (
+    <ul className="fk-prov-obligations">
+      {list.map((o) => {
+        const Icon = OBLIGATION_ICON[o.status]
+        return (
+          <li key={o.id} className="fk-prov-obligation" data-status={o.status}>
+            <span className="fk-prov-obligation__state">
+              <Icon aria-hidden="true" focusable="false" />
+              <span className="fk-prov-obligation__word">{l.obligationStatus[o.status]}</span>
+            </span>
+            <span className="fk-prov-obligation__label">{o.label}</span>
+            {o.detail ? (
+              <code className="fk-prov-obligation__detail" dir="ltr">
+                {o.detail}
+              </code>
+            ) : null}
+            {o.children?.length ? <Obligations list={o.children} l={l} /> : null}
+          </li>
+        )
+      })}
+    </ul>
+  )
+}
+
+export function ProvenanceInspector({ vertex, view, labels: l, locale, onSelect, onClose, returnFocusTo, onReread, onRequestVerification }: ProvenanceInspectorProps) {
   const byId = new Map(view.vertices.map((v) => [v.id, v]))
   const { back, ahead } = relationsOf(vertex.id, view.links)
   const nameOf = (id: string) => {
@@ -75,6 +109,28 @@ export function ProvenanceInspector({ vertex, view, labels: l, locale, onSelect,
             {...(vertex.item.verifiedBy ? { provedBy: vertex.item.verifiedBy } : {})}
             {...(vertex.item.rule ? { rule: vertex.item.rule } : {})}
           />
+          {vertex.item.proofReason ? (
+            <p className="fk-prov-inspector__reason">
+              <span className="fk-prov-inspector__label">{l.reason}</span> {vertex.item.proofReason}
+            </p>
+          ) : null}
+          {vertex.item.hashCheck ? <HashCheck state={vertex.item.hashCheck} labels={l} /> : null}
+          {vertex.item.evidence ? (
+            <figure className="fk-prov-inspector__evidence">
+              <figcaption className="fk-prov-inspector__heading">{l.evidence}</figcaption>
+              <blockquote className="fk-prov-inspector__quote" dir="auto">
+                {vertex.item.evidence}
+              </blockquote>
+            </figure>
+          ) : null}
+          {vertex.item.obligations?.length ? (
+            <section className="fk-prov-inspector__section" aria-labelledby={`fk-prov-obl-${vertex.id}`}>
+              <h3 id={`fk-prov-obl-${vertex.id}`} className="fk-prov-inspector__heading">
+                {l.obligations}
+              </h3>
+              <Obligations list={vertex.item.obligations} l={l} />
+            </section>
+          ) : null}
           {vertex.item.actor || vertex.item.at ? (
             <p className="fk-prov-inspector__act">
               {vertex.item.actor ? (
@@ -110,7 +166,7 @@ export function ProvenanceInspector({ vertex, view, labels: l, locale, onSelect,
                 {vertex.item.details.map((d) => (
                   <div key={d.label} className="fk-prov-inspector__detail">
                     <dt>{d.label}</dt>
-                    <dd>{d.mono ? <code>{d.value}</code> : d.value}</dd>
+                    <dd>{d.mono ? <code dir="ltr">{d.value}</code> : d.value}</dd>
                   </div>
                 ))}
               </dl>
@@ -118,6 +174,20 @@ export function ProvenanceInspector({ vertex, view, labels: l, locale, onSelect,
           ) : null}
           {list(back, 'back', l.cameFrom)}
           {list(ahead, 'ahead', l.madeFrom)}
+          {onReread || onRequestVerification ? (
+            <div className="fk-prov-inspector__actions">
+              {onReread && (vertex.item.kind === 'retrieval' || vertex.item.kind === 'source') ? (
+                <Button variant="secondary" leadingIcon={<RefreshCw />} onPress={() => onReread(vertex.id)}>
+                  {l.reread}
+                </Button>
+              ) : null}
+              {onRequestVerification ? (
+                <Button variant="secondary" leadingIcon={<ShieldQuestion />} onPress={() => onRequestVerification(vertex.id)}>
+                  {l.requestVerification}
+                </Button>
+              ) : null}
+            </div>
+          ) : null}
         </div>
       ) : (
         <div className="fk-prov-inspector__body">

@@ -70,6 +70,13 @@ export interface CanvasSurfaceProps {
    * then centred and reached by panning (the overview map and the list help).
    */
   minFitZoom?: number
+  /**
+   * Where a fitted graph sits: centred, or against the reading-start and top
+   * edges (no empty margin before the content; right edge in RTL).
+   */
+  fitAlign?: 'center' | 'start'
+  /** Extra canvas area a fit must include besides the nodes (band labels, frames). */
+  fitInclude?: Rect
 
   mode?: 'select' | 'pan'
   dragNodes?: boolean
@@ -136,6 +143,8 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
     fitPadding = 48,
     maxFitZoom = 1,
     minFitZoom,
+    fitAlign = 'center',
+    fitInclude,
     mode = 'select',
     dragNodes = false,
     marquee = false,
@@ -183,7 +192,7 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
   const ordered = useMemo(() => nodes.filter((n) => !n.hidden).map((n, i) => ({ n, i })).sort((a, b) => (a.n.layer ?? 1) - (b.n.layer ?? 1) || a.i - b.i).map((x) => x.n), [nodes])
 
   // ---- viewport helpers -------------------------------------------------
-  const bounds = useCallback(() => enclosingRect([...placed.values()]), [placed])
+  const bounds = useCallback(() => enclosingRect([...placed.values(), ...(fitInclude ? [fitInclude] : [])]), [placed, fitInclude])
   const fitNow = useCallback(() => {
     const b = bounds()
     let v = fitBounds(b, container, fitPadding, zoomLimits, maxFitZoom)
@@ -191,8 +200,12 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
       const zoom = clampZoom(minFitZoom, zoomLimits)
       v = { zoom, x: container.width / 2 - (b.x + b.width / 2) * zoom, y: container.height / 2 - (b.y + b.height / 2) * zoom }
     }
+    if (b && fitAlign === 'start') {
+      const pad = Math.min(fitPadding, 16)
+      v = { zoom: v.zoom, y: pad - b.y * v.zoom, x: rtl ? container.width - pad - (b.x + b.width) * v.zoom : pad - b.x * v.zoom }
+    }
     setViewport(v)
-  }, [bounds, container, fitPadding, zoomLimits, maxFitZoom, minFitZoom, setViewport])
+  }, [bounds, container, fitPadding, zoomLimits, maxFitZoom, minFitZoom, fitAlign, rtl, setViewport])
   const centrePivot = useCallback((): Point => ({ x: container.width / 2, y: container.height / 2 }), [container])
 
   const didFit = useRef(false)

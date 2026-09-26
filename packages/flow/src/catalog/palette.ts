@@ -33,7 +33,7 @@ const FAMILY_TONES: ReadonlyArray<[ToneName, readonly string[]]> = [
   ['categorical-6', ['datasource', 'data-source']],
   // Provenance kinds (W3C PROV, design direction §3.13).
   ['categorical-7', ['query', 'retrieval', 'source']],
-  ['categorical-8', ['assertion', 'record', 'analysis', 'edition', 'manuscript']],
+  ['categorical-8', ['assertion', 'record', 'verification', 'analysis', 'edition', 'manuscript']],
   ['neutral', ['note', 'group']],
 ]
 

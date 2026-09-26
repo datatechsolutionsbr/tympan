@@ -8,26 +8,34 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { Button as AriaButton, Tree, TreeItem, TreeItemContent, type Key, type Selection } from 'react-aria-components'
 import { ChevronRight } from 'lucide-react'
-import { ActorChip, ProofBadge } from '@fakhir/design-system'
+import { ActorChip, ProofBadge, SegmentedControl } from '@fakhir/design-system'
+import { useControllable } from '../internal/useControllable'
 import { FALLBACK_KIND_ICONS, resolveIcon } from '../catalog/icons'
 import { kindTone } from '../catalog/palette'
 import type { HopDirection } from '../model/graph'
 import type { ProvenanceLabels } from './labels'
 import { proofKeyOf, provenanceTree, treeKeys, type ProvTreeRow, type ProvView } from './model'
-import { itemAccessibleName } from './ProvenanceNode'
+import { HashCheck, itemAccessibleName } from './ProvenanceNode'
 
 export interface ProvenanceTreeProps {
   view: ProvView
   focusId: string | null
-  direction: HopDirection
+  /** 'backward' lists where the focus came from; 'forward' where it was used. */
+  way?: 'backward' | 'forward'
+  defaultWay?: 'backward' | 'forward'
+  onWayChange?: (way: 'backward' | 'forward') => void
   selectedId: string | null
   onSelect: (id: string) => void
+  /** Enter on a row: show that node in the graph. */
+  onOpenInGraph?: (id: string) => void
   labels: ProvenanceLabels
   locale?: string
   className?: string
 }
 
-export function ProvenanceTree({ view, focusId, direction, selectedId, onSelect, labels: l, locale, className }: ProvenanceTreeProps) {
+export function ProvenanceTree({ view, focusId, selectedId, onSelect, onOpenInGraph, labels: l, locale, className, ...rest }: ProvenanceTreeProps) {
+  const [way, setWay] = useControllable<'backward' | 'forward'>(rest.way, rest.defaultWay ?? 'backward', rest.onWayChange)
+  const direction: HopDirection = focusId ? way : 'forward'
   const rows = useMemo(() => provenanceTree(view, focusId, direction), [view, focusId, direction])
   const allKeys = useMemo(() => treeKeys(rows), [rows])
   const [expanded, setExpanded] = useState<Set<Key>>(() => new Set(allKeys))
@@ -62,15 +70,22 @@ export function ProvenanceTree({ view, focusId, direction, selectedId, onSelect,
               ) : null}
               <span className="fk-prov-tree__text">
                 {via ? <span className="fk-prov-tree__via">{via}</span> : null}
-                <span className="fk-prov-tree__kind">{vertex.type === 'item' ? l.kinds[vertex.item.kind] : l.actorKinds[vertex.actor.kind]}</span>
-                <span className="fk-prov-tree__title">{vertex.type === 'item' ? vertex.item.title : vertex.actor.name}</span>
-                {vertex.type === 'item' ? (
-                  <span className="fk-prov-tree__facts">
-                    <ProofBadge state={vertex.item.proofState ?? null} size="inline" label={l.proof[proofKeyOf(vertex.item)]} />
-                    {vertex.item.actor ? <ActorChip kind={vertex.item.actor.kind} name={vertex.item.actor.name} compact /> : null}
-                  </span>
+                <span className="fk-prov-tree__title">
+                  <span className="fk-prov-tree__kind">{vertex.type === 'item' ? l.kinds[vertex.item.kind] : l.actorKinds[vertex.actor.kind]}</span> {vertex.type === 'item' ? vertex.item.title : vertex.actor.name}
+                </span>
+                {vertex.type === 'item' && vertex.item.meta?.[0] ? (
+                  <code className="fk-prov-tree__meta" dir="ltr">
+                    {vertex.item.meta[0]}
+                  </code>
                 ) : null}
               </span>
+              {vertex.type === 'item' ? (
+                <span className="fk-prov-tree__facts">
+                  <ProofBadge state={vertex.item.proofState ?? null} size="compact" label={l.proof[proofKeyOf(vertex.item)]} />
+                  {vertex.item.actor ? <ActorChip kind={vertex.item.actor.kind} name={vertex.item.actor.name} compact /> : null}
+                  {vertex.item.hashCheck ? <HashCheck state={vertex.item.hashCheck} labels={l} /> : null}
+                </span>
+              ) : null}
             </div>
           )}
         </TreeItemContent>
@@ -80,10 +95,26 @@ export function ProvenanceTree({ view, focusId, direction, selectedId, onSelect,
   }
 
   return (
+    <div className="fk-prov-tree-wrap">
+    {focusId ? (
+      <SegmentedControl
+        className="fk-prov-tree__way"
+        label={l.treeWay}
+        size="compact"
+        options={[
+          { value: 'backward', label: l.treeBackward },
+          { value: 'forward', label: l.treeForward },
+        ]}
+        value={way}
+        onChange={(v) => setWay(v as 'backward' | 'forward')}
+      />
+    ) : null}
+    <p className="fk-prov-tree__hint">{onOpenInGraph ? l.openInGraph : null}</p>
     <Tree
       aria-label={l.treeName}
       className={['fk-prov-tree', className].filter(Boolean).join(' ')}
       selectionMode="single"
+      selectionBehavior={onOpenInGraph ? 'replace' : 'toggle'}
       selectedKeys={selectedKey ? [selectedKey] : []}
       onSelectionChange={(keys: Selection) => {
         if (keys === 'all') return
@@ -93,9 +124,11 @@ export function ProvenanceTree({ view, focusId, direction, selectedId, onSelect,
       expandedKeys={expanded}
       onExpandedChange={setExpanded}
       renderEmptyState={() => <p className="fk-prov-tree__empty">{l.noMatches}</p>}
+      {...(onOpenInGraph ? { onAction: (key: Key) => onOpenInGraph(lastId(String(key))) } : {})}
     >
       {rows.map(renderRow)}
     </Tree>
+    </div>
   )
 }
 

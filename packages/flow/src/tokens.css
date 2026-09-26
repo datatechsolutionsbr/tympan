@@ -74,6 +74,13 @@
     --fk-flow-grid-dot: var(--fk-line-strong);
     --fk-flow-guide: var(--fk-accent);
     --fk-flow-marquee: var(--fk-accent-soft);
+
+    /* Provenance bands (read by the layout at mount; px values). */
+    --fk-flow-band: 96px;
+    --fk-flow-band-label: 130px;
+    --fk-flow-node-h: 72px;
+    --fk-flow-node-w: 236px;
+    --fk-flow-col-gap: 56px;
   }
 
   /* A tone name on any element (data-tone) selects the four tone parts. */

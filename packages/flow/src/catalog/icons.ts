@@ -112,4 +112,5 @@ export const FALLBACK_KIND_ICONS: Readonly<Record<string, string>> = Object.free
   analysis: 'chart-column',
   edition: 'library',
   manuscript: 'scroll-text',
+  verification: 'scale',
 })

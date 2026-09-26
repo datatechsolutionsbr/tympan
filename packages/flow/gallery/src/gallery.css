@@ -74,7 +74,7 @@ body {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  min-block-size: max(560px, calc(100dvh - 180px));
+  block-size: max(620px, calc(100dvh - 150px));
 }
 .fk-gallery-page__stage > * {
   flex: 1 1 auto;
