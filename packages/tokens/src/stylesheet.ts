@@ -4,6 +4,7 @@
 // directly by the generator); both produce the same text for the same input.
 
 import { presets as builtInPresets, DEFAULT_THEME } from './presets.ts'
+import { scriptRules } from './scripts.ts'
 import { DENSITIES, densityVariables, resolveTheme, themeVariables, type Density, type ThemeConfig } from './theme.ts'
 
 export type VarList = Array<[string, string]>
@@ -122,7 +123,10 @@ export const OPAQUE_VARS: VarList = [
 export function buildStylesheet(input: StylesheetInput): string {
   const parts: string[] = []
   const defaultTheme = input.defaultTheme === undefined ? DEFAULT_THEME : input.defaultTheme
-  if (input.base?.length) parts.push(rule([':root'], decls(input.base)))
+  if (input.base?.length) {
+    parts.push(rule([':root'], decls(input.base)))
+    parts.push(`/* per-script typography (:lang) */\n${scriptRules(input.base)}`)
+  }
 
   const densities = input.densities ?? {}
   if (densities.default) parts.push(rule([':root', '[data-fk-density="default"]'], decls(densities.default)))

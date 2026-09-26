@@ -178,3 +178,17 @@ describe('stylesheet', () => {
     expect(text).toContain('--fk-dur-quick: 0ms;')
   })
 })
+
+describe('per-script typography', () => {
+  it('emits :lang() blocks that reorder stacks, drop tracking for joined scripts and relax leading', async () => {
+    const { readFileSync } = await import('node:fs')
+    const css = readFileSync(new URL('../dist/tokens.css', import.meta.url), 'utf8')
+    const arabic = css.slice(css.indexOf(':lang(ar)'), css.indexOf('}', css.indexOf(':lang(ar)')))
+    expect(arabic).toMatch(/--fk-font-sans:\s*"Noto Sans Arabic"/)
+    expect(arabic).toMatch(/--fk-font-tracking-eyebrow:\s*0em/)
+    expect(arabic).toMatch(/--fk-font-line-height-body:\s*28px/)
+    const japanese = css.slice(css.indexOf(':lang(ja)'), css.indexOf('}', css.indexOf(':lang(ja)')))
+    expect(japanese).toMatch(/line-break:\s*strict/)
+    expect(css).toMatch(/--fk-font-sans:[^;]*Noto Sans/)
+  })
+})
