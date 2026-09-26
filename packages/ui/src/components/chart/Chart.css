@@ -1,0 +1,205 @@
+/* Chart (spec: wave-2/chart.md; design direction §2.2, §2.3, §2.7, §5). */
+@layer fakhir.components {
+  .fk-chart {
+    --fk-chart-ink: var(--fk-ink-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-3);
+    margin: 0;
+    min-inline-size: 0;
+  }
+
+  .fk-chart__caption {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-1);
+  }
+  .fk-chart__title {
+    color: var(--fk-ink);
+    font-family: var(--fk-font-serif);
+    font-size: var(--fk-font-size-h3);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-h3);
+  }
+  .fk-chart__subtitle {
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+  .fk-chart__finding {
+    max-inline-size: var(--fk-measure-summary);
+    color: var(--fk-ink-2);
+    font-size: var(--fk-font-size-body);
+    line-height: var(--fk-font-line-height-body);
+  }
+
+  .fk-chart__tools {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .fk-chart__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--fk-space-2) var(--fk-space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .fk-chart__legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fk-space-2);
+  }
+  .fk-chart__swatch {
+    inline-size: 24px;
+    block-size: 12px;
+    stroke: currentColor;
+    stroke-width: 3;
+  }
+  .fk-chart__legend-name {
+    color: var(--fk-ink-2);
+    font-size: var(--fk-font-size-meta);
+  }
+
+  .fk-chart__plot {
+    position: relative;
+    border-radius: var(--fk-radius-control);
+    outline: none;
+    touch-action: pan-y;
+  }
+  .fk-chart__plot:focus-visible {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+  .fk-chart__svg {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    overflow: visible;
+  }
+
+  .fk-chart__grid {
+    stroke: var(--fk-line);
+    stroke-width: 1;
+  }
+  .fk-chart__baseline {
+    stroke: var(--fk-line-strong);
+    stroke-width: 1;
+  }
+  .fk-chart__tick {
+    fill: var(--fk-chart-ink);
+    font-family: var(--fk-font-sans);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .fk-chart__line {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .fk-chart__area {
+    fill: currentColor;
+    fill-opacity: 0.16;
+    stroke: none;
+  }
+  .fk-chart__mark {
+    fill: currentColor;
+    stroke: var(--fk-surface-solid);
+    stroke-width: 1;
+  }
+  .fk-chart__bar {
+    stroke-width: 0;
+  }
+  .fk-chart__bar[data-overlap] {
+    fill-opacity: 0.55;
+  }
+  .fk-chart__mark[data-active] {
+    stroke: var(--fk-ink);
+    stroke-width: 2;
+  }
+
+  .fk-chart__annotation line {
+    stroke: var(--fk-ink-3);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+  .fk-chart__annotation text {
+    fill: var(--fk-ink-2);
+    font-family: var(--fk-font-sans);
+    font-size: 12px;
+  }
+
+  .fk-chart__readout {
+    position: absolute;
+    inset-block-start: var(--fk-space-2);
+    translate: -50% 0;
+    padding: var(--fk-space-1) var(--fk-space-2);
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-control);
+    background: var(--fk-surface-raised);
+    box-shadow: var(--fk-shadow-floating);
+    color: var(--fk-ink);
+    font-size: var(--fk-font-size-meta);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .fk-chart__readout[data-edge='end'] {
+    translate: -100% 0;
+  }
+  .fk-chart__readout[data-edge='start'] {
+    translate: 0 0;
+  }
+
+  .fk-chart__missing {
+    color: var(--fk-ink-3);
+  }
+
+  /* No drawing animation anywhere; nothing to remove beyond transitions. */
+  @media (prefers-reduced-motion: reduce) {
+    .fk-chart * {
+      transition: none;
+      animation: none;
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .fk-chart__readout {
+      background: var(--fk-surface-raised-solid);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-chart__legend-item,
+    .fk-chart__marks g {
+      color: CanvasText;
+    }
+    .fk-chart__mark {
+      stroke: Canvas;
+    }
+    .fk-chart__marks g[data-index='1'] .fk-chart__bar,
+    .fk-chart__marks g[data-index='3'] .fk-chart__bar {
+      fill: Canvas;
+      stroke: CanvasText;
+      stroke-width: 1.5;
+    }
+    .fk-chart__mark[data-active] {
+      fill: Highlight;
+      stroke: Highlight;
+    }
+    .fk-chart__grid,
+    .fk-chart__baseline {
+      stroke: GrayText;
+    }
+    .fk-chart__tick {
+      fill: CanvasText;
+    }
+    .fk-chart__readout {
+      border-color: CanvasText;
+    }
+  }
+}

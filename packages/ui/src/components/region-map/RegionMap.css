@@ -1,0 +1,213 @@
+/* RegionMap (spec: wave-2/region-map.md; design direction §2.3, §2.7, §2.10, §2.12). */
+@layer fakhir.components {
+  .fk-region-map {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-4);
+    min-inline-size: 0;
+  }
+  .fk-region-map__counter {
+    margin: 0;
+    color: var(--fk-ink-2);
+    font-size: var(--fk-font-size-body);
+  }
+
+  .fk-region-map__stage {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-card);
+    background: var(--fk-surface-sunken);
+  }
+  .fk-region-map__svg {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    touch-action: none;
+    cursor: grab;
+    user-select: none;
+  }
+  .fk-region-map__placeholder {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 800 / 560;
+    padding: var(--fk-space-5);
+  }
+  .fk-region-map__placeholder > * {
+    inline-size: 100%;
+  }
+
+  .fk-region-map__shape {
+    fill-opacity: 0.22;
+    stroke: var(--fk-line-strong);
+    stroke-width: 0.8;
+    vector-effect: non-scaling-stroke;
+  }
+  .fk-region-map__shape[data-has-items] {
+    fill-opacity: 0.42;
+    cursor: pointer;
+  }
+  .fk-region-map__shape[data-hovered] {
+    fill-opacity: 0.6;
+  }
+  .fk-region-map__shape[data-active] {
+    fill-opacity: 0.75;
+    stroke: var(--fk-accent);
+    stroke-width: 2;
+  }
+
+  .fk-region-map__marker {
+    cursor: pointer;
+    outline: none;
+  }
+  .fk-region-map__hit {
+    fill: transparent;
+  }
+  .fk-region-map__dot {
+    fill: var(--fk-surface-raised-solid);
+    stroke: currentColor;
+    stroke-width: 2.5;
+    vector-effect: non-scaling-stroke;
+  }
+  .fk-region-map__count {
+    fill: var(--fk-ink);
+    font-family: var(--fk-font-sans);
+    font-weight: var(--fk-font-weight-semibold);
+    font-variant-numeric: tabular-nums;
+    pointer-events: none;
+  }
+  .fk-region-map__marker[data-active] .fk-region-map__dot {
+    fill: var(--fk-accent-soft);
+    stroke: var(--fk-accent);
+  }
+  .fk-region-map__marker:focus-visible .fk-region-map__dot {
+    stroke: var(--fk-focus-ring);
+    stroke-width: 4;
+  }
+
+  .fk-region-map__zoom {
+    position: absolute;
+    inset-block-start: var(--fk-space-3);
+    inset-inline-end: var(--fk-space-3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--fk-space-1);
+    padding: var(--fk-space-1);
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-card);
+    background: var(--fk-surface-raised);
+    box-shadow: var(--fk-shadow-floating);
+    backdrop-filter: blur(var(--fk-glass-blur-floating));
+    -webkit-backdrop-filter: blur(var(--fk-glass-blur-floating));
+  }
+  /* Zoom controls are 44 x 44 px (§2.10). */
+  .fk-region-map__zoom .fk-button {
+    --fk-button-height: var(--fk-control-target);
+  }
+  .fk-region-map__zoom-value {
+    color: var(--fk-ink-3);
+    font-family: var(--fk-font-mono);
+    font-size: var(--fk-font-size-meta);
+  }
+
+  .fk-region-map__detail {
+    position: absolute;
+    inset-block-end: var(--fk-space-3);
+    inset-inline-start: var(--fk-space-3);
+    max-inline-size: min(22rem, calc(100% - 2 * var(--fk-space-3)));
+    padding: var(--fk-space-3) var(--fk-space-4);
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-card);
+    background: var(--fk-surface-raised);
+    box-shadow: var(--fk-shadow-floating);
+  }
+
+  .fk-region-map__legend-title {
+    margin: 0 0 var(--fk-space-2);
+    color: var(--fk-ink);
+    font-size: var(--fk-font-size-label);
+    font-weight: var(--fk-font-weight-semibold);
+  }
+  .fk-region-map__legend ul,
+  .fk-region-map__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--fk-space-2) var(--fk-space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .fk-region-map__legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fk-space-2);
+    font-size: var(--fk-font-size-meta);
+  }
+  .fk-region-map__swatch {
+    inline-size: 8px;
+    block-size: 8px;
+    border-radius: 2px;
+  }
+  .fk-region-map__flag {
+    inline-size: 18px;
+    block-size: 12px;
+    object-fit: cover;
+    border: 1px solid var(--fk-line);
+  }
+  .fk-region-map__legend-count {
+    color: var(--fk-ink-3);
+    font-family: var(--fk-font-mono);
+  }
+  .fk-region-map__legend-more {
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+  }
+  .fk-region-map__list {
+    gap: var(--fk-space-1) var(--fk-space-2);
+  }
+  .fk-region-map__list-toggle[aria-pressed='true'] {
+    --fk-button-fill: var(--fk-accent-soft);
+    --fk-button-ink: var(--fk-on-accent-soft);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-region-map__svg * {
+      transition: none;
+      animation: none;
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .fk-region-map__zoom,
+    .fk-region-map__detail {
+      background: var(--fk-surface-raised-solid);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-region-map__shape {
+      fill: Canvas;
+      stroke: CanvasText;
+    }
+    .fk-region-map__shape[data-active],
+    .fk-region-map__marker[data-active] .fk-region-map__dot {
+      stroke: Highlight;
+      fill: Highlight;
+    }
+    .fk-region-map__dot {
+      fill: Canvas;
+      stroke: CanvasText;
+    }
+    .fk-region-map__count {
+      fill: CanvasText;
+    }
+    .fk-region-map__stage,
+    .fk-region-map__zoom,
+    .fk-region-map__detail {
+      border-color: CanvasText;
+    }
+  }
+}
