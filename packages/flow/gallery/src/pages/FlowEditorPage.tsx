@@ -1,111 +1,67 @@
-// Gallery: the shape of an analysis workflow as a DAG (start, data source,
-// compute, a decision step of backlog B-002, a rule, a report). All names,
-// values, probabilities and counts are neutral sample data.
+// Gallery: an analysis flow of research steps. Known values only: the frozen
+// edition 2026-09-20 with 582 records and the counts per phase 9 · 26 · 24 ·
+// 18. Everything else (criteria, captions, phase names, version, seed) is a
+// neutral placeholder, and the page carries the "Dados de exemplo" badge.
 
 import { useMemo, useState } from 'react'
-import { FakhirProvider, Tag, SegmentedControl, messagesPtBR } from '@fakhir/design-system'
-import { installNodeCatalog, type NodeKindEntry } from '../../../src/catalog/kindCatalog'
+import { FakhirProvider, SegmentedControl, Switch, Tag, messagesPtBR } from '@fakhir/design-system'
 import { FlowEditor } from '../../../src/editor/FlowEditor'
-import type { FlowGraph } from '../../../src/model/types'
+import { autoLayout } from '../../../src/layout/autoLayout'
+import type { FlowConnector, FlowNode } from '../../../src/model/types'
 import type { RunSummary } from '../../../src/run/types'
 import { createFlowEditorStore } from '../../../src/state/editorState'
 
 type Locale = 'pt-BR' | 'en' | 'ar' | 'ja'
 
-// Sample data only (project rule: no invented research data). Every name,
-// value, probability, model and count below is a neutral placeholder.
 const TEXT: Record<Locale, Record<string, string>> = {
-  'pt-BR': {
-    badge: 'Dados de exemplo', title: 'Análise de exemplo', start: 'Início', source: 'Fonte de dados A', rule: 'Regra de exemplo', decision: 'Decisão de exemplo',
-    check: 'Regra de consistência de exemplo', report: 'Relatório de exemplo', end: 'Fim', note: 'Fluxo de exemplo: nomes e valores são marcadores.', group: 'Grupo de exemplo',
-    confirmed_primary: 'Opção A', confirmed_secondary: 'Opção B', not_confirmed: 'Opção C', rulename: 'Regra de exemplo',
-  },
-  en: {
-    badge: 'Sample data', title: 'Sample analysis', start: 'Start', source: 'Data source A', rule: 'Sample rule', decision: 'Sample decision',
-    check: 'Sample consistency rule', report: 'Sample report', end: 'End', note: 'Sample flow: names and values are placeholders.', group: 'Sample group',
-    confirmed_primary: 'Option A', confirmed_secondary: 'Option B', not_confirmed: 'Option C', rulename: 'Sample rule',
-  },
-  ar: {
-    badge: 'بيانات تجريبية', title: 'تحليل تجريبي', start: 'البداية', source: 'مصدر بيانات أ', rule: 'قاعدة تجريبية', decision: 'قرار تجريبي',
-    check: 'قاعدة اتساق تجريبية', report: 'تقرير تجريبي', end: 'النهاية', note: 'مسار تجريبي: الأسماء والقيم عناصر نائبة.', group: 'مجموعة تجريبية',
-    confirmed_primary: 'الخيار أ', confirmed_secondary: 'الخيار ب', not_confirmed: 'الخيار ج', rulename: 'قاعدة تجريبية',
-  },
-  ja: {
-    badge: 'サンプルデータ', title: 'サンプル分析', start: '開始', source: 'データソース A', rule: 'サンプル規則', decision: 'サンプル判断',
-    check: 'サンプル整合性ルール', report: 'サンプルレポート', end: '終了', note: 'サンプルのフロー：名前と値はプレースホルダー。', group: 'サンプルグループ',
-    confirmed_primary: '選択肢 A', confirmed_secondary: '選択肢 B', not_confirmed: '選択肢 C', rulename: 'サンプル規則',
-  },
+  'pt-BR': { badge: 'Dados de exemplo', title: 'Análise de exemplo', group: 'Agrupar por país e fase', count: 'Contagem por fase', keys: 'país, fase', phaseColumn: 'fase', criterion: '[critério]', caption: '[legenda]', phase: '[fase {n}]', broken: 'Mostrar uma ligação incompatível', noAgents: 'Projeto sem agentes' },
+  en: { badge: 'Sample data', title: 'Sample analysis', group: 'Group by country and phase', count: 'Count per phase', keys: 'country, phase', phaseColumn: 'phase', criterion: '[criterion]', caption: '[caption]', phase: '[phase {n}]', broken: 'Show a mismatched link', noAgents: 'Project without agents' },
+  ar: { badge: 'بيانات تجريبية', title: 'تحليل تجريبي', group: 'تجميع حسب البلد والمرحلة', count: 'العدد حسب المرحلة', keys: 'البلد، المرحلة', phaseColumn: 'المرحلة', criterion: '[معيار]', caption: '[تعليق]', phase: '[المرحلة {n}]', broken: 'إظهار رابط غير متوافق', noAgents: 'مشروع بلا وكلاء' },
+  ja: { badge: 'サンプルデータ', title: 'サンプル分析', group: '国と段階でグループ化', count: '段階ごとの件数', keys: '国, 段階', phaseColumn: '段階', criterion: '[条件]', caption: '[キャプション]', phase: '[段階 {n}]', broken: '不整合なリンクを表示', noAgents: 'エージェントなしのプロジェクト' },
 }
 
-const CATALOG: NodeKindEntry[] = [
-  { kind: 'start', label: 'Start', category: 'Control flow', icon: 'play', formKind: 'start' },
-  { kind: 'end', label: 'End', category: 'Control flow', icon: 'flag' },
-  { kind: 'if-else', label: 'Branch', category: 'Control flow', icon: 'git-branch' },
-  { kind: 'code', label: 'Compute', category: 'Data processing', icon: 'square-function', defaultConfig: { operation: 'pass' }, formKind: 'compute' },
-  { kind: 'datasource', label: 'Data source', category: 'Data processing', icon: 'database', formKind: 'datasource' },
-  { kind: 'decision', label: 'Decision', category: 'AI', icon: 'target', formKind: 'decision' },
-  { kind: 'agent', label: 'Agent', category: 'AI', icon: 'bot', formKind: 'agent' },
-  { kind: 'rule', label: 'Rule', category: 'Control flow', icon: 'scale', formKind: 'rule' },
-  { kind: 'report-output', label: 'Report', category: 'Output', icon: 'file-chart-column', formKind: 'report-output' },
-  { kind: 'note', label: 'Note', category: 'Annotation', icon: 'sticky-note' },
-  { kind: 'group', label: 'Group', category: 'Annotation', icon: 'group', formKind: 'group' },
-]
-installNodeCatalog(CATALOG)
+const COUNTS = [9, 26, 24, 18]
 
-function buildGraph(t: Record<string, string>): FlowGraph {
-  return {
-    nodes: [
-      { id: 'start', kind: 'start', position: { x: 0, y: 0 }, data: { label: t.start, inputVariables: ['edition'], inputDefaults: { edition: '[edição]' } } },
-      { id: 'source', kind: 'datasource', position: { x: 0, y: 150 }, data: { label: t.source, sourceId: 'source-a', dialect: 'postgresql', table: 'tabela_a', selectedColumns: ['col_a', 'col_b', 'col_c'], filters: [{ column: 'edition', operator: 'equals', value: '{{start.edition}}' }], limit: 5000 } },
-      { id: 'coding', kind: 'group', position: { x: -40, y: 360 }, size: { width: 400, height: 470 }, data: { name: t.group, tone: 'categorical-3', expanded: true, autoFit: true } },
-      { id: 'rule', kind: 'code', parentId: 'coding', position: { x: 40, y: 64 }, data: { label: t.rule, operation: 'map' } },
-      { id: 'decision', kind: 'decision', parentId: 'coding', position: { x: 40, y: 214 }, data: { label: t.decision, input: { ref: 'item.value' }, options: [{ value: 'option_a', label: t.confirmed_primary }, { value: 'option_b', label: t.confirmed_secondary }, { value: 'option_c', label: t.not_confirmed }], provider: '[provedor]', model: '[modelo]', modelVersion: '[versão]', threshold: 0.6 } },
-      { id: 'check', kind: 'rule', position: { x: 440, y: 580 }, data: { label: t.check, ruleId: 'r-sample' } },
-      { id: 'report', kind: 'report-output', position: { x: 0, y: 900 }, data: { label: t.report, from: 'sample.report' } },
-      { id: 'end', kind: 'end', position: { x: 0, y: 1050 }, data: { label: t.end } },
-      { id: 'note', kind: 'note', position: { x: 420, y: 150 }, size: { width: 240, height: 120 }, data: { text: t.note, tone: 'categorical-5' } },
-    ],
-    connectors: [
-      { id: 'c1', source: 'start', target: 'source' },
-      { id: 'c2', source: 'source', target: 'rule' },
-      { id: 'c3', source: 'rule', target: 'decision' },
-      { id: 'c4', source: 'decision', target: 'report', label: t.confirmed_primary },
-      { id: 'c5', source: 'check', target: 'decision', sourcePort: 'rule' },
-      { id: 'c6', source: 'report', target: 'end' },
-    ],
-    viewport: { x: 0, y: 0, zoom: 1 },
+const link = (id: string, source: string, target: string): FlowConnector => ({ id, source, target, sourcePort: 'out', targetPort: 'in-0' })
+
+function buildFlow(t: Record<string, string>, broken: boolean): { nodes: FlowNode[]; connectors: FlowConnector[] } {
+  const at = { x: 0, y: 0 }
+  const nodes: FlowNode[] = [
+    { id: 'edition', kind: 'step', position: at, data: { stepId: 'frozen-edition', edition: '2026-09-20', count: 582 } },
+    { id: 'filter', kind: 'step', position: at, data: { stepId: 'filter', criterion: t.criterion, before: 582, after: '[n]' } },
+    { id: 'group', kind: 'step', position: at, data: { stepId: 'group', label: t.group, keys: t.keys } },
+    { id: 'count', kind: 'step', position: at, data: { stepId: 'describe', label: t.count, counts: COUNTS.join(' · ') } },
+    { id: 'table', kind: 'step', position: at, data: { stepId: 'citable-table', caption: t.caption } },
+    { id: 'chart', kind: 'step', position: at, data: { stepId: 'citable-chart', caption: t.caption } },
+  ]
+  const connectors = [link('l1', 'edition', 'filter'), link('l2', 'filter', 'group'), link('l3', 'group', 'count'), link('l4', 'count', 'table'), link('l5', 'count', 'chart')]
+  if (broken) {
+    nodes.push({ id: 'number', kind: 'step', position: at, data: { stepId: 'manuscript-number' } })
+    connectors.push(link('l6', 'table', 'number'))
   }
+  // Unplaced steps: lay them out once, top to bottom.
+  return { nodes: autoLayout(nodes.map((n) => ({ ...n, size: { width: 250, height: 86 } })), connectors, 'top-down'), connectors }
 }
 
 const RUNS: RunSummary[] = [
-  {
-    id: 'run-sample-2',
-    status: 'COMPLETED',
-    startedAt: '2026-01-02T10:00:00Z',
-    durationMs: 3400,
-    nodeResults: [
-      { nodeId: 'source', status: 'completed', durationMs: 200, outputs: { rows: 30 } },
-      { nodeId: 'rule', status: 'completed', durationMs: 1100, outputs: { coded: 30 } },
-      { nodeId: 'decision', status: 'completed', durationMs: 1700, outputs: { usage: { input_tokens: 5200, output_tokens: 310 } } },
-      { nodeId: 'report', status: 'completed', durationMs: 400, outputs: { a: 12, b: 18 } },
-    ],
-  } as RunSummary,
-  { id: 'run-sample-1', status: 'FAILED', startedAt: '2026-01-01T10:00:00Z', durationMs: 900, nodeResults: [{ nodeId: 'decision', status: 'failed', error: '[erro de exemplo]' }] } as RunSummary,
+  { id: 'run-sample-2', status: 'COMPLETED', startedAt: '2026-01-02T10:00:00Z', durationMs: 3400, nodeResults: [] } as RunSummary,
+  { id: 'run-sample-1', status: 'COMPLETED', startedAt: '2026-01-01T10:00:00Z', durationMs: 3100, nodeResults: [] } as RunSummary,
 ]
 
 export function FlowEditorPage() {
   const [locale, setLocale] = useState<Locale>('pt-BR')
+  const [broken, setBroken] = useState(false)
+  const [noAgents, setNoAgents] = useState(false)
   const t = TEXT[locale]
   const rtl = locale === 'ar'
-  // One editor per locale so the sample titles follow the switch.
+  // One editor per locale and example so the sample titles follow the switch.
   const store = useMemo(() => {
-    const g = buildGraph(t)
+    const g = buildFlow(t, broken)
     const s = createFlowEditorStore({ initial: { nodes: g.nodes, connectors: g.connectors, layoutDirection: 'down' } })
-    s.actions.setNodeResult('source', { status: 'success', durationMs: 200 })
-    s.actions.setNodeResult('rule', { status: 'success', durationMs: 1100 })
-    s.actions.setNodeResult('decision', { status: 'running' })
+    for (const id of ['edition', 'filter', 'group', 'count']) s.actions.setNodeResult(id, { status: 'success' })
+    s.actions.setNodeResult('table', { status: 'running' })
     return s
-  }, [t])
+  }, [t, broken])
 
   return (
     <div className="fk-gallery-page" lang={locale} dir={rtl ? 'rtl' : 'ltr'}>
@@ -113,23 +69,21 @@ export function FlowEditorPage() {
         <h1>{t.title}</h1>
         <Tag tone="accent">{t.badge}</Tag>
         <SegmentedControl label="Idioma / Language" size="compact" options={['pt-BR', 'en', 'ar', 'ja']} value={locale} onChange={(v) => setLocale(v as Locale)} />
+        <Switch label={t.broken} size="small" isSelected={broken} onChange={setBroken} />
+        <Switch label={t.noAgents} size="small" isSelected={noAgents} onChange={setNoAgents} />
       </div>
       <FakhirProvider locale={locale} {...(locale === 'pt-BR' ? { baseMessages: messagesPtBR } : {})}>
         <div className="fk-gallery-page__stage">
           <FlowEditor
-            key={locale}
+            key={`${locale}-${broken}`}
             flowId="sample-analysis"
             store={store}
-            reference={{
-              rules: [{ id: 'r-sample', name: t.rulename ?? '', priority: 1, enabled: true, categories: ['sample'] }],
-              dataSources: [{ id: 'source-a', name: t.source ?? '', dialect: 'postgresql', connected: true }],
-              dialects: [{ key: 'postgresql', displayName: 'PostgreSQL' }],
-              decisionResults: {
-                decision: { value: 'option_a', probabilities: { option_a: 0.6, option_b: 0.3, option_c: 0.1 }, provider: '[provedor]', model: '[modelo]', modelVersion: '[versão]' },
-              },
-            }}
-            defaultOutlineOpen
-            runs={{ loadRuns: async () => RUNS, defaultRunView: { mode: 'panel', open: true } }}
+            agentsAllowed={!noAgents}
+            flowFacts={{ version: '[versão]', runsOverEdition: RUNS.length, deterministic: true, seed: '[semente]' }}
+            onRunFlow={() => undefined}
+            onTestStep={() => undefined}
+            outputPreview={(id) => (id === 'count' ? { columns: [t.phaseColumn!, 'n'], rows: COUNTS.map((n, i) => [t.phase!.replace('{n}', String(i + 1)), n]) } : null)}
+            runs={{ loadRuns: async () => RUNS }}
           />
         </div>
       </FakhirProvider>

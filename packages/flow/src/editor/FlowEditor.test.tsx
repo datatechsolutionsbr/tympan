@@ -109,13 +109,15 @@ describe('FlowEditor', () => {
     expect(screen.getByRole('toolbar', { name: 'Canvas tools' })).toContainElement(document.activeElement as HTMLElement)
   })
 
-  it('offers the step list alternative: configure, connect and delete from it', async () => {
+  it('offers the list view from the dock: configure and delete from it', async () => {
     const store = createFlowEditorStore({ initial: { nodes: graph().nodes.slice(0, 2), connectors: [] } })
-    render(<FlowEditor store={store} palette={false} defaultOutlineOpen />)
-    const outline = screen.getByRole('complementary', { name: 'Flow steps' })
-    expect(outline).toHaveTextContent('Sum')
-    await userEvent.click(within(outline).getByRole('button', { name: 'Delete Sum' }))
+    render(<FlowEditor store={store} palette={false} defaultListView />)
+    const list = screen.getByRole('region', { name: 'Flow steps' })
+    expect(list).toHaveTextContent('Sum')
+    await userEvent.click(within(list).getByRole('button', { name: 'More for “Sum”' }))
+    await userEvent.click(await screen.findByRole('menuitem', { name: 'Remove' }))
     expect(store.getState().nodes.map((n) => n.id)).toEqual(['start'])
+    expect(screen.getByRole('button', { name: 'Show as list' })).toHaveAttribute('aria-pressed', 'true')
   })
 
   it('loads through the provider when the flow id is given', async () => {
@@ -130,13 +132,13 @@ describe('FlowEditor', () => {
   })
 
   it('lays a horizontal flow out right to left in Arabic unless asked to keep LTR', async () => {
-    const store = createFlowEditorStore({ initial: { nodes: graph().nodes.slice(0, 2), connectors: graph().connectors } })
+    const store = createFlowEditorStore({ initial: { nodes: graph().nodes.slice(0, 2), connectors: graph().connectors, layoutDirection: 'right' } })
     render(
       <FakhirProvider locale="ar">
         <FlowEditor store={store} palette={false} />
       </FakhirProvider>,
     )
-    const layoutTool = document.querySelector('[data-tool="layout-direction"]') as HTMLElement
+    const layoutTool = document.querySelector('[data-tool="auto-layout"]') as HTMLElement
     await userEvent.click(layoutTool)
     const pos = Object.fromEntries(store.getState().nodes.map((n) => [n.id, n.position.x]))
     expect(pos.start!).toBeGreaterThan(pos.sum!)
@@ -162,13 +164,12 @@ describe('FlowEditor', () => {
 describe('FlowEditor on narrow screens', () => {
   it('opens the palette as a bottom drawer and places a step by tap', async () => {
     setViewportWidth(375)
-    nodeKindCatalog.install([{ kind: 'code', label: 'Compute', category: 'Data processing', icon: 'code' }])
     const { container } = render(<FlowEditor initialGraph={graph()} />)
     expect(container.querySelector('.fk-editor__palette')).toBeNull()
-    await userEvent.click(screen.getByRole('button', { name: 'Add a step' }))
+    await userEvent.click(container.querySelector('.fk-editor__palette-open') as HTMLElement)
     const drawer = await screen.findByRole('dialog', { name: 'Steps to add' })
     const before = container.querySelectorAll('[data-fk-node-id]').length
-    const item = within(drawer).getAllByRole('row').find((r) => r.textContent?.includes('Compute'))!
+    const item = within(drawer).getByRole('row', { name: 'Frozen edition' })
     item.focus()
     await userEvent.keyboard('{Enter}')
     expect(container.querySelectorAll('[data-fk-node-id]').length).toBe(before + 1)

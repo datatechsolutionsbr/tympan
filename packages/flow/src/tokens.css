@@ -80,6 +80,8 @@
     --fk-flow-band-label: 130px;
     --fk-flow-node-h: 72px;
     --fk-flow-node-w: 236px;
+    --fk-flow-step-w: 250px;
+    --fk-flow-step-h: 86px;
     --fk-flow-col-gap: 56px;
   }
 
