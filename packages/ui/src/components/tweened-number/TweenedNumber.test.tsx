@@ -20,7 +20,7 @@ describe('TweenedNumber', () => {
   it('shows the target on the first frame under reduced motion', () => {
     setMedia({ reducedMotion: true })
     const { container } = render(<TweenedNumber value={1234} />)
-    expect(text(container)).toBe('1234')
+    expect(text(container)).toBe(new Intl.NumberFormat('en-US').format(1234))
   })
 
   it('jumps straight to a new value with duration 0', () => {

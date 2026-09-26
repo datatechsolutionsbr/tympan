@@ -57,7 +57,8 @@ export function DeltaMark(props: {
       data-appearance={props.appearance ?? 'inline'}
       data-size={props.size ?? 'small'}
     >
-      <Glyph className="fk-delta__glyph" aria-hidden="true" focusable="false" />
+      {/* Diagonal and flat arrows point along the reading direction: mirrored in RTL (up stays up). */}
+      <Glyph className="fk-delta__glyph fk-mirror-rtl" aria-hidden="true" focusable="false" />
       <span className="fk-visually-hidden">{words[props.trend]} </span>
       {props.text ? <span className="fk-delta__value">{props.text}</span> : null}
     </span>

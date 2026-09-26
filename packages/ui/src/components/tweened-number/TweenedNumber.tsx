@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useLocale } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 import { TweenDriver } from '../../internal/data-b/tween'
 import { prefersReducedMotion } from '../../internal/media'
@@ -10,7 +11,7 @@ export interface TweenedNumberProps {
   value: number
   /** One tween's length; 0 shows every value at once. */
   durationMs?: number
-  /** Fixed decimals of the default formatter. */
+  /** Fixed decimals of the default formatter (Intl, in the provider's locale and numbering system). */
   decimals?: number
   /** Applied to every intermediate frame (currency, grouping). */
   format?: (n: number) => string
@@ -27,6 +28,8 @@ function isStill(durationMs: number): boolean {
  * value from the surrounding tile when they need to.
  */
 export function TweenedNumber({ value, durationMs = TWEEN_BASE_MS, decimals = 0, format, className }: TweenedNumberProps) {
+  const { locale } = useLocale()
+  const digits = useMemo(() => new Intl.NumberFormat(locale, { minimumFractionDigits: decimals, maximumFractionDigits: decimals }), [locale, decimals])
   const [shown, setShown] = useState(() => (isStill(durationMs) ? value : 0))
   const driver = useRef<TweenDriver | null>(null)
   if (driver.current === null) {
@@ -53,7 +56,7 @@ export function TweenedNumber({ value, durationMs = TWEEN_BASE_MS, decimals = 0,
   useEffect(() => () => driver.current?.stop(), [])
 
   const settled = shown === value
-  const text = format ? format(shown) : shown.toFixed(decimals)
+  const text = format ? format(shown) : digits.format(Number(shown.toFixed(decimals)))
   return (
     <span className={cx('fk-tweened-number', className)} data-settled={settled || undefined}>
       {text}

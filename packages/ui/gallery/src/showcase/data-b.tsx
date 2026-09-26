@@ -44,7 +44,7 @@ export function DataBShowcase({ scope }: { scope: string }) {
 
       <Section id={id('tweened')} title="TweenedNumber">
         <p>
-          Total <TweenedNumber value={count} format={(n) => new Intl.NumberFormat('en').format(Math.round(n))} />{' '}
+          Total <TweenedNumber value={count} />{' '}
           <button type="button" className="fk-gallery-native-input" style={{ inlineSize: 'auto' }} onClick={() => setCount((c) => c + 37)}>
             Add 37
           </button>

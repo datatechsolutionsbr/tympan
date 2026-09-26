@@ -1,5 +1,5 @@
 // Copy of the "data-b" group (wave 2/4): figures, cards and summaries. One
-// namespace per component, English and Brazilian Portuguese. Merged into
+// namespace per component, English, Brazilian Portuguese and Spanish. Merged into
 // `Messages` by ../messages.ts.
 
 export interface DataBMessages {
@@ -76,5 +76,24 @@ export const dataBPtBR: DataBMessages = {
   ticker: { value: 'valor', change: 'variação', empty: 'Nenhuma entrada para mostrar.', loading: 'Carregando entradas' },
 }
 
-/** Spanish (placeholder until translated: falls back to English). */
-export const dataBEs: DataBMessages = dataBEn
+export const dataBEs: DataBMessages = {
+  statTile: {
+    filtered: 'filtrado',
+    explain: (label) => `Cómo se calcula «${label}»`,
+    attention: 'requiere acción',
+  },
+  delta: { up: 'subió', down: 'bajó', flat: 'sin cambios' },
+  agentOutput: {
+    outcome: { completed: 'completada', failed: 'falló', pending: 'pendiente' },
+    duration: (d) => `tardó ${d}`,
+  },
+  recordCard: { cancel: 'Cancelar', working: 'Procesando' },
+  contact: { email: 'Correo electrónico', phone: 'Teléfono' },
+  insight: {
+    actions: 'Acciones sobre esta propuesta',
+    pending: 'Procesando',
+    proposedBy: 'Propuesta de',
+    failed: 'No se pudo completar la acción.',
+  },
+  ticker: { value: 'valor', change: 'variación', empty: 'No hay entradas para mostrar.', loading: 'Cargando entradas' },
+}
