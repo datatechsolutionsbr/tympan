@@ -3,7 +3,7 @@
 // card's main control, so toggling never opens the editor.
 
 import { Scale } from 'lucide-react'
-import { Switch } from '@fakhir/ui'
+import { Switch } from '@datatechsolutions/tympan'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { FlowNode, LayoutDirection } from '../model/types'
 import { ConnectionPorts } from './ConnectionPorts'
@@ -108,8 +108,8 @@ export function RuleNode(props: RuleNodeProps) {
     const adj = formatAdjustment(rule.adjustment, locale, l.formula)
     meta = (
       <>
-        {adj ? <span className="fk-rule-node__adjustment">{adj}</span> : null}
-        {rule.priority !== undefined ? <span className="fk-rule-node__priority">{fill(l.priority, { value: rule.priority }, locale)}</span> : null}
+        {adj ? <span className="ty-rule-node__adjustment">{adj}</span> : null}
+        {rule.priority !== undefined ? <span className="ty-rule-node__priority">{fill(l.priority, { value: rule.priority }, locale)}</span> : null}
         {(rule.categories ?? []).map((c) => (
           <NodeBadge key={c}>{c}</NodeBadge>
         ))}
@@ -119,19 +119,19 @@ export function RuleNode(props: RuleNodeProps) {
     meta = (
       <>
         <span>{fill(l.variables, { count: config.contextVariables?.length ?? 0 }, locale)}</span>
-        {config.outputVariable ? <span className="fk-rule-node__output">{fill(l.output, { name: config.outputVariable }, locale)}</span> : null}
+        {config.outputVariable ? <span className="ty-rule-node__output">{fill(l.output, { name: config.outputVariable }, locale)}</span> : null}
       </>
     )
   }
 
   const toggle =
     rule && onToggleEnabled && !preview ? (
-      <span className="fk-rule-node__switch" data-fk-above="" data-fk-no-drag="">
+      <span className="ty-rule-node__switch" data-ty-above="" data-ty-no-drag="">
         <Switch size="small" isSelected={rule.enabled} accessibleLabel={fill(l.enabled, { name: rule.name })} disabled={locked} onChange={() => onToggleEnabled(rule)} />
-        {!rule.enabled ? <span className="fk-rule-node__off">{l.off}</span> : null}
+        {!rule.enabled ? <span className="ty-rule-node__off">{l.off}</span> : null}
       </span>
     ) : rule && !rule.enabled ? (
-      <span className="fk-rule-node__off">{l.off}</span>
+      <span className="ty-rule-node__off">{l.off}</span>
     ) : null
 
   return (
@@ -153,7 +153,7 @@ export function RuleNode(props: RuleNodeProps) {
       labels={{ remove: l.remove }}
       headerActions={toggle}
       meta={meta}
-      className="fk-flow-node fk-rule-node"
+      className="ty-flow-node ty-rule-node"
     >
       <ConnectionPorts nodeId={id} nodeLabel={title} inputs={k.inputs} outputs={k.outputs} tone={k.tone} preview={preview} />
       <NodeRunIndicator nodeId={id} kind="rule" nodeLabel={title} />

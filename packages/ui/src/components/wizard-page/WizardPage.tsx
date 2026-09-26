@@ -73,22 +73,22 @@ export function WizardPage(props: WizardPageProps) {
   const primaryText = onFinal ? (props.submitLabel ?? copy.submit) : copy.next
 
   return (
-    <div className={cx('fk-wizard-page', props.className)} aria-busy={busy || undefined}>
-      <div className="fk-wizard-page__head">
-        <div className="fk-wizard-page__top">
-          <p className="fk-wizard-page__eyebrow">
-            <span aria-hidden="true" className="fk-wizard-page__eyebrow-icon">
+    <div className={cx('ty-wizard-page', props.className)} aria-busy={busy || undefined}>
+      <div className="ty-wizard-page__head">
+        <div className="ty-wizard-page__top">
+          <p className="ty-wizard-page__eyebrow">
+            <span aria-hidden="true" className="ty-wizard-page__eyebrow-icon">
               {props.icon}
             </span>
             {props.eyebrow}
           </p>
           <Button variant="quiet" iconOnly shape="circle" accessibleLabel={copy.close} leadingIcon={<X />} onPress={props.onCancel} />
         </div>
-        <h1 ref={heading} tabIndex={-1} className="fk-wizard-page__title">
+        <h1 ref={heading} tabIndex={-1} className="ty-wizard-page__title">
           {step?.title ?? props.title}
         </h1>
-        {(step?.description ?? props.subtitle) ? <p className="fk-wizard-page__lead">{step?.description ?? props.subtitle}</p> : null}
-        {props.aside ? <div className="fk-wizard-page__aside">{props.aside}</div> : null}
+        {(step?.description ?? props.subtitle) ? <p className="ty-wizard-page__lead">{step?.description ?? props.subtitle}</p> : null}
+        {props.aside ? <div className="ty-wizard-page__aside">{props.aside}</div> : null}
         <StepList
           label={props.title}
           currentIndex={at}
@@ -96,10 +96,10 @@ export function WizardPage(props: WizardPageProps) {
           onStepSelect={busy ? undefined : props.onStepChange}
         />
       </div>
-      <div className="fk-wizard-page__body" key={step?.id}>
+      <div className="ty-wizard-page__body" key={step?.id}>
         {props.children}
       </div>
-      <div className="fk-wizard-page__nav" role="group" aria-label={copy.actions}>
+      <div className="ty-wizard-page__nav" role="group" aria-label={copy.actions}>
         <Button onPress={goBack} disabled={busy}>
           {at === 0 ? copy.cancel : copy.previous}
         </Button>
@@ -115,7 +115,7 @@ export function WizardPage(props: WizardPageProps) {
           {primaryText}
         </Button>
       </div>
-      <span role="status" className="fk-visually-hidden">
+      <span role="status" className="ty-visually-hidden">
         {busy ? copy.submitting : ''}
       </span>
     </div>

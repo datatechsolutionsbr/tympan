@@ -4,7 +4,7 @@
 // `animateChange` hands a state or route change to the browser's native view
 // transition when that is available, allowed by the person's motion setting
 // and not refused by the caller; otherwise it applies the change at once.
-// During a native run <html> carries `data-fk-change-style="<style>"`.
+// During a native run <html> carries `data-ty-change-style="<style>"`.
 import { useMemo, useRef } from 'react'
 import { prefersReducedMotion } from '../../internal/media'
 
@@ -23,7 +23,7 @@ export interface ChangeRun {
   cancel: () => void
 }
 
-export const CHANGE_STYLE_ATTRIBUTE = 'data-fk-change-style'
+export const CHANGE_STYLE_ATTRIBUTE = 'data-ty-change-style'
 
 type Change = () => void | Promise<void>
 type NativeRun = { finished: PromiseLike<unknown>; skipTransition(): void }

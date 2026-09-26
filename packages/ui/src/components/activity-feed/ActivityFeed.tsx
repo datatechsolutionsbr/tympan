@@ -47,7 +47,7 @@ export function relativePhrase(at: Date, now: Date, locale: string): string {
 function Stamp({ at, now, locale }: { at: Date; now: Date; locale: string }) {
   const absolute = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(at)
   return (
-    <time className="fk-activity__time" dateTime={at.toISOString()} title={absolute}>
+    <time className="ty-activity__time" dateTime={at.toISOString()} title={absolute}>
       {relativePhrase(at, now, locale)}
     </time>
   )
@@ -59,25 +59,25 @@ export function ActivityFeed(props: ActivityFeedProps) {
   const adapterLocale = useLocale().locale
   const locale = props.locale ?? adapterLocale
   const now = props.now ?? new Date()
-  if (!props.entries.length) return <p className={cx('fk-activity__empty', props.className)}>{words.empty}</p>
+  if (!props.entries.length) return <p className={cx('ty-activity__empty', props.className)}>{words.empty}</p>
   return (
-    <div className={cx('fk-activity', props.className)}>
-      <ol className="fk-activity__list" aria-label={props.label}>
+    <div className={cx('ty-activity', props.className)}>
+      <ol className="ty-activity__list" aria-label={props.label}>
         {props.entries.map((entry) => (
-          <li key={entry.id} className="fk-activity__entry">
+          <li key={entry.id} className="ty-activity__entry">
             <ActorChip compact kind={entry.actor.kind} name={entry.actor.name} agentKey={entry.actor.agentKey} model={entry.actor.model} />
-            <div className="fk-activity__body">
-              <p className="fk-activity__text" dir="auto">{entry.text}</p>
-              <p className="fk-activity__meta">
+            <div className="ty-activity__body">
+              <p className="ty-activity__text" dir="auto">{entry.text}</p>
+              <p className="ty-activity__meta">
                 <Stamp at={typeof entry.at === 'string' ? new Date(entry.at) : entry.at} now={now} locale={locale} />
-                {entry.meta ? <code className="fk-activity__code">{entry.meta}</code> : null}
+                {entry.meta ? <code className="ty-activity__code">{entry.meta}</code> : null}
               </p>
             </div>
           </li>
         ))}
       </ol>
       {props.moreHref && props.moreLabel ? (
-        <AriaLink className="fk-activity__more" href={props.moreHref}>
+        <AriaLink className="ty-activity__more" href={props.moreHref}>
           {props.moreLabel}
         </AriaLink>
       ) : null}

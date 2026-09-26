@@ -31,14 +31,14 @@ describe('SummaryRow', () => {
     render(<SummaryRow title={long} />)
     const title = screen.getByText(long)
     expect(title).toHaveAttribute('title', long)
-    expect(cssOf('components/summary-row/SummaryRow.css')).toMatch(/\.fk-summary-row__title,[^{]*\{[^}]*text-overflow:\s*ellipsis/)
+    expect(cssOf('components/summary-row/SummaryRow.css')).toMatch(/\.ty-summary-row__title,[^{]*\{[^}]*text-overflow:\s*ellipsis/)
   })
 
   it('renders no tile without an icon', () => {
     const { container, rerender } = render(<SummaryRow title="No icon" />)
-    expect(container.querySelector('.fk-summary-row__tile')).toBeNull()
+    expect(container.querySelector('.ty-summary-row__tile')).toBeNull()
     rerender(<SummaryRow title="Icon" icon={<FileText />} iconTone="accent" />)
-    const tile = container.querySelector('.fk-summary-row__tile')!
+    const tile = container.querySelector('.ty-summary-row__tile')!
     expect(tile).toHaveAttribute('aria-hidden', 'true')
     expect(tile).toHaveAttribute('data-tone', 'accent')
   })

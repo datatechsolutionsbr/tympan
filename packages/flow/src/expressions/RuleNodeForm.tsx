@@ -2,7 +2,7 @@
 // step is active; the rule itself is authored elsewhere (onManageRules).
 
 import { useEffect, useState } from 'react'
-import { Button, InlineNotice, NativeSelect, Spinner, Switch } from '@fakhir/ui'
+import { Button, InlineNotice, NativeSelect, Spinner, Switch } from '@datatechsolutions/tympan'
 import { NodeFormFooter } from '../forms/NodeFormFooter'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { conditionSummary } from './ruleCondition'
@@ -126,7 +126,7 @@ export function RuleNodeForm({ value, rules, loadRules, onManageRules, onSave, o
   const summary = chosen ? conditionSummary(chosen.condition) : null
 
   return (
-    <div className="fk-node-form fk-rule-node-form">
+    <div className="ty-node-form ty-rule-node-form">
       {legacy ? (
         <InlineNotice tone="warning" urgency="polite">
           {l.legacy}
@@ -138,16 +138,16 @@ export function RuleNodeForm({ value, rules, loadRules, onManageRules, onSave, o
         </InlineNotice>
       ) : null}
       {loaded.state === 'loading' ? (
-        <div className="fk-rule-node-form__loading" aria-busy="true">
+        <div className="ty-rule-node-form__loading" aria-busy="true">
           <Spinner size="small" label={l.loading} showLabel />
         </div>
       ) : (
         <NativeSelect label={l.rule} options={options} value={ruleId} onChange={setRuleId} />
       )}
       {chosen ? (
-        <div className="fk-rule-node-form__summary">
-          <p className="fk-rule-node-form__summary-name">{chosen.name}</p>
-          {summary ? <p className="fk-rule-node-form__summary-line">{fill(l.summary, { root: summary.root, clauses: summary.clauses }, locale)}</p> : null}
+        <div className="ty-rule-node-form__summary">
+          <p className="ty-rule-node-form__summary-name">{chosen.name}</p>
+          {summary ? <p className="ty-rule-node-form__summary-line">{fill(l.summary, { root: summary.root, clauses: summary.clauses }, locale)}</p> : null}
         </div>
       ) : null}
       <Button variant="secondary" onPress={onManageRules}>

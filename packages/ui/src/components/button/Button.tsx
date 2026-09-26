@@ -141,22 +141,22 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
   const content = (
     <>
       {busy ? (
-        <LoaderCircle className="fk-icon fk-button__busy" aria-hidden="true" focusable="false" />
+        <LoaderCircle className="ty-icon ty-button__busy" aria-hidden="true" focusable="false" />
       ) : leadingIcon ? (
-        <span className="fk-button__icon" aria-hidden="true">
+        <span className="ty-button__icon" aria-hidden="true">
           {leadingIcon}
         </span>
       ) : null}
-      {iconOnly ? null : <span className="fk-button__label">{label}</span>}
+      {iconOnly ? null : <span className="ty-button__label">{label}</span>}
       {trailingIcon && !iconOnly ? (
-        <span className="fk-button__icon" aria-hidden="true">
+        <span className="ty-button__icon" aria-hidden="true">
           {trailingIcon}
         </span>
       ) : null}
     </>
   )
 
-  const classes = cx('fk-button', className)
+  const classes = cx('ty-button', className)
   const style = minWidth ? { minInlineSize: `${minWidth}px` } : undefined
   const ariaLabel = iconOnly ? accessibleLabel : busy && busyLabel ? busyLabel : undefined
 

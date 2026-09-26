@@ -1,112 +1,112 @@
 /* ErrorState (spec: wave-1/error-state.md; design direction §2.3, §2.10, §2.12). */
-@layer fakhir.components {
-  .fk-error {
+@layer tympan.components {
+  .ty-error {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--fk-space-2);
-    max-inline-size: calc(var(--fk-measure-prose) * 1ch);
-    padding-block: var(--fk-space-6);
+    gap: var(--ty-space-2);
+    max-inline-size: calc(var(--ty-measure-prose) * 1ch);
+    padding-block: var(--ty-space-6);
   }
-  .fk-error[data-scope='block'] {
-    padding-block: var(--fk-space-4);
-  }
-
-  .fk-error__icon {
-    inline-size: var(--fk-space-5);
-    block-size: var(--fk-space-5);
-    color: var(--fk-danger);
+  .ty-error[data-scope='block'] {
+    padding-block: var(--ty-space-4);
   }
 
-  .fk-error__title {
+  .ty-error__icon {
+    inline-size: var(--ty-space-5);
+    block-size: var(--ty-space-5);
+    color: var(--ty-danger);
+  }
+
+  .ty-error__title {
     margin: 0;
-    color: var(--fk-ink);
-    font-family: var(--fk-font-serif);
-    font-size: var(--fk-font-size-h2);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-h2);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-serif);
+    font-size: var(--ty-font-size-h2);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-h2);
     outline: none;
   }
-  .fk-error[data-scope='block'] .fk-error__title {
-    font-size: var(--fk-font-size-h3);
-    line-height: var(--fk-font-line-height-h3);
+  .ty-error[data-scope='block'] .ty-error__title {
+    font-size: var(--ty-font-size-h3);
+    line-height: var(--ty-font-line-height-h3);
   }
-  .fk-error__title:focus-visible {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-error__title:focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
 
-  .fk-error__message {
+  .ty-error__message {
     margin: 0;
-    color: var(--fk-ink-2);
+    color: var(--ty-ink-2);
   }
 
-  .fk-error__meta {
+  .ty-error__meta {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
     margin: 0;
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
-  .fk-error__type {
-    font-family: var(--fk-font-mono);
+  .ty-error__type {
+    font-family: var(--ty-font-mono);
   }
 
-  .fk-error__details {
+  .ty-error__details {
     inline-size: 100%;
   }
-  .fk-error__details .fk-error__chevron {
-    transition: transform var(--fk-dur-quick) var(--fk-ease);
+  .ty-error__details .ty-error__chevron {
+    transition: transform var(--ty-dur-quick) var(--ty-ease);
   }
-  .fk-error__details[data-expanded] .fk-error__chevron {
+  .ty-error__details[data-expanded] .ty-error__chevron {
     transform: rotate(180deg);
   }
-  .fk-error__details-text {
+  .ty-error__details-text {
     overflow: auto;
-    margin: var(--fk-space-2) 0 0;
-    padding: var(--fk-space-3);
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-surface-sunken);
-    color: var(--fk-on-surface-sunken);
-    font-family: var(--fk-font-mono);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    margin: var(--ty-space-2) 0 0;
+    padding: var(--ty-space-3);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-surface-sunken);
+    color: var(--ty-on-surface-sunken);
+    font-family: var(--ty-font-mono);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
     white-space: pre-wrap;
   }
 
-  .fk-error__actions {
+  .ty-error__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--fk-space-3);
-    margin-block-start: var(--fk-space-3);
+    gap: var(--ty-space-3);
+    margin-block-start: var(--ty-space-3);
   }
-  .fk-error__actions .fk-button {
-    min-block-size: var(--fk-control-target);
+  .ty-error__actions .ty-button {
+    min-block-size: var(--ty-control-target);
   }
 
   @media (max-width: 639.98px) {
-    .fk-error__actions {
+    .ty-error__actions {
       flex-direction: column;
       align-self: stretch;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-error__details .fk-error__chevron {
+    .ty-error__details .ty-error__chevron {
       transition: none;
     }
   }
 
   @media (forced-colors: active) {
-    .fk-error__icon,
-    .fk-error__title,
-    .fk-error__message,
-    .fk-error__meta {
+    .ty-error__icon,
+    .ty-error__title,
+    .ty-error__message,
+    .ty-error__meta {
       color: CanvasText;
     }
-    .fk-error__details-text {
+    .ty-error__details-text {
       border: 1px solid CanvasText;
     }
   }

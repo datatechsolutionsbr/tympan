@@ -1,4 +1,4 @@
-// The research shell of the gallery pages, built from @fakhir/ui:
+// The research shell of the gallery pages, built from @datatechsolutions/tympan:
 // AppFrame (layout="rail": rail, glass sheet, dock), the editorial PageHeader
 // and the FloatingActionBar as the dock. The canvas tools of a page become the
 // dock's items (dockItemsFromCanvasTools); pages without a canvas get the app
@@ -20,7 +20,7 @@ import {
   useTheme,
   type ActionBarItem,
   type IconComponent,
-} from '@fakhir/ui'
+} from '@datatechsolutions/tympan'
 import type { CanvasToolItem } from '../../../src/toolbar/canvasTools'
 import { dockItemsFromCanvasTools } from '../../../src/toolbar/dockItems'
 import { nextLocale, setHashParam } from './params'
@@ -118,11 +118,11 @@ export interface ResearchShellProps {
 function Account({ w }: { w: Words }) {
   const theme = useTheme()
   return (
-    <div className="fk-flow-account">
+    <div className="ty-flow-account">
       <ProfileAvatar name={w.user!} size="sm" decorative />
-      <span className="fk-flow-account__who">
-        <span className="fk-flow-account__name">{w.user}</span>
-        <span className="fk-flow-account__role">{w.role}</span>
+      <span className="ty-flow-account__who">
+        <span className="ty-flow-account__name">{w.user}</span>
+        <span className="ty-flow-account__role">{w.role}</span>
       </span>
       <Button variant="quiet" iconOnly accessibleLabel={w.account!} leadingIcon={<Settings />} onPress={() => theme.setMode(theme.resolvedMode === 'dark' ? 'light' : 'dark')} />
     </div>
@@ -153,7 +153,7 @@ export function ResearchShell(p: ResearchShellProps) {
       layout="rail"
       width="full"
       ambient
-      className={p.compact ? 'fk-flow-frame fk-flow-frame--compact' : 'fk-flow-frame'}
+      className={p.compact ? 'ty-flow-frame ty-flow-frame--compact' : 'ty-flow-frame'}
       navOpen={navOpen}
       onNavOpenChange={setNavOpen}
       brand={<BrandMark size="small" />}
@@ -168,10 +168,10 @@ export function ResearchShell(p: ResearchShellProps) {
       account={<Account w={w} />}
       dock={<FloatingActionBar anchor="container" edge="bottom" destinations={[]} contextual={dockItems} label={p.tools ? p.toolsLabel : w.dock} focusShortcut={null} />}
     >
-      <PageHeader variant="editorial" title={p.title} trail={trail} lead={p.description} actions={p.actions} className="fk-flow-frame__header">
+      <PageHeader variant="editorial" title={p.title} trail={trail} lead={p.description} actions={p.actions} className="ty-flow-frame__header">
         {p.subheader}
       </PageHeader>
-      <div className="fk-flow-frame__body">{p.children}</div>
+      <div className="ty-flow-frame__body">{p.children}</div>
     </AppFrame>
   )
 }

@@ -13,7 +13,7 @@ An editable canvas where a person builds a directed flow of typed steps (nodes) 
 - **CanvasCommandBar**: floating tools (mode, zoom, fit, undo, redo, view toggles, layout, shortcut list).
 - **CanvasContextMenus**: node, selection and empty-area menus.
 - **Editing dialogs**: NodeConfigDialog, AgentEditorDialog (host may supply its own), data source form.
-Implementation note: an MIT graph-canvas library (for example @xyflow/react) may back the surface.
+Implementation note: a third-party graph-canvas library may back the surface (the implementation uses its own pointer-event surface; see `packages/flow/PROVENANCE.md`).
 
 ## Properties and events
 | name | type | default | meaning |

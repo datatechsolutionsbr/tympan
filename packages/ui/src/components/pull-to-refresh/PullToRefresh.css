@@ -1,12 +1,12 @@
 /* PullToRefresh (spec: wave-2/pull-to-refresh.md; design direction §2.7, §2.12). */
-@layer fakhir.components {
-  .fk-pull {
+@layer tympan.components {
+  .ty-pull {
     position: relative;
     overflow-y: auto;
     overscroll-behavior-y: contain;
   }
 
-  .fk-pull__indicator {
+  .ty-pull__indicator {
     position: absolute;
     inset-block-start: 0;
     inset-inline: 0;
@@ -15,83 +15,83 @@
     justify-content: center;
     block-size: 0;
     pointer-events: none;
-    translate: 0 calc(var(--fk-pull-distance, 0px) / 2 - var(--fk-space-6));
+    translate: 0 calc(var(--ty-pull-distance, 0px) / 2 - var(--ty-space-6));
   }
-  .fk-pull__indicator[data-visible] {
+  .ty-pull__indicator[data-visible] {
     block-size: auto;
   }
-  .fk-pull[data-refreshing] .fk-pull__indicator {
-    translate: 0 var(--fk-space-2);
+  .ty-pull[data-refreshing] .ty-pull__indicator {
+    translate: 0 var(--ty-space-2);
   }
 
-  .fk-pull__content {
-    translate: 0 var(--fk-pull-distance, 0px);
-    transition: translate var(--fk-dur-base) var(--fk-ease);
+  .ty-pull__content {
+    translate: 0 var(--ty-pull-distance, 0px);
+    transition: translate var(--ty-dur-base) var(--ty-ease);
   }
-  .fk-pull[data-refreshing] .fk-pull__content {
-    translate: 0 var(--fk-space-8);
+  .ty-pull[data-refreshing] .ty-pull__content {
+    translate: 0 var(--ty-space-8);
   }
 
   /* Ring: fills with pull progress, spins while refreshing. */
-  .fk-pull__ring {
+  .ty-pull__ring {
     display: inline-flex;
   }
-  .fk-pull__ring-track {
-    --fk-pull-angle: calc(var(--fk-pull-progress, 0) * 1turn);
+  .ty-pull__ring-track {
+    --ty-pull-angle: calc(var(--ty-pull-progress, 0) * 1turn);
     display: block;
-    inline-size: var(--fk-space-6);
-    block-size: var(--fk-space-6);
+    inline-size: var(--ty-space-6);
+    block-size: var(--ty-space-6);
     border-radius: 50%;
-    background: conic-gradient(var(--fk-accent) var(--fk-pull-angle), var(--fk-line) 0);
+    background: conic-gradient(var(--ty-accent) var(--ty-pull-angle), var(--ty-line) 0);
     mask: radial-gradient(circle, transparent 55%, #000 57%);
-    box-shadow: var(--fk-shadow-floating);
+    box-shadow: var(--ty-shadow-floating);
   }
-  .fk-pull[data-refreshing] .fk-pull__ring-track {
-    background: conic-gradient(var(--fk-accent) 0.3turn, var(--fk-line) 0);
-    animation: fk-pull-spin 900ms linear infinite;
+  .ty-pull[data-refreshing] .ty-pull__ring-track {
+    background: conic-gradient(var(--ty-accent) 0.3turn, var(--ty-line) 0);
+    animation: ty-pull-spin 900ms linear infinite;
   }
-  @keyframes fk-pull-spin {
+  @keyframes ty-pull-spin {
     to {
       rotate: 1turn;
     }
   }
 
-  .fk-pull__dots {
+  .ty-pull__dots {
     display: inline-flex;
-    gap: var(--fk-space-1);
-    padding: var(--fk-space-2);
+    gap: var(--ty-space-1);
+    padding: var(--ty-space-2);
   }
-  .fk-pull__dots > span {
-    inline-size: var(--fk-space-2);
-    block-size: var(--fk-space-2);
+  .ty-pull__dots > span {
+    inline-size: var(--ty-space-2);
+    block-size: var(--ty-space-2);
     border-radius: 50%;
-    background: var(--fk-ink-3);
+    background: var(--ty-ink-3);
     opacity: 0.4;
   }
-  .fk-pull[data-armed] .fk-pull__dots > span,
-  .fk-pull[data-refreshing] .fk-pull__dots > span {
-    background: var(--fk-accent);
+  .ty-pull[data-armed] .ty-pull__dots > span,
+  .ty-pull[data-refreshing] .ty-pull__dots > span {
+    background: var(--ty-accent);
     opacity: 1;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-pull__content,
-    .fk-pull[data-refreshing] .fk-pull__content {
+    .ty-pull__content,
+    .ty-pull[data-refreshing] .ty-pull__content {
       translate: none;
       transition: none;
     }
-    .fk-pull[data-refreshing] .fk-pull__ring-track {
+    .ty-pull[data-refreshing] .ty-pull__ring-track {
       animation: none;
-      background: var(--fk-accent);
+      background: var(--ty-accent);
     }
   }
 
   @media (forced-colors: active) {
-    .fk-pull__ring-track {
+    .ty-pull__ring-track {
       background: CanvasText;
       forced-color-adjust: none;
     }
-    .fk-pull__dots > span {
+    .ty-pull__dots > span {
       background: CanvasText;
       forced-color-adjust: none;
     }

@@ -36,7 +36,7 @@ export function RuledGrid(props: RuledGridProps) {
   const marks = props.marks === true
   return (
     <MarksOn.Provider value={marks}>
-      <div className={cx('fk-ruled-grid', props.className)} data-marks={marks || undefined} data-outer={props.outerRules === false ? undefined : true}>
+      <div className={cx('ty-ruled-grid', props.className)} data-marks={marks || undefined} data-outer={props.outerRules === false ? undefined : true}>
         {props.children}
       </div>
     </MarksOn.Provider>
@@ -52,9 +52,9 @@ function template(columns: RuledGridRowProps['columns']): string | undefined {
 export function RuledGridRow(props: RuledGridRowProps) {
   const Tag = props.as ?? 'div'
   const cols = template(props.columns)
-  const style = cols ? ({ '--fk-ruled-columns': cols } as CSSProperties) : undefined
+  const style = cols ? ({ '--ty-ruled-columns': cols } as CSSProperties) : undefined
   return (
-    <Tag className={cx('fk-ruled-grid__row', props.className)} style={style}>
+    <Tag className={cx('ty-ruled-grid__row', props.className)} style={style}>
       {props.children}
     </Tag>
   )
@@ -65,8 +65,8 @@ export function RuledGridCell(props: RuledGridCellProps) {
   const Tag = props.as ?? 'div'
   const marks = useContext(MarksOn)
   return (
-    <Tag className={cx('fk-ruled-grid__cell', props.className)}>
-      {marks && CORNERS.map((c) => <span key={c} className="fk-ruled-grid__mark" data-corner={c} aria-hidden="true" />)}
+    <Tag className={cx('ty-ruled-grid__cell', props.className)}>
+      {marks && CORNERS.map((c) => <span key={c} className="ty-ruled-grid__mark" data-corner={c} aria-hidden="true" />)}
       {props.children}
     </Tag>
   )

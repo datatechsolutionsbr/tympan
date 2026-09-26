@@ -63,15 +63,15 @@ export function useSwipeActionPresets() {
 function ActionStrip({ side, actions, open, onPick }: { side: 'leading' | 'trailing'; actions: SwipeAction[]; open: boolean; onPick: (a: SwipeAction) => void }) {
   if (actions.length === 0) return null
   return (
-    <div className="fk-swipe-row__actions" data-side={side} aria-hidden={!open || undefined} {...inertProps(!open)}>
+    <div className="ty-swipe-row__actions" data-side={side} aria-hidden={!open || undefined} {...inertProps(!open)}>
       {actions.map((action) => (
-        <button key={action.label} type="button" className="fk-swipe-row__action" data-tone={action.tone} tabIndex={open ? undefined : -1} onClick={() => onPick(action)}>
+        <button key={action.label} type="button" className="ty-swipe-row__action" data-tone={action.tone} tabIndex={open ? undefined : -1} onClick={() => onPick(action)}>
           {action.icon ? (
-            <span className="fk-swipe-row__action-icon" aria-hidden="true">
+            <span className="ty-swipe-row__action-icon" aria-hidden="true">
               {action.icon}
             </span>
           ) : null}
-          <span className="fk-swipe-row__action-word">{action.label}</span>
+          <span className="ty-swipe-row__action-word">{action.label}</span>
         </button>
       ))}
     </div>
@@ -184,33 +184,33 @@ export function SwipeRow(props: SwipeRowProps) {
   const offsetValue = drag !== null ? `${rtl ? -drag : drag}px` : undefined
   return (
     <div
-      className={cx('fk-swipe-row', props.className)}
+      className={cx('ty-swipe-row', props.className)}
       data-reveal={side}
       data-dragging={drag !== null || undefined}
       data-reduced={reduced || undefined}
       data-dir={rtl ? 'rtl' : 'ltr'}
       data-armed={drag !== null && armed.current ? true : undefined}
       onKeyDown={onKeyDown}
-      style={{ '--fk-swipe-reveal': `${revealFraction * 100}%`, ...(offsetValue ? { '--fk-swipe-drag': offsetValue } : {}) } as React.CSSProperties}
+      style={{ '--ty-swipe-reveal': `${revealFraction * 100}%`, ...(offsetValue ? { '--ty-swipe-drag': offsetValue } : {}) } as React.CSSProperties}
     >
       <ActionStrip side="leading" actions={leadingActions} open={side === 'leading'} onPick={commit} />
       <ActionStrip side="trailing" actions={trailingActions} open={side === 'trailing'} onPick={commit} />
       <div
         ref={surface}
-        className="fk-swipe-row__surface"
+        className="ty-swipe-row__surface"
         tabIndex={-1}
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
         onTouchCancel={onTouchEnd}
       >
-        <div className="fk-swipe-row__content">{props.children}</div>
+        <div className="ty-swipe-row__content">{props.children}</div>
         {everyAction.length > 0 ? (
           <ActionMenu
             label={copy.actionsFor(props.label)}
             items={menuItems}
             onAction={(id) => everyAction[Number(id)]?.onAction()}
-            trigger={<Button variant="quiet" iconOnly accessibleLabel={copy.actionsFor(props.label)} leadingIcon={<Ellipsis />} className="fk-swipe-row__menu" />}
+            trigger={<Button variant="quiet" iconOnly accessibleLabel={copy.actionsFor(props.label)} leadingIcon={<Ellipsis />} className="ty-swipe-row__menu" />}
           />
         ) : null}
       </div>

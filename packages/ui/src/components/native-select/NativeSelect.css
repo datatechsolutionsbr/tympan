@@ -1,243 +1,243 @@
 /* NativeSelect (spec: wave-1/native-select.md; design direction §2.5, §2.10). */
-@layer fakhir.components {
-  .fk-native-select {
+@layer tympan.components {
+  .ty-native-select {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
     min-inline-size: 0;
   }
 
-  .fk-native-select__label {
-    color: var(--fk-ink);
-    font-size: var(--fk-font-size-label);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-label);
+  .ty-native-select__label {
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-label);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-label);
   }
 
-  .fk-native-select__hint {
+  .ty-native-select__hint {
     margin: 0;
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
 
-  .fk-native-select__error {
+  .ty-native-select__error {
     display: flex;
     align-items: flex-start;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
     margin: 0;
-    color: var(--fk-danger);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    color: var(--ty-danger);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
 
-  .fk-native-select__frame {
+  .ty-native-select__frame {
     position: relative;
     display: flex;
     align-items: center;
   }
 
-  .fk-native-select__control {
+  .ty-native-select__control {
     box-sizing: border-box;
     appearance: none;
     inline-size: 100%;
     /* 40px on desktop, 44px below 1024px (density tokens). The line box fills
        the inner height so every engine centres the value vertically. */
-    --fk-select-block: var(--fk-control-height);
-    block-size: var(--fk-select-block);
-    min-block-size: var(--fk-select-block);
+    --ty-select-block: var(--ty-control-height);
+    block-size: var(--ty-select-block);
+    min-block-size: var(--ty-select-block);
     padding-block: 0;
-    padding-inline: var(--fk-space-3) calc(var(--fk-space-3) + var(--fk-space-5));
-    border: 1px solid var(--fk-input);
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-surface-solid);
-    color: var(--fk-ink);
+    padding-inline: var(--ty-space-3) calc(var(--ty-space-3) + var(--ty-space-5));
+    border: 1px solid var(--ty-input);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-surface-solid);
+    color: var(--ty-ink);
     font: inherit;
-    font-family: var(--fk-font-sans);
-    font-size: var(--fk-font-size-body);
-    line-height: calc(var(--fk-select-block) - 2px);
+    font-family: var(--ty-font-sans);
+    font-size: var(--ty-font-size-body);
+    line-height: calc(var(--ty-select-block) - 2px);
     text-align: start;
     cursor: pointer;
     outline: none;
-    transition: border-color var(--fk-dur-instant) var(--fk-ease);
+    transition: border-color var(--ty-dur-instant) var(--ty-ease);
   }
 
-  .fk-native-select__control:hover,
-  .fk-native-select__control[data-hovered] {
-    border-color: var(--fk-ink-3);
+  .ty-native-select__control:hover,
+  .ty-native-select__control[data-hovered] {
+    border-color: var(--ty-ink-3);
   }
 
-  .fk-native-select__control:focus-visible,
-  .fk-native-select__control[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-native-select__control:focus-visible,
+  .ty-native-select__control[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
 
-  .fk-native-select[data-invalid] .fk-native-select__control {
-    border-color: var(--fk-danger);
+  .ty-native-select[data-invalid] .ty-native-select__control {
+    border-color: var(--ty-danger);
   }
 
-  .fk-native-select__control:disabled,
-  .fk-native-select__control[data-disabled] {
+  .ty-native-select__control:disabled,
+  .ty-native-select__control[data-disabled] {
     opacity: 0.55;
     cursor: not-allowed;
   }
 
-  .fk-native-select__value[data-placeholder] {
-    color: var(--fk-ink-3);
+  .ty-native-select__value[data-placeholder] {
+    color: var(--ty-ink-3);
   }
 
-  .fk-native-select__chevron {
+  .ty-native-select__chevron {
     position: absolute;
-    inset-inline-end: var(--fk-space-3);
-    color: var(--fk-ink-3);
-    transition: transform var(--fk-dur-quick) var(--fk-ease);
+    inset-inline-end: var(--ty-space-3);
+    color: var(--ty-ink-3);
+    transition: transform var(--ty-dur-quick) var(--ty-ease);
   }
 
   /* Wheel presentation: bottom drawer (level 4 elevation, §2.5). */
-  .fk-native-select__overlay {
+  .ty-native-select__overlay {
     position: fixed;
     inset: 0;
-    z-index: var(--fk-z-modal);
+    z-index: var(--ty-z-modal);
     display: flex;
     align-items: flex-end;
-    background: var(--fk-backdrop);
+    background: var(--ty-backdrop);
   }
 
-  .fk-native-select__drawer {
+  .ty-native-select__drawer {
     box-sizing: border-box;
     inline-size: 100%;
     max-block-size: 80vh;
-    padding: var(--fk-space-4) var(--fk-space-4) calc(var(--fk-space-4) + env(safe-area-inset-bottom, 0px));
-    border: 1px solid var(--fk-line);
+    padding: var(--ty-space-4) var(--ty-space-4) calc(var(--ty-space-4) + env(safe-area-inset-bottom, 0px));
+    border: 1px solid var(--ty-line);
     border-block-end: 0;
-    border-start-start-radius: var(--fk-radius-sheet);
-    border-start-end-radius: var(--fk-radius-sheet);
-    background: var(--fk-surface-raised);
-    box-shadow: var(--fk-shadow-modal);
-    backdrop-filter: blur(var(--fk-glass-blur-floating));
+    border-start-start-radius: var(--ty-radius-sheet);
+    border-start-end-radius: var(--ty-radius-sheet);
+    background: var(--ty-surface-raised);
+    box-shadow: var(--ty-shadow-modal);
+    backdrop-filter: blur(var(--ty-glass-blur-floating));
   }
 
-  .fk-native-select__overlay[data-entering] .fk-native-select__drawer {
-    animation: fk-native-select-rise var(--fk-dur-base) var(--fk-ease);
+  .ty-native-select__overlay[data-entering] .ty-native-select__drawer {
+    animation: ty-native-select-rise var(--ty-dur-base) var(--ty-ease);
   }
 
-  .fk-native-select__dialog {
+  .ty-native-select__dialog {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
     outline: none;
   }
 
-  .fk-native-select__drawer-title {
+  .ty-native-select__drawer-title {
     margin: 0;
-    color: var(--fk-ink);
-    font-family: var(--fk-font-serif);
-    font-size: var(--fk-font-size-h3);
-    line-height: var(--fk-font-line-height-h3);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-serif);
+    font-size: var(--ty-font-size-h3);
+    line-height: var(--ty-font-line-height-h3);
   }
 
-  .fk-native-select__wheel {
+  .ty-native-select__wheel {
     max-block-size: 50vh;
     overflow-y: auto;
     scroll-snap-type: y mandatory;
     outline: none;
   }
 
-  .fk-native-select__wheel-item {
+  .ty-native-select__wheel-item {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-block-size: var(--fk-control-target);
-    border-radius: var(--fk-radius-control);
-    color: var(--fk-ink-2);
-    font-size: var(--fk-font-size-body-lg);
+    min-block-size: var(--ty-control-target);
+    border-radius: var(--ty-radius-control);
+    color: var(--ty-ink-2);
+    font-size: var(--ty-font-size-body-lg);
     scroll-snap-align: center;
     cursor: pointer;
     outline: none;
   }
 
-  .fk-native-select__wheel-item[data-selected] {
-    background: var(--fk-accent-soft);
-    color: var(--fk-on-accent-soft);
-    font-weight: var(--fk-font-weight-semibold);
+  .ty-native-select__wheel-item[data-selected] {
+    background: var(--ty-accent-soft);
+    color: var(--ty-on-accent-soft);
+    font-weight: var(--ty-font-weight-semibold);
   }
 
-  .fk-native-select__wheel-item[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-native-select__wheel-item[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: -2px;
   }
 
-  .fk-native-select__wheel-item[data-disabled] {
+  .ty-native-select__wheel-item[data-disabled] {
     opacity: 0.45;
     cursor: not-allowed;
   }
 
-  .fk-native-select__done {
-    min-block-size: var(--fk-control-target);
+  .ty-native-select__done {
+    min-block-size: var(--ty-control-target);
     border: 0;
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-accent);
-    color: var(--fk-accent-ink);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-accent);
+    color: var(--ty-accent-ink);
     font: inherit;
-    font-weight: var(--fk-font-weight-semibold);
+    font-weight: var(--ty-font-weight-semibold);
     cursor: pointer;
   }
 
-  .fk-native-select__done[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-native-select__done[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
 
-  @keyframes fk-native-select-rise {
+  @keyframes ty-native-select-rise {
     from {
       transform: translateY(100%);
     }
   }
 
   @media (max-width: 1023.98px) {
-    .fk-native-select__control {
-      --fk-select-block: var(--fk-control-height-touch);
+    .ty-native-select__control {
+      --ty-select-block: var(--ty-control-height-touch);
     }
   }
 
   @media (pointer: coarse) {
-    .fk-native-select__control {
-      font-size: var(--fk-font-size-body-lg);
+    .ty-native-select__control {
+      font-size: var(--ty-font-size-body-lg);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-native-select__control,
-    .fk-native-select__chevron {
+    .ty-native-select__control,
+    .ty-native-select__chevron {
       transition: none;
     }
-    .fk-native-select__overlay[data-entering] .fk-native-select__drawer {
+    .ty-native-select__overlay[data-entering] .ty-native-select__drawer {
       animation: none;
     }
   }
 
   @media (prefers-reduced-transparency: reduce) {
-    .fk-native-select__drawer {
-      background: var(--fk-surface-raised-solid);
+    .ty-native-select__drawer {
+      background: var(--ty-surface-raised-solid);
       backdrop-filter: none;
     }
   }
 
   @media (forced-colors: active) {
-    .fk-native-select__control {
+    .ty-native-select__control {
       border: 1px solid FieldText;
       background: Field;
       color: FieldText;
     }
-    .fk-native-select__control:focus-visible,
-    .fk-native-select__control[data-focus-visible] {
+    .ty-native-select__control:focus-visible,
+    .ty-native-select__control[data-focus-visible] {
       outline-color: Highlight;
     }
-    .fk-native-select__drawer {
+    .ty-native-select__drawer {
       border: 1px solid CanvasText;
     }
-    .fk-native-select__wheel-item[data-selected] {
+    .ty-native-select__wheel-item[data-selected] {
       background: Highlight;
       color: HighlightText;
       forced-color-adjust: none;

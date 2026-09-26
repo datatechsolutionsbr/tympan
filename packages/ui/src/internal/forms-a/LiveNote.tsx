@@ -11,7 +11,7 @@ export function LiveNote({ text, delay = 500, id }: { text: string | undefined; 
     return () => clearTimeout(handle)
   }, [text, delay])
   return (
-    <span id={id} className="fk-visually-hidden" role="status" aria-live="polite" aria-atomic="true">
+    <span id={id} className="ty-visually-hidden" role="status" aria-live="polite" aria-atomic="true">
       {settled}
     </span>
   )

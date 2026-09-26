@@ -1,135 +1,135 @@
 /* StepList (spec: wave-2/step-list.md; design direction §2.2, §2.3, §2.10). */
-@layer fakhir.components {
-  .fk-step-list {
-    --fk-step-ink: var(--fk-ink-3);
-    --fk-step-edge: var(--fk-line-strong);
+@layer tympan.components {
+  .ty-step-list {
+    --ty-step-ink: var(--ty-ink-3);
+    --ty-step-edge: var(--ty-line-strong);
     min-inline-size: 0;
   }
-  .fk-step-list__list {
+  .ty-step-list__list {
     display: flex;
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
     margin: 0;
     padding: 0;
     list-style: none;
   }
-  .fk-step-list__step {
-    --fk-step-ink: var(--fk-ink-3);
-    --fk-step-edge: var(--fk-line-strong);
+  .ty-step-list__step {
+    --ty-step-ink: var(--ty-ink-3);
+    --ty-step-edge: var(--ty-line-strong);
     position: relative;
     display: flex;
     flex: 1 1 0;
     min-inline-size: 0;
   }
-  .fk-step-list__step[data-status='complete'],
-  .fk-step-list__step[data-status='current'] {
-    --fk-step-ink: var(--fk-accent);
-    --fk-step-edge: var(--fk-accent);
+  .ty-step-list__step[data-status='complete'],
+  .ty-step-list__step[data-status='current'] {
+    --ty-step-ink: var(--ty-accent);
+    --ty-step-edge: var(--ty-accent);
   }
-  .fk-step-list__target,
-  .fk-step-list__static {
+  .ty-step-list__target,
+  .ty-step-list__static {
     display: flex;
     align-items: flex-start;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
     min-inline-size: 0;
     color: inherit;
     text-decoration: none;
   }
-  .fk-step-list__target {
+  .ty-step-list__target {
     position: relative;
     flex: 1;
-    padding: var(--fk-space-1);
+    padding: var(--ty-space-1);
     border: 0;
-    border-radius: var(--fk-radius-control);
+    border-radius: var(--ty-radius-control);
     background: transparent;
     font: inherit;
     text-align: start;
     outline: none;
   }
-  .fk-step-list__step[data-selectable] .fk-step-list__target {
-    min-block-size: var(--fk-control-target);
+  .ty-step-list__step[data-selectable] .ty-step-list__target {
+    min-block-size: var(--ty-control-target);
     cursor: pointer;
   }
-  .fk-step-list__target[data-hovered] {
-    background: var(--fk-surface-sunken);
+  .ty-step-list__target[data-hovered] {
+    background: var(--ty-surface-sunken);
   }
-  .fk-step-list__target[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-step-list__target[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
-  .fk-step-list__marker {
+  .ty-step-list__marker {
     display: inline-grid;
     flex: none;
     place-items: center;
     inline-size: 28px;
     block-size: 28px;
-    border: 1.5px solid var(--fk-step-edge);
-    border-radius: var(--fk-radius-pill);
-    color: var(--fk-step-ink);
-    font-size: var(--fk-font-size-label);
-    font-weight: var(--fk-font-weight-semibold);
+    border: 1.5px solid var(--ty-step-edge);
+    border-radius: var(--ty-radius-pill);
+    color: var(--ty-step-ink);
+    font-size: var(--ty-font-size-label);
+    font-weight: var(--ty-font-weight-semibold);
     font-variant-numeric: tabular-nums;
   }
-  .fk-step-list__marker > svg {
+  .ty-step-list__marker > svg {
     inline-size: 16px;
     block-size: 16px;
   }
-  .fk-step-list__step[data-status='current'] .fk-step-list__marker {
-    background: var(--fk-accent);
-    color: var(--fk-accent-ink);
+  .ty-step-list__step[data-status='current'] .ty-step-list__marker {
+    background: var(--ty-accent);
+    color: var(--ty-accent-ink);
   }
-  .fk-step-list__text {
+  .ty-step-list__text {
     display: flex;
     flex-direction: column;
     min-inline-size: 0;
   }
-  .fk-step-list__eyebrow {
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+  .ty-step-list__eyebrow {
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
-  .fk-step-list__name {
-    color: var(--fk-ink-2);
-    font-size: var(--fk-font-size-label);
-    line-height: var(--fk-font-line-height-label);
+  .ty-step-list__name {
+    color: var(--ty-ink-2);
+    font-size: var(--ty-font-size-label);
+    line-height: var(--ty-font-line-height-label);
     overflow-wrap: anywhere;
   }
-  .fk-step-list__step[data-status='current'] .fk-step-list__name {
-    color: var(--fk-ink);
-    font-weight: var(--fk-font-weight-semibold);
+  .ty-step-list__step[data-status='current'] .ty-step-list__name {
+    color: var(--ty-ink);
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-step-list__description {
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
+  .ty-step-list__description {
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
   }
-  .fk-step-list__now {
+  .ty-step-list__now {
     display: none;
-    margin: var(--fk-space-2) 0 0;
-    color: var(--fk-ink);
-    font-size: var(--fk-font-size-label);
-    font-weight: var(--fk-font-weight-semibold);
+    margin: var(--ty-space-2) 0 0;
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-label);
+    font-weight: var(--ty-font-weight-semibold);
   }
   /* markers: a connector between consecutive markers. */
-  .fk-step-list[data-appearance='markers'] .fk-step-list__step:not(:last-child)::after {
+  .ty-step-list[data-appearance='markers'] .ty-step-list__step:not(:last-child)::after {
     content: '';
     align-self: flex-start;
-    flex: 1 0 var(--fk-space-4);
+    flex: 1 0 var(--ty-space-4);
     block-size: 1.5px;
-    margin-block-start: calc(var(--fk-space-1) + 14px);
-    background: var(--fk-line-strong);
+    margin-block-start: calc(var(--ty-space-1) + 14px);
+    background: var(--ty-line-strong);
   }
-  .fk-step-list[data-appearance='markers'] .fk-step-list__step[data-status='complete']:not(:last-child)::after {
-    background: var(--fk-accent);
+  .ty-step-list[data-appearance='markers'] .ty-step-list__step[data-status='complete']:not(:last-child)::after {
+    background: var(--ty-accent);
   }
   /* bar: each step carries an edge (top on wide screens). */
-  .fk-step-list[data-appearance='bar'] .fk-step-list__step {
-    padding-block-start: var(--fk-space-2);
-    border-block-start: 3px solid var(--fk-step-edge);
+  .ty-step-list[data-appearance='bar'] .ty-step-list__step {
+    padding-block-start: var(--ty-space-2);
+    border-block-start: 3px solid var(--ty-step-edge);
   }
-  .fk-step-list[data-appearance='bar'] .fk-step-list__step[data-status='upcoming'] {
-    border-block-start-color: var(--fk-line);
+  .ty-step-list[data-appearance='bar'] .ty-step-list__step[data-status='upcoming'] {
+    border-block-start-color: var(--ty-line);
   }
   @media (max-width: 639.98px) {
-    .fk-step-list[data-appearance='markers'] .fk-step-list__text {
+    .ty-step-list[data-appearance='markers'] .ty-step-list__text {
       position: absolute;
       inline-size: 1px;
       block-size: 1px;
@@ -137,44 +137,44 @@
       clip-path: inset(50%);
       white-space: nowrap;
     }
-    .fk-step-list[data-appearance='markers'] .fk-step-list__step {
+    .ty-step-list[data-appearance='markers'] .ty-step-list__step {
       flex: 0 1 auto;
     }
-    .fk-step-list[data-appearance='markers'] .fk-step-list__step:not(:last-child) {
+    .ty-step-list[data-appearance='markers'] .ty-step-list__step:not(:last-child) {
       flex: 1 1 auto;
     }
-    .fk-step-list[data-appearance='markers'] .fk-step-list__now {
+    .ty-step-list[data-appearance='markers'] .ty-step-list__now {
       display: block;
     }
-    .fk-step-list[data-appearance='bar'] .fk-step-list__list {
+    .ty-step-list[data-appearance='bar'] .ty-step-list__list {
       flex-direction: column;
     }
-    .fk-step-list[data-appearance='bar'] .fk-step-list__step {
+    .ty-step-list[data-appearance='bar'] .ty-step-list__step {
       padding-block-start: 0;
-      padding-inline-start: var(--fk-space-3);
+      padding-inline-start: var(--ty-space-3);
       border-block-start: 0;
-      border-inline-start: 3px solid var(--fk-step-edge);
+      border-inline-start: 3px solid var(--ty-step-edge);
     }
-    .fk-step-list[data-appearance='bar'] .fk-step-list__step[data-status='upcoming'] {
-      border-inline-start-color: var(--fk-line);
+    .ty-step-list[data-appearance='bar'] .ty-step-list__step[data-status='upcoming'] {
+      border-inline-start-color: var(--ty-line);
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .fk-step-list__marker,
-    .fk-step-list__step::after {
+    .ty-step-list__marker,
+    .ty-step-list__step::after {
       transition: none;
     }
   }
   @media (forced-colors: active) {
-    .fk-step-list__step[data-status='current'] .fk-step-list__marker {
+    .ty-step-list__step[data-status='current'] .ty-step-list__marker {
       background: Highlight;
       color: HighlightText;
       border-color: Highlight;
     }
-    .fk-step-list__marker {
+    .ty-step-list__marker {
       border-color: CanvasText;
     }
-    .fk-step-list__target[data-focus-visible] {
+    .ty-step-list__target[data-focus-visible] {
       outline: 2px solid Highlight;
     }
   }

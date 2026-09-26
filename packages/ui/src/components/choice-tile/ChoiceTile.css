@@ -1,77 +1,77 @@
 /* ChoiceTile (spec: wave-2/choice-tile.md; design direction §2.3, §2.4, §2.7). */
-@layer fakhir.components {
-  .fk-choice-tile {
+@layer tympan.components {
+  .ty-choice-tile {
     position: relative;
     box-sizing: border-box;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
     min-block-size: 32px;
-    padding: var(--fk-space-1) var(--fk-space-3);
-    border: 1px solid var(--fk-line-strong);
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-surface-solid);
-    color: var(--fk-ink-2);
+    padding: var(--ty-space-1) var(--ty-space-3);
+    border: 1px solid var(--ty-line-strong);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-surface-solid);
+    color: var(--ty-ink-2);
     font: inherit;
-    font-size: var(--fk-font-size-body);
+    font-size: var(--ty-font-size-body);
     cursor: pointer;
     outline: none;
-    transition: background-color var(--fk-dur-instant) var(--fk-ease), border-color var(--fk-dur-instant) var(--fk-ease);
+    transition: background-color var(--ty-dur-instant) var(--ty-ease), border-color var(--ty-dur-instant) var(--ty-ease);
   }
-  .fk-choice-tile[data-shape='pill'] {
-    border-radius: var(--fk-radius-pill);
+  .ty-choice-tile[data-shape='pill'] {
+    border-radius: var(--ty-radius-pill);
   }
-  .fk-choice-tile[data-shape='card'] {
-    padding: var(--fk-space-4);
-    border-radius: var(--fk-radius-card);
+  .ty-choice-tile[data-shape='card'] {
+    padding: var(--ty-space-4);
+    border-radius: var(--ty-radius-card);
   }
-  .fk-choice-tile::before {
+  .ty-choice-tile::before {
     content: '';
     position: absolute;
     inset-block-start: 50%;
     /* physical: centring with translate(-50%) is the same in both directions */
     left: 50%;
-    inline-size: max(100%, var(--fk-control-target));
-    block-size: max(100%, var(--fk-control-target));
+    inline-size: max(100%, var(--ty-control-target));
+    block-size: max(100%, var(--ty-control-target));
     transform: translate(-50%, -50%);
   }
-  .fk-choice-tile[data-hovered]:not([data-disabled]) {
-    border-color: var(--fk-ink-3);
+  .ty-choice-tile[data-hovered]:not([data-disabled]) {
+    border-color: var(--ty-ink-3);
   }
   /* Selected: fill plus a thicker accent border, so it never relies on hue alone. */
-  .fk-choice-tile[data-selected]:not([data-own-selection]) {
-    border-color: var(--fk-accent);
-    background: var(--fk-accent-soft);
-    color: var(--fk-ink);
-    box-shadow: inset 0 0 0 1px var(--fk-accent);
+  .ty-choice-tile[data-selected]:not([data-own-selection]) {
+    border-color: var(--ty-accent);
+    background: var(--ty-accent-soft);
+    color: var(--ty-ink);
+    box-shadow: inset 0 0 0 1px var(--ty-accent);
   }
-  .fk-choice-tile[data-pressed] {
+  .ty-choice-tile[data-pressed] {
     opacity: 0.85;
   }
-  .fk-choice-tile[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-choice-tile[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
-  .fk-choice-tile[data-disabled] {
+  .ty-choice-tile[data-disabled] {
     cursor: not-allowed;
     opacity: 0.55;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-choice-tile {
+    .ty-choice-tile {
       transition: none;
     }
   }
   @media (forced-colors: active) {
-    .fk-choice-tile {
+    .ty-choice-tile {
       border-color: ButtonText;
     }
-    .fk-choice-tile[data-selected] {
+    .ty-choice-tile[data-selected] {
       outline: 3px solid Highlight;
       outline-offset: -3px;
     }
-    .fk-choice-tile[data-focus-visible] {
+    .ty-choice-tile[data-focus-visible] {
       outline: 2px solid Highlight;
       outline-offset: 2px;
     }

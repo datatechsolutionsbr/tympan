@@ -137,7 +137,7 @@ export function ChartsGeoShowcase({ scope }: { scope: string }) {
   }, [])
 
   return (
-    <div className="fk-gallery-showcase">
+    <div className="ty-gallery-showcase">
       <Section id={id('chart')} title="Chart (line, bar, histogram; table view)">
         <Chart figure={stages} />
         <Chart figure={bars} />
@@ -184,9 +184,9 @@ export function ChartsGeoShowcase({ scope }: { scope: string }) {
       </Section>
 
       <Section id={id('tint')} title="ToneTint">
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           {toneNames.map((t) => (
-            <span key={t} data-fk-tinted="" style={{ ...tintStyle(t), padding: '8px 12px', border: '1px solid', borderRadius: 10 }}>
+            <span key={t} data-ty-tinted="" style={{ ...tintStyle(t), padding: '8px 12px', border: '1px solid', borderRadius: 10 }}>
               {t}
             </span>
           ))}

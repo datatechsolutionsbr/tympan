@@ -12,7 +12,7 @@ describe('DeltaIndicator in right-to-left locales', () => {
       </>,
       'ar-EG',
     )
-    for (const glyph of container.querySelectorAll('.fk-delta__glyph')) expect(glyph).toHaveClass('fk-mirror-rtl')
+    for (const glyph of container.querySelectorAll('.ty-delta__glyph')) expect(glyph).toHaveClass('ty-mirror-rtl')
     expect(container.textContent).toMatch(/[٠-٩]/)
     await expectNoAxeViolations(container)
   })

@@ -1,7 +1,7 @@
 // Variants declared as data. A component lists its variant axes and their
 // allowed values once; the returned function validates props, applies
 // defaults and yields `data-*` attributes that the component's CSS selects on
-// (`.fk-button[data-variant='primary']`). No class strings are generated.
+// (`.ty-button[data-variant='primary']`). No class strings are generated.
 
 export type VariantConfig = Record<string, readonly string[]>
 

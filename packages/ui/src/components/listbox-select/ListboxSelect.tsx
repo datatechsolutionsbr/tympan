@@ -55,26 +55,26 @@ export interface ListboxSelectProps {
 
 function Option({ option }: { option: ListboxSelectOption }) {
   return (
-    <ListBoxItem id={option.value} textValue={option.label} isDisabled={option.disabled} className="fk-listbox-select__option">
+    <ListBoxItem id={option.value} textValue={option.label} isDisabled={option.disabled} className="ty-listbox-select__option">
       {({ isSelected }) => (
         <>
           {option.icon ? (
-            <span className="fk-listbox-select__option-icon" aria-hidden="true">
+            <span className="ty-listbox-select__option-icon" aria-hidden="true">
               {option.icon}
             </span>
           ) : null}
-          <span className="fk-listbox-select__option-text">
-            <Text slot="label" className="fk-listbox-select__option-label">
+          <span className="ty-listbox-select__option-text">
+            <Text slot="label" className="ty-listbox-select__option-label">
               {option.label}
             </Text>
             {option.description ? (
-              <Text slot="description" className="fk-listbox-select__option-description">
+              <Text slot="description" className="ty-listbox-select__option-description">
                 {option.description}
               </Text>
             ) : null}
           </span>
-          <span className="fk-listbox-select__check" aria-hidden="true">
-            {isSelected ? <Check className="fk-icon" focusable="false" /> : null}
+          <span className="ty-listbox-select__check" aria-hidden="true">
+            {isSelected ? <Check className="ty-icon" focusable="false" /> : null}
           </span>
         </>
       )}
@@ -115,13 +115,13 @@ export function ListboxSelect(props: ListboxSelectProps) {
   const disabledKeys = [...options, ...(sections ?? []).flatMap((s) => s.options)].filter((o) => o.disabled).map((o) => o.value)
 
   const list = (
-    <ListBox className="fk-listbox-select__list">
+    <ListBox className="ty-listbox-select__list">
       {options.map((o) => (
         <Option key={o.value} option={o} />
       ))}
       {sections?.map((s) => (
-        <ListBoxSection key={s.title} id={s.title} className="fk-listbox-select__section">
-          <Header className="fk-listbox-select__section-title">{s.title}</Header>
+        <ListBoxSection key={s.title} id={s.title} className="ty-listbox-select__section">
+          <Header className="ty-listbox-select__section-title">{s.title}</Header>
           {s.options.map((o) => (
             <Option key={o.value} option={o} />
           ))}
@@ -133,7 +133,7 @@ export function ListboxSelect(props: ListboxSelectProps) {
   return (
     <Select
       id={wiring.id}
-      className={cx('fk-listbox-select', className)}
+      className={cx('ty-listbox-select', className)}
       value={value === undefined ? undefined : value}
       defaultValue={defaultValue ?? undefined}
       onChange={(key: Key | null) => {
@@ -152,25 +152,25 @@ export function ListboxSelect(props: ListboxSelectProps) {
       aria-describedby={wiring.describedBy}
       data-presentation={narrow ? 'tray' : 'popover'}
     >
-      {label ? <Label className="fk-listbox-select__label">{label}</Label> : null}
+      {label ? <Label className="ty-listbox-select__label">{label}</Label> : null}
       {hint != null ? (
-        <p id={hintId} className="fk-listbox-select__hint">
+        <p id={hintId} className="ty-listbox-select__hint">
           {hint}
         </p>
       ) : null}
-      <AriaButton className="fk-listbox-select__trigger" aria-describedby={wiring.describedBy}>
-        <SelectValue className="fk-listbox-select__value" />
-        <ChevronDown className="fk-icon fk-listbox-select__chevron" aria-hidden="true" focusable="false" />
+      <AriaButton className="ty-listbox-select__trigger" aria-describedby={wiring.describedBy}>
+        <SelectValue className="ty-listbox-select__value" />
+        <ChevronDown className="ty-icon ty-listbox-select__chevron" aria-hidden="true" focusable="false" />
       </AriaButton>
       {errorMessage ? (
-        <p id={errorId} className="fk-listbox-select__error" aria-live={errorAppeared ? 'polite' : undefined}>
-          <CircleAlert className="fk-icon" aria-hidden="true" focusable="false" />
+        <p id={errorId} className="ty-listbox-select__error" aria-live={errorAppeared ? 'polite' : undefined}>
+          <CircleAlert className="ty-icon" aria-hidden="true" focusable="false" />
           <span>{errorMessage}</span>
         </p>
       ) : null}
       {/* Narrow screens: the same popover (the collection must stay inside it)
           is laid out as a bottom tray by CSS. */}
-      <Popover className={narrow ? 'fk-listbox-select__tray' : 'fk-listbox-select__popover'} offset={4} data-presentation={narrow ? 'tray' : 'popover'}>
+      <Popover className={narrow ? 'ty-listbox-select__tray' : 'ty-listbox-select__popover'} offset={4} data-presentation={narrow ? 'tray' : 'popover'}>
         {list}
       </Popover>
     </Select>

@@ -47,7 +47,7 @@ describe('GroupNodeForm', () => {
 
   it('marks the checked swatch by shape (check mark and ring) that survives forced colours', () => {
     const { container } = render(<GroupNodeForm value={{ label: 'A', tone: 'categorical-3' }} onSave={() => {}} onCancel={() => {}} />)
-    expect(container.querySelectorAll('.fk-group-form__check')).toHaveLength(1)
+    expect(container.querySelectorAll('.ty-group-form__check')).toHaveLength(1)
     const css = cssOf('forms/GroupNodeForm.css')
     expect(mediaBlock(css, /\(forced-colors: active\)/)).toMatch(/\[data-selected\][^}]*Highlight/)
     expect(css).toMatch(/min-block-size:\s*44px/)

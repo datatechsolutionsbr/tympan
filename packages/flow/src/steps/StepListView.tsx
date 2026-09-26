@@ -5,7 +5,7 @@
 
 import { ArrowDown, ArrowUp, Ellipsis, Plus, Settings2, Trash2 } from 'lucide-react'
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
-import { ActionMenu, Button } from '@fakhir/ui'
+import { ActionMenu, Button } from '@datatechsolutions/tympan'
 import { fill, useFlowLocale } from '../internal/labels'
 import type { FlowNode } from '../model/types'
 import { ShapeFlow } from './ShapeChip'
@@ -73,14 +73,14 @@ export function StepListView({ nodes, locked, activeId, onConfigure, onMove, onR
   }
 
   return (
-    <section className="fk-flow-list" aria-labelledby="fk-flow-list-title">
-      <h2 id="fk-flow-list-title" className="fk-visually-hidden">
+    <section className="ty-flow-list" aria-labelledby="ty-flow-list-title">
+      <h2 id="ty-flow-list-title" className="ty-visually-hidden">
         {w.listTitle}
       </h2>
-      <p className="fk-visually-hidden" id="fk-flow-list-hint">
+      <p className="ty-visually-hidden" id="ty-flow-list-hint">
         {w.listHint}
       </p>
-      <ol className="fk-flow-list__rows">
+      <ol className="ty-flow-list__rows">
         {nodes.map((n, i) => {
           const spec = specOfNode(n, rt.byId)
           const title = (typeof n.data.label === 'string' && n.data.label) || spec?.name || n.kind
@@ -88,8 +88,8 @@ export function StepListView({ nodes, locked, activeId, onConfigure, onMove, onR
           const Icon = spec?.icon
           const here = n.id === current?.id
           return [
-            <li key={n.id} className="fk-flow-list__row" data-current={here ? 'true' : undefined}>
-              <span className="fk-flow-list__number" aria-hidden="true">
+            <li key={n.id} className="ty-flow-list__row" data-current={here ? 'true' : undefined}>
+              <span className="ty-flow-list__number" aria-hidden="true">
                 {new Intl.NumberFormat(locale).format(i + 1)}
               </span>
               <button
@@ -98,9 +98,9 @@ export function StepListView({ nodes, locked, activeId, onConfigure, onMove, onR
                   else rows.current.delete(n.id)
                 }}
                 type="button"
-                className="fk-flow-list__main"
+                className="ty-flow-list__main"
                 tabIndex={here ? 0 : -1}
-                aria-describedby="fk-flow-list-hint"
+                aria-describedby="ty-flow-list-hint"
                 onFocus={() => {
                   setAt(i)
                   onActiveChange?.(n.id)
@@ -108,11 +108,11 @@ export function StepListView({ nodes, locked, activeId, onConfigure, onMove, onR
                 onClick={() => onConfigure(n.id)}
                 onKeyDown={(e) => onKey(e, i, n)}
               >
-                <span className="fk-flow-list__tile" aria-hidden="true">
+                <span className="ty-flow-list__tile" aria-hidden="true">
                   {Icon ? <Icon focusable="false" /> : null}
                 </span>
-                <span className="fk-flow-list__title-text" dir="auto">{title}</span>
-                <span className="fk-flow-list__line" dir="auto">{line ?? w.notSet}</span>
+                <span className="ty-flow-list__title-text" dir="auto">{title}</span>
+                <span className="ty-flow-list__line" dir="auto">{line ?? w.notSet}</span>
                 {spec && !spec.primitive ? <ShapeFlow inputs={spec.inputs} output={spec.output} words={rt.shapes} labels={w} bare /> : null}
               </button>
               {!locked ? (
@@ -137,8 +137,8 @@ export function StepListView({ nodes, locked, activeId, onConfigure, onMove, onR
               ) : null}
             </li>,
             here && !locked ? (
-              <li key={`${n.id}-add`} className="fk-flow-list__add">
-                <button type="button" className="fk-flow-list__add-button" onClick={(e) => onAddAfter(n.id, e.currentTarget)}>
+              <li key={`${n.id}-add`} className="ty-flow-list__add">
+                <button type="button" className="ty-flow-list__add-button" onClick={(e) => onAddAfter(n.id, e.currentTarget)}>
                   <Plus aria-hidden="true" focusable="false" />
                   {w.addHere}
                 </button>

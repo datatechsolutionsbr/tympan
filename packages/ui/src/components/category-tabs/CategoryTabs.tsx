@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react'
 import { ToggleButton, ToggleButtonGroup, type Key } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 
-/** Index into the categorical palette (`--fk-categorical-1` … `-8`), §2.3. */
+/** Index into the categorical palette (`--ty-categorical-1` … `-8`), §2.3. */
 export type CategoryMarker = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
 
 export interface CategoryItem {
@@ -25,7 +25,7 @@ export interface CategoryTabsProps {
   className?: string
 }
 
-const markerStyle = (marker: CategoryMarker) => ({ '--fk-category-marker': `var(--fk-categorical-${marker})` }) as CSSProperties
+const markerStyle = (marker: CategoryMarker) => ({ '--ty-category-marker': `var(--ty-categorical-${marker})` }) as CSSProperties
 
 /** Name without its leading code ("PT Portugal" → "Portugal"); the full name when nothing is left. */
 function nameWithoutCode(code: string, name: string): string {
@@ -52,20 +52,20 @@ export function CategoryTabs({ items, selected, onSelect, label, allowNone = fal
   }
   return (
     // Activation stays inside the row: an enclosing clickable card never sees it.
-    <div className={cx('fk-category-tabs', className)} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
+    <div className={cx('ty-category-tabs', className)} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
       <ToggleButtonGroup
         aria-label={label}
-        className="fk-category-tabs__row"
+        className="ty-category-tabs__row"
         selectionMode="single"
         disallowEmptySelection={!allowNone}
         selectedKeys={selected == null ? [] : [selected]}
         onSelectionChange={change}
       >
         {items.map((item) => (
-          <ToggleButton key={item.key} id={reportedValue(item)} isDisabled={item.disabled} className="fk-category-tabs__item" style={markerStyle(item.marker)}>
-            <span className="fk-category-tabs__marker" aria-hidden="true" />
-            <strong className="fk-category-tabs__code">{item.code}</strong>{" "}
-            <span className="fk-category-tabs__name">{nameWithoutCode(item.code, item.name)}</span>
+          <ToggleButton key={item.key} id={reportedValue(item)} isDisabled={item.disabled} className="ty-category-tabs__item" style={markerStyle(item.marker)}>
+            <span className="ty-category-tabs__marker" aria-hidden="true" />
+            <strong className="ty-category-tabs__code">{item.code}</strong>{" "}
+            <span className="ty-category-tabs__name">{nameWithoutCode(item.code, item.name)}</span>
           </ToggleButton>
         ))}
       </ToggleButtonGroup>
@@ -85,10 +85,10 @@ export interface CategoryLabelProps {
 /** Static colour marker plus code. */
 export function CategoryLabel({ code, name, marker, size = 'medium', className }: CategoryLabelProps) {
   return (
-    <span className={cx('fk-category-label', className)} data-size={size} style={markerStyle(marker)}>
-      <span className="fk-category-tabs__marker" aria-hidden="true" />
+    <span className={cx('ty-category-label', className)} data-size={size} style={markerStyle(marker)}>
+      <span className="ty-category-tabs__marker" aria-hidden="true" />
       <span aria-hidden={name ? true : undefined}>{code}</span>
-      {name ? <span className="fk-visually-hidden">{name}</span> : null}
+      {name ? <span className="ty-visually-hidden">{name}</span> : null}
     </span>
   )
 }

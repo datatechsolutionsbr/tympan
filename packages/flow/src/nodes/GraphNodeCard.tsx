@@ -6,7 +6,7 @@
 import { isValidElement, useId, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
 import { Button as AriaButton, Input, TextField as AriaTextField, Label } from 'react-aria-components'
 import { TriangleAlert, Trash2 } from 'lucide-react'
-import { Button, type IconComponent } from '@fakhir/ui'
+import { Button, type IconComponent } from '@datatechsolutions/tympan'
 import { nodeStateAttributes, type NodeProofState, type NodeRunState } from '../catalog/nodeState'
 import type { ToneName } from '../catalog/palette'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
@@ -208,11 +208,11 @@ export function GraphNodeCard(props: GraphNodeCardProps) {
   }
 
   const titleNode = renaming ? (
-    <AriaTextField className="fk-node-card__rename" value={draft} onChange={setDraft} autoFocus aria-label={fill(l.renameField, { title }, locale)}>
-      <Label className="fk-visually-hidden">{fill(l.renameField, { title }, locale)}</Label>
+    <AriaTextField className="ty-node-card__rename" value={draft} onChange={setDraft} autoFocus aria-label={fill(l.renameField, { title }, locale)}>
+      <Label className="ty-visually-hidden">{fill(l.renameField, { title }, locale)}</Label>
       <Input
-        className="fk-node-card__rename-input"
-        data-fk-no-drag=""
+        className="ty-node-card__rename-input"
+        data-ty-no-drag=""
         onBlur={() => finishRename(true)}
         onKeyDown={(e) => {
           // Keys typed while renaming never reach canvas shortcuts.
@@ -230,28 +230,28 @@ export function GraphNodeCard(props: GraphNodeCardProps) {
   ) : onActivate ? (
     <AriaButton
       ref={activatorRef}
-      className="fk-node-card__activator"
+      className="ty-node-card__activator"
       aria-label={name}
       aria-describedby={[words.length ? stateId : null, problem ? problemId : null].filter(Boolean).join(' ') || undefined}
-      data-fk-node-focus=""
+      data-ty-node-focus=""
       onPress={() => {
         if (surface.justDragged()) return
         onActivate()
       }}
       onKeyDown={onActivatorKeyDown}
     >
-      <span className="fk-node-card__title" title={title}>
+      <span className="ty-node-card__title" title={title}>
         {title}
       </span>
     </AriaButton>
   ) : (
-    <span className="fk-node-card__title" title={title}>
+    <span className="ty-node-card__title" title={title}>
       {title}
     </span>
   )
 
   const root = {
-    className: ['fk-node-card', className].filter(Boolean).join(' '),
+    className: ['ty-node-card', className].filter(Boolean).join(' '),
     'data-kind': kind,
     'data-tone': tone,
     'data-width': width,
@@ -268,40 +268,40 @@ export function GraphNodeCard(props: GraphNodeCardProps) {
         role: 'group' as const,
         'aria-label': name,
         tabIndex: 0,
-        'data-fk-node-focus': '',
+        'data-ty-node-focus': '',
         ...(words.length ? { 'aria-describedby': stateId } : {}),
         onKeyDown: onActivatorKeyDown,
       }
 
   return (
     <div {...root} {...groupProps}>
-      <div className="fk-node-card__header">
-        <span className="fk-node-card__bubble" data-tone={tone} aria-hidden="true">
+      <div className="ty-node-card__header">
+        <span className="ty-node-card__bubble" data-tone={tone} aria-hidden="true">
           {renderIcon(icon)}
         </span>
-        <div className="fk-node-card__titles" onDoubleClick={canRename && !renaming ? startRename : undefined}>
+        <div className="ty-node-card__titles" onDoubleClick={canRename && !renaming ? startRename : undefined}>
           {titleNode}
-          {description && density === 'detailed' ? <span className="fk-node-card__description">{description}</span> : null}
+          {description && density === 'detailed' ? <span className="ty-node-card__description">{description}</span> : null}
         </div>
-        {badges ? <div className="fk-node-card__badges">{badges}</div> : null}
+        {badges ? <div className="ty-node-card__badges">{badges}</div> : null}
         {headerActions || onDelete ? (
-          <div className="fk-node-card__actions">
+          <div className="ty-node-card__actions">
             {headerActions}
             {onDelete && !locked ? (
-              <Button className="fk-node-card__delete" variant="quiet" size="compact" shape="circle" iconOnly accessibleLabel={fill(l.remove, { title }, locale)} leadingIcon={<Trash2 />} onPress={onDelete} />
+              <Button className="ty-node-card__delete" variant="quiet" size="compact" shape="circle" iconOnly accessibleLabel={fill(l.remove, { title }, locale)} leadingIcon={<Trash2 />} onPress={onDelete} />
             ) : null}
           </div>
         ) : null}
       </div>
       {problem ? (
-        <p className="fk-node-card__problem" id={problemId}>
+        <p className="ty-node-card__problem" id={problemId}>
           <TriangleAlert aria-hidden="true" focusable="false" />
           <span>{typeof problem === 'string' ? problem : l.problem}</span>
         </p>
       ) : null}
-      {meta && density === 'detailed' ? <div className="fk-node-card__meta">{meta}</div> : null}
+      {meta && density === 'detailed' ? <div className="ty-node-card__meta">{meta}</div> : null}
       {words.length ? (
-        <span id={stateId} className="fk-visually-hidden">
+        <span id={stateId} className="ty-visually-hidden">
           {words.join(', ')}
         </span>
       ) : null}
@@ -313,9 +313,9 @@ export function GraphNodeCard(props: GraphNodeCardProps) {
 /** Small label in the header or meta row: neutral, or in the kind's tone. */
 export function NodeBadge({ tone = 'neutral', icon, children }: { tone?: ToneName | 'neutral'; icon?: ReactNode; children: ReactNode }) {
   return (
-    <span className="fk-node-badge" data-tone={tone}>
+    <span className="ty-node-badge" data-tone={tone}>
       {icon ? (
-        <span className="fk-node-badge__icon" aria-hidden="true">
+        <span className="ty-node-badge__icon" aria-hidden="true">
           {icon}
         </span>
       ) : null}

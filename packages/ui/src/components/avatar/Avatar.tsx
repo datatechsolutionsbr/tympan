@@ -57,22 +57,22 @@ export function Avatar({ src, fallbackText, name, decorative = false, actorKind 
 
   let inner
   if (showImage) {
-    inner = <img className="fk-avatar__image" src={src ?? undefined} alt={hidden ? '' : (name ?? '')} onError={() => setFailed(true)} />
+    inner = <img className="ty-avatar__image" src={src ?? undefined} alt={hidden ? '' : (name ?? '')} onError={() => setFailed(true)} />
   } else if (isAgent) {
-    inner = <Bot className="fk-avatar__icon" aria-hidden="true" focusable="false" />
+    inner = <Bot className="ty-avatar__icon" aria-hidden="true" focusable="false" />
   } else if (fallbackText) {
     inner = (
-      <span className="fk-avatar__initials" aria-hidden="true">
+      <span className="ty-avatar__initials" aria-hidden="true">
         {leadingGraphemes(fallbackText, 2)}
       </span>
     )
   } else {
-    inner = <User className="fk-avatar__icon" aria-hidden="true" focusable="false" />
+    inner = <User className="ty-avatar__icon" aria-hidden="true" focusable="false" />
   }
 
   const visual = (
     <span
-      className={cx('fk-avatar', !pressable && className)}
+      className={cx('ty-avatar', !pressable && className)}
       data-kind={actorKind}
       data-size={size}
       data-tint={tint}
@@ -90,13 +90,13 @@ export function Avatar({ src, fallbackText, name, decorative = false, actorKind 
   const label = name ? messages.avatar.open(name) : undefined
   if (href) {
     return (
-      <AriaLink href={href} onPress={onPress} aria-label={label} className={cx('fk-avatar-control', className)} data-size={size}>
+      <AriaLink href={href} onPress={onPress} aria-label={label} className={cx('ty-avatar-control', className)} data-size={size}>
         {visual}
       </AriaLink>
     )
   }
   return (
-    <AriaButton onPress={onPress} aria-label={label} className={cx('fk-avatar-control', className)} data-size={size}>
+    <AriaButton onPress={onPress} aria-label={label} className={cx('ty-avatar-control', className)} data-size={size}>
       {visual}
     </AriaButton>
   )

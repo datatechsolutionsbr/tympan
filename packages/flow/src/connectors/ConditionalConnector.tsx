@@ -167,7 +167,7 @@ function ConnectorPath({ connector, shape, options }: { connector: FlowConnector
   const branch = branchOf(connector)
   return (
     <g
-      className="fk-connector"
+      className="ty-connector"
       data-branch={branch?.wellKnown ?? (branch ? 'named' : 'none')}
       data-tone={toneOf(connector)}
       data-selected={options.selected ? 'true' : 'false'}
@@ -175,9 +175,9 @@ function ConnectorPath({ connector, shape, options }: { connector: FlowConnector
       data-active={options.active ? 'true' : undefined}
       aria-hidden="true"
     >
-      <path className="fk-connector__path" d={shape.d} markerEnd="url(#fk-surface-arrow)" />
+      <path className="ty-connector__path" d={shape.d} markerEnd="url(#ty-surface-arrow)" />
       <path
-        className="fk-connector__hit"
+        className="ty-connector__hit"
         d={shape.d}
         onPointerEnter={() => enter(connector.id)}
         onPointerLeave={() => leave(connector.id)}
@@ -224,7 +224,7 @@ function ConnectorControls({ connector, shape, options }: { connector: FlowConne
 
   return (
     <div
-      className="fk-connector-controls"
+      className="ty-connector-controls"
       data-labelled={branch ? 'true' : 'false'}
       data-tone={toneOf(connector)}
       data-visible={showControls ? 'true' : 'false'}
@@ -235,24 +235,24 @@ function ConnectorControls({ connector, shape, options }: { connector: FlowConne
       onBlur={(e) => {
         if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocusWithin(false)
       }}
-      data-fk-surface-chrome=""
+      data-ty-surface-chrome=""
     >
-      <AriaButton ref={focusRef} className="fk-connector-controls__handle" aria-label={name} onPress={() => options.onSelect?.(connector.id)} onKeyDown={onKeyDown}>
+      <AriaButton ref={focusRef} className="ty-connector-controls__handle" aria-label={name} onPress={() => options.onSelect?.(connector.id)} onKeyDown={onKeyDown}>
         {branchWord ? (
-          <span className="fk-connector-controls__label">
+          <span className="ty-connector-controls__label">
             <Icon aria-hidden="true" focusable="false" />
             {branchWord}
           </span>
         ) : (
-          <span className="fk-connector-controls__dot" aria-hidden="true" />
+          <span className="ty-connector-controls__dot" aria-hidden="true" />
         )}
       </AriaButton>
       {canEdit ? (
-        <span className="fk-connector-controls__pill" role="group" aria-label={l.controls}>
-          <AriaButton ref={insertRef} className="fk-connector-controls__tool" aria-label={fill(l.insert, names, locale)} onPress={openInsert}>
+        <span className="ty-connector-controls__pill" role="group" aria-label={l.controls}>
+          <AriaButton ref={insertRef} className="ty-connector-controls__tool" aria-label={fill(l.insert, names, locale)} onPress={openInsert}>
             <Plus aria-hidden="true" focusable="false" />
           </AriaButton>
-          <AriaButton className="fk-connector-controls__tool" data-tone="danger" aria-label={fill(l.remove, names, locale)} onPress={() => options.onDelete?.(connector.id)}>
+          <AriaButton className="ty-connector-controls__tool" data-tone="danger" aria-label={fill(l.remove, names, locale)} onPress={() => options.onDelete?.(connector.id)}>
             <Trash2 aria-hidden="true" focusable="false" />
           </AriaButton>
         </span>
@@ -279,7 +279,7 @@ export function ConditionalConnector(props: { connector: FlowConnector; shape: C
   const parts = renderConditionalConnector(connector, shape, options)
   return (
     <>
-      <svg className="fk-connector-standalone" aria-hidden="true" focusable="false">
+      <svg className="ty-connector-standalone" aria-hidden="true" focusable="false">
         {parts.svg}
       </svg>
       {parts.html}

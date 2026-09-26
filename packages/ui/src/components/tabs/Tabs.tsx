@@ -36,11 +36,11 @@ function TabLabel({ item }: { item: TabItem }) {
   const Glyph = item.icon
   const counted = typeof item.count === 'number'
   return (
-    <Tab id={item.id} className="fk-tabs__tab">
-      {Glyph && <Glyph className="fk-icon fk-tabs__icon" aria-hidden="true" focusable="false" />}
-      <span className="fk-tabs__label">{item.label}</span>
+    <Tab id={item.id} className="ty-tabs__tab">
+      {Glyph && <Glyph className="ty-icon ty-tabs__icon" aria-hidden="true" focusable="false" />}
+      <span className="ty-tabs__label">{item.label}</span>
       {counted && ' '}
-      {counted && <span className="fk-tabs__count">{item.count}</span>}
+      {counted && <span className="ty-tabs__count">{item.count}</span>}
     </Tab>
   )
 }
@@ -60,13 +60,13 @@ export function Tabs(props: TabsProps) {
   return (
     <AriaTabs
       {...selectionOf(props)}
-      className={cx('fk-tabs', props.className)}
+      className={cx('ty-tabs', props.className)}
       orientation={props.orientation ?? 'horizontal'}
       keyboardActivation={props.activation ?? 'automatic'}
       disabledKeys={blocked}
       onSelectionChange={report}
     >
-      <TabList aria-label={props.label} className="fk-tabs__list">
+      <TabList aria-label={props.label} className="ty-tabs__list">
         {props.tabs.map((item) => (
           <TabLabel key={item.id} item={item} />
         ))}
@@ -87,7 +87,7 @@ export interface TabPanelProps {
 export function TabPanel(props: TabPanelProps) {
   const policy = useContext(PanelPolicy)
   return (
-    <AriaTabPanel id={props.id} shouldForceMount={policy.forceMount} className={cx('fk-tabs__panel', props.className)}>
+    <AriaTabPanel id={props.id} shouldForceMount={policy.forceMount} className={cx('ty-tabs__panel', props.className)}>
       {props.children}
     </AriaTabPanel>
   )

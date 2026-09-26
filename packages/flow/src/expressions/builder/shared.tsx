@@ -45,8 +45,8 @@ export function groupName(words: ExpressionBuilderLabels, key: string, depth: nu
 /** Header shared by operand groups: the key in mono and the level as text (depth never by colour). */
 export function SlotHeading({ slotKey, trailing }: { slotKey: string; trailing: ReactNode }) {
   return (
-    <div className="fk-expr__slot-head">
-      <code className="fk-expr__slot-key" dir="ltr">
+    <div className="ty-expr__slot-head">
+      <code className="ty-expr__slot-key" dir="ltr">
         {slotKey}
       </code>
       {trailing}

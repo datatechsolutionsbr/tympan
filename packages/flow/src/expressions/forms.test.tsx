@@ -2,7 +2,7 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
 import { describe, expect, it, vi } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import { ExpressionCatalogProvider } from './catalogContext'
 import { ComputeNodeForm } from './ComputeNodeForm'
@@ -186,11 +186,11 @@ describe('RuleEditor', () => {
 
   it('uses Portuguese strings and keeps working in RTL', async () => {
     render(
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <div dir="rtl">
           <RuleHarness />
         </div>
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(screen.getByRole('textbox', { name: /Nome/ })).toBeInTheDocument()
     await userEvent.click(screen.getByRole('button', { name: 'Avançado' }))

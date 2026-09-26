@@ -19,21 +19,21 @@ export interface FeatureTileProps {
 export function FeatureTile(props: FeatureTileProps) {
   const Glyph = props.icon
   const heading = props.href ? (
-    <AriaLink href={props.href} className="fk-feature-tile__link">
+    <AriaLink href={props.href} className="ty-feature-tile__link">
       {props.title}
     </AriaLink>
   ) : (
     props.title
   )
   return (
-    <div className={cx('fk-feature-tile', props.className)} data-surface={props.surface ?? 'none'} data-linked={props.href ? true : undefined}>
-      <span className="fk-feature-tile__badge" aria-hidden="true">
-        <Glyph className="fk-icon" aria-hidden="true" focusable="false" />
+    <div className={cx('ty-feature-tile', props.className)} data-surface={props.surface ?? 'none'} data-linked={props.href ? true : undefined}>
+      <span className="ty-feature-tile__badge" aria-hidden="true">
+        <Glyph className="ty-icon" aria-hidden="true" focusable="false" />
       </span>
-      <AriaHeading level={props.headingLevel ?? 3} className="fk-feature-tile__title">
+      <AriaHeading level={props.headingLevel ?? 3} className="ty-feature-tile__title">
         {heading}
       </AriaHeading>
-      <div className="fk-feature-tile__description">{props.description}</div>
+      <div className="ty-feature-tile__description">{props.description}</div>
     </div>
   )
 }
@@ -41,9 +41,9 @@ export function FeatureTile(props: FeatureTileProps) {
 /** List of FeatureTiles: one column, two from 640 px, three from 1024 px. */
 export function FeatureTileGrid(props: { children: ReactNode; className?: string }) {
   return (
-    <ul className={cx('fk-feature-tile-grid', props.className)}>
+    <ul className={cx('ty-feature-tile-grid', props.className)}>
       {Children.toArray(props.children).map((tile, i) => (
-        <li key={i} className="fk-feature-tile-grid__item">
+        <li key={i} className="ty-feature-tile-grid__item">
           {tile}
         </li>
       ))}

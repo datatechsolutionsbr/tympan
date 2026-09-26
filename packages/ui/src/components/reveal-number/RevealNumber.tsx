@@ -16,7 +16,7 @@ export interface RevealNumberProps {
   visibleFraction?: number
   /** When false, the number resets on leaving the view and counts again on return. */
   once?: boolean
-  /** Length of the count; defaults to the `--fk-dur-base` token. */
+  /** Length of the count; defaults to the `--ty-dur-base` token. */
   durationMs?: number
   className?: string
 }
@@ -26,7 +26,7 @@ const useBeforePaint = typeof window === 'undefined' ? useEffect : useLayoutEffe
 /** Reads a duration token (`240ms` or `0.24s`) from the element; falls back to 240 ms. */
 function tokenDuration(el: Element | null): number {
   if (!el || typeof getComputedStyle !== 'function') return 240
-  const raw = getComputedStyle(el).getPropertyValue('--fk-dur-base').trim()
+  const raw = getComputedStyle(el).getPropertyValue('--ty-dur-base').trim()
   const n = parseFloat(raw)
   if (!raw || Number.isNaN(n)) return 240
   return raw.endsWith('ms') ? n : raw.endsWith('s') ? n * 1000 : n
@@ -101,15 +101,15 @@ export function RevealNumber(props: RevealNumberProps) {
 
   const finalText = show(end)
   return (
-    <span ref={host} className={cx('fk-reveal-number', props.className)}>
+    <span ref={host} className={cx('ty-reveal-number', props.className)}>
       {/* Reserves the width of the final value so the digits never jitter. */}
-      <span className="fk-reveal-number__ghost" aria-hidden="true">
+      <span className="ty-reveal-number__ghost" aria-hidden="true">
         {finalText}
       </span>
-      <span className="fk-reveal-number__run" aria-hidden="true">
+      <span className="ty-reveal-number__run" aria-hidden="true">
         {show(current ?? end)}
       </span>
-      <span className="fk-visually-hidden">{finalText}</span>
+      <span className="ty-visually-hidden">{finalText}</span>
     </span>
   )
 }

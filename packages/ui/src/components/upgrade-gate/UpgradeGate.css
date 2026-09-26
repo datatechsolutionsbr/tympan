@@ -1,93 +1,93 @@
 /* UpgradeGate (spec: wave-2/upgrade-gate.md; design direction §2.5, §2.7, §2.10). */
-@layer fakhir.components {
-  .fk-gate {
+@layer tympan.components {
+  .ty-gate {
     position: fixed;
     inset: 0;
-    z-index: var(--fk-z-modal);
+    z-index: var(--ty-z-modal);
     display: grid;
     place-items: center;
-    padding: var(--fk-space-4);
+    padding: var(--ty-space-4);
     overflow-y: auto;
-    background: var(--fk-bg);
+    background: var(--ty-bg);
   }
-  .fk-gate[data-entering] {
-    animation: fk-gate-fade var(--fk-dur-quick) var(--fk-ease);
+  .ty-gate[data-entering] {
+    animation: ty-gate-fade var(--ty-dur-quick) var(--ty-ease);
   }
-  @keyframes fk-gate-fade {
+  @keyframes ty-gate-fade {
     from {
       opacity: 0;
     }
   }
-  .fk-gate__modal {
+  .ty-gate__modal {
     position: relative;
     z-index: 1;
     inline-size: min(100%, 560px);
     outline: none;
   }
-  .fk-gate__dialog {
+  .ty-gate__dialog {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-4);
-    padding: var(--fk-space-6);
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-sheet);
-    background: var(--fk-surface-raised);
-    box-shadow: var(--fk-shadow-modal);
-    backdrop-filter: blur(var(--fk-glass-blur-floating));
-    -webkit-backdrop-filter: blur(var(--fk-glass-blur-floating));
+    gap: var(--ty-space-4);
+    padding: var(--ty-space-6);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-sheet);
+    background: var(--ty-surface-raised);
+    box-shadow: var(--ty-shadow-modal);
+    backdrop-filter: blur(var(--ty-glass-blur-floating));
+    -webkit-backdrop-filter: blur(var(--ty-glass-blur-floating));
     outline: none;
   }
-  .fk-gate__eyebrow {
+  .ty-gate__eyebrow {
     margin: 0;
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-eyebrow);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-eyebrow);
-    letter-spacing: var(--fk-font-tracking-eyebrow);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-eyebrow);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-eyebrow);
+    letter-spacing: var(--ty-font-tracking-eyebrow);
     text-transform: uppercase;
   }
-  .fk-gate__title {
+  .ty-gate__title {
     margin: 0;
-    color: var(--fk-ink);
-    font-family: var(--fk-font-serif);
-    font-size: var(--fk-font-size-h1);
-    font-weight: var(--fk-font-weight-bold);
-    line-height: var(--fk-font-line-height-h1);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-serif);
+    font-size: var(--ty-font-size-h1);
+    font-weight: var(--ty-font-weight-bold);
+    line-height: var(--ty-font-line-height-h1);
   }
-  .fk-gate__description {
+  .ty-gate__description {
     margin: 0;
-    max-inline-size: var(--fk-measure-summary);
-    font-size: var(--fk-font-size-body-lg);
-    line-height: var(--fk-font-line-height-body-lg);
+    max-inline-size: var(--ty-measure-summary);
+    font-size: var(--ty-font-size-body-lg);
+    line-height: var(--ty-font-line-height-body-lg);
   }
-  .fk-gate__actions {
+  .ty-gate__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
   }
   @media (max-width: 639.98px) {
-    .fk-gate__actions {
+    .ty-gate__actions {
       flex-direction: column;
     }
-    .fk-gate__actions > * {
+    .ty-gate__actions > * {
       inline-size: 100%;
-      min-block-size: var(--fk-control-target);
+      min-block-size: var(--ty-control-target);
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .fk-gate[data-entering] {
+    .ty-gate[data-entering] {
       animation: none;
     }
   }
   @media (prefers-reduced-transparency: reduce) {
-    .fk-gate__dialog {
-      background: var(--fk-surface-raised-solid);
+    .ty-gate__dialog {
+      background: var(--ty-surface-raised-solid);
       backdrop-filter: none;
       -webkit-backdrop-filter: none;
     }
   }
   @media (forced-colors: active) {
-    .fk-gate__dialog {
+    .ty-gate__dialog {
       border: 1px solid CanvasText;
     }
   }

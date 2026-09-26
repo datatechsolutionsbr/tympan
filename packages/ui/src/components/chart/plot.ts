@@ -4,7 +4,7 @@ import type { ChartFigure, ChartForm, ChartLayer, ChartRecord, Glyph, Plot, Stro
 
 const GLYPH_CYCLE: readonly Glyph[] = ['dot', 'box', 'wedge', 'rhomb']
 const DASH_CYCLE: readonly string[] = ['6 4', '2 3', '10 3 2 3', '4 4']
-const PAINT = /^(?:--fk-)?(chart|categorical)-([1-8])$/
+const PAINT = /^(?:--ty-)?(chart|categorical)-([1-8])$/
 
 /** Drawing mode per kind: bars and histograms stand on the floor, histogram bins touch. */
 const STROKES: Record<ChartForm, Stroke> = {
@@ -17,7 +17,7 @@ const STROKES: Record<ChartForm, Stroke> = {
 /** Resolved token colour; unknown tokens fall back to the chart cycle. */
 function hueFor(layer: ChartLayer, position: number): string {
   const hit = layer.tone ? PAINT.exec(layer.tone) : null
-  return hit ? `var(--fk-${hit[1]}-${hit[2]})` : `var(--fk-chart-${(position % 8) + 1})`
+  return hit ? `var(--ty-${hit[1]}-${hit[2]})` : `var(--ty-chart-${(position % 8) + 1})`
 }
 
 /** Category text of a record. */

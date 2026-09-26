@@ -6,7 +6,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Check, Database, Plus, Trash2 } from 'lucide-react'
 import { ListBox, ListBoxItem, Radio, RadioGroup } from 'react-aria-components'
-import { Button, Checkbox, CheckboxGroup, InlineNotice, NativeSelect, Skeleton, TextField } from '@fakhir/ui'
+import { Button, Checkbox, CheckboxGroup, InlineNotice, NativeSelect, Skeleton, TextField } from '@datatechsolutions/tympan'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { SectionedModal } from '../internal/SectionedModal'
 import { NodeFormFooter } from './NodeFormFooter'
@@ -350,17 +350,17 @@ export function DataSourceNodeForm(props: DataSourceNodeFormProps) {
     ) : null
 
   const connectionPane = (
-    <RadioGroup className="fk-ds-form__tiles" aria-label={l.connectionGroup} value={sourceId || null} onChange={pickSource} isDisabled={readOnly}>
+    <RadioGroup className="ty-ds-form__tiles" aria-label={l.connectionGroup} value={sourceId || null} onChange={pickSource} isDisabled={readOnly}>
       {sources.map((s) => (
-        <Radio key={s.id} value={s.id} className="fk-ds-form__tile" isDisabled={readOnly && s.id !== sourceId}>
+        <Radio key={s.id} value={s.id} className="ty-ds-form__tile" isDisabled={readOnly && s.id !== sourceId}>
           {({ isSelected }) => (
             <>
-              <Database className="fk-ds-form__tile-icon" aria-hidden="true" focusable="false" />
-              <span className="fk-ds-form__tile-text">
-                <span className="fk-ds-form__tile-name">{s.name}</span>
-                <span className="fk-ds-form__tile-meta">{s.dialect}</span>
+              <Database className="ty-ds-form__tile-icon" aria-hidden="true" focusable="false" />
+              <span className="ty-ds-form__tile-text">
+                <span className="ty-ds-form__tile-name">{s.name}</span>
+                <span className="ty-ds-form__tile-meta">{s.dialect}</span>
               </span>
-              {isSelected ? <Check className="fk-ds-form__tile-check" aria-hidden="true" focusable="false" /> : null}
+              {isSelected ? <Check className="ty-ds-form__tile-check" aria-hidden="true" focusable="false" /> : null}
             </>
           )}
         </Radio>
@@ -369,16 +369,16 @@ export function DataSourceNodeForm(props: DataSourceNodeFormProps) {
   )
 
   const tablePane = (
-    <div className="fk-ds-form__pane">
+    <div className="ty-ds-form__pane">
       <TextField mode="search" label={l.tableSearch} value={tableQuery} onChange={setTableQuery} disabled={readOnly} />
       {loadState(tables, retryTables)}
       {tables.state === 'ready' ? (
         <>
-          <p className="fk-visually-hidden" role="status">
+          <p className="ty-visually-hidden" role="status">
             {tableQuery ? fill(l.results, { count: shownTables.length }, locale) : ''}
           </p>
           <ListBox
-            className="fk-ds-form__list"
+            className="ty-ds-form__list"
             aria-label={l.tableList}
             selectionMode="single"
             selectedKeys={table ? [table] : []}
@@ -388,14 +388,14 @@ export function DataSourceNodeForm(props: DataSourceNodeFormProps) {
             }}
             items={shownTables.map((t) => ({ id: t }))}
             disabledKeys={readOnly ? shownTables.filter((t) => t !== table) : []}
-            renderEmptyState={() => <p className="fk-node-form__empty">{l.noTables}</p>}
+            renderEmptyState={() => <p className="ty-node-form__empty">{l.noTables}</p>}
           >
             {(item) => (
-              <ListBoxItem id={item.id} textValue={item.id} className="fk-ds-form__option">
+              <ListBoxItem id={item.id} textValue={item.id} className="ty-ds-form__option">
                 {({ isSelected }) => (
                   <>
-                    <span className="fk-ds-form__option-name fk-ltr-text">{item.id}</span>
-                    {isSelected ? <Check className="fk-ds-form__tile-check" aria-hidden="true" focusable="false" /> : null}
+                    <span className="ty-ds-form__option-name ty-ltr-text">{item.id}</span>
+                    {isSelected ? <Check className="ty-ds-form__tile-check" aria-hidden="true" focusable="false" /> : null}
                   </>
                 )}
               </ListBoxItem>
@@ -408,23 +408,23 @@ export function DataSourceNodeForm(props: DataSourceNodeFormProps) {
 
   const allSelected = allColumns.length > 0 && columns.length === allColumns.length
   const columnsPane = (
-    <div className="fk-ds-form__pane">
+    <div className="ty-ds-form__pane">
       {loadState(columnList, retryColumns)}
       {columnList.state === 'ready' ? (
         <>
-          <div className="fk-ds-form__bar">
-            <span className="fk-ds-form__count">{fill(l.selectedCount, { selected: columns.length, total: allColumns.length }, locale)}</span>
+          <div className="ty-ds-form__bar">
+            <span className="ty-ds-form__count">{fill(l.selectedCount, { selected: columns.length, total: allColumns.length }, locale)}</span>
             <Button variant="quiet" size="compact" disabled={readOnly} onPress={() => setColumns(allSelected ? [] : allColumns.map((c) => c.name))}>
               {allSelected ? l.clearAll : l.selectAll}
             </Button>
           </div>
           <TextField mode="search" label={l.columnSearch} value={columnQuery} onChange={setColumnQuery} />
-          <p className="fk-visually-hidden" role="status">
+          <p className="ty-visually-hidden" role="status">
             {columnQuery ? fill(l.results, { count: shownColumns.length }, locale) : ''}
           </p>
           <CheckboxGroup label={l.columns} value={columns} onChange={setColumns} disabled={readOnly}>
             {shownColumns.map((c) => (
-              <Checkbox key={c.name} value={c.name} label={c.name} description={c.type} className="fk-ds-form__column" />
+              <Checkbox key={c.name} value={c.name} label={c.name} description={c.type} className="ty-ds-form__column" />
             ))}
           </CheckboxGroup>
         </>
@@ -435,10 +435,10 @@ export function DataSourceNodeForm(props: DataSourceNodeFormProps) {
   const columnOptions = [{ value: '', label: l.noColumn }, ...allColumns.map((c) => ({ value: c.name, label: c.name })), ...filters.filter((f) => f.column && !allColumns.some((c) => c.name === f.column)).map((f) => ({ value: f.column, label: f.column }))]
   const patchFilter = (i: number, patch: Partial<DataSourceFilter>) => setFilters((fs) => fs.map((f, j) => (j === i ? { ...f, ...patch } : f)))
   const filtersPane = (
-    <div className="fk-ds-form__pane">
+    <div className="ty-ds-form__pane">
       {filters.map((f, i) => (
-        <fieldset key={i} className="fk-ds-form__filter" disabled={readOnly}>
-          <legend className="fk-ds-form__legend">{fill(l.filterLegend, { n: i + 1 }, locale)}</legend>
+        <fieldset key={i} className="ty-ds-form__filter" disabled={readOnly}>
+          <legend className="ty-ds-form__legend">{fill(l.filterLegend, { n: i + 1 }, locale)}</legend>
           <NativeSelect label={l.filterColumn} options={columnOptions} value={f.column} onChange={(column) => patchFilter(i, { column })} />
           <NativeSelect
             label={l.filterOperator}
@@ -475,15 +475,15 @@ export function DataSourceNodeForm(props: DataSourceNodeFormProps) {
   )
 
   const outputPane = (
-    <div className="fk-ds-form__pane">
-      <TextField className="fk-ltr-text" label={l.outputVariable} value={outputVariable} onChange={setOutputVariable} readOnly={readOnly} />
+    <div className="ty-ds-form__pane">
+      <TextField className="ty-ltr-text" label={l.outputVariable} value={outputVariable} onChange={setOutputVariable} readOnly={readOnly} />
       <TextField inputType="number" label={l.limit} value={limit} onChange={setLimit} readOnly={readOnly} />
-      <section aria-label={l.summary} className="fk-ds-form__summary">
+      <section aria-label={l.summary} className="ty-ds-form__summary">
         <dl>
           <dt>{l.summaryConnection}</dt>
           <dd>{source ? `${source.name} · ${source.dialect}` : l.none}</dd>
           <dt>{l.summaryTable}</dt>
-          <dd className="fk-ltr-text">{table || l.none}</dd>
+          <dd className="ty-ltr-text">{table || l.none}</dd>
           <dt>{l.summaryColumns}</dt>
           <dd>{columns.length ? columns.join(', ') : l.none}</dd>
         </dl>
@@ -502,7 +502,7 @@ export function DataSourceNodeForm(props: DataSourceNodeFormProps) {
       subtitle={source && table ? fill(l.subtitle, { dialect: source.dialect, table }, locale) : undefined}
       icon={<Database />}
       tone="categorical-6"
-      className="fk-ds-form"
+      className="ty-ds-form"
       railLabel={l.rail}
       activeSection={section}
       onActiveSectionChange={(id) => setSection(id as SectionId)}

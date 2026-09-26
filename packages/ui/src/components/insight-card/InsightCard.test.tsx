@@ -23,7 +23,7 @@ const base: InsightCardProps = {
 describe('InsightCard', () => {
   it('shows the agent with a square avatar and the word agent', () => {
     const { container } = render(<InsightCard {...base} />)
-    expect(container.querySelector('.fk-avatar')).toHaveAttribute('data-kind', 'agent')
+    expect(container.querySelector('.ty-avatar')).toHaveAttribute('data-kind', 'agent')
     const article = screen.getByRole('article', { name: base.title })
     expect(article).toHaveAccessibleDescription('Proposed by stage-coder, agent')
   })
@@ -74,7 +74,7 @@ describe('InsightCard', () => {
         ]}
       />,
     )
-    const buttons = container.querySelectorAll('.fk-insight-card__actions .fk-button')
+    const buttons = container.querySelectorAll('.ty-insight-card__actions .ty-button')
     expect(buttons[0]).toHaveAttribute('data-variant', 'primary')
     expect(buttons[1]).toHaveAttribute('data-variant', 'secondary')
     expect(warn).toHaveBeenCalledWith(expect.stringContaining('primary'))

@@ -38,16 +38,16 @@ function StatusFrame({ status, children }: { status: RunStatus; children: ReactN
   const id = useId()
   const word = usePreviewStatusWord(status)
   useLayoutEffect(() => {
-    const target = ref.current?.querySelector<HTMLElement>('[data-fk-node-focus]')
+    const target = ref.current?.querySelector<HTMLElement>('[data-ty-node-focus]')
     if (!target) return
     const own = (target.getAttribute('aria-describedby') ?? '').split(/\s+/).filter((t) => t && t !== id)
     target.setAttribute('aria-describedby', [...own, id].join(' '))
   })
   return (
-    <div ref={ref} className="fk-flow-preview__frame" data-status={status}>
+    <div ref={ref} className="ty-flow-preview__frame" data-status={status}>
       {children}
       <PreviewStatusMark status={status} />
-      <span id={id} className="fk-visually-hidden">
+      <span id={id} className="ty-visually-hidden">
         {word}
       </span>
     </div>
@@ -109,7 +109,7 @@ export function FlowPreview(props: FlowPreviewProps) {
   }))
 
   return (
-    <div ref={rootRef} className={['fk-flow-preview', className].filter(Boolean).join(' ')}>
+    <div ref={rootRef} className={['ty-flow-preview', className].filter(Boolean).join(' ')}>
       <CanvasSurface
         label={props.label ?? l.canvas}
         nodes={surfaceNodes}

@@ -5,7 +5,7 @@
 import type { ReactNode } from 'react'
 import { Toolbar } from 'react-aria-components'
 import { CircleCheck, CircleDashed, CircleX, History, LoaderCircle, SkipForward, Undo2 } from 'lucide-react'
-import { Button, type IconComponent } from '@fakhir/ui'
+import { Button, type IconComponent } from '@datatechsolutions/tympan'
 import { humaniseKey, useRenderCatalog, type RenderCatalog } from '../catalog/RenderCatalog'
 import type { ToneName } from '../catalog/palette'
 import { defineLabels, useLabels } from '../internal/labels'
@@ -59,7 +59,7 @@ export interface NodeToolAction {
 export function NodeTools({ label, actions }: { label: string; actions: NodeToolAction[] }) {
   if (!actions.length) return null
   return (
-    <Toolbar aria-label={label} className="fk-node-tools" data-fk-no-drag="" data-fk-above="">
+    <Toolbar aria-label={label} className="ty-node-tools" data-ty-no-drag="" data-ty-above="">
       {actions.map((a) => (
         <Button key={a.id} variant={a.tone === 'danger' ? 'danger' : 'quiet'} size="compact" iconOnly accessibleLabel={a.label} leadingIcon={<a.icon />} onPress={a.onPress} />
       ))}
@@ -105,7 +105,7 @@ export function PreviewStatusMark({ status, labels }: { status: RunStatus; label
   const l = useLabels(previewStatusLabels, labels)
   const Glyph = STATUS_GLYPHS[status]
   return (
-    <span className="fk-preview-status" data-status={status} aria-hidden="true">
+    <span className="ty-preview-status" data-status={status} aria-hidden="true">
       <Glyph focusable="false" />
       {l[status]}
     </span>

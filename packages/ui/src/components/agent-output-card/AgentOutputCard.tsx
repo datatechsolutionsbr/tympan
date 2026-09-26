@@ -37,7 +37,7 @@ function OutcomeMark({ outcome }: { outcome: AgentOutcome }) {
   const word = useMessages().agentOutput.outcome[outcome]
   const Icon = OUTCOME_ICON[outcome]
   return (
-    <span className="fk-agent-output__outcome" data-outcome={outcome}>
+    <span className="ty-agent-output__outcome" data-outcome={outcome}>
       <Icon aria-hidden="true" focusable="false" />
       {word}
     </span>
@@ -49,24 +49,24 @@ export function AgentOutputCard(props: AgentOutputCardProps) {
   const m = useMessages().agentOutput
   const outcome = props.outcome ?? 'completed'
   const chip = <ActorChip kind="agent" name={props.agentName} agentKey={props.agentKey} compact={!props.agentKey} />
-  const clamp = { '--fk-agent-output-lines': String(props.maxLines ?? 4) } as CSSProperties
+  const clamp = { '--ty-agent-output-lines': String(props.maxLines ?? 4) } as CSSProperties
 
   return (
-    <article className={cx('fk-agent-output', props.className)} aria-label={props.agentName} data-interactive={props.onOpen ? '' : undefined}>
-      <header className="fk-agent-output__head">
+    <article className={cx('ty-agent-output', props.className)} aria-label={props.agentName} data-interactive={props.onOpen ? '' : undefined}>
+      <header className="ty-agent-output__head">
         {props.onOpen ? (
-          <AriaButton className="fk-agent-output__open" onPress={props.onOpen}>
+          <AriaButton className="ty-agent-output__open" onPress={props.onOpen}>
             {chip}
           </AriaButton>
         ) : (
           chip
         )}
-        <span className="fk-agent-output__meta">
-          <span className="fk-agent-output__duration">{m.duration(props.duration)}</span>
+        <span className="ty-agent-output__meta">
+          <span className="ty-agent-output__duration">{m.duration(props.duration)}</span>
           <OutcomeMark outcome={outcome} />
         </span>
       </header>
-      <p className="fk-agent-output__excerpt" style={clamp} title={props.onOpen ? undefined : props.output}>
+      <p className="ty-agent-output__excerpt" style={clamp} title={props.onOpen ? undefined : props.output}>
         {props.output}
       </p>
     </article>

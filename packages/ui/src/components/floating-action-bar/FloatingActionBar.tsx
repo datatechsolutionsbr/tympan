@@ -111,7 +111,7 @@ function renderGlyph(icon: ActionBarItem['icon'], className: string): ReactNode 
   const Glyph = icon as ComponentType<{ className?: string; 'aria-hidden'?: boolean | 'true' }>
   return (
     <span className={className} aria-hidden="true">
-      <Glyph className="fk-icon" aria-hidden="true" />
+      <Glyph className="ty-icon" aria-hidden="true" />
     </span>
   )
 }
@@ -135,7 +135,7 @@ function usePublishedInset(ref: RefObject<HTMLElement | null>, edge: BarEdge, ta
   useLayoutEffect(() => {
     if (!active || typeof document === 'undefined') return
     const root = document.documentElement
-    const name = `--fk-action-bar-inset-${edge}`
+    const name = `--ty-action-bar-inset-${edge}`
     const rect = ref.current?.getBoundingClientRect()
     const measured = rect ? (isHorizontal(edge) ? rect.height : rect.width) : 0
     const thickness = Math.round((measured || 56) + (tabBar ? 0 : 24))
@@ -194,7 +194,7 @@ function BarSlot(props: SlotProps) {
 
   return (
     <div
-      className="fk-action-bar__slot"
+      className="ty-action-bar__slot"
       data-kind={kind}
       onPointerEnter={() => setTip((t) => (t === 'dismissed' ? t : 'shown'))}
       onPointerLeave={() => setTip('hidden')}
@@ -219,7 +219,7 @@ function BarSlot(props: SlotProps) {
           },
         })}
         ref={attach as never}
-        className="fk-action-bar__item"
+        className="ty-action-bar__item"
         tabIndex={tabbable ? 0 : -1}
         data-bar-index={index}
         data-active={item.active || (kind === 'contextual' && item.pressed) || undefined}
@@ -230,10 +230,10 @@ function BarSlot(props: SlotProps) {
         aria-haspopup={hasMenu ? 'menu' : undefined}
         aria-expanded={hasMenu ? menuOpen : undefined}
       >
-        {renderGlyph(item.icon, 'fk-action-bar__glyph')}
-        {tabBar ? <span className="fk-action-bar__caption" aria-hidden="true">{item.label}</span> : null}
+        {renderGlyph(item.icon, 'ty-action-bar__glyph')}
+        {tabBar ? <span className="ty-action-bar__caption" aria-hidden="true">{item.label}</span> : null}
         {count ? (
-          <span className="fk-action-bar__count" aria-hidden="true">
+          <span className="ty-action-bar__count" aria-hidden="true">
             {count > 99 ? props.capText : props.numberText(count)}
           </span>
         ) : null}
@@ -242,19 +242,19 @@ function BarSlot(props: SlotProps) {
         <button
           type="button"
           tabIndex={-1}
-          className="fk-action-bar__chevron"
+          className="ty-action-bar__chevron"
           aria-label={props.chevronName(item)}
           aria-haspopup="menu"
           aria-expanded={menuOpen}
           onClick={() => control.current && props.onOpenMenu(item.id, control.current)}
         >
-          <ChevronDown className="fk-icon fk-mirror-rtl" aria-hidden="true" />
+          <ChevronDown className="ty-icon ty-mirror-rtl" aria-hidden="true" />
         </button>
       ) : null}
       {tip === 'shown' && !tabBar ? (
-        <span className="fk-action-bar__tip" role="tooltip">
+        <span className="ty-action-bar__tip" role="tooltip">
           {item.label}
-          {shortcutText ? <kbd className="fk-action-bar__kbd">{item.shortcut}</kbd> : null}
+          {shortcutText ? <kbd className="ty-action-bar__kbd">{item.shortcut}</kbd> : null}
         </span>
       ) : null}
     </div>
@@ -281,17 +281,17 @@ function MenuLayer(props: {
   if (!props.open) return null
   return (
     <Popover
-      className="fk-action-bar__popover"
+      className="ty-action-bar__popover"
       triggerRef={triggerRef}
       isOpen
       onOpenChange={(next) => !next && props.onClose()}
       placement={props.placement}
       offset={8}
     >
-      <Menu className="fk-action-bar__menu" aria-label={props.label} autoFocus="first" onAction={(key) => props.onAction(String(key))}>
+      <Menu className="ty-action-bar__menu" aria-label={props.label} autoFocus="first" onAction={(key) => props.onAction(String(key))}>
         {props.entries.map((entry) => (
-          <MenuItem key={entry.id} id={entry.id} href={entry.href} className="fk-action-bar__entry" data-tone={entry.tone ?? 'neutral'} textValue={entry.label}>
-            {entry.icon ? renderGlyph(entry.icon, 'fk-action-bar__entry-glyph') : null}
+          <MenuItem key={entry.id} id={entry.id} href={entry.href} className="ty-action-bar__entry" data-tone={entry.tone ?? 'neutral'} textValue={entry.label}>
+            {entry.icon ? renderGlyph(entry.icon, 'ty-action-bar__entry-glyph') : null}
             <span>{entry.label}</span>
           </MenuItem>
         ))}
@@ -312,8 +312,8 @@ function useBuiltInConfirm() {
 
 /* ------------------------------------------------------------------------ */
 
-const MORE_ID = '__fk-more__'
-const ALL_SECTIONS_ID = '__fk-all-sections__'
+const MORE_ID = '__ty-more__'
+const ALL_SECTIONS_ID = '__ty-all-sections__'
 
 /**
  * Floating bar of destinations and contextual actions with a full keyboard
@@ -328,7 +328,7 @@ export function FloatingActionBar(props: FloatingActionBarProps) {
   const wide = useMinWidth(breakpoints.lg)
   const narrow = !useMinWidth(breakpoints.md)
   const reducedMotion = useReducedMotion()
-  const barId = props.id ?? 'fk-action-bar'
+  const barId = props.id ?? 'ty-action-bar'
 
   const destinations = props.destinations
   const contextual = props.contextual ?? []
@@ -499,13 +499,13 @@ export function FloatingActionBar(props: FloatingActionBarProps) {
 
   if (loading) {
     return (
-      <nav {...common} className={cx('fk-action-bar', props.className)} aria-busy="true" data-loading="">
-        <span role="status" className="fk-visually-hidden">
+      <nav {...common} className={cx('ty-action-bar', props.className)} aria-busy="true" data-loading="">
+        <span role="status" className="ty-visually-hidden">
           {text.loading}
         </span>
-        <span className="fk-action-bar__ghosts" aria-hidden="true">
+        <span className="ty-action-bar__ghosts" aria-hidden="true">
           {Array.from({ length: 5 }, (_, i) => (
-            <span key={i} className="fk-action-bar__ghost" />
+            <span key={i} className="ty-action-bar__ghost" />
           ))}
         </span>
       </nav>
@@ -528,7 +528,7 @@ export function FloatingActionBar(props: FloatingActionBarProps) {
       <nav
         {...common}
         ref={barRef as RefObject<HTMLElement>}
-        className={cx('fk-action-bar', props.className)}
+        className={cx('ty-action-bar', props.className)}
         data-hidden={hidden || undefined}
         {...inertProps(hidden)}
         tabIndex={-1}
@@ -543,7 +543,7 @@ export function FloatingActionBar(props: FloatingActionBarProps) {
           role="toolbar"
           aria-label={props.label ?? text.label}
           aria-orientation={horizontal ? 'horizontal' : 'vertical'}
-          className="fk-action-bar__track"
+          className="ty-action-bar__track"
           onKeyDown={onToolbarKey}
         >
           {plan.shown.map((placed, index) => (
@@ -612,7 +612,7 @@ export function FloatingActionBar(props: FloatingActionBarProps) {
 function FragmentWithSeparator({ before, horizontal, children }: { before: boolean; horizontal: boolean; children: ReactNode }) {
   return (
     <>
-      {before ? <span role="separator" aria-orientation={horizontal ? 'vertical' : 'horizontal'} className="fk-action-bar__separator" /> : null}
+      {before ? <span role="separator" aria-orientation={horizontal ? 'vertical' : 'horizontal'} className="ty-action-bar__separator" /> : null}
       {children}
     </>
   )
@@ -631,24 +631,24 @@ function MoreSlot(props: {
   const ref = useRef<HTMLButtonElement | null>(null)
   const { buttonProps } = useButton({ onPress: () => ref.current && props.onOpen(ref.current), elementType: 'button' }, ref)
   return (
-    <div className="fk-action-bar__slot" data-kind="more">
+    <div className="ty-action-bar__slot" data-kind="more">
       <button
         {...mergeProps(buttonProps, { onFocus: () => props.onFocusIndex(props.index) })}
         ref={(el) => {
           ref.current = el
           props.registerRef(el)
         }}
-        className="fk-action-bar__item"
+        className="ty-action-bar__item"
         tabIndex={props.tabbable ? 0 : -1}
         data-bar-index={props.index}
         aria-label={props.label}
         aria-haspopup="menu"
         aria-expanded={props.open}
       >
-        <span className="fk-action-bar__glyph" aria-hidden="true">
-          <Ellipsis className="fk-icon" aria-hidden="true" />
+        <span className="ty-action-bar__glyph" aria-hidden="true">
+          <Ellipsis className="ty-icon" aria-hidden="true" />
         </span>
-        {props.tabBar ? <span className="fk-action-bar__caption" aria-hidden="true">{props.label}</span> : null}
+        {props.tabBar ? <span className="ty-action-bar__caption" aria-hidden="true">{props.label}</span> : null}
       </button>
     </div>
   )

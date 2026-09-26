@@ -125,16 +125,16 @@ describe('Button', () => {
 
   it('keeps a 44 px hit area at every size, including compact', () => {
     const { container } = render(<Button size="compact">Edit</Button>)
-    expect(container.querySelector('.fk-button')).toHaveAttribute('data-size', 'compact')
+    expect(container.querySelector('.ty-button')).toHaveAttribute('data-size', 'compact')
     const css = cssOf('components/button/Button.css')
-    expect(css).toMatch(/\.fk-button::before\s*\{[^}]*inline-size:\s*max\(100%,\s*var\(--fk-control-target\)\)/)
-    expect(css).toMatch(/\.fk-button::before\s*\{[^}]*block-size:\s*max\(100%,\s*var\(--fk-control-target\)\)/)
+    expect(css).toMatch(/\.ty-button::before\s*\{[^}]*inline-size:\s*max\(100%,\s*var\(--ty-control-target\)\)/)
+    expect(css).toMatch(/\.ty-button::before\s*\{[^}]*block-size:\s*max\(100%,\s*var\(--ty-control-target\)\)/)
   })
 
   it('runs no transform animation under reduced motion', () => {
     const reduced = mediaBlock(cssOf('components/button/Button.css'), /\(prefers-reduced-motion:\s*reduce\)/)
-    expect(reduced).toMatch(/\.fk-button\[data-pressed\]\s*\{[^}]*transform:\s*none/)
-    expect(reduced).toMatch(/\.fk-button__busy\s*\{[^}]*animation:\s*none/)
+    expect(reduced).toMatch(/\.ty-button\[data-pressed\]\s*\{[^}]*transform:\s*none/)
+    expect(reduced).toMatch(/\.ty-button__busy\s*\{[^}]*animation:\s*none/)
   })
 
   it('draws system colours in forced-colors mode', () => {
@@ -171,7 +171,7 @@ describe('Button in right-to-left (ar)', () => {
     await rtlUser.click(rtlDom.screen.getByRole('button', { name: 'حفظ' }))
     expect(onPress).toHaveBeenCalledTimes(1)
     // The 44 px hit area is centred with a physical left: 50% + translate(-50%), identical in both directions.
-    expect(cssOf('components/button/Button.css')).toMatch(/\.fk-button::before\s*\{[^}]*left:\s*50%/)
+    expect(cssOf('components/button/Button.css')).toMatch(/\.ty-button::before\s*\{[^}]*left:\s*50%/)
     await axeRtl(container)
   })
 })

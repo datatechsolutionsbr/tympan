@@ -5,7 +5,7 @@
 import { useMemo, useState, type RefObject } from 'react'
 import { Autocomplete, Dialog, Heading, Input, ListBox, ListBoxItem, Popover, SearchField, Text, useFilter } from 'react-aria-components'
 import { Search } from 'lucide-react'
-import { Drawer, useMediaQuery } from '@fakhir/ui'
+import { Drawer, useMediaQuery } from '@datatechsolutions/tympan'
 import { fill, useFlowLocale } from '../internal/labels'
 import { ShapeChip } from './ShapeChip'
 import type { DataShape } from './shapes'
@@ -33,28 +33,28 @@ function PickerBody({ title, placeholder, arriving, options, onPick, onClose, he
   const [query, setQuery] = useState('')
   const shown = useMemo(() => (query ? options.filter((o) => contains(`${o.name} ${o.description}`, query)) : [...options]), [options, query, contains])
   return (
-    <div className="fk-add-picker__body">
+    <div className="ty-add-picker__body">
       {headed ? (
-        <Heading slot="title" className="fk-visually-hidden">
+        <Heading slot="title" className="ty-visually-hidden">
           {title}
         </Heading>
       ) : null}
       <Autocomplete inputValue={query} onInputChange={setQuery} filter={() => true}>
-        <SearchField className="fk-add-picker__field" autoFocus aria-label={title}>
-          <Search className="fk-add-picker__glass" aria-hidden="true" focusable="false" />
-          <Input className="fk-add-picker__input" placeholder={placeholder ?? title} />
+        <SearchField className="ty-add-picker__field" autoFocus aria-label={title}>
+          <Search className="ty-add-picker__glass" aria-hidden="true" focusable="false" />
+          <Input className="ty-add-picker__input" placeholder={placeholder ?? title} />
         </SearchField>
         {arriving ? (
-          <p className="fk-add-picker__only">
+          <p className="ty-add-picker__only">
             <span>{w.pickerOnly}</span>
             <ShapeChip shapes={[arriving]} words={rt.shapes} />
           </p>
         ) : null}
         <ListBox
-          className="fk-add-picker__list"
+          className="ty-add-picker__list"
           aria-label={title}
           items={shown}
-          renderEmptyState={() => <p className="fk-add-picker__empty">{arriving && !options.length ? fill(w.nothingAccepts, { shape: rt.shapes[arriving] }, locale) : fill(w.noMatch, { query }, locale)}</p>}
+          renderEmptyState={() => <p className="ty-add-picker__empty">{arriving && !options.length ? fill(w.nothingAccepts, { shape: rt.shapes[arriving] }, locale) : fill(w.noMatch, { query }, locale)}</p>}
           onAction={(key) => {
             onPick(String(key))
             onClose()
@@ -63,14 +63,14 @@ function PickerBody({ title, placeholder, arriving, options, onPick, onClose, he
           {(item) => {
             const Icon = item.icon
             return (
-              <ListBoxItem id={item.id} textValue={item.name} className="fk-add-picker__option">
-                <span className="fk-add-picker__tile" aria-hidden="true">
+              <ListBoxItem id={item.id} textValue={item.name} className="ty-add-picker__option">
+                <span className="ty-add-picker__tile" aria-hidden="true">
                   <Icon focusable="false" />
                 </span>
-                <Text slot="label" className="fk-add-picker__name">
+                <Text slot="label" className="ty-add-picker__name">
                   {item.name}
                 </Text>
-                <Text slot="description" className="fk-add-picker__about">
+                <Text slot="description" className="ty-add-picker__about">
                   {item.description}
                 </Text>
               </ListBoxItem>
@@ -78,10 +78,10 @@ function PickerBody({ title, placeholder, arriving, options, onPick, onClose, he
           }}
         </ListBox>
       </Autocomplete>
-      <p className="fk-add-picker__keys" aria-hidden="true">
+      <p className="ty-add-picker__keys" aria-hidden="true">
         {w.pickerKeys}
       </p>
-      <p className="fk-visually-hidden" role="status">
+      <p className="ty-visually-hidden" role="status">
         {fill(w.results, { count: shown.length }, locale)}
       </p>
     </div>
@@ -99,8 +99,8 @@ export function AddStepPicker(props: AddStepPickerProps) {
     )
   }
   return (
-    <Popover isOpen onOpenChange={(open) => !open && onClose()} triggerRef={triggerRef} placement="bottom start" offset={10} className="fk-add-picker">
-      <Dialog className="fk-add-picker__dialog">
+    <Popover isOpen onOpenChange={(open) => !open && onClose()} triggerRef={triggerRef} placement="bottom start" offset={10} className="ty-add-picker">
+      <Dialog className="ty-add-picker__dialog">
         <PickerBody {...props} headed />
       </Dialog>
     </Popover>

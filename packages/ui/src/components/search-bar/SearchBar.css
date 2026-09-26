@@ -1,116 +1,116 @@
 /* SearchBar (spec: wave-2/search-bar.md; design direction §2.3, §2.10, §3.6). */
-@layer fakhir.components {
-  .fk-search-bar {
+@layer tympan.components {
+  .ty-search-bar {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas: 'main actions' 'chips chips';
     align-items: center;
-    gap: var(--fk-space-3) var(--fk-space-4);
-    padding-block-end: var(--fk-space-3);
+    gap: var(--ty-space-3) var(--ty-space-4);
+    padding-block-end: var(--ty-space-3);
   }
-  .fk-search-bar[data-bordered] {
-    border-block-end: 1px solid var(--fk-line);
+  .ty-search-bar[data-bordered] {
+    border-block-end: 1px solid var(--ty-line);
   }
-  .fk-search-bar__main {
+  .ty-search-bar__main {
     grid-area: main;
     display: flex;
     align-items: center;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
     min-inline-size: 0;
   }
-  .fk-search-bar__field {
+  .ty-search-bar__field {
     flex: 1;
   }
-  .fk-search-bar__chips {
+  .ty-search-bar__chips {
     grid-area: chips;
   }
-  .fk-search-bar__actions {
+  .ty-search-bar__actions {
     grid-area: actions;
     display: flex;
     align-items: center;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
-  .fk-search-bar__text-action {
+  .ty-search-bar__text-action {
     position: relative;
-    min-block-size: var(--fk-control-height);
-    padding-inline: var(--fk-space-2);
+    min-block-size: var(--ty-control-height);
+    padding-inline: var(--ty-space-2);
     border: 0;
-    border-radius: var(--fk-radius-control);
+    border-radius: var(--ty-radius-control);
     background: transparent;
-    color: var(--fk-accent);
+    color: var(--ty-accent);
     font: inherit;
-    font-size: var(--fk-font-size-body);
-    font-weight: var(--fk-font-weight-semibold);
+    font-size: var(--ty-font-size-body);
+    font-weight: var(--ty-font-weight-semibold);
     white-space: nowrap;
     cursor: pointer;
     outline: none;
-    transition: opacity var(--fk-dur-instant) var(--fk-ease);
+    transition: opacity var(--ty-dur-instant) var(--ty-ease);
   }
-  .fk-search-bar__text-action::before {
+  .ty-search-bar__text-action::before {
     content: '';
     position: absolute;
     inset-block-start: 50%;
     /* physical: centring with translate(-50%) is the same in both directions */
     left: 50%;
-    inline-size: max(100%, var(--fk-control-target));
-    block-size: max(100%, var(--fk-control-target));
+    inline-size: max(100%, var(--ty-control-target));
+    block-size: max(100%, var(--ty-control-target));
     transform: translate(-50%, -50%);
   }
-  .fk-search-bar__text-action[data-hovered] {
-    color: var(--fk-accent-strong);
+  .ty-search-bar__text-action[data-hovered] {
+    color: var(--ty-accent-strong);
   }
-  .fk-search-bar__text-action[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-search-bar__text-action[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
-  .fk-search-bar__count {
+  .ty-search-bar__count {
     display: inline-grid;
     place-items: center;
     min-inline-size: 20px;
     block-size: 20px;
-    padding-inline: var(--fk-space-1);
-    border-radius: var(--fk-radius-pill);
-    background: var(--fk-accent-soft);
-    color: var(--fk-on-accent-soft);
-    font-size: var(--fk-font-size-meta);
+    padding-inline: var(--ty-space-1);
+    border-radius: var(--ty-radius-pill);
+    background: var(--ty-accent-soft);
+    color: var(--ty-on-accent-soft);
+    font-size: var(--ty-font-size-meta);
     font-variant-numeric: tabular-nums;
   }
-  .fk-search-bar__context {
+  .ty-search-bar__context {
     display: flex;
     align-items: center;
-    gap: var(--fk-space-2);
-    margin: 0 0 var(--fk-space-4);
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
+    gap: var(--ty-space-2);
+    margin: 0 0 var(--ty-space-4);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
   }
-  .fk-search-bar__context-label {
-    color: var(--fk-ink-2);
-    font-weight: var(--fk-font-weight-semibold);
+  .ty-search-bar__context-label {
+    color: var(--ty-ink-2);
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-search-bar__drawer-actions {
+  .ty-search-bar__drawer-actions {
     display: flex;
     justify-content: flex-end;
-    gap: var(--fk-space-2);
-    margin-block-start: var(--fk-space-5);
+    gap: var(--ty-space-2);
+    margin-block-start: var(--ty-space-5);
   }
 
   /* Under 640: chips wrap below and the trailing slot moves under them. */
   @media (max-width: 639.98px) {
-    .fk-search-bar {
+    .ty-search-bar {
       grid-template-columns: minmax(0, 1fr);
       grid-template-areas: 'main' 'chips' 'actions';
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .fk-search-bar__text-action {
+    .ty-search-bar__text-action {
       transition: none;
     }
   }
   @media (forced-colors: active) {
-    .fk-search-bar[data-bordered] {
+    .ty-search-bar[data-bordered] {
       border-block-end-color: CanvasText;
     }
-    .fk-search-bar__count {
+    .ty-search-bar__count {
       border: 1px solid ButtonText;
     }
   }

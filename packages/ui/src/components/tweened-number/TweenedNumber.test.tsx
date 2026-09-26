@@ -5,7 +5,7 @@ import { setMedia } from '../../../test/media'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { TweenedNumber } from './TweenedNumber'
 
-const text = (c: HTMLElement) => c.querySelector('.fk-tweened-number')!.textContent
+const text = (c: HTMLElement) => c.querySelector('.ty-tweened-number')!.textContent
 
 describe('TweenedNumber', () => {
   beforeEach(() => {

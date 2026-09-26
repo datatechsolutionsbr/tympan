@@ -75,15 +75,15 @@ describe('Switch', () => {
 
   it('keeps a 44 px hit area at the small size', () => {
     const { container } = render(<Switch label="Small" size="small" />)
-    expect(container.querySelector('.fk-switch')).toHaveAttribute('data-size', 'small')
+    expect(container.querySelector('.ty-switch')).toHaveAttribute('data-size', 'small')
     const css = cssOf('components/switch/Switch.css')
-    expect(css).toMatch(/\.fk-switch\s*\{[^}]*min-block-size:\s*var\(--fk-control-target\)/)
-    expect(css).toMatch(/\.fk-switch__track::before\s*\{[^}]*block-size:\s*max\(100%,\s*var\(--fk-control-target\)\)/)
+    expect(css).toMatch(/\.ty-switch\s*\{[^}]*min-block-size:\s*var\(--ty-control-target\)/)
+    expect(css).toMatch(/\.ty-switch__track::before\s*\{[^}]*block-size:\s*max\(100%,\s*var\(--ty-control-target\)\)/)
   })
 
   it('runs no transition under reduced motion; forced colours outline the track', () => {
     const css = cssOf('components/switch/Switch.css')
-    expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/\.fk-switch__thumb\s*\{[^}]*transition:\s*none/)
+    expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/\.ty-switch__thumb\s*\{[^}]*transition:\s*none/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/CanvasText/)
   })
 

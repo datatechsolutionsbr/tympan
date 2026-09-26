@@ -1,24 +1,24 @@
 /* RouteProgress (spec: wave-2/route-progress.md; design direction §2.3, §2.7, §2.8). */
-@layer fakhir.components {
-  .fk-route-progress {
+@layer tympan.components {
+  .ty-route-progress {
     position: fixed;
     inset-block-start: 0;
     inset-inline: 0;
-    z-index: calc(var(--fk-z-sticky) + 1);
+    z-index: calc(var(--ty-z-sticky) + 1);
     block-size: 3px;
     pointer-events: none;
   }
-  .fk-route-progress__bar {
+  .ty-route-progress__bar {
     block-size: 100%;
     inline-size: 100%;
-    background: var(--fk-accent);
+    background: var(--ty-accent);
     transform-origin: left center;
-    animation: fk-route-advance 8s var(--fk-ease) forwards;
+    animation: ty-route-advance 8s var(--ty-ease) forwards;
   }
-  .fk-route-progress__bar[data-phase='finishing'] {
-    animation: fk-route-finish var(--fk-dur-base) var(--fk-ease-out) forwards;
+  .ty-route-progress__bar[data-phase='finishing'] {
+    animation: ty-route-finish var(--ty-dur-base) var(--ty-ease-out) forwards;
   }
-  @keyframes fk-route-advance {
+  @keyframes ty-route-advance {
     from {
       transform: scaleX(0.08);
     }
@@ -26,7 +26,7 @@
       transform: scaleX(0.9);
     }
   }
-  @keyframes fk-route-finish {
+  @keyframes ty-route-finish {
     from {
       transform: scaleX(0.9);
     }
@@ -35,19 +35,19 @@
       opacity: 0;
     }
   }
-  [dir='rtl'] .fk-route-progress__bar {
+  [dir='rtl'] .ty-route-progress__bar {
     transform-origin: right center;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-route-progress__bar,
-    .fk-route-progress__bar[data-phase='finishing'] {
+    .ty-route-progress__bar,
+    .ty-route-progress__bar[data-phase='finishing'] {
       animation: none;
       transform: scaleX(0.6);
     }
   }
   @media (forced-colors: active) {
-    .fk-route-progress__bar {
+    .ty-route-progress__bar {
       background: Highlight;
     }
   }

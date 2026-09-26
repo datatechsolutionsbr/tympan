@@ -23,16 +23,16 @@ export interface SectionHeadingProps {
 
 /** Wraps an optional slot in its element, or renders nothing when the slot is empty. */
 function slot(content: ReactNode, part: string) {
-  return content == null ? null : <div className={`fk-section-heading__${part}`}>{content}</div>
+  return content == null ? null : <div className={`ty-section-heading__${part}`}>{content}</div>
 }
 
 function TitleBlock(p: { id: string; level: 2 | 3 | 4; title: string; subtitle?: string; clip: boolean }) {
   return (
-    <div className="fk-section-heading__text">
-      <AriaHeading level={p.level} id={p.id} className="fk-section-heading__title" data-truncate={p.clip || undefined} title={p.clip ? p.title : undefined}>
+    <div className="ty-section-heading__text">
+      <AriaHeading level={p.level} id={p.id} className="ty-section-heading__title" data-truncate={p.clip || undefined} title={p.clip ? p.title : undefined}>
         {p.title}
       </AriaHeading>
-      {p.subtitle ? <p className="fk-section-heading__subtitle">{p.subtitle}</p> : null}
+      {p.subtitle ? <p className="ty-section-heading__subtitle">{p.subtitle}</p> : null}
     </div>
   )
 }
@@ -43,11 +43,11 @@ export function SectionHeading(props: SectionHeadingProps) {
   const level = props.level ?? 2
   const Glyph = props.icon
   return (
-    <div className={cx('fk-section-heading', props.className)} data-level={level}>
-      <div className="fk-section-heading__row">
-        {Glyph ? <Glyph className="fk-icon fk-section-heading__icon" aria-hidden="true" focusable="false" /> : null}
+    <div className={cx('ty-section-heading', props.className)} data-level={level}>
+      <div className="ty-section-heading__row">
+        {Glyph ? <Glyph className="ty-icon ty-section-heading__icon" aria-hidden="true" focusable="false" /> : null}
         <TitleBlock
-          id={props.id ?? `fk-section-heading-${auto.replace(/:/g, '')}`}
+          id={props.id ?? `ty-section-heading-${auto.replace(/:/g, '')}`}
           level={level}
           title={props.title}
           subtitle={props.subtitle}

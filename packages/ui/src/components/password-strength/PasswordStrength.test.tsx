@@ -50,7 +50,7 @@ describe('PasswordStrength', () => {
 
   it('always shows four segments and exposes the level word as value text', () => {
     const { container } = render(<PasswordStrength password="x" />)
-    expect(container.querySelectorAll('.fk-password-strength__segment')).toHaveLength(4)
+    expect(container.querySelectorAll('.ty-password-strength__segment')).toHaveLength(4)
     expect(screen.getByRole('meter')).toHaveAttribute('aria-valuetext', 'Weak')
     expect(within(screen.getByRole('meter')).getByText('Weak')).toBeVisible()
   })

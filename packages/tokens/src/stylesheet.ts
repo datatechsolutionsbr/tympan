@@ -48,20 +48,20 @@ const media = (query: string, body: string) => `@media ${query} {\n${indent(body
 
 /**
  * Selectors for one theme. The attributes may sit on the same element or on
- * an ancestor: `data-fk-theme` picks the theme, `data-fk-mode` forces light or
+ * an ancestor: `data-ty-theme` picks the theme, `data-ty-mode` forces light or
  * dark (absent or `system` follows `prefers-color-scheme`).
  */
 export function themeSelectors(name: string, isDefault: boolean) {
-  const t = `[data-fk-theme="${name}"]`
+  const t = `[data-ty-theme="${name}"]`
   return {
-    light: isDefault ? [':root', t, '[data-fk-mode="light"]'] : [t, `${t} [data-fk-mode="light"]`],
+    light: isDefault ? [':root', t, '[data-ty-mode="light"]'] : [t, `${t} [data-ty-mode="light"]`],
     systemDark: isDefault
-      ? [':root:not([data-fk-mode="light"])', `${t}:not([data-fk-mode="light"])`]
-      : [`${t}:not([data-fk-mode="light"])`],
+      ? [':root:not([data-ty-mode="light"])', `${t}:not([data-ty-mode="light"])`]
+      : [`${t}:not([data-ty-mode="light"])`],
     dark: isDefault
-      ? ['[data-fk-mode="dark"]', `${t}[data-fk-mode="dark"]`, `${t} [data-fk-mode="dark"]`, `[data-fk-mode="dark"] ${t}`]
-      : [`${t}[data-fk-mode="dark"]`, `${t} [data-fk-mode="dark"]`, `[data-fk-mode="dark"] ${t}`],
-    explicitLight: [`${t}[data-fk-mode="light"]`, `[data-fk-mode="dark"] ${t}[data-fk-mode="light"]`],
+      ? ['[data-ty-mode="dark"]', `${t}[data-ty-mode="dark"]`, `${t} [data-ty-mode="dark"]`, `[data-ty-mode="dark"] ${t}`]
+      : [`${t}[data-ty-mode="dark"]`, `${t} [data-ty-mode="dark"]`, `[data-ty-mode="dark"] ${t}`],
+    explicitLight: [`${t}[data-ty-mode="light"]`, `[data-ty-mode="dark"] ${t}[data-ty-mode="light"]`],
   }
 }
 
@@ -75,56 +75,56 @@ function themeBlocks(theme: ThemeVars, isDefault: boolean, light: VarList, dark:
   ]
 }
 
-const ANY_SCOPE = [':root', '[data-fk-theme]', '[data-fk-mode]']
+const ANY_SCOPE = [':root', '[data-ty-theme]', '[data-ty-mode]']
 
 /** Forced colours: roles map to system colours so boundaries and state stay visible. */
 export const FORCED_COLORS_VARS: VarList = [
-  ['--fk-bg', 'Canvas'],
-  ['--fk-surface', 'Canvas'],
-  ['--fk-surface-raised', 'Canvas'],
-  ['--fk-surface-sunken', 'Canvas'],
-  ['--fk-surface-solid', 'Canvas'],
-  ['--fk-surface-raised-solid', 'Canvas'],
-  ['--fk-secondary', 'ButtonFace'],
-  ['--fk-on-secondary', 'ButtonText'],
-  ['--fk-ink', 'CanvasText'],
-  ['--fk-ink-2', 'CanvasText'],
-  ['--fk-ink-3', 'CanvasText'],
-  ['--fk-line', 'CanvasText'],
-  ['--fk-line-soft', 'CanvasText'],
-  ['--fk-line-strong', 'CanvasText'],
-  ['--fk-input', 'CanvasText'],
-  ['--fk-focus-ring', 'Highlight'],
-  ['--fk-brand', 'Highlight'],
-  ['--fk-accent', 'Highlight'],
-  ['--fk-on-brand', 'HighlightText'],
-  ['--fk-accent-ink', 'HighlightText'],
-  ['--fk-brand-soft', 'Canvas'],
-  ['--fk-accent-soft', 'Canvas'],
-  ['--fk-on-brand-soft', 'LinkText'],
-  ['--fk-on-accent-soft', 'LinkText'],
-  ['--fk-cta', 'ButtonFace'],
-  ['--fk-cta-solid', 'ButtonFace'],
-  ['--fk-on-cta', 'ButtonText'],
-  ['--fk-backdrop', 'transparent'],
-  ['--fk-shadow-sheet', 'none'],
-  ['--fk-shadow-raised', 'none'],
-  ['--fk-shadow-floating', 'none'],
-  ['--fk-shadow-modal', 'none'],
-  ['--fk-glass-blur-sheet', '0px'],
-  ['--fk-glass-blur-floating', '0px'],
+  ['--ty-bg', 'Canvas'],
+  ['--ty-surface', 'Canvas'],
+  ['--ty-surface-raised', 'Canvas'],
+  ['--ty-surface-sunken', 'Canvas'],
+  ['--ty-surface-solid', 'Canvas'],
+  ['--ty-surface-raised-solid', 'Canvas'],
+  ['--ty-secondary', 'ButtonFace'],
+  ['--ty-on-secondary', 'ButtonText'],
+  ['--ty-ink', 'CanvasText'],
+  ['--ty-ink-2', 'CanvasText'],
+  ['--ty-ink-3', 'CanvasText'],
+  ['--ty-line', 'CanvasText'],
+  ['--ty-line-soft', 'CanvasText'],
+  ['--ty-line-strong', 'CanvasText'],
+  ['--ty-input', 'CanvasText'],
+  ['--ty-focus-ring', 'Highlight'],
+  ['--ty-brand', 'Highlight'],
+  ['--ty-accent', 'Highlight'],
+  ['--ty-on-brand', 'HighlightText'],
+  ['--ty-accent-ink', 'HighlightText'],
+  ['--ty-brand-soft', 'Canvas'],
+  ['--ty-accent-soft', 'Canvas'],
+  ['--ty-on-brand-soft', 'LinkText'],
+  ['--ty-on-accent-soft', 'LinkText'],
+  ['--ty-cta', 'ButtonFace'],
+  ['--ty-cta-solid', 'ButtonFace'],
+  ['--ty-on-cta', 'ButtonText'],
+  ['--ty-backdrop', 'transparent'],
+  ['--ty-shadow-sheet', 'none'],
+  ['--ty-shadow-raised', 'none'],
+  ['--ty-shadow-floating', 'none'],
+  ['--ty-shadow-modal', 'none'],
+  ['--ty-glass-blur-sheet', '0px'],
+  ['--ty-glass-blur-floating', '0px'],
 ]
 
 /** Reduced transparency (and no backdrop-filter support): opaque surfaces, no blur, no ambient. */
 export const OPAQUE_VARS: VarList = [
-  ['--fk-surface', 'var(--fk-surface-solid) !important'],
-  ['--fk-surface-raised', 'var(--fk-surface-raised-solid) !important'],
-  ['--fk-secondary', 'var(--fk-surface-raised-solid) !important'],
-  ['--fk-glass-blur-sheet', '0px !important'],
-  ['--fk-glass-blur-floating', '0px !important'],
-  ['--fk-glass-saturate', '1 !important'],
-  ['--fk-ambient-1', 'transparent !important'],
-  ['--fk-ambient-2', 'transparent !important'],
+  ['--ty-surface', 'var(--ty-surface-solid) !important'],
+  ['--ty-surface-raised', 'var(--ty-surface-raised-solid) !important'],
+  ['--ty-secondary', 'var(--ty-surface-raised-solid) !important'],
+  ['--ty-glass-blur-sheet', '0px !important'],
+  ['--ty-glass-blur-floating', '0px !important'],
+  ['--ty-glass-saturate', '1 !important'],
+  ['--ty-ambient-1', 'transparent !important'],
+  ['--ty-ambient-2', 'transparent !important'],
 ]
 
 export function buildStylesheet(input: StylesheetInput): string {
@@ -134,14 +134,14 @@ export function buildStylesheet(input: StylesheetInput): string {
     parts.push(rule([':root'], decls(input.base)))
     parts.push(`/* per-script typography (:lang) */\n${scriptRules(input.base)}`)
     // Reading direction as a number, for inline-axis translations that must mirror in RTL.
-    parts.push(`:root,\n[dir="ltr"] {\n  --fk-inline-sign: 1;\n}\n\n[dir="rtl"] {\n  --fk-inline-sign: -1;\n}`)
+    parts.push(`:root,\n[dir="ltr"] {\n  --ty-inline-sign: 1;\n}\n\n[dir="rtl"] {\n  --ty-inline-sign: -1;\n}`)
   }
 
   const densities = input.densities ?? {}
-  if (densities.default) parts.push(rule([':root', '[data-fk-density="default"]'], decls(densities.default)))
+  if (densities.default) parts.push(rule([':root', '[data-ty-density="default"]'], decls(densities.default)))
   for (const d of ['compact', 'comfortable'] as const) {
     const v = densities[d]
-    if (v) parts.push(rule([`[data-fk-density="${d}"]`], decls(v)))
+    if (v) parts.push(rule([`[data-ty-density="${d}"]`], decls(v)))
   }
 
   if (input.components?.length) {
@@ -160,14 +160,14 @@ export function buildStylesheet(input: StylesheetInput): string {
     parts.push(`/* prefers-contrast: more -> the high-contrast variant of each theme */\n${media('(prefers-contrast: more)', inner.join('\n\n'))}`)
   }
 
-  const durations = (input.base ?? []).filter(([n]) => n.startsWith('--fk-dur-')).map(([n]) => [n, '0ms'] as [string, string])
+  const durations = (input.base ?? []).filter(([n]) => n.startsWith('--ty-dur-')).map(([n]) => [n, '0ms'] as [string, string])
   if (durations.length) parts.push(media('(prefers-reduced-motion: reduce)', rule(ANY_SCOPE, decls(durations))))
   parts.push(media('(prefers-reduced-transparency: reduce)', rule(ANY_SCOPE, decls(OPAQUE_VARS))))
   parts.push(`@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {\n${indent(rule(ANY_SCOPE, decls(OPAQUE_VARS)))}\n}`)
   parts.push(media('(forced-colors: active)', rule(ANY_SCOPE, decls(FORCED_COLORS_VARS))))
 
   const body = parts.join('\n\n')
-  const layered = input.layer === null ? body : `@layer ${input.layer ?? 'fakhir.tokens'} {\n${indent(body)}\n}`
+  const layered = input.layer === null ? body : `@layer ${input.layer ?? 'tympan.tokens'} {\n${indent(body)}\n}`
   return `${input.banner ? `${input.banner}\n` : ''}${layered}\n`
 }
 
@@ -201,7 +201,7 @@ export function generateThemeCss(config: ThemeConfig, options: ThemeCssOptions =
     densities: options.densities
       ? { default: densityVariables('default'), compact: densityVariables('compact'), comfortable: densityVariables('comfortable') }
       : undefined,
-    layer: options.layer === undefined ? 'fakhir.tokens' : options.layer,
+    layer: options.layer === undefined ? 'tympan.tokens' : options.layer,
   })
 }
 

@@ -1,92 +1,92 @@
 /* MarkdownView (spec: wave-2/markdown-view.md; design direction §2.2, §2.3). */
-@layer fakhir.components {
-  .fk-markdown {
-    --fk-markdown-gap: var(--fk-space-3);
+@layer tympan.components {
+  .ty-markdown {
+    --ty-markdown-gap: var(--ty-space-3);
     display: flex;
     flex-direction: column;
-    gap: var(--fk-markdown-gap);
-    max-inline-size: calc(var(--fk-measure-prose) * 1ch);
-    color: var(--fk-ink-2);
-    font-size: var(--fk-font-size-body);
-    line-height: var(--fk-font-line-height-body);
+    gap: var(--ty-markdown-gap);
+    max-inline-size: calc(var(--ty-measure-prose) * 1ch);
+    color: var(--ty-ink-2);
+    font-size: var(--ty-font-size-body);
+    line-height: var(--ty-font-line-height-body);
     overflow-wrap: anywhere;
   }
-  .fk-markdown[data-density='compact'] {
-    --fk-markdown-gap: var(--fk-space-2);
+  .ty-markdown[data-density='compact'] {
+    --ty-markdown-gap: var(--ty-space-2);
   }
-  .fk-markdown > * {
+  .ty-markdown > * {
     margin: 0;
   }
 
-  .fk-markdown__heading {
-    color: var(--fk-ink);
-    font-family: var(--fk-font-serif);
-    font-weight: var(--fk-font-weight-semibold);
+  .ty-markdown__heading {
+    color: var(--ty-ink);
+    font-family: var(--ty-font-serif);
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-markdown__heading[data-depth='1'] {
-    font-size: var(--fk-font-size-h2);
-    line-height: var(--fk-font-line-height-h2);
+  .ty-markdown__heading[data-depth='1'] {
+    font-size: var(--ty-font-size-h2);
+    line-height: var(--ty-font-line-height-h2);
   }
-  .fk-markdown__heading[data-depth='2'] {
-    font-size: var(--fk-font-size-h3);
-    line-height: var(--fk-font-line-height-h3);
+  .ty-markdown__heading[data-depth='2'] {
+    font-size: var(--ty-font-size-h3);
+    line-height: var(--ty-font-line-height-h3);
   }
-  .fk-markdown__heading[data-depth='3'],
-  .fk-markdown__heading[data-depth='4'] {
-    font-size: var(--fk-font-size-body-lg);
-    line-height: var(--fk-font-line-height-body-lg);
+  .ty-markdown__heading[data-depth='3'],
+  .ty-markdown__heading[data-depth='4'] {
+    font-size: var(--ty-font-size-body-lg);
+    line-height: var(--ty-font-line-height-body-lg);
   }
 
-  .fk-markdown__list {
+  .ty-markdown__list {
     display: grid;
-    gap: var(--fk-space-1);
-    padding-inline-start: var(--fk-space-5);
+    gap: var(--ty-space-1);
+    padding-inline-start: var(--ty-space-5);
   }
 
-  .fk-markdown__code-span {
-    padding: 0 var(--fk-space-1);
-    border-radius: var(--fk-radius-agent);
-    background: var(--fk-surface-sunken);
-    color: var(--fk-ink);
-    font-family: var(--fk-font-mono);
+  .ty-markdown__code-span {
+    padding: 0 var(--ty-space-1);
+    border-radius: var(--ty-radius-agent);
+    background: var(--ty-surface-sunken);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-mono);
     font-size: 0.92em;
   }
 
-  .fk-markdown__code-block {
+  .ty-markdown__code-block {
     display: grid;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
     min-inline-size: 0;
   }
-  .fk-markdown__language {
-    color: var(--fk-ink-3);
-    font-family: var(--fk-font-mono);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+  .ty-markdown__language {
+    color: var(--ty-ink-3);
+    font-family: var(--ty-font-mono);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
-  .fk-markdown__pre {
+  .ty-markdown__pre {
     margin: 0;
-    padding: var(--fk-space-3) var(--fk-space-4);
+    padding: var(--ty-space-3) var(--ty-space-4);
     overflow-x: auto;
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-surface-sunken);
-    color: var(--fk-ink);
-    font-family: var(--fk-font-mono);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-surface-sunken);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-mono);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
     overflow-wrap: normal;
     outline: none;
   }
-  .fk-markdown__pre:focus-visible {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-markdown__pre:focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
 
   @media (forced-colors: active) {
-    .fk-markdown__pre {
+    .ty-markdown__pre {
       border-color: CanvasText;
     }
-    .fk-markdown .fk-link {
+    .ty-markdown .ty-link {
       text-decoration: underline;
     }
   }

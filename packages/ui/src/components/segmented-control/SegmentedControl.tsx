@@ -50,9 +50,9 @@ function useSelection(controlled: string | undefined, initial: string, notify: (
 function SegmentButton({ segment, hideText, hint }: { segment: Segment; hideText: boolean; hint: boolean }) {
   const Glyph = segment.icon
   return (
-    <Radio value={segment.value} className="fk-segmented-control__segment" aria-label={hideText ? segment.label : undefined}>
-      {Glyph && <Glyph className="fk-icon" aria-hidden="true" focusable="false" />}
-      <span className={hideText ? 'fk-visually-hidden' : 'fk-segmented-control__label'} title={hint ? segment.label : undefined}>
+    <Radio value={segment.value} className="ty-segmented-control__segment" aria-label={hideText ? segment.label : undefined}>
+      {Glyph && <Glyph className="ty-icon" aria-hidden="true" focusable="false" />}
+      <span className={hideText ? 'ty-visually-hidden' : 'ty-segmented-control__label'} title={hint ? segment.label : undefined}>
         {segment.label}
       </span>
     </Radio>
@@ -67,7 +67,7 @@ export function SegmentedControl(props: SegmentedControlProps) {
   const iconOnly = props.iconOnly === true
   return (
     <RadioGroup
-      className={cx('fk-segmented-control', props.className)}
+      className={cx('ty-segmented-control', props.className)}
       aria-label={props.label}
       orientation="horizontal"
       isDisabled={props.disabled ?? false}

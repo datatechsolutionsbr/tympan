@@ -54,7 +54,7 @@ function PresetChoices({ props, name }: { props: FlagSetPickerProps; name: strin
     props.onPresetChange?.(preset.id)
   }
   return (
-    <ChoiceCardGroup className="fk-flag-set__presets" label={name} arrangement="inline" value={props.presetId ?? null} onChange={choose}>
+    <ChoiceCardGroup className="ty-flag-set__presets" label={name} arrangement="inline" value={props.presetId ?? null} onChange={choose}>
       {list.map((preset) => (
         <ChoiceCard key={preset.id} value={preset.id} label={preset.label} description={preset.description} />
       ))}
@@ -77,8 +77,8 @@ export function FlagSetPicker(props: FlagSetPickerProps) {
   }
 
   return (
-    <div className={cx('fk-flag-set', props.className)} role="group" aria-labelledby={headId}>
-      <span className="fk-flag-set__title" id={headId}>
+    <div className={cx('ty-flag-set', props.className)} role="group" aria-labelledby={headId}>
+      <span className="ty-flag-set__title" id={headId}>
         {props.label}
       </span>
       <PresetChoices props={props} name={props.presetsLabel ?? words.presets} />

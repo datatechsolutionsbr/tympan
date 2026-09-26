@@ -10,7 +10,7 @@ describe('SafeAreaInset in right-to-left locales', () => {
         <p>محتوى</p>
       </SafeAreaInset>,
     )
-    const box = container.querySelector('.fk-safe-area')!
+    const box = container.querySelector('.ty-safe-area')!
     expect(box.hasAttribute('data-pad-right') || box.hasAttribute('data-pad-left')).toBe(true)
     await expectNoAxeViolations(container)
   })

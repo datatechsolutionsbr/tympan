@@ -10,7 +10,7 @@ describe('BrandMark in right-to-left locales', () => {
   it('renders inside an Arabic right-to-left subtree and passes axe', async () => {
     const { container } = inRtl(<BrandMark />)
     expect(container.querySelector('[dir="rtl"]')).not.toBeNull()
-    expect(cssText()).toMatch(/letter-spacing:\s*var\(--fk-font-tracking-h1\)/)
+    expect(cssText()).toMatch(/letter-spacing:\s*var\(--ty-font-tracking-h1\)/)
     await expectNoAxeViolations(document.body, ['region'])
   })
 })

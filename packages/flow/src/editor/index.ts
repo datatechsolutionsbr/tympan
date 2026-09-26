@@ -1,4 +1,4 @@
-// @fakhir/flow: editor group barrel.
+// @datatechsolutions/tympan-flow: editor group barrel.
 export * from './FlowEditor'
 export * from './AutosaveController'
 export * from './keyMap'

@@ -33,11 +33,11 @@ export function SaveStatus({ status, labels, showLabel = true, className }: Save
   const l = useLabels(saveStatusLabels, labels)
   const Glyph = status === 'idle' ? null : GLYPH[status]
   return (
-    <span className={['fk-save-status', className].filter(Boolean).join(' ')} role="status" aria-live="polite" data-status={status}>
+    <span className={['ty-save-status', className].filter(Boolean).join(' ')} role="status" aria-live="polite" data-status={status}>
       {Glyph ? (
         <>
-          <Glyph className="fk-save-status__glyph" aria-hidden="true" focusable="false" />
-          <span className={showLabel ? 'fk-save-status__word' : 'fk-visually-hidden'}>{l[status as Exclude<SaveState, 'idle'>]}</span>
+          <Glyph className="ty-save-status__glyph" aria-hidden="true" focusable="false" />
+          <span className={showLabel ? 'ty-save-status__word' : 'ty-visually-hidden'}>{l[status as Exclude<SaveState, 'idle'>]}</span>
         </>
       ) : null}
     </span>

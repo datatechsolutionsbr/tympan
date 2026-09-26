@@ -52,21 +52,21 @@ export function StatusPill({ status, statusMap, tone, label, size = 'regular', a
   const def: StatusDefinition = entry ?? { label: status, tone: 'neutral', icon: <CircleHelp /> }
   const pill = (
     <span
-      className={cx('fk-status', className)}
+      className={cx('ty-status', className)}
       data-tone={tone ?? def.tone}
       data-size={size}
       data-busy={def.busy || undefined}
       data-status={status}
     >
-      <span className="fk-status__icon" aria-hidden="true">
+      <span className="ty-status__icon" aria-hidden="true">
         {def.icon ?? <CircleHelp />}
       </span>
-      <span className="fk-status__label">{label ?? def.label}</span>
+      <span className="ty-status__label">{label ?? def.label}</span>
     </span>
   )
   if (!announce) return pill
   return (
-    <span role="status" aria-live="polite" aria-atomic="true" className="fk-status-live">
+    <span role="status" aria-live="polite" aria-atomic="true" className="ty-status-live">
       {pill}
     </span>
   )

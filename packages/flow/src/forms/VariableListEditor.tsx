@@ -5,7 +5,7 @@
 
 import { Fragment, useId, useReducer, useRef, type KeyboardEvent, type ReactNode, type Ref } from 'react'
 import { Plus, X } from 'lucide-react'
-import { Button, TextField } from '@fakhir/ui'
+import { Button, TextField } from '@datatechsolutions/tympan'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { admit, EMPTY_ENTRY, focusTargetAfter, issueAt, nameListStep, replaceAt, withoutAt } from './nameListModel'
 
@@ -106,7 +106,7 @@ interface SlotContext {
 
 function slotMarker(ctx: SlotContext, position: number): ReactNode {
   return (
-    <span className="fk-var-list__marker" aria-hidden={ctx.numbered ? undefined : true} data-numbered={ctx.numbered || undefined}>
+    <span className="ty-var-list__marker" aria-hidden={ctx.numbered ? undefined : true} data-numbered={ctx.numbered || undefined}>
       {ctx.numbered ? new Intl.NumberFormat(ctx.locale).format(position + 1) : ''}
     </span>
   )
@@ -115,7 +115,7 @@ function slotMarker(ctx: SlotContext, position: number): ReactNode {
 function slotName(ctx: SlotContext, position: number, name: string): ReactNode {
   if (!ctx.editable) {
     return (
-      <span className="fk-var-list__name fk-mono fk-ltr-text" dir="ltr">
+      <span className="ty-var-list__name ty-mono ty-ltr-text" dir="ltr">
         {name}
       </span>
     )
@@ -124,7 +124,7 @@ function slotName(ctx: SlotContext, position: number, name: string): ReactNode {
   const message = issue === 'blank' ? ctx.text.blank : issue === 'duplicate' ? ctx.text.duplicate : null
   return (
     <TextField
-      className="fk-var-list__name-field"
+      className="ty-var-list__name-field"
       accessibleLabel={fill(ctx.text.rowField, { n: position + 1 }, ctx.locale)}
       value={name}
       onChange={(v) => ctx.rename(position, v)}
@@ -175,7 +175,7 @@ function NewNameEntry(p: EntryProps) {
     }
   }
   return (
-    <div className="fk-var-list__add" onKeyDown={commitOnEnter}>
+    <div className="ty-var-list__add" onKeyDown={commitOnEnter}>
       <TextField ref={p.fieldRef} accessibleLabel={p.fieldLabel} placeholder={p.placeholder} value={p.draft} onChange={p.onType} {...(p.complaint ? { errorMessage: p.complaint } : {})} />
       <Button variant="secondary" leadingIcon={<Plus />} disabled={p.draft.trim() === ''} onPress={p.onCommit}>
         {p.buttonText}
@@ -234,7 +234,7 @@ export function VariableListEditor(props: VariableListEditorProps) {
 
   const spoken = entry.spoken ? fill(entry.spoken.kind === 'added' ? text.added : text.removed, { name: entry.spoken.name }, locale) : ''
   const caption = props.label ? (
-    <span id={captionId} className="fk-var-list__label">
+    <span id={captionId} className="ty-var-list__label">
       {props.label}
     </span>
   ) : null
@@ -242,9 +242,9 @@ export function VariableListEditor(props: VariableListEditorProps) {
   let listing: ReactNode = null
   if (list.length) {
     listing = (
-      <ul className="fk-var-list__rows" role="list" aria-labelledby={props.label ? captionId : undefined}>
+      <ul className="ty-var-list__rows" role="list" aria-labelledby={props.label ? captionId : undefined}>
         {list.map((name, position) => (
-          <li key={position} className="fk-var-list__row">
+          <li key={position} className="ty-var-list__row">
             {SLOT_PARTS.map((part, i) => (
               <Fragment key={i}>{part(ctx, position, name)}</Fragment>
             ))}
@@ -253,11 +253,11 @@ export function VariableListEditor(props: VariableListEditorProps) {
       </ul>
     )
   } else if (!accepting) {
-    listing = <p className="fk-var-list__empty">{text.empty}</p>
+    listing = <p className="ty-var-list__empty">{text.empty}</p>
   }
 
   return (
-    <div className="fk-var-list" data-tone={ROLE_SWATCH[props.tone ?? 'input']}>
+    <div className="ty-var-list" data-tone={ROLE_SWATCH[props.tone ?? 'input']}>
       {caption}
       {listing}
       {accepting ? (
@@ -272,7 +272,7 @@ export function VariableListEditor(props: VariableListEditorProps) {
           onCommit={commit}
         />
       ) : null}
-      <p className="fk-visually-hidden" role="status" aria-live="polite">
+      <p className="ty-visually-hidden" role="status" aria-live="polite">
         {spoken}
       </p>
     </div>

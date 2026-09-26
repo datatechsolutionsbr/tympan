@@ -64,9 +64,9 @@ export function FormsAShowcase({ scope }: { scope: string }) {
     })
 
   return (
-    <div className="fk-gallery-showcase">
+    <div className="ty-gallery-showcase">
       <Section id={id('switches')} title="ThemeSwitcher, StateSwitch">
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <ThemeSwitcher mode={mode} onModeChange={setMode} />
           <ThemeSwitcher mode={mode} variant="compact" onModeChange={setMode} />
           <StateSwitch label="Agent status" checked={active} onCheckedChange={setActive} />
@@ -77,9 +77,9 @@ export function FormsAShowcase({ scope }: { scope: string }) {
       <Section id={id('otc')} title="OneTimeCodeField, PasswordStrength">
         <OneTimeCodeField value={code} onChange={setCode} />
         <OneTimeCodeField label="Recovery code" value="12345" onChange={() => {}} errorText="The code expired. Ask for a new one." />
-        <label className="fk-gallery-stack">
+        <label className="ty-gallery-stack">
           <span>New password (demo input)</span>
-          <input className="fk-gallery-native-input" value={password} onChange={(e) => setPassword(e.target.value)} aria-describedby={id('pw')} />
+          <input className="ty-gallery-native-input" value={password} onChange={(e) => setPassword(e.target.value)} aria-describedby={id('pw')} />
         </label>
         <PasswordStrength id={id('pw')} password={password} showRequirements policy={{ symbol: true }} />
       </Section>
@@ -117,7 +117,7 @@ export function FormsAShowcase({ scope }: { scope: string }) {
           <FilterTile selected={tiles.has('uk')} onToggle={() => toggleTile('uk')} label="United Kingdom" detail="12 records" icon={<Flag />} iconSurface="neutral" />
           <FilterTile selected={false} onToggle={() => {}} label="Unavailable" detail="0 records" icon={<Flag />} disabled />
         </FilterTileGrid>
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           {[
             ['pt', 'Português'],
             ['et', 'Eesti'],

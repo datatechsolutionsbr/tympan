@@ -64,8 +64,8 @@ export function RecoveryCodeList(props: RecoveryCodeListProps) {
 
   if (!revealed) {
     return (
-      <div className={cx('fk-recovery-codes', props.className)} data-revealed="false">
-        <p className="fk-recovery-codes__hidden">{text.hidden}</p>
+      <div className={cx('ty-recovery-codes', props.className)} data-revealed="false">
+        <p className="ty-recovery-codes__hidden">{text.hidden}</p>
         {props.onReveal ? (
           <Button leadingIcon={<Eye />} onPress={props.onReveal}>
             {text.reveal}
@@ -76,15 +76,15 @@ export function RecoveryCodeList(props: RecoveryCodeListProps) {
   }
 
   return (
-    <div className={cx('fk-recovery-codes', props.className)} data-revealed="true">
-      <ol className="fk-recovery-codes__list" aria-label={text.listLabel}>
+    <div className={cx('ty-recovery-codes', props.className)} data-revealed="true">
+      <ol className="ty-recovery-codes__list" aria-label={text.listLabel}>
         {codes.map((code, i) => (
-          <li key={`${i}-${code}`} className="fk-recovery-codes__code">
+          <li key={`${i}-${code}`} className="ty-recovery-codes__code">
             {code}
           </li>
         ))}
       </ol>
-      <div className="fk-recovery-codes__actions">
+      <div className="ty-recovery-codes__actions">
         <Button leadingIcon={<Copy />} onPress={() => void copyAll()}>
           {text.copyAll}
         </Button>
@@ -97,7 +97,7 @@ export function RecoveryCodeList(props: RecoveryCodeListProps) {
           </Button>
         ) : null}
       </div>
-      <p className="fk-recovery-codes__status" role="status">
+      <p className="ty-recovery-codes__status" role="status">
         {status}
       </p>
     </div>

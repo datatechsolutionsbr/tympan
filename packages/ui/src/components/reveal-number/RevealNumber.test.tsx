@@ -22,8 +22,8 @@ class FakeObserver {
   }
 }
 
-const run = (c: HTMLElement) => c.querySelector('.fk-reveal-number__run')!.textContent
-const spoken = (c: HTMLElement) => c.querySelector('.fk-visually-hidden')!.textContent
+const run = (c: HTMLElement) => c.querySelector('.ty-reveal-number__run')!.textContent
+const spoken = (c: HTMLElement) => c.querySelector('.ty-visually-hidden')!.textContent
 
 function view(visible: boolean) {
   act(() => {
@@ -46,7 +46,7 @@ describe('RevealNumber', () => {
     const { container } = render(<RevealNumber to={94} durationMs={200} />)
     expect(run(container)).toBe('0')
     expect(spoken(container)).toBe('94')
-    expect(container.querySelector('.fk-reveal-number__run')).toHaveAttribute('aria-hidden', 'true')
+    expect(container.querySelector('.ty-reveal-number__run')).toHaveAttribute('aria-hidden', 'true')
     expect(observers[0]!.threshold).toBe(0.5)
   })
 
@@ -110,7 +110,7 @@ describe('RevealNumber', () => {
 
   it('applies the formatter to every frame and reserves the final width', () => {
     const { container } = render(<RevealNumber from={0} to={1500} durationMs={100} format={(n) => `R$ ${n.toFixed(2)}`} />)
-    expect(container.querySelector('.fk-reveal-number__ghost')).toHaveTextContent('R$ 1500.00')
+    expect(container.querySelector('.ty-reveal-number__ghost')).toHaveTextContent('R$ 1500.00')
     view(true)
     act(() => {
       vi.advanceTimersByTime(50)

@@ -16,16 +16,16 @@ describe('Skeleton and PageLoadingState', () => {
     const statuses = screen.getAllByRole('status')
     expect(statuses).toHaveLength(1)
     expect(statuses[0]).toHaveTextContent('Loading the catalogue')
-    expect(container.querySelector('.fk-page-loading')).toHaveAttribute('aria-busy', 'true')
+    expect(container.querySelector('.ty-page-loading')).toHaveAttribute('aria-busy', 'true')
   })
 
   it.each(presets)('exposes nothing but the status for preset %s', (preset) => {
     const { container } = render(<PageLoadingState label="Loading" preset={preset} />)
-    const blocks = container.querySelectorAll('.fk-skeleton')
+    const blocks = container.querySelectorAll('.ty-skeleton')
     expect(blocks.length).toBeGreaterThan(0)
     for (const b of blocks) expect(b.closest('[aria-hidden="true"]')).not.toBeNull()
     // Everything except the status lives under aria-hidden.
-    const exposed = Array.from(container.querySelectorAll('.fk-page-loading > *')).filter(
+    const exposed = Array.from(container.querySelectorAll('.ty-page-loading > *')).filter(
       (el) => el.getAttribute('aria-hidden') !== 'true',
     )
     expect(exposed).toEqual([screen.getByRole('status')])
@@ -33,33 +33,33 @@ describe('Skeleton and PageLoadingState', () => {
 
   it('renders three stat tiles in one row of three columns', () => {
     const { container } = render(<Skeleton preset="stats" count={3} columns={3} />)
-    const grid = container.querySelector<HTMLElement>('.fk-skeleton-grid')
-    expect(grid?.style.getPropertyValue('--fk-skeleton-columns')).toBe('3')
+    const grid = container.querySelector<HTMLElement>('.ty-skeleton-grid')
+    expect(grid?.style.getPropertyValue('--ty-skeleton-columns')).toBe('3')
     expect(container.querySelectorAll('[data-part="stat"]')).toHaveLength(3)
     expect(cssOf('components/skeleton/Skeleton.css')).toMatch(
-      /grid-template-columns:\s*repeat\(var\(--fk-skeleton-columns/,
+      /grid-template-columns:\s*repeat\(var\(--ty-skeleton-columns/,
     )
   })
 
   it('stops the pulse under reduced motion (opacity-only pulse otherwise)', () => {
     const css = cssOf('components/skeleton/Skeleton.css')
-    expect(css).toMatch(/animation:\s*fk-skeleton-pulse var\(--fk-dur-pulse\)/)
-    expect(css).toMatch(/@keyframes fk-skeleton-pulse\s*\{[^@]*opacity[^@]*\}/)
-    expect(css).not.toMatch(/@keyframes fk-skeleton-pulse\s*\{[^@]*transform/)
+    expect(css).toMatch(/animation:\s*ty-skeleton-pulse var\(--ty-dur-pulse\)/)
+    expect(css).toMatch(/@keyframes ty-skeleton-pulse\s*\{[^@]*opacity[^@]*\}/)
+    expect(css).not.toMatch(/@keyframes ty-skeleton-pulse\s*\{[^@]*transform/)
     const reduced = mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)
-    expect(reduced).toMatch(/\.fk-skeleton\s*\{[^}]*animation:\s*none/)
+    expect(reduced).toMatch(/\.ty-skeleton\s*\{[^}]*animation:\s*none/)
   })
 
   it('varies widths across three lines', () => {
     const { container } = render(<Skeleton lines={3} />)
-    const widths = Array.from(container.querySelectorAll('.fk-skeleton')).map((b) => b.getAttribute('data-width'))
+    const widths = Array.from(container.querySelectorAll('.ty-skeleton')).map((b) => b.getAttribute('data-width'))
     expect(widths).toHaveLength(3)
     expect(new Set(widths).size).toBeGreaterThanOrEqual(2)
   })
 
   it('accepts a CSS length as width', () => {
     const { container } = render(<Skeleton width="12rem" />)
-    expect(container.querySelector<HTMLElement>('.fk-skeleton')?.style.inlineSize).toBe('12rem')
+    expect(container.querySelector<HTMLElement>('.ty-skeleton')?.style.inlineSize).toBe('12rem')
   })
 
   it('outlines blocks in forced-colors mode', () => {

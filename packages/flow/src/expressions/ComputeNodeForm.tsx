@@ -5,7 +5,7 @@
 // ComputeTrial.tsx (dry run on sample data). This file wires them together.
 
 import { useMemo, useState, type ReactNode } from 'react'
-import { SegmentedControl, TextArea } from '@fakhir/ui'
+import { SegmentedControl, TextArea } from '@datatechsolutions/tympan'
 import { NodeFormFooter } from '../forms/NodeFormFooter'
 import { defineLabels, useFlowLocale, useLabels } from '../internal/labels'
 import { useExpressionCatalog } from './catalogContext'
@@ -31,7 +31,7 @@ export interface ComputeExample {
   expression: OperationNode
 }
 
-/** Examples authored for Fakhir's research census; names come from labels. */
+/** Examples authored for a research census; names come from labels. */
 export const defaultComputeExamples: ComputeExample[] = [
   {
     id: 'countConfirmed',
@@ -245,10 +245,10 @@ export function ComputeNodeForm(props: ComputeNodeFormProps) {
     text: () => {
       const error = draft.problem ? textErrorMessage(draft.problem, words, locale) : null
       return (
-        <div className="fk-expr-form__section">
-          <TextArea ref={draft.textArea} className="fk-expr-form__code" label={words.expression} hint={words.expressionHint} monospace rows={12} value={draft.text} onChange={draft.editText} errorMessage={error ?? undefined} />
+        <div className="ty-expr-form__section">
+          <TextArea ref={draft.textArea} className="ty-expr-form__code" label={words.expression} hint={words.expressionHint} monospace rows={12} value={draft.text} onChange={draft.editText} errorMessage={error ?? undefined} />
           {draft.problem ? null : (
-            <p className="fk-expr-form__valid" role="status">
+            <p className="ty-expr-form__valid" role="status">
               {words.valid}
             </p>
           )}
@@ -270,7 +270,7 @@ export function ComputeNodeForm(props: ComputeNodeFormProps) {
 
   const onDryRun = props.onDryRun
   return (
-    <div className="fk-expr-form" data-form="compute">
+    <div className="ty-expr-form" data-form="compute">
       <SegmentedControl
         label={words.editorMode}
         value={mode}
@@ -280,7 +280,7 @@ export function ComputeNodeForm(props: ComputeNodeFormProps) {
         }}
         options={(['visual', 'text'] as const).map((m) => ({ value: m, label: words[m] }))}
       />
-      <div className="fk-expr-form__layout" data-with-panel={inText || undefined}>
+      <div className="ty-expr-form__layout" data-with-panel={inText || undefined}>
         {editors[mode]()}
         {panel}
       </div>

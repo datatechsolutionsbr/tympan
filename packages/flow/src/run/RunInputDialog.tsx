@@ -3,7 +3,7 @@
 // dialog opens.
 
 import { useEffect, useId, useState, type FormEvent } from 'react'
-import { Button, ModalDialog, TextField } from '@fakhir/ui'
+import { Button, ModalDialog, TextField } from '@datatechsolutions/tympan'
 import { defineLabels, useLabels } from '../internal/labels'
 import { createFlowEditorStore, useOptionalFlowEditorStore } from '../state/editorState'
 import { useStoreSelector } from '../state/store'
@@ -113,7 +113,7 @@ export function RunInputDialog({ open, onClose, onRun, classifyVariable, currenc
 
   const fields = names.map((name, index) => {
     const kind = kindOf(name)
-    const common = { label: humaniseIdentifier(name), hint: <code className="fk-run-mono">{name}</code>, name }
+    const common = { label: humaniseIdentifier(name), hint: <code className="ty-run-mono">{name}</code>, name }
     return kind === 'text' ? (
       <TextField key={name} {...common} placeholder={l.valuePlaceholder} value={String(entered[name] ?? '')} onChange={put(name)} {...(index === 0 ? { autoFocus: true } : {})} />
     ) : (
@@ -139,8 +139,8 @@ export function RunInputDialog({ open, onClose, onRun, classifyVariable, currenc
         </>
       }
     >
-      <form id={formId} className="fk-run-form" onSubmit={send} noValidate>
-        {fields.length ? fields : <p className="fk-run-empty">{l.empty}</p>}
+      <form id={formId} className="ty-run-form" onSubmit={send} noValidate>
+        {fields.length ? fields : <p className="ty-run-empty">{l.empty}</p>}
         {/* Lets Enter in a single-line field submit. */}
         <button type="submit" hidden tabIndex={-1} aria-hidden="true" />
       </form>

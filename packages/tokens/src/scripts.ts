@@ -1,4 +1,4 @@
-// Per-script typography (`:lang()` overrides). Fakhir serves the humanities and
+// Per-script typography (`:lang()` overrides). Tympan serves the humanities and
 // the exact sciences in any language, so the base stacks (IBM Plex / Source
 // Serif with Noto fallbacks) are adapted per writing system:
 //  - the script's Noto family is moved to the front (CJK needs the right
@@ -14,7 +14,7 @@ interface ScriptRule {
   langs: string[]
   sans: string[]
   serif?: string[]
-  /** Line-height multiplier applied to every --fk-font-line-height-* token. */
+  /** Line-height multiplier applied to every --ty-font-line-height-* token. */
   leading?: number
   /** Letter-spacing off (tracking tokens set to 0). */
   noTracking?: boolean
@@ -59,13 +59,13 @@ function scaledPx(value: string, factor: number): string {
 /** The `:lang()` blocks, derived from the base token values. */
 export function scriptRules(base: VarList): string {
   const value = (name: string) => base.find(([n]) => n === name)?.[1] ?? ''
-  const sansBase = value('--fk-font-sans')
-  const serifBase = value('--fk-font-serif')
-  const leadings = base.filter(([n]) => n.startsWith('--fk-font-line-height-'))
-  const trackings = base.filter(([n]) => n.startsWith('--fk-font-tracking-'))
+  const sansBase = value('--ty-font-sans')
+  const serifBase = value('--ty-font-serif')
+  const leadings = base.filter(([n]) => n.startsWith('--ty-font-line-height-'))
+  const trackings = base.filter(([n]) => n.startsWith('--ty-font-tracking-'))
   return SCRIPT_RULES.map((r) => {
-    const decls: string[] = [`--fk-font-sans: ${r.sans.map(quote).join(', ')}, ${sansBase};`]
-    if (r.serif) decls.push(`--fk-font-serif: ${r.serif.map(quote).join(', ')}, ${serifBase};`)
+    const decls: string[] = [`--ty-font-sans: ${r.sans.map(quote).join(', ')}, ${sansBase};`]
+    if (r.serif) decls.push(`--ty-font-serif: ${r.serif.map(quote).join(', ')}, ${serifBase};`)
     if (r.leading) for (const [n, v] of leadings) decls.push(`${n}: ${scaledPx(v, r.leading)};`)
     if (r.noTracking) for (const [n] of trackings) decls.push(`${n}: 0em;`)
     decls.push(...(r.text ?? []))

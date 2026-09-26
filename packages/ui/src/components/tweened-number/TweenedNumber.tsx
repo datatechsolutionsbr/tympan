@@ -4,7 +4,7 @@ import { cx } from '../../internal/cx'
 import { TweenDriver } from '../../internal/data-b/tween'
 import { prefersReducedMotion } from '../../internal/media'
 
-/** `--fk-dur-base` of design direction §2.7, in milliseconds. */
+/** `--ty-dur-base` of design direction §2.7, in milliseconds. */
 export const TWEEN_BASE_MS = 240
 
 export interface TweenedNumberProps {
@@ -63,7 +63,7 @@ export function TweenedNumber(props: TweenedNumberProps) {
   }, [props.format, locale, places])
 
   return (
-    <span className={cx('fk-tweened-number', props.className)} data-settled={figure === props.value || undefined}>
+    <span className={cx('ty-tweened-number', props.className)} data-settled={figure === props.value || undefined}>
       {writer(figure)}
     </span>
   )

@@ -3,7 +3,7 @@
 // confirms). The live version is marked by a word and a border.
 
 import { useEffect, useState } from 'react'
-import { ActorChip, Button, InlineNotice, Skeleton } from '@fakhir/ui'
+import { ActorChip, Button, InlineNotice, Skeleton } from '@datatechsolutions/tympan'
 import { DockedPanel } from '../internal/DockedPanel'
 import { formatDateTime } from '../internal/format'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
@@ -120,8 +120,8 @@ export function VersionHistoryPanel(props: VersionHistoryPanelProps) {
   if (!open) return null
 
   return (
-    <DockedPanel title={l.title} landmark="complementary" onClose={onClose} closeLabel={l.close} returnFocusTo={returnFocusTo ?? null} busy={state.kind === 'loading'} className="fk-versions">
-      <p className="fk-visually-hidden" role="status" aria-live="polite">
+    <DockedPanel title={l.title} landmark="complementary" onClose={onClose} closeLabel={l.close} returnFocusTo={returnFocusTo ?? null} busy={state.kind === 'loading'} className="ty-versions">
+      <p className="ty-visually-hidden" role="status" aria-live="polite">
         {state.kind === 'loading' ? l.loading : state.kind === 'error' ? fill(l.error, { message: state.message }, locale) : ''}
       </p>
       {state.kind === 'loading' ? (
@@ -141,24 +141,24 @@ export function VersionHistoryPanel(props: VersionHistoryPanelProps) {
           {fill(l.error, { message: state.message }, locale)}
         </InlineNotice>
       ) : state.versions.length === 0 ? (
-        <p className="fk-run-empty">{l.empty}</p>
+        <p className="ty-run-empty">{l.empty}</p>
       ) : (
-        <ul className="fk-versions__list">
+        <ul className="ty-versions__list">
           {state.versions.map((v) => {
             const current = v.number === currentVersion
             return (
-              <li key={v.number} className="fk-versions__entry" data-current={current ? 'true' : 'false'}>
-                <div className="fk-versions__head">
-                  <span className="fk-versions__number">{fill(l.version, { number: v.number }, locale)}</span>
-                  {current ? <span className="fk-versions__current">{l.current}</span> : null}
+              <li key={v.number} className="ty-versions__entry" data-current={current ? 'true' : 'false'}>
+                <div className="ty-versions__head">
+                  <span className="ty-versions__number">{fill(l.version, { number: v.number }, locale)}</span>
+                  {current ? <span className="ty-versions__current">{l.current}</span> : null}
                 </div>
-                <div className="fk-versions__meta">
-                  <span className="fk-visually-hidden">{l.publishedBy}</span>
+                <div className="ty-versions__meta">
+                  <span className="ty-visually-hidden">{l.publishedBy}</span>
                   <ActorChip kind={v.publishedBy.kind} name={v.publishedBy.name} compact {...(v.publishedBy.agentKey ? { agentKey: v.publishedBy.agentKey } : {})} {...(v.publishedBy.model ? { model: v.publishedBy.model } : {})} />
                   <time dateTime={v.publishedAt}>{formatDateTime(v.publishedAt, locale)}</time>
                   <span>{fill(l.counts, { nodes: v.nodeCount, connectors: v.connectorCount }, locale)}</span>
                 </div>
-                <div className="fk-versions__actions">
+                <div className="ty-versions__actions">
                   <Button variant="secondary" size="compact" onPress={() => onPreview(v)}>
                     {fill(l.preview, { number: v.number }, locale)}
                   </Button>

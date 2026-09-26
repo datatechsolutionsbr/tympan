@@ -33,7 +33,7 @@ export interface ListRowProps {
 function ActionStrip({ actions, suffix }: { actions: ListRowAction[]; suffix?: string }) {
   if (actions.length === 0) return null
   return (
-    <div className="fk-list-row__actions">
+    <div className="ty-list-row__actions">
       {actions.map((action, i) => (
         <Button
           key={`${action.label}-${i}`}
@@ -41,10 +41,10 @@ function ActionStrip({ actions, suffix }: { actions: ListRowAction[]; suffix?: s
           size="compact"
           disabled={action.disabled}
           onPress={action.onPress}
-          className="fk-list-row__action"
+          className="ty-list-row__action"
         >
           {action.label}
-          {suffix ? <span className="fk-visually-hidden">, {suffix}</span> : null}
+          {suffix ? <span className="ty-visually-hidden">, {suffix}</span> : null}
         </Button>
       ))}
     </div>
@@ -57,10 +57,10 @@ export function ListRow({ variant = 'surface', actions = [], itemLabel, emphasis
   const suffix = itemLabel ?? (typeof summary.title === 'string' ? summary.title : undefined)
   const marked = variant === 'emphasised'
   return (
-    <div className={cx('fk-list-row', className)} data-variant={variant}>
-      <div className="fk-list-row__summary">
+    <div className={cx('ty-list-row', className)} data-variant={variant}>
+      <div className="ty-list-row__summary">
         <SummaryRow {...summary} iconTone={marked ? 'accent' : 'neutral'} />
-        {marked ? <span className="fk-list-row__marker">{emphasisLabel ?? copy.current}</span> : null}
+        {marked ? <span className="ty-list-row__marker">{emphasisLabel ?? copy.current}</span> : null}
       </div>
       <ActionStrip actions={actions} suffix={suffix} />
     </div>

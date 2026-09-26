@@ -1,7 +1,7 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import { DecisionNodeForm, validateDecision } from './DecisionNodeForm'
 
@@ -60,11 +60,11 @@ describe('DecisionNodeForm', () => {
 
   it('works under RTL with Portuguese strings', async () => {
     render(
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <div dir="rtl">
           <DecisionNodeForm value={value} onSave={() => {}} onCancel={() => {}} />
         </div>
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     await userEvent.click(screen.getByRole('button', { name: 'Adicionar opção' }))
     expect(screen.getByRole('group', { name: 'Opção 3' })).toBeInTheDocument()

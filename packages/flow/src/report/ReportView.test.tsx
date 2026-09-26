@@ -25,7 +25,7 @@ describe('ReportView', () => {
     expect(screen.getByText('62%')).toBeInTheDocument()
     const chart = screen.getByRole('figure', { name: /By stage/ })
     expect(screen.getByRole('img', { name: 'Bar chart of cases, proved by stage, 2 rows' })).toBeInTheDocument()
-    expect(chart.querySelectorAll('.fk-flow-report__legend-item')).toHaveLength(2)
+    expect(chart.querySelectorAll('.ty-flow-report__legend-item')).toHaveLength(2)
     const toggle = screen.getByRole('button', { name: 'Show data table' })
     expect(toggle).toHaveAttribute('aria-expanded', 'false')
     await userEvent.click(toggle)
@@ -52,7 +52,7 @@ describe('ReportView', () => {
 
   it('keeps series distinguishable without colour and draws in system colours when forced', () => {
     const css = cssOf('report/report.css')
-    expect(css).toMatch(/\.fk-flow-report__line\[data-series='1'\]\s*\{[^}]*stroke-dasharray/)
+    expect(css).toMatch(/\.ty-flow-report__line\[data-series='1'\]\s*\{[^}]*stroke-dasharray/)
     expect(mediaBlock(css, /\(forced-colors: active\)/)).toMatch(/CanvasText/)
     expect(css).not.toMatch(/#[0-9a-f]{3,6}\b/i)
   })

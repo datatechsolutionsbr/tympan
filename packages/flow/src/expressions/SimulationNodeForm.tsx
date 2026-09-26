@@ -4,7 +4,7 @@
 // wrapped in a "first non-empty value" operation with that single candidate.
 
 import { useState } from 'react'
-import { TextArea } from '@fakhir/ui'
+import { TextArea } from '@datatechsolutions/tympan'
 import { NodeFormFooter } from '../forms/NodeFormFooter'
 import { defineLabels, useLabels } from '../internal/labels'
 import { ExpressionField, type ExpressionFieldLabels } from './ExpressionField'
@@ -132,7 +132,7 @@ export function SimulationNodeForm({ value, references = [], defaults = {}, cata
   const save = () => onSave({ ...value, kind: 'simulation', ...fields, tracking })
 
   return (
-    <div className="fk-node-form fk-expr-form" data-form="simulation">
+    <div className="ty-node-form ty-expr-form" data-form="simulation">
       {SIMULATION_FIELDS.map((f) => (
         <ExpressionField
           key={f}
@@ -147,7 +147,7 @@ export function SimulationNodeForm({ value, references = [], defaults = {}, cata
         />
       ))}
       <TextArea
-        className="fk-expr-form__code"
+        className="ty-expr-form__code"
         label={l.tracking}
         hint={l.trackingHint}
         monospace

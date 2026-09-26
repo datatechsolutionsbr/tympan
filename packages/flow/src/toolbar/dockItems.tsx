@@ -5,7 +5,7 @@
 // The zoom readout carries its percentage as text rather than a pictogram, and
 // the tool's `group` lets the dock draw dividers between clusters.
 
-import type { ActionBarItem } from '@fakhir/ui'
+import type { ActionBarItem } from '@datatechsolutions/tympan'
 import type { CanvasToolItem } from './canvasTools'
 
 type Tool = CanvasToolItem
@@ -28,10 +28,10 @@ const optionalFields: ReadonlyArray<{
 ]
 
 function pictogram(tool: Tool) {
-  if (tool.text) return <span className="fk-canvas-tool__text">{tool.text}</span>
+  if (tool.text) return <span className="ty-canvas-tool__text">{tool.text}</span>
   const Glyph = tool.icon
   if (!Glyph) return null
-  return <Glyph className="fk-icon" aria-hidden="true" focusable="false" />
+  return <Glyph className="ty-icon" aria-hidden="true" focusable="false" />
 }
 
 function toDockEntry(tool: Tool): DockEntry {

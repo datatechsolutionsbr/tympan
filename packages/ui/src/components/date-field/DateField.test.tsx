@@ -108,7 +108,7 @@ describe('DateField', () => {
 
   it('keeps 44 px cells on touch, highlights the selection in forced colours and fades only', () => {
     const css = cssOf('components/date-field/DateField.css')
-    expect(mediaBlock(css, /\(pointer:\s*coarse\)/)).toMatch(/var\(--fk-control-target\)/)
+    expect(mediaBlock(css, /\(pointer:\s*coarse\)/)).toMatch(/var\(--ty-control-target\)/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/Highlight/)
     const shared = cssOf('internal/forms-b/forms-b.css')
     expect(mediaBlock(shared, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/animation:\s*none/)
@@ -137,7 +137,7 @@ describe('DateField in right-to-left (ar)', () => {
     await rtlUser.click(rtlDom.screen.getByRole('button', { name: /تاريخ الاسترجاع/ }))
     const dialog = await rtlDom.screen.findByRole('dialog')
     // Previous/next month chevrons mirror in right-to-left.
-    for (const svg of dialog.querySelectorAll('svg.fk-icon')) if (svg.classList.contains('lucide-chevron-left') || svg.classList.contains('lucide-chevron-right')) expect(svg).toHaveClass('fk-mirror-rtl')
+    for (const svg of dialog.querySelectorAll('svg.ty-icon')) if (svg.classList.contains('lucide-chevron-left') || svg.classList.contains('lucide-chevron-right')) expect(svg).toHaveClass('ty-mirror-rtl')
     await axeRtl(container)
   })
 })

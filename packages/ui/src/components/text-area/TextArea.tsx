@@ -116,27 +116,27 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(function 
       aria-label={label ? undefined : accessibleLabel}
       aria-labelledby={!label && !accessibleLabel ? wiring.labelledBy : undefined}
       aria-describedby={wiring.describedBy}
-      className={cx('fk-text-area', className)}
+      className={cx('ty-text-area', className)}
       data-monospace={monospace || undefined}
       data-resize={resize}
       data-auto-grow={autoGrow || undefined}
       data-scrolling={scrolling || undefined}
     >
-      {label ? <Label className="fk-text-area__label">{label}</Label> : null}
+      {label ? <Label className="ty-text-area__label">{label}</Label> : null}
       {hint != null ? (
-        <p id={hintId} className="fk-text-area__hint">
+        <p id={hintId} className="ty-text-area__hint">
           {hint}
         </p>
       ) : null}
-      <AriaTextArea ref={ref} className="fk-text-area__input" rows={visibleRows} placeholder={placeholder} />
+      <AriaTextArea ref={ref} className="ty-text-area__input" rows={visibleRows} placeholder={placeholder} />
       {errorMessage ? (
-        <p id={errorId} className="fk-text-area__error" aria-live={errorAppeared ? 'polite' : undefined}>
-          <CircleAlert className="fk-icon" aria-hidden="true" focusable="false" />
+        <p id={errorId} className="ty-text-area__error" aria-live={errorAppeared ? 'polite' : undefined}>
+          <CircleAlert className="ty-icon" aria-hidden="true" focusable="false" />
           <span>{errorMessage}</span>
         </p>
       ) : null}
       {counterId && maxLength != null ? (
-        <p id={counterId} className="fk-text-area__counter" data-over-limit={overLimit || undefined}>
+        <p id={counterId} className="ty-text-area__counter" data-over-limit={overLimit || undefined}>
           {overLimit ? messages.textField.overLimit(current.length, maxLength) : messages.textField.counter(current.length, maxLength)}
         </p>
       ) : null}

@@ -1,5 +1,5 @@
 // Bundles src/styles.css into dist/styles.css: inlines relative @imports and
-// the @fakhir/tokens stylesheet, keeps the leading @layer order statement.
+// the @datatechsolutions/tympan-tokens stylesheet, keeps the leading @layer order statement.
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join, resolve } from 'node:path'

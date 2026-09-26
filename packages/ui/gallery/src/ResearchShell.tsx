@@ -28,7 +28,7 @@ import {
   AttentionList,
   Button,
   EvidencePanel,
-  FakhirProvider,
+  TympanProvider,
   FloatingActionBar,
   PageHeader,
   PhaseBar,
@@ -114,10 +114,10 @@ function Navigation() {
 function Account() {
   const theme = useTheme()
   return (
-    <div className="fk-demo-account">
-      <div className="fk-demo-account__who">
+    <div className="ty-demo-account">
+      <div className="ty-demo-account__who">
         <ProfileAvatar name="Natalia Mesquita" size="sm" decorative />
-        <span className="fk-demo-account__name">
+        <span className="ty-demo-account__name">
           <strong>Natalia Mesquita</strong>
           <span>Owner</span>
         </span>
@@ -163,7 +163,7 @@ export function ResearchShellDemo() {
   ]
 
   return (
-    <FakhirProvider locale={gallery.locale} pseudo={gallery.pseudo} navigate={(href) => (window.location.hash = href.replace(/^#/, ''))}>
+    <TympanProvider locale={gallery.locale} pseudo={gallery.pseudo} navigate={(href) => (window.location.hash = href.replace(/^#/, ''))}>
       <AppFrame
         layout="rail"
         ambient
@@ -185,8 +185,8 @@ export function ResearchShellDemo() {
               proof={{ state: evidence.proof === 'none' ? null : evidence.proof, provedBy: 'Avaliadora de exemplo', rule: 'regra de exemplo' }}
               footer={<Button variant="primary">Salvar e seguir</Button>}
             >
-              <p className="fk-demo-quote" dir="auto">“Trecho citado de exemplo.”</p>
-              <p className="fk-demo-meta">fonte de exemplo</p>
+              <p className="ty-demo-quote" dir="auto">“Trecho citado de exemplo.”</p>
+              <p className="ty-demo-meta">fonte de exemplo</p>
             </EvidencePanel>
           ) : null
         }
@@ -205,28 +205,28 @@ export function ResearchShellDemo() {
             </>
           }
         />
-        <div className="fk-demo-stack">
+        <div className="ty-demo-stack">
           <StatStrip label="Estado da pesquisa" items={stats} />
-          <section aria-labelledby="demo-stages" className="fk-demo-section">
+          <section aria-labelledby="demo-stages" className="ty-demo-section">
             <SectionHeading id="demo-stages" title="Da busca ao manuscrito" level={2} />
             <StageStrip label="Etapas da pesquisa" stages={stages} />
           </section>
-          <div className="fk-demo-columns">
-            <section aria-labelledby="demo-attention" className="fk-demo-section">
+          <div className="ty-demo-columns">
+            <section aria-labelledby="demo-attention" className="ty-demo-section">
               <SectionHeading id="demo-attention" title="O que precisa de você" level={2} />
               <AttentionList label="Pendências" items={attention} maxRows={4} seeAllHref={go('verificacao')} />
             </section>
-            <section aria-labelledby="demo-proof" className="fk-demo-section">
+            <section aria-labelledby="demo-proof" className="ty-demo-section">
               <SectionHeading id="demo-proof" title="Estado da prova" level={2} subtitle="Proporções de exemplo" />
               <PhaseBar label="Estado da prova" segments={phases} caption="Frase-achado de exemplo: na plataforma ela vem da execução que a produziu." />
             </section>
           </div>
-          <section aria-labelledby="demo-activity" className="fk-demo-section">
+          <section aria-labelledby="demo-activity" className="ty-demo-section">
             <SectionHeading id="demo-activity" title="Atividade recente" level={2} />
             <ActivityFeed label="Atividade recente" entries={activity} moreHref={go('trilha')} moreLabel="Ver trilha" />
           </section>
         </div>
       </AppFrame>
-    </FakhirProvider>
+    </TympanProvider>
   )
 }

@@ -5,7 +5,7 @@ import { catalogueForLocale, defaultMessages, mergeMessages, type MessageOverrid
 
 const MessagesContext = createContext<Messages>(defaultMessages)
 
-export interface FakhirProviderProps {
+export interface TympanProviderProps {
   /** Copy overrides, typically produced by the host's i18n adapter. */
   messages?: MessageOverrides
   /** Base catalogue to merge overrides into (defaults to the shipped catalogue of `locale`: pt, es or en). */
@@ -39,7 +39,7 @@ declare module 'react-aria-components' {
  * every link-like component. Optional: components fall back to English copy
  * and native navigation without it.
  */
-export function FakhirProvider({ messages, baseMessages, icuMessages, pseudo = false, navigate, useHref, locale, children }: FakhirProviderProps) {
+export function TympanProvider({ messages, baseMessages, icuMessages, pseudo = false, navigate, useHref, locale, children }: TympanProviderProps) {
   const merged = useMemo(() => {
     const base = baseMessages ?? (locale ? catalogueForLocale(locale) : defaultMessages)
     let out = mergeMessages(base, messages)

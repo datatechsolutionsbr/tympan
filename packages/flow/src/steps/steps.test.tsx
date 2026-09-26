@@ -2,7 +2,7 @@ import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { ReactNode } from 'react'
 import { describe, expect, it } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import { cssOf, mediaBlock } from '../../test/css'
 import { FlowEditor } from '../editor/FlowEditor'
@@ -103,7 +103,7 @@ describe('typed wiring', () => {
 })
 
 describe('StepPalette', () => {
-  const inPt = (ui: ReactNode) => render(<FakhirProvider locale="pt-BR">{ui}</FakhirProvider>)
+  const inPt = (ui: ReactNode) => render(<TympanProvider locale="pt-BR">{ui}</TympanProvider>)
 
   it('shelves steps by research verb with their purpose and typed chips, in Portuguese', async () => {
     const { container } = inPt(
@@ -161,7 +161,7 @@ describe('FlowEditor with research steps', () => {
     return { store, ...view }
   }
   const focusBody = (id: string) => {
-    const body = document.querySelector<HTMLElement>(`[data-fk-node-id="${id}"] .fk-step__body`)!
+    const body = document.querySelector<HTMLElement>(`[data-ty-node-id="${id}"] .ty-step__body`)!
     act(() => body.focus())
     return body
   }
@@ -169,13 +169,13 @@ describe('FlowEditor with research steps', () => {
   it('draws steps with kind, title, summary, run badge and typed chips', async () => {
     const { store, container } = mount()
     act(() => store.actions.setNodeResult('ed', { status: 'success' }))
-    const card = container.querySelector('[data-fk-node-id="ed"] .fk-step')!
+    const card = container.querySelector('[data-ty-node-id="ed"] .ty-step')!
     expect(card).toHaveTextContent('Input')
     expect(card).toHaveTextContent('Frozen edition')
     expect(card).toHaveTextContent('2026-09-20 · 582 records')
     expect(card).toHaveTextContent('ok')
     expect(within(card as HTMLElement).getByRole('button', { name: 'Input: Frozen edition' })).toHaveAccessibleDescription(/Gives: records/)
-    expect(container.querySelector('[data-fk-node-id="flt"] .fk-step__line')).toHaveTextContent('not configured')
+    expect(container.querySelector('[data-ty-node-id="flt"] .ty-step__line')).toHaveTextContent('not configured')
     await expectNoAxeViolations(container, ['nested-interactive'])
   })
 
@@ -211,7 +211,7 @@ describe('FlowEditor with research steps', () => {
 
   it('drops a palette step and links it after the nearest open end that fits', () => {
     const { store } = mount()
-    const canvas = document.querySelector('.fk-editor__canvas')!
+    const canvas = document.querySelector('.ty-editor__canvas')!
     const data = new Map([[STEP_MEDIA_TYPE, JSON.stringify({ stepId: 'citable-chart' })]])
     const dataTransfer = { types: [...data.keys()], getData: (t: string) => data.get(t) ?? '', dropEffect: 'none' }
     fireEvent.dragOver(canvas, { dataTransfer, clientX: 100, clientY: 100 })
@@ -225,12 +225,12 @@ describe('FlowEditor with research steps', () => {
     g.nodes.push(step('num', 'manuscript-number'))
     g.connectors.push(wire('bad', 'cnt', 'num'))
     const { store, container } = mount(g)
-    expect(container.querySelector('[data-fk-node-id="num"] .fk-step')).toHaveAttribute('data-issue', 'true')
-    expect(container.querySelector('[data-fk-node-id="num"] .fk-step__line')).toHaveTextContent('expects number; gets table')
-    expect(container.querySelector('.fk-issue-bar')).toHaveTextContent('1 problem: “Number for the manuscript” expects number and gets table.')
+    expect(container.querySelector('[data-ty-node-id="num"] .ty-step')).toHaveAttribute('data-issue', 'true')
+    expect(container.querySelector('[data-ty-node-id="num"] .ty-step__line')).toHaveTextContent('expects number; gets table')
+    expect(container.querySelector('.ty-issue-bar')).toHaveTextContent('1 problem: “Number for the manuscript” expects number and gets table.')
     await userEvent.click(screen.getByRole('button', { name: 'Replace with Citable table' }))
     expect(store.getState().nodes.find((n) => n.id === 'num')!.data.stepId).toBe('citable-table')
-    expect(container.querySelector('.fk-issue-bar')).toBeNull()
+    expect(container.querySelector('.ty-issue-bar')).toBeNull()
   })
 
   it('sums the flow up with nothing selected and edits a step when one is', async () => {
@@ -276,8 +276,8 @@ describe('FlowEditor with research steps', () => {
     }
     const graph = { nodes: [step('r', 'records', { config: { record_type: 'case' } }), step('p', 'pick', { config: { how: 'inner' } })], connectors: [wire('a', 'r', 'p')] }
     const { store, container } = mount(graph, { steps: catalog, stepProblems: new Map([['r', { record_type: 'no record type case' }]]) })
-    expect(container.querySelector('[data-fk-node-id="p"] .fk-step__line')).toHaveTextContent('configuration incomplete')
-    expect(container.querySelector('[data-fk-node-id="r"] .fk-step__line')).toHaveTextContent('configuration incomplete')
+    expect(container.querySelector('[data-ty-node-id="p"] .ty-step__line')).toHaveTextContent('configuration incomplete')
+    expect(container.querySelector('[data-ty-node-id="r"] .ty-step__line')).toHaveTextContent('configuration incomplete')
     act(() => store.actions.select(['r']))
     expect(screen.getByRole('textbox', { name: /record_type/ })).toHaveAccessibleDescription(/no record type case/)
     act(() => store.actions.select(['p']))
@@ -296,14 +296,14 @@ describe('FlowEditor with research steps', () => {
     await userEvent.type(where, '{{"x": 1}')
     await userEvent.tab()
     expect((store.getState().nodes.find((n) => n.id === 'p')!.data.config as Record<string, unknown>).where).toEqual({ x: 1 })
-    expect(container.querySelector('[data-fk-node-id="p"] .fk-step__line')).not.toHaveTextContent('configuration incomplete')
+    expect(container.querySelector('[data-ty-node-id="p"] .ty-step__line')).not.toHaveTextContent('configuration incomplete')
   })
 
   it('shows the list view from the dock: arrows move, Alt+arrows reorder, A adds, Enter configures', async () => {
     const { store, container } = mount()
     await userEvent.click(screen.getByRole('button', { name: 'Show as list' }))
     const list = screen.getByRole('region', { name: 'Flow steps' })
-    const rows = within(list).getAllByRole('listitem').filter((li) => li.classList.contains('fk-flow-list__row'))
+    const rows = within(list).getAllByRole('listitem').filter((li) => li.classList.contains('ty-flow-list__row'))
     expect(rows.map((r) => r.textContent)).toEqual([expect.stringContaining('Frozen edition'), expect.stringContaining('Filter'), expect.stringContaining('By phase'), expect.stringContaining('Count per phase')])
     const first = within(rows[0]!).getAllByRole('button')[0]!
     act(() => first.focus())
@@ -323,28 +323,28 @@ describe('FlowEditor with research steps', () => {
     const g = flow()
     const store = createFlowEditorStore({ initial: { nodes: g.nodes, connectors: g.connectors } })
     const { unmount } = render(
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <FlowEditor store={store} />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(screen.getByRole('complementary', { name: 'Resumo do fluxo' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Ver como lista' })).toBeInTheDocument()
     expect(document.body).not.toHaveTextContent(/Control flow|Start|End|Branch/)
     unmount()
     render(
-      <FakhirProvider locale="ar">
+      <TympanProvider locale="ar">
         <div dir="rtl">
           <FlowEditor store={store} palette={false} />
         </div>
-      </FakhirProvider>,
+      </TympanProvider>,
     )
-    expect(document.querySelector('.fk-editor')!.closest('[dir="rtl"]')).not.toBeNull()
+    expect(document.querySelector('.ty-editor')!.closest('[dir="rtl"]')).not.toBeNull()
   })
 
   it('keeps its styles logical, with forced colours and reduced motion', () => {
     const css = cssOf('steps/steps.css')
     expect(css).not.toMatch(/(^|[^-])(left|right)\s*:/m)
-    expect(css).toMatch(/\[dir='rtl'\] :is\([^)]*\.fk-shape-flow__arrow/)
+    expect(css).toMatch(/\[dir='rtl'\] :is\([^)]*\.ty-shape-flow__arrow/)
     expect(mediaBlock(css, /\(forced-colors: active\)/)).toMatch(/Highlight/)
     expect(mediaBlock(css, /\(prefers-reduced-motion: reduce\)/)).toMatch(/animation:\s*none/)
   })

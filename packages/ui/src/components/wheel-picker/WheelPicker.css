@@ -1,118 +1,118 @@
 /* WheelPicker (spec: wave-2/wheel-picker.md; design direction §2.5, §2.6, §2.7, §2.10). */
-@layer fakhir.components {
-  .fk-wheel {
-    --fk-wheel-row: var(--fk-control-target);
-    --fk-wheel-rows: 5;
-    --fk-wheel-share: 1;
+@layer tympan.components {
+  .ty-wheel {
+    --ty-wheel-row: var(--ty-control-target);
+    --ty-wheel-rows: 5;
+    --ty-wheel-share: 1;
     display: flex;
-    flex: var(--fk-wheel-share) 1 0;
+    flex: var(--ty-wheel-share) 1 0;
     flex-direction: column;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
     min-inline-size: 0;
   }
-  .fk-wheel__caption {
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+  .ty-wheel__caption {
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
     text-align: center;
   }
-  .fk-wheel__viewport {
+  .ty-wheel__viewport {
     position: relative;
-    block-size: calc(var(--fk-wheel-row) * var(--fk-wheel-rows));
+    block-size: calc(var(--ty-wheel-row) * var(--ty-wheel-rows));
     overflow: hidden;
-    border-radius: var(--fk-radius-card);
+    border-radius: var(--ty-radius-card);
   }
   /* Fade masks at the top and bottom. */
-  .fk-wheel__viewport::before,
-  .fk-wheel__viewport::after {
+  .ty-wheel__viewport::before,
+  .ty-wheel__viewport::after {
     content: '';
     position: absolute;
     inset-inline: 0;
     z-index: 2;
-    block-size: calc(var(--fk-wheel-row) * (var(--fk-wheel-rows) - 1) / 2);
+    block-size: calc(var(--ty-wheel-row) * (var(--ty-wheel-rows) - 1) / 2);
     pointer-events: none;
   }
-  .fk-wheel__viewport::before {
+  .ty-wheel__viewport::before {
     inset-block-start: 0;
-    background: linear-gradient(to bottom, var(--fk-surface-raised-solid), transparent);
+    background: linear-gradient(to bottom, var(--ty-surface-raised-solid), transparent);
   }
-  .fk-wheel__viewport::after {
+  .ty-wheel__viewport::after {
     inset-block-end: 0;
-    background: linear-gradient(to top, var(--fk-surface-raised-solid), transparent);
+    background: linear-gradient(to top, var(--ty-surface-raised-solid), transparent);
   }
-  .fk-wheel__band {
+  .ty-wheel__band {
     position: absolute;
-    inset-inline: var(--fk-space-1);
-    inset-block-start: calc(var(--fk-wheel-row) * (var(--fk-wheel-rows) - 1) / 2);
+    inset-inline: var(--ty-space-1);
+    inset-block-start: calc(var(--ty-wheel-row) * (var(--ty-wheel-rows) - 1) / 2);
     z-index: 0;
-    block-size: var(--fk-wheel-row);
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-accent-soft);
+    block-size: var(--ty-wheel-row);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-accent-soft);
     pointer-events: none;
   }
-  .fk-wheel__list {
+  .ty-wheel__list {
     position: relative;
     z-index: 1;
     box-sizing: border-box;
     block-size: 100%;
     overflow-y: auto;
-    padding-block: calc(var(--fk-wheel-row) * (var(--fk-wheel-rows) - 1) / 2);
+    padding-block: calc(var(--ty-wheel-row) * (var(--ty-wheel-rows) - 1) / 2);
     scroll-snap-type: y mandatory;
     scrollbar-width: none;
     overscroll-behavior: contain;
     outline: none;
     touch-action: pan-y;
   }
-  .fk-wheel__list::-webkit-scrollbar {
+  .ty-wheel__list::-webkit-scrollbar {
     display: none;
   }
-  .fk-wheel__viewport:has(.fk-wheel__list[data-focus-visible]) .fk-wheel__band,
-  .fk-wheel__viewport:has(.fk-wheel__row[data-focus-visible]) .fk-wheel__band {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-wheel__viewport:has(.ty-wheel__list[data-focus-visible]) .ty-wheel__band,
+  .ty-wheel__viewport:has(.ty-wheel__row[data-focus-visible]) .ty-wheel__band {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: -2px;
   }
-  .fk-wheel__row {
+  .ty-wheel__row {
     display: flex;
     align-items: center;
     justify-content: center;
-    block-size: var(--fk-wheel-row);
-    padding-inline: var(--fk-space-2);
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-body);
+    block-size: var(--ty-wheel-row);
+    padding-inline: var(--ty-space-2);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-body);
     font-variant-numeric: tabular-nums;
     scroll-snap-align: center;
     cursor: pointer;
     outline: none;
     transition:
-      opacity var(--fk-dur-quick) var(--fk-ease),
-      transform var(--fk-dur-quick) var(--fk-ease);
+      opacity var(--ty-dur-quick) var(--ty-ease),
+      transform var(--ty-dur-quick) var(--ty-ease);
     user-select: none;
   }
-  .fk-wheel__row[data-distance='1'] {
+  .ty-wheel__row[data-distance='1'] {
     opacity: 0.8;
     transform: scale(0.94);
   }
-  .fk-wheel__row[data-distance='2'],
-  .fk-wheel__row[data-distance='3'] {
+  .ty-wheel__row[data-distance='2'],
+  .ty-wheel__row[data-distance='3'] {
     opacity: 0.55;
     transform: scale(0.88);
   }
-  .fk-wheel__row[data-selected] {
-    color: var(--fk-ink);
-    font-weight: var(--fk-font-weight-semibold);
+  .ty-wheel__row[data-selected] {
+    color: var(--ty-ink);
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-wheel[data-disabled] {
+  .ty-wheel[data-disabled] {
     opacity: 0.55;
   }
 
-  .fk-wheel-group {
+  .ty-wheel-group {
     display: flex;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-wheel__row,
-    .fk-wheel__row[data-distance] {
+    .ty-wheel__row,
+    .ty-wheel__row[data-distance] {
       transform: none;
       opacity: 1;
       transition: none;
@@ -120,22 +120,22 @@
   }
 
   @media (prefers-reduced-transparency: reduce) {
-    .fk-wheel__viewport::before,
-    .fk-wheel__viewport::after {
-      background: var(--fk-surface-raised-solid);
+    .ty-wheel__viewport::before,
+    .ty-wheel__viewport::after {
+      background: var(--ty-surface-raised-solid);
     }
   }
 
   @media (forced-colors: active) {
-    .fk-wheel__band {
+    .ty-wheel__band {
       border: 2px solid Highlight;
       background: Canvas;
     }
-    .fk-wheel__row[data-selected] {
+    .ty-wheel__row[data-selected] {
       color: CanvasText;
     }
-    .fk-wheel__viewport::before,
-    .fk-wheel__viewport::after {
+    .ty-wheel__viewport::before,
+    .ty-wheel__viewport::after {
       background: Canvas;
       opacity: 0.6;
     }

@@ -77,22 +77,22 @@ function TileFace({ tile, person, ready }: Pick<TileViewProps, 'tile' | 'person'
   if (tile.id === 'profile' && person !== undefined) {
     if (!ready) {
       return (
-        <span className="fk-launcher__face" data-placeholder="true">
-          <span className="fk-launcher__icon fk-launcher__icon--ghost" aria-hidden="true" />
-          <span className="fk-visually-hidden">{m.profileLoading}</span>
+        <span className="ty-launcher__face" data-placeholder="true">
+          <span className="ty-launcher__icon ty-launcher__icon--ghost" aria-hidden="true" />
+          <span className="ty-visually-hidden">{m.profileLoading}</span>
         </span>
       )
     }
     const initial = (person.name ?? person.email ?? '?').trim().charAt(0).toLocaleUpperCase()
     return (
-      <span className="fk-launcher__face">
+      <span className="ty-launcher__face">
         <Avatar src={person.pictureUrl} fallbackText={initial} decorative size="large" />
-        {person.roleLabel ? <span className="fk-launcher__role">{person.roleLabel}</span> : null}
+        {person.roleLabel ? <span className="ty-launcher__role">{person.roleLabel}</span> : null}
       </span>
     )
   }
   return (
-    <span className="fk-launcher__icon" aria-hidden="true">
+    <span className="ty-launcher__icon" aria-hidden="true">
       {tile.icon}
     </span>
   )
@@ -112,12 +112,12 @@ function Tile(props: TileViewProps) {
   const body = (
     <>
       <TileFace tile={tile} person={props.person} ready={props.ready} />
-      <span className="fk-launcher__text" aria-hidden="true">
-        <span className="fk-launcher__name">{tile.label}</span>
-        {tile.description ? <span className="fk-launcher__description">{tile.description}</span> : null}
+      <span className="ty-launcher__text" aria-hidden="true">
+        <span className="ty-launcher__name">{tile.label}</span>
+        {tile.description ? <span className="ty-launcher__description">{tile.description}</span> : null}
       </span>
       {tile.count || tile.alertCount ? (
-        <span className="fk-launcher__badge" data-alert={tile.alertCount ? true : undefined} aria-hidden="true">
+        <span className="ty-launcher__badge" data-alert={tile.alertCount ? true : undefined} aria-hidden="true">
           {cappedCount((tile.alertCount || tile.count) ?? 0, undefined, locale)}
         </span>
       ) : null}
@@ -128,7 +128,7 @@ function Tile(props: TileViewProps) {
   let control: ReactNode
   if (props.kind === 'action') {
     control = (
-      <AriaButton className="fk-launcher__tile" aria-label={name} onPress={() => (tile.onPress ? tile.onPress() : props.onOpen?.(tile))} onHoverStart={hover} onFocus={hover}>
+      <AriaButton className="ty-launcher__tile" aria-label={name} onPress={() => (tile.onPress ? tile.onPress() : props.onOpen?.(tile))} onHoverStart={hover} onFocus={hover}>
         {body}
       </AriaButton>
     )
@@ -141,23 +141,23 @@ function Tile(props: TileViewProps) {
       else props.onOpen?.(tile)
     }
     control = (
-      <a className="fk-launcher__tile" href={tile.href} aria-label={name} onClick={hand} onMouseEnter={hover} onFocus={hover}>
+      <a className="ty-launcher__tile" href={tile.href} aria-label={name} onClick={hand} onMouseEnter={hover} onFocus={hover}>
         {body}
       </a>
     )
   } else {
     control = (
-      <AriaLink className="fk-launcher__tile" href={tile.href} aria-label={name} onHoverStart={hover} onFocus={hover}>
+      <AriaLink className="ty-launcher__tile" href={tile.href} aria-label={name} onHoverStart={hover} onFocus={hover}>
         {body}
       </AriaLink>
     )
   }
 
   return (
-    <li className="fk-launcher__cell" {...(shortcuts.length ? request.props : {})}>
+    <li className="ty-launcher__cell" {...(shortcuts.length ? request.props : {})}>
       {control}
       {shortcuts.length ? (
-        <div className="fk-launcher__more">
+        <div className="ty-launcher__more">
           <ActionMenu
             label={m.shortcuts(tile.label)}
             open={menuOpen}
@@ -180,8 +180,8 @@ export function AppLauncherGrid(props: AppLauncherGridProps) {
   const actions = props.actions ?? []
   const shared = { person: props.person, ready, onOpen: props.onOpen, onPrefetch: props.onPrefetch }
   return (
-    <div className={cx('fk-launcher', props.className)}>
-      <ul className="fk-launcher__grid">
+    <div className={cx('ty-launcher', props.className)}>
+      <ul className="ty-launcher__grid">
         {pages.map((t) => (
           <Tile key={t.id} tile={t} kind="page" {...shared} />
         ))}
@@ -189,7 +189,7 @@ export function AppLauncherGrid(props: AppLauncherGridProps) {
       {actions.length ? (
         <>
           <Separator caption={props.actionsLabel ?? m.actions} />
-          <ul className="fk-launcher__grid" data-group="actions">
+          <ul className="ty-launcher__grid" data-group="actions">
             {actions.map((t) => (
               <Tile key={t.id} tile={t} kind="action" {...shared} />
             ))}

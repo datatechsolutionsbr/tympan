@@ -4,7 +4,7 @@
 
 import { ChevronDown, SlidersHorizontal } from 'lucide-react'
 import { Button as AriaButton, Dialog, DialogTrigger, Popover as AriaPopover } from 'react-aria-components'
-import { Button, Checkbox, CheckboxGroup, Popover, Switch, TextField } from '@fakhir/ui'
+import { Button, Checkbox, CheckboxGroup, Popover, Switch, TextField } from '@datatechsolutions/tympan'
 import type { ReactNode } from 'react'
 import { fill } from '../internal/labels'
 import type { ProvenanceLabels } from './labels'
@@ -24,7 +24,7 @@ export interface ProvenanceFiltersProps {
 /** The filter fields without the popover (embeddable in a drawer). */
 export function ProvenanceFilterFields({ value, onChange, labels: l, kinds = PROV_KINDS, canShowActors = false }: ProvenanceFiltersProps) {
   return (
-    <div className="fk-prov-filters">
+    <div className="ty-prov-filters">
       <CheckboxGroup label={l.filterKinds} value={value.kinds} onChange={(v) => onChange({ ...value, kinds: v as ProvKind[] })} orientation="vertical">
         {kinds.map((k) => (
           <Checkbox key={k} value={k} label={l.kinds[k]} />
@@ -59,7 +59,7 @@ export function ProvenanceFilters(props: ProvenanceFiltersProps) {
       placement="bottom"
       align="end"
       trigger={
-        <Button variant="secondary" leadingIcon={<SlidersHorizontal />} className="fk-prov-filters__trigger">
+        <Button variant="secondary" leadingIcon={<SlidersHorizontal />} className="ty-prov-filters__trigger">
           {trigger}
         </Button>
       }
@@ -121,13 +121,13 @@ export function FilterChips({ value, onChange, labels: l, locale, kinds = PROV_K
     <>
       {chips.map((c) => (
         <DialogTrigger key={c.key}>
-          <AriaButton className="fk-prov-chip" data-active={c.active ? 'true' : undefined}>
+          <AriaButton className="ty-prov-chip" data-active={c.active ? 'true' : undefined}>
             {c.text}
-            <ChevronDown className="fk-prov-chip__chevron" aria-hidden="true" />
+            <ChevronDown className="ty-prov-chip__chevron" aria-hidden="true" />
           </AriaButton>
-          <AriaPopover className="fk-prov-chip-pop" placement="bottom start" offset={6}>
-            <Dialog className="fk-prov-chip-pop__dialog" aria-label={c.text}>
-              <div className="fk-prov-filters">{c.body}</div>
+          <AriaPopover className="ty-prov-chip-pop" placement="bottom start" offset={6}>
+            <Dialog className="ty-prov-chip-pop__dialog" aria-label={c.text}>
+              <div className="ty-prov-filters">{c.body}</div>
             </Dialog>
           </AriaPopover>
         </DialogTrigger>

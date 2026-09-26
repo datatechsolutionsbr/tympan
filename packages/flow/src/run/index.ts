@@ -1,4 +1,4 @@
-// @fakhir/flow: run group barrel.
+// @datatechsolutions/tympan-flow: run group barrel.
 export * from './types'
 export * from './lineage'
 export * from './execution'

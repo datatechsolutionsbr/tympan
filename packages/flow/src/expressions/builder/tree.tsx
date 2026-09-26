@@ -3,7 +3,7 @@
 // Operand kinds and slot kinds are both driven by descriptor tables.
 
 import { useMemo, useState, type ReactNode } from 'react'
-import { InlineNotice, ListboxSelect, SegmentedControl } from '@fakhir/ui'
+import { InlineNotice, ListboxSelect, SegmentedControl } from '@datatechsolutions/tympan'
 import { fill } from '../../internal/labels'
 import type { ExpressionBuilderLabels } from '../labels'
 import { EXPRESSION_FAMILIES, entryIdOf, findOperation, inferSlots, isLiteral, isOperation, isReference, seedOperation, type ExpressionNode, type OperandSlotSpec, type OperationNode, type PickerEntry } from '../model'
@@ -35,7 +35,7 @@ const OPERAND_KINDS: ReadonlyArray<{
     matches: isOperation,
     starter: (e) => (e.palette[0] ? seedOperation(e.palette[0]) : { operation: '' }),
     editor: (e) => (
-      <div className="fk-expr__nested" data-depth={e.depth}>
+      <div className="ty-expr__nested" data-depth={e.depth}>
         <OperationEditor node={e.value as OperationNode} onNode={e.set} depth={e.depth} refs={e.refs} palette={e.palette} />
       </div>
     ),
@@ -74,17 +74,17 @@ export function OperandEditor({ slotKey, value, onValue, depth, refs, hint, pale
   const env: OperandEnv = { value, set: onValue, depth, refs, palette: palette ?? innerPalette }
   const current = kindOf(value)
   return (
-    <div className="fk-expr__slot" role="group" aria-label={groupName(words, slotKey, depth)} data-depth={depth}>
+    <div className="ty-expr__slot" role="group" aria-label={groupName(words, slotKey, depth)} data-depth={depth}>
       <SlotHeading
         slotKey={slotKey}
         trailing={
-          <span className="fk-expr__level" aria-hidden="true">
+          <span className="ty-expr__level" aria-hidden="true">
             {depth + 1}
           </span>
         }
       />
-      {hint ? <p className="fk-expr__hint">{hint}</p> : null}
-      <div ref={switchRef} className="fk-expr__kind">
+      {hint ? <p className="ty-expr__hint">{hint}</p> : null}
+      <div ref={switchRef} className="ty-expr__kind">
         <SegmentedControl
           label={words.kindSwitch}
           size="compact"
@@ -166,7 +166,7 @@ export function OperationEditor({ node, onNode, depth, refs, palette }: Operatio
   const slots = node ? (definition ? definition.operands : inferSlots(node)).filter((s) => s.key !== hiddenSlot) : []
   const unknown = !!node && !!catalog && !definition && node.operation !== ''
   return (
-    <div className="fk-expr__operation">
+    <div className="ty-expr__operation">
       <OperationPicker palette={palette} pickedId={pickedId} onPick={(entry) => onNode(seedOperation(entry))} />
       {unknown ? (
         <InlineNotice tone="warning" urgency="none">
@@ -188,14 +188,14 @@ function OperationPicker({ palette, pickedId, onPick }: { palette: PickerEntry[]
   const [browsed, setBrowsed] = useState(pickedFamily ?? families[0])
   if (catalogPending && palette.length === 0) {
     return (
-      <p className="fk-expr__loading" role="status">
+      <p className="ty-expr__loading" role="status">
         {words.loadingOperations}
       </p>
     )
   }
   const family = pickedFamily ?? browsed ?? families[0]
   return (
-    <div className="fk-expr__picker">
+    <div className="ty-expr__picker">
       <ListboxSelect
         label={words.family}
         value={family ?? null}

@@ -125,7 +125,7 @@ export function RegionMap<T>(props: RegionMapProps<T>) {
     const chosen = props.getRegionTone?.(code)
     if (chosen) return resolveTint(chosen).rgb
     const i = rank.get(code)
-    return i === undefined ? 'var(--fk-surface-sunken)' : `var(--fk-categorical-${(i % 8) + 1})`
+    return i === undefined ? 'var(--ty-surface-sunken)' : `var(--ty-categorical-${(i % 8) + 1})`
   }
   const active = (code: string) => props.isRegionActive?.(code) ?? false
 
@@ -244,13 +244,13 @@ export function RegionMap<T>(props: RegionMapProps<T>) {
   let canvas: ReactNode
   if (load.phase === 'loading') {
     canvas = (
-      <div className="fk-region-map__placeholder" role="status" aria-label={copy.loading}>
+      <div className="ty-region-map__placeholder" role="status" aria-label={copy.loading}>
         <Skeleton shape="rect" />
       </div>
     )
   } else if (load.phase === 'error' || !geo) {
     canvas = (
-      <div className="fk-region-map__placeholder">
+      <div className="ty-region-map__placeholder">
         <InlineNotice tone="danger">{copy.loadError}</InlineNotice>
       </div>
     )
@@ -258,7 +258,7 @@ export function RegionMap<T>(props: RegionMapProps<T>) {
     canvas = (
       <svg
         ref={svgRef}
-        className="fk-region-map__svg"
+        className="ty-region-map__svg"
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
         role="group"
         aria-label={labels.map}
@@ -268,12 +268,12 @@ export function RegionMap<T>(props: RegionMapProps<T>) {
         onPointerCancel={onPointerEnd}
       >
         <g transform={transform}>
-          <g className="fk-region-map__shapes" aria-hidden="true">
+          <g className="ty-region-map__shapes" aria-hidden="true">
             {geo.shapes.map((s) => (
               <path
                 key={s.code}
                 d={s.d}
-                className="fk-region-map__shape"
+                className="ty-region-map__shape"
                 style={{ fill: toneOf(s.code) }}
                 data-has-items={rank.has(s.code) || undefined}
                 data-active={active(s.code) || undefined}
@@ -284,7 +284,7 @@ export function RegionMap<T>(props: RegionMapProps<T>) {
               />
             ))}
           </g>
-          <g className="fk-region-map__markers">
+          <g className="ty-region-map__markers">
             {markers.map(({ group, x, y }, i) => {
               const r = state.markerRadius(group.count)
               const pressed = active(group.code)
@@ -294,7 +294,7 @@ export function RegionMap<T>(props: RegionMapProps<T>) {
                   ref={(el) => {
                     markerRefs.current[i] = el
                   }}
-                  className="fk-region-map__marker"
+                  className="ty-region-map__marker"
                   role="button"
                   tabIndex={i === safeCursor ? 0 : -1}
                   aria-pressed={props.onRegionToggle ? pressed : undefined}
@@ -311,9 +311,9 @@ export function RegionMap<T>(props: RegionMapProps<T>) {
                   onPointerEnter={() => state.setHovered(group.code)}
                   onPointerLeave={() => state.setHovered(null)}
                 >
-                  <circle className="fk-region-map__hit" r={Math.max(r, 22 / state.zoom)} />
-                  <circle className="fk-region-map__dot" r={r} style={{ color: toneOf(group.code) }} />
-                  <text className="fk-region-map__count" textAnchor="middle" dominantBaseline="central" style={{ fontSize: `${12 / state.zoom}px` }}>
+                  <circle className="ty-region-map__hit" r={Math.max(r, 22 / state.zoom)} />
+                  <circle className="ty-region-map__dot" r={r} style={{ color: toneOf(group.code) }} />
+                  <text className="ty-region-map__count" textAnchor="middle" dominantBaseline="central" style={{ fontSize: `${12 / state.zoom}px` }}>
                     {figures.format(group.count)}
                   </text>
                 </g>
@@ -329,61 +329,61 @@ export function RegionMap<T>(props: RegionMapProps<T>) {
   const panel = hoverCode && props.renderRegionDetail ? props.renderRegionDetail(hoverCode, (detailGroup ?? state.groups.find((g) => g.code === hoverCode))?.items ?? []) : null
 
   return (
-    <div className={cx('fk-region-map', props.className)} data-phase={load.phase}>
+    <div className={cx('ty-region-map', props.className)} data-phase={load.phase}>
       {props.formatCounter ? (
-        <p className="fk-region-map__counter">{props.formatCounter({ items: state.total, regions: state.groups.length, active: activeCount })}</p>
+        <p className="ty-region-map__counter">{props.formatCounter({ items: state.total, regions: state.groups.length, active: activeCount })}</p>
       ) : null}
-      <div className="fk-region-map__stage">
+      <div className="ty-region-map__stage">
         {canvas}
-        <div className="fk-region-map__zoom">
+        <div className="ty-region-map__zoom">
           <Button ref={zoomInRef} iconOnly accessibleLabel={labels.zoomIn} leadingIcon={<Plus />} disabled={!state.canZoomIn} onPress={state.zoomIn} />
           <Button iconOnly accessibleLabel={labels.zoomOut} leadingIcon={<Minus />} disabled={!state.canZoomOut} onPress={state.zoomOut} />
-          <output className="fk-region-map__zoom-value" aria-live="polite">
+          <output className="ty-region-map__zoom-value" aria-live="polite">
             {copy.zoomValue(Math.round(state.zoom * 100))}
           </output>
         </div>
         {panel ? (
-          <div className="fk-region-map__detail" id={`${uid}-detail`}>
+          <div className="ty-region-map__detail" id={`${uid}-detail`}>
             {panel}
           </div>
         ) : null}
       </div>
 
       {legend.length ? (
-        <div className="fk-region-map__legend">
-          <p className="fk-region-map__legend-title" id={`${uid}-legend`}>
+        <div className="ty-region-map__legend">
+          <p className="ty-region-map__legend-title" id={`${uid}-legend`}>
             {labels.legendTitle}
           </p>
           <ul aria-labelledby={`${uid}-legend`}>
             {legend.map((g) => {
               const flag = props.getRegionFlag?.(g.code)
               return (
-                <li key={g.code} className="fk-region-map__legend-item">
+                <li key={g.code} className="ty-region-map__legend-item">
                   {flag ? (
-                    <img className="fk-region-map__flag" src={flag} alt={nameOf(g.code)} />
+                    <img className="ty-region-map__flag" src={flag} alt={nameOf(g.code)} />
                   ) : (
-                    <span className="fk-region-map__swatch" style={{ background: toneOf(g.code) }} aria-hidden="true" />
+                    <span className="ty-region-map__swatch" style={{ background: toneOf(g.code) }} aria-hidden="true" />
                   )}
                   <span>{flag ? null : nameOf(g.code)}</span>
-                  <span className="fk-region-map__legend-count">{figures.format(g.count)}</span>
+                  <span className="ty-region-map__legend-count">{figures.format(g.count)}</span>
                 </li>
               )
             })}
-            {hidden ? <li className="fk-region-map__legend-more">{labels.more(hidden)}</li> : null}
+            {hidden ? <li className="ty-region-map__legend-more">{labels.more(hidden)}</li> : null}
           </ul>
         </div>
       ) : null}
 
-      <ul className="fk-region-map__list" aria-label={copy.regionList}>
+      <ul className="ty-region-map__list" aria-label={copy.regionList}>
         {state.groups.map((g) => (
-          <li key={g.code} className="fk-region-map__list-item">
+          <li key={g.code} className="ty-region-map__list-item">
             {props.onRegionToggle ? (
               <Button
                 variant="quiet"
                 size="compact"
                 aria-pressed={active(g.code)}
                 onPress={() => props.onRegionToggle?.(g.code)}
-                className="fk-region-map__list-toggle"
+                className="ty-region-map__list-toggle"
               >
                 {regionLabel(g)}
               </Button>

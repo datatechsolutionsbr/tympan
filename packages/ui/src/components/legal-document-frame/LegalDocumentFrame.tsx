@@ -73,10 +73,10 @@ function useCurrentSection(entries: ContentsEntry[]): string | undefined {
 
 function ContentsList({ entries, current, onFollow }: { entries: ContentsEntry[]; current?: string; onFollow: (id: string) => (e: MouseEvent) => void }) {
   return (
-    <ol className="fk-legal__contents-list">
+    <ol className="ty-legal__contents-list">
       {entries.map((e) => (
         <li key={e.id}>
-          <a className="fk-legal__contents-link" href={`#${e.id}`} aria-current={e.id === current ? 'location' : undefined} onClick={onFollow(e.id)}>
+          <a className="ty-legal__contents-link" href={`#${e.id}`} aria-current={e.id === current ? 'location' : undefined} onClick={onFollow(e.id)}>
             {e.text}
           </a>
         </li>
@@ -102,7 +102,7 @@ export function LegalDocumentFrame({ title, updatedAt, children, topBar, footer,
   const label = contentsLabel ?? copy.contents
   const wide = useMinWidth(breakpoints.lg)
   const article = useRef<HTMLElement>(null)
-  const navTitleId = `fk-legal-nav-${useId().replace(/:/g, '')}`
+  const navTitleId = `ty-legal-nav-${useId().replace(/:/g, '')}`
   const [entries, setEntries] = useState<ContentsEntry[]>([])
   const current = useCurrentSection(entries)
 
@@ -123,22 +123,22 @@ export function LegalDocumentFrame({ title, updatedAt, children, topBar, footer,
   let contents: ReactNode = null
   if (entries.length > 0) {
     contents = wide ? (
-      <nav className="fk-legal__contents" aria-labelledby={navTitleId} data-placement="rail">
-        <p id={navTitleId} className="fk-legal__contents-title">
+      <nav className="ty-legal__contents" aria-labelledby={navTitleId} data-placement="rail">
+        <p id={navTitleId} className="ty-legal__contents-title">
           {label}
         </p>
         <ContentsList entries={entries} current={current} onFollow={follow} />
       </nav>
     ) : (
-      <nav className="fk-legal__contents" aria-label={label} data-placement="inline">
-        <Disclosure className="fk-legal__disclosure">
-          <Heading level={2} className="fk-legal__disclosure-heading">
-            <Button slot="trigger" className="fk-legal__disclosure-trigger">
+      <nav className="ty-legal__contents" aria-label={label} data-placement="inline">
+        <Disclosure className="ty-legal__disclosure">
+          <Heading level={2} className="ty-legal__disclosure-heading">
+            <Button slot="trigger" className="ty-legal__disclosure-trigger">
               {label}
-              <ChevronDown className="fk-legal__chevron" aria-hidden="true" focusable="false" />
+              <ChevronDown className="ty-legal__chevron" aria-hidden="true" focusable="false" />
             </Button>
           </Heading>
-          <DisclosurePanel className="fk-legal__disclosure-panel">
+          <DisclosurePanel className="ty-legal__disclosure-panel">
             <ContentsList entries={entries} current={current} onFollow={follow} />
           </DisclosurePanel>
         </Disclosure>
@@ -147,21 +147,21 @@ export function LegalDocumentFrame({ title, updatedAt, children, topBar, footer,
   }
 
   return (
-    <div className={className ? `fk-legal ${className}` : 'fk-legal'} data-layout={wide ? 'columns' : 'single'}>
-      {topBar ? <header className="fk-legal__top">{topBar}</header> : null}
-      <main className="fk-legal__main">
-        <div className="fk-legal__head">
-          <h1 className="fk-legal__title">{title}</h1>
-          <p className="fk-legal__updated">{updatedAt}</p>
+    <div className={className ? `ty-legal ${className}` : 'ty-legal'} data-layout={wide ? 'columns' : 'single'}>
+      {topBar ? <header className="ty-legal__top">{topBar}</header> : null}
+      <main className="ty-legal__main">
+        <div className="ty-legal__head">
+          <h1 className="ty-legal__title">{title}</h1>
+          <p className="ty-legal__updated">{updatedAt}</p>
         </div>
-        <div className="fk-legal__body">
+        <div className="ty-legal__body">
           {contents}
-          <article ref={article} className="fk-legal__prose">
+          <article ref={article} className="ty-legal__prose">
             {children}
           </article>
         </div>
       </main>
-      {footer ? <footer className="fk-legal__footer">{footer}</footer> : null}
+      {footer ? <footer className="ty-legal__footer">{footer}</footer> : null}
     </div>
   )
 }

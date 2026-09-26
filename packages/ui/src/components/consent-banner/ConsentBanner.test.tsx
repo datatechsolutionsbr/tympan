@@ -5,7 +5,7 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { ConsentBanner } from './ConsentBanner'
 
-const KEY = 'fk-consent-test'
+const KEY = 'ty-consent-test'
 
 describe('ConsentBanner', () => {
   beforeEach(() => window.localStorage.removeItem(KEY))

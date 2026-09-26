@@ -20,7 +20,7 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react'
-import { Button, Drawer, useMediaQuery } from '@fakhir/ui'
+import { Button, Drawer, useMediaQuery } from '@datatechsolutions/tympan'
 import { Plus } from 'lucide-react'
 import { nodeKindCatalog } from '../catalog/kindCatalog'
 import { useRenderCatalog } from '../catalog/RenderCatalog'
@@ -602,7 +602,7 @@ function EditorBody(props: FlowEditorProps & { reference: FlowReferenceData }) {
   const addFromDock = () => {
     const chosen = store.getState().nodes.find((n) => n.selected)
     const dockButton = rootRef.current?.querySelector<HTMLElement>('[data-tool="add-step"]') ?? null
-    if (chosen && DRAWN(chosen)) openAfter(chosen.id, rootRef.current?.querySelector<HTMLElement>(`[data-fk-add-after="${chosen.id}"]`) ?? dockButton)
+    if (chosen && DRAWN(chosen)) openAfter(chosen.id, rootRef.current?.querySelector<HTMLElement>(`[data-ty-add-after="${chosen.id}"]`) ?? dockButton)
     else openLoose(dockButton)
   }
 
@@ -714,7 +714,7 @@ function EditorBody(props: FlowEditorProps & { reference: FlowReferenceData }) {
   }, [store, actions])
 
   const leave = useCallback(() => {
-    const tools = rootRef.current?.querySelector<HTMLElement>('[data-fk-canvas-exit] button, [data-fk-canvas-exit] [role="button"]')
+    const tools = rootRef.current?.querySelector<HTMLElement>('[data-ty-canvas-exit] button, [data-ty-canvas-exit] [role="button"]')
     if (tools) tools.focus()
     else focusAfter(canvasRef.current)
   }, [])
@@ -770,16 +770,16 @@ function EditorBody(props: FlowEditorProps & { reference: FlowReferenceData }) {
       actions.openContextMenu({ kind: selectedCount > 1 ? 'selection' : 'node', position: { x: r.left + 8, y: r.bottom }, targetId: id })
       return
     }
-    if (plainA(e) && singleKeyShortcuts && !locked && target.hasAttribute('data-fk-node-focus')) {
+    if (plainA(e) && singleKeyShortcuts && !locked && target.hasAttribute('data-ty-node-focus')) {
       e.preventDefault()
       e.stopPropagation()
-      openAfter(id, rootRef.current?.querySelector<HTMLElement>(`[data-fk-add-after="${id}"]`) ?? target)
+      openAfter(id, rootRef.current?.querySelector<HTMLElement>(`[data-ty-add-after="${id}"]`) ?? target)
       return
     }
     const steps: Record<string, [number, number]> = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }
     const step = steps[e.key]
     if (!step || locked || e.metaKey || e.ctrlKey || e.altKey) return
-    if (!target.hasAttribute('data-fk-node-focus')) return
+    if (!target.hasAttribute('data-ty-node-focus')) return
     e.preventDefault()
     e.stopPropagation()
     const amount = e.shiftKey ? NUDGE * 4 : NUDGE
@@ -859,10 +859,10 @@ function EditorBody(props: FlowEditorProps & { reference: FlowReferenceData }) {
     const Card = componentForKind(node.kind, kinds)
     return (
       <div
-        className="fk-editor__node"
+        className="ty-editor__node"
         onFocus={(e) => {
           // Keyboard focus selects the node (unless it is already in the selection).
-          if (e.target.hasAttribute('data-fk-node-focus') && !node.selected) actions.select([node.id])
+          if (e.target.hasAttribute('data-ty-node-focus') && !node.selected) actions.select([node.id])
         }}
         // Capture phase: React Aria buttons inside cards stop key propagation.
         onKeyDownCapture={(e) => onNodeKeyDown(node.id, e)}
@@ -929,16 +929,16 @@ function EditorBody(props: FlowEditorProps & { reference: FlowReferenceData }) {
     <StepsProvider catalog={props.steps ?? researchStepCatalog} aiAllowed={aiAllowed} issues={issuesByNode} {...(props.stepProblems ? { problems: props.stepProblems } : {})} addAfter={openAfter}>
       <div
         ref={rootRef}
-        className={['fk-editor', props.className].filter(Boolean).join(' ')}
+        className={['ty-editor', props.className].filter(Boolean).join(' ')}
         data-view={listView ? 'list' : 'canvas'}
         data-side={props.sidePanel === false ? 'none' : 'shown'}
         data-palette={props.palette === false || (listView && wide) ? 'none' : 'shown'}
         data-locked={locked ? 'true' : 'false'}
       >
-        {props.palette !== false && wide && !listView ? <aside className="fk-editor__palette" aria-label={l.palette}>{paletteBody}</aside> : null}
+        {props.palette !== false && wide && !listView ? <aside className="ty-editor__palette" aria-label={l.palette}>{paletteBody}</aside> : null}
         {props.palette !== false && !wide ? (
           <>
-            <Button className="fk-editor__palette-open" variant="secondary" leadingIcon={<Plus />} onPress={() => setPaletteOpen(true)}>
+            <Button className="ty-editor__palette-open" variant="secondary" leadingIcon={<Plus />} onPress={() => setPaletteOpen(true)}>
               {l.openPalette}
             </Button>
             <Drawer open={paletteOpen} onOpenChange={setPaletteOpen} title={l.palette} placement="bottom">
@@ -948,10 +948,10 @@ function EditorBody(props: FlowEditorProps & { reference: FlowReferenceData }) {
         ) : null}
         {listView ? (
           <div
-            className="fk-editor__canvas"
+            className="ty-editor__canvas"
             data-view="list"
             onKeyDown={(e) => {
-              if (plainA(e) && !locked && !isTyping(e.target as HTMLElement) && !(e.target as HTMLElement).closest('.fk-flow-step-list__main')) {
+              if (plainA(e) && !locked && !isTyping(e.target as HTMLElement) && !(e.target as HTMLElement).closest('.ty-flow-step-list__main')) {
                 e.preventDefault()
                 addFromDock()
               }
@@ -968,18 +968,18 @@ function EditorBody(props: FlowEditorProps & { reference: FlowReferenceData }) {
               onAddAfter={(id, trigger) => openAfter(id, trigger)}
               onActiveChange={(id) => actions.select([id])}
             />
-            <div className="fk-editor__list-dock">{tools}</div>
+            <div className="ty-editor__list-dock">{tools}</div>
           </div>
         ) : (
           <div
             ref={canvasRef}
-            className="fk-editor__canvas"
+            className="ty-editor__canvas"
             onDragOver={onDragOver}
             onDragLeave={onDragLeave}
             onDrop={onDrop}
             onKeyDown={(e) => {
               const t = e.target as HTMLElement
-              if (plainA(e) && singleKeyShortcuts && !locked && !isTyping(t) && !t.closest('[data-fk-node-id]')) {
+              if (plainA(e) && singleKeyShortcuts && !locked && !isTyping(t) && !t.closest('[data-ty-node-id]')) {
                 e.preventDefault()
                 addFromDock()
               }
@@ -1087,14 +1087,14 @@ function EditorBody(props: FlowEditorProps & { reference: FlowReferenceData }) {
               {tools}
             </CanvasSurface>
             {dropAt && dragName ? (
-              <div className="fk-editor__drop" style={{ insetInlineStart: dropAt.start, insetBlockStart: dropAt.top }} aria-hidden="true">
+              <div className="ty-editor__drop" style={{ insetInlineStart: dropAt.start, insetBlockStart: dropAt.top }} aria-hidden="true">
                 {fill(sw.dropHere, { name: dragName }, locale)}
               </div>
             ) : null}
           </div>
         )}
         {props.sidePanel !== false ? (
-          <aside ref={sideRef} className="fk-editor__side" aria-label={single ? nameOf(single.id) : sw.summaryTitle}>
+          <aside ref={sideRef} className="ty-editor__side" aria-label={single ? nameOf(single.id) : sw.summaryTitle}>
             <FlowSidePanel
               nodes={nodes}
               selected={single}

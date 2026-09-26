@@ -1,8 +1,24 @@
 {
-  "name": "@fakhir/ui",
+  "name": "@datatechsolutions/tympan",
   "version": "0.1.0",
-  "description": "Fakhir design system: accessible React components (React 18.3 or 19) on React Aria Components, styled with --fk-* CSS custom properties in @layer fakhir. No Tailwind.",
+  "description": "Tympan: accessible React components (React 18.3 or 19) on React Aria Components, styled with --ty-* CSS custom properties in @layer tympan.",
   "license": "FSL-1.1-ALv2",
+  "author": "Natalia Mesquita",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/datatechsolutionsbr/tympan.git",
+    "directory": "packages/ui"
+  },
+  "keywords": [
+    "react",
+    "design-system",
+    "accessibility",
+    "react-aria",
+    "design-tokens",
+    "css-custom-properties",
+    "rtl",
+    "i18n"
+  ],
   "private": true,
   "type": "module",
   "sideEffects": [
@@ -13,7 +29,7 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "fakhir-source": "./src/index.ts",
+      "tympan-source": "./src/index.ts",
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
@@ -26,22 +42,22 @@
     "THIRD_PARTY_NOTICES.md"
   ],
   "scripts": {
-    "prebuild": "npm run build -w @fakhir/tokens",
+    "prebuild": "npm run build -w @datatechsolutions/tympan-tokens",
     "build": "tsdown && node scripts/build-css.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest",
-    "gallery": "npm run build -w @fakhir/tokens && vite --config gallery/vite.config.ts",
-    "gallery:build": "npm run build -w @fakhir/tokens && vite build --config gallery/vite.config.ts",
-    "pretest": "npm run build -w @fakhir/tokens",
-    "pretypecheck": "npm run build -w @fakhir/tokens"
+    "gallery": "npm run build -w @datatechsolutions/tympan-tokens && vite --config gallery/vite.config.ts",
+    "gallery:build": "npm run build -w @datatechsolutions/tympan-tokens && vite build --config gallery/vite.config.ts",
+    "pretest": "npm run build -w @datatechsolutions/tympan-tokens",
+    "pretypecheck": "npm run build -w @datatechsolutions/tympan-tokens"
   },
   "peerDependencies": {
     "react": "^18.3.0 || ^19.0.0",
     "react-dom": "^18.3.0 || ^19.0.0"
   },
   "dependencies": {
-    "@fakhir/tokens": "0.1.0",
+    "@datatechsolutions/tympan-tokens": "0.1.0",
     "@internationalized/date": "^3.12.4",
     "d3-geo": "^3.1.1",
     "lucide-react": "^1.48.0",

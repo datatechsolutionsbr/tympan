@@ -2,7 +2,7 @@
 // is chosen from the catalog entry's form kind; each form owns its footer.
 
 import { useEffect, useRef, useSyncExternalStore, type ComponentType, type ReactNode } from 'react'
-import { InlineNotice } from '@fakhir/ui'
+import { InlineNotice } from '@datatechsolutions/tympan'
 import { nodeKindCatalog, type FormKind, type NodeKindCatalogStore } from '../catalog/kindCatalog'
 import { humaniseKey, useRenderCatalog } from '../catalog/RenderCatalog'
 import { SectionedModal } from '../internal/SectionedModal'
@@ -72,7 +72,7 @@ const asForm = (c: unknown) => c as AnyForm
 /** Focuses the node's main control on the canvas, if it is there. */
 export function focusCanvasNode(nodeId: string): void {
   const esc = typeof CSS !== 'undefined' && CSS.escape ? CSS.escape(nodeId) : nodeId
-  const el = document.querySelector<HTMLElement>(`[data-fk-node-id="${esc}"] [data-fk-node-focus]`) ?? document.querySelector<HTMLElement>(`[data-fk-node-id="${esc}"]`)
+  const el = document.querySelector<HTMLElement>(`[data-ty-node-id="${esc}"] [data-ty-node-focus]`) ?? document.querySelector<HTMLElement>(`[data-ty-node-id="${esc}"]`)
   el?.focus()
 }
 
@@ -177,7 +177,7 @@ export function NodeConfigDialog(props: NodeConfigDialogProps) {
   // Ctrl/Cmd+Enter: press the form's save control (marked by the form, else its primary button).
   const submitShortcut = () => {
     const body = bodyRef.current
-    const save = body?.querySelector<HTMLButtonElement>('[data-fk-form-save]') ?? body?.querySelector<HTMLButtonElement>('button[data-variant="primary"]')
+    const save = body?.querySelector<HTMLButtonElement>('[data-ty-form-save]') ?? body?.querySelector<HTMLButtonElement>('button[data-variant="primary"]')
     if (save && !save.disabled && save.getAttribute('aria-disabled') !== 'true') save.click()
   }
 
@@ -193,9 +193,9 @@ export function NodeConfigDialog(props: NodeConfigDialogProps) {
       icon={<Icon />}
       tone={render.tone(payload.kind)}
       onSubmitShortcut={submitShortcut}
-      className="fk-node-config-dialog"
+      className="ty-node-config-dialog"
     >
-      <div ref={bodyRef} className="fk-node-config-dialog__body" data-form-kind={formKind} dir={direction}>
+      <div ref={bodyRef} className="ty-node-config-dialog__body" data-form-kind={formKind} dir={direction}>
         {catalog.isExperimental(payload.kind) ? (
           <InlineNotice tone="warning" urgency="none">
             {l.experimental}

@@ -19,7 +19,7 @@ import {
   ToggleButtonGroup,
 } from 'react-aria-components'
 import { ChevronDown, CircleAlert, CircleCheck, Clock, Loader } from 'lucide-react'
-import { Button, InlineNotice, Link, NativeSelect, SegmentedControl, Switch, TextArea, TextField } from '@fakhir/ui'
+import { Button, InlineNotice, Link, NativeSelect, SegmentedControl, Switch, TextArea, TextField } from '@datatechsolutions/tympan'
 import { useConfirm } from '../internal/confirm'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { SectionedModal } from '../internal/SectionedModal'
@@ -525,11 +525,11 @@ export function AgentEditorDialog(props: AgentEditorDialogProps) {
   }
 
   const statusView = (
-    <div className="fk-agent-editor__status" data-status={status}>
-      <p id={statusId} role="status" aria-live="polite" className="fk-agent-editor__status-line">
+    <div className="ty-agent-editor__status" data-status={status}>
+      <p id={statusId} role="status" aria-live="polite" className="ty-agent-editor__status-line">
         {status === 'saving' ? (
           <>
-            <Loader aria-hidden="true" focusable="false" className="fk-agent-editor__spin" />
+            <Loader aria-hidden="true" focusable="false" className="ty-agent-editor__spin" />
             {l.statusSaving}
           </>
         ) : status === 'pending' ? (
@@ -558,15 +558,15 @@ export function AgentEditorDialog(props: AgentEditorDialogProps) {
   )
 
   const identity = (
-    <div className="fk-agent-editor__identity">
-      <div className="fk-agent-editor__identity-head">
+    <div className="ty-agent-editor__identity">
+      <div className="ty-agent-editor__identity-head">
         <AgentMark image={form.image} size="lg" />
-        <div className="fk-agent-editor__name-block">
-          <AriaTextField className="fk-agent-editor__name" value={form.name} onChange={(name) => edit({ name })}>
-            <Label className="fk-visually-hidden">{l.name}</Label>
-            <Input className="fk-agent-editor__name-input" placeholder={l.namePlaceholder} />
+        <div className="ty-agent-editor__name-block">
+          <AriaTextField className="ty-agent-editor__name" value={form.name} onChange={(name) => edit({ name })}>
+            <Label className="ty-visually-hidden">{l.name}</Label>
+            <Input className="ty-agent-editor__name-input" placeholder={l.namePlaceholder} />
           </AriaTextField>
-          <span className="fk-agent-editor__kind-word">{l.agentWord}</span>
+          <span className="ty-agent-editor__kind-word">{l.agentWord}</span>
         </div>
       </div>
       <Switch label={l.active} isSelected={form.active} onChange={(v) => edit({ active: v })} />
@@ -577,27 +577,27 @@ export function AgentEditorDialog(props: AgentEditorDialogProps) {
   )
 
   const engine = (
-    <div className="fk-agent-editor__section">
-      <Slider className="fk-agent-slider" minValue={0} maxValue={100} step={1} value={form.rating} onChange={(v) => setRating(Array.isArray(v) ? v[0]! : v)}>
-        <div className="fk-agent-slider__head">
-          <Label className="fk-agent-slider__label">{l.capability}</Label>
-          <SliderOutput className="fk-agent-slider__output">{() => tierName}</SliderOutput>
+    <div className="ty-agent-editor__section">
+      <Slider className="ty-agent-slider" minValue={0} maxValue={100} step={1} value={form.rating} onChange={(v) => setRating(Array.isArray(v) ? v[0]! : v)}>
+        <div className="ty-agent-slider__head">
+          <Label className="ty-agent-slider__label">{l.capability}</Label>
+          <SliderOutput className="ty-agent-slider__output">{() => tierName}</SliderOutput>
         </div>
-        <SliderTrack className="fk-agent-slider__track">
+        <SliderTrack className="ty-agent-slider__track">
           {({ state }) => (
             <>
-              <span className="fk-agent-slider__fill" style={{ inlineSize: `${state.getThumbPercent(0) * 100}%` }} />
-              <SliderThumb className="fk-agent-slider__thumb" inputRef={capabilityRef} />
+              <span className="ty-agent-slider__fill" style={{ inlineSize: `${state.getThumbPercent(0) * 100}%` }} />
+              <SliderThumb className="ty-agent-slider__thumb" inputRef={capabilityRef} />
             </>
           )}
         </SliderTrack>
       </Slider>
-      <div className="fk-agent-editor__autonomy">
-        <p className="fk-agent-editor__label" id={`${statusId}-autonomy`}>
+      <div className="ty-agent-editor__autonomy">
+        <p className="ty-agent-editor__label" id={`${statusId}-autonomy`}>
           {l.autonomy}
         </p>
         <ToggleButtonGroup
-          className="fk-agent-autonomy"
+          className="ty-agent-autonomy"
           aria-labelledby={`${statusId}-autonomy`}
           selectionMode="single"
           disallowEmptySelection
@@ -609,24 +609,24 @@ export function AgentEditorDialog(props: AgentEditorDialogProps) {
           }}
         >
           {autonomyLevels.map((a) => (
-            <ToggleButton key={a.key} id={a.key} className="fk-agent-autonomy__level">
+            <ToggleButton key={a.key} id={a.key} className="ty-agent-autonomy__level">
               {l.autonomyNames[a.key]}
             </ToggleButton>
           ))}
         </ToggleButtonGroup>
       </div>
-      <dl className="fk-agent-editor__summary">
+      <dl className="ty-agent-editor__summary">
         <div>
           <dt>{l.model}</dt>
-          <dd className="fk-agent-editor__mono">{model ? (model.name ?? model.id) : ''}</dd>
-          {model?.contextSize ? <dd className="fk-agent-editor__meta">{fill(l.contextSize, { size: model.contextSize }, locale)}</dd> : null}
-          {model?.outputLimit ? <dd className="fk-agent-editor__meta">{fill(l.outputLimit, { size: model.outputLimit }, locale)}</dd> : null}
+          <dd className="ty-agent-editor__mono">{model ? (model.name ?? model.id) : ''}</dd>
+          {model?.contextSize ? <dd className="ty-agent-editor__meta">{fill(l.contextSize, { size: model.contextSize }, locale)}</dd> : null}
+          {model?.outputLimit ? <dd className="ty-agent-editor__meta">{fill(l.outputLimit, { size: model.outputLimit }, locale)}</dd> : null}
         </div>
       </dl>
       {model && provider ? (
-        <p className="fk-agent-editor__served" data-configured={provider.configured}>
+        <p className="ty-agent-editor__served" data-configured={provider.configured}>
           {fill(l.servedVia, { provider: provider.name })}
-          <span className="fk-agent-editor__provider-state">
+          <span className="ty-agent-editor__provider-state">
             {provider.configured ? <CircleCheck aria-hidden="true" focusable="false" /> : <CircleAlert aria-hidden="true" focusable="false" />}
             {provider.configured ? l.connected : l.needsSetup}
           </span>
@@ -636,14 +636,14 @@ export function AgentEditorDialog(props: AgentEditorDialogProps) {
           {l.noProvider}
         </InlineNotice>
       ) : null}
-      <Disclosure className="fk-agent-editor__advanced">
-        <Heading level={3} className="fk-agent-editor__advanced-heading">
-          <AriaButton slot="trigger" className="fk-agent-editor__advanced-trigger">
-            <ChevronDown aria-hidden="true" focusable="false" className="fk-agent-editor__chevron" />
+      <Disclosure className="ty-agent-editor__advanced">
+        <Heading level={3} className="ty-agent-editor__advanced-heading">
+          <AriaButton slot="trigger" className="ty-agent-editor__advanced-trigger">
+            <ChevronDown aria-hidden="true" focusable="false" className="ty-agent-editor__chevron" />
             {l.advanced}
           </AriaButton>
         </Heading>
-        <DisclosurePanel className="fk-agent-editor__advanced-panel">
+        <DisclosurePanel className="ty-agent-editor__advanced-panel">
           <NativeSelect
             label={l.manualModel}
             value={form.modelId}
@@ -656,13 +656,13 @@ export function AgentEditorDialog(props: AgentEditorDialogProps) {
           {model?.supports?.maxOutput ? <TextField label={l.maxOutput} inputType="number" value={form.maxOutput} onChange={(maxOutput) => edit({ maxOutput })} /> : null}
           {model?.supports?.topP ? <TextField label={l.topP} inputType="number" value={form.topP} onChange={(topP) => edit({ topP })} /> : null}
           {model?.supports?.topK ? <TextField label={l.topK} inputType="number" value={form.topK} onChange={(topK) => edit({ topK })} /> : null}
-          <div className="fk-agent-editor__credentials">
-            <p className="fk-agent-editor__label">{l.credentials}</p>
-            <ul className="fk-agent-editor__credential-list">
+          <div className="ty-agent-editor__credentials">
+            <p className="ty-agent-editor__label">{l.credentials}</p>
+            <ul className="ty-agent-editor__credential-list">
               {providers.map((p) => (
                 <li key={p.id}>
                   <span>{p.name}</span>
-                  <span className="fk-agent-editor__provider-state">
+                  <span className="ty-agent-editor__provider-state">
                     {p.configured ? <CircleCheck aria-hidden="true" focusable="false" /> : <CircleAlert aria-hidden="true" focusable="false" />}
                     {p.configured ? l.connected : l.needsSetup}
                   </span>
@@ -678,7 +678,7 @@ export function AgentEditorDialog(props: AgentEditorDialogProps) {
 
   const effortKeys: ReasoningEffort[] = ['low', 'medium', 'high', 'very_high']
   const instructions = (
-    <div className="fk-agent-editor__section">
+    <div className="ty-agent-editor__section">
       {model?.reasoning ? (
         <SegmentedControl
           label={l.reasoningEffort}
@@ -687,31 +687,31 @@ export function AgentEditorDialog(props: AgentEditorDialogProps) {
           onChange={(v) => edit({ reasoningEffort: v as ReasoningEffort })}
         />
       ) : (
-        <Slider className="fk-agent-slider" minValue={0} maxValue={2} step={0.1} value={form.temperature} onChange={(v) => edit({ temperature: Array.isArray(v) ? v[0]! : v })}>
-          <div className="fk-agent-slider__head">
-            <Label className="fk-agent-slider__label">{l.temperature}</Label>
-            <SliderOutput className="fk-agent-slider__output">{() => temperatureRange}</SliderOutput>
+        <Slider className="ty-agent-slider" minValue={0} maxValue={2} step={0.1} value={form.temperature} onChange={(v) => edit({ temperature: Array.isArray(v) ? v[0]! : v })}>
+          <div className="ty-agent-slider__head">
+            <Label className="ty-agent-slider__label">{l.temperature}</Label>
+            <SliderOutput className="ty-agent-slider__output">{() => temperatureRange}</SliderOutput>
           </div>
-          <SliderTrack className="fk-agent-slider__track">
+          <SliderTrack className="ty-agent-slider__track">
             {({ state }) => (
               <>
-                <span className="fk-agent-slider__fill" style={{ inlineSize: `${state.getThumbPercent(0) * 100}%` }} />
-                <SliderThumb className="fk-agent-slider__thumb" inputRef={temperatureRef} />
+                <span className="ty-agent-slider__fill" style={{ inlineSize: `${state.getThumbPercent(0) * 100}%` }} />
+                <SliderThumb className="ty-agent-slider__thumb" inputRef={temperatureRef} />
               </>
             )}
           </SliderTrack>
         </Slider>
       )}
       <TextArea label={l.systemPrompt} value={form.systemPrompt} onChange={(systemPrompt) => edit({ systemPrompt })} rows={6} autoGrow />
-      <div className="fk-agent-editor__schema">
-        <p className="fk-agent-editor__label">{l.outputSchema}</p>
+      <div className="ty-agent-editor__schema">
+        <p className="ty-agent-editor__label">{l.outputSchema}</p>
         <OutputSchemaBuilder value={form.outputSchema} onChange={(outputSchema: Record<string, unknown> | undefined) => edit(outputSchema ? { outputSchema } : { outputSchema: undefined })} />
       </div>
     </div>
   )
 
   const tools = (
-    <div className="fk-agent-editor__section">
+    <div className="ty-agent-editor__section">
       <ToolServerListField value={form.toolServers} onChange={(toolServers: ToolServerEntry[]) => edit({ toolServers })} />
     </div>
   )
@@ -726,7 +726,7 @@ export function AgentEditorDialog(props: AgentEditorDialogProps) {
       eyebrow={l.agentWord}
       icon={<AgentMark image={null} size="sm" />}
       width="xwide"
-      className="fk-agent-editor"
+      className="ty-agent-editor"
       sections={[
         { id: 'engine', label: l.engine, content: engine },
         { id: 'instructions', label: l.instructions, content: instructions },

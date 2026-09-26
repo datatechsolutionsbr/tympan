@@ -96,10 +96,10 @@ describe('ListboxSelect', () => {
     setViewportWidth(375)
     const onChange = vi.fn()
     const { container } = render(<ListboxSelect label="Fruit" options={options} onChange={onChange} />)
-    expect(container.querySelector('.fk-listbox-select')).toHaveAttribute('data-presentation', 'tray')
+    expect(container.querySelector('.ty-listbox-select')).toHaveAttribute('data-presentation', 'tray')
     await userEvent.click(screen.getByRole('button', { name: /Fruit/ }))
     const listbox = screen.getByRole('listbox')
-    expect(listbox.closest('.fk-listbox-select__tray')).not.toBeNull()
+    expect(listbox.closest('.ty-listbox-select__tray')).not.toBeNull()
     await userEvent.click(within(listbox).getByRole('option', { name: /Cherry/ }))
     expect(onChange).toHaveBeenCalledWith('cherry')
   })
@@ -109,7 +109,7 @@ describe('ListboxSelect', () => {
     expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/animation:\s*none/)
     expect(mediaBlock(css, /\(prefers-reduced-transparency:\s*reduce\)/)).toMatch(/surface-raised-solid/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/Highlight/)
-    expect(css).toMatch(/\.fk-listbox-select__option\s*\{[^}]*min-block-size:\s*var\(--fk-control-target\)/)
+    expect(css).toMatch(/\.ty-listbox-select__option\s*\{[^}]*min-block-size:\s*var\(--ty-control-target\)/)
   })
 
   it('has no axe violations when closed and open', async () => {
@@ -137,21 +137,21 @@ describe('ListboxSelect trigger size', () => {
   const css = cssOf('components/listbox-select/ListboxSelect.css').replace(/\/\*[\s\S]*?\*\//g, '')
 
   it('is 40px on desktop and 44px below 1024px, never taller than one line', () => {
-    const trigger = ruleOf(css, '.fk-listbox-select__trigger')
-    expect(trigger).toMatch(/--fk-select-block:\s*var\(--fk-control-height\);/)
-    expect(trigger).toMatch(/(^|\s)block-size:\s*var\(--fk-select-block\);/)
+    const trigger = ruleOf(css, '.ty-listbox-select__trigger')
+    expect(trigger).toMatch(/--ty-select-block:\s*var\(--ty-control-height\);/)
+    expect(trigger).toMatch(/(^|\s)block-size:\s*var\(--ty-select-block\);/)
     expect(trigger).toMatch(/padding-block:\s*0;/)
-    expect(mediaBlock(css, /\(max-width:\s*1023\.98px\)/)).toMatch(/--fk-select-block:\s*var\(--fk-control-height-touch\)/)
+    expect(mediaBlock(css, /\(max-width:\s*1023\.98px\)/)).toMatch(/--ty-select-block:\s*var\(--ty-control-height-touch\)/)
   })
 
   it('centres the value and shows only the chosen label (no description, no check)', () => {
-    const value = ruleOf(css, '.fk-listbox-select__value')
+    const value = ruleOf(css, '.ty-listbox-select__value')
     expect(value).toMatch(/display:\s*flex;/)
     expect(value).toMatch(/align-items:\s*center;/)
-    expect(css).toMatch(/\.fk-listbox-select__value \.fk-listbox-select__option-description,\s*\.fk-listbox-select__value \.fk-listbox-select__check \{\s*display:\s*none;/)
+    expect(css).toMatch(/\.ty-listbox-select__value \.ty-listbox-select__option-description,\s*\.ty-listbox-select__value \.ty-listbox-select__check \{\s*display:\s*none;/)
     render(<ListboxSelect label="Fruit" options={options} defaultValue="banana" />)
     const trigger = screen.getByRole('button', { name: /Fruit/ })
     // The description is rendered by the list's item template but hidden in the trigger by the rule above.
-    expect(trigger.querySelector('.fk-listbox-select__value .fk-listbox-select__option-label')?.textContent).toBe('Banana')
+    expect(trigger.querySelector('.ty-listbox-select__value .ty-listbox-select__option-label')?.textContent).toBe('Banana')
   })
 })

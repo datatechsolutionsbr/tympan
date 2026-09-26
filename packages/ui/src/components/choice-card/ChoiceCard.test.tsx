@@ -63,9 +63,9 @@ describe('ChoiceCard', () => {
 
   it('shows the description inline and hides it (still describing) when stacked', () => {
     const { rerender } = render(<ChoiceCard selected={false} onSelect={() => {}} label="Plan" description="For teams" arrangement="inline" />)
-    expect(screen.getByText('For teams')).toHaveClass('fk-choice-card__description')
+    expect(screen.getByText('For teams')).toHaveClass('ty-choice-card__description')
     rerender(<ChoiceCard selected={false} onSelect={() => {}} label="Plan" description="For teams" arrangement="stacked" />)
-    expect(screen.getByText('For teams')).toHaveClass('fk-visually-hidden')
+    expect(screen.getByText('For teams')).toHaveClass('ty-visually-hidden')
     expect(screen.getByRole('button', { name: 'Plan' })).toHaveAccessibleDescription('For teams')
   })
 
@@ -73,7 +73,7 @@ describe('ChoiceCard', () => {
     const onSelect = vi.fn()
     const { container } = render(<ChoiceCard selected onSelect={onSelect} label="Plan" />)
     expect(screen.getByRole('button', { name: 'Plan' })).toHaveAttribute('aria-pressed', 'true')
-    expect(container.querySelector('.fk-selected-mark')).not.toBeNull()
+    expect(container.querySelector('.ty-selected-mark')).not.toBeNull()
     await userEvent.click(screen.getByRole('button'))
     expect(onSelect).toHaveBeenCalledTimes(1)
   })

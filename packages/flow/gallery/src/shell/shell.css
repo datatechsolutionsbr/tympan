@@ -2,33 +2,33 @@
    layout="rail"). Only page-level layout lives here: canvas pages fill the
    sheet edge to edge under the editorial header, as in the storyboards
    (header 28/40/20). Not shipped. */
-.fk-flow-frame {
-  --fk-flow-head-pad-block: 28px 20px;
-  --fk-flow-head-pad-inline: 40px;
+.ty-flow-frame {
+  --ty-flow-head-pad-block: 28px 20px;
+  --ty-flow-head-pad-inline: 40px;
 }
 
-.fk-flow-frame .fk-app-frame__sheet {
+.ty-flow-frame .ty-app-frame__sheet {
   display: flex;
   flex-direction: column;
   padding: 0;
   overflow: hidden;
 }
 
-.fk-flow-frame .fk-app-frame__content {
+.ty-flow-frame .ty-app-frame__content {
   display: flex;
   flex: 1;
   flex-direction: column;
   min-block-size: 0;
 }
 
-.fk-flow-frame__header {
+.ty-flow-frame__header {
   flex: none;
   margin: 0;
-  padding-block: var(--fk-flow-head-pad-block);
-  padding-inline: var(--fk-flow-head-pad-inline);
+  padding-block: var(--ty-flow-head-pad-block);
+  padding-inline: var(--ty-flow-head-pad-inline);
 }
 
-.fk-flow-frame__body {
+.ty-flow-frame__body {
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -42,11 +42,11 @@
 
 /* Compact header (graph view): trail and title on the start side, the
    question and the view switch on the same row at the end. */
-.fk-flow-frame--compact {
-  --fk-flow-head-pad-block: 18px 14px;
-  --fk-flow-head-pad-inline: 32px;
+.ty-flow-frame--compact {
+  --ty-flow-head-pad-block: 18px 14px;
+  --ty-flow-head-pad-inline: 32px;
 
-  & .fk-flow-frame__header {
+  & .ty-flow-frame__header {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     grid-template-rows: auto auto;
@@ -55,30 +55,30 @@
     row-gap: 4px;
   }
 
-  & .fk-page-header__trail {
+  & .ty-page-header__trail {
     grid-area: 1 / 1;
   }
 
-  & .fk-page-header__row {
+  & .ty-page-header__row {
     display: contents;
   }
 
-  & .fk-page-header__text {
+  & .ty-page-header__text {
     grid-area: 2 / 1;
   }
 
-  & .fk-page-header__title {
+  & .ty-page-header__title {
     font-size: 24px;
     line-height: 1.1;
   }
 
-  & .fk-page-header__actions {
+  & .ty-page-header__actions {
     grid-area: 1 / 2 / 3 / 3;
     flex-wrap: nowrap;
     gap: 16px;
     min-inline-size: 0;
 
-    & > .fk-prov-question {
+    & > .ty-prov-question {
       flex: 1 1 auto;
       min-inline-size: 0;
     }
@@ -86,36 +86,36 @@
 }
 
 /* Account block at the foot of the rail. */
-.fk-flow-account {
+.ty-flow-account {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.fk-flow-account__who {
+.ty-flow-account__who {
   display: flex;
   flex: 1;
   flex-direction: column;
   min-inline-size: 0;
 }
 
-.fk-flow-account__name {
-  color: var(--fk-ink);
-  font: 600 13px/1.3 var(--fk-font-sans);
+.ty-flow-account__name {
+  color: var(--ty-ink);
+  font: 600 13px/1.3 var(--ty-font-sans);
 }
 
-.fk-flow-account__role {
-  color: var(--fk-ink-3);
-  font: 400 12px/1.3 var(--fk-font-sans);
+.ty-flow-account__role {
+  color: var(--ty-ink-3);
+  font: 400 12px/1.3 var(--ty-font-sans);
 }
 
 /* "saved" beside the run button. */
-.fk-flow-saved {
+.ty-flow-saved {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: var(--fk-ink-3);
-  font: 500 13px/1 var(--fk-font-sans);
+  color: var(--ty-ink-3);
+  font: 500 13px/1 var(--ty-font-sans);
 
   & svg {
     inline-size: 14px;
@@ -125,16 +125,16 @@
 
 /* Narrow screens: the rail is the frame's drawer and the sheet scrolls. */
 @media (max-width: 1023px) {
-  .fk-flow-frame {
-    --fk-flow-head-pad-block: 20px 16px;
-    --fk-flow-head-pad-inline: 16px;
+  .ty-flow-frame {
+    --ty-flow-head-pad-block: 20px 16px;
+    --ty-flow-head-pad-inline: 16px;
   }
 
-  .fk-flow-frame .fk-app-frame__sheet {
+  .ty-flow-frame .ty-app-frame__sheet {
     overflow: auto;
   }
 
-  .fk-flow-frame__body {
+  .ty-flow-frame__body {
     min-block-size: 70dvh;
   }
 }

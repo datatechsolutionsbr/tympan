@@ -118,7 +118,7 @@ describe('SectionedModal', () => {
   it('fills the screen under 640 with the footer pinned', () => {
     const narrow = mediaBlock(cssOf('components/sectioned-modal/SectionedModal.css'), /\(max-width:\s*639\.98px\)/)
     expect(narrow).toMatch(/block-size:\s*100dvh/)
-    expect(narrow).toMatch(/\.fk-sectioned-modal__foot\s*\{[^}]*position:\s*sticky/)
+    expect(narrow).toMatch(/\.ty-sectioned-modal__foot\s*\{[^}]*position:\s*sticky/)
   })
 
   it('has no axe violations (sectioned form with error)', async () => {

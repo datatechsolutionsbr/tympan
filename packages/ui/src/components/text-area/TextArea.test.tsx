@@ -34,7 +34,7 @@ describe('TextArea', () => {
     const area = screen.getByRole('textbox', { name: 'Log' })
     await userEvent.type(area, Array.from({ length: 10 }, (_, i) => `line ${i}`).join('{Enter}'))
     expect(area).toHaveAttribute('rows', '6')
-    expect(container.querySelector('.fk-text-area')).toHaveAttribute('data-scrolling', 'true')
+    expect(container.querySelector('.ty-text-area')).toHaveAttribute('data-scrolling', 'true')
   })
 
   it('marks errors invalid and describes them', () => {
@@ -57,8 +57,8 @@ describe('TextArea', () => {
 
   it('uses the mono family when monospace', () => {
     const { container } = render(<TextArea label="JSON" monospace />)
-    expect(container.querySelector('.fk-text-area')).toHaveAttribute('data-monospace', 'true')
-    expect(cssOf('components/text-area/TextArea.css')).toMatch(/\[data-monospace\] \.fk-text-area__input\s*\{[^}]*font-family:\s*var\(--fk-font-mono\)/)
+    expect(container.querySelector('.ty-text-area')).toHaveAttribute('data-monospace', 'true')
+    expect(cssOf('components/text-area/TextArea.css')).toMatch(/\[data-monospace\] \.ty-text-area__input\s*\{[^}]*font-family:\s*var\(--ty-font-mono\)/)
   })
 
   it('counts characters and flags the over-limit state', async () => {
@@ -73,7 +73,7 @@ describe('TextArea', () => {
     const css = cssOf('components/text-area/TextArea.css')
     expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/transition:\s*none/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/FieldText/)
-    expect(css).toMatch(/min-block-size:\s*var\(--fk-control-target\)/)
+    expect(css).toMatch(/min-block-size:\s*var\(--ty-control-target\)/)
   })
 
   it('has no axe violations', async () => {

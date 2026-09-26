@@ -21,7 +21,7 @@ describe('CopyIdentifier', () => {
     const button = screen.getByRole('button', { name: `Copy: ${long}` })
     // The whole value is in the tree; CSS elides it after about eight character widths.
     expect(button).toHaveTextContent(long)
-    expect(button.querySelector('[data-elided]')).toHaveStyle({ '--fk-copy-visible': '8' })
+    expect(button.querySelector('[data-elided]')).toHaveStyle({ '--ty-copy-visible': '8' })
   })
 
   it('shows a short value whole', () => {
@@ -76,7 +76,7 @@ describe('CopyIdentifier', () => {
   })
 
   it('keeps a 44 px hit area', () => {
-    expect(cssOf('components/copy-identifier/CopyIdentifier.css')).toMatch(/__trigger::before\s*\{[^}]*inline-size:\s*max\(100%,\s*var\(--fk-control-target\)\)/)
+    expect(cssOf('components/copy-identifier/CopyIdentifier.css')).toMatch(/__trigger::before\s*\{[^}]*inline-size:\s*max\(100%,\s*var\(--ty-control-target\)\)/)
   })
 
   it('has no axe violations, light and dark', async () => {

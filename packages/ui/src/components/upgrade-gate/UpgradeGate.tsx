@@ -21,27 +21,27 @@ export interface UpgradeGateProps {
 export function UpgradeGate({ onViewPlans, onSignOut, busy = false, texts, className }: UpgradeGateProps) {
   const t: UpgradeGateTexts = { ...useMessages().upgradeGate, ...texts }
   const ids = useId().replace(/:/g, '')
-  const titleId = `fk-gate-title-${ids}`
-  const descId = `fk-gate-desc-${ids}`
+  const titleId = `ty-gate-title-${ids}`
+  const descId = `ty-gate-desc-${ids}`
   const dialogRef = useRef<HTMLElement>(null)
   // RAC's Dialog does not forward aria-modal; the gate is modal, so say it.
   useDomAttributes(dialogRef, { 'aria-modal': 'true' })
   return (
-    <ModalOverlay isOpen isDismissable={false} isKeyboardDismissDisabled className={className ? `fk-gate ${className}` : 'fk-gate'}>
+    <ModalOverlay isOpen isDismissable={false} isKeyboardDismissDisabled className={className ? `ty-gate ${className}` : 'ty-gate'}>
       <AmbientBackdrop />
-      <Modal className="fk-gate__modal">
-        <Dialog className="fk-gate__dialog" ref={dialogRef} role="dialog" aria-labelledby={titleId} aria-describedby={descId}>
-          <p className="fk-gate__eyebrow">{t.eyebrow}</p>
-          <Heading slot="title" level={1} id={titleId} className="fk-gate__title">
+      <Modal className="ty-gate__modal">
+        <Dialog className="ty-gate__dialog" ref={dialogRef} role="dialog" aria-labelledby={titleId} aria-describedby={descId}>
+          <p className="ty-gate__eyebrow">{t.eyebrow}</p>
+          <Heading slot="title" level={1} id={titleId} className="ty-gate__title">
             {t.title}
           </Heading>
-          <p id={descId} className="fk-gate__description">
-            {t.description} <span className="fk-visually-hidden">{t.cannotDismiss}</span>
+          <p id={descId} className="ty-gate__description">
+            {t.description} <span className="ty-visually-hidden">{t.cannotDismiss}</span>
           </p>
           <InlineNotice tone="warning" title={t.noticeTitle} urgency="none">
             {t.noticeBody}
           </InlineNotice>
-          <div className="fk-gate__actions">
+          <div className="ty-gate__actions">
             <Button variant="primary" busy={busy} onPress={onViewPlans} autoFocus>
               {t.viewPlans}
             </Button>

@@ -17,12 +17,12 @@ describe('TickerCard', () => {
   it('renders the entries in the given order', () => {
     render(<TickerCard title="TAU index" entries={entries} />)
     const rows = within(screen.getByRole('list')).getAllByRole('listitem')
-    expect(rows.map((r) => r.querySelector('.fk-ticker-card__name')!.textContent)).toEqual(['Estonia', entries[1]!.name, 'Brazil'])
+    expect(rows.map((r) => r.querySelector('.ty-ticker-card__name')!.textContent)).toEqual(['Estonia', entries[1]!.name, 'Brazil'])
   })
 
   it('keeps direction and sentiment apart: an upward arrow with the negative tone and word', () => {
     const { container } = render(<TickerCard title="TAU index" entries={entries} />)
-    const mark = container.querySelectorAll('.fk-delta')[1]!
+    const mark = container.querySelectorAll('.ty-delta')[1]!
     expect(mark).toHaveAttribute('data-trend', 'up')
     expect(mark).toHaveAttribute('data-sentiment', 'negative')
     expect(mark).toHaveTextContent('up')
@@ -32,7 +32,7 @@ describe('TickerCard', () => {
     render(<TickerCard title="TAU index" entries={entries} onEntryPress={() => {}} />)
     const row = screen.getByRole('button', { name: /United Kingdom of Great Britain and Northern Ireland/ })
     expect(row.textContent).toMatch(/Northern Ireland, 2026, value 0\.77, change up \+0\.02/)
-    expect(cssOf('components/ticker-card/TickerCard.css')).toMatch(/\.fk-ticker-card__name\s*\{[^}]*text-overflow:\s*ellipsis/)
+    expect(cssOf('components/ticker-card/TickerCard.css')).toMatch(/\.ty-ticker-card__name\s*\{[^}]*text-overflow:\s*ellipsis/)
   })
 
   it('shows the empty line without entries', () => {

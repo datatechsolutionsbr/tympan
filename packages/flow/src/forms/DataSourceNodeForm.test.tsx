@@ -1,7 +1,7 @@
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import { cssOf, mediaBlock } from '../../test/css'
 import { convertFilterValue, DataSourceNodeForm, parseListValue, type DataSourceNodeFormProps } from './DataSourceNodeForm'
@@ -96,25 +96,25 @@ describe('DataSourceNodeForm', () => {
 
   it('works in Arabic (RTL) and names sections in Portuguese', async () => {
     const { rerender } = render(
-      <FakhirProvider locale="ar">
+      <TympanProvider locale="ar">
         <div dir="rtl">
           <DataSourceNodeForm open value={{}} sources={sources} loadTables={() => Promise.resolve([])} loadColumns={() => Promise.resolve([])} onSave={() => {}} onCancel={() => {}} />
         </div>
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     await userEvent.click(screen.getByRole('radio', { name: /Census edition/ }))
     expect(screen.getByRole('tab', { name: 'Table' })).toHaveAttribute('aria-selected', 'true')
     rerender(
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <DataSourceNodeForm open value={{}} sources={sources} loadTables={() => Promise.resolve([])} loadColumns={() => Promise.resolve([])} onSave={() => {}} onCancel={() => {}} />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(screen.getByRole('tab', { name: 'Conexão' })).toBeInTheDocument()
   })
 
   it('marks selection with a check, keeps 44 px rows and visible borders in forced colours', () => {
     const css = cssOf('forms/NewForms.css')
-    expect(css).toMatch(/\.fk-ds-form__option\s*\{[^}]*min-block-size: 44px/)
+    expect(css).toMatch(/\.ty-ds-form__option\s*\{[^}]*min-block-size: 44px/)
     expect(mediaBlock(css, /\(forced-colors: active\)/)).toMatch(/Highlight/)
     expect(css).not.toMatch(/(margin|padding)-(left|right)|[^-]left:|[^-]right:/)
   })

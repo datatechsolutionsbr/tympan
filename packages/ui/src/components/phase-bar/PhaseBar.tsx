@@ -38,29 +38,29 @@ export function PhaseBar({ segments, label, caption, locale, className }: PhaseB
   const speech = useLocaleText()
   const spoken = segments.length ? speech.join(...segments.map((s) => words.part(s.label, fmt.format(s.value)))) : words.empty
   return (
-    <figure className={cx('fk-phase-bar', className)}>
-      <div className="fk-phase-bar__track" role="img" aria-label={words.named(label, spoken)}>
+    <figure className={cx('ty-phase-bar', className)}>
+      <div className="ty-phase-bar__track" role="img" aria-label={words.named(label, spoken)}>
         {segments.map((segment, i) =>
           segment.value > 0 ? (
             <span
               key={segment.id}
-              className="fk-phase-bar__segment"
+              className="ty-phase-bar__segment"
               data-tone={segment.tone}
-              style={{ '--fk-phase-share': `${percent[i]}%` } as CSSProperties}
+              style={{ '--ty-phase-share': `${percent[i]}%` } as CSSProperties}
             />
           ) : null,
         )}
       </div>
-      <ul className="fk-phase-bar__legend">
+      <ul className="ty-phase-bar__legend">
         {segments.map((segment) => (
-          <li key={segment.id} className="fk-phase-bar__key" data-tone={segment.tone}>
-            <span className="fk-phase-bar__swatch" aria-hidden="true" />
-            <span className="fk-phase-bar__word" dir="auto">{segment.label}</span>
-            <span className="fk-phase-bar__count">{fmt.format(segment.value)}</span>
+          <li key={segment.id} className="ty-phase-bar__key" data-tone={segment.tone}>
+            <span className="ty-phase-bar__swatch" aria-hidden="true" />
+            <span className="ty-phase-bar__word" dir="auto">{segment.label}</span>
+            <span className="ty-phase-bar__count">{fmt.format(segment.value)}</span>
           </li>
         ))}
       </ul>
-      {caption ? <figcaption className="fk-phase-bar__caption" dir="auto">{caption}</figcaption> : null}
+      {caption ? <figcaption className="ty-phase-bar__caption" dir="auto">{caption}</figcaption> : null}
     </figure>
   )
 }

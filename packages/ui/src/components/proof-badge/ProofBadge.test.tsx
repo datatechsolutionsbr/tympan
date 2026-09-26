@@ -21,7 +21,7 @@ const states: Array<[ProofState | null, string, string]> = [
 describe('ProofBadge', () => {
   it.each(states)('inline %s shows an icon and the word "%s"', (state, word, attr) => {
     const { container } = render(<ProofBadge state={state} />)
-    const badge = container.querySelector('.fk-proof-badge')!
+    const badge = container.querySelector('.ty-proof-badge')!
     expect(badge).toHaveAttribute('data-state', attr)
     expect(badge).toHaveTextContent(word)
     expect(badge.querySelector('svg[aria-hidden="true"]')).not.toBeNull()
@@ -29,9 +29,9 @@ describe('ProofBadge', () => {
 
   it('compact keeps the word available to assistive tech and as tooltip', () => {
     const { container } = render(<ProofBadge state="pending" size="compact" detail="4/6" />)
-    const badge = container.querySelector('.fk-proof-badge')!
+    const badge = container.querySelector('.ty-proof-badge')!
     expect(badge).toHaveAttribute('title', 'pending')
-    expect(screen.getByText('pending')).toHaveClass('fk-visually-hidden')
+    expect(screen.getByText('pending')).toHaveClass('ty-visually-hidden')
     expect(badge).toHaveTextContent('4/6')
   })
 
@@ -68,7 +68,7 @@ describe('ProofBadge', () => {
 
   it('inline badge uses 12 px text and a 22 px pill', () => {
     const css = cssOf('components/proof-badge/ProofBadge.css')
-    expect(css).toMatch(/\[data-size='inline'\]\s*\{[^}]*block-size:\s*22px[^}]*var\(--fk-radius-pill\)[^}]*var\(--fk-font-size-meta\)/)
+    expect(css).toMatch(/\[data-size='inline'\]\s*\{[^}]*block-size:\s*22px[^}]*var\(--ty-radius-pill\)[^}]*var\(--ty-font-size-meta\)/)
   })
 
   it('has no axe violations in every size', async () => {

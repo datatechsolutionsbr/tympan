@@ -5,7 +5,7 @@ import { act, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
 import { describe, expect, it, vi } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import type { CanvasToolItem } from '../toolbar/canvasTools'
 import { EditionCompare } from './EditionCompare'
@@ -93,7 +93,7 @@ describe('host-placed parts', () => {
     const panel = screen.getByRole('region', { name: 'Where 26 comes from' })
     expect(panel).toHaveTextContent('Selected number')
     expect(panel).toHaveTextContent('records of [phase 2]')
-    expect(container.querySelectorAll('.fk-numtrace__index')).toHaveLength(2)
+    expect(container.querySelectorAll('.ty-numtrace__index')).toHaveLength(2)
     await userEvent.click(within(panel).getByRole('button', { name: 'Open in the graph' }))
     expect(onOpenInGraph).toHaveBeenCalledWith(expect.objectContaining({ id: 'n' }))
     await expectNoAxeViolations(container)
@@ -103,14 +103,14 @@ describe('host-placed parts', () => {
     const onOpenInGraph = vi.fn()
     const onRequestReview = vi.fn()
     render(
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <EditionCompare
           comparison={{ a: { id: 'a', label: '2026-09-20' }, b: { id: 'b', label: 'ao vivo' }, rows: [{ itemId: 'x', label: '[registro]', a: '[valor]', b: '[novo]', change: 'altered', aNote: 'fonte [id]' }] }}
           defaultSelectedItemId="x"
           onOpenInGraph={onOpenInGraph}
           onRequestReview={onRequestReview}
         />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(screen.getByText('Antes · 2026-09-20')).toBeInTheDocument()
     expect(screen.getByText('fonte [id]')).toBeInTheDocument()

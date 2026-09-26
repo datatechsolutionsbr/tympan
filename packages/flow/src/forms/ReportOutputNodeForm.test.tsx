@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import { ReportOutputNodeForm } from './ReportOutputNodeForm'
 
@@ -50,11 +50,11 @@ describe('ReportOutputNodeForm', () => {
   it('uses Spanish strings and works in RTL', async () => {
     const onSave = vi.fn()
     render(
-      <FakhirProvider locale="es">
+      <TympanProvider locale="es">
         <div dir="rtl">
           <ReportOutputNodeForm value={{}} onSave={onSave} onCancel={() => {}} />
         </div>
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     await userEvent.click(screen.getByRole('radio', { name: 'Definición propia' }))
     await userEvent.click(screen.getByRole('button', { name: 'Guardar' }))

@@ -167,7 +167,7 @@ export function CurrencyField(props: CurrencyFieldProps) {
   }
 
   return (
-    <div className={cx('fk-currency-field', props.className)} data-size={props.size ?? 'medium'} data-invalid={props.error ? true : undefined}>
+    <div className={cx('ty-currency-field', props.className)} data-size={props.size ?? 'medium'} data-invalid={props.error ? true : undefined}>
       <AriaTextField
         value={text}
         onChange={onTyped}
@@ -179,7 +179,7 @@ export function CurrencyField(props: CurrencyFieldProps) {
         id={props.id}
         aria-labelledby={ids.label}
         aria-describedby={joinIds(ids.hint, ids.currency, ids.error)}
-        className="fk-currency-field__field"
+        className="ty-currency-field__field"
       >
         <FieldLine kind="label" id={ids.label}>
           {props.label}
@@ -189,22 +189,22 @@ export function CurrencyField(props: CurrencyFieldProps) {
             {props.hint}
           </FieldLine>
         ) : null}
-        <div className="fk-currency-field__box">
+        <div className="ty-currency-field__box">
           {props.currency ? (
-            <span className="fk-currency-field__symbol" aria-hidden="true">
+            <span className="ty-currency-field__symbol" aria-hidden="true">
               {symbolOf(props.currency, locale)}
             </span>
           ) : null}
           <Input
             ref={inputRef}
-            className="fk-currency-field__input"
+            className="ty-currency-field__input"
             inputMode={decimals === 0 ? 'numeric' : 'decimal'}
             autoComplete="off"
             placeholder={props.placeholder}
           />
         </div>
         {ids.currency ? (
-          <span id={ids.currency} className="fk-visually-hidden">
+          <span id={ids.currency} className="ty-visually-hidden">
             {m.currencyField.currency(currencyName(props.currency!, locale))}
           </span>
         ) : null}

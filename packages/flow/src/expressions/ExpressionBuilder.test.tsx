@@ -2,7 +2,7 @@ import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
 import { describe, expect, it, vi } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import { cssOf, mediaBlock } from '../../test/css'
 import { ExpressionCatalogProvider } from './catalogContext'
@@ -133,29 +133,29 @@ describe('ExpressionBuilder', () => {
 
   it('uses built-in pt-BR strings and renders right to left in Arabic', () => {
     const { unmount } = render(
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <Harness initial={{ operation: 'union', lists: [{ value: 1 }] }} />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(screen.getByText('1 item')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Adicionar item' })).toBeInTheDocument()
     unmount()
     render(
-      <FakhirProvider locale="ar">
+      <TympanProvider locale="ar">
         <div dir="rtl">
           <Harness initial={{ operation: 'count', list: { ref: 'cases' } }} references={['cases']} />
         </div>
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(screen.getByText('cases', { selector: 'code' })).toHaveAttribute('dir', 'ltr')
   })
 
   it('indents with logical properties, keeps 44 px targets and shows depth without colour', () => {
     const css = cssOf('expressions/expressions.css')
-    expect(css).toMatch(/\.fk-expr__nested\s*\{[^}]*padding-inline-start/)
-    expect(css).toMatch(/\.fk-expr__nested\s*\{[^}]*border-inline-start/)
+    expect(css).toMatch(/\.ty-expr__nested\s*\{[^}]*padding-inline-start/)
+    expect(css).toMatch(/\.ty-expr__nested\s*\{[^}]*border-inline-start/)
     expect(css).not.toMatch(/(margin|padding|border)-(left|right)\b/)
-    expect(css).toMatch(/\.fk-expr__chip\s*\{[^}]*min-block-size:\s*44px/)
+    expect(css).toMatch(/\.ty-expr__chip\s*\{[^}]*min-block-size:\s*44px/)
     expect(mediaBlock(css, /\(forced-colors: active\)/)).toMatch(/CanvasText/)
   })
 })

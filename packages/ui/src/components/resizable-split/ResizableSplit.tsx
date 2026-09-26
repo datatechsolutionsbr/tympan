@@ -50,25 +50,25 @@ export function ResizableSplit(props: ResizableSplitProps) {
 
   const panes = {
     primary: (
-      <div key="primary" className="fk-split__pane" data-pane="primary">
+      <div key="primary" className="ty-split__pane" data-pane="primary">
         {props.primary}
       </div>
     ),
     secondary: (
-      <div key="secondary" id={paneId} className="fk-split__pane" data-pane="secondary">
+      <div key="secondary" id={paneId} className="ty-split__pane" data-pane="secondary">
         {props.secondary}
       </div>
     ),
-    handle: sideBySide ? <div key="handle" {...splitter} aria-label={props.label} aria-controls={paneId} className="fk-split__handle" /> : null,
+    handle: sideBySide ? <div key="handle" {...splitter} aria-label={props.label} aria-controls={paneId} className="ty-split__handle" /> : null,
   }
   const order = side === 'end' ? [panes.primary, panes.handle, panes.secondary] : [panes.secondary, panes.handle, panes.primary]
 
   return (
     <div
-      className={cx('fk-split', props.className)}
+      className={cx('ty-split', props.className)}
       data-side={side}
       data-stacked={sideBySide ? undefined : ''}
-      style={{ '--fk-split-size': `${size}px` } as CSSProperties}
+      style={{ '--ty-split-size': `${size}px` } as CSSProperties}
     >
       {order}
     </div>

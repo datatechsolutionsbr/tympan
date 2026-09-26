@@ -3,7 +3,7 @@
 // the drawer tab live here, so switching mode keeps them.
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { useMediaQuery } from '@fakhir/ui'
+import { useMediaQuery } from '@datatechsolutions/tympan'
 import { defineLabels, useLabels } from '../internal/labels'
 import { useControllable } from '../internal/useControllable'
 import { useFlowEditorState } from '../state/editorState'
@@ -114,7 +114,7 @@ export function RunViews(props: RunViewsProps) {
   useLayoutEffect(() => {
     if (!focusSwitch.current) return
     focusSwitch.current = false
-    root.current?.querySelector<HTMLElement>('.fk-run-switch')?.focus()
+    root.current?.querySelector<HTMLElement>('.ty-run-switch')?.focus()
   })
 
   const close = () => setView({ ...view, open: false })
@@ -122,8 +122,8 @@ export function RunViews(props: RunViewsProps) {
   const runStatus = props.runStatus ?? (isRunning ? 'running' : failing ? 'failed' : Object.keys(results).length ? 'completed' : 'idle')
 
   return (
-    <div ref={root} className="fk-run-views" data-mode={view.open ? mode : 'closed'}>
-      <p className="fk-visually-hidden" role="status" aria-live="polite">
+    <div ref={root} className="ty-run-views" data-mode={view.open ? mode : 'closed'}>
+      <p className="ty-visually-hidden" role="status" aria-live="polite">
         {announcement}
       </p>
       {view.open && mode === 'panel' ? (

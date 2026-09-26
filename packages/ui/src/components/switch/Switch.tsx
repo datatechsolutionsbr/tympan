@@ -40,14 +40,14 @@ function useOnOff(owned: boolean | undefined, start: boolean, report?: (on: bool
 function Caption(p: { labelId?: string; label?: string; descId?: string; description?: ReactNode }) {
   if (!p.label && p.description == null) return null
   return (
-    <span className="fk-switch__text">
+    <span className="ty-switch__text">
       {p.label && (
-        <span id={p.labelId} className="fk-switch__label">
+        <span id={p.labelId} className="ty-switch__label">
           {p.label}
         </span>
       )}
       {p.description != null && (
-        <span id={p.descId} className="fk-switch__description">
+        <span id={p.descId} className="ty-switch__description">
           {p.description}
         </span>
       )}
@@ -90,12 +90,12 @@ export const Switch = forwardRef<HTMLLabelElement, SwitchProps>(function Switch(
       aria-label={props.label ? undefined : props.accessibleLabel}
       aria-labelledby={ids.label}
       aria-describedby={ids.desc}
-      className={cx('fk-switch', props.className)}
+      className={cx('ty-switch', props.className)}
       data-layout={props.layout ?? 'inline'}
       data-size={props.size ?? 'regular'}
     >
-      <span className="fk-switch__track" aria-hidden="true">
-        <span className="fk-switch__thumb" />
+      <span className="ty-switch__track" aria-hidden="true">
+        <span className="ty-switch__thumb" />
       </span>
       <Caption labelId={ids.label} label={props.label} descId={ids.desc} description={props.description} />
     </AriaSwitch>
@@ -113,9 +113,9 @@ export function SwitchGroup(props: SwitchGroupProps) {
   const captionId = useId()
   const named = Boolean(props.label)
   return (
-    <div className={cx('fk-switch-group', props.className)} role="group" aria-labelledby={named ? captionId : undefined}>
+    <div className={cx('ty-switch-group', props.className)} role="group" aria-labelledby={named ? captionId : undefined}>
       {named && (
-        <span id={captionId} className="fk-switch-group__label">
+        <span id={captionId} className="ty-switch-group__label">
           {props.label}
         </span>
       )}

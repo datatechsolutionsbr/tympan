@@ -144,13 +144,13 @@ function InspectorBody({ onClose, labels }: Omit<VariableInspectorProps, 'open'>
   ).map((id) => byId.get(id)!)
 
   const varList = (vars: InferredVariable[], heading: string) => (
-    <section className="fk-variables__group">
-      <h4 className="fk-run-subtitle">{heading}</h4>
-      <ul className="fk-variables__list">
+    <section className="ty-variables__group">
+      <h4 className="ty-run-subtitle">{heading}</h4>
+      <ul className="ty-variables__list">
         {vars.map((v) => (
-          <li key={v.name} className="fk-variables__item">
-            <code className="fk-run-mono">{v.name}</code>
-            <span className="fk-variables__type">{l[v.type]}</span>
+          <li key={v.name} className="ty-variables__item">
+            <code className="ty-run-mono">{v.name}</code>
+            <span className="ty-variables__type">{l[v.type]}</span>
           </li>
         ))}
       </ul>
@@ -158,29 +158,29 @@ function InspectorBody({ onClose, labels }: Omit<VariableInspectorProps, 'open'>
   )
 
   return (
-    <DockedPanel title={l.title} onClose={onClose} closeLabel={l.close} className="fk-variables">
+    <DockedPanel title={l.title} onClose={onClose} closeLabel={l.close} className="ty-variables">
       {ordered.length === 0 ? (
-        <p className="fk-run-empty">{l.noNodes}</p>
+        <p className="ty-run-empty">{l.noNodes}</p>
       ) : (
-        <DisclosureGroup allowsMultipleExpanded className="fk-variables__entries">
+        <DisclosureGroup allowsMultipleExpanded className="ty-variables__entries">
           {ordered.map((n) => {
             const vars = inferVariables(n)
             const count = vars.inputs.length + vars.outputs.length
             const Icon = catalog.icon(n.kind)
             const label = typeof n.data.label === 'string' && n.data.label ? n.data.label : (catalog.entry(n.kind)?.label ?? n.id)
             return (
-              <Disclosure key={n.id} id={n.id} className="fk-variables__entry">
-                <Heading level={3} className="fk-variables__heading">
-                  <AriaButton slot="trigger" className="fk-variables__trigger">
-                    <ChevronRight className="fk-variables__chevron fk-run-mirror" aria-hidden="true" focusable="false" />
-                    <Icon className="fk-variables__icon" aria-hidden="true" focusable="false" />
-                    <span className="fk-variables__label">{label}</span>
-                    <span className="fk-variables__count">{fill(l.variables, { count }, locale)}</span>
+              <Disclosure key={n.id} id={n.id} className="ty-variables__entry">
+                <Heading level={3} className="ty-variables__heading">
+                  <AriaButton slot="trigger" className="ty-variables__trigger">
+                    <ChevronRight className="ty-variables__chevron ty-run-mirror" aria-hidden="true" focusable="false" />
+                    <Icon className="ty-variables__icon" aria-hidden="true" focusable="false" />
+                    <span className="ty-variables__label">{label}</span>
+                    <span className="ty-variables__count">{fill(l.variables, { count }, locale)}</span>
                   </AriaButton>
                 </Heading>
-                <DisclosurePanel className="fk-variables__panel">
+                <DisclosurePanel className="ty-variables__panel">
                   {count === 0 ? (
-                    <p className="fk-run-hint">{l.noVariables}</p>
+                    <p className="ty-run-hint">{l.noVariables}</p>
                   ) : (
                     <>
                       {vars.inputs.length ? varList(vars.inputs, l.inputs) : null}

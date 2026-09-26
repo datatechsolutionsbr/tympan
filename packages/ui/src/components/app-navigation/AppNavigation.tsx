@@ -88,23 +88,23 @@ function EntryRow({ entry, ctx }: { entry: NavEntry; ctx: EntryContext }) {
   const warm = ctx.onPrefetch ? () => ctx.onPrefetch?.(entry.href) : undefined
   const face = (
     <>
-      <span className="fk-app-nav__icon" aria-hidden="true">
+      <span className="ty-app-nav__icon" aria-hidden="true">
         {entry.icon}
       </span>
       {ctx.iconOnly ? null : (
-        <span className="fk-app-nav__label" aria-hidden={pending ? true : undefined}>
+        <span className="ty-app-nav__label" aria-hidden={pending ? true : undefined}>
           {entry.label}
         </span>
       )}
       {pending && !ctx.iconOnly ? (
-        <span className="fk-app-nav__count" aria-hidden="true">
+        <span className="ty-app-nav__count" aria-hidden="true">
           {pending}
         </span>
       ) : null}
     </>
   )
   const shared = {
-    className: 'fk-app-nav__link',
+    className: 'ty-app-nav__link',
     'aria-current': active ? ('page' as const) : undefined,
     'aria-label': ctx.iconOnly || pending ? name : undefined,
     'data-active': active || undefined,
@@ -134,14 +134,14 @@ function EntryRow({ entry, ctx }: { entry: NavEntry; ctx: EntryContext }) {
     link = (
       <TooltipTrigger delay={300}>
         {link}
-        <Tooltip className="fk-app-nav__tip" placement="end" offset={8}>
+        <Tooltip className="ty-app-nav__tip" placement="end" offset={8}>
           {name}
         </Tooltip>
       </TooltipTrigger>
     )
   }
   return (
-    <li className="fk-app-nav__row">
+    <li className="ty-app-nav__row">
       {link}
       {entry.menu?.length && !ctx.iconOnly ? (
         <ActionMenu
@@ -165,13 +165,13 @@ function EntryGroups({ entries, ctx }: { entries: NavEntry[]; ctx: EntryContext 
       {order.map((group, i) => {
         const labelId = `${baseId}-g${i}`
         return (
-          <div key={group ?? `ungrouped-${i}`} className="fk-app-nav__group">
+          <div key={group ?? `ungrouped-${i}`} className="ty-app-nav__group">
             {group ? (
-              <p id={labelId} className="fk-app-nav__group-name" data-hidden={ctx.iconOnly || undefined}>
+              <p id={labelId} className="ty-app-nav__group-name" data-hidden={ctx.iconOnly || undefined}>
                 {group}
               </p>
             ) : null}
-            <ul className="fk-app-nav__list" aria-labelledby={group ? labelId : undefined}>
+            <ul className="ty-app-nav__list" aria-labelledby={group ? labelId : undefined}>
               {entries
                 .filter((e) => e.group === group)
                 .map((e) => (
@@ -193,22 +193,22 @@ function AccountMenu({ account, copy, iconOnly }: { account: AppNavigationAccoun
   }
   return (
     <MenuTrigger>
-      <AriaButton className="fk-app-nav__account" aria-label={account.name ? `${copy.account}: ${account.name}` : copy.account}>
+      <AriaButton className="ty-app-nav__account" aria-label={account.name ? `${copy.account}: ${account.name}` : copy.account}>
         {letter || account.pictureUrl ? <Avatar src={account.pictureUrl} fallbackText={letter} size="small" decorative /> : <UserRound aria-hidden="true" />}
         {iconOnly || !account.name ? null : (
-          <span className="fk-app-nav__account-name" aria-hidden="true">
+          <span className="ty-app-nav__account-name" aria-hidden="true">
             {account.name}
           </span>
         )}
       </AriaButton>
-      <Popover className="fk-app-nav__menu-popover" placement="top start" offset={8}>
-        <Menu className="fk-app-nav__menu" aria-label={copy.account} onAction={pick}>
-          <MenuItem id="profile" className="fk-app-nav__menu-item" textValue={copy.profile}>
-            <UserRound aria-hidden="true" className="fk-app-nav__menu-icon" />
+      <Popover className="ty-app-nav__menu-popover" placement="top start" offset={8}>
+        <Menu className="ty-app-nav__menu" aria-label={copy.account} onAction={pick}>
+          <MenuItem id="profile" className="ty-app-nav__menu-item" textValue={copy.profile}>
+            <UserRound aria-hidden="true" className="ty-app-nav__menu-icon" />
             {copy.profile}
           </MenuItem>
           <MenuSection
-            className="fk-app-nav__menu-section"
+            className="ty-app-nav__menu-section"
             selectionMode="single"
             selectedKeys={[account.theme]}
             onSelectionChange={(keys) => {
@@ -216,19 +216,19 @@ function AccountMenu({ account, copy, iconOnly }: { account: AppNavigationAccoun
               if (next === 'light' || next === 'dark') account.onThemeChange(next)
             }}
           >
-            <Header className="fk-app-nav__menu-heading">{copy.theme}</Header>
-            <MenuItem id="light" className="fk-app-nav__menu-item" textValue={copy.themeLight}>
-              <span className="fk-app-nav__radio" aria-hidden="true" />
+            <Header className="ty-app-nav__menu-heading">{copy.theme}</Header>
+            <MenuItem id="light" className="ty-app-nav__menu-item" textValue={copy.themeLight}>
+              <span className="ty-app-nav__radio" aria-hidden="true" />
               {copy.themeLight}
             </MenuItem>
-            <MenuItem id="dark" className="fk-app-nav__menu-item" textValue={copy.themeDark}>
-              <span className="fk-app-nav__radio" aria-hidden="true" />
+            <MenuItem id="dark" className="ty-app-nav__menu-item" textValue={copy.themeDark}>
+              <span className="ty-app-nav__radio" aria-hidden="true" />
               {copy.themeDark}
             </MenuItem>
           </MenuSection>
           {account.locales?.length ? (
             <MenuSection
-              className="fk-app-nav__menu-section"
+              className="ty-app-nav__menu-section"
               selectionMode="single"
               selectedKeys={account.locale ? [account.locale] : []}
               onSelectionChange={(keys) => {
@@ -236,17 +236,17 @@ function AccountMenu({ account, copy, iconOnly }: { account: AppNavigationAccoun
                 if (next !== undefined) account.onLocaleChange?.(String(next))
               }}
             >
-              <Header className="fk-app-nav__menu-heading">{copy.language}</Header>
+              <Header className="ty-app-nav__menu-heading">{copy.language}</Header>
               {account.locales.map((l) => (
-                <MenuItem key={l.value} id={l.value} className="fk-app-nav__menu-item" textValue={l.label}>
-                  <span className="fk-app-nav__radio" aria-hidden="true" />
+                <MenuItem key={l.value} id={l.value} className="ty-app-nav__menu-item" textValue={l.label}>
+                  <span className="ty-app-nav__radio" aria-hidden="true" />
                   <span lang={l.value}>{l.label}</span>
                 </MenuItem>
               ))}
             </MenuSection>
           ) : null}
-          <MenuItem id="sign-out" className="fk-app-nav__menu-item" data-tone="danger" textValue={copy.signOut}>
-            <LogOut aria-hidden="true" className="fk-app-nav__menu-icon" />
+          <MenuItem id="sign-out" className="ty-app-nav__menu-item" data-tone="danger" textValue={copy.signOut}>
+            <LogOut aria-hidden="true" className="ty-app-nav__menu-icon" />
             {copy.signOut}
           </MenuItem>
         </Menu>
@@ -292,8 +292,8 @@ export function AppNavigation(props: AppNavigationProps) {
   // Below 1024 the side presentations become a compact bar with a drawer.
   if (sideLike && !desktop) {
     return (
-      <div className={cx('fk-app-nav', props.className)} data-layout="drawer">
-        <div className="fk-app-nav__bar">
+      <div className={cx('ty-app-nav', props.className)} data-layout="drawer">
+        <div className="ty-app-nav__bar">
           <Button
             variant="quiet"
             iconOnly
@@ -303,21 +303,21 @@ export function AppNavigation(props: AppNavigationProps) {
             aria-controls={drawerOpen ? navId : undefined}
             onPress={() => setDrawerOpen(true)}
           />
-          {props.title ? <span className="fk-app-nav__screen">{props.title}</span> : null}
+          {props.title ? <span className="ty-app-nav__screen">{props.title}</span> : null}
           {props.account ? <AccountMenu account={props.account} copy={copy} iconOnly /> : null}
         </div>
-        <ModalOverlay isOpen={drawerOpen} onOpenChange={setDrawerOpen} isDismissable className="fk-app-nav__scrim">
-          <Modal className="fk-app-nav__drawer">
-            <Dialog className="fk-app-nav__drawer-dialog" aria-label={copy.landmark}>
-              <div className="fk-app-nav__drawer-head">
+        <ModalOverlay isOpen={drawerOpen} onOpenChange={setDrawerOpen} isDismissable className="ty-app-nav__scrim">
+          <Modal className="ty-app-nav__drawer">
+            <Dialog className="ty-app-nav__drawer-dialog" aria-label={copy.landmark}>
+              <div className="ty-app-nav__drawer-head">
                 {props.brand}
                 <Button variant="quiet" iconOnly accessibleLabel={copy.closeMenu} leadingIcon={<X />} onPress={() => setDrawerOpen(false)} />
               </div>
               {props.scopeSwitcher}
-              <nav id={navId} aria-label={copy.landmark} className="fk-app-nav__nav">
+              <nav id={navId} aria-label={copy.landmark} className="ty-app-nav__nav">
                 <EntryGroups entries={entries} ctx={{ ...ctx, onChosen: () => setDrawerOpen(false) }} />
               </nav>
-              {props.footer ? <div className="fk-app-nav__footer">{props.footer}</div> : null}
+              {props.footer ? <div className="ty-app-nav__footer">{props.footer}</div> : null}
             </Dialog>
           </Modal>
         </ModalOverlay>
@@ -329,10 +329,10 @@ export function AppNavigation(props: AppNavigationProps) {
   if (layout === 'topbar' || layout === 'floating') {
     const iconOnly = layout === 'floating'
     return (
-      <div className={cx('fk-app-nav', props.className)} data-layout={layout}>
-        {layout === 'topbar' && props.brand ? <div className="fk-app-nav__brand">{props.brand}</div> : null}
-        <nav aria-label={copy.landmark} className="fk-app-nav__nav">
-          <ul className="fk-app-nav__list">
+      <div className={cx('ty-app-nav', props.className)} data-layout={layout}>
+        {layout === 'topbar' && props.brand ? <div className="ty-app-nav__brand">{props.brand}</div> : null}
+        <nav aria-label={copy.landmark} className="ty-app-nav__nav">
+          <ul className="ty-app-nav__list">
             {entries.map((e) => (
               <EntryRow key={e.id} entry={e} ctx={{ ...ctx, iconOnly }} />
             ))}
@@ -345,14 +345,14 @@ export function AppNavigation(props: AppNavigationProps) {
   }
 
   return (
-    <div className={cx('fk-app-nav', props.className)} data-layout="sidebar" data-collapsed={collapsed || undefined}>
-      {props.brand ? <div className="fk-app-nav__brand">{props.brand}</div> : null}
-      {props.scopeSwitcher && !collapsed ? <div className="fk-app-nav__scope">{props.scopeSwitcher}</div> : null}
-      <nav id={navId} aria-label={copy.landmark} className="fk-app-nav__nav">
+    <div className={cx('ty-app-nav', props.className)} data-layout="sidebar" data-collapsed={collapsed || undefined}>
+      {props.brand ? <div className="ty-app-nav__brand">{props.brand}</div> : null}
+      {props.scopeSwitcher && !collapsed ? <div className="ty-app-nav__scope">{props.scopeSwitcher}</div> : null}
+      <nav id={navId} aria-label={copy.landmark} className="ty-app-nav__nav">
         <EntryGroups entries={entries} ctx={{ ...ctx, iconOnly: collapsed }} />
       </nav>
-      {props.footer && !collapsed ? <div className="fk-app-nav__footer">{props.footer}</div> : null}
-      <div className="fk-app-nav__end">
+      {props.footer && !collapsed ? <div className="ty-app-nav__footer">{props.footer}</div> : null}
+      <div className="ty-app-nav__end">
         {props.account ? <AccountMenu account={props.account} copy={copy} iconOnly={collapsed} /> : null}
         {props.onCollapsedChange && layout === 'sidebar' ? (
           <Button

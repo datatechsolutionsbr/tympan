@@ -4,13 +4,25 @@
 > were planned as MIT. They are published under FSL-1.1-ALv2 (see `LICENSE`
 > at the repository root); the clean-room process below is unchanged.
 
-> **Naming note.** In this repository `packages/ui` / `@fakhir/ui` is the
+> **Naming note.** In this record `packages/ui` / `@fakhir/ui` is the
 > clean-room library (formerly `packages/design-system` /
 > `@fakhir/design-system`) and `packages/flow` / `@fakhir/flow` is the canvas
 > (formerly `packages/flow-canvas` / `@fakhir/flow-canvas`). Where this record
 > names `packages/ui`, `@fakhir/ui`, `packages/workflow` or `@fakhir/workflow`
 > as the fork, it means the deleted fork of the Fakhir monorepo, whose code is
 > not in this repository or its history.
+
+> **Rename note (2026-09-26).** The repository is now Tympan, an
+> Astrlabe-family component published by Datatech. `packages/ui` is
+> `@datatechsolutions/tympan` (called `@fakhir/ui` in this record, before
+> that `@fakhir/design-system`), `packages/flow` is
+> `@datatechsolutions/tympan-flow` (here `@fakhir/flow`, before that
+> `@fakhir/flow-canvas`) and `packages/tokens` is
+> `@datatechsolutions/tympan-tokens` (here `@fakhir/tokens`). The `fk-` class
+> and `--fk-` custom-property prefix and the `data-fk-*` attributes named here
+> are now `ty-`, `--ty-` and `data-ty-*`; `FakhirProvider` is `TympanProvider`;
+> the Fakhir look is the `fakhir` theme preset. This record is otherwise kept
+> as written.
 
 Date: 2026-09-26. Branch: `ds/clean-room` (waves 1 to 3); wave 4 on
 `ds/specs-extra`.

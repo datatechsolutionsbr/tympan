@@ -3,7 +3,7 @@
 
 import { useEffect, useReducer, useRef, useState } from 'react'
 import { ToggleButton } from 'react-aria-components'
-import { ListboxSelect, TextArea, TextField } from '@fakhir/ui'
+import { ListboxSelect, TextArea, TextField } from '@datatechsolutions/tympan'
 import { fill } from '../../internal/labels'
 import { prettyJson, readLiteral, vocabularyOf, writeLiteral, type OperandSlotSpec } from '../model'
 import { useBuilderEnv } from './shared'
@@ -11,18 +11,18 @@ import { useBuilderEnv } from './shared'
 export function ReferencePicker({ current, offered, onPick }: { current: string; offered: readonly string[]; onPick: (ref: string) => void }) {
   const { words } = useBuilderEnv()
   const chips = offered.map((ref) => (
-    <ToggleButton key={ref} className="fk-expr__chip" isSelected={ref === current} onChange={() => onPick(ref)}>
+    <ToggleButton key={ref} className="ty-expr__chip" isSelected={ref === current} onChange={() => onPick(ref)}>
       <code dir="ltr">{ref}</code>
     </ToggleButton>
   ))
   return (
-    <div className="fk-expr__reference">
+    <div className="ty-expr__reference">
       {chips.length ? (
-        <div className="fk-expr__chips" role="group" aria-label={words.references}>
+        <div className="ty-expr__chips" role="group" aria-label={words.references}>
           {chips}
         </div>
       ) : null}
-      <TextField label={words.referencePath} value={current} onChange={onPick} className="fk-expr__mono" />
+      <TextField label={words.referencePath} value={current} onChange={onPick} className="ty-expr__mono" />
     </div>
   )
 }

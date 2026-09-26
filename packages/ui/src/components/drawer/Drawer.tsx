@@ -84,25 +84,25 @@ export function Drawer(props: DrawerProps) {
         if (!o) onOpenChange(false)
       }}
       isDismissable={dismissible}
-      className="fk-drawer__backdrop"
+      className="ty-drawer__backdrop"
       data-placement={placement}
       style={overlayStyle}
     >
       <Modal
-        className={cx('fk-drawer', className)}
+        className={cx('ty-drawer', className)}
         data-placement={placement}
         data-width={width}
         data-dragging={dragging || undefined}
         style={panelStyle}
       >
-        <Dialog className="fk-drawer__dialog">
-          <header className="fk-drawer__header" {...dragHandlers}>
-            {placement === 'bottom' && showHandle ? <span className="fk-drawer__handle" aria-hidden="true" /> : null}
-            <Heading slot="title" level={2} className="fk-drawer__title">
+        <Dialog className="ty-drawer__dialog">
+          <header className="ty-drawer__header" {...dragHandlers}>
+            {placement === 'bottom' && showHandle ? <span className="ty-drawer__handle" aria-hidden="true" /> : null}
+            <Heading slot="title" level={2} className="ty-drawer__title">
               {title}
             </Heading>
             <Button
-              className="fk-drawer__close"
+              className="ty-drawer__close"
               variant="quiet"
               size="compact"
               shape="circle"
@@ -112,8 +112,8 @@ export function Drawer(props: DrawerProps) {
               onPress={() => onOpenChange(false)}
             />
           </header>
-          <div className="fk-drawer__body">{children}</div>
-          {placement === 'bottom' ? <div className="fk-drawer__inset" aria-hidden="true" /> : null}
+          <div className="ty-drawer__body">{children}</div>
+          {placement === 'bottom' ? <div className="ty-drawer__inset" aria-hidden="true" /> : null}
         </Dialog>
       </Modal>
     </ModalOverlay>

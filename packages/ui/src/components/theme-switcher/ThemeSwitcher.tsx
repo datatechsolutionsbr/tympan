@@ -23,7 +23,7 @@ const flip = (m: ThemeSwitcherMode): ThemeSwitcherMode => (m === 'dark' ? 'light
 function Glyph({ of, active }: { of: ThemeSwitcherMode; active?: boolean }) {
   const Icon = of === 'dark' ? Moon : Sun
   return (
-    <span className="fk-theme-switcher__glyph" data-glyph={of} data-active={active || undefined} aria-hidden="true">
+    <span className="ty-theme-switcher__glyph" data-glyph={of} data-active={active || undefined} aria-hidden="true">
       <Icon focusable="false" />
     </span>
   )
@@ -40,7 +40,7 @@ export function ThemeSwitcher(props: ThemeSwitcherProps) {
     return (
       <AriaButton
         {...shared}
-        className={cx('fk-theme-switcher', props.className)}
+        className={cx('ty-theme-switcher', props.className)}
         data-variant="compact"
         aria-label={name}
         onPress={() => props.onModeChange(next)}
@@ -54,19 +54,19 @@ export function ThemeSwitcher(props: ThemeSwitcherProps) {
   return (
     <AriaSwitch
       {...shared}
-      className={cx('fk-theme-switcher', props.className)}
+      className={cx('ty-theme-switcher', props.className)}
       data-variant="full"
       isSelected={props.mode === 'dark'}
       onChange={(on) => props.onModeChange(on ? 'dark' : 'light')}
     >
       <Glyph of="light" active={props.mode === 'light'} />
-      <span className="fk-theme-switcher__track" aria-hidden="true">
-        <span className="fk-theme-switcher__knob">
-          <Check className="fk-theme-switcher__knob-check" focusable="false" />
+      <span className="ty-theme-switcher__track" aria-hidden="true">
+        <span className="ty-theme-switcher__knob">
+          <Check className="ty-theme-switcher__knob-check" focusable="false" />
         </span>
       </span>
       <Glyph of="dark" active={props.mode === 'dark'} />
-      <span className="fk-theme-switcher__name">{name}</span>
+      <span className="ty-theme-switcher__name">{name}</span>
     </AriaSwitch>
   )
 }

@@ -82,7 +82,7 @@ describe('Pagination', () => {
 
   it('keeps 44 px hit areas and a forced-colours current page', () => {
     const css = cssOf('components/pagination/Pagination.css')
-    expect(css).toMatch(/\.fk-pagination__button::before\s*\{[^}]*max\(100%,\s*var\(--fk-control-target\)\)/)
+    expect(css).toMatch(/\.ty-pagination__button::before\s*\{[^}]*max\(100%,\s*var\(--ty-control-target\)\)/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/border-color:\s*CanvasText/)
   })
 
@@ -98,7 +98,7 @@ describe('Pagination in right-to-left (ar)', () => {
     // Page numbers use the locale's digits; the previous/next chevrons mirror.
     expect(container.querySelector('[aria-current="page"]')).toHaveTextContent('٢')
     const arrows = container.querySelectorAll('[data-arrow] svg')
-    for (const a of arrows) expect(a).toHaveClass('fk-mirror-rtl')
+    for (const a of arrows) expect(a).toHaveClass('ty-mirror-rtl')
     await axeRtl(container)
   })
 })

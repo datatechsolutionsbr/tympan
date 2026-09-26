@@ -63,7 +63,7 @@ describe('CanvasToolbar and canvas tool items', () => {
 
   it('keeps 44 px hit areas and has reduced-motion and forced-colour rules', () => {
     const css = cssOf('toolbar/toolbar.css')
-    expect(css).toMatch(/\.fk-canvas-tool::before\s*\{[^}]*max\(100%, var\(--fk-control-target, 44px\)\)/)
+    expect(css).toMatch(/\.ty-canvas-tool::before\s*\{[^}]*max\(100%, var\(--ty-control-target, 44px\)\)/)
     expect(mediaBlock(css, /\(prefers-reduced-motion: reduce\)/)).toMatch(/transition:\s*none/)
     expect(mediaBlock(css, /\(forced-colors: active\)/)).toMatch(/Highlight/)
   })

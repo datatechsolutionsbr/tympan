@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { autoLayout, rankDirectionOf } from '../layout/autoLayout'
 import { CanvasSurface, physicalSide } from '../surface/CanvasSurface'
 import { canvasToolItems } from '../toolbar/canvasTools'
@@ -34,15 +34,15 @@ describe('i18n foundations', () => {
 
   it('picks the built-in bundle of the provider locale, by exact tag then language', () => {
     const { rerender } = render(
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <Probe />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(screen.getByText(/Olá Ana/)).toHaveTextContent('Olá Ana / 1.200 nós')
     rerender(
-      <FakhirProvider locale="es-MX">
+      <TympanProvider locale="es-MX">
         <Probe />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     // Spanish greeting, English plural fallback (es bundle is partial), Mexican number grouping.
     expect(screen.getByText(/Hola Ana/)).toHaveTextContent('Hola Ana / 1,200 nodes')
@@ -50,12 +50,12 @@ describe('i18n foundations', () => {
 
   it('lets the host catalogue and then the prop override the bundle', () => {
     render(
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <FlowMessagesProvider messages={{ Probe: { hello: 'Oi {name}' } }}>
           <Probe />
           <Probe override="Salve {name}" />
         </FlowMessagesProvider>
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(screen.getByText(/Oi Ana/)).toBeInTheDocument()
     expect(screen.getByText(/Salve Ana/)).toBeInTheDocument()
@@ -63,9 +63,9 @@ describe('i18n foundations', () => {
 
   it('reports right-to-left for Arabic', () => {
     const { container } = render(
-      <FakhirProvider locale="ar">
+      <TympanProvider locale="ar">
         <Probe />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(container.querySelector('[data-dir]')).toHaveAttribute('data-dir', 'rtl')
   })
@@ -92,13 +92,13 @@ describe('i18n foundations', () => {
       { id: 'b', rect: { x: 0, y: 0, width: 200, height: 80 } },
     ]
     const { container } = render(
-      <FakhirProvider locale="ar">
+      <TympanProvider locale="ar">
         <CanvasSurface label="مسار" nodes={nodes} fit="none" connectors={[{ id: 'c', source: 'a', target: 'b' }]} renderNode={(n) => <span>{n.id}</span>} />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     // Source leaves a's physical left edge (x = 400) toward b's right edge (x = 200).
-    expect(container.querySelector('.fk-flow-surface__connector')!.getAttribute('d')!.startsWith('M400,40 ')).toBe(true)
-    expect(container.querySelector('.fk-flow-surface')).toHaveAttribute('data-direction', 'rtl')
+    expect(container.querySelector('.ty-flow-surface__connector')!.getAttribute('d')!.startsWith('M400,40 ')).toBe(true)
+    expect(container.querySelector('.ty-flow-surface')).toHaveAttribute('data-direction', 'rtl')
   })
 
   it('names canvas tools in the requested locale', () => {

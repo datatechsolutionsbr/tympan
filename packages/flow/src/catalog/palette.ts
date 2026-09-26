@@ -1,5 +1,5 @@
 // FlowPaletteTokens (wave-4 spec): every colour decision of the canvas as a
-// token reference. Components receive `var(--fk-flow-…)` strings or a tone
+// token reference. Components receive `var(--ty-flow-…)` strings or a tone
 // name for a data attribute; never a literal colour.
 
 export const TONE_NAMES = [
@@ -85,12 +85,12 @@ export interface KindTokenRefs {
 /** Token references for the parts drawn in a kind's tone. */
 export function toneTokens(tone: ToneName): KindTokenRefs {
   return {
-    bubble: `var(--fk-flow-tone-${tone})`,
-    bubbleInk: `var(--fk-flow-tone-${tone}-ink)`,
-    badge: `var(--fk-flow-tone-${tone}-soft)`,
-    badgeInk: `var(--fk-flow-tone-${tone}-text)`,
-    minimap: `var(--fk-flow-tone-${tone})`,
-    port: `var(--fk-flow-tone-${tone})`,
+    bubble: `var(--ty-flow-tone-${tone})`,
+    bubbleInk: `var(--ty-flow-tone-${tone}-ink)`,
+    badge: `var(--ty-flow-tone-${tone}-soft)`,
+    badgeInk: `var(--ty-flow-tone-${tone}-text)`,
+    minimap: `var(--ty-flow-tone-${tone})`,
+    port: `var(--ty-flow-tone-${tone})`,
   }
 }
 
@@ -100,12 +100,12 @@ export function kindTokens(kind: string): KindTokenRefs {
 
 /** Connector colours. Every conditional connector also carries a word and a line style. */
 export const connectorTokens = Object.freeze({
-  rest: 'var(--fk-flow-connector)',
-  active: 'var(--fk-flow-connector-active)',
-  true: 'var(--fk-flow-connector-true)',
-  false: 'var(--fk-flow-connector-false)',
-  rule: 'var(--fk-flow-connector-rule)',
+  rest: 'var(--ty-flow-connector)',
+  active: 'var(--ty-flow-connector-active)',
+  true: 'var(--ty-flow-connector-true)',
+  false: 'var(--ty-flow-connector-false)',
+  rule: 'var(--ty-flow-connector-rule)',
 })
 
 /** Run accent of a running node: always the semantic pending colour, never the kind tone. */
-export const RUN_ACCENT = 'var(--fk-flow-ring-running)'
+export const RUN_ACCENT = 'var(--ty-flow-ring-running)'

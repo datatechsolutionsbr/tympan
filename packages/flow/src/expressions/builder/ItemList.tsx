@@ -4,7 +4,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Plus, Trash2 } from 'lucide-react'
-import { Button, Tag } from '@fakhir/ui'
+import { Button, Tag } from '@datatechsolutions/tympan'
 import { fill } from '../../internal/labels'
 import { groupName, SlotHeading, useBuilderEnv } from './shared'
 
@@ -44,11 +44,11 @@ export function ItemList({ slotKey, items, depth, onItems, drawItem }: ItemListP
     focus.land(index < items.length - 1 ? index : -1)
   }
   const rows = items.map((item, index) => (
-    <li key={index} className="fk-expr__item">
-      <span className="fk-expr__item-number" aria-hidden="true">
+    <li key={index} className="ty-expr__item">
+      <span className="ty-expr__item-number" aria-hidden="true">
         {index + 1}
       </span>
-      <div className="fk-expr__item-body">
+      <div className="ty-expr__item-body">
         {drawItem({
           index,
           item,
@@ -61,9 +61,9 @@ export function ItemList({ slotKey, items, depth, onItems, drawItem }: ItemListP
     </li>
   ))
   return (
-    <div className="fk-expr__list" role="group" aria-label={groupName(words, slotKey, depth)}>
+    <div className="ty-expr__list" role="group" aria-label={groupName(words, slotKey, depth)}>
       <SlotHeading slotKey={slotKey} trailing={<Tag size="small">{fill(words.itemCount, { count: items.length }, locale)}</Tag>} />
-      {rows.length ? <ol className="fk-expr__items">{rows}</ol> : null}
+      {rows.length ? <ol className="ty-expr__items">{rows}</ol> : null}
       <Button ref={focus.fallback} variant="secondary" size="compact" leadingIcon={<Plus />} onPress={() => onItems([...items, { value: null }])}>
         {words.addItem}
       </Button>

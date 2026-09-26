@@ -55,7 +55,7 @@ export function Surface({
   className,
   children,
 }: SurfaceProps) {
-  const headingId = `fk-surface-title-${useId().replace(/:/g, '')}`
+  const headingId = `ty-surface-title-${useId().replace(/:/g, '')}`
   const primaryRef = useRef<HTMLElement | null>(null)
   const pressable = !!(onPress || href)
   devWarning(pressable && title == null, 'Surface: a pressable surface needs a `title`, which becomes its primary control.')
@@ -82,12 +82,12 @@ export function Surface({
         routerOptions={routerOptions}
         isDisabled={disabled}
         onPress={onPress}
-        className="fk-surface__primary"
+        className="ty-surface__primary"
       >
         {title}
       </AriaLink>
     ) : (
-      <AriaButton ref={primaryRef as React.Ref<HTMLButtonElement>} onPress={onPress} isDisabled={disabled} className="fk-surface__primary">
+      <AriaButton ref={primaryRef as React.Ref<HTMLButtonElement>} onPress={onPress} isDisabled={disabled} className="ty-surface__primary">
         {title}
       </AriaButton>
     )
@@ -98,7 +98,7 @@ export function Surface({
   return (
     <Element
       id={id}
-      className={cx('fk-surface', className)}
+      className={cx('ty-surface', className)}
       aria-labelledby={labelled ? headingId : undefined}
       data-elevation={elevation}
       data-padding={padding}
@@ -108,17 +108,17 @@ export function Surface({
       onClick={pressable ? handleClick : undefined}
     >
       {title != null || description != null ? (
-        <header className="fk-surface__header">
+        <header className="ty-surface__header">
           {title != null ? (
-            <AriaHeading level={titleLevel} id={headingId} className="fk-surface__title">
+            <AriaHeading level={titleLevel} id={headingId} className="ty-surface__title">
               {titleContent}
             </AriaHeading>
           ) : null}
-          {description != null ? <div className="fk-surface__description">{description}</div> : null}
+          {description != null ? <div className="ty-surface__description">{description}</div> : null}
         </header>
       ) : null}
-      {children != null ? <div className="fk-surface__body">{children}</div> : null}
-      {footer != null ? <footer className="fk-surface__footer">{footer}</footer> : null}
+      {children != null ? <div className="ty-surface__body">{children}</div> : null}
+      {footer != null ? <footer className="ty-surface__footer">{footer}</footer> : null}
     </Element>
   )
 }

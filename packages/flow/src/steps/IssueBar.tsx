@@ -4,7 +4,7 @@
 // the same kind that takes what arrives, insert a bridging step, or unlink.
 
 import { TriangleAlert } from 'lucide-react'
-import { Button } from '@fakhir/ui'
+import { Button } from '@datatechsolutions/tympan'
 import { fill, useFlowLocale } from '../internal/labels'
 import { ShapeChip } from './ShapeChip'
 import { useSteps } from './StepsContext'
@@ -24,7 +24,7 @@ export function IssueBar({ issues, nameOf, locked, onRepair, onShow }: IssueBarP
   const w = rt.words
   const { locale } = useFlowLocale()
   const first = issues[0]
-  if (!first) return <p className="fk-visually-hidden" role="status" />
+  if (!first) return <p className="ty-visually-hidden" role="status" />
   const names = { from: nameOf(first.sourceId), to: nameOf(first.nodeId) }
   const stepName = (id: string) => rt.byId.get(id)?.name ?? id
   const fix =
@@ -34,12 +34,12 @@ export function IssueBar({ issues, nameOf, locked, onRepair, onShow }: IssueBarP
         ? fill(w.fixInsert, { step: stepName(first.repair.stepId), ...names }, locale)
         : fill(w.fixUnlink, names, locale)
   return (
-    <div className="fk-issue-bar" data-fk-surface-chrome="">
-      <TriangleAlert className="fk-issue-bar__icon" aria-hidden="true" focusable="false" />
-      <p className="fk-issue-bar__text" role="status">
+    <div className="ty-issue-bar" data-ty-surface-chrome="">
+      <TriangleAlert className="ty-issue-bar__icon" aria-hidden="true" focusable="false" />
+      <p className="ty-issue-bar__text" role="status">
         <strong>{fill(w.issueCount, { count: issues.length }, locale)}:</strong>{' '}
         {onShow ? (
-          <button type="button" className="fk-issue-bar__link" onClick={() => onShow(first.nodeId)}>
+          <button type="button" className="ty-issue-bar__link" onClick={() => onShow(first.nodeId)}>
             {fill(w.issueSentence, { to: names.to }, locale)}
           </button>
         ) : (
@@ -49,7 +49,7 @@ export function IssueBar({ issues, nameOf, locked, onRepair, onShow }: IssueBarP
         {first.gets ? <ShapeChip shapes={[first.gets]} words={rt.shapes} /> : w.nothing}.
       </p>
       {!locked ? (
-        <Button className="fk-issue-bar__fix" variant="secondary" size="compact" onPress={() => onRepair(first)}>
+        <Button className="ty-issue-bar__fix" variant="secondary" size="compact" onPress={() => onRepair(first)}>
           {fix}
         </Button>
       ) : null}

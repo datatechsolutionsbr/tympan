@@ -16,6 +16,7 @@ import {
   themeToDtcg,
   themeVariables,
   toCss,
+  tympanPreset,
   type ContrastLevel,
   type Mode,
   type ThemeConfig,
@@ -75,7 +76,7 @@ describe('WCAG 2.2 AA in every preset and mode', () => {
   }
 
   it('checks the focus ring and field border as UI pairs', () => {
-    const theme = resolveTheme(fakhirPreset, 'light')
+    const theme = resolveTheme(tympanPreset, 'light')
     const kinds = new Set(theme.report.filter((r) => r.fg === 'focus-ring' || r.fg === 'input').map((r) => r.kind))
     expect([...kinds]).toEqual(['ui'])
   })
@@ -112,30 +113,30 @@ describe('WCAG 2.2 AA in every preset and mode', () => {
   })
 })
 
-describe('fakhir preset honours the design direction (§2.3, §2.4)', () => {
+describe('default preset honours the design direction (§2.3, §2.4)', () => {
   it('pins the accent, surfaces and ink values', () => {
-    const light = new Map(themeVariables(resolveTheme(fakhirPreset, 'light')))
-    expect(light.get('--fk-accent')).toBe('#166e5a')
-    expect(light.get('--fk-brand')).toBe('#166e5a')
-    expect(light.get('--fk-bg')).toBe('#f6f8fa')
-    expect(light.get('--fk-surface')).toBe('rgb(252 253 253 / 0.82)')
-    expect(light.get('--fk-ink-3')).toBe('#526077')
-    expect(light.get('--fk-radius-control')).toBe('10px')
-    expect(light.get('--fk-radius-card')).toBe('16px')
-    expect(light.get('--fk-radius-sheet')).toBe('24px')
-    const dark = new Map(themeVariables(resolveTheme(fakhirPreset, 'dark')))
-    expect(dark.get('--fk-accent')).toBe('#34d399')
-    expect(dark.get('--fk-bg')).toBe('#0a0f1c')
+    const light = new Map(themeVariables(resolveTheme(tympanPreset, 'light')))
+    expect(light.get('--ty-accent')).toBe('#166e5a')
+    expect(light.get('--ty-brand')).toBe('#166e5a')
+    expect(light.get('--ty-bg')).toBe('#f6f8fa')
+    expect(light.get('--ty-surface')).toBe('rgb(252 253 253 / 0.82)')
+    expect(light.get('--ty-ink-3')).toBe('#526077')
+    expect(light.get('--ty-radius-control')).toBe('10px')
+    expect(light.get('--ty-radius-card')).toBe('16px')
+    expect(light.get('--ty-radius-sheet')).toBe('24px')
+    const dark = new Map(themeVariables(resolveTheme(tympanPreset, 'dark')))
+    expect(dark.get('--ty-accent')).toBe('#34d399')
+    expect(dark.get('--ty-bg')).toBe('#0a0f1c')
   })
 
   it('derives the radius scale from one base', () => {
-    const t = resolveTheme({ ...fakhirPreset, radius: 6 }, 'light')
+    const t = resolveTheme({ ...tympanPreset, radius: 6 }, 'light')
     expect(t.dimensions['radius-card']).toBe(10)
     expect(t.dimensions['radius-sheet']).toBe(14)
   })
 
   it('switches glass off to opaque surfaces and no blur', () => {
-    const t = resolveTheme({ ...fakhirPreset, glass: false, pins: undefined }, 'light')
+    const t = resolveTheme({ ...tympanPreset, glass: false, pins: undefined }, 'light')
     expect(t.colors.surface!.a).toBe(1)
     expect(t.dimensions['glass-blur-sheet']).toBe(0)
   })
@@ -143,39 +144,39 @@ describe('fakhir preset honours the design direction (§2.3, §2.4)', () => {
 
 describe('DTCG output', () => {
   it('emits srgb colour objects and px dimensions with css names', () => {
-    const tree = themeToDtcg(resolveTheme(fakhirPreset, 'light')) as Record<string, Record<string, { $value: unknown; $extensions: Record<string, { cssName: string }> }>>
+    const tree = themeToDtcg(resolveTheme(tympanPreset, 'light')) as Record<string, Record<string, { $value: unknown; $extensions: Record<string, { cssName: string }> }>>
     const accent = tree.color!.accent!
     expect(accent.$value).toMatchObject({ colorSpace: 'srgb', hex: '#166e5a' })
-    expect(accent.$extensions['app.fakhir']!.cssName).toBe('--fk-accent')
+    expect(accent.$extensions['br.com.datatechsolutions.tympan']!.cssName).toBe('--ty-accent')
     expect(tree.dimension!['radius-card']!.$value).toEqual({ value: 16, unit: 'px' })
   })
 })
 
 describe('stylesheet', () => {
-  const css = generateThemeCss({ ...fakhirPreset, name: 'custom' }, { densities: true })
+  const css = generateThemeCss({ ...tympanPreset, name: 'custom' }, { densities: true })
 
   it('is layered and scoped by theme, mode and density attributes', () => {
-    expect(css.startsWith('@layer fakhir.tokens {')).toBe(true)
-    expect(css).toContain('[data-fk-theme="custom"]')
-    expect(css).toContain('[data-fk-theme="custom"][data-fk-mode="dark"]')
-    expect(css).toContain('[data-fk-density="compact"]')
-    expect(css).not.toContain(':root:not([data-fk-mode="light"])')
+    expect(css.startsWith('@layer tympan.tokens {')).toBe(true)
+    expect(css).toContain('[data-ty-theme="custom"]')
+    expect(css).toContain('[data-ty-theme="custom"][data-ty-mode="dark"]')
+    expect(css).toContain('[data-ty-density="compact"]')
+    expect(css).not.toContain(':root:not([data-ty-mode="light"])')
   })
 
   it('handles contrast, transparency, motion and forced-colour preferences', () => {
     expect(css).toContain('@media (prefers-contrast: more)')
     expect(css).toContain('@media (prefers-reduced-transparency: reduce)')
     expect(css).toContain('@media (forced-colors: active)')
-    expect(css).toContain('--fk-focus-ring: Highlight;')
+    expect(css).toContain('--ty-focus-ring: Highlight;')
   })
 
   const built = join(__dirname, '..', 'dist', 'tokens.css')
   it.runIf(existsSync(built))('built tokens.css defines the default theme on :root and follows the OS scheme', () => {
     const text = readFileSync(built, 'utf8')
-    expect(text).toMatch(/:root,\n\s*\[data-fk-theme="fakhir"\]/)
-    expect(text).toContain(':root:not([data-fk-mode="light"])')
+    expect(text).toMatch(/:root,\n\s*\[data-ty-theme="tympan"\]/)
+    expect(text).toContain(':root:not([data-ty-mode="light"])')
     expect(text).toContain('@media (prefers-reduced-motion: reduce)')
-    expect(text).toContain('--fk-dur-quick: 0ms;')
+    expect(text).toContain('--ty-dur-quick: 0ms;')
   })
 })
 
@@ -184,11 +185,26 @@ describe('per-script typography', () => {
     const { readFileSync } = await import('node:fs')
     const css = readFileSync(new URL('../dist/tokens.css', import.meta.url), 'utf8')
     const arabic = css.slice(css.indexOf(':lang(ar)'), css.indexOf('}', css.indexOf(':lang(ar)')))
-    expect(arabic).toMatch(/--fk-font-sans:\s*"Noto Sans Arabic"/)
-    expect(arabic).toMatch(/--fk-font-tracking-eyebrow:\s*0em/)
-    expect(arabic).toMatch(/--fk-font-line-height-body:\s*28px/)
+    expect(arabic).toMatch(/--ty-font-sans:\s*"Noto Sans Arabic"/)
+    expect(arabic).toMatch(/--ty-font-tracking-eyebrow:\s*0em/)
+    expect(arabic).toMatch(/--ty-font-line-height-body:\s*28px/)
     const japanese = css.slice(css.indexOf(':lang(ja)'), css.indexOf('}', css.indexOf(':lang(ja)')))
     expect(japanese).toMatch(/line-break:\s*strict/)
-    expect(css).toMatch(/--fk-font-sans:[^;]*Noto Sans/)
+    expect(css).toMatch(/--ty-font-sans:[^;]*Noto Sans/)
+  })
+})
+
+describe('fakhir preset', () => {
+  it('ships by name with the default theme values, so an app can select it explicitly', () => {
+    expect(presets.map((p) => p.name)).toEqual(['tympan', 'fakhir', 'neutral', 'high-contrast'])
+    expect(fakhirPreset.label).toBe('Fakhir')
+    for (const mode of MODES) {
+      expect(themeVariables(resolveTheme(fakhirPreset, mode))).toEqual(themeVariables(resolveTheme(tympanPreset, mode)))
+    }
+  })
+
+  const built = join(__dirname, '..', 'dist', 'tokens.css')
+  it.runIf(existsSync(built))('is scoped to data-ty-theme="fakhir" in the built stylesheet', () => {
+    expect(readFileSync(built, 'utf8')).toContain('[data-ty-theme="fakhir"]')
   })
 })

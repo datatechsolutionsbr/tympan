@@ -1,179 +1,179 @@
 /* NavigationFlyout (spec: wave-2/navigation-flyout.md; design direction §2.3, §2.5, §2.7, §3.2). */
-@layer fakhir.components {
-  .fk-flyout__backdrop {
+@layer tympan.components {
+  .ty-flyout__backdrop {
     position: fixed;
     inset: 0;
-    z-index: var(--fk-z-modal);
+    z-index: var(--ty-z-modal);
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding: calc(var(--fk-layout-topbar) + var(--fk-space-2)) var(--fk-space-4) var(--fk-space-4);
-    background: var(--fk-backdrop);
+    padding: calc(var(--ty-layout-topbar) + var(--ty-space-2)) var(--ty-space-4) var(--ty-space-4);
+    background: var(--ty-backdrop);
   }
-  .fk-flyout__backdrop[data-entering] {
-    animation: fk-flyout-fade var(--fk-dur-base) var(--fk-ease);
+  .ty-flyout__backdrop[data-entering] {
+    animation: ty-flyout-fade var(--ty-dur-base) var(--ty-ease);
   }
-  .fk-flyout {
+  .ty-flyout {
     box-sizing: border-box;
     inline-size: min(56rem, 100%);
-    max-block-size: calc(100dvh - var(--fk-layout-topbar) - var(--fk-space-6));
+    max-block-size: calc(100dvh - var(--ty-layout-topbar) - var(--ty-space-6));
     display: flex;
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-sheet);
-    background: var(--fk-surface-raised);
-    box-shadow: var(--fk-shadow-modal);
-    backdrop-filter: blur(var(--fk-glass-blur-floating)) saturate(var(--fk-glass-saturate));
-    -webkit-backdrop-filter: blur(var(--fk-glass-blur-floating)) saturate(var(--fk-glass-saturate));
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-sheet);
+    background: var(--ty-surface-raised);
+    box-shadow: var(--ty-shadow-modal);
+    backdrop-filter: blur(var(--ty-glass-blur-floating)) saturate(var(--ty-glass-saturate));
+    -webkit-backdrop-filter: blur(var(--ty-glass-blur-floating)) saturate(var(--ty-glass-saturate));
     overflow: hidden;
     outline: none;
   }
-  .fk-flyout[data-entering] {
-    animation: fk-flyout-drop var(--fk-dur-base) var(--fk-ease);
+  .ty-flyout[data-entering] {
+    animation: ty-flyout-drop var(--ty-dur-base) var(--ty-ease);
   }
-  @keyframes fk-flyout-drop {
+  @keyframes ty-flyout-drop {
     from {
       opacity: 0;
       translate: 0 -12px;
     }
   }
-  @keyframes fk-flyout-fade {
+  @keyframes ty-flyout-fade {
     from {
       opacity: 0;
     }
   }
-  .fk-flyout__dialog {
+  .ty-flyout__dialog {
     display: flex;
     flex: 1;
     flex-direction: column;
-    gap: var(--fk-space-4);
+    gap: var(--ty-space-4);
     min-block-size: 0;
-    padding: var(--fk-space-5);
+    padding: var(--ty-space-5);
     overflow-y: auto;
     outline: none;
   }
-  .fk-flyout__title {
+  .ty-flyout__title {
     margin: 0;
-    color: var(--fk-ink);
-    font-family: var(--fk-font-serif);
-    font-size: var(--fk-font-size-h3);
-    line-height: var(--fk-font-line-height-h3);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-serif);
+    font-size: var(--ty-font-size-h3);
+    line-height: var(--ty-font-line-height-h3);
   }
-  .fk-flyout__grid {
+  .ty-flyout__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
     margin: 0;
     padding: 0;
     list-style: none;
   }
-  .fk-flyout__tile {
+  .ty-flyout__tile {
     display: flex;
     align-items: center;
-    gap: var(--fk-space-3);
-    min-block-size: var(--fk-control-target);
-    padding: var(--fk-space-3);
+    gap: var(--ty-space-3);
+    min-block-size: var(--ty-control-target);
+    padding: var(--ty-space-3);
     border: 1px solid transparent;
-    border-radius: var(--fk-radius-control);
-    color: var(--fk-ink-2);
+    border-radius: var(--ty-radius-control);
+    color: var(--ty-ink-2);
     text-decoration: none;
     outline: none;
   }
-  .fk-flyout__tile:hover,
-  .fk-flyout__tile[data-hovered] {
-    background: var(--fk-surface-sunken);
+  .ty-flyout__tile:hover,
+  .ty-flyout__tile[data-hovered] {
+    background: var(--ty-surface-sunken);
   }
-  .fk-flyout__tile[data-current] {
-    background: var(--fk-accent-soft);
-    color: var(--fk-accent);
-    box-shadow: inset 3px 0 0 var(--fk-accent);
+  .ty-flyout__tile[data-current] {
+    background: var(--ty-accent-soft);
+    color: var(--ty-accent);
+    box-shadow: inset 3px 0 0 var(--ty-accent);
   }
-  .fk-flyout__tile:focus-visible,
-  .fk-flyout__tile[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-flyout__tile:focus-visible,
+  .ty-flyout__tile[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
-  .fk-flyout__tile-icon {
+  .ty-flyout__tile-icon {
     display: inline-grid;
     place-items: center;
     flex: none;
   }
-  .fk-flyout__tile-icon > svg {
+  .ty-flyout__tile-icon > svg {
     inline-size: 20px;
     block-size: 20px;
   }
-  .fk-flyout__tile-text {
+  .ty-flyout__tile-text {
     display: flex;
     flex-direction: column;
     min-inline-size: 0;
   }
-  .fk-flyout__tile-label {
-    font-weight: var(--fk-font-weight-semibold);
+  .ty-flyout__tile-label {
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-flyout__tile-sub {
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
+  .ty-flyout__tile-sub {
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
   }
-  .fk-flyout__empty {
+  .ty-flyout__empty {
     margin: 0;
-    color: var(--fk-ink-3);
+    color: var(--ty-ink-3);
   }
-  .fk-flyout__quick {
+  .ty-flyout__quick {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--fk-space-3);
-    padding-block-start: var(--fk-space-4);
-    border-block-start: 1px solid var(--fk-line);
+    gap: var(--ty-space-3);
+    padding-block-start: var(--ty-space-4);
+    border-block-start: 1px solid var(--ty-line);
   }
-  .fk-flyout__count {
+  .ty-flyout__count {
     min-inline-size: 1.25rem;
-    padding: 0 var(--fk-space-1);
-    border-radius: var(--fk-radius-pill);
-    background: var(--fk-danger-soft);
-    color: var(--fk-on-danger-soft);
-    font-size: var(--fk-font-size-meta);
+    padding: 0 var(--ty-space-1);
+    border-radius: var(--ty-radius-pill);
+    background: var(--ty-danger-soft);
+    color: var(--ty-on-danger-soft);
+    font-size: var(--ty-font-size-meta);
     text-align: center;
   }
-  .fk-flyout__initial {
+  .ty-flyout__initial {
     display: inline-grid;
     place-items: center;
     inline-size: 1.4em;
     block-size: 1.4em;
-    border-radius: var(--fk-radius-pill);
-    background: var(--fk-accent-soft);
-    color: var(--fk-accent);
-    font-size: var(--fk-font-size-meta);
+    border-radius: var(--ty-radius-pill);
+    background: var(--ty-accent-soft);
+    color: var(--ty-accent);
+    font-size: var(--ty-font-size-meta);
   }
   @media (max-width: 639.98px) {
-    .fk-flyout__backdrop {
+    .ty-flyout__backdrop {
       padding: 0;
     }
-    .fk-flyout {
+    .ty-flyout {
       inline-size: 100%;
       block-size: 100dvh;
       max-block-size: 100dvh;
       border-radius: 0;
     }
-    .fk-flyout__grid {
+    .ty-flyout__grid {
       grid-template-columns: 1fr;
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .fk-flyout[data-entering] {
-      animation: fk-flyout-fade var(--fk-dur-base) linear;
+    .ty-flyout[data-entering] {
+      animation: ty-flyout-fade var(--ty-dur-base) linear;
     }
   }
   @media (prefers-reduced-transparency: reduce) {
-    .fk-flyout {
-      background: var(--fk-surface-raised-solid);
+    .ty-flyout {
+      background: var(--ty-surface-raised-solid);
       backdrop-filter: none;
     }
   }
   @media (forced-colors: active) {
-    .fk-flyout {
+    .ty-flyout {
       border: 1px solid CanvasText;
     }
-    .fk-flyout__tile[data-current] {
+    .ty-flyout__tile[data-current] {
       border-color: Highlight;
       box-shadow: none;
     }

@@ -5,7 +5,7 @@
 import { useId, useMemo, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { Button as AriaButton, Radio, RadioGroup, Label } from 'react-aria-components'
-import { EmptyState, TextArea, TextField } from '@fakhir/ui'
+import { EmptyState, TextArea, TextField } from '@datatechsolutions/tympan'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { ReportView, validateReport, type ReportIssue, type ReportSpec } from '../report/ReportView'
 import { NodeFormFooter } from './NodeFormFooter'
@@ -136,23 +136,23 @@ export function ReportOutputNodeForm({ value, validate = validateReport, onSave,
     )
 
   return (
-    <div className="fk-node-form fk-report-form">
-      <RadioGroup className="fk-report-form__source" value={mode} onChange={(m) => setMode(m as 'reference' | 'inline')} orientation="horizontal">
-        <Label className="fk-report-form__label">{l.source}</Label>
-        <div className="fk-report-form__radios">
-          <Radio value="reference" className="fk-report-form__radio">
+    <div className="ty-node-form ty-report-form">
+      <RadioGroup className="ty-report-form__source" value={mode} onChange={(m) => setMode(m as 'reference' | 'inline')} orientation="horizontal">
+        <Label className="ty-report-form__label">{l.source}</Label>
+        <div className="ty-report-form__radios">
+          <Radio value="reference" className="ty-report-form__radio">
             {l.fromStep}
           </Radio>
-          <Radio value="inline" className="fk-report-form__radio">
+          <Radio value="inline" className="ty-report-form__radio">
             {l.inline}
           </Radio>
         </div>
       </RadioGroup>
       {mode === 'reference' ? (
-        <TextField className="fk-ltr-text" label={l.reference} hint={l.referenceHint} value={from} onChange={setFrom} />
+        <TextField className="ty-ltr-text" label={l.reference} hint={l.referenceHint} value={from} onChange={setFrom} />
       ) : (
         <TextArea
-          className="fk-ltr-text"
+          className="ty-ltr-text"
           monospace
           rows={8}
           label={l.definition}
@@ -165,12 +165,12 @@ export function ReportOutputNodeForm({ value, validate = validateReport, onSave,
           {...(!parsed.ok && (showError || text.trim()) ? { errorMessage: fill(l.parseError, { message: parsed.message }, locale) } : {})}
         />
       )}
-      <div className="fk-report-form__preview">
-        <AriaButton className="fk-report-form__toggle" aria-expanded={previewOpen} aria-controls={previewId} onPress={() => setPreviewOpen((o) => !o)}>
-          <ChevronDown className="fk-report-form__chevron" data-open={previewOpen || undefined} aria-hidden="true" focusable="false" />
+      <div className="ty-report-form__preview">
+        <AriaButton className="ty-report-form__toggle" aria-expanded={previewOpen} aria-controls={previewId} onPress={() => setPreviewOpen((o) => !o)}>
+          <ChevronDown className="ty-report-form__chevron" data-open={previewOpen || undefined} aria-hidden="true" focusable="false" />
           {l.preview}
         </AriaButton>
-        <section id={previewId} aria-label={l.preview} className="fk-report-form__preview-body" hidden={!previewOpen}>
+        <section id={previewId} aria-label={l.preview} className="ty-report-form__preview-body" hidden={!previewOpen}>
           {previewOpen ? preview : null}
         </section>
       </div>

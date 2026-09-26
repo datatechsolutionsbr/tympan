@@ -1,95 +1,95 @@
 /* PhaseBar (spec: wave-4/phase-bar.md; design direction §2.3, §2.11 textures, §3.5). */
-@layer fakhir.components {
-  .fk-phase-bar {
+@layer tympan.components {
+  .ty-phase-bar {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
     margin: 0;
   }
-  .fk-phase-bar__track {
+  .ty-phase-bar__track {
     display: flex;
     gap: 2px;
     block-size: 12px;
     overflow: hidden;
-    border-radius: var(--fk-radius-pill);
-    background: var(--fk-surface-sunken);
+    border-radius: var(--ty-radius-pill);
+    background: var(--ty-surface-sunken);
   }
-  .fk-phase-bar__segment {
+  .ty-phase-bar__segment {
     flex: 0 0 auto;
-    inline-size: var(--fk-phase-share);
+    inline-size: var(--ty-phase-share);
     min-inline-size: 2px;
-    background: var(--fk-phase-fill);
+    background: var(--ty-phase-fill);
   }
   /* Tones: proof colours with the §2.11 textures (stripes, cross-hatch, dots). */
   [data-tone='proved'] {
-    --fk-phase-fill: var(--fk-proof-proved);
+    --ty-phase-fill: var(--ty-proof-proved);
   }
   [data-tone='pending'] {
-    --fk-phase-fill: repeating-linear-gradient(90deg, var(--fk-proof-pending) 0 3px, var(--fk-proof-pending-soft) 3px 5px);
+    --ty-phase-fill: repeating-linear-gradient(90deg, var(--ty-proof-pending) 0 3px, var(--ty-proof-pending-soft) 3px 5px);
   }
   [data-tone='refuted'] {
-    --fk-phase-fill: repeating-linear-gradient(45deg, var(--fk-proof-refuted) 0 2px, var(--fk-proof-refuted-soft) 2px 5px),
-      var(--fk-proof-refuted);
+    --ty-phase-fill: repeating-linear-gradient(45deg, var(--ty-proof-refuted) 0 2px, var(--ty-proof-refuted-soft) 2px 5px),
+      var(--ty-proof-refuted);
   }
   [data-tone='not_disclosed'] {
-    --fk-phase-fill: radial-gradient(circle, var(--fk-proof-not-disclosed) 1.2px, var(--fk-proof-not-disclosed-soft) 1.5px) 0 0 / 5px 5px;
+    --ty-phase-fill: radial-gradient(circle, var(--ty-proof-not-disclosed) 1.2px, var(--ty-proof-not-disclosed-soft) 1.5px) 0 0 / 5px 5px;
   }
   [data-tone='none'] {
-    --fk-phase-fill: var(--fk-proof-none);
+    --ty-phase-fill: var(--ty-proof-none);
   }
   [data-tone='accent'] {
-    --fk-phase-fill: var(--fk-accent);
+    --ty-phase-fill: var(--ty-accent);
   }
   [data-tone='neutral'] {
-    --fk-phase-fill: var(--fk-ink-3);
+    --ty-phase-fill: var(--ty-ink-3);
   }
-  .fk-phase-bar__legend {
+  .ty-phase-bar__legend {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--fk-space-2) var(--fk-space-5);
+    gap: var(--ty-space-2) var(--ty-space-5);
     margin: 0;
     padding: 0;
     list-style: none;
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
-  .fk-phase-bar__key {
+  .ty-phase-bar__key {
     display: inline-flex;
     align-items: center;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
-  .fk-phase-bar__swatch {
+  .ty-phase-bar__swatch {
     inline-size: 8px;
     block-size: 8px;
     border-radius: 2px;
-    background: var(--fk-phase-fill);
+    background: var(--ty-phase-fill);
   }
-  .fk-phase-bar__word {
-    color: var(--fk-ink-2);
+  .ty-phase-bar__word {
+    color: var(--ty-ink-2);
   }
-  .fk-phase-bar__count {
-    color: var(--fk-ink);
-    font-family: var(--fk-font-mono);
+  .ty-phase-bar__count {
+    color: var(--ty-ink);
+    font-family: var(--ty-font-mono);
     font-variant-numeric: tabular-nums;
   }
-  .fk-phase-bar__caption {
+  .ty-phase-bar__caption {
     max-inline-size: 68ch;
-    color: var(--fk-ink-2);
-    font-family: var(--fk-font-serif);
-    font-size: var(--fk-font-size-body-lg);
+    color: var(--ty-ink-2);
+    font-family: var(--ty-font-serif);
+    font-size: var(--ty-font-size-body-lg);
     font-style: italic;
-    line-height: var(--fk-font-line-height-body-lg);
+    line-height: var(--ty-font-line-height-body-lg);
   }
 
   @media (forced-colors: active) {
-    .fk-phase-bar__track {
+    .ty-phase-bar__track {
       border: 1px solid CanvasText;
     }
-    .fk-phase-bar__segment,
-    .fk-phase-bar__swatch {
+    .ty-phase-bar__segment,
+    .ty-phase-bar__swatch {
       forced-color-adjust: none;
       border: 1px solid CanvasText;
-      background: var(--fk-phase-fill), Canvas;
+      background: var(--ty-phase-fill), Canvas;
     }
   }
 }

@@ -1,171 +1,171 @@
 /* Button (spec: wave-1/button.md; design direction §2.6, §2.7, §2.10). */
-@layer fakhir.components {
-  .fk-button {
-    --fk-button-height: var(--fk-control-height);
-    --fk-button-padding-inline: var(--fk-space-4);
-    --fk-button-fill: var(--fk-secondary);
-    --fk-button-ink: var(--fk-on-secondary);
-    --fk-button-border: var(--fk-line-strong);
+@layer tympan.components {
+  .ty-button {
+    --ty-button-height: var(--ty-control-height);
+    --ty-button-padding-inline: var(--ty-space-4);
+    --ty-button-fill: var(--ty-secondary);
+    --ty-button-ink: var(--ty-on-secondary);
+    --ty-button-border: var(--ty-line-strong);
 
     position: relative;
     box-sizing: border-box;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--fk-space-2);
-    min-block-size: var(--fk-button-height);
+    gap: var(--ty-space-2);
+    min-block-size: var(--ty-button-height);
     padding-block: 0;
-    padding-inline: var(--fk-button-padding-inline);
-    border: 1px solid var(--fk-button-border);
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-button-fill);
-    color: var(--fk-button-ink);
+    padding-inline: var(--ty-button-padding-inline);
+    border: 1px solid var(--ty-button-border);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-button-fill);
+    color: var(--ty-button-ink);
     font: inherit;
-    font-family: var(--fk-font-sans);
-    font-size: var(--fk-font-size-body);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-label);
+    font-family: var(--ty-font-sans);
+    font-size: var(--ty-font-size-body);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-label);
     text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
     transition:
-      background-color var(--fk-dur-instant) var(--fk-ease),
-      border-color var(--fk-dur-instant) var(--fk-ease),
-      color var(--fk-dur-instant) var(--fk-ease),
-      transform var(--fk-dur-instant) var(--fk-ease);
+      background-color var(--ty-dur-instant) var(--ty-ease),
+      border-color var(--ty-dur-instant) var(--ty-ease),
+      color var(--ty-dur-instant) var(--ty-ease),
+      transform var(--ty-dur-instant) var(--ty-ease);
     outline: none;
   }
 
   /* Invisible hit area: at least 44 x 44 px whatever the visible size (§2.10). */
-  .fk-button::before {
+  .ty-button::before {
     content: '';
     position: absolute;
     inset-block-start: 50%;
     /* physical: centring with translate(-50%) is the same in both directions */
     left: 50%;
-    inline-size: max(100%, var(--fk-control-target));
-    block-size: max(100%, var(--fk-control-target));
+    inline-size: max(100%, var(--ty-control-target));
+    block-size: max(100%, var(--ty-control-target));
     transform: translate(-50%, -50%);
   }
 
-  .fk-button[data-size='compact'] {
-    --fk-button-height: var(--fk-control-height-compact);
-    --fk-button-padding-inline: var(--fk-space-3);
-    font-size: var(--fk-font-size-label);
+  .ty-button[data-size='compact'] {
+    --ty-button-height: var(--ty-control-height-compact);
+    --ty-button-padding-inline: var(--ty-space-3);
+    font-size: var(--ty-font-size-label);
   }
 
-  .fk-button[data-size='large'] {
-    --fk-button-height: calc(var(--fk-control-height) + var(--fk-space-2));
-    --fk-button-padding-inline: var(--fk-space-5);
-    font-size: var(--fk-font-size-body-lg);
+  .ty-button[data-size='large'] {
+    --ty-button-height: calc(var(--ty-control-height) + var(--ty-space-2));
+    --ty-button-padding-inline: var(--ty-space-5);
+    font-size: var(--ty-font-size-body-lg);
   }
 
-  .fk-button[data-shape='pill'],
-  .fk-button[data-shape='circle'] {
-    border-radius: var(--fk-radius-pill);
+  .ty-button[data-shape='pill'],
+  .ty-button[data-shape='circle'] {
+    border-radius: var(--ty-radius-pill);
   }
 
-  .fk-button[data-icon-only] {
-    inline-size: var(--fk-button-height);
+  .ty-button[data-icon-only] {
+    inline-size: var(--ty-button-height);
     padding-inline: 0;
   }
 
-  .fk-button[data-full-width] {
+  .ty-button[data-full-width] {
     display: flex;
     inline-size: 100%;
   }
 
   /* Variants */
-  .fk-button[data-variant='primary'] {
-    --fk-button-fill: var(--fk-cta);
-    --fk-button-ink: var(--fk-on-cta);
-    --fk-button-border: transparent;
+  .ty-button[data-variant='primary'] {
+    --ty-button-fill: var(--ty-cta);
+    --ty-button-ink: var(--ty-on-cta);
+    --ty-button-border: transparent;
   }
 
-  .fk-button[data-variant='quiet'] {
-    --fk-button-fill: transparent;
-    --fk-button-ink: var(--fk-ink-2);
-    --fk-button-border: transparent;
+  .ty-button[data-variant='quiet'] {
+    --ty-button-fill: transparent;
+    --ty-button-ink: var(--ty-ink-2);
+    --ty-button-border: transparent;
   }
 
-  .fk-button[data-variant='danger'] {
-    --fk-button-fill: transparent;
-    --fk-button-ink: var(--fk-danger);
-    --fk-button-border: var(--fk-danger);
+  .ty-button[data-variant='danger'] {
+    --ty-button-fill: transparent;
+    --ty-button-ink: var(--ty-danger);
+    --ty-button-border: var(--ty-danger);
   }
 
   /* States */
-  .fk-button[data-hovered]:not([data-disabled], [data-soft-disabled], [data-busy]) {
-    --fk-button-border: var(--fk-ink-3);
+  .ty-button[data-hovered]:not([data-disabled], [data-soft-disabled], [data-busy]) {
+    --ty-button-border: var(--ty-ink-3);
   }
-  .fk-button[data-variant='primary'][data-hovered]:not([data-disabled], [data-soft-disabled], [data-busy]) {
-    --fk-button-fill: var(--fk-cta-solid);
-    --fk-button-border: transparent;
+  .ty-button[data-variant='primary'][data-hovered]:not([data-disabled], [data-soft-disabled], [data-busy]) {
+    --ty-button-fill: var(--ty-cta-solid);
+    --ty-button-border: transparent;
   }
-  .fk-button[data-variant='quiet'][data-hovered]:not([data-disabled], [data-soft-disabled], [data-busy]) {
-    --fk-button-fill: var(--fk-surface-sunken);
-    --fk-button-border: transparent;
+  .ty-button[data-variant='quiet'][data-hovered]:not([data-disabled], [data-soft-disabled], [data-busy]) {
+    --ty-button-fill: var(--ty-surface-sunken);
+    --ty-button-border: transparent;
   }
-  .fk-button[data-variant='danger'][data-hovered]:not([data-disabled], [data-soft-disabled], [data-busy]) {
-    --fk-button-fill: var(--fk-danger-soft);
-    --fk-button-ink: var(--fk-on-danger-soft);
-    --fk-button-border: var(--fk-danger);
+  .ty-button[data-variant='danger'][data-hovered]:not([data-disabled], [data-soft-disabled], [data-busy]) {
+    --ty-button-fill: var(--ty-danger-soft);
+    --ty-button-ink: var(--ty-on-danger-soft);
+    --ty-button-border: var(--ty-danger);
   }
 
   /* Pressed: slight inward feedback, no lift (§2.7). */
-  .fk-button[data-pressed] {
+  .ty-button[data-pressed] {
     transform: scale(0.98);
   }
 
-  .fk-button[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-button[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
   /* Double ring on the gradient primary (§2.6). */
-  .fk-button[data-variant='primary'][data-focus-visible] {
+  .ty-button[data-variant='primary'][data-focus-visible] {
     outline: none;
     box-shadow:
-      0 0 0 2px var(--fk-bg),
-      0 0 0 calc(2px + var(--fk-focus-width)) var(--fk-focus-ring);
+      0 0 0 2px var(--ty-bg),
+      0 0 0 calc(2px + var(--ty-focus-width)) var(--ty-focus-ring);
   }
 
-  .fk-button[data-disabled],
-  .fk-button[data-soft-disabled] {
+  .ty-button[data-disabled],
+  .ty-button[data-soft-disabled] {
     cursor: not-allowed;
     opacity: 0.55;
   }
 
-  .fk-button[data-busy] {
+  .ty-button[data-busy] {
     cursor: progress;
   }
 
-  .fk-button[data-current] {
-    --fk-button-fill: var(--fk-accent-soft);
-    --fk-button-ink: var(--fk-accent);
+  .ty-button[data-current] {
+    --ty-button-fill: var(--ty-accent-soft);
+    --ty-button-ink: var(--ty-accent);
   }
 
-  .fk-button__icon {
+  .ty-button__icon {
     display: inline-flex;
     flex: none;
   }
-  .fk-button__icon > svg,
-  .fk-button .fk-icon {
+  .ty-button__icon > svg,
+  .ty-button .ty-icon {
     inline-size: 1.15em;
     block-size: 1.15em;
   }
 
-  .fk-button__label {
+  .ty-button__label {
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  .fk-button__busy {
-    animation: fk-button-spin 900ms linear infinite;
+  .ty-button__busy {
+    animation: ty-button-spin 900ms linear infinite;
   }
 
-  @keyframes fk-button-spin {
+  @keyframes ty-button-spin {
     to {
       transform: rotate(1turn);
     }
@@ -173,39 +173,39 @@
 
   /* Touch step below 1024 px (§2.10). */
   @media (max-width: 1023.98px) {
-    .fk-button:not([data-size='compact']) {
-      --fk-button-height: var(--fk-control-height-touch);
+    .ty-button:not([data-size='compact']) {
+      --ty-button-height: var(--ty-control-height-touch);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-button {
+    .ty-button {
       transition: none;
     }
-    .fk-button[data-pressed] {
+    .ty-button[data-pressed] {
       transform: none;
       opacity: 0.85;
     }
-    .fk-button__busy {
+    .ty-button__busy {
       animation: none;
     }
   }
 
   @media (forced-colors: active) {
-    .fk-button {
+    .ty-button {
       border: 1px solid ButtonText;
       background: ButtonFace;
       color: ButtonText;
       forced-color-adjust: none;
     }
-    .fk-button[data-focus-visible],
-    .fk-button[data-variant='primary'][data-focus-visible] {
+    .ty-button[data-focus-visible],
+    .ty-button[data-variant='primary'][data-focus-visible] {
       outline: 2px solid Highlight;
       outline-offset: 2px;
       box-shadow: none;
     }
-    .fk-button[data-disabled],
-    .fk-button[data-soft-disabled] {
+    .ty-button[data-disabled],
+    .ty-button[data-soft-disabled] {
       border-color: GrayText;
       color: GrayText;
       opacity: 1;

@@ -1,6 +1,6 @@
-// @fakhir/flow (FSL-1.1-ALv2). Import the stylesheets once, design system first:
-//   import '@fakhir/ui/styles.css'
-//   import '@fakhir/flow/styles.css'
+// @datatechsolutions/tympan-flow (FSL-1.1-ALv2). Import the stylesheets once, design system first:
+//   import '@datatechsolutions/tympan/styles.css'
+//   import '@datatechsolutions/tympan-flow/styles.css'
 
 // Model and pure helpers
 export * from './model/types'

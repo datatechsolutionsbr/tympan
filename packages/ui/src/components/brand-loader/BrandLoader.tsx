@@ -19,16 +19,16 @@ export function BrandLoader(props: BrandLoaderProps) {
   const copy = useMessages()
   const chosen = useLoaderPreset(props.preset)
   const statusText = props.label ?? chosen.label ?? copy.loading
-  const toneStyle = { '--fk-loader-tone': loaderToneColour(chosen.tone) } as CSSProperties
-  const root = ['fk-brand-loader', props.className].filter(Boolean).join(' ')
+  const toneStyle = { '--ty-loader-tone': loaderToneColour(chosen.tone) } as CSSProperties
+  const root = ['ty-brand-loader', props.className].filter(Boolean).join(' ')
 
   return (
     <div className={root} role="status" data-layout={props.layout ?? 'fullscreen'} data-tone={chosen.tone} style={toneStyle}>
-      <div className="fk-brand-loader__figure" aria-hidden="true">
-        <span className="fk-brand-loader__pulse">{props.mark ?? chosen.mark}</span>
-        <span className="fk-brand-loader__name">{props.name ?? chosen.name ?? copy.brand.productName}</span>
+      <div className="ty-brand-loader__figure" aria-hidden="true">
+        <span className="ty-brand-loader__pulse">{props.mark ?? chosen.mark}</span>
+        <span className="ty-brand-loader__name">{props.name ?? chosen.name ?? copy.brand.productName}</span>
       </div>
-      <p className="fk-brand-loader__label">{statusText}</p>
+      <p className="ty-brand-loader__label">{statusText}</p>
     </div>
   )
 }

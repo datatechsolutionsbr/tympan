@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import { cssOf, mediaBlock } from '../../test/css'
 import { DryRunFailure, runDryRun, traceReportFromWire, type TraceReport } from './trace'
@@ -51,11 +51,11 @@ describe('TraceTree', () => {
 
   it('mirrors Left and Right in a right-to-left locale', async () => {
     render(
-      <FakhirProvider locale="ar">
+      <TympanProvider locale="ar">
         <div dir="rtl">
           <TraceTree report={report} />
         </div>
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     await userEvent.tab()
     await userEvent.keyboard('{ArrowDown}{ArrowLeft}')
@@ -111,10 +111,10 @@ describe('TraceTree', () => {
     const { container } = render(<TraceTree report={report} />)
     await expectNoAxeViolations(container)
     const css = cssOf('expressions/expressions.css')
-    expect(css).toMatch(/\.fk-trace__row\s*\{[^}]*padding-inline-start/)
-    expect(css).toMatch(/\.fk-trace__line\s*\{[^}]*border-inline-start/)
-    expect(css).toMatch(/:dir\(rtl\) \.fk-rule-editor__chevron,\s*:dir\(rtl\) \.fk-trace__chevron-icon\s*\{\s*scale: -1 1/)
+    expect(css).toMatch(/\.ty-trace__row\s*\{[^}]*padding-inline-start/)
+    expect(css).toMatch(/\.ty-trace__line\s*\{[^}]*border-inline-start/)
+    expect(css).toMatch(/:dir\(rtl\) \.ty-rule-editor__chevron,\s*:dir\(rtl\) \.ty-trace__chevron-icon\s*\{\s*scale: -1 1/)
     expect(mediaBlock(css, /\(prefers-reduced-motion: reduce\)/)).toMatch(/transition:\s*none/)
-    expect(mediaBlock(css, /\(forced-colors: active\)/)).toMatch(/fk-trace__line/)
+    expect(mediaBlock(css, /\(forced-colors: active\)/)).toMatch(/ty-trace__line/)
   })
 })

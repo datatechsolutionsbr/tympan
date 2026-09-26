@@ -36,8 +36,8 @@ describe('Text', () => {
     const el = screen.getByText(long)
     expect(el).toHaveAttribute('data-truncate', 'clamp')
     expect(el).toHaveAttribute('title', long)
-    expect(el.style.getPropertyValue('--fk-text-lines')).toBe('2')
-    expect(cssOf('components/text/Text.css')).toMatch(/\[data-truncate='clamp'\][^}]*line-clamp:\s*var\(--fk-text-lines/)
+    expect(el.style.getPropertyValue('--ty-text-lines')).toBe('2')
+    expect(cssOf('components/text/Text.css')).toMatch(/\[data-truncate='clamp'\][^}]*line-clamp:\s*var\(--ty-text-lines/)
   })
 
   it('wraps Strong in a strong element', () => {
@@ -48,11 +48,11 @@ describe('Text', () => {
   it('wraps Code in a code element in the mono family', () => {
     render(<Code>sha256:9f2c</Code>)
     expect(screen.getByText('sha256:9f2c').tagName).toBe('CODE')
-    expect(cssOf('components/text/Text.css')).toMatch(/\.fk-code\s*\{[^}]*font-family:\s*var\(--fk-font-mono\)/)
+    expect(cssOf('components/text/Text.css')).toMatch(/\.ty-code\s*\{[^}]*font-family:\s*var\(--ty-font-mono\)/)
   })
 
   it('muted tone meets 4.5:1 on the light and dark surfaces', () => {
-    expect(cssOf('components/text/Text.css')).toMatch(/\[data-tone='muted'\]\s*\{[^}]*var\(--fk-ink-3\)/)
+    expect(cssOf('components/text/Text.css')).toMatch(/\[data-tone='muted'\]\s*\{[^}]*var\(--ty-ink-3\)/)
     expect(contrast('#526077', '#fcfdfd')).toBeGreaterThanOrEqual(4.5)
     expect(contrast('#94a3b8', '#141c2e')).toBeGreaterThanOrEqual(4.5)
   })
@@ -61,7 +61,7 @@ describe('Text', () => {
     render(<Text numeric size="meta">1234</Text>)
     expect(screen.getByText('1234')).toHaveAttribute('data-numeric')
     const css = cssOf('components/text/Text.css')
-    expect(css).toMatch(/max\(12px, var\(--fk-font-size-meta\)\)/)
+    expect(css).toMatch(/max\(12px, var\(--ty-font-size-meta\)\)/)
     expect(css).toMatch(/tabular-nums/)
   })
 
@@ -83,7 +83,7 @@ describe('Text', () => {
 describe('Text in right-to-left (ar)', () => {
   it('renders mirrored where directional and passes axe', async () => {
     const { container } = renderRtl(<Text truncate={2}>جملة طويلة جدًا تُقطع بصريًا فقط ويبقى النص الكامل متاحًا.</Text>)
-    const text = container.querySelector('.fk-text')!
+    const text = container.querySelector('.ty-text')!
     // Truncation is visual (line clamp); the whole text stays in the tree.
     expect(text.textContent).toBe('جملة طويلة جدًا تُقطع بصريًا فقط ويبقى النص الكامل متاحًا.')
     await axeRtl(container)

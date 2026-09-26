@@ -1,28 +1,28 @@
 /* AgentNodeForm */
-@layer fakhir.components {
-  .fk-agent-form__loading {
+@layer tympan.components {
+  .ty-agent-form__loading {
     display: flex;
     align-items: center;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
     min-block-size: 44px;
     margin: 0;
-    color: var(--fk-ink-3);
+    color: var(--ty-ink-3);
   }
-  .fk-agent-form__summary {
+  .ty-agent-form__summary {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--fk-space-3);
-    padding: var(--fk-space-3);
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-control);
+    gap: var(--ty-space-3);
+    padding: var(--ty-space-3);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-control);
   }
-  .fk-agent-form__model {
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
+  .ty-agent-form__model {
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
   }
   @media (forced-colors: active) {
-    .fk-agent-form__summary {
+    .ty-agent-form__summary {
       border-color: CanvasText;
     }
   }

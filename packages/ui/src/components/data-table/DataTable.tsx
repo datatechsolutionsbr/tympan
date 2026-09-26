@@ -78,13 +78,13 @@ function nextDirection(current: SortDirection, sameColumn: boolean): SortDirecti
 
 function SortIcon({ direction }: { direction: SortDirection }) {
   const Icon = direction === 'ascending' ? ArrowUp : direction === 'descending' ? ArrowDown : ArrowUpDown
-  return <Icon className="fk-table__sort-icon" aria-hidden="true" focusable="false" />
+  return <Icon className="ty-table__sort-icon" aria-hidden="true" focusable="false" />
 }
 
 function CellContent({ value }: { value: ReactNode }) {
   const text = textOf(value)
   return (
-    <span className="fk-table__clamp" title={text}>
+    <span className="ty-table__clamp" title={text}>
       {value}
     </span>
   )
@@ -92,7 +92,7 @@ function CellContent({ value }: { value: ReactNode }) {
 
 function SelectionBox({ isSelected, isIndeterminate }: { isSelected: boolean; isIndeterminate: boolean }) {
   return (
-    <span className="fk-table__checkbox-box" aria-hidden="true">
+    <span className="ty-table__checkbox-box" aria-hidden="true">
       {isIndeterminate ? <Minus /> : isSelected ? <Check /> : null}
     </span>
   )
@@ -125,7 +125,7 @@ export function DataTable(props: DataTableProps) {
   const interactive = selectionMode !== 'none' || !!onRowAction || rows.some((r) => r.href)
 
   const wrapperProps = {
-    className: cx('fk-table-wrap', className),
+    className: cx('ty-table-wrap', className),
     'data-density': density,
     'data-sticky-first': stickyFirstColumn || undefined,
     'data-column-lines': showColumnLines || undefined,
@@ -133,12 +133,12 @@ export function DataTable(props: DataTableProps) {
   }
   const scrollStyle: CSSProperties | undefined = maxBlockSize ? { maxBlockSize } : undefined
   const captionNode = (
-    <div id={captionId} className={captionVisible ? 'fk-table__caption' : 'fk-visually-hidden'}>
+    <div id={captionId} className={captionVisible ? 'ty-table__caption' : 'ty-visually-hidden'}>
       {caption}
     </div>
   )
   const status = loading ? (
-    <span role="status" className="fk-visually-hidden">
+    <span role="status" className="ty-visually-hidden">
       {loadingLabel ?? messages.table.loading}
     </span>
   ) : null
@@ -154,23 +154,23 @@ export function DataTable(props: DataTableProps) {
       <div {...wrapperProps}>
         {captionVisible ? captionNode : null}
         {status}
-        <div className="fk-table-scroll" style={scrollStyle}>
-          <table className="fk-table" aria-labelledby={captionVisible ? captionId : undefined} aria-busy={loading || undefined}>
-            {captionVisible ? null : <caption className="fk-visually-hidden">{caption}</caption>}
-            <thead className="fk-table__head">
-              <tr className="fk-table__row fk-table__row--head">
+        <div className="ty-table-scroll" style={scrollStyle}>
+          <table className="ty-table" aria-labelledby={captionVisible ? captionId : undefined} aria-busy={loading || undefined}>
+            {captionVisible ? null : <caption className="ty-visually-hidden">{caption}</caption>}
+            <thead className="ty-table__head">
+              <tr className="ty-table__row ty-table__row--head">
                 {columns.map((col) => {
                   const dir = sortColumn === col.id ? sortDirection : null
                   return (
                     <th
                       key={col.id}
                       scope="col"
-                      className="fk-table__column"
+                      className="ty-table__column"
                       data-align={col.numeric || col.align === 'end' ? 'end' : 'start'}
                       aria-sort={col.sortable ? (dir ?? 'none') : undefined}
                     >
                       {col.sortable ? (
-                        <button type="button" className="fk-table__sort" onClick={() => requestSort(col.id)}>
+                        <button type="button" className="ty-table__sort" onClick={() => requestSort(col.id)}>
                           <span>{col.header}</span>
                           <SortIcon direction={dir} />
                         </button>
@@ -182,12 +182,12 @@ export function DataTable(props: DataTableProps) {
                 })}
               </tr>
             </thead>
-            <tbody className="fk-table__body">
+            <tbody className="ty-table__body">
               {loading
                 ? Array.from({ length: loadingRowCount }, (_, i) => (
-                    <tr key={`loading-${i}`} className="fk-table__row" data-loading="true" aria-hidden="true">
+                    <tr key={`loading-${i}`} className="ty-table__row" data-loading="true" aria-hidden="true">
                       {columns.map((col) => (
-                        <td key={col.id} className="fk-table__cell">
+                        <td key={col.id} className="ty-table__cell">
                           <Skeleton width={col.numeric ? 'short' : 'long'} />
                         </td>
                       ))}
@@ -195,23 +195,23 @@ export function DataTable(props: DataTableProps) {
                   ))
                 : rows.length === 0
                   ? (
-                      <tr className="fk-table__row fk-table__row--empty">
-                        <td className="fk-table__cell fk-table__cell--empty" colSpan={colSpan}>
+                      <tr className="ty-table__row ty-table__row--empty">
+                        <td className="ty-table__cell ty-table__cell--empty" colSpan={colSpan}>
                           {empty}
                         </td>
                       </tr>
                     )
                   : rows.map((row) => (
-                      <tr key={row.id} className="fk-table__row">
+                      <tr key={row.id} className="ty-table__row">
                         {columns.map((col, i) => {
                           const align = col.numeric || col.align === 'end' ? 'end' : 'start'
                           const content = <CellContent value={row.cells[col.id]} />
                           return i === 0 ? (
-                            <th key={col.id} scope="row" className="fk-table__cell fk-table__cell--row-header" data-align={align}>
+                            <th key={col.id} scope="row" className="ty-table__cell ty-table__cell--row-header" data-align={align}>
                               {content}
                             </th>
                           ) : (
-                            <td key={col.id} className="fk-table__cell" data-align={align} data-numeric={col.numeric || undefined}>
+                            <td key={col.id} className="ty-table__cell" data-align={align} data-numeric={col.numeric || undefined}>
                               {content}
                             </td>
                           )
@@ -252,7 +252,7 @@ interface InteractiveProps extends DataTableProps {
   loadingRowCount: number
 }
 
-const NO_SORT: SortDescriptor = { column: '__fk-none__', direction: 'ascending' }
+const NO_SORT: SortDescriptor = { column: '__ty-none__', direction: 'ascending' }
 
 function InteractiveTable({
   caption,
@@ -280,7 +280,7 @@ function InteractiveTable({
   const sortDescriptor: SortDescriptor =
     sortColumn && sortDirection ? { column: sortColumn, direction: sortDirection } : NO_SORT
 
-  const loadingKeys = Array.from({ length: loading ? loadingRowCount : 0 }, (_, i) => `__fk-loading-${i}`)
+  const loadingKeys = Array.from({ length: loading ? loadingRowCount : 0 }, (_, i) => `__ty-loading-${i}`)
   const onSelection = (keys: Selection) => {
     if (!onSelectionChange) return
     if (keys === 'all') onSelectionChange(new Set(rows.map((r) => r.id)))
@@ -291,10 +291,10 @@ function InteractiveTable({
     <div {...wrapperProps}>
       {captionNode}
       {status}
-      <div className="fk-table-scroll" style={scrollStyle}>
+      <div className="ty-table-scroll" style={scrollStyle}>
         <AriaTable
           ref={tableRef}
-          className="fk-table"
+          className="ty-table"
           aria-label={captionId ? undefined : caption}
           aria-labelledby={captionId}
           sortDescriptor={sortDescriptor}
@@ -306,10 +306,10 @@ function InteractiveTable({
           disabledKeys={loadingKeys}
           onRowAction={onRowAction ? (key) => onRowAction(String(key)) : undefined}
         >
-          <TableHeader className="fk-table__head">
+          <TableHeader className="ty-table__head">
             {selectable ? (
-              <Column className="fk-table__column fk-table__column--select">
-                <AriaCheckbox slot="selection" className="fk-table__checkbox" isDisabled={loading || rows.length === 0}>
+              <Column className="ty-table__column ty-table__column--select">
+                <AriaCheckbox slot="selection" className="ty-table__checkbox" isDisabled={loading || rows.length === 0}>
                   {({ isSelected, isIndeterminate }) => <SelectionBox isSelected={isSelected} isIndeterminate={isIndeterminate} />}
                 </AriaCheckbox>
               </Column>
@@ -322,12 +322,12 @@ function InteractiveTable({
                   id={col.id}
                   isRowHeader={i === 0}
                   allowsSorting={!!col.sortable}
-                  className="fk-table__column"
+                  className="ty-table__column"
                   data-align={col.numeric || col.align === 'end' ? 'end' : 'start'}
                   textValue={textOf(col.header)}
                 >
                   {col.sortable ? (
-                    <span className="fk-table__sort">
+                    <span className="ty-table__sort">
                       <span>{col.header}</span>
                       <SortIcon direction={dir} />
                     </span>
@@ -339,19 +339,19 @@ function InteractiveTable({
             })}
           </TableHeader>
           <TableBody
-            className="fk-table__body"
-            renderEmptyState={() => <div className="fk-table__empty">{empty}</div>}
+            className="ty-table__body"
+            renderEmptyState={() => <div className="ty-table__empty">{empty}</div>}
           >
             {loading
               ? loadingKeys.map((key) => (
-                  <Row key={key} id={key} className="fk-table__row" data-loading="true" textValue="">
+                  <Row key={key} id={key} className="ty-table__row" data-loading="true" textValue="">
                     {selectable ? (
-                      <Cell className="fk-table__cell fk-table__cell--select">
-                        <span aria-hidden="true" className="fk-table__checkbox-box" />
+                      <Cell className="ty-table__cell ty-table__cell--select">
+                        <span aria-hidden="true" className="ty-table__checkbox-box" />
                       </Cell>
                     ) : null}
                     {columns.map((col) => (
-                      <Cell key={col.id} className="fk-table__cell">
+                      <Cell key={col.id} className="ty-table__cell">
                         <Skeleton width={col.numeric ? 'short' : 'long'} />
                       </Cell>
                     ))}
@@ -363,12 +363,12 @@ function InteractiveTable({
                     id={row.id}
                     href={row.href}
                     textValue={row.label ?? textOf(row.cells[columns[0]?.id ?? '']) ?? row.id}
-                    className="fk-table__row"
+                    className="ty-table__row"
                     data-actionable={row.href || onRowAction ? true : undefined}
                   >
                     {selectable ? (
-                      <Cell className="fk-table__cell fk-table__cell--select">
-                        <AriaCheckbox slot="selection" className="fk-table__checkbox">
+                      <Cell className="ty-table__cell ty-table__cell--select">
+                        <AriaCheckbox slot="selection" className="ty-table__checkbox">
                           {({ isSelected, isIndeterminate }) => (
                             <SelectionBox isSelected={isSelected} isIndeterminate={isIndeterminate} />
                           )}
@@ -378,7 +378,7 @@ function InteractiveTable({
                     {columns.map((col) => (
                       <Cell
                         key={col.id}
-                        className="fk-table__cell"
+                        className="ty-table__cell"
                         data-align={col.numeric || col.align === 'end' ? 'end' : 'start'}
                         data-numeric={col.numeric || undefined}
                         textValue={textOf(row.cells[col.id])}

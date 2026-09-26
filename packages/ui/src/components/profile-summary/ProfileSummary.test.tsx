@@ -9,7 +9,7 @@ describe('ProfileSummary', () => {
   it('falls back to the initials when the picture fails', () => {
     const { container } = render(<ProfileSummary name="Natália Mesquita" pictureUrl="/missing.png" />)
     fireEvent.error(container.querySelector('img')!)
-    expect(container.querySelector('.fk-avatar')).toHaveTextContent('NM')
+    expect(container.querySelector('.ty-avatar')).toHaveTextContent('NM')
   })
 
   it('leaves the e-mail out of the document unless showEmail is true', () => {
@@ -22,7 +22,7 @@ describe('ProfileSummary', () => {
   it('exposes the name once to assistive technology', () => {
     const { container } = render(<ProfileSummary name="Ana Souza" pictureUrl="/a.png" />)
     expect(container.querySelector('img')).toHaveAttribute('alt', '')
-    expect(container.querySelector('.fk-avatar')).toHaveAttribute('aria-hidden', 'true')
+    expect(container.querySelector('.ty-avatar')).toHaveAttribute('aria-hidden', 'true')
     expect(screen.getAllByText('Ana Souza')).toHaveLength(1)
   })
 

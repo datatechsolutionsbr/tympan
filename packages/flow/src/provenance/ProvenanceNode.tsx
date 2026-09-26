@@ -33,11 +33,11 @@ const ACTOR_GLYPH: Record<ProvActorKind, typeof Bot> = { agent: Bot, person: Use
 export function ActorMark({ actor, className }: { actor: Pick<ProvActor, 'kind' | 'name'>; className?: string }) {
   const Glyph = ACTOR_GLYPH[actor.kind]
   return (
-    <span className={['fk-prov-actor', className].filter(Boolean).join(' ')} data-kind={actor.kind}>
-      <span className="fk-prov-actor__glyph" aria-hidden="true">
+    <span className={['ty-prov-actor', className].filter(Boolean).join(' ')} data-kind={actor.kind}>
+      <span className="ty-prov-actor__glyph" aria-hidden="true">
         <Glyph focusable="false" />
       </span>
-      <span className="fk-prov-actor__name" dir="auto">
+      <span className="ty-prov-actor__name" dir="auto">
         {actor.name}
       </span>
     </span>
@@ -50,7 +50,7 @@ const PROOF_GLYPH: Record<ProofKey, typeof CircleCheck> = { proved: CircleCheck,
 export function ProofPill({ state, word, size = 'regular' }: { state: ProofKey; word: string; size?: 'regular' | 'small' }) {
   const Glyph = PROOF_GLYPH[state]
   return (
-    <span className="fk-prov-proof" data-proof={state} data-size={size}>
+    <span className="ty-prov-proof" data-proof={state} data-size={size}>
       <Glyph aria-hidden="true" focusable="false" />
       {word}
     </span>
@@ -61,7 +61,7 @@ export function ProofPill({ state, word, size = 'regular' }: { state: ProofKey; 
 export function HashCheck({ state, labels: l }: { state: NonNullable<ProvItem['hashCheck']>; labels: ProvenanceLabels }) {
   const Icon = state === 'match' ? ShieldCheck : state === 'mismatch' ? ShieldX : ShieldQuestion
   return (
-    <span className="fk-prov-hash" data-state={state}>
+    <span className="ty-prov-hash" data-state={state}>
       <Icon aria-hidden="true" focusable="false" />
       {l.hash[state]}
     </span>
@@ -87,10 +87,10 @@ function CardShell({ name, words, onActivate, onKeyDown, attrs, children }: { na
   const surface = useSurface()
   const describedBy = useId()
   return (
-    <div className="fk-prov-card" {...attrs}>
+    <div className="ty-prov-card" {...attrs}>
       <AriaButton
-        className="fk-prov-card__hit"
-        data-fk-node-focus=""
+        className="ty-prov-card__hit"
+        data-ty-node-focus=""
         aria-label={name}
         {...(words.length ? { 'aria-describedby': describedBy } : {})}
         onPress={() => {
@@ -101,7 +101,7 @@ function CardShell({ name, words, onActivate, onKeyDown, attrs, children }: { na
       />
       {children}
       {words.length ? (
-        <span id={describedBy} className="fk-visually-hidden">
+        <span id={describedBy} className="ty-visually-hidden">
           {words.join(', ')}
         </span>
       ) : null}
@@ -121,16 +121,16 @@ export function ProvenanceNode({ item, labels: l, locale, selected, dimmed, onPa
       onKeyDown={onKeyDown}
       attrs={{ 'data-kind': item.kind, 'data-on-path': onPath ? 'true' : undefined, 'data-focus': focused ? 'true' : undefined, 'data-selected': selected ? 'true' : undefined, 'data-dimmed': dimmed ? 'true' : undefined }}
     >
-      <span className="fk-prov-card__head" aria-hidden="true">
-        <Icon className="fk-prov-card__icon" focusable="false" />
-        <span className="fk-prov-card__title" dir="auto" title={item.title}>
+      <span className="ty-prov-card__head" aria-hidden="true">
+        <Icon className="ty-prov-card__icon" focusable="false" />
+        <span className="ty-prov-card__title" dir="auto" title={item.title}>
           {item.title}
         </span>
       </span>
-      <code className="fk-prov-card__id" dir="ltr" title={item.meta?.[0]} aria-hidden="true">
+      <code className="ty-prov-card__id" dir="ltr" title={item.meta?.[0]} aria-hidden="true">
         {item.meta?.[0] ?? ''}
       </code>
-      <span className="fk-prov-card__foot" aria-hidden="true">
+      <span className="ty-prov-card__foot" aria-hidden="true">
         {item.actor ? <ActorMark actor={item.actor} /> : <span />}
         {item.hashCheck ? <HashCheck state={item.hashCheck} labels={l} /> : showsProof(item) ? <ProofPill state={proof} word={l.proof[proof]} size="small" /> : null}
       </span>
@@ -157,13 +157,13 @@ export function ActorNode({ actor, labels: l, locale, selected, onActivate, onKe
       onKeyDown={onKeyDown}
       attrs={{ 'data-kind': 'actor', 'data-selected': selected ? 'true' : undefined }}
     >
-      <span className="fk-prov-card__head" aria-hidden="true">
-        <span className="fk-prov-card__title">{l.actorKinds[actor.kind]}</span>
+      <span className="ty-prov-card__head" aria-hidden="true">
+        <span className="ty-prov-card__title">{l.actorKinds[actor.kind]}</span>
       </span>
-      <code className="fk-prov-card__id" dir="ltr" aria-hidden="true">
+      <code className="ty-prov-card__id" dir="ltr" aria-hidden="true">
         {actor.model ?? ''}
       </code>
-      <span className="fk-prov-card__foot" aria-hidden="true">
+      <span className="ty-prov-card__foot" aria-hidden="true">
         <ActorMark actor={actor} />
       </span>
     </CardShell>

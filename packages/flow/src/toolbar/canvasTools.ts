@@ -2,7 +2,7 @@
 // (each entry is a dock item) and the stand-alone CanvasToolbar.
 
 import { Hand, ListTree, Maximize, MousePointer2, Network, Search, ZoomIn, ZoomOut } from 'lucide-react'
-import type { IconComponent } from '@fakhir/ui'
+import type { IconComponent } from '@datatechsolutions/tympan'
 import { bundleFor, defineLabels, fill } from '../internal/labels'
 
 export interface CanvasToolItem {

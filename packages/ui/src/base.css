@@ -1,22 +1,22 @@
 /* Base layer: document defaults and shared helpers. */
-@layer fakhir.base {
+@layer tympan.base {
   :where(html) {
     /* Focus is never hidden under the sticky top bar (§2.6). */
-    scroll-padding-top: var(--fk-layout-scroll-padding);
+    scroll-padding-top: var(--ty-layout-scroll-padding);
   }
 
   :where(body),
-  .fk-theme-scope {
+  .ty-theme-scope {
     margin: 0;
-    background-color: var(--fk-bg);
-    color: var(--fk-ink-2);
-    font-family: var(--fk-font-sans);
-    font-size: var(--fk-font-size-body);
-    line-height: var(--fk-font-line-height-body);
+    background-color: var(--ty-bg);
+    color: var(--ty-ink-2);
+    font-family: var(--ty-font-sans);
+    font-size: var(--ty-font-size-body);
+    line-height: var(--ty-font-line-height-body);
     -webkit-font-smoothing: antialiased;
   }
 
-  .fk-visually-hidden {
+  .ty-visually-hidden {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -29,21 +29,21 @@
   }
 
   /* Shared icon sizing: icons inherit the text colour and never catch pointer events. */
-  .fk-icon {
+  .ty-icon {
     flex: none;
     width: 1.15em;
     height: 1.15em;
     pointer-events: none;
   }
 
-  /* A subtree in another language re-resolves the per-script stacks of @fakhir/tokens (:lang overrides). */
+  /* A subtree in another language re-resolves the per-script stacks of @datatechsolutions/tympan-tokens (:lang overrides). */
   [lang] {
-    font-family: var(--fk-font-sans);
+    font-family: var(--ty-font-sans);
   }
 
   /* Directional icons (chevrons, arrows, "back", "next") mirror in right-to-left text. */
-  :dir(rtl) .fk-mirror-rtl,
-  [dir='rtl'] .fk-mirror-rtl {
+  :dir(rtl) .ty-mirror-rtl,
+  [dir='rtl'] .ty-mirror-rtl {
     scale: -1 1;
   }
 }

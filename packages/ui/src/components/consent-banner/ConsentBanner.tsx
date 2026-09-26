@@ -7,7 +7,7 @@ import { Link } from '../link/Link'
 export type ConsentAnswer = 'accepted' | 'rejected'
 export type ConsentTexts = AuthBrandMessages['consent']
 
-export const DEFAULT_CONSENT_KEY = 'fk-consent'
+export const DEFAULT_CONSENT_KEY = 'ty-consent'
 
 /** Storage access that never throws (blocked storage behaves as "no answer yet"). */
 const consentStore = {
@@ -39,7 +39,7 @@ export interface ConsentBannerProps {
 /** Non-modal cookie consent region with an equal-weight choice (spec: wave-2/consent-banner.md). */
 export function ConsentBanner({ policyHref, storageKey = DEFAULT_CONSENT_KEY, onAccept, onReject, texts, className }: ConsentBannerProps) {
   const t: ConsentTexts = { ...useMessages().consent, ...texts }
-  const messageId = `fk-consent-${useId().replace(/:/g, '')}`
+  const messageId = `ty-consent-${useId().replace(/:/g, '')}`
   const [answered, setAnswered] = useState(() => {
     const stored = typeof window === 'undefined' ? null : consentStore.read(storageKey)
     return stored === 'accepted' || stored === 'rejected'
@@ -53,11 +53,11 @@ export function ConsentBanner({ policyHref, storageKey = DEFAULT_CONSENT_KEY, on
   }
 
   return (
-    <section className={className ? `fk-consent ${className}` : 'fk-consent'} aria-label={t.label} aria-describedby={messageId}>
-      <p id={messageId} className="fk-consent__message">
+    <section className={className ? `ty-consent ${className}` : 'ty-consent'} aria-label={t.label} aria-describedby={messageId}>
+      <p id={messageId} className="ty-consent__message">
         {t.message} <Link href={policyHref}>{t.learnMore}</Link>
       </p>
-      <div className="fk-consent__choices">
+      <div className="ty-consent__choices">
         <Button onPress={() => choose('rejected')}>{t.reject}</Button>
         <Button onPress={() => choose('accepted')}>{t.accept}</Button>
       </div>

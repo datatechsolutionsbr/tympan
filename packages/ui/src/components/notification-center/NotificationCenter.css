@@ -1,186 +1,186 @@
 /* NotificationCenter (spec: wave-2/notification-center.md; design direction §2.3, §2.5, §2.7, §2.10). */
-@layer fakhir.components {
-  .fk-notification-center,
-  .fk-notification-center__bell {
+@layer tympan.components {
+  .ty-notification-center,
+  .ty-notification-center__bell {
     position: relative;
     display: inline-flex;
   }
 
-  .fk-notification-center__backdrop {
+  .ty-notification-center__backdrop {
     position: fixed;
     inset: 0;
-    z-index: var(--fk-z-modal);
-    background: var(--fk-backdrop);
+    z-index: var(--ty-z-modal);
+    background: var(--ty-backdrop);
   }
-  .fk-notification-center__drawer {
+  .ty-notification-center__drawer {
     position: fixed;
     inset-block: 0;
     inset-inline-end: 0;
     display: flex;
-    inline-size: min(var(--fk-layout-aside), 100vw);
-    border-start-start-radius: var(--fk-radius-sheet);
-    border-end-start-radius: var(--fk-radius-sheet);
-    background: var(--fk-surface-raised);
-    box-shadow: var(--fk-shadow-modal);
-    backdrop-filter: blur(var(--fk-glass-blur-floating));
-    -webkit-backdrop-filter: blur(var(--fk-glass-blur-floating));
+    inline-size: min(var(--ty-layout-aside), 100vw);
+    border-start-start-radius: var(--ty-radius-sheet);
+    border-end-start-radius: var(--ty-radius-sheet);
+    background: var(--ty-surface-raised);
+    box-shadow: var(--ty-shadow-modal);
+    backdrop-filter: blur(var(--ty-glass-blur-floating));
+    -webkit-backdrop-filter: blur(var(--ty-glass-blur-floating));
     outline: none;
   }
-  .fk-notification-center__drawer[data-entering] {
-    animation: fk-notification-center-in var(--fk-dur-base) var(--fk-ease);
+  .ty-notification-center__drawer[data-entering] {
+    animation: ty-notification-center-in var(--ty-dur-base) var(--ty-ease);
   }
-  [dir='rtl'] .fk-notification-center__drawer[data-entering],
-  .fk-notification-center__drawer[data-entering]:dir(rtl) {
-    animation-name: fk-notification-center-in-rtl;
+  [dir='rtl'] .ty-notification-center__drawer[data-entering],
+  .ty-notification-center__drawer[data-entering]:dir(rtl) {
+    animation-name: ty-notification-center-in-rtl;
   }
-  .fk-notification-center__backdrop[data-entering] {
-    animation: fk-notification-center-fade var(--fk-dur-base) var(--fk-ease);
+  .ty-notification-center__backdrop[data-entering] {
+    animation: ty-notification-center-fade var(--ty-dur-base) var(--ty-ease);
   }
-  @keyframes fk-notification-center-in {
+  @keyframes ty-notification-center-in {
     from {
       opacity: 0;
-      translate: var(--fk-space-5) 0;
+      translate: var(--ty-space-5) 0;
     }
   }
   /* The panel sits at the inline end: it enters from the left in right-to-left. */
-  @keyframes fk-notification-center-in-rtl {
+  @keyframes ty-notification-center-in-rtl {
     from {
       opacity: 0;
-      translate: calc(-1 * var(--fk-space-5)) 0;
+      translate: calc(-1 * var(--ty-space-5)) 0;
     }
   }
-  @keyframes fk-notification-center-fade {
+  @keyframes ty-notification-center-fade {
     from {
       opacity: 0;
     }
   }
 
-  .fk-notification-center__dialog {
+  .ty-notification-center__dialog {
     display: flex;
     flex: 1;
     flex-direction: column;
     min-block-size: 0;
     outline: none;
   }
-  .fk-notification-center__head {
+  .ty-notification-center__head {
     display: flex;
     align-items: center;
-    gap: var(--fk-space-2);
-    padding: var(--fk-space-4) var(--fk-space-4) var(--fk-space-3) var(--fk-space-5);
-    border-block-end: 1px solid var(--fk-line);
-    color: var(--fk-ink-3);
+    gap: var(--ty-space-2);
+    padding: var(--ty-space-4) var(--ty-space-4) var(--ty-space-3) var(--ty-space-5);
+    border-block-end: 1px solid var(--ty-line);
+    color: var(--ty-ink-3);
   }
-  .fk-notification-center__heading {
+  .ty-notification-center__heading {
     flex: 1;
     margin: 0;
-    color: var(--fk-ink);
-    font-family: var(--fk-font-serif);
-    font-size: var(--fk-font-size-h3);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-h3);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-serif);
+    font-size: var(--ty-font-size-h3);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-h3);
     outline: none;
   }
-  .fk-notification-center__heading:focus-visible {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-notification-center__heading:focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
 
-  .fk-notification-center__list {
+  .ty-notification-center__list {
     flex: 1;
     margin: 0;
-    padding: 0 var(--fk-space-3);
+    padding: 0 var(--ty-space-3);
     overflow-y: auto;
     list-style: none;
   }
-  .fk-notification-center__entry {
-    --fk-notice-tone: var(--fk-ink-3);
+  .ty-notification-center__entry {
+    --ty-notice-tone: var(--ty-ink-3);
     display: flex;
     align-items: flex-start;
-    gap: var(--fk-space-3);
-    padding: var(--fk-space-3) var(--fk-space-2);
-    border-block-end: 1px solid var(--fk-line);
+    gap: var(--ty-space-3);
+    padding: var(--ty-space-3) var(--ty-space-2);
+    border-block-end: 1px solid var(--ty-line);
   }
-  .fk-notification-center__entry[data-tone='success'] {
-    --fk-notice-tone: var(--fk-success);
+  .ty-notification-center__entry[data-tone='success'] {
+    --ty-notice-tone: var(--ty-success);
   }
-  .fk-notification-center__entry[data-tone='error'] {
-    --fk-notice-tone: var(--fk-danger);
+  .ty-notification-center__entry[data-tone='error'] {
+    --ty-notice-tone: var(--ty-danger);
   }
-  .fk-notification-center__entry[data-tone='warning'] {
-    --fk-notice-tone: var(--fk-warning);
+  .ty-notification-center__entry[data-tone='warning'] {
+    --ty-notice-tone: var(--ty-warning);
   }
-  .fk-notification-center__glyph {
+  .ty-notification-center__glyph {
     margin-block-start: 0.15em;
-    color: var(--fk-notice-tone);
+    color: var(--ty-notice-tone);
   }
-  .fk-notification-center__text {
+  .ty-notification-center__text {
     display: grid;
     flex: 1;
     gap: 2px;
     min-inline-size: 0;
   }
-  .fk-notification-center__text > p {
+  .ty-notification-center__text > p {
     margin: 0;
   }
-  .fk-notification-center__tone,
-  .fk-notification-center__time {
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+  .ty-notification-center__tone,
+  .ty-notification-center__time {
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
-  .fk-notification-center__tone {
-    font-weight: var(--fk-font-weight-semibold);
+  .ty-notification-center__tone {
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-notification-center__title {
-    color: var(--fk-ink);
-    font-weight: var(--fk-font-weight-semibold);
+  .ty-notification-center__title {
+    color: var(--ty-ink);
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-notification-center__message {
-    color: var(--fk-ink-2);
+  .ty-notification-center__message {
+    color: var(--ty-ink-2);
   }
 
-  .fk-notification-center__empty {
+  .ty-notification-center__empty {
     display: grid;
     justify-items: center;
-    gap: var(--fk-space-2);
-    padding: var(--fk-space-7) var(--fk-space-5);
-    color: var(--fk-ink-3);
+    gap: var(--ty-space-2);
+    padding: var(--ty-space-7) var(--ty-space-5);
+    color: var(--ty-ink-3);
     text-align: center;
   }
-  .fk-notification-center__empty > p {
+  .ty-notification-center__empty > p {
     margin: 0;
   }
 
   @media (max-width: 639.98px) {
-    .fk-notification-center__drawer {
+    .ty-notification-center__drawer {
       inline-size: 100vw;
       border-radius: 0;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-notification-center__drawer[data-entering],
-    .fk-notification-center__backdrop[data-entering] {
+    .ty-notification-center__drawer[data-entering],
+    .ty-notification-center__backdrop[data-entering] {
       animation: none;
     }
   }
 
   @media (prefers-reduced-transparency: reduce) {
-    .fk-notification-center__drawer {
-      background: var(--fk-surface-raised-solid);
+    .ty-notification-center__drawer {
+      background: var(--ty-surface-raised-solid);
       backdrop-filter: none;
       -webkit-backdrop-filter: none;
     }
   }
 
   @media (forced-colors: active) {
-    .fk-notification-center__drawer {
+    .ty-notification-center__drawer {
       border: 1px solid CanvasText;
     }
-    .fk-notification-center__entry {
+    .ty-notification-center__entry {
       border-block-end-color: CanvasText;
     }
-    .fk-notification-center__glyph {
+    .ty-notification-center__glyph {
       color: CanvasText;
     }
   }

@@ -12,7 +12,7 @@ describe('HttpErrorPage', () => {
     const headings = screen.getAllByRole('heading', { level: 1 })
     expect(headings).toHaveLength(1)
     expect(headings[0]).toHaveTextContent('Error 404: Page not found')
-    expect(container.querySelector('.fk-http-error__code')).toHaveAttribute('aria-hidden', 'true')
+    expect(container.querySelector('.ty-http-error__code')).toHaveAttribute('aria-hidden', 'true')
     expect(screen.getByRole('main')).toBeInTheDocument()
   })
 
@@ -22,8 +22,8 @@ describe('HttpErrorPage', () => {
   })
 
   it('shows the problem type as monospace metadata', () => {
-    render(<HttpErrorPage kind="server-error" problemType="https://fakhir.app/problems/upstream" />)
-    expect(screen.getByText('https://fakhir.app/problems/upstream').tagName).toBe('CODE')
+    render(<HttpErrorPage kind="server-error" problemType="https://example.org/problems/upstream" />)
+    expect(screen.getByText('https://example.org/problems/upstream').tagName).toBe('CODE')
   })
 
   it('moves focus to the heading on mount', () => {
@@ -32,7 +32,7 @@ describe('HttpErrorPage', () => {
   })
 
   it('never uses the accent as the error colour', () => {
-    expect(cssOf('components/http-error-page/HttpErrorPage.css')).not.toMatch(/--fk-accent/)
+    expect(cssOf('components/http-error-page/HttpErrorPage.css')).not.toMatch(/--ty-accent/)
   })
 
   it('has no axe violations, light and dark', async () => {

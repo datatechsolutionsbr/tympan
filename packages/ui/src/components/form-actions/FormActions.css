@@ -1,33 +1,33 @@
 /* FormActions (spec: wave-2/form-actions.md; design direction §2.1, §2.10). */
-@layer fakhir.components {
-  .fk-form-actions {
-    --fk-form-actions-justify: flex-end;
+@layer tympan.components {
+  .ty-form-actions {
+    --ty-form-actions-justify: flex-end;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: var(--fk-form-actions-justify);
-    gap: var(--fk-space-3);
+    justify-content: var(--ty-form-actions-justify);
+    gap: var(--ty-space-3);
   }
-  .fk-form-actions[data-align='start'] {
-    --fk-form-actions-justify: flex-start;
+  .ty-form-actions[data-align='start'] {
+    --ty-form-actions-justify: flex-start;
   }
-  .fk-form-actions[data-align='between'] {
-    --fk-form-actions-justify: space-between;
+  .ty-form-actions[data-align='between'] {
+    --ty-form-actions-justify: space-between;
   }
 
   /* Phones: full width, primary on top visually; the DOM keeps secondary first. */
   @media (max-width: 639.98px) {
-    .fk-form-actions {
+    .ty-form-actions {
       flex-direction: column-reverse;
       align-items: stretch;
     }
-    .fk-form-actions > * {
+    .ty-form-actions > * {
       inline-size: 100%;
     }
   }
 
   @media (forced-colors: active) {
-    .fk-form-actions__primary {
+    .ty-form-actions__primary {
       border-width: 3px;
     }
   }

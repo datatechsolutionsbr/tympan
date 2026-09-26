@@ -1,41 +1,41 @@
 /* CanvasSurface: plane, grid, connectors layer, overview map, marquee. */
-@layer fakhir.components {
-  .fk-flow-surface {
+@layer tympan.components {
+  .ty-flow-surface {
     position: relative;
     overflow: hidden;
     inline-size: 100%;
     block-size: 100%;
     min-block-size: 240px;
-    background: var(--fk-flow-plane);
+    background: var(--ty-flow-plane);
     touch-action: none;
     user-select: none;
     outline: none;
     border-radius: inherit;
     cursor: default;
   }
-  .fk-flow-surface:focus-visible {
-    outline: var(--fk-focus-width, 2px) solid var(--fk-focus-ring, var(--fk-accent));
+  .ty-flow-surface:focus-visible {
+    outline: var(--ty-focus-width, 2px) solid var(--ty-focus-ring, var(--ty-accent));
     outline-offset: -2px;
   }
-  .fk-flow-surface[data-mode='pan'] {
+  .ty-flow-surface[data-mode='pan'] {
     cursor: grab;
   }
-  .fk-flow-surface[data-dragging] {
+  .ty-flow-surface[data-dragging] {
     cursor: grabbing;
   }
-  .fk-flow-surface[data-connecting] {
+  .ty-flow-surface[data-connecting] {
     cursor: crosshair;
   }
 
-  .fk-flow-surface__grid {
+  .ty-flow-surface__grid {
     position: absolute;
     inset: 0;
     inline-size: 100%;
     block-size: 100%;
     pointer-events: none;
   }
-  .fk-flow-surface__grid circle {
-    fill: var(--fk-flow-grid-dot);
+  .ty-flow-surface__grid circle {
+    fill: var(--ty-flow-grid-dot);
   }
 
   /* The plane, the links layer and node boxes are placed from the canvas
@@ -43,7 +43,7 @@
      layout; it stays at the physical top-left in both reading directions.
      Mirroring for right-to-left happens in the layout (rank direction) and in
      the logical port sides, not by flipping the plane. */
-  .fk-flow-surface__plane {
+  .ty-flow-surface__plane {
     position: absolute;
     inset: 0 auto auto 0;
     inline-size: 0;
@@ -51,7 +51,7 @@
     transform-origin: 0 0;
   }
 
-  .fk-flow-surface__links {
+  .ty-flow-surface__links {
     position: absolute;
     inset: 0 auto auto 0;
     inline-size: 1px;
@@ -59,140 +59,140 @@
     overflow: visible;
     pointer-events: none;
   }
-  .fk-flow-surface__links * {
+  .ty-flow-surface__links * {
     pointer-events: visiblePainted;
   }
-  .fk-flow-surface__connector {
+  .ty-flow-surface__connector {
     fill: none;
-    stroke: var(--fk-flow-connector);
-    stroke-width: var(--fk-flow-connector-width);
+    stroke: var(--ty-flow-connector);
+    stroke-width: var(--ty-flow-connector-width);
   }
-  .fk-flow-surface__arrowhead {
-    fill: var(--fk-flow-connector);
+  .ty-flow-surface__arrowhead {
+    fill: var(--ty-flow-connector);
   }
 
-  .fk-flow-surface__node {
+  .ty-flow-surface__node {
     position: absolute;
     inset: 0 auto auto 0;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
   }
-  .fk-flow-surface__node > * {
+  .ty-flow-surface__node > * {
     flex: 1 1 auto;
   }
-  .fk-flow-surface__node[data-layer='0'] {
+  .ty-flow-surface__node[data-layer='0'] {
     z-index: 0;
   }
-  .fk-flow-surface__node:focus-within {
+  .ty-flow-surface__node:focus-within {
     z-index: 2;
   }
 
-  .fk-flow-surface__connector-html {
+  .ty-flow-surface__connector-html {
     display: contents;
   }
 
-  .fk-flow-surface__marquee {
+  .ty-flow-surface__marquee {
     position: absolute;
     /* Placed from pointer coordinates (physical), like the plane. */
-    border: 1px dashed var(--fk-accent);
-    background: var(--fk-flow-marquee);
+    border: 1px dashed var(--ty-accent);
+    background: var(--ty-flow-marquee);
     pointer-events: none;
   }
 
-  .fk-flow-surface__overview {
+  .ty-flow-surface__overview {
     position: absolute;
-    inset-block-end: var(--fk-space-3);
-    inset-inline-end: var(--fk-space-3);
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-surface-raised-solid);
-    box-shadow: var(--fk-shadow-raised);
+    inset-block-end: var(--ty-space-3);
+    inset-inline-end: var(--ty-space-3);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-surface-raised-solid);
+    box-shadow: var(--ty-shadow-raised);
     cursor: pointer;
   }
-  .fk-flow-surface__overview-node {
-    fill: var(--fk-flow-tone, var(--fk-flow-tone-neutral));
+  .ty-flow-surface__overview-node {
+    fill: var(--ty-flow-tone, var(--ty-flow-tone-neutral));
   }
-  .fk-flow-surface__overview-view {
-    fill: var(--fk-accent-soft);
-    stroke: var(--fk-accent);
+  .ty-flow-surface__overview-view {
+    fill: var(--ty-accent-soft);
+    stroke: var(--ty-accent);
     stroke-width: 1.5;
   }
 
   /* ConnectionPreviewLine */
-  .fk-connection-preview__path {
+  .ty-connection-preview__path {
     fill: none;
-    stroke: var(--fk-accent);
+    stroke: var(--ty-accent);
     stroke-width: 2;
     stroke-dasharray: 6 5;
-    animation: fk-connection-dash 0.8s linear infinite;
+    animation: ty-connection-dash 0.8s linear infinite;
   }
-  .fk-connection-preview__dot {
-    fill: var(--fk-accent);
+  .ty-connection-preview__dot {
+    fill: var(--ty-accent);
   }
-  .fk-connection-preview[data-validity='invalid'] .fk-connection-preview__path {
-    stroke: var(--fk-danger);
+  .ty-connection-preview[data-validity='invalid'] .ty-connection-preview__path {
+    stroke: var(--ty-danger);
   }
-  .fk-connection-preview[data-validity='invalid'] .fk-connection-preview__dot {
-    fill: var(--fk-danger);
+  .ty-connection-preview[data-validity='invalid'] .ty-connection-preview__dot {
+    fill: var(--ty-danger);
   }
-  .fk-connection-preview__refusal circle,
-  .fk-connection-preview__refusal line {
-    fill: var(--fk-surface-solid);
-    stroke: var(--fk-danger);
+  .ty-connection-preview__refusal circle,
+  .ty-connection-preview__refusal line {
+    fill: var(--ty-surface-solid);
+    stroke: var(--ty-danger);
     stroke-width: 2;
   }
-  @keyframes fk-connection-dash {
+  @keyframes ty-connection-dash {
     to {
       stroke-dashoffset: -22;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-connection-preview__path {
+    .ty-connection-preview__path {
       animation: none;
     }
   }
 
   @media (forced-colors: active) {
-    .fk-flow-surface {
+    .ty-flow-surface {
       background: Canvas;
     }
-    .fk-flow-surface__grid circle {
+    .ty-flow-surface__grid circle {
       fill: GrayText;
     }
-    .fk-flow-surface__connector {
+    .ty-flow-surface__connector {
       stroke: CanvasText;
     }
-    .fk-flow-surface__arrowhead {
+    .ty-flow-surface__arrowhead {
       fill: CanvasText;
     }
-    .fk-flow-surface__marquee {
+    .ty-flow-surface__marquee {
       border-color: Highlight;
       background: transparent;
     }
-    .fk-flow-surface__overview {
+    .ty-flow-surface__overview {
       border-color: CanvasText;
       background: Canvas;
     }
-    .fk-flow-surface__overview-node,
-    .fk-flow-surface__overview-node[data-tone] {
+    .ty-flow-surface__overview-node,
+    .ty-flow-surface__overview-node[data-tone] {
       fill: Canvas;
       stroke: CanvasText;
     }
-    .fk-flow-surface__overview-view {
+    .ty-flow-surface__overview-view {
       fill: transparent;
       stroke: Highlight;
     }
-    .fk-connection-preview__path,
-    .fk-connection-preview[data-validity='invalid'] .fk-connection-preview__path {
+    .ty-connection-preview__path,
+    .ty-connection-preview[data-validity='invalid'] .ty-connection-preview__path {
       stroke: Highlight;
     }
-    .fk-connection-preview__dot {
+    .ty-connection-preview__dot {
       fill: Highlight;
     }
-    .fk-connection-preview__refusal circle,
-    .fk-connection-preview__refusal line {
+    .ty-connection-preview__refusal circle,
+    .ty-connection-preview__refusal line {
       fill: Canvas;
       stroke: CanvasText;
     }

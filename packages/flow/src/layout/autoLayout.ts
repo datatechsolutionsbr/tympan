@@ -23,11 +23,11 @@ export interface LayoutEdge {
 }
 
 export interface AutoLayoutOptions {
-  /** Gap between ranks (design direction §2.1: --fk-space-8 = 64). */
+  /** Gap between ranks (design direction §2.1: --ty-space-8 = 64). */
   rankGap?: number
-  /** Gap between nodes of one rank (--fk-space-6 = 32). */
+  /** Gap between nodes of one rank (--ty-space-6 = 32). */
   siblingGap?: number
-  /** Margin around the whole layout (--fk-space-5 = 24). */
+  /** Margin around the whole layout (--ty-space-5 = 24). */
   margin?: number
   /** Kinds whose nodes are never moved (annotations). Default: note. */
   fixedKinds?: readonly string[]

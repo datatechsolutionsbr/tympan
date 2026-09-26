@@ -18,13 +18,13 @@ describe('FeatureTile', () => {
         <FeatureTile icon={Map} title="Atlas" description="Cases on a map." />
       </FeatureTileGrid>,
     )
-    const badges = container.querySelectorAll('.fk-feature-tile__badge')
+    const badges = container.querySelectorAll('.ty-feature-tile__badge')
     expect(badges).toHaveLength(3)
     badges.forEach((b) => {
       expect(b).toHaveAttribute('aria-hidden', 'true')
       expect(b.getAttribute('style')).toBeNull()
     })
-    expect(css()).toMatch(/\.fk-feature-tile__badge\s*\{[^}]*background:\s*var\(--fk-accent-soft\);[^}]*color:\s*var\(--fk-accent\)/)
+    expect(css()).toMatch(/\.ty-feature-tile__badge\s*\{[^}]*background:\s*var\(--ty-accent-soft\);[^}]*color:\s*var\(--ty-accent\)/)
     expect(within(screen.getByRole('list')).getAllByRole('listitem')).toHaveLength(3)
   })
 
@@ -39,7 +39,7 @@ describe('FeatureTile', () => {
     expect(screen.getByRole('link', { name: 'Proof' })).toHaveFocus()
     await userEvent.tab()
     expect(screen.getByRole('link', { name: 'Agents' })).toHaveFocus()
-    expect(css()).toMatch(/\.fk-feature-tile__link::after\s*\{[^}]*inset:\s*0/)
+    expect(css()).toMatch(/\.ty-feature-tile__link::after\s*\{[^}]*inset:\s*0/)
   })
 
   it('is not focusable without href', async () => {
@@ -54,10 +54,10 @@ describe('FeatureTile', () => {
   })
 
   it('outlines the badge in forced colours and lays out 1, 2, 3 columns', () => {
-    expect(mediaBlock(css(), /\(forced-colors:\s*active\)/)).toMatch(/\.fk-feature-tile__badge\s*\{[^}]*border:\s*1px solid CanvasText/)
+    expect(mediaBlock(css(), /\(forced-colors:\s*active\)/)).toMatch(/\.ty-feature-tile__badge\s*\{[^}]*border:\s*1px solid CanvasText/)
     expect(mediaBlock(css(), /\(min-width:\s*640px\)/)).toMatch(/repeat\(2,/)
     expect(mediaBlock(css(), /\(min-width:\s*1024px\)/)).toMatch(/repeat\(3,/)
-    expect(css()).not.toMatch(/(?<!text-)transform|translate|animation|--fk-cta/)
+    expect(css()).not.toMatch(/(?<!text-)transform|translate|animation|--ty-cta/)
   })
 
   it('has no axe violations in light and dark', async () => {

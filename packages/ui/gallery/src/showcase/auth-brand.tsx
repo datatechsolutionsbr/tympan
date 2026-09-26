@@ -32,13 +32,13 @@ function previewStyle(tall: boolean): CSSProperties {
     overflow: 'auto',
     maxBlockSize: tall ? 640 : 380,
     minBlockSize: 160,
-    border: '1px solid var(--fk-line)',
-    borderRadius: 'var(--fk-radius-card)',
-    background: 'var(--fk-bg)',
+    border: '1px solid var(--ty-line)',
+    borderRadius: 'var(--ty-radius-card)',
+    background: 'var(--ty-bg)',
   }
 }
 
-const onAccentStyle: CSSProperties = { padding: 'var(--fk-space-4)', borderRadius: 'var(--fk-radius-card)', background: 'var(--fk-cta)' }
+const onAccentStyle: CSSProperties = { padding: 'var(--ty-space-4)', borderRadius: 'var(--ty-radius-card)', background: 'var(--ty-cta)' }
 
 function Preview({ children, tall = false }: { children: ReactNode; tall?: boolean }) {
   // `transform` makes fixed-position frames stay inside the preview box.
@@ -63,16 +63,16 @@ export function AuthBrandShowcase({ scope }: { scope: string }) {
   const [busyId, setBusyId] = useState<string | null>(null)
   const [pending, setPending] = useState(false)
   const [gate, setGate] = useState(false)
-  const [consentKey, setConsentKey] = useState(() => `fk-gallery-consent-${scope}-${Date.now()}`)
+  const [consentKey, setConsentKey] = useState(() => `ty-gallery-consent-${scope}-${Date.now()}`)
 
   return (
-    <div className="fk-gallery-showcase">
+    <div className="ty-gallery-showcase">
       <Section id={id('brand-mark')} title="BrandMark">
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <BrandMark size="small" />
           <BrandMark />
           <BrandMark size="large" />
-          <BrandMark showWordmark={false} label="Fakhir home" />
+          <BrandMark showWordmark={false} label="Home" />
         </div>
       </Section>
 
@@ -84,7 +84,7 @@ export function AuthBrandShowcase({ scope }: { scope: string }) {
             brandPanel={{ mark: <BrandMark showWordmark={false} />, title: 'Evidence before opinion', subtitle: 'A calm workbench for researchers and reviewers.', figures, footnote: 'EACH/USP' }}
           >
             <h1>Sign in</h1>
-            <form className="fk-gallery-stack" onSubmit={(e) => e.preventDefault()}>
+            <form className="ty-gallery-stack" onSubmit={(e) => e.preventDefault()}>
               <TextField label="E-mail" inputType="email" />
               <TextField label="Password" mode="password" />
               <Button type="submit" variant="primary" fullWidth>
@@ -99,7 +99,7 @@ export function AuthBrandShowcase({ scope }: { scope: string }) {
       </Section>
 
       <Section id={id('marks')} title="ThirdPartyMarkSlot, ProviderMark">
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <ProviderMark modelId="eu.anthropic.claude-sonnet" />
           <ProviderMark modelId="gpt-4o" size="bubble" />
           <ProviderMark modelId="acme-7b" />
@@ -109,10 +109,10 @@ export function AuthBrandShowcase({ scope }: { scope: string }) {
 
       <Section id={id('loader')} title="BrandLoader, SkeletonBlock">
         <BrandLoader layout="inline" label="Opening the census" />
-        <div className="fk-gallery-stack">
+        <div className="ty-gallery-stack">
           <SkeletonBlock width="60%" />
           <SkeletonBlock />
-          <div className="fk-gallery-row">
+          <div className="ty-gallery-row">
             <SkeletonBlock shape="circle" />
             <SkeletonBlock shape="pill" />
             <SkeletonBlock shape="block" width={9} />
@@ -145,7 +145,7 @@ export function AuthBrandShowcase({ scope }: { scope: string }) {
         <EnvironmentBanner environment="development" texts={{ label: `Environment (${scope})` }} facts={{ appName: 'platform', port: 3200, apiBase: '/api' }} user={{ email: 'reviewer@example.org', role: 'Owner' }} />
         <Preview>
           <ConsentBanner policyHref="#/privacy" storageKey={consentKey} texts={{ label: `Cookie choice (${scope})` }} />
-          <Button size="compact" onPress={() => setConsentKey(`fk-gallery-consent-${scope}-${Date.now()}`)}>
+          <Button size="compact" onPress={() => setConsentKey(`ty-gallery-consent-${scope}-${Date.now()}`)}>
             Ask again
           </Button>
           <RouteProgress pending={pending} label={`Loading page (${scope})`} />

@@ -65,26 +65,26 @@ export function InlineNotice({
   }
 
   return (
-    <div ref={rootRef} className={cx('fk-notice', className)} data-tone={tone} data-align={align} role={role}>
-      <span className="fk-notice__icon" aria-hidden="true">
+    <div ref={rootRef} className={cx('ty-notice', className)} data-tone={tone} data-align={align} role={role}>
+      <span className="ty-notice__icon" aria-hidden="true">
         {icon ?? <Icon />}
       </span>
-      <div className="fk-notice__body">
+      <div className="ty-notice__body">
         {title ? (
-          <TitleTag className="fk-notice__title">
-            <span className="fk-visually-hidden">{messages.notice.toneWord[tone]} </span>
+          <TitleTag className="ty-notice__title">
+            <span className="ty-visually-hidden">{messages.notice.toneWord[tone]} </span>
             {title}
           </TitleTag>
         ) : null}
-        <div className="fk-notice__message">
-          {title ? null : <span className="fk-visually-hidden">{messages.notice.toneWord[tone]} </span>}
+        <div className="ty-notice__message">
+          {title ? null : <span className="ty-visually-hidden">{messages.notice.toneWord[tone]} </span>}
           {children}
         </div>
-        {actions ? <div className="fk-notice__actions">{actions}</div> : null}
+        {actions ? <div className="ty-notice__actions">{actions}</div> : null}
       </div>
       {dismissible ? (
         <Button
-          className="fk-notice__dismiss"
+          className="ty-notice__dismiss"
           variant="quiet"
           size="compact"
           iconOnly

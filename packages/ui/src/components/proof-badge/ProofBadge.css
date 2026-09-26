@@ -1,177 +1,177 @@
 /* ProofBadge (design direction §2.11: icon, word and border style per proof state). */
-@layer fakhir.components {
-  .fk-proof-badge {
-    --fk-proof-color: var(--fk-proof-none);
-    --fk-proof-fill: transparent;
-    --fk-proof-border: 1px solid var(--fk-line);
+@layer tympan.components {
+  .ty-proof-badge {
+    --ty-proof-color: var(--ty-proof-none);
+    --ty-proof-fill: transparent;
+    --ty-proof-border: 1px solid var(--ty-line);
     box-sizing: border-box;
     display: inline-flex;
     align-items: center;
-    gap: var(--fk-space-1);
-    color: var(--fk-proof-color);
-    font-family: var(--fk-font-sans);
+    gap: var(--ty-space-1);
+    color: var(--ty-proof-color);
+    font-family: var(--ty-font-sans);
     white-space: nowrap;
   }
 
-  .fk-proof-badge[data-state='proved'] {
-    --fk-proof-color: var(--fk-proof-proved);
-    --fk-proof-fill: var(--fk-proof-proved-soft);
-    --fk-proof-border: 1.5px solid var(--fk-proof-proved);
+  .ty-proof-badge[data-state='proved'] {
+    --ty-proof-color: var(--ty-proof-proved);
+    --ty-proof-fill: var(--ty-proof-proved-soft);
+    --ty-proof-border: 1.5px solid var(--ty-proof-proved);
   }
-  .fk-proof-badge[data-state='pending'] {
-    --fk-proof-color: var(--fk-proof-pending);
-    --fk-proof-fill: var(--fk-proof-pending-soft);
-    --fk-proof-border: 1.5px dashed var(--fk-proof-pending);
+  .ty-proof-badge[data-state='pending'] {
+    --ty-proof-color: var(--ty-proof-pending);
+    --ty-proof-fill: var(--ty-proof-pending-soft);
+    --ty-proof-border: 1.5px dashed var(--ty-proof-pending);
   }
-  .fk-proof-badge[data-state='refuted'] {
-    --fk-proof-color: var(--fk-proof-refuted);
-    --fk-proof-fill: var(--fk-proof-refuted-soft);
-    --fk-proof-border: 3px double var(--fk-proof-refuted);
+  .ty-proof-badge[data-state='refuted'] {
+    --ty-proof-color: var(--ty-proof-refuted);
+    --ty-proof-fill: var(--ty-proof-refuted-soft);
+    --ty-proof-border: 3px double var(--ty-proof-refuted);
   }
-  .fk-proof-badge[data-state='not-disclosed'] {
-    --fk-proof-color: var(--fk-proof-not-disclosed);
-    --fk-proof-fill: var(--fk-proof-not-disclosed-soft);
-    --fk-proof-border: 1.5px dotted var(--fk-proof-not-disclosed);
+  .ty-proof-badge[data-state='not-disclosed'] {
+    --ty-proof-color: var(--ty-proof-not-disclosed);
+    --ty-proof-fill: var(--ty-proof-not-disclosed-soft);
+    --ty-proof-border: 1.5px dotted var(--ty-proof-not-disclosed);
   }
-  .fk-proof-badge[data-state='none'] {
-    --fk-proof-color: var(--fk-ink-3);
-    --fk-proof-fill: transparent;
-    --fk-proof-border: 1px solid var(--fk-line);
+  .ty-proof-badge[data-state='none'] {
+    --ty-proof-color: var(--ty-ink-3);
+    --ty-proof-fill: transparent;
+    --ty-proof-border: 1px solid var(--ty-line);
   }
 
-  .fk-proof-badge__icon {
+  .ty-proof-badge__icon {
     flex: none;
     inline-size: 14px;
     block-size: 14px;
   }
 
   /* inline: icon 14 + word, 12 px text, 22 px tall pill. */
-  .fk-proof-badge[data-size='inline'] {
+  .ty-proof-badge[data-size='inline'] {
     block-size: 22px;
-    padding-inline: var(--fk-space-2);
-    border: var(--fk-proof-border);
-    border-radius: var(--fk-radius-pill);
-    background: var(--fk-proof-fill);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
-    font-weight: var(--fk-font-weight-semibold);
+    padding-inline: var(--ty-space-2);
+    border: var(--ty-proof-border);
+    border-radius: var(--ty-radius-pill);
+    background: var(--ty-proof-fill);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
+    font-weight: var(--ty-font-weight-semibold);
   }
 
   /* compact: icon only, word for AT and tooltip. */
-  .fk-proof-badge[data-size='compact'] {
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+  .ty-proof-badge[data-size='compact'] {
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
     font-variant-numeric: tabular-nums;
   }
-  .fk-proof-badge[data-size='compact'] .fk-proof-badge__icon {
+  .ty-proof-badge[data-size='compact'] .ty-proof-badge__icon {
     box-sizing: content-box;
     padding: 2px;
-    border: var(--fk-proof-border);
-    border-radius: var(--fk-radius-pill);
-    background: var(--fk-proof-fill);
+    border: var(--ty-proof-border);
+    border-radius: var(--ty-radius-pill);
+    background: var(--ty-proof-fill);
   }
-  .fk-proof-badge[data-interactive] {
-    border-radius: var(--fk-radius-pill);
+  .ty-proof-badge[data-interactive] {
+    border-radius: var(--ty-radius-pill);
     outline: none;
     cursor: default;
   }
-  .fk-proof-badge[data-interactive]:focus-visible {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-proof-badge[data-interactive]:focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
 
   /* block: strip on top of the evidence panel. */
-  .fk-proof-badge[data-size='block'] {
+  .ty-proof-badge[data-size='block'] {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: var(--fk-space-1);
-    padding: var(--fk-space-3) var(--fk-space-4);
-    border: var(--fk-proof-border);
-    border-radius: var(--fk-radius-card);
-    background: var(--fk-proof-fill);
+    gap: var(--ty-space-1);
+    padding: var(--ty-space-3) var(--ty-space-4);
+    border: var(--ty-proof-border);
+    border-radius: var(--ty-radius-card);
+    background: var(--ty-proof-fill);
     white-space: normal;
   }
-  .fk-proof-badge[data-size='block'] .fk-proof-badge__icon {
+  .ty-proof-badge[data-size='block'] .ty-proof-badge__icon {
     inline-size: 20px;
     block-size: 20px;
   }
-  .fk-proof-badge__head {
+  .ty-proof-badge__head {
     display: flex;
     align-items: center;
-    gap: var(--fk-space-2);
-    font-size: var(--fk-font-size-body);
-    line-height: var(--fk-font-line-height-body);
-    font-weight: var(--fk-font-weight-semibold);
+    gap: var(--ty-space-2);
+    font-size: var(--ty-font-size-body);
+    line-height: var(--ty-font-line-height-body);
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-proof-badge__meta {
+  .ty-proof-badge__meta {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--fk-space-1) var(--fk-space-3);
+    gap: var(--ty-space-1) var(--ty-space-3);
     margin: 0;
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
-  .fk-proof-badge__rule {
-    font-family: var(--fk-font-mono);
+  .ty-proof-badge__rule {
+    font-family: var(--ty-font-mono);
   }
-  .fk-proof-badge__detail {
-    color: var(--fk-ink-2);
-    font-weight: var(--fk-font-weight-regular);
+  .ty-proof-badge__detail {
+    color: var(--ty-ink-2);
+    font-weight: var(--ty-font-weight-regular);
     font-variant-numeric: tabular-nums;
   }
 
-  .fk-proof-badge__tooltip {
-    max-inline-size: calc(var(--fk-measure-summary) * 1ch);
-    padding: var(--fk-space-1) var(--fk-space-2);
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-surface-raised-solid);
-    color: var(--fk-ink);
-    box-shadow: var(--fk-shadow-floating);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
-    z-index: var(--fk-z-popover);
+  .ty-proof-badge__tooltip {
+    max-inline-size: calc(var(--ty-measure-summary) * 1ch);
+    padding: var(--ty-space-1) var(--ty-space-2);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-surface-raised-solid);
+    color: var(--ty-ink);
+    box-shadow: var(--ty-shadow-floating);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
+    z-index: var(--ty-z-popover);
   }
-  .fk-proof-badge__tooltip[data-entering] {
-    animation: fk-proof-badge-fade var(--fk-dur-quick) var(--fk-ease);
+  .ty-proof-badge__tooltip[data-entering] {
+    animation: ty-proof-badge-fade var(--ty-dur-quick) var(--ty-ease);
   }
-  @keyframes fk-proof-badge-fade {
+  @keyframes ty-proof-badge-fade {
     from {
       opacity: 0;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-proof-badge__tooltip[data-entering] {
+    .ty-proof-badge__tooltip[data-entering] {
       animation: none;
     }
   }
 
   /* Forced colours: the border style (solid, dashed, double, dotted) and the word carry the state. */
   @media (forced-colors: active) {
-    .fk-proof-badge {
+    .ty-proof-badge {
       color: CanvasText;
       forced-color-adjust: none;
-      --fk-proof-fill: Canvas;
+      --ty-proof-fill: Canvas;
     }
-    .fk-proof-badge[data-state='proved'] {
-      --fk-proof-border: 1.5px solid CanvasText;
+    .ty-proof-badge[data-state='proved'] {
+      --ty-proof-border: 1.5px solid CanvasText;
     }
-    .fk-proof-badge[data-state='pending'] {
-      --fk-proof-border: 1.5px dashed CanvasText;
+    .ty-proof-badge[data-state='pending'] {
+      --ty-proof-border: 1.5px dashed CanvasText;
     }
-    .fk-proof-badge[data-state='refuted'] {
-      --fk-proof-border: 3px double CanvasText;
+    .ty-proof-badge[data-state='refuted'] {
+      --ty-proof-border: 3px double CanvasText;
     }
-    .fk-proof-badge[data-state='not-disclosed'] {
-      --fk-proof-border: 1.5px dotted CanvasText;
+    .ty-proof-badge[data-state='not-disclosed'] {
+      --ty-proof-border: 1.5px dotted CanvasText;
     }
-    .fk-proof-badge[data-state='none'] {
-      --fk-proof-border: 1px solid CanvasText;
+    .ty-proof-badge[data-state='none'] {
+      --ty-proof-border: 1px solid CanvasText;
     }
-    .fk-proof-badge__tooltip {
+    .ty-proof-badge__tooltip {
       border-color: CanvasText;
     }
   }

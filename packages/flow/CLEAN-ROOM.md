@@ -4,6 +4,18 @@
 > were planned as MIT. They are published under FSL-1.1-ALv2 (see `LICENSE`
 > at the repository root); the clean-room process below is unchanged.
 
+> **Rename note (2026-09-26).** The repository is now Tympan, an
+> Astrlabe-family component published by Datatech. `packages/ui` is
+> `@datatechsolutions/tympan` (called `@fakhir/ui` in this record, before
+> that `@fakhir/design-system`), `packages/flow` is
+> `@datatechsolutions/tympan-flow` (here `@fakhir/flow`, before that
+> `@fakhir/flow-canvas`) and `packages/tokens` is
+> `@datatechsolutions/tympan-tokens` (here `@fakhir/tokens`). The `fk-` class
+> and `--fk-` custom-property prefix and the `data-fk-*` attributes named here
+> are now `ty-`, `--ty-` and `data-ty-*`; `FakhirProvider` is `TympanProvider`;
+> the Fakhir look is the `fakhir` theme preset. This record is otherwise kept
+> as written.
+
 Date: 2026-09-26. Author: Natalia Mesquita. Branch: `ds/wave-3` (from
 `ds/clean-room`), worktree `~/datatech/fakhir-ds-canvas`, a sparse checkout
 without the forked packages and the old platform app.
@@ -54,7 +66,7 @@ direction and recorded in `PROVENANCE.md`.
 6. W3C PROV-O / PROV-DM (entity, activity, agent; `wasDerivedFrom`, `used`,
    `wasGeneratedBy`, `wasAttributedTo`) for the provenance model.
 7. Public documentation and MIT source of `@xyflow/react` were allowed; the
-   implementer did not need them (see `THIRD_PARTY_NOTICES.md`).
+   implementer did not need them (see `PROVENANCE.md`).
 8. `@dagrejs/dagre` public API documentation (MIT) for `autoLayout`.
 9. The public ICU MessageFormat syntax description, for the label templates.
 10. The project's own canvas storyboards (rendered PNGs and their HTML

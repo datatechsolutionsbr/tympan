@@ -27,17 +27,17 @@ export function CanvasToolbar({ items, label, orientation = 'horizontal', placem
     <Toolbar
       aria-label={label}
       orientation={orientation}
-      className={['fk-canvas-toolbar', className].filter(Boolean).join(' ')}
+      className={['ty-canvas-toolbar', className].filter(Boolean).join(' ')}
       data-placement={placement}
-      data-fk-surface-chrome=""
-      {...(exitTarget ? { 'data-fk-canvas-exit': '' } : {})}
+      data-ty-surface-chrome=""
+      {...(exitTarget ? { 'data-ty-canvas-exit': '' } : {})}
     >
       {items.map((item) => {
         const divider = lastGroup !== null && lastGroup !== item.group
         lastGroup = item.group
         return (
           <Fragment key={item.id}>
-            {divider ? <Separator orientation={orientation === 'horizontal' ? 'vertical' : 'horizontal'} className="fk-canvas-toolbar__divider" /> : null}
+            {divider ? <Separator orientation={orientation === 'horizontal' ? 'vertical' : 'horizontal'} className="ty-canvas-toolbar__divider" /> : null}
             <Tool item={item} />
           </Fragment>
         )
@@ -52,16 +52,16 @@ function ToolFace({ item }: { item: CanvasToolItem }) {
   return (
     <>
       {item.text ? (
-        <span className="fk-canvas-tool__text" aria-hidden="true">
+        <span className="ty-canvas-tool__text" aria-hidden="true">
           {item.text}
         </span>
       ) : Icon ? (
-        <Icon className="fk-canvas-tool__icon" aria-hidden="true" focusable="false" />
+        <Icon className="ty-canvas-tool__icon" aria-hidden="true" focusable="false" />
       ) : null}
       {item.text ? null : (
-        <span className="fk-canvas-tool__label" aria-hidden="true">
+        <span className="ty-canvas-tool__label" aria-hidden="true">
           {item.label}
-          {item.shortcut ? <kbd className="fk-canvas-tool__keys">{item.shortcut.replace('Control+', '⌃')}</kbd> : null}
+          {item.shortcut ? <kbd className="ty-canvas-tool__keys">{item.shortcut.replace('Control+', '⌃')}</kbd> : null}
         </span>
       )}
     </>
@@ -70,7 +70,7 @@ function ToolFace({ item }: { item: CanvasToolItem }) {
 
 function Tool({ item }: { item: CanvasToolItem }) {
   const common = {
-    className: 'fk-canvas-tool',
+    className: 'ty-canvas-tool',
     'aria-label': item.label,
     'data-tool': item.id,
     // React Aria does not forward aria-keyshortcuts; set it on the element.

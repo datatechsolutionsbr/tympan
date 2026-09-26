@@ -6,7 +6,7 @@
 
 import { useMemo, useReducer, useRef, type ReactNode } from 'react'
 import { History } from 'lucide-react'
-import { Button, Drawer, useMediaQuery } from '@fakhir/ui'
+import { Button, Drawer, useMediaQuery } from '@datatechsolutions/tympan'
 import { useConfirm, type ConfirmFn } from '../internal/confirm'
 import { fill, useFlowLocale, useLabels } from '../internal/labels'
 import { AssistantConversation, assistantLabels, type AssistantLabels } from './AssistantConversation'
@@ -76,7 +76,7 @@ export function ConversationShell(props: ConversationShellProps) {
   const canvasOpen = !!artifact && w.dismissed !== artifact.callId
   const closeCanvas = () => {
     if (artifact) set({ dismissed: artifact.callId })
-    requestAnimationFrame(() => rootRef.current?.querySelector<HTMLElement>('[data-fk-composer]')?.focus())
+    requestAnimationFrame(() => rootRef.current?.querySelector<HTMLElement>('[data-ty-composer]')?.focus())
   }
 
   const remove = async (t: ThreadSummary) => {
@@ -118,15 +118,15 @@ export function ConversationShell(props: ConversationShellProps) {
     {
       key: 'centre',
       node: (
-        <div className="fk-convo-shell__centre">
+        <div className="ty-convo-shell__centre">
           {historyBeside ? null : (
-            <div className="fk-convo-shell__bar">
+            <div className="ty-convo-shell__bar">
               <Button variant="secondary" size="compact" leadingIcon={<History />} onPress={() => set({ historyDrawer: true })}>
                 {l.openHistory}
               </Button>
             </div>
           )}
-          {props.banner ? <div className="fk-convo-shell__banner">{props.banner}</div> : null}
+          {props.banner ? <div className="ty-convo-shell__banner">{props.banner}</div> : null}
           <AssistantConversation
             session={session}
             labels={l}
@@ -148,7 +148,7 @@ export function ConversationShell(props: ConversationShellProps) {
   ]
 
   return (
-    <div ref={rootRef} className={['fk-convo-shell', props.className].filter(Boolean).join(' ')} data-canvas={canvasOpen && canvasBeside ? 'open' : undefined}>
+    <div ref={rootRef} className={['ty-convo-shell', props.className].filter(Boolean).join(' ')} data-canvas={canvasOpen && canvasBeside ? 'open' : undefined}>
       {regions.map((r) => (r.node ? <RegionSlot key={r.key}>{r.node}</RegionSlot> : null))}
     </div>
   )

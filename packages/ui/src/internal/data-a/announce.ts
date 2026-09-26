@@ -2,7 +2,7 @@
 // report a change (a counter went up, a list was cleared) write into it
 // instead of each owning its own live region.
 
-const REGION_ATTR = 'data-fk-polite-announcer'
+const REGION_ATTR = 'data-ty-polite-announcer'
 
 function region(): HTMLElement | null {
   if (typeof document === 'undefined') return null
@@ -12,7 +12,7 @@ function region(): HTMLElement | null {
     node.setAttribute(REGION_ATTR, '')
     node.setAttribute('role', 'status')
     node.setAttribute('aria-live', 'polite')
-    node.className = 'fk-visually-hidden'
+    node.className = 'ty-visually-hidden'
     document.body.appendChild(node)
   }
   return node

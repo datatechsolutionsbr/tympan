@@ -70,7 +70,7 @@ describe('Surface', () => {
 
   it('shows the selected state', () => {
     const { container } = render(<Surface selected title="A" />)
-    expect(container.querySelector('.fk-surface')).toHaveAttribute('data-selected')
+    expect(container.querySelector('.ty-surface')).toHaveAttribute('data-selected')
   })
 
   it('has no axe violations', async () => {

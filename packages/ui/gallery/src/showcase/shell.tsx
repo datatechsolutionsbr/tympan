@@ -24,7 +24,7 @@ export function ShellShowcase({ scope }: { scope: string }) {
   const id = (s: string) => `${scope}-${s}`
   const [split, setSplit] = useState(380)
   return (
-    <div className="fk-gallery-showcase">
+    <div className="ty-gallery-showcase">
       <Section id={id('page-header-editorial')} title="PageHeader (editorial variant)">
         <PageHeader
           variant="editorial"
@@ -36,7 +36,7 @@ export function ShellShowcase({ scope }: { scope: string }) {
       </Section>
 
       <Section id={id('rail')} title="Rail navigation (RailNavSection, RailNavItem, RailContextButton)">
-        <div className="fk-gallery-rail">
+        <div className="ty-gallery-rail">
           <RailContextButton scope="EACH/USP" name="Censo de assistentes de IA" />
           <nav aria-label={`Rail sample ${scope}`}>
             <RailNavSection>
@@ -51,7 +51,7 @@ export function ShellShowcase({ scope }: { scope: string }) {
       </Section>
 
       <Section id={id('action-bar')} title="FloatingActionBar (dock)">
-        <div className="fk-gallery-dock-stage">
+        <div className="ty-gallery-dock-stage">
           <FloatingActionBar
             id={id('dock')}
             label={`Dock sample ${scope}`}
@@ -70,7 +70,7 @@ export function ShellShowcase({ scope }: { scope: string }) {
             ]}
           />
         </div>
-        <div className="fk-gallery-dock-stage">
+        <div className="ty-gallery-dock-stage">
           <FloatingActionBar id={id('dock-loading')} label={`Dock loading ${scope}`} anchor="container" edge="bottom" destinations={[]} focusShortcut={null} />
         </div>
       </Section>
@@ -141,7 +141,7 @@ export function ShellShowcase({ scope }: { scope: string }) {
       </Section>
 
       <Section id={id('split')} title="ResizableSplit and EvidencePanel (docked)">
-        <div className="fk-gallery-split-stage">
+        <div className="ty-gallery-split-stage">
           <ResizableSplit
             label={`Resize the evidence ${scope}`}
             size={split}
@@ -150,7 +150,7 @@ export function ShellShowcase({ scope }: { scope: string }) {
             max={420}
             stackBelow={640}
             primary={
-              <div className="fk-gallery-stack">
+              <div className="ty-gallery-stack">
                 <Text>Queue: Case A, Case B, Case C.</Text>
                 <Text size="meta" tone="muted">
                   Drag the line or use the arrow keys on it.

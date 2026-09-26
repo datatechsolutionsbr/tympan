@@ -99,7 +99,7 @@ describe('Tabs', () => {
 
   it('has 44 px touch tabs, reduced motion and forced colours rules', () => {
     const css = cssOf('components/tabs/Tabs.css')
-    expect(mediaBlock(css, /\(max-width:\s*1023\.98px\)/)).toMatch(/var\(--fk-control-target\)/)
+    expect(mediaBlock(css, /\(max-width:\s*1023\.98px\)/)).toMatch(/var\(--ty-control-target\)/)
     expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/transition:\s*none/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/Highlight/)
   })

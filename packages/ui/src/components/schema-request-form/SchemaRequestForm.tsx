@@ -175,18 +175,18 @@ export function SchemaRequestForm({ runId, request, submit, onResolved, classNam
 
   const sending = phase.kind === 'sending'
   return (
-    <section className={cx('fk-request-form', className)} data-tone={request.tone ?? 'info'} aria-labelledby={titleId}>
-      <h3 id={titleId} className="fk-request-form__prompt">
+    <section className={cx('ty-request-form', className)} data-tone={request.tone ?? 'info'} aria-labelledby={titleId}>
+      <h3 id={titleId} className="ty-request-form__prompt">
         {request.prompt}
       </h3>
-      {request.description ? <div className="fk-request-form__description">{request.description}</div> : null}
+      {request.description ? <div className="ty-request-form__description">{request.description}</div> : null}
       {phase.kind === 'failed' ? (
         <InlineNotice tone="danger" urgency="assertive">
           {phase.message}
         </InlineNotice>
       ) : null}
       <Form
-        className="fk-request-form__form"
+        className="ty-request-form__form"
         validationBehavior="aria"
         aria-labelledby={titleId}
         onSubmit={(e) => {
@@ -194,7 +194,7 @@ export function SchemaRequestForm({ runId, request, submit, onResolved, classNam
           approve()
         }}
       >
-        <div ref={bodyRef} className="fk-request-form__fields">
+        <div ref={bodyRef} className="ty-request-form__fields">
           {request.fields.map((field) => (
             <div key={field.key} data-request-key={field.key}>
               <RequestControl
@@ -209,12 +209,12 @@ export function SchemaRequestForm({ runId, request, submit, onResolved, classNam
           ))}
         </div>
         {phase.kind === 'resolved' ? (
-          <p className="fk-request-form__resolution" role="status">
+          <p className="ty-request-form__resolution" role="status">
             <StatusPill status={phase.approved ? 'approved' : 'rejected'} label={phase.approved ? t.approved : t.rejected} tone={phase.approved ? 'success' : 'neutral'} />
             <span>{phase.approved ? t.approvedSentence : t.rejectedSentence}</span>
           </p>
         ) : (
-          <div className="fk-request-form__actions">
+          <div className="ty-request-form__actions">
             {request.rejectLabel === null ? null : (
               <Button variant="secondary" disabled={sending} busy={sending && phase.approved === false} busyLabel={t.sending} onPress={reject}>
                 {request.rejectLabel ?? t.reject}

@@ -76,13 +76,13 @@ function useButtonVariants(actions: InsightAction[]) {
 
 function Measures({ items }: { items: InsightMeasure[] }) {
   return (
-    <dl className="fk-insight-card__measures">
+    <dl className="ty-insight-card__measures">
       {items.map((it) => (
-        <div key={it.id} className="fk-insight-card__measure">
+        <div key={it.id} className="ty-insight-card__measure">
           <dt>{it.label}</dt>
           <dd>{it.value}</dd>
           {typeof it.meter === 'number' ? (
-            <dd className="fk-insight-card__meter">
+            <dd className="ty-insight-card__meter">
               <ProgressBar aria-label={it.label} value={it.meter * 100} valueLabel={it.value} showValue={false} size="thin" />
             </dd>
           ) : null}
@@ -130,19 +130,19 @@ export function InsightCard(props: InsightCardProps) {
   const pendingId = phase.kind === 'pending' ? phase.id : null
 
   return (
-    <article className={cx('fk-insight-card', props.className)} aria-labelledby={titleId} aria-describedby={byId} data-phase={phase.kind}>
-      <header className="fk-insight-card__head">
-        <span className="fk-insight-card__by">
-          <span id={byId} className="fk-visually-hidden">{`${m.proposedBy} ${props.actor.name}, ${kindWord}`}</span>
+    <article className={cx('ty-insight-card', props.className)} aria-labelledby={titleId} aria-describedby={byId} data-phase={phase.kind}>
+      <header className="ty-insight-card__head">
+        <span className="ty-insight-card__by">
+          <span id={byId} className="ty-visually-hidden">{`${m.proposedBy} ${props.actor.name}, ${kindWord}`}</span>
           <ActorChip kind={props.actor.kind} name={props.actor.name} agentKey={props.actor.agentKey} model={props.actor.model} email={props.actor.email} compact />
         </span>
         {props.proofState ? <ProofBadge state={props.proofState} /> : null}
       </header>
-      <h3 id={titleId} className="fk-insight-card__title">
+      <h3 id={titleId} className="ty-insight-card__title">
         {props.title}
       </h3>
-      <p className="fk-insight-card__value">
-        <span className="fk-insight-card__figure">{props.value}</span>
+      <p className="ty-insight-card__value">
+        <span className="ty-insight-card__figure">{props.value}</span>
         {props.delta ? <DeltaIndicator {...props.delta} /> : null}
       </p>
       {props.measures?.length ? <Measures items={props.measures} /> : null}
@@ -154,11 +154,11 @@ export function InsightCard(props: InsightCardProps) {
       ) : null}
 
       {props.outcome ? (
-        <p ref={outcomeRef} tabIndex={-1} role="status" className="fk-insight-card__outcome">
+        <p ref={outcomeRef} tabIndex={-1} role="status" className="ty-insight-card__outcome">
           {props.outcome.text}
         </p>
       ) : actions.length ? (
-        <div role="group" aria-label={props.labels?.actions ?? m.actions} className="fk-insight-card__actions">
+        <div role="group" aria-label={props.labels?.actions ?? m.actions} className="ty-insight-card__actions">
           {actions.map((a, i) => (
             <Button
               key={a.id}
@@ -176,7 +176,7 @@ export function InsightCard(props: InsightCardProps) {
       ) : null}
 
       {props.footnote ? (
-        <p className="fk-insight-card__footnote">
+        <p className="ty-insight-card__footnote">
           {props.footnote.href ? <Link href={props.footnote.href}>{props.footnote.text}</Link> : props.footnote.text}
         </p>
       ) : null}

@@ -16,12 +16,12 @@ export function ConnectionPreviewLine({ from, to, validity = 'unknown' }: Connec
   const toSide = to.side ?? facingSide(from, to)
   const { d } = connectorCurve({ point: from, side: from.side }, { point: to, side: toSide })
   return (
-    <g className="fk-connection-preview" data-validity={validity} aria-hidden="true">
-      <path className="fk-connection-preview__path" d={d} />
-      <circle className="fk-connection-preview__dot" cx={to.x} cy={to.y} r={4} />
+    <g className="ty-connection-preview" data-validity={validity} aria-hidden="true">
+      <path className="ty-connection-preview__path" d={d} />
+      <circle className="ty-connection-preview__dot" cx={to.x} cy={to.y} r={4} />
       {validity === 'invalid' ? (
         // Not-allowed glyph: a ring with a bar, drawn beside the pointer so a finger does not hide it.
-        <g className="fk-connection-preview__refusal" transform={`translate(${to.x + 14} ${to.y - 14})`}>
+        <g className="ty-connection-preview__refusal" transform={`translate(${to.x + 14} ${to.y - 14})`}>
           <circle r={7} />
           <line x1={-5} y1={5} x2={5} y2={-5} />
         </g>

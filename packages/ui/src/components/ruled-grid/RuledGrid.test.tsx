@@ -24,26 +24,26 @@ function TwoByThree({ marks = false }: { marks?: boolean }) {
 describe('RuledGrid', () => {
   it('separates rows and cells with rules and marks every intersection and corner', () => {
     const { container } = render(<TwoByThree marks />)
-    expect(container.querySelectorAll('.fk-ruled-grid__row')).toHaveLength(2)
-    const cells = container.querySelectorAll('.fk-ruled-grid__cell')
+    expect(container.querySelectorAll('.ty-ruled-grid__row')).toHaveLength(2)
+    const cells = container.querySelectorAll('.ty-ruled-grid__cell')
     for (const cell of cells) {
-      const corners = [...cell.querySelectorAll('.fk-ruled-grid__mark')].map((m) => m.getAttribute('data-corner'))
+      const corners = [...cell.querySelectorAll('.ty-ruled-grid__mark')].map((m) => m.getAttribute('data-corner'))
       expect(corners).toEqual(['start-start', 'start-end', 'end-start', 'end-end'])
     }
-    expect(container.querySelectorAll('.fk-ruled-grid__mark[aria-hidden="true"]')).toHaveLength(24)
-    expect(css()).toMatch(/\.fk-ruled-grid__row \+ \.fk-ruled-grid__row\s*\{[^}]*border-block-start:\s*1px solid var\(--fk-line\)/)
-    expect(css()).toMatch(/\.fk-ruled-grid__cell \+ \.fk-ruled-grid__cell\s*\{[^}]*border-inline-start:\s*1px solid var\(--fk-line\)/)
-    expect(container.querySelector('.fk-ruled-grid__row')).toHaveStyle({ '--fk-ruled-columns': 'repeat(3, minmax(0, 1fr))' })
+    expect(container.querySelectorAll('.ty-ruled-grid__mark[aria-hidden="true"]')).toHaveLength(24)
+    expect(css()).toMatch(/\.ty-ruled-grid__row \+ \.ty-ruled-grid__row\s*\{[^}]*border-block-start:\s*1px solid var\(--ty-line\)/)
+    expect(css()).toMatch(/\.ty-ruled-grid__cell \+ \.ty-ruled-grid__cell\s*\{[^}]*border-inline-start:\s*1px solid var\(--ty-line\)/)
+    expect(container.querySelector('.ty-ruled-grid__row')).toHaveStyle({ '--ty-ruled-columns': 'repeat(3, minmax(0, 1fr))' })
   })
 
   it('draws no marks unless asked', () => {
     const { container } = render(<TwoByThree />)
-    expect(container.querySelector('.fk-ruled-grid__mark')).toBeNull()
+    expect(container.querySelector('.ty-ruled-grid__mark')).toBeNull()
   })
 
   it('collapses to one column on phones with horizontal rules between stacked cells', () => {
     const phone = mediaBlock(css(), /\(max-width:\s*639\.98px\)/)
-    expect(phone).toMatch(/\.fk-ruled-grid__row\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/)
+    expect(phone).toMatch(/\.ty-ruled-grid__row\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/)
     expect(phone).toMatch(/border-block-start:\s*1px solid/)
   })
 
@@ -63,7 +63,7 @@ describe('RuledGrid', () => {
   it('keeps rules and drops marks in forced colours', () => {
     const forced = mediaBlock(css(), /\(forced-colors:\s*active\)/)
     expect(forced).toMatch(/border-color:\s*CanvasText/)
-    expect(forced).toMatch(/\.fk-ruled-grid__mark\s*\{[^}]*display:\s*none/)
+    expect(forced).toMatch(/\.ty-ruled-grid__mark\s*\{[^}]*display:\s*none/)
   })
 
   it('omits outer rules when outerRules is false', () => {

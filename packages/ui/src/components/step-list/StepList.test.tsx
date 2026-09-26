@@ -63,9 +63,9 @@ describe('StepList', () => {
 
   it('shows markers only with the current name below on narrow screens', () => {
     const { container } = render(<StepList steps={four} currentIndex={2} label="Setup" />)
-    expect(container.querySelector('.fk-step-list__now')).toHaveTextContent('Sources')
+    expect(container.querySelector('.ty-step-list__now')).toHaveTextContent('Sources')
     const narrow = mediaBlock(cssOf('components/step-list/StepList.css'), /\(max-width:\s*639\.98px\)/)
-    expect(narrow).toMatch(/\.fk-step-list__now\s*\{[^}]*display:\s*block/)
+    expect(narrow).toMatch(/\.ty-step-list__now\s*\{[^}]*display:\s*block/)
     expect(narrow).toMatch(/clip-path:\s*inset\(50%\)/)
   })
 

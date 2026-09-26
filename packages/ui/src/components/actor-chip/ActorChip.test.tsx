@@ -9,7 +9,7 @@ import { ActorChip } from './ActorChip'
 describe('ActorChip', () => {
   it('shows a person with a round initials avatar, the name and the e-mail', () => {
     const { container } = render(<ActorChip kind="user" name="Natália Mesquita" email="n@example.org" />)
-    const avatar = container.querySelector('.fk-avatar')!
+    const avatar = container.querySelector('.ty-avatar')!
     expect(avatar).toHaveAttribute('data-kind', 'person')
     expect(avatar).toHaveTextContent('NM')
     expect(avatar).toHaveAttribute('aria-hidden', 'true')
@@ -25,7 +25,7 @@ describe('ActorChip', () => {
 
   it('shows an agent with a square bot avatar, no initials and the word "agent"', () => {
     const { container } = render(<ActorChip kind="agent" name="stage-counter" agentKey="ak_91" model="nova-lite" />)
-    const avatar = container.querySelector('.fk-avatar')!
+    const avatar = container.querySelector('.ty-avatar')!
     expect(avatar).toHaveAttribute('data-kind', 'agent')
     expect(avatar.querySelector('svg')).not.toBeNull()
     expect(avatar.textContent).toBe('')
@@ -42,7 +42,7 @@ describe('ActorChip', () => {
 
   it('shows a system actor with no avatar, the word "system" and the rule in mono', () => {
     const { container } = render(<ActorChip kind="system" name="compile@1" />)
-    expect(container.querySelector('.fk-avatar')).toBeNull()
+    expect(container.querySelector('.ty-avatar')).toBeNull()
     expect(screen.getByText('system')).toBeInTheDocument()
     expect(screen.getByText('compile@1').tagName).toBe('CODE')
   })
@@ -64,7 +64,7 @@ describe('ActorChip', () => {
   })
 
   it('keeps the agent kind marker visible in forced colours', () => {
-    expect(cssOf('components/actor-chip/ActorChip.css')).toMatch(/forced-colors[\s\S]*data-kind='agent'\] \.fk-actor-chip__kind\s*\{[^}]*CanvasText/)
+    expect(cssOf('components/actor-chip/ActorChip.css')).toMatch(/forced-colors[\s\S]*data-kind='agent'\] \.ty-actor-chip__kind\s*\{[^}]*CanvasText/)
   })
 
   it('has no axe violations', async () => {

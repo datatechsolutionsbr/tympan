@@ -18,9 +18,9 @@ const envelope = parseAssistantVisual({
 
 export function ComponentsPage() {
   return (
-    <div className="fk-gallery-sections">
-      <p className="fk-gallery-section">Dados de exemplo / Sample data: every name and value on this page is a neutral placeholder.</p>
-      <section className="fk-gallery-section" aria-labelledby="g-assistant">
+    <div className="ty-gallery-sections">
+      <p className="ty-gallery-section">Dados de exemplo / Sample data: every name and value on this page is a neutral placeholder.</p>
+      <section className="ty-gallery-section" aria-labelledby="g-assistant">
         <h2 id="g-assistant">Assistant answer</h2>
         <p>Dados de exemplo / Sample data</p>
         {envelope ? <AssistantVisualBlock envelope={envelope} locale="pt-BR" /> : null}

@@ -1,7 +1,7 @@
 import { act, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import { cssOf, mediaBlock } from '../../test/css'
 import { setViewportWidth } from '../../test/media'
@@ -100,10 +100,10 @@ describe('ProvenanceGraph', () => {
 
   it('draws research bands in order, labels links and gives each relation its own line style', () => {
     const { container } = renderGraph({ defaultBack: 3, defaultForward: 2 })
-    expect([...container.querySelectorAll('.fk-prov-band__name')].map((e) => e.textContent)).toEqual(['Search', 'Reading', 'Source', 'Assertion', 'Base and verification', 'Edition'])
-    const relations = [...container.querySelectorAll('.fk-prov-link')].map((e) => e.getAttribute('data-relation'))
+    expect([...container.querySelectorAll('.ty-prov-band__name')].map((e) => e.textContent)).toEqual(['Search', 'Reading', 'Source', 'Assertion', 'Base and verification', 'Edition'])
+    const relations = [...container.querySelectorAll('.ty-prov-link')].map((e) => e.getAttribute('data-relation'))
     expect(relations).toEqual(expect.arrayContaining(['wasDerivedFrom', 'used', 'wasGeneratedBy']))
-    expect([...container.querySelectorAll('.fk-prov-link title')].map((e) => e.textContent)).toEqual(expect.arrayContaining(['was derived from', 'used']))
+    expect([...container.querySelectorAll('.ty-prov-link title')].map((e) => e.textContent)).toEqual(expect.arrayContaining(['was derived from', 'used']))
     const css = cssOf('provenance/ProvenanceGraph.css')
     expect(css).toMatch(/\[data-relation='used'\]\s*\{\s*stroke-dasharray:\s*7 4/)
     expect(css).toMatch(/\[data-relation='wasAttributedTo'\]\s*\{\s*stroke-dasharray:\s*1\.5 4/)
@@ -111,14 +111,14 @@ describe('ProvenanceGraph', () => {
 
   it('highlights the proof path, dims the rest, marks the focus, and can show only the path', async () => {
     const { container } = renderGraph({ defaultBack: 3, defaultForward: 2, defaultFilters: { ...EMPTY_FILTERS } })
-    const node = (id: string) => container.querySelector(`[data-fk-node-id="${id}"]`)
-    expect(node('src')!.querySelector('.fk-prov-card')).toHaveAttribute('data-on-path', 'true')
-    expect(node('as1')!.querySelector('.fk-prov-card')).toHaveAttribute('data-focus', 'true')
+    const node = (id: string) => container.querySelector(`[data-ty-node-id="${id}"]`)
+    expect(node('src')!.querySelector('.ty-prov-card')).toHaveAttribute('data-on-path', 'true')
+    expect(node('as1')!.querySelector('.ty-prov-card')).toHaveAttribute('data-focus', 'true')
     // What was made from the focus reads in full; only items beside the path dim.
-    expect(node('rec')!.querySelector('.fk-prov-card')).not.toHaveAttribute('data-dimmed')
-    expect(container.querySelector('.fk-prov-link[data-on-path="true"]')).not.toBeNull()
+    expect(node('rec')!.querySelector('.ty-prov-card')).not.toHaveAttribute('data-dimmed')
+    expect(container.querySelector('.ty-prov-link[data-on-path="true"]')).not.toBeNull()
     const aside = render(<ProvenanceNode item={items[4]!} labels={defaultProvenanceLabels} dimmed onActivate={() => {}} />)
-    expect(aside.container.querySelector('.fk-prov-card')).toHaveAttribute('data-dimmed', 'true')
+    expect(aside.container.querySelector('.ty-prov-card')).toHaveAttribute('data-dimmed', 'true')
     expect(within(aside.container).getByRole('button', { name: /^assertion: model.sovereignty/ })).toHaveAccessibleDescription(/off the proof path/)
     aside.unmount()
     await userEvent.click(screen.getByRole('switch', { name: 'Only the proof path' }))
@@ -130,17 +130,17 @@ describe('ProvenanceGraph', () => {
     render(<ProvenanceLegend labels={defaultProvenanceLabels} />)
     const legend = screen.getByRole('region', { name: 'Proof states' })
     for (const w of ['proved', 'pending', 'refuted', 'not disclosed', 'no proof', 'was derived from', 'used', 'was attributed to']) expect(within(legend).getByText(w)).toBeInTheDocument()
-    expect(legend.querySelectorAll('.fk-proof-badge svg')).toHaveLength(5)
-    expect(legend.querySelector('.fk-prov-legend__line[data-relation="used"]')).not.toBeNull()
+    expect(legend.querySelectorAll('.ty-proof-badge svg')).toHaveLength(5)
+    expect(legend.querySelector('.ty-prov-legend__line[data-relation="used"]')).not.toBeNull()
   })
 
   it('keeps the tools in one row above the canvas, not over it', () => {
     const { container } = renderGraph()
-    const row = container.querySelector('.fk-prov__tools')!
-    expect(row.nextElementSibling).toHaveClass('fk-flow-surface')
+    const row = container.querySelector('.ty-prov__tools')!
+    expect(row.nextElementSibling).toHaveClass('ty-flow-surface')
     expect(within(row as HTMLElement).getByLabelText('Steps back')).toBeInTheDocument()
     expect(within(row as HTMLElement).getByLabelText('Steps forward')).toBeInTheDocument()
-    expect(row.querySelector('.fk-prov-legend')).not.toBeNull()
+    expect(row.querySelector('.ty-prov-legend')).not.toBeNull()
   })
 
   it('opens the evidence panel with reason, quote, obligations and actions', async () => {
@@ -245,15 +245,15 @@ describe('ProvenanceGraph', () => {
     await userEvent.selectOptions(screen.getByLabelText('Steps back'), '1')
     expect(onBackChange).toHaveBeenCalledWith(1)
     const canvas = screen.getByRole('group', { name: 'Provenance graph' })
-    expect(canvas.querySelector('[data-fk-node-id="r115b"]')).toBeNull()
+    expect(canvas.querySelector('[data-ty-node-id="r115b"]')).toBeNull()
     await userEvent.selectOptions(screen.getByLabelText('Steps forward'), '2')
-    expect(canvas.querySelector('[data-fk-node-id="ed"]')).not.toBeNull()
+    expect(canvas.querySelector('[data-ty-node-id="ed"]')).not.toBeNull()
   })
 
   it('applies filters to every view', async () => {
     renderGraph({ defaultFocusId: null, defaultFilters: { ...EMPTY_FILTERS, proofStates: ['refuted'] } })
     const canvas = screen.getByRole('group', { name: 'Provenance graph' })
-    expect(canvas.querySelectorAll('[data-fk-node-id]')).toHaveLength(1)
+    expect(canvas.querySelectorAll('[data-ty-node-id]')).toHaveLength(1)
     expect(screen.getByRole('button', { name: 'Proof: 1 chosen' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Type: all' })).toBeInTheDocument()
     await userEvent.click(screen.getByRole('radio', { name: 'Tree' }))
@@ -264,7 +264,7 @@ describe('ProvenanceGraph', () => {
     const onRerun = vi.fn()
     renderGraph({
       certificates: {
-        as1: { claimId: 'as1', claim: 'Operator position is confirmed', verdict: 'proved', verifier: 'fakhir-verify 0.7.2', ranAt: '2026-09-21T10:00:00Z', inputEdition: '2026-09-20', hash: 'sha256:77a1', obligations: [{ id: 'o1', label: 'Hash matches', status: 'ok' }] },
+        as1: { claimId: 'as1', claim: 'Operator position is confirmed', verdict: 'proved', verifier: 'proof-verify 0.7.2', ranAt: '2026-09-21T10:00:00Z', inputEdition: '2026-09-20', hash: 'sha256:77a1', obligations: [{ id: 'o1', label: 'Hash matches', status: 'ok' }] },
       },
       onRerunCertificate: onRerun,
       comparison: { a: { id: 'e1', label: '2026-08-01' }, b: { id: 'e2', label: '2026-09-20' }, rows: [{ itemId: 'as1', label: 'Operator position', a: 'unclear', b: 'confirmed_primary', change: 'altered' }] },
@@ -272,7 +272,7 @@ describe('ProvenanceGraph', () => {
     await userEvent.click(screen.getByRole('radio', { name: 'Timeline' }))
     expect(screen.getAllByText('Ana Souza').length).toBeGreaterThan(0)
     await userEvent.click(screen.getByRole('radio', { name: 'Certificate' }))
-    expect(screen.getByText('fakhir-verify 0.7.2')).toBeInTheDocument()
+    expect(screen.getByText('proof-verify 0.7.2')).toBeInTheDocument()
     await userEvent.click(screen.getByRole('button', { name: /Run again/ }))
     expect(onRerun).toHaveBeenCalledWith('as1')
     await userEvent.click(screen.getByRole('radio', { name: 'Compare editions' }))
@@ -291,7 +291,7 @@ describe('ProvenanceGraph', () => {
     const onRetry = vi.fn()
     const { container, rerender } = renderGraph({ loading: true })
     expect(screen.getByRole('status')).toHaveTextContent('Loading the provenance graph')
-    expect(container.querySelectorAll('.fk-prov__ghost')).toHaveLength(3)
+    expect(container.querySelectorAll('.ty-prov__ghost')).toHaveLength(3)
     rerender(<ProvenanceGraph items={items} statements={statements} error="Server unavailable (503)" onRetry={onRetry} />)
     await userEvent.click(screen.getByRole('button', { name: 'Try again' }))
     expect(onRetry).toHaveBeenCalled()
@@ -308,11 +308,11 @@ describe('ProvenanceGraph', () => {
 
   it('works in RTL: tree keys mirror, the inspector opens, and band labels sit at the right', async () => {
     const { container } = render(
-      <FakhirProvider locale="ar">
+      <TympanProvider locale="ar">
         <div dir="rtl">
           <ProvenanceGraph items={items} statements={statements} defaultFocusId="as1" defaultView="tree" />
         </div>
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     const tree = screen.getByRole('treegrid')
     const rows = () => within(tree).getAllByRole('row')
@@ -325,15 +325,15 @@ describe('ProvenanceGraph', () => {
     await userEvent.click(within(tree).getByText('TAMM official page'))
     expect(screen.getByRole('complementary')).toBeInTheDocument()
     await userEvent.click(screen.getByRole('radio', { name: 'Graph' }))
-    const label = container.querySelector('.fk-prov-band__label') as HTMLElement
+    const label = container.querySelector('.ty-prov-band__label') as HTMLElement
     expect(label.style.transform).not.toMatch(/^translate\(0px/)
   })
 
   it('picks the built-in pt-BR strings from the provider locale', () => {
     render(
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <ProvenanceGraph items={items} statements={statements} defaultFocusId="as1" />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(screen.getByRole('group', { name: 'Grafo de proveniência' })).toBeInTheDocument()
     expect(screen.getByRole('combobox', { name: 'De onde veio' })).toBeInTheDocument()
@@ -346,7 +346,7 @@ describe('ProvenanceGraph', () => {
     expect(mediaBlock(css, /\(prefers-reduced-motion: reduce\)/)).toMatch(/animation:\s*none/)
     expect(mediaBlock(css, /\(prefers-reduced-transparency: reduce\)/)).toMatch(/backdrop-filter:\s*none/)
     const forced = mediaBlock(css, /\(forced-colors: active\)/)
-    expect(forced).toMatch(/\.fk-prov-link\s*\{\s*stroke:\s*CanvasText/)
+    expect(forced).toMatch(/\.ty-prov-link\s*\{\s*stroke:\s*CanvasText/)
     expect(forced).toMatch(/Highlight/)
     expect(css.replace(/\/\*[\s\S]*?\*\//g, '')).not.toMatch(/(margin|padding|border)-(left|right)\b|text-align:\s*(left|right)|\b(left|right):\s/)
   })
@@ -354,8 +354,8 @@ describe('ProvenanceGraph', () => {
   it('updates the selection when controlled', () => {
     const { rerender } = renderGraph({ selectedId: 'src' })
     const canvas = screen.getByRole('group', { name: 'Provenance graph' })
-    expect(canvas.querySelector('[data-fk-node-id="src"] .fk-prov-card')).toHaveAttribute('data-selected', 'true')
+    expect(canvas.querySelector('[data-ty-node-id="src"] .ty-prov-card')).toHaveAttribute('data-selected', 'true')
     act(() => rerender(<ProvenanceGraph items={items} statements={statements} defaultFocusId="as1" defaultBack={2} selectedId="r115b" />))
-    expect(canvas.querySelector('[data-fk-node-id="r115b"] .fk-prov-card')).toHaveAttribute('data-selected', 'true')
+    expect(canvas.querySelector('[data-ty-node-id="r115b"] .ty-prov-card')).toHaveAttribute('data-selected', 'true')
   })
 })

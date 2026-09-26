@@ -10,7 +10,7 @@ describe('RouteProgress in right-to-left locales', () => {
   it('renders inside an Arabic right-to-left subtree and passes axe', async () => {
     const { container } = inRtl(<RouteProgress pending label="جارٍ التحميل" />)
     expect(container.querySelector('[dir="rtl"]')).not.toBeNull()
-    expect(cssText()).toMatch(/\[dir='rtl'\] \.fk-route-progress__bar\s*\{[^}]*transform-origin:\s*right/)
+    expect(cssText()).toMatch(/\[dir='rtl'\] \.ty-route-progress__bar\s*\{[^}]*transform-origin:\s*right/)
     await expectNoAxeViolations(document.body, ['region'])
   })
 })

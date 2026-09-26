@@ -118,7 +118,7 @@ describe('NativeSelect', () => {
 
   it('stops the chevron under reduced motion and uses system field colours', () => {
     const css = cssOf('components/native-select/NativeSelect.css')
-    expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/\.fk-native-select__chevron\s*\{[^}]*transition:\s*none/)
+    expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/\.ty-native-select__chevron\s*\{[^}]*transition:\s*none/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/Field/)
   })
 
@@ -143,18 +143,18 @@ describe('NativeSelect in right-to-left (ar)', () => {
 
 describe('NativeSelect control size', () => {
   const css = cssOf('components/native-select/NativeSelect.css').replace(/\/\*[\s\S]*?\*\//g, '')
-  const at = css.indexOf('.fk-native-select__control {')
+  const at = css.indexOf('.ty-native-select__control {')
   const control = css.slice(at, css.indexOf('}', at))
 
   it('is 40px on desktop and 44px below 1024px', () => {
-    expect(control).toMatch(/--fk-select-block:\s*var\(--fk-control-height\);/)
-    expect(control).toMatch(/(^|\s)block-size:\s*var\(--fk-select-block\);/)
-    expect(mediaBlock(css, /\(max-width:\s*1023\.98px\)/)).toMatch(/--fk-select-block:\s*var\(--fk-control-height-touch\)/)
+    expect(control).toMatch(/--ty-select-block:\s*var\(--ty-control-height\);/)
+    expect(control).toMatch(/(^|\s)block-size:\s*var\(--ty-select-block\);/)
+    expect(mediaBlock(css, /\(max-width:\s*1023\.98px\)/)).toMatch(/--ty-select-block:\s*var\(--ty-control-height-touch\)/)
   })
 
   it('centres the value: the line box fills the inner height, after the font shorthand', () => {
     expect(control).toMatch(/padding-block:\s*0;/)
-    const line = control.search(/line-height:\s*calc\(var\(--fk-select-block\) - 2px\);/)
+    const line = control.search(/line-height:\s*calc\(var\(--ty-select-block\) - 2px\);/)
     expect(line).toBeGreaterThan(control.indexOf('font: inherit;'))
   })
 })

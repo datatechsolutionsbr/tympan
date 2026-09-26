@@ -3,7 +3,7 @@
 // defaults that still belong to a named variable and are not empty.
 
 import { useId, useReducer } from 'react'
-import { TextField } from '@fakhir/ui'
+import { TextField } from '@datatechsolutions/tympan'
 import { defineLabels, useLabels } from '../internal/labels'
 import { NodeFormFooter } from './NodeFormFooter'
 import { VariableListEditor } from './VariableListEditor'
@@ -61,13 +61,13 @@ function settle(config: StartNodeFormProps['config'], draft: Draft): StartConfig
 function DefaultValues({ names, fallback, heading, placeholder, onEdit }: { names: string[]; fallback: Record<string, string>; heading: string; placeholder: string; onEdit: (name: string, value: string) => void }) {
   const headingId = useId()
   return (
-    <div className="fk-start-form__defaults" role="group" aria-labelledby={headingId}>
-      <span id={headingId} className="fk-start-form__defaults-title">
+    <div className="ty-start-form__defaults" role="group" aria-labelledby={headingId}>
+      <span id={headingId} className="ty-start-form__defaults-title">
         {heading}
       </span>
-      <div className="fk-start-form__grid">
+      <div className="ty-start-form__grid">
         {names.map((name) => (
-          <TextField key={name} className="fk-start-form__default" label={name} placeholder={placeholder} value={fallback[name] ?? ''} onChange={(v) => onEdit(name, v)} />
+          <TextField key={name} className="ty-start-form__default" label={name} placeholder={placeholder} value={fallback[name] ?? ''} onChange={(v) => onEdit(name, v)} />
         ))}
       </div>
     </div>
@@ -79,7 +79,7 @@ export function StartNodeForm({ config, onSave, onCancel, labels }: StartNodeFor
   const [draft, change] = useReducer(edit, config, (c): Draft => ({ names: [...(c.inputVariables ?? [])], fallback: { ...(c.inputDefaults ?? {}) } }))
   const named = draft.names.filter((n) => n.trim() !== '')
   return (
-    <div className="fk-node-form fk-start-form">
+    <div className="ty-node-form ty-start-form">
       <VariableListEditor label={l.variables} value={draft.names} onChange={(names) => change({ names })} numbered editable tone="input" addLabel={l.add} placeholder={l.placeholder} />
       {named.length > 0 && <DefaultValues names={named} fallback={draft.fallback} heading={l.defaults} placeholder={l.defaultPlaceholder} onEdit={(name, fallback) => change({ name, fallback })} />}
       <NodeFormFooter onSave={() => onSave(settle(config, draft))} onCancel={onCancel} labels={{ save: l.save, cancel: l.cancel }} />

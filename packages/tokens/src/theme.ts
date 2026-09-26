@@ -6,8 +6,8 @@
 //
 // The role model (paired surface/foreground roles, one radius base deriving
 // the radius scale, themes as a swap of custom properties) and the idea of
-// 11-step ramps in OKLCH are concepts documented publicly by shadcn/ui and
-// Tailwind CSS. No code or values were taken from them; the lightness curve,
+// 11-step ramps in OKLCH are publicly documented concepts (sources in
+// PROVENANCE.md). No code or values were taken from them; the lightness curve,
 // chroma curve, hues and role recipes below are this project's own.
 
 import { apcaContrast, contrastRatio, flatten, oklchToRgb, parseColor, rgbToOklch, toCss, type Oklch, type Rgba } from './color.ts'
@@ -26,7 +26,7 @@ export interface Seed {
 export type SeedName = 'brand' | 'neutral' | 'danger' | 'warning' | 'success' | 'info'
 
 export interface ThemeConfig {
-  /** Identifier used in `data-fk-theme`. Lowercase letters, digits and dashes. */
+  /** Identifier used in `data-ty-theme`. Lowercase letters, digits and dashes. */
   name: string
   /** Human label (customizer, docs). */
   label?: string
@@ -464,20 +464,20 @@ export function gradientToCss(angle: number, stops: Rgba[]): string {
   return `linear-gradient(${angle}deg, ${list.map((s, i) => `${toCss(s)} ${Math.round((i / (list.length - 1)) * 100)}%`).join(', ')})`
 }
 
-/** Ordered `[--fk-name, value]` pairs for one resolved theme. */
+/** Ordered `[--ty-name, value]` pairs for one resolved theme. */
 export function themeVariables(t: ResolvedTheme): Array<[string, string]> {
   const out: Array<[string, string]> = []
-  for (const [name, c] of Object.entries(t.colors)) out.push([`--fk-${name}`, toCss(c)])
-  out.push(['--fk-cta', gradientToCss(t.cta.angle, t.cta.stops)])
+  for (const [name, c] of Object.entries(t.colors)) out.push([`--ty-${name}`, toCss(c)])
+  out.push(['--ty-cta', gradientToCss(t.cta.angle, t.cta.stops)])
   for (const [seed, ramp] of Object.entries(t.ramps)) {
-    for (const step of RAMP_STEPS) out.push([`--fk-${seed}-${step}`, toCss(ramp[step])])
+    for (const step of RAMP_STEPS) out.push([`--ty-${seed}-${step}`, toCss(ramp[step])])
   }
-  for (const [name, layers] of Object.entries(t.shadows)) out.push([`--fk-shadow-${name}`, shadowToCss(layers)])
-  for (const [name, px] of Object.entries(t.dimensions)) out.push([`--fk-${name}`, `${px}px`])
-  for (const [name, n] of Object.entries(t.numbers)) out.push([`--fk-${name}`, String(n)])
+  for (const [name, layers] of Object.entries(t.shadows)) out.push([`--ty-shadow-${name}`, shadowToCss(layers)])
+  for (const [name, px] of Object.entries(t.dimensions)) out.push([`--ty-${name}`, `${px}px`])
+  for (const [name, n] of Object.entries(t.numbers)) out.push([`--ty-${name}`, String(n)])
   return out
 }
 
 export function densityVariables(density: Density): Array<[string, string]> {
-  return Object.entries(DENSITIES[density]).map(([k, v]) => [`--fk-${k}`, k === 'density' ? String(v) : `${v}px`])
+  return Object.entries(DENSITIES[density]).map(([k, v]) => [`--ty-${k}`, k === 'density' ? String(v) : `${v}px`])
 }

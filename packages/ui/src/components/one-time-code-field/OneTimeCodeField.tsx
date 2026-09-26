@@ -144,13 +144,13 @@ export function OneTimeCodeField(props: OneTimeCodeFieldProps) {
   const fault = props.errorText
 
   return (
-    <div className={cx('fk-otc', props.className)} data-invalid={fault ? true : undefined}>
-      <Group className="fk-otc__group" aria-label={props.label ?? copy.label} aria-describedby={fault ? faultId : undefined} isDisabled={off} isInvalid={!!fault}>
+    <div className={cx('ty-otc', props.className)} data-invalid={fault ? true : undefined}>
+      <Group className="ty-otc__group" aria-label={props.label ?? copy.label} aria-describedby={fault ? faultId : undefined} isDisabled={off} isInvalid={!!fault}>
         {cells.map((glyph, k) => (
           <Input
             key={k}
             ref={(node) => void (refs.current[k] = node)}
-            className="fk-otc__box"
+            className="ty-otc__box"
             value={glyph}
             aria-label={naming(k + 1, size)}
             aria-invalid={fault ? true : undefined}
@@ -167,7 +167,7 @@ export function OneTimeCodeField(props: OneTimeCodeFieldProps) {
         ))}
       </Group>
       {fault ? (
-        <p id={faultId} className="fk-otc__error" role="alert">
+        <p id={faultId} className="ty-otc__error" role="alert">
           {fault}
         </p>
       ) : null}

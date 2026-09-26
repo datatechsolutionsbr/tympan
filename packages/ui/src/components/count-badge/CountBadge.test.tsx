@@ -34,8 +34,8 @@ describe('CountBadge', () => {
 
   it('caps the visible counter while the accessible text keeps the exact number', () => {
     const { container } = render(<Host count={150} />)
-    expect(container.querySelector('.fk-count-badge__value')).toHaveTextContent('99+')
-    expect(container.querySelector('.fk-count-badge__value')).toHaveAttribute('aria-hidden', 'true')
+    expect(container.querySelector('.ty-count-badge__value')).toHaveTextContent('99+')
+    expect(container.querySelector('.ty-count-badge__value')).toHaveAttribute('aria-hidden', 'true')
     expect(screen.getByRole('button')).toHaveAccessibleDescription('150 notifications')
   })
 
@@ -46,7 +46,7 @@ describe('CountBadge', () => {
       await Promise.resolve()
     })
     expect(politeAnnouncement()).toBe('3 notifications')
-    expect(document.querySelectorAll('[data-fk-polite-announcer]')).toHaveLength(1)
+    expect(document.querySelectorAll('[data-ty-polite-announcer]')).toHaveLength(1)
   })
 
   it('plays no animation under reduced motion and uses system colours in forced colours', () => {
@@ -75,7 +75,7 @@ describe('CountBadge in right-to-left (ar)', () => {
   it('renders mirrored where directional and passes axe', async () => {
     const { container } = renderRtl(<CountBadge count={150} />, { locale: 'ar-EG' })
     // The cap and the count use the locale's digits.
-    expect(container.querySelector('.fk-count-badge__value')).toHaveTextContent('٩٩+')
+    expect(container.querySelector('.ty-count-badge__value')).toHaveTextContent('٩٩+')
     await axeRtl(container)
   })
 })

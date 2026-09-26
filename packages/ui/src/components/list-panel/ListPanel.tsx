@@ -54,10 +54,10 @@ function collectRows(children: ReactNode): RowSpec[] {
 function RowBody({ row, chevron }: { row: RowSpec; chevron?: boolean }) {
   return (
     <>
-      {row.leading ? <span className="fk-list-panel__leading">{row.leading}</span> : null}
-      <span className="fk-list-panel__main">{row.children}</span>
-      {row.trailing ? <span className="fk-list-panel__trailing">{row.trailing}</span> : null}
-      {chevron ? <ChevronRight className="fk-icon fk-mirror-rtl fk-list-panel__chevron" aria-hidden="true" focusable="false" /> : null}
+      {row.leading ? <span className="ty-list-panel__leading">{row.leading}</span> : null}
+      <span className="ty-list-panel__main">{row.children}</span>
+      {row.trailing ? <span className="ty-list-panel__trailing">{row.trailing}</span> : null}
+      {chevron ? <ChevronRight className="ty-icon ty-mirror-rtl ty-list-panel__chevron" aria-hidden="true" focusable="false" /> : null}
     </>
   )
 }
@@ -79,9 +79,9 @@ function feedKeys(event: KeyboardEvent<HTMLDivElement>) {
 function FeedForm({ rows, label }: { rows: RowSpec[]; label?: string }) {
   const feedRef = useRef<HTMLDivElement>(null)
   return (
-    <div ref={feedRef} role="feed" aria-label={label} className="fk-list-panel__rows" onKeyDown={feedKeys}>
+    <div ref={feedRef} role="feed" aria-label={label} className="ty-list-panel__rows" onKeyDown={feedKeys}>
       {rows.map((row, i) => (
-        <article key={row.key} className="fk-list-panel__row" tabIndex={0} aria-posinset={i + 1} aria-setsize={rows.length}>
+        <article key={row.key} className="ty-list-panel__row" tabIndex={0} aria-posinset={i + 1} aria-setsize={rows.length}>
           <RowBody row={row} />
         </article>
       ))}
@@ -91,7 +91,7 @@ function FeedForm({ rows, label }: { rows: RowSpec[]; label?: string }) {
 
 function GridForm({ rows, label }: { rows: RowSpec[]; label?: string }) {
   return (
-    <GridList aria-label={label} className="fk-list-panel__rows" data-form="grid">
+    <GridList aria-label={label} className="ty-list-panel__rows" data-form="grid">
       {rows.map((row) => (
         <GridListItem
           key={row.key}
@@ -100,7 +100,7 @@ function GridForm({ rows, label }: { rows: RowSpec[]; label?: string }) {
           onAction={row.onAction}
           href={row.href}
           isDisabled={row.disabled}
-          className="fk-list-panel__row"
+          className="ty-list-panel__row"
           data-actionable={row.onAction || row.href ? '' : undefined}
         >
           <RowBody row={row} chevron={!!(row.onAction || row.href) && !row.trailing} />
@@ -112,9 +112,9 @@ function GridForm({ rows, label }: { rows: RowSpec[]; label?: string }) {
 
 function StaticForm({ rows, label }: { rows: RowSpec[]; label?: string }) {
   return (
-    <ul className="fk-list-panel__rows" aria-label={label}>
+    <ul className="ty-list-panel__rows" aria-label={label}>
       {rows.map((row) => (
-        <li key={row.key} className="fk-list-panel__row">
+        <li key={row.key} className="ty-list-panel__row">
           <RowBody row={row} />
         </li>
       ))}
@@ -130,7 +130,7 @@ export function ListPanel({ children, elevation = 'sheet', label, as = 'list', c
   devWarning(form !== 'static' && !label, 'ListPanel: activatable rows and feeds need `label`.')
   const Form = form === 'feed' ? FeedForm : form === 'grid' ? GridForm : StaticForm
   return (
-    <div className={cx('fk-list-panel', className)} data-elevation={elevation} data-form={form}>
+    <div className={cx('ty-list-panel', className)} data-elevation={elevation} data-form={form}>
       <Form rows={rows} label={label} />
     </div>
   )

@@ -4,7 +4,7 @@
 // incoming value, keeping keys the schema does not mention.
 
 import { useReducer, type ReactNode } from 'react'
-import { NativeSelect, Switch, TextArea, TextField } from '@fakhir/ui'
+import { NativeSelect, Switch, TextArea, TextField } from '@datatechsolutions/tympan'
 import type { ConfigSchema, FieldSchema } from '../catalog/kindCatalog'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { NodeFormFooter } from './NodeFormFooter'
@@ -148,7 +148,7 @@ const EDITORS: Record<Control, (c: FieldCtx) => ReactNode> = {
     />
   ),
   switch: (c) => <Switch label={c.label} {...(c.field.description ? { description: c.field.description } : {})} isSelected={c.current === true} onChange={c.put} />,
-  structured: (c) => <TextArea {...shared(c)} monospace className="fk-ltr-text" rows={5} value={c.slot.text ?? ''} onChange={c.typeJson} />,
+  structured: (c) => <TextArea {...shared(c)} monospace className="ty-ltr-text" rows={5} value={c.slot.text ?? ''} onChange={c.typeJson} />,
   multiline: (c) => <TextArea {...shared(c)} rows={4} autoGrow value={asText(c.current)} onChange={c.put} />,
   line: (c) => <TextField {...shared(c)} value={asText(c.current)} onChange={c.put} onBlur={c.visit} />,
 }
@@ -202,12 +202,12 @@ export function SchemaConfigForm({ value, schema, onSave, onCancel, saveDisabled
       visit: () => patch([name, { visited: true }]),
       typeJson: typeJsonFor(name),
     }
-    return <div key={name} className="fk-schema-form__field">{EDITORS[controlFor(name, field)](ctx)}</div>
+    return <div key={name} className="ty-schema-form__field">{EDITORS[controlFor(name, field)](ctx)}</div>
   })
 
   return (
-    <div className="fk-node-form fk-schema-form">
-      {editors.length ? <div className="fk-node-form__fields">{editors}</div> : <p className="fk-node-form__empty">{l.empty}</p>}
+    <div className="ty-node-form ty-schema-form">
+      {editors.length ? <div className="ty-node-form__fields">{editors}</div> : <p className="ty-node-form__empty">{l.empty}</p>}
       <NodeFormFooter onSave={() => onSave(merged())} onCancel={onCancel} saveDisabled={saveDisabled} labels={{ save: l.save, cancel: l.cancel }} />
     </div>
   )

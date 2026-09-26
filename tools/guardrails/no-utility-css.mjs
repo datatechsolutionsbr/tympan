@@ -1,13 +1,13 @@
-// check:no-tailwind — the clean-room library must stay free of Tailwind.
-// Fails on:
-//  - any tailwind / tailwind-related or class-variance-authority dependency in
+// check:no-utility-css — the clean-room library must stay free of utility-class
+// CSS frameworks. Fails on (the forbidden patterns are listed below):
+//  - any forbidden utility-CSS or class-variance-authority dependency in
 //    the package.json of packages/tokens, packages/ui or
 //    packages/flow, or in their
 //    package-lock.json entries;
 //  - shadcn registry files (components.json);
-//  - @tailwind, @apply, @theme, @config, @utility, @variant, @custom-variant in CSS;
+//  - utility-framework at-rules in CSS (CSS_DIRECTIVE below);
 //  - utility-class tokens in className strings of TS/TSX files: every static
-//    class token must be an fk- prefixed name.
+//    class token must be a ty- prefixed name.
 import { existsSync } from 'node:fs'
 import { basename, join } from 'node:path'
 import { lineOf, read, rel, repoRoot, report, SCANNED_PACKAGES, walk } from './lib.mjs'
@@ -63,9 +63,9 @@ function checkTokens(file, text, index, raw) {
   const literals = [...raw.matchAll(/["'`]([^"'`]*)["'`]/g)].map((m) => m[1])
   for (const lit of literals) {
     for (const token of lit.replace(/\$\{[^}]*\}/g, ' ').split(/\s+/).filter(Boolean)) {
-      if (token.startsWith('fk-')) continue
+      if (token.startsWith('ty-')) continue
       if (UTILITY.test(token) || BARE_UTILITY.test(token)) problems.push(`${rel(file)}:${lineOf(text, index)} utility class "${token}"`)
-      else if (/^[a-z][\w-]*$/i.test(token)) problems.push(`${rel(file)}:${lineOf(text, index)} class "${token}" is not fk- prefixed`)
+      else if (/^[a-z][\w-]*$/i.test(token)) problems.push(`${rel(file)}:${lineOf(text, index)} class "${token}" is not ty- prefixed`)
     }
   }
 }
@@ -85,4 +85,4 @@ for (const file of walk()) {
   }
 }
 
-report('check:no-tailwind', problems)
+report('check:no-utility-css', problems)

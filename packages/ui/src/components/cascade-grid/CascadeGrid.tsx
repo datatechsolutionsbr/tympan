@@ -62,9 +62,9 @@ function Entrant({ offset, children }: { offset: number | undefined; children: R
   return (
     <div
       role="none"
-      className="fk-cascade-grid__cell"
+      className="ty-cascade-grid__cell"
       data-entering={moving || undefined}
-      style={moving ? ({ '--fk-cascade-delay': `${offset}ms` } as CSSProperties) : undefined}
+      style={moving ? ({ '--ty-cascade-delay': `${offset}ms` } as CSSProperties) : undefined}
     >
       {children}
     </div>
@@ -81,7 +81,7 @@ export function CascadeGrid(props: CascadeGridProps) {
     role: props.role,
     'aria-label': props['aria-label'],
     'data-testid': props['data-testid'],
-    className: cx('fk-cascade-grid', props.className),
+    className: cx('ty-cascade-grid', props.className),
     style: props.style,
   }
   if (!enabled) return <div {...host}>{props.children}</div>

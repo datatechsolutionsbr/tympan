@@ -21,18 +21,18 @@ type LineKind = 'label' | 'hint' | 'error'
 export function FieldLine({ kind, id, htmlFor, children }: { kind: LineKind; id?: string; htmlFor?: string; children: ReactNode }) {
   if (kind === 'label') {
     return htmlFor ? (
-      <label className="fk-fb-line" data-line="label" id={id} htmlFor={htmlFor}>
+      <label className="ty-fb-line" data-line="label" id={id} htmlFor={htmlFor}>
         {children}
       </label>
     ) : (
-      <span className="fk-fb-line" data-line="label" id={id}>
+      <span className="ty-fb-line" data-line="label" id={id}>
         {children}
       </span>
     )
   }
   return (
-    <p className="fk-fb-line" data-line={kind} id={id}>
-      {kind === 'error' ? <CircleAlert className="fk-icon" aria-hidden="true" focusable="false" /> : null}
+    <p className="ty-fb-line" data-line={kind} id={id}>
+      {kind === 'error' ? <CircleAlert className="ty-icon" aria-hidden="true" focusable="false" /> : null}
       <span>{children}</span>
     </p>
   )
@@ -51,12 +51,12 @@ export function FloatSurface(props: {
   const phone = usePhoneWidth()
   return (
     <Popover
-      className={cx('fk-fb-float', props.className)}
+      className={cx('ty-fb-float', props.className)}
       placement={props.side ?? 'bottom'}
       offset={6}
       data-presentation={phone ? 'tray' : 'popover'}
     >
-      <Dialog className="fk-fb-float__dialog" aria-label={props.labelledBy ? undefined : props.label} aria-labelledby={props.labelledBy}>
+      <Dialog className="ty-fb-float__dialog" aria-label={props.labelledBy ? undefined : props.label} aria-labelledby={props.labelledBy}>
         {props.children}
       </Dialog>
     </Popover>
@@ -75,15 +75,15 @@ export function StepperHeader(props: {
   headingId?: string
 }) {
   return (
-    <div className="fk-fb-stepper">
-      <AriaButton className="fk-fb-nav" aria-label={props.previousLabel} isDisabled={props.previousDisabled} onPress={props.onPrevious}>
-        <ChevronLeft className="fk-icon fk-mirror-rtl" aria-hidden="true" focusable="false" />
+    <div className="ty-fb-stepper">
+      <AriaButton className="ty-fb-nav" aria-label={props.previousLabel} isDisabled={props.previousDisabled} onPress={props.onPrevious}>
+        <ChevronLeft className="ty-icon ty-mirror-rtl" aria-hidden="true" focusable="false" />
       </AriaButton>
-      <span className="fk-fb-stepper__heading" id={props.headingId} aria-live="polite">
+      <span className="ty-fb-stepper__heading" id={props.headingId} aria-live="polite">
         {props.heading}
       </span>
-      <AriaButton className="fk-fb-nav" aria-label={props.nextLabel} isDisabled={props.nextDisabled} onPress={props.onNext}>
-        <ChevronRight className="fk-icon fk-mirror-rtl" aria-hidden="true" focusable="false" />
+      <AriaButton className="ty-fb-nav" aria-label={props.nextLabel} isDisabled={props.nextDisabled} onPress={props.onNext}>
+        <ChevronRight className="ty-icon ty-mirror-rtl" aria-hidden="true" focusable="false" />
       </AriaButton>
     </div>
   )
@@ -122,7 +122,7 @@ export function MonthGrid(props: {
   }
   return (
     <div
-      className="fk-fb-months"
+      className="ty-fb-months"
       onKeyDown={(e) => {
         if (!props.onYearStep || (e.key !== 'PageUp' && e.key !== 'PageDown')) return
         e.preventDefault()
@@ -132,7 +132,7 @@ export function MonthGrid(props: {
       <GridList
         aria-label={props.label}
         layout="grid"
-        className="fk-fb-months__grid"
+        className="ty-fb-months__grid"
         items={cells}
         selectionMode="single"
         disallowEmptySelection
@@ -141,7 +141,7 @@ export function MonthGrid(props: {
         onSelectionChange={pick}
       >
         {(cell) => (
-          <GridListItem id={cell.key} textValue={`${cell.long} ${props.year}`} className="fk-fb-months__cell">
+          <GridListItem id={cell.key} textValue={`${cell.long} ${props.year}`} className="ty-fb-months__cell">
             {cell.short}
           </GridListItem>
         )}

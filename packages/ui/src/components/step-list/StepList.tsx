@@ -53,7 +53,7 @@ function resolveSteps(props: StepListProps): Resolved[] {
 function Marker({ entry }: { entry: Resolved }) {
   const face = entry.status === 'complete' ? <Check aria-hidden="true" focusable="false" /> : (entry.step.icon ?? entry.index + 1)
   return (
-    <span className="fk-step-list__marker" aria-hidden="true">
+    <span className="ty-step-list__marker" aria-hidden="true">
       {face}
     </span>
   )
@@ -71,22 +71,22 @@ export function StepList(props: StepListProps) {
   const body = (e: Resolved) => (
     <>
       <Marker entry={e} />
-      <span className="fk-step-list__text" aria-hidden={e.selectable || undefined}>
-        <span className="fk-step-list__eyebrow">{m.position(e.index + 1, total)}</span>
-        <span className="fk-step-list__name">{e.step.name}</span>
-        {e.step.description ? <span className="fk-step-list__description">{e.step.description}</span> : null}
+      <span className="ty-step-list__text" aria-hidden={e.selectable || undefined}>
+        <span className="ty-step-list__eyebrow">{m.position(e.index + 1, total)}</span>
+        <span className="ty-step-list__name">{e.step.name}</span>
+        {e.step.description ? <span className="ty-step-list__description">{e.step.description}</span> : null}
       </span>
     </>
   )
 
   const cell = (e: Resolved) => {
-    const shared = { className: 'fk-step-list__target', 'aria-label': describe(e), onPress: () => props.onStepSelect?.(e.index) }
+    const shared = { className: 'ty-step-list__target', 'aria-label': describe(e), onPress: () => props.onStepSelect?.(e.index) }
     if (e.selectable && e.step.href) return <AriaLink {...shared} href={e.step.href}>{body(e)}</AriaLink>
     if (e.selectable) return <AriaButton {...shared}>{body(e)}</AriaButton>
     return (
-      <span className="fk-step-list__target" data-static="true">
-        <span className="fk-visually-hidden">{describe(e)}</span>
-        <span aria-hidden="true" className="fk-step-list__static">
+      <span className="ty-step-list__target" data-static="true">
+        <span className="ty-visually-hidden">{describe(e)}</span>
+        <span aria-hidden="true" className="ty-step-list__static">
           {body(e)}
         </span>
       </span>
@@ -94,12 +94,12 @@ export function StepList(props: StepListProps) {
   }
 
   return (
-    <nav className={cx('fk-step-list', props.className)} aria-label={props.label} data-appearance={props.appearance ?? 'markers'}>
-      <ol className="fk-step-list__list">
+    <nav className={cx('ty-step-list', props.className)} aria-label={props.label} data-appearance={props.appearance ?? 'markers'}>
+      <ol className="ty-step-list__list">
         {entries.map((e) => (
           <li
             key={e.step.id}
-            className="fk-step-list__step"
+            className="ty-step-list__step"
             data-status={e.status}
             data-selectable={e.selectable || undefined}
             aria-current={e.status === 'current' ? 'step' : undefined}
@@ -109,7 +109,7 @@ export function StepList(props: StepListProps) {
         ))}
       </ol>
       {current ? (
-        <p className="fk-step-list__now" aria-hidden="true">
+        <p className="ty-step-list__now" aria-hidden="true">
           {current.step.name}
         </p>
       ) : null}

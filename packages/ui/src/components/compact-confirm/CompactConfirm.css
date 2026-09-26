@@ -1,133 +1,133 @@
 /* CompactConfirm (spec: wave-2/compact-confirm.md; design direction §2.3, §2.5, §2.7, §2.10). */
-@layer fakhir.components {
-  .fk-compact-confirm__scrim {
+@layer tympan.components {
+  .ty-compact-confirm__scrim {
     position: fixed;
     inset: 0;
-    z-index: var(--fk-z-modal);
+    z-index: var(--ty-z-modal);
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding: calc(env(safe-area-inset-top, 0px) + var(--fk-space-5)) var(--fk-space-4) var(--fk-space-4);
+    padding: calc(env(safe-area-inset-top, 0px) + var(--ty-space-5)) var(--ty-space-4) var(--ty-space-4);
     background: rgb(15 23 42 / 0.18);
   }
-  .fk-compact-confirm {
+  .ty-compact-confirm {
     box-sizing: border-box;
     inline-size: min(26rem, 100%);
     outline: none;
   }
-  .fk-compact-confirm__card {
+  .ty-compact-confirm__card {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
-    gap: var(--fk-space-3) var(--fk-space-4);
-    padding: var(--fk-space-5);
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-card);
-    background: var(--fk-surface-raised);
-    color: var(--fk-on-surface-raised);
-    box-shadow: var(--fk-shadow-floating);
-    backdrop-filter: blur(var(--fk-glass-blur-floating));
-    -webkit-backdrop-filter: blur(var(--fk-glass-blur-floating));
+    gap: var(--ty-space-3) var(--ty-space-4);
+    padding: var(--ty-space-5);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-card);
+    background: var(--ty-surface-raised);
+    color: var(--ty-on-surface-raised);
+    box-shadow: var(--ty-shadow-floating);
+    backdrop-filter: blur(var(--ty-glass-blur-floating));
+    -webkit-backdrop-filter: blur(var(--ty-glass-blur-floating));
     outline: none;
   }
-  .fk-compact-confirm[data-entering] {
-    animation: fk-compact-confirm-drop var(--fk-dur-quick) var(--fk-ease);
+  .ty-compact-confirm[data-entering] {
+    animation: ty-compact-confirm-drop var(--ty-dur-quick) var(--ty-ease);
   }
-  .fk-compact-confirm__scrim[data-entering] {
-    animation: fk-compact-confirm-fade var(--fk-dur-quick) var(--fk-ease);
+  .ty-compact-confirm__scrim[data-entering] {
+    animation: ty-compact-confirm-fade var(--ty-dur-quick) var(--ty-ease);
   }
-  @keyframes fk-compact-confirm-drop {
+  @keyframes ty-compact-confirm-drop {
     from {
       opacity: 0;
       translate: 0 -8px;
     }
   }
-  @keyframes fk-compact-confirm-fade {
+  @keyframes ty-compact-confirm-fade {
     from {
       opacity: 0;
     }
   }
-  .fk-compact-confirm__tone {
+  .ty-compact-confirm__tone {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
   }
-  .fk-compact-confirm__tile {
+  .ty-compact-confirm__tile {
     display: inline-grid;
     place-items: center;
     inline-size: 40px;
     block-size: 40px;
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-neutral-soft);
-    color: var(--fk-on-neutral-soft);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-neutral-soft);
+    color: var(--ty-on-neutral-soft);
   }
-  .fk-compact-confirm__tile > svg {
+  .ty-compact-confirm__tile > svg {
     inline-size: 20px;
     block-size: 20px;
   }
-  .fk-compact-confirm[data-tone='danger'] .fk-compact-confirm__tile {
-    background: var(--fk-danger-soft);
-    color: var(--fk-on-danger-soft);
+  .ty-compact-confirm[data-tone='danger'] .ty-compact-confirm__tile {
+    background: var(--ty-danger-soft);
+    color: var(--ty-on-danger-soft);
   }
-  .fk-compact-confirm__word {
-    color: var(--fk-on-danger-soft);
-    font-size: var(--fk-font-size-meta);
-    font-weight: var(--fk-font-weight-semibold);
+  .ty-compact-confirm__word {
+    color: var(--ty-on-danger-soft);
+    font-size: var(--ty-font-size-meta);
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-compact-confirm__text {
+  .ty-compact-confirm__text {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
     min-inline-size: 0;
   }
-  .fk-compact-confirm__source {
+  .ty-compact-confirm__source {
     margin: 0;
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
-  .fk-compact-confirm__question {
+  .ty-compact-confirm__question {
     margin: 0;
-    color: var(--fk-ink);
-    font-size: var(--fk-font-size-body-lg);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-body-lg);
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-body-lg);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-body-lg);
   }
-  .fk-compact-confirm__message {
+  .ty-compact-confirm__message {
     margin: 0;
-    color: var(--fk-ink-2);
+    color: var(--ty-ink-2);
   }
-  .fk-compact-confirm__actions {
+  .ty-compact-confirm__actions {
     grid-column: 1 / -1;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
   }
-  .fk-compact-confirm__actions .fk-button {
-    min-block-size: var(--fk-control-target);
+  .ty-compact-confirm__actions .ty-button {
+    min-block-size: var(--ty-control-target);
   }
   @media (max-width: 639.98px) {
-    .fk-compact-confirm__actions {
+    .ty-compact-confirm__actions {
       grid-template-columns: 1fr;
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .fk-compact-confirm[data-entering] {
-      animation: fk-compact-confirm-fade var(--fk-dur-quick) linear;
+    .ty-compact-confirm[data-entering] {
+      animation: ty-compact-confirm-fade var(--ty-dur-quick) linear;
     }
   }
   @media (prefers-reduced-transparency: reduce) {
-    .fk-compact-confirm__card {
-      background: var(--fk-surface-raised-solid);
+    .ty-compact-confirm__card {
+      background: var(--ty-surface-raised-solid);
       backdrop-filter: none;
     }
   }
   @media (forced-colors: active) {
-    .fk-compact-confirm__card {
+    .ty-compact-confirm__card {
       border: 1px solid CanvasText;
       backdrop-filter: none;
     }
-    .fk-compact-confirm__actions .fk-button {
+    .ty-compact-confirm__actions .ty-button {
       border: 1px solid ButtonText;
       background: ButtonFace;
       color: ButtonText;

@@ -27,15 +27,15 @@ function plainText(node: ReactNode): string | undefined {
 
 function TitleLine({ level, children }: { level: SummaryRowProps['titleLevel']; children: ReactNode }) {
   const tag = level === 3 || level === 4 ? `h${level}` : 'p'
-  return createElement(tag, { className: 'fk-summary-row__title', title: plainText(children) }, children)
+  return createElement(tag, { className: 'ty-summary-row__title', title: plainText(children) }, children)
 }
 
 function PairList({ pairs }: { pairs: SummaryPair[] }) {
   if (pairs.length === 0) return null
   return (
-    <dl className="fk-summary-row__pairs">
+    <dl className="ty-summary-row__pairs">
       {pairs.map((pair, index) => (
-        <div className="fk-summary-row__pair" key={`${pair.label}:${index}`}>
+        <div className="ty-summary-row__pair" key={`${pair.label}:${index}`}>
           <dt>{pair.label}</dt>
           <dd>{pair.value}</dd>
         </div>
@@ -51,17 +51,17 @@ function PairList({ pairs }: { pairs: SummaryPair[] }) {
 export function SummaryRow(props: SummaryRowProps) {
   const pairs = props.metadata ?? []
   const tile = props.icon ? (
-    <span className="fk-summary-row__tile" data-tone={props.iconTone ?? 'neutral'} aria-hidden="true">
+    <span className="ty-summary-row__tile" data-tone={props.iconTone ?? 'neutral'} aria-hidden="true">
       {props.icon}
     </span>
   ) : null
   return (
-    <div className={cx('fk-summary-row', props.className)}>
+    <div className={cx('ty-summary-row', props.className)}>
       {tile}
-      <div className="fk-summary-row__text">
+      <div className="ty-summary-row__text">
         <TitleLine level={props.titleLevel}>{props.title}</TitleLine>
         {props.subtitle ? (
-          <p className="fk-summary-row__subtitle" title={plainText(props.subtitle)}>
+          <p className="ty-summary-row__subtitle" title={plainText(props.subtitle)}>
             {props.subtitle}
           </p>
         ) : null}

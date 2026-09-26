@@ -23,8 +23,8 @@ export function OverviewMap({ nodes, rects, viewport, container, onCentre }: { n
   const v = toMap(seen)
   return (
     <svg
-      className="fk-flow-surface__overview"
-      data-fk-surface-chrome=""
+      className="ty-flow-surface__overview"
+      data-ty-surface-chrome=""
       aria-hidden="true"
       focusable="false"
       width={MAP_W}
@@ -42,9 +42,9 @@ export function OverviewMap({ nodes, rects, viewport, container, onCentre }: { n
         const r = rects.get(n.id)
         if (!r) return null
         const m = toMap(r)
-        return <rect key={n.id} className="fk-flow-surface__overview-node" data-tone={n.tone ?? 'neutral'} x={m.x} y={m.y} width={m.width} height={m.height} rx={2} />
+        return <rect key={n.id} className="ty-flow-surface__overview-node" data-tone={n.tone ?? 'neutral'} x={m.x} y={m.y} width={m.width} height={m.height} rx={2} />
       })}
-      <rect className="fk-flow-surface__overview-view" x={v.x} y={v.y} width={v.width} height={v.height} rx={3} />
+      <rect className="ty-flow-surface__overview-view" x={v.x} y={v.y} width={v.width} height={v.height} rx={3} />
     </svg>
   )
 }

@@ -27,9 +27,9 @@ export function DataBShowcase({ scope }: { scope: string }) {
   const [outcome, setOutcome] = useState<string | undefined>()
 
   return (
-    <div className="fk-gallery-showcase">
+    <div className="ty-gallery-showcase">
       <Section id={id('stat-tile')} title="StatTile">
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <StatTile
             value={count}
             label="Proved claims"
@@ -45,14 +45,14 @@ export function DataBShowcase({ scope }: { scope: string }) {
       <Section id={id('tweened')} title="TweenedNumber">
         <p>
           Total <TweenedNumber value={count} />{' '}
-          <button type="button" className="fk-gallery-native-input" style={{ inlineSize: 'auto' }} onClick={() => setCount((c) => c + 37)}>
+          <button type="button" className="ty-gallery-native-input" style={{ inlineSize: 'auto' }} onClick={() => setCount((c) => c + 37)}>
             Add 37
           </button>
         </p>
       </Section>
 
       <Section id={id('delta')} title="DeltaIndicator">
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <DeltaIndicator value={12.34} />
           <DeltaIndicator value={-3} unit="number" />
           <DeltaIndicator value={0} />
@@ -62,7 +62,7 @@ export function DataBShowcase({ scope }: { scope: string }) {
       </Section>
 
       <Section id={id('metric')} title="MetricTile">
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <MetricTile title="Records" value={94} subtitle="Edition 2026-09-20" trend={{ value: 10.5, label: 'vs last edition' }} icon={<Scale />} tone="success" />
           <MetricTile title="Refuted" value={7} tone="danger" icon={<CircleAlert />} trend={{ value: -5.2 }} />
           <MetricTile title="Runs" value={3} surface="plain" trend={{ value: 0 }} />
@@ -75,7 +75,7 @@ export function DataBShowcase({ scope }: { scope: string }) {
       </Section>
 
       <Section id={id('record')} title="RecordCard">
-        <ul className="fk-gallery-stack" style={{ margin: 0, padding: 0 }}>
+        <ul className="ty-gallery-stack" style={{ margin: 0, padding: 0 }}>
           <RecordCard
             title="stage-counter"
             secondary="ak_91 · nova-lite"

@@ -28,7 +28,7 @@ export function SearchInput(p: SearchInputProps) {
   const filled = p.value.length > 0
   return (
     <SearchField
-      className={p.className ?? 'fk-search-input'}
+      className={p.className ?? 'ty-search-input'}
       value={p.value}
       onChange={p.onChange}
       isDisabled={p.disabled}
@@ -36,13 +36,13 @@ export function SearchInput(p: SearchInputProps) {
       aria-label={p.label ? undefined : p.ariaLabel}
       aria-describedby={p.describedBy}
     >
-      {p.label ? <Label className="fk-search-input__label">{p.label}</Label> : null}
-      <div className="fk-search-input__well" data-filled={filled || undefined}>
-        <Search className="fk-search-input__glyph" aria-hidden="true" focusable="false" />
-        <Input className="fk-search-input__input" placeholder={p.placeholder} onFocus={p.onFocus} />
+      {p.label ? <Label className="ty-search-input__label">{p.label}</Label> : null}
+      <div className="ty-search-input__well" data-filled={filled || undefined}>
+        <Search className="ty-search-input__glyph" aria-hidden="true" focusable="false" />
+        <Input className="ty-search-input__input" placeholder={p.placeholder} onFocus={p.onFocus} />
         {p.end}
         {filled && !p.readOnly ? (
-          <AriaButton className="fk-search-input__clear" aria-label={p.clearLabel}>
+          <AriaButton className="ty-search-input__clear" aria-label={p.clearLabel}>
             <X aria-hidden="true" focusable="false" />
           </AriaButton>
         ) : null}

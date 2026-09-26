@@ -22,8 +22,8 @@ describe('ShowcaseHeading', () => {
 
   it('limits the lead to the reading measure', () => {
     render(<ShowcaseHeading lead="A long lead paragraph that would run past the reading width.">Title</ShowcaseHeading>)
-    expect(screen.getByText(/long lead/)).toHaveClass('fk-lead')
-    expect(css()).toMatch(/\.fk-lead\s*\{[^}]*max-inline-size:\s*calc\(var\(--fk-measure-prose\)\s*\*\s*1ch\)/)
+    expect(screen.getByText(/long lead/)).toHaveClass('ty-lead')
+    expect(css()).toMatch(/\.ty-lead\s*\{[^}]*max-inline-size:\s*calc\(var\(--ty-measure-prose\)\s*\*\s*1ch\)/)
   })
 
   it('centres kicker, title and lead with align center', () => {
@@ -34,8 +34,8 @@ describe('ShowcaseHeading', () => {
     )
     const block = container.firstElementChild!
     expect(block).toHaveAttribute('data-align', 'center')
-    expect(block.querySelectorAll('.fk-kicker, .fk-showcase-heading__title, .fk-lead')).toHaveLength(3)
-    expect(css()).toMatch(/\.fk-showcase-heading\[data-align='center'\]\s*\{[^}]*text-align:\s*center/)
+    expect(block.querySelectorAll('.ty-kicker, .ty-showcase-heading__title, .ty-lead')).toHaveLength(3)
+    expect(css()).toMatch(/\.ty-showcase-heading\[data-align='center'\]\s*\{[^}]*text-align:\s*center/)
   })
 
   it('produces only the heading element without kicker and lead', () => {
@@ -57,9 +57,9 @@ describe('ShowcaseHeading', () => {
   })
 
   it('steps the title down below 640 px and uses CanvasText in forced colours', () => {
-    expect(mediaBlock(css(), /\(max-width:\s*639\.98px\)/)).toMatch(/--fk-font-size-h1\)/)
+    expect(mediaBlock(css(), /\(max-width:\s*639\.98px\)/)).toMatch(/--ty-font-size-h1\)/)
     expect(mediaBlock(css(), /\(forced-colors:\s*active\)/)).toMatch(/CanvasText/)
-    expect(css()).not.toMatch(/animation|--fk-cta/)
+    expect(css()).not.toMatch(/animation|--ty-cta/)
   })
 
   it('has no axe violations in light and dark', async () => {
@@ -68,7 +68,7 @@ describe('ShowcaseHeading', () => {
         {(['light', 'dark'] as const).map((s) => (
           <ThemeScope key={s} scheme={s}>
             <ShowcaseHeading level={2} kicker="Census" lead="Evidence first.">
-              Fakhir
+              Tympan
             </ShowcaseHeading>
           </ThemeScope>
         ))}

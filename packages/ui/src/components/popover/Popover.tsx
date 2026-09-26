@@ -76,30 +76,30 @@ export function Popover(props: PopoverProps) {
         <Button iconOnly variant="quiet" shape="circle" size="compact" accessibleLabel={triggerLabel ?? ''} leadingIcon={<Info />} />
       )}
       <AriaPopover
-        className={cx('fk-popover', className)}
+        className={cx('ty-popover', className)}
         placement={toAriaPlacement(placement, align)}
         offset={(SPACE_STEPS[offset] ?? 8) + (showArrow ? 6 : 0)}
         containerPadding={16}
         shouldFlip
       >
         {showArrow ? (
-          <OverlayArrow className="fk-popover__arrow">
+          <OverlayArrow className="ty-popover__arrow">
             <svg width={12} height={12} viewBox="0 0 12 12" aria-hidden="true">
               <path d="M0 0 L6 6 L12 0" />
             </svg>
           </OverlayArrow>
         ) : null}
-        <Dialog className="fk-popover__dialog" aria-label={title ? undefined : triggerLabel}>
+        <Dialog className="ty-popover__dialog" aria-label={title ? undefined : triggerLabel}>
           {({ close }) => {
             closeRef.current = close
             return (
-              <div className="fk-popover__body" onBlur={handleBlur}>
+              <div className="ty-popover__body" onBlur={handleBlur}>
                 {title ? (
-                  <Heading slot="title" level={3} className="fk-popover__title">
+                  <Heading slot="title" level={3} className="ty-popover__title">
                     {title}
                   </Heading>
                 ) : null}
-                <div className="fk-popover__content">{children}</div>
+                <div className="ty-popover__content">{children}</div>
               </div>
             )
           }}

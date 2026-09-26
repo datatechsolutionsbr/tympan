@@ -4,7 +4,7 @@
 
 import { useRef, type KeyboardEvent } from 'react'
 import { CircleCheck, PencilLine, Plus, Trash2 } from 'lucide-react'
-import { Button, NativeSelect, Skeleton, StatusPill, useMediaQuery } from '@fakhir/ui'
+import { Button, NativeSelect, Skeleton, StatusPill, useMediaQuery } from '@datatechsolutions/tympan'
 import { formatRelative } from '../internal/format'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 
@@ -56,11 +56,11 @@ export function FlowSwitcherBar({ flows, activeFlowId, isLoading, onSelect, onCr
 
   if (isLoading) {
     return (
-      <nav className={['fk-flow-switcher', className].filter(Boolean).join(' ')} aria-label={l.bar} aria-busy="true">
-        <span role="status" className="fk-visually-hidden">
+      <nav className={['ty-flow-switcher', className].filter(Boolean).join(' ')} aria-label={l.bar} aria-busy="true">
+        <span role="status" className="ty-visually-hidden">
           {l.loading}
         </span>
-        <div className="fk-flow-switcher__skeletons" aria-hidden="true">
+        <div className="ty-flow-switcher__skeletons" aria-hidden="true">
           {[0, 1, 2].map((i) => (
             <Skeleton key={i} shape="rect" width="160px" />
           ))}
@@ -72,7 +72,7 @@ export function FlowSwitcherBar({ flows, activeFlowId, isLoading, onSelect, onCr
   if (narrow) {
     const active = flows.find((f) => f.id === activeFlowId)
     return (
-      <nav className={['fk-flow-switcher', className].filter(Boolean).join(' ')} aria-label={l.bar} data-narrow="">
+      <nav className={['ty-flow-switcher', className].filter(Boolean).join(' ')} aria-label={l.bar} data-narrow="">
         <NativeSelect
           label={l.select}
           options={flows.map((f) => ({ value: f.id, label: `${f.name} · ${fill(l.version, { version: f.version }, locale)}` }))}
@@ -104,17 +104,17 @@ export function FlowSwitcherBar({ flows, activeFlowId, isLoading, onSelect, onCr
   }
 
   return (
-    <nav className={['fk-flow-switcher', className].filter(Boolean).join(' ')} aria-label={l.bar}>
-      <ul className="fk-flow-switcher__list" ref={listRef} onKeyDown={onKeyDown}>
+    <nav className={['ty-flow-switcher', className].filter(Boolean).join(' ')} aria-label={l.bar}>
+      <ul className="ty-flow-switcher__list" ref={listRef} onKeyDown={onKeyDown}>
         {flows.map((f) => {
           const current = f.id === activeFlowId
           const when = f.updatedAt ? formatRelative(f.updatedAt, locale, now) : ''
           return (
-            <li key={f.id} className="fk-flow-switcher__item" data-current={current || undefined}>
-              <button type="button" className="fk-flow-switcher__flow" data-flow-button="" aria-current={current ? 'page' : undefined} onClick={() => onSelect(f)}>
-                <span className="fk-flow-switcher__name">{f.name}</span>
-                <span className="fk-flow-switcher__meta">
-                  <code className="fk-flow-switcher__version">{fill(l.version, { version: f.version }, locale)}</code>
+            <li key={f.id} className="ty-flow-switcher__item" data-current={current || undefined}>
+              <button type="button" className="ty-flow-switcher__flow" data-flow-button="" aria-current={current ? 'page' : undefined} onClick={() => onSelect(f)}>
+                <span className="ty-flow-switcher__name">{f.name}</span>
+                <span className="ty-flow-switcher__meta">
+                  <code className="ty-flow-switcher__version">{fill(l.version, { version: f.version }, locale)}</code>
                   {when ? <time dateTime={new Date(f.updatedAt!).toISOString()}>{when}</time> : null}
                 </span>
               </button>
@@ -127,7 +127,7 @@ export function FlowSwitcherBar({ flows, activeFlowId, isLoading, onSelect, onCr
                 }}
               />
               {canDelete ? (
-                <Button className="fk-flow-switcher__delete" variant="quiet" size="compact" iconOnly accessibleLabel={fill(l.delete, { name: f.name }, locale)} leadingIcon={<Trash2 />} onPress={() => onDelete(f.id, f.name)} />
+                <Button className="ty-flow-switcher__delete" variant="quiet" size="compact" iconOnly accessibleLabel={fill(l.delete, { name: f.name }, locale)} leadingIcon={<Trash2 />} onPress={() => onDelete(f.id, f.name)} />
               ) : null}
             </li>
           )

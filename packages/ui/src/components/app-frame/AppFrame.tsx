@@ -20,7 +20,7 @@ export type AppFrameWidth = 'reading' | 'data' | 'full'
  */
 export function FrameNavLabel({ children }: { children: ReactNode }) {
   const { navCollapsed, navPlacement } = useAppFrame()
-  return <span className={navCollapsed && navPlacement === 'column' ? 'fk-visually-hidden' : 'fk-app-frame__nav-label'}>{children}</span>
+  return <span className={navCollapsed && navPlacement === 'column' ? 'ty-visually-hidden' : 'ty-app-frame__nav-label'}>{children}</span>
 }
 
 export interface AppFrameProps {
@@ -112,7 +112,7 @@ function TopBarFrame({
   const closeAside = () => onAsideOpenChange?.(false)
 
   const navLandmark = (
-    <nav id={navId} className="fk-app-frame__nav" aria-label={m.frame.navigation}>
+    <nav id={navId} className="ty-app-frame__nav" aria-label={m.frame.navigation}>
       {navigation}
     </nav>
   )
@@ -122,26 +122,26 @@ function TopBarFrame({
       {sessionGuard}
       {initializers}
       <div
-        className={cx('fk-app-frame', className)}
+        className={cx('ty-app-frame', className)}
         data-nav={desktop ? (collapsed ? 'rail' : 'column') : 'drawer'}
         data-aside={asidePlacement}
         data-width={width}
       >
         <SkipLink targetId={mainId} />
         {ambient ? (
-          <div className="fk-app-frame__ambient" aria-hidden="true">
-            <span className="fk-app-frame__orb fk-app-frame__orb--top" />
-            <span className="fk-app-frame__orb fk-app-frame__orb--bottom" />
+          <div className="ty-app-frame__ambient" aria-hidden="true">
+            <span className="ty-app-frame__orb ty-app-frame__orb--top" />
+            <span className="ty-app-frame__orb ty-app-frame__orb--bottom" />
           </div>
         ) : null}
-        {progress ? <div className="fk-app-frame__progress">{progress}</div> : null}
+        {progress ? <div className="ty-app-frame__progress">{progress}</div> : null}
 
         {/* Desktop: the navigation column comes first, matching the visual order (left column, then top bar). */}
         {desktop ? (
-          <div className="fk-app-frame__side">
+          <div className="ty-app-frame__side">
             {navLandmark}
             {onNavCollapsedChange ? (
-              <div className="fk-app-frame__side-footer">
+              <div className="ty-app-frame__side-footer">
                 <Button
                   variant="quiet"
                   iconOnly
@@ -156,7 +156,7 @@ function TopBarFrame({
           </div>
         ) : null}
 
-        <header className="fk-app-frame__top">
+        <header className="ty-app-frame__top">
           {!desktop ? (
             <Button
               variant="quiet"
@@ -166,22 +166,22 @@ function TopBarFrame({
               onPress={() => onNavOpenChange?.(true)}
               aria-expanded={navOpen}
               aria-controls={navOpen ? navId : undefined}
-              className="fk-app-frame__menu-button"
+              className="ty-app-frame__menu-button"
             />
           ) : null}
-          <div className="fk-app-frame__top-content">{topBar}</div>
+          <div className="ty-app-frame__top-content">{topBar}</div>
         </header>
 
         {!desktop ? (
           <ModalOverlay
-            className="fk-app-frame__overlay"
+            className="ty-app-frame__overlay"
             isOpen={navOpen}
             onOpenChange={(open) => onNavOpenChange?.(open)}
             isDismissable
           >
-            <Modal className="fk-app-frame__drawer" data-placement="start">
-              <Dialog className="fk-app-frame__drawer-dialog" aria-label={m.frame.navigation}>
-                <div className="fk-app-frame__drawer-head">
+            <Modal className="ty-app-frame__drawer" data-placement="start">
+              <Dialog className="ty-app-frame__drawer-dialog" aria-label={m.frame.navigation}>
+                <div className="ty-app-frame__drawer-head">
                   <Button
                     variant="quiet"
                     iconOnly
@@ -196,30 +196,30 @@ function TopBarFrame({
           </ModalOverlay>
         ) : null}
 
-        <main id={mainId} tabIndex={-1} className="fk-app-frame__main" aria-busy={busy || undefined}>
-          <div className="fk-app-frame__content">
+        <main id={mainId} tabIndex={-1} className="ty-app-frame__main" aria-busy={busy || undefined}>
+          <div className="ty-app-frame__content">
             <Suspense fallback={<PageLoadingState label={label} />}>{children}</Suspense>
           </div>
         </main>
 
         {asidePlacement === 'column' ? (
-          <aside className="fk-app-frame__aside" aria-label={asideLabel}>
+          <aside className="ty-app-frame__aside" aria-label={asideLabel}>
             {aside}
           </aside>
         ) : null}
         {asidePlacement === 'overlay' || asidePlacement === 'sheet' ? (
-          <ModalOverlay className="fk-app-frame__overlay" isOpen onOpenChange={(open) => !open && closeAside()} isDismissable>
-            <Modal className="fk-app-frame__aside-modal" data-placement={asidePlacement === 'overlay' ? 'end' : 'bottom'}>
-              <Dialog className="fk-app-frame__drawer-dialog" aria-labelledby={asideLabel ? asideTitleId : undefined}>
-                <div className="fk-app-frame__drawer-head">
+          <ModalOverlay className="ty-app-frame__overlay" isOpen onOpenChange={(open) => !open && closeAside()} isDismissable>
+            <Modal className="ty-app-frame__aside-modal" data-placement={asidePlacement === 'overlay' ? 'end' : 'bottom'}>
+              <Dialog className="ty-app-frame__drawer-dialog" aria-labelledby={asideLabel ? asideTitleId : undefined}>
+                <div className="ty-app-frame__drawer-head">
                   {asideLabel ? (
-                    <Heading slot="title" id={asideTitleId} className="fk-app-frame__aside-title">
+                    <Heading slot="title" id={asideTitleId} className="ty-app-frame__aside-title">
                       {asideLabel}
                     </Heading>
                   ) : null}
                   <Button variant="quiet" iconOnly accessibleLabel={m.frame.closePanel} leadingIcon={<X />} onPress={closeAside} />
                 </div>
-                <div className="fk-app-frame__aside-body">{aside}</div>
+                <div className="ty-app-frame__aside-body">{aside}</div>
               </Dialog>
             </Modal>
           </ModalOverlay>

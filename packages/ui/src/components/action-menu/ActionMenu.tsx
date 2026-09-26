@@ -91,25 +91,25 @@ function renderItem(item: ActionMenuItem) {
       id={item.id}
       textValue={item.label}
       href={item.href}
-      className="fk-action-menu__item"
+      className="ty-action-menu__item"
       data-tone={item.tone ?? 'default'}
     >
-      {Icon ? <Icon className="fk-icon fk-action-menu__icon" aria-hidden="true" focusable="false" /> : null}
-      <Text slot="label" className="fk-action-menu__label">
+      {Icon ? <Icon className="ty-icon ty-action-menu__icon" aria-hidden="true" focusable="false" /> : null}
+      <Text slot="label" className="ty-action-menu__label">
         {item.label}
       </Text>
-      {item.shortcut ? <Keyboard className="fk-action-menu__shortcut">{item.shortcut}</Keyboard> : null}
+      {item.shortcut ? <Keyboard className="ty-action-menu__shortcut">{item.shortcut}</Keyboard> : null}
     </MenuItem>
   )
 }
 
 function renderEntries(items: ActionMenuEntry[]) {
   return items.map((entry, i) => {
-    if (entry.type === 'separator') return <Separator key={entry.id ?? `separator-${i}`} className="fk-action-menu__separator" />
+    if (entry.type === 'separator') return <Separator key={entry.id ?? `separator-${i}`} className="ty-action-menu__separator" />
     if (entry.type === 'section') {
       return (
-        <MenuSection key={entry.id} id={entry.id} className="fk-action-menu__section">
-          <Header className="fk-action-menu__section-title">{entry.title}</Header>
+        <MenuSection key={entry.id} id={entry.id} className="ty-action-menu__section">
+          <Header className="ty-action-menu__section-title">{entry.title}</Header>
           {entry.items.map(renderItem)}
         </MenuSection>
       )
@@ -148,7 +148,7 @@ export function ActionMenu(props: ActionMenuProps) {
   const menu = (
     <Menu
       aria-labelledby={labelId}
-      className="fk-action-menu__menu"
+      className="ty-action-menu__menu"
       disabledKeys={disabledKeys}
       onAction={handleAction}
       shouldFocusWrap
@@ -162,8 +162,8 @@ export function ActionMenu(props: ActionMenuProps) {
     return (
       <MenuTrigger isOpen={isOpen} onOpenChange={setOpen}>
         {trigger ?? <Button iconOnly accessibleLabel={messages.moreActions} leadingIcon={<Ellipsis />} variant="quiet" />}
-        <Popover className={cx('fk-action-menu', className)} placement="bottom end" offset={8}>
-          <span id={labelId} className="fk-visually-hidden">
+        <Popover className={cx('ty-action-menu', className)} placement="bottom end" offset={8}>
+          <span id={labelId} className="ty-visually-hidden">
             {label}
           </span>
           {menu}
@@ -245,7 +245,7 @@ function ContextActionMenu({ isOpen, setOpen, menu, labelId, label, children, cl
     <>
       <span
         ref={targetRef}
-        className="fk-action-menu__target"
+        className="ty-action-menu__target"
         onContextMenu={onContextMenu}
         onKeyDown={onKeyDown}
         onPointerDown={onPointerDown}
@@ -258,7 +258,7 @@ function ContextActionMenu({ isOpen, setOpen, menu, labelId, label, children, cl
       <span
         ref={anchorRef}
         aria-hidden="true"
-        className="fk-action-menu__anchor"
+        className="ty-action-menu__anchor"
         style={{ position: 'fixed', left: effective.x, top: effective.y, width: 0, height: 0 }}
       />
       <Popover
@@ -268,11 +268,11 @@ function ContextActionMenu({ isOpen, setOpen, menu, labelId, label, children, cl
         onOpenChange={handleOpenChange}
         placement="bottom start"
         offset={0}
-        className={cx('fk-action-menu', className)}
+        className={cx('ty-action-menu', className)}
         data-mode="context"
         style={{ position: 'fixed', left: clamped.x, top: clamped.y }}
       >
-        <span id={labelId} className="fk-visually-hidden">
+        <span id={labelId} className="ty-visually-hidden">
           {label}
         </span>
         {menu}

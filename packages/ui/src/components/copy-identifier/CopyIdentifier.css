@@ -1,89 +1,89 @@
 /* CopyIdentifier (spec: wave-2/copy-identifier.md; design direction §2.2, §2.4, §2.6, §2.10). */
-@layer fakhir.components {
-  .fk-copy-identifier {
+@layer tympan.components {
+  .ty-copy-identifier {
     display: inline-flex;
     vertical-align: middle;
   }
 
-  .fk-copy-identifier__trigger {
+  .ty-copy-identifier__trigger {
     position: relative;
     display: inline-flex;
     align-items: center;
-    gap: var(--fk-space-1);
-    min-block-size: calc(var(--fk-space-5) + var(--fk-space-1));
-    padding: 0 var(--fk-space-2);
-    border: 1px solid var(--fk-line-strong);
-    border-radius: var(--fk-radius-pill);
-    background: var(--fk-surface-sunken);
-    color: var(--fk-ink-2);
-    font-family: var(--fk-font-mono);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    gap: var(--ty-space-1);
+    min-block-size: calc(var(--ty-space-5) + var(--ty-space-1));
+    padding: 0 var(--ty-space-2);
+    border: 1px solid var(--ty-line-strong);
+    border-radius: var(--ty-radius-pill);
+    background: var(--ty-surface-sunken);
+    color: var(--ty-ink-2);
+    font-family: var(--ty-font-mono);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
     cursor: pointer;
     outline: none;
   }
   /* 44 x 44 hit area around the small pill (§2.10). */
-  .fk-copy-identifier__trigger::before {
+  .ty-copy-identifier__trigger::before {
     content: '';
     position: absolute;
     inset-block-start: 50%;
     /* physical: centring with translate(-50%) is the same in both directions */
     left: 50%;
-    inline-size: max(100%, var(--fk-control-target));
-    block-size: max(100%, var(--fk-control-target));
+    inline-size: max(100%, var(--ty-control-target));
+    block-size: max(100%, var(--ty-control-target));
     transform: translate(-50%, -50%);
   }
-  .fk-copy-identifier__trigger[data-hovered] {
-    border-color: var(--fk-ink-3);
+  .ty-copy-identifier__trigger[data-hovered] {
+    border-color: var(--ty-ink-3);
   }
-  .fk-copy-identifier__trigger[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-copy-identifier__trigger[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
-  .fk-copy-identifier[data-phase='copied'] .fk-copy-identifier__trigger {
-    color: var(--fk-on-success-soft);
-    border-color: var(--fk-success);
+  .ty-copy-identifier[data-phase='copied'] .ty-copy-identifier__trigger {
+    color: var(--ty-on-success-soft);
+    border-color: var(--ty-success);
   }
-  .fk-copy-identifier__text {
+  .ty-copy-identifier__text {
     white-space: nowrap;
   }
   /* Visual elision only: the whole identifier stays in the tree (never cut by character count). */
-  .fk-copy-identifier__text[data-elided] {
+  .ty-copy-identifier__text[data-elided] {
     display: inline-block;
-    max-inline-size: calc(var(--fk-copy-visible, 8) * 1ch + 1ch);
+    max-inline-size: calc(var(--ty-copy-visible, 8) * 1ch + 1ch);
     overflow: hidden;
     text-overflow: ellipsis;
     unicode-bidi: isolate;
     vertical-align: bottom;
   }
 
-  .fk-copy-identifier__tooltip {
+  .ty-copy-identifier__tooltip {
     max-inline-size: min(90vw, 48ch);
-    padding: var(--fk-space-1) var(--fk-space-2);
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-surface-raised-solid);
-    color: var(--fk-ink);
-    box-shadow: var(--fk-shadow-floating);
-    font-family: var(--fk-font-mono);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    padding: var(--ty-space-1) var(--ty-space-2);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-surface-raised-solid);
+    color: var(--ty-ink);
+    box-shadow: var(--ty-shadow-floating);
+    font-family: var(--ty-font-mono);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
     overflow-wrap: anywhere;
-    z-index: var(--fk-z-popover);
+    z-index: var(--ty-z-popover);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-copy-identifier__trigger {
+    .ty-copy-identifier__trigger {
       transition: none;
     }
   }
 
   @media (forced-colors: active) {
-    .fk-copy-identifier__trigger {
+    .ty-copy-identifier__trigger {
       border-color: CanvasText;
       color: CanvasText;
     }
-    .fk-copy-identifier__trigger[data-focus-visible] {
+    .ty-copy-identifier__trigger[data-focus-visible] {
       outline-color: Highlight;
     }
   }

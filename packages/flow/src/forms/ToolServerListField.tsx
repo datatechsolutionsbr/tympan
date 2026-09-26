@@ -4,7 +4,7 @@
 
 import { useEffect, useId, useRef, useState } from 'react'
 import { Plus, Trash2 } from 'lucide-react'
-import { Button, Fieldset, TextField } from '@fakhir/ui'
+import { Button, Fieldset, TextField } from '@datatechsolutions/tympan'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 
 export interface ToolServer {
@@ -165,22 +165,22 @@ export function ToolServerListField({ value, onChange, allowCommand = true, labe
   }
 
   return (
-    <div className="fk-tool-servers" role="group" aria-labelledby={headingId}>
-      <div className="fk-tool-servers__header">
-        <span id={headingId} className="fk-tool-servers__label">
+    <div className="ty-tool-servers" role="group" aria-labelledby={headingId}>
+      <div className="ty-tool-servers__header">
+        <span id={headingId} className="ty-tool-servers__label">
           {l.label}
         </span>
         <Button ref={addRef} variant="secondary" size="compact" leadingIcon={<Plus />} onPress={add}>
           {l.add}
         </Button>
       </div>
-      {value.length === 0 ? <p className="fk-tool-servers__empty">{l.empty}</p> : null}
+      {value.length === 0 ? <p className="ty-tool-servers__empty">{l.empty}</p> : null}
       {value.map((s, i) => {
         const n = i + 1
         const incomplete = !s.url?.trim() && !s.command?.trim()
         const badUrl = urlChecked[i] && !!s.url?.trim() && !isUrl(s.url)
         return (
-          <Fieldset key={i} legend={fill(l.legend, { n }, locale)} className="fk-tool-servers__entry">
+          <Fieldset key={i} legend={fill(l.legend, { n }, locale)} className="ty-tool-servers__entry">
             <TextField
               ref={(el) => {
                 firstFields.current[i] = el
@@ -190,26 +190,26 @@ export function ToolServerListField({ value, onChange, allowCommand = true, labe
               value={s.prefix ?? ''}
               onChange={(v) => patch(i, { prefix: v })}
             />
-            <div className="fk-tool-servers__reach" data-command={allowCommand || undefined}>
+            <div className="ty-tool-servers__reach" data-command={allowCommand || undefined}>
               <TextField
                 label={l.url}
                 inputType="url"
                 placeholder={l.urlPlaceholder}
-                className="fk-ltr-text"
+                className="ty-ltr-text"
                 value={s.url ?? ''}
                 onChange={(v) => patch(i, { url: v })}
                 onBlur={() => setUrlChecked((c) => ({ ...c, [i]: true }))}
                 {...(badUrl ? { errorMessage: l.badUrl } : {})}
               />
               {allowCommand ? (
-                <TextField label={l.command} className="fk-tool-servers__mono fk-ltr-text" value={s.command ?? ''} onChange={(v) => patch(i, { command: v })} />
+                <TextField label={l.command} className="ty-tool-servers__mono ty-ltr-text" value={s.command ?? ''} onChange={(v) => patch(i, { command: v })} />
               ) : null}
             </div>
             {allowCommand ? (
               <TextField
                 label={l.args}
                 hint={l.argsHint}
-                className="fk-tool-servers__mono fk-ltr-text"
+                className="ty-tool-servers__mono ty-ltr-text"
                 value={argText[i] ?? (s.args ?? []).join(' ')}
                 onChange={(v) => {
                   setArgText((t) => {
@@ -222,11 +222,11 @@ export function ToolServerListField({ value, onChange, allowCommand = true, labe
               />
             ) : null}
             {incomplete ? (
-              <p className="fk-tool-servers__hint" data-tone="warning">
+              <p className="ty-tool-servers__hint" data-tone="warning">
                 {l.incomplete}
               </p>
             ) : null}
-            <div className="fk-tool-servers__actions">
+            <div className="ty-tool-servers__actions">
               <Button variant="quiet" size="compact" leadingIcon={<Trash2 />} onPress={() => remove(i)} accessibleLabel={fill(l.remove, { n }, locale)}>
                 {fill(l.remove, { n }, locale)}
               </Button>
@@ -234,7 +234,7 @@ export function ToolServerListField({ value, onChange, allowCommand = true, labe
           </Fieldset>
         )
       })}
-      <p className="fk-visually-hidden" role="status" aria-live="polite">
+      <p className="ty-visually-hidden" role="status" aria-live="polite">
         {live}
       </p>
     </div>

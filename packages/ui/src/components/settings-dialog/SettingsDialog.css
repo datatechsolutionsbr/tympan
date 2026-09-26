@@ -1,150 +1,150 @@
 /* SettingsDialog and PreferenceGroup (spec: wave-2/settings-dialog.md; design direction §2.1, §2.2, §2.10). */
-@layer fakhir.components {
-  .fk-preference-group {
+@layer tympan.components {
+  .ty-preference-group {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-4);
+    gap: var(--ty-space-4);
   }
-  .fk-preference-group + .fk-preference-group {
-    padding-block-start: var(--fk-space-5);
-    border-block-start: 1px solid var(--fk-line);
+  .ty-preference-group + .ty-preference-group {
+    padding-block-start: var(--ty-space-5);
+    border-block-start: 1px solid var(--ty-line);
   }
-  .fk-preference-group__title {
+  .ty-preference-group__title {
     display: flex;
     align-items: center;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
     margin: 0;
-    color: var(--fk-ink);
-    font-family: var(--fk-font-serif);
-    font-size: var(--fk-font-size-h3);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-h3);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-serif);
+    font-size: var(--ty-font-size-h3);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-h3);
   }
-  .fk-preference-group__icon > svg {
+  .ty-preference-group__icon > svg {
     inline-size: 18px;
     block-size: 18px;
   }
-  .fk-preference-group__body {
+  .ty-preference-group__body {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-4);
+    gap: var(--ty-space-4);
   }
-  .fk-settings-dialog__field {
+  .ty-settings-dialog__field {
     display: flex;
     align-items: flex-end;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
-  .fk-settings-dialog__field-control {
+  .ty-settings-dialog__field-control {
     flex: 1;
     min-inline-size: 0;
   }
-  .fk-settings-dialog__picture {
+  .ty-settings-dialog__picture {
     display: flex;
     align-items: center;
-    gap: var(--fk-space-4);
+    gap: var(--ty-space-4);
   }
-  .fk-settings-dialog__password {
+  .ty-settings-dialog__password {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-4);
-    padding-block-start: var(--fk-space-4);
-    border-block-start: 1px solid var(--fk-line);
+    gap: var(--ty-space-4);
+    padding-block-start: var(--ty-space-4);
+    border-block-start: 1px solid var(--ty-line);
   }
-  .fk-settings-dialog__description,
-  .fk-settings-dialog__placeholder {
+  .ty-settings-dialog__description,
+  .ty-settings-dialog__placeholder {
     margin: 0;
-    color: var(--fk-ink-3);
-    max-inline-size: calc(var(--fk-measure-prose) * 1ch);
+    color: var(--ty-ink-3);
+    max-inline-size: calc(var(--ty-measure-prose) * 1ch);
   }
-  .fk-settings-dialog__choices {
+  .ty-settings-dialog__choices {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
-  .fk-settings-dialog__legend {
-    color: var(--fk-ink);
-    font-size: var(--fk-font-size-label);
-    font-weight: var(--fk-font-weight-semibold);
+  .ty-settings-dialog__legend {
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-label);
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-settings-dialog__choice-grid {
+  .ty-settings-dialog__choice-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 11rem), 1fr));
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
-  .fk-settings-dialog__choices:not([data-cards]) .fk-settings-dialog__choice-grid {
+  .ty-settings-dialog__choices:not([data-cards]) .ty-settings-dialog__choice-grid {
     grid-template-columns: 1fr;
   }
-  .fk-settings-dialog__choice {
+  .ty-settings-dialog__choice {
     display: flex;
     align-items: flex-start;
-    gap: var(--fk-space-2);
-    min-block-size: var(--fk-control-target);
-    padding: var(--fk-space-2);
-    border-radius: var(--fk-radius-control);
+    gap: var(--ty-space-2);
+    min-block-size: var(--ty-control-target);
+    padding: var(--ty-space-2);
+    border-radius: var(--ty-radius-control);
     cursor: pointer;
     outline: none;
   }
-  .fk-settings-dialog__choices[data-cards] .fk-settings-dialog__choice {
-    padding: var(--fk-space-3);
-    border: 1px solid var(--fk-line-strong);
-    border-radius: var(--fk-radius-card);
+  .ty-settings-dialog__choices[data-cards] .ty-settings-dialog__choice {
+    padding: var(--ty-space-3);
+    border: 1px solid var(--ty-line-strong);
+    border-radius: var(--ty-radius-card);
   }
-  .fk-settings-dialog__choices[data-cards] .fk-settings-dialog__choice[data-selected] {
-    border-color: var(--fk-accent);
-    background: var(--fk-accent-soft);
+  .ty-settings-dialog__choices[data-cards] .ty-settings-dialog__choice[data-selected] {
+    border-color: var(--ty-accent);
+    background: var(--ty-accent-soft);
   }
-  .fk-settings-dialog__choice[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-settings-dialog__choice[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
-  .fk-settings-dialog__choice-mark {
+  .ty-settings-dialog__choice-mark {
     flex: none;
     inline-size: 18px;
     block-size: 18px;
     margin-block-start: 2px;
-    border: 1.5px solid var(--fk-input);
-    border-radius: var(--fk-radius-pill);
-    background: var(--fk-surface-solid);
+    border: 1.5px solid var(--ty-input);
+    border-radius: var(--ty-radius-pill);
+    background: var(--ty-surface-solid);
   }
-  .fk-settings-dialog__choice[data-selected] .fk-settings-dialog__choice-mark {
-    border: 5px solid var(--fk-accent);
+  .ty-settings-dialog__choice[data-selected] .ty-settings-dialog__choice-mark {
+    border: 5px solid var(--ty-accent);
   }
-  .fk-settings-dialog__choice-text {
+  .ty-settings-dialog__choice-text {
     display: flex;
     flex-direction: column;
   }
-  .fk-settings-dialog__choice-label {
-    color: var(--fk-ink);
+  .ty-settings-dialog__choice-label {
+    color: var(--ty-ink);
   }
-  .fk-settings-dialog__choice-hint {
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
+  .ty-settings-dialog__choice-hint {
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
   }
-  .fk-settings-dialog__denied {
+  .ty-settings-dialog__denied {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
-  .fk-settings-dialog__denied-icon {
-    color: var(--fk-ink-3);
+  .ty-settings-dialog__denied-icon {
+    color: var(--ty-ink-3);
   }
-  .fk-settings-dialog__denied-title {
+  .ty-settings-dialog__denied-title {
     margin: 0;
-    color: var(--fk-ink);
-    font-family: var(--fk-font-serif);
-    font-size: var(--fk-font-size-h3);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-serif);
+    font-size: var(--ty-font-size-h3);
   }
   @media (max-width: 639.98px) {
-    .fk-settings-dialog__choice-grid {
+    .ty-settings-dialog__choice-grid {
       grid-template-columns: 1fr;
     }
   }
   @media (forced-colors: active) {
-    .fk-settings-dialog__choice[data-selected] .fk-settings-dialog__choice-mark {
+    .ty-settings-dialog__choice[data-selected] .ty-settings-dialog__choice-mark {
       border-color: Highlight;
     }
-    .fk-settings-dialog__choices[data-cards] .fk-settings-dialog__choice[data-selected] {
+    .ty-settings-dialog__choices[data-cards] .ty-settings-dialog__choice[data-selected] {
       outline: 2px solid Highlight;
     }
   }

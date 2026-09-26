@@ -22,7 +22,7 @@ import {
   StickyNote,
   Trash2,
 } from 'lucide-react'
-import { ActionMenu, type ActionMenuEntry } from '@fakhir/ui'
+import { ActionMenu, type ActionMenuEntry } from '@datatechsolutions/tympan'
 import type { AlignEdge, DistributeAxis } from '../geometry/arrange'
 import { FALLBACK_NODE_SIZE } from '../geometry/rect'
 import { defineLabels, useLabels } from '../internal/labels'
@@ -165,7 +165,7 @@ function MenuAt({ anchor, onClose, label, items, run }: { anchor: Point; onClose
       position={anchor}
       label={label}
       items={items}
-      className="fk-canvas-menu"
+      className="ty-canvas-menu"
       onOpenChange={(open) => {
         if (!open) onClose()
       }}

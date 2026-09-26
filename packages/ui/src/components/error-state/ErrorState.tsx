@@ -93,35 +93,35 @@ export function ErrorState({
 
   return (
     <div
-      className={cx('fk-error', className)}
+      className={cx('ty-error', className)}
       data-scope={scope}
       data-kind={kind}
       role={appearedAfterLoad ? 'alert' : scope === 'block' ? 'region' : undefined}
       aria-labelledby={!appearedAfterLoad && scope === 'block' ? titleId : undefined}
     >
-      <Icon className="fk-error__icon" aria-hidden="true" focusable="false" />
-      <H id={titleId} ref={titleRef} tabIndex={-1} className="fk-error__title">
+      <Icon className="ty-error__icon" aria-hidden="true" focusable="false" />
+      <H id={titleId} ref={titleRef} tabIndex={-1} className="ty-error__title">
         {title ?? copy.title}
       </H>
-      <p className="fk-error__message">{message ?? copy.message}</p>
+      <p className="ty-error__message">{message ?? copy.message}</p>
       {statusCode !== undefined || problemType ? (
-        <p className="fk-error__meta">
+        <p className="ty-error__meta">
           {statusCode !== undefined ? <span>{messages.error.statusCode(statusCode)}</span> : null}
-          {problemType ? <code className="fk-error__type">{problemType}</code> : null}
+          {problemType ? <code className="ty-error__type">{problemType}</code> : null}
         </p>
       ) : null}
       {details ? (
-        <Disclosure className="fk-error__details">
-          <Button slot="trigger" variant="quiet" size="compact" trailingIcon={<ChevronDown className="fk-error__chevron" />}>
+        <Disclosure className="ty-error__details">
+          <Button slot="trigger" variant="quiet" size="compact" trailingIcon={<ChevronDown className="ty-error__chevron" />}>
             {labels?.details ?? messages.error.details}
           </Button>
-          <DisclosurePanel className="fk-error__details-panel">
-            <pre className="fk-error__details-text">{details}</pre>
+          <DisclosurePanel className="ty-error__details-panel">
+            <pre className="ty-error__details-text">{details}</pre>
           </DisclosurePanel>
         </Disclosure>
       ) : null}
       {onRetry || secondaryAction ? (
-        <div className="fk-error__actions">
+        <div className="ty-error__actions">
           {onRetry ? (
             <Button
               variant="secondary"

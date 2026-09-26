@@ -36,13 +36,13 @@ describe('ThemeSwitcher', () => {
 
   it('has no animation under reduced motion', () => {
     const reduced = mediaBlock(cssOf('components/theme-switcher/ThemeSwitcher.css'), /\(prefers-reduced-motion:\s*reduce\)/)
-    expect(reduced).toMatch(/\.fk-theme-switcher__knob[\s\S]*transition:\s*none/)
+    expect(reduced).toMatch(/\.ty-theme-switcher__knob[\s\S]*transition:\s*none/)
   })
 
   it('keeps a 44 px hit area and system colours in forced-colors mode', () => {
     const css = cssOf('components/theme-switcher/ThemeSwitcher.css')
-    expect(css).toMatch(/min-block-size:\s*var\(--fk-control-target\)/)
-    expect(css).toMatch(/inline-size:\s*max\(100%,\s*var\(--fk-control-target\)\)/)
+    expect(css).toMatch(/min-block-size:\s*var\(--ty-control-target\)/)
+    expect(css).toMatch(/inline-size:\s*max\(100%,\s*var\(--ty-control-target\)\)/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/Highlight/)
   })
 

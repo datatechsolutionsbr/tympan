@@ -1,57 +1,57 @@
 /* ToolServerListField: entries as fieldsets; address and command side by side from the medium breakpoint. */
-@layer fakhir.components {
-  .fk-tool-servers {
+@layer tympan.components {
+  .ty-tool-servers {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
   }
-  .fk-tool-servers__header {
+  .ty-tool-servers__header {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
-  .fk-tool-servers__label {
-    color: var(--fk-ink);
-    font-size: var(--fk-font-size-label);
-    line-height: var(--fk-font-line-height-label);
-    font-weight: var(--fk-font-weight-semibold);
+  .ty-tool-servers__label {
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-label);
+    line-height: var(--ty-font-line-height-label);
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-tool-servers__empty {
+  .ty-tool-servers__empty {
     margin: 0;
-    color: var(--fk-ink-3);
+    color: var(--ty-ink-3);
   }
-  .fk-tool-servers__entry {
-    padding: var(--fk-space-4);
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-card);
+  .ty-tool-servers__entry {
+    padding: var(--ty-space-4);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-card);
   }
-  .fk-tool-servers__reach {
+  .ty-tool-servers__reach {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--fk-space-4);
+    gap: var(--ty-space-4);
   }
   @media (min-width: 768px) {
-    .fk-tool-servers__reach[data-command] {
+    .ty-tool-servers__reach[data-command] {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
-  .fk-tool-servers__mono input {
-    font-family: var(--fk-font-mono);
+  .ty-tool-servers__mono input {
+    font-family: var(--ty-font-mono);
   }
-  .fk-tool-servers__hint {
+  .ty-tool-servers__hint {
     margin: 0;
-    color: var(--fk-on-warning-soft, var(--fk-ink-2));
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    color: var(--ty-on-warning-soft, var(--ty-ink-2));
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
-  .fk-tool-servers__actions {
+  .ty-tool-servers__actions {
     display: flex;
     justify-content: flex-end;
   }
   @media (forced-colors: active) {
-    .fk-tool-servers__entry {
+    .ty-tool-servers__entry {
       border-color: CanvasText;
     }
   }

@@ -1,291 +1,291 @@
 /* CommandPalette (spec: wave-2/command-palette.md; design direction §2.5, §2.6, §2.7). */
-@layer fakhir.components {
-  .fk-palette__backdrop {
+@layer tympan.components {
+  .ty-palette__backdrop {
     position: fixed;
     inset: 0;
-    z-index: var(--fk-z-modal);
+    z-index: var(--ty-z-modal);
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding: 12vh var(--fk-space-4) var(--fk-space-4);
-    background: var(--fk-backdrop);
+    padding: 12vh var(--ty-space-4) var(--ty-space-4);
+    background: var(--ty-backdrop);
   }
-  .fk-palette__backdrop[data-entering] {
-    animation: fk-palette-fade var(--fk-dur-quick) var(--fk-ease);
+  .ty-palette__backdrop[data-entering] {
+    animation: ty-palette-fade var(--ty-dur-quick) var(--ty-ease);
   }
-  @keyframes fk-palette-fade {
+  @keyframes ty-palette-fade {
     from {
       opacity: 0;
     }
   }
-  .fk-palette {
+  .ty-palette {
     box-sizing: border-box;
     display: flex;
     inline-size: min(44rem, 100%);
     max-block-size: 70dvh;
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-sheet);
-    background: var(--fk-surface-raised);
-    color: var(--fk-on-surface-raised);
-    box-shadow: var(--fk-shadow-modal);
-    backdrop-filter: blur(var(--fk-glass-blur-floating)) saturate(var(--fk-glass-saturate));
-    -webkit-backdrop-filter: blur(var(--fk-glass-blur-floating)) saturate(var(--fk-glass-saturate));
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-sheet);
+    background: var(--ty-surface-raised);
+    color: var(--ty-on-surface-raised);
+    box-shadow: var(--ty-shadow-modal);
+    backdrop-filter: blur(var(--ty-glass-blur-floating)) saturate(var(--ty-glass-saturate));
+    -webkit-backdrop-filter: blur(var(--ty-glass-blur-floating)) saturate(var(--ty-glass-saturate));
     overflow: hidden;
     outline: none;
   }
-  .fk-palette[data-entering] {
-    animation: fk-palette-fade var(--fk-dur-quick) var(--fk-ease);
+  .ty-palette[data-entering] {
+    animation: ty-palette-fade var(--ty-dur-quick) var(--ty-ease);
   }
-  .fk-palette__dialog {
+  .ty-palette__dialog {
     display: flex;
     flex: 1;
     flex-direction: column;
     min-block-size: 0;
     outline: none;
   }
-  .fk-palette__field {
+  .ty-palette__field {
     display: flex;
     align-items: center;
-    gap: var(--fk-space-2);
-    padding: var(--fk-space-3) var(--fk-space-4);
-    border-block-end: 1px solid var(--fk-line);
+    gap: var(--ty-space-2);
+    padding: var(--ty-space-3) var(--ty-space-4);
+    border-block-end: 1px solid var(--ty-line);
   }
-  .fk-palette__search-icon {
+  .ty-palette__search-icon {
     flex: none;
     inline-size: 20px;
     block-size: 20px;
-    color: var(--fk-ink-3);
+    color: var(--ty-ink-3);
   }
-  .fk-palette__input {
+  .ty-palette__input {
     flex: 1;
     min-inline-size: 0;
-    min-block-size: var(--fk-control-target);
+    min-block-size: var(--ty-control-target);
     border: 0;
     background: transparent;
-    color: var(--fk-ink);
+    color: var(--ty-ink);
     font: inherit;
-    font-size: var(--fk-font-size-body-lg);
+    font-size: var(--ty-font-size-body-lg);
     outline: none;
   }
-  .fk-palette__field:focus-within {
-    box-shadow: inset 0 -2px 0 var(--fk-focus-ring);
+  .ty-palette__field:focus-within {
+    box-shadow: inset 0 -2px 0 var(--ty-focus-ring);
   }
-  .fk-palette__chip {
+  .ty-palette__chip {
     display: inline-flex;
     align-items: center;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
     min-block-size: 28px;
-    padding-inline: var(--fk-space-2);
-    border: 1px solid var(--fk-line-strong);
-    border-radius: var(--fk-radius-pill);
-    background: var(--fk-surface-sunken);
-    color: var(--fk-ink);
+    padding-inline: var(--ty-space-2);
+    border: 1px solid var(--ty-line-strong);
+    border-radius: var(--ty-radius-pill);
+    background: var(--ty-surface-sunken);
+    color: var(--ty-ink);
     font: inherit;
-    font-size: var(--fk-font-size-label);
+    font-size: var(--ty-font-size-label);
     cursor: pointer;
     outline: none;
   }
-  .fk-palette__chip > svg {
+  .ty-palette__chip > svg {
     inline-size: 14px;
     block-size: 14px;
   }
-  .fk-palette__chip[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-palette__chip[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
-  .fk-palette__main {
+  .ty-palette__main {
     display: flex;
     flex: 1;
     min-block-size: 0;
   }
-  .fk-palette__scopes {
+  .ty-palette__scopes {
     display: flex;
     flex: none;
     flex-direction: column;
     gap: 2px;
     inline-size: 11rem;
-    padding: var(--fk-space-2);
-    border-inline-end: 1px solid var(--fk-line);
+    padding: var(--ty-space-2);
+    border-inline-end: 1px solid var(--ty-line);
   }
-  .fk-palette__scope {
+  .ty-palette__scope {
     display: flex;
     align-items: center;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
     min-block-size: 36px;
-    padding-inline: var(--fk-space-3);
+    padding-inline: var(--ty-space-3);
     border: 0;
-    border-radius: var(--fk-radius-control);
+    border-radius: var(--ty-radius-control);
     background: transparent;
-    color: var(--fk-ink-2);
+    color: var(--ty-ink-2);
     font: inherit;
     text-align: start;
     cursor: pointer;
   }
-  .fk-palette__scope[aria-pressed='true'] {
-    background: var(--fk-accent-soft);
-    color: var(--fk-accent);
-    font-weight: var(--fk-font-weight-semibold);
+  .ty-palette__scope[aria-pressed='true'] {
+    background: var(--ty-accent-soft);
+    color: var(--ty-accent);
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-palette__results {
+  .ty-palette__results {
     flex: 1;
     min-inline-size: 0;
-    padding: var(--fk-space-2);
+    padding: var(--ty-space-2);
     overflow-y: auto;
   }
-  .fk-palette__heading {
-    padding: var(--fk-space-2) var(--fk-space-3) var(--fk-space-1);
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    font-weight: var(--fk-font-weight-semibold);
+  .ty-palette__heading {
+    padding: var(--ty-space-2) var(--ty-space-3) var(--ty-space-1);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-palette__option {
+  .ty-palette__option {
     display: flex;
     align-items: center;
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
     min-block-size: 40px;
-    padding: var(--fk-space-2) var(--fk-space-3);
-    border-radius: var(--fk-radius-control);
-    color: var(--fk-ink-2);
+    padding: var(--ty-space-2) var(--ty-space-3);
+    border-radius: var(--ty-radius-control);
+    color: var(--ty-ink-2);
     cursor: pointer;
   }
-  .fk-palette__option[data-highlighted] {
-    background: var(--fk-surface-sunken);
-    color: var(--fk-ink);
-    box-shadow: inset 3px 0 0 var(--fk-accent);
+  .ty-palette__option[data-highlighted] {
+    background: var(--ty-surface-sunken);
+    color: var(--ty-ink);
+    box-shadow: inset 3px 0 0 var(--ty-accent);
   }
-  .fk-palette__icon {
+  .ty-palette__icon {
     display: inline-grid;
     place-items: center;
     flex: none;
   }
-  .fk-palette__icon > svg {
+  .ty-palette__icon > svg {
     inline-size: 18px;
     block-size: 18px;
   }
-  .fk-palette__text {
+  .ty-palette__text {
     display: flex;
     flex: 1;
     flex-direction: column;
     min-inline-size: 0;
   }
-  .fk-palette__label {
+  .ty-palette__label {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .fk-palette__mark {
+  .ty-palette__mark {
     background: transparent;
-    color: var(--fk-accent);
-    font-weight: var(--fk-font-weight-semibold);
+    color: var(--ty-accent);
+    font-weight: var(--ty-font-weight-semibold);
     text-decoration: underline;
     text-underline-offset: 2px;
   }
-  .fk-palette__description,
-  .fk-palette__hint {
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
+  .ty-palette__description,
+  .ty-palette__hint {
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
   }
-  .fk-palette__hint {
-    font-family: var(--fk-font-mono);
+  .ty-palette__hint {
+    font-family: var(--ty-font-mono);
   }
-  .fk-palette__kbd {
-    padding: 0 var(--fk-space-1);
-    border: 1px solid var(--fk-line-strong);
+  .ty-palette__kbd {
+    padding: 0 var(--ty-space-1);
+    border: 1px solid var(--ty-line-strong);
     border-radius: 4px;
-    color: var(--fk-ink-3);
-    font-family: var(--fk-font-mono);
-    font-size: var(--fk-font-size-meta);
+    color: var(--ty-ink-3);
+    font-family: var(--ty-font-mono);
+    font-size: var(--ty-font-size-meta);
   }
-  .fk-palette__chevron {
+  .ty-palette__chevron {
     display: inline-grid;
     place-items: center;
     inline-size: 28px;
     block-size: 28px;
-    border-radius: var(--fk-radius-control);
-    color: var(--fk-ink-3);
+    border-radius: var(--ty-radius-control);
+    color: var(--ty-ink-3);
   }
-  .fk-palette__chevron > svg {
+  .ty-palette__chevron > svg {
     inline-size: 16px;
     block-size: 16px;
   }
-  .fk-palette__empty {
+  .ty-palette__empty {
     margin: 0;
-    padding: var(--fk-space-5) var(--fk-space-3);
-    color: var(--fk-ink-3);
+    padding: var(--ty-space-5) var(--ty-space-3);
+    color: var(--ty-ink-3);
     text-align: center;
   }
-  .fk-palette__loading {
+  .ty-palette__loading {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-3);
-    padding: var(--fk-space-3);
+    gap: var(--ty-space-3);
+    padding: var(--ty-space-3);
   }
-  .fk-palette__footer {
+  .ty-palette__footer {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--fk-space-4);
-    padding: var(--fk-space-2) var(--fk-space-4);
-    border-block-start: 1px solid var(--fk-line);
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
+    gap: var(--ty-space-4);
+    padding: var(--ty-space-2) var(--ty-space-4);
+    border-block-start: 1px solid var(--ty-line);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
   }
   @media (pointer: coarse) {
-    .fk-palette__footer {
+    .ty-palette__footer {
       display: none;
     }
-    .fk-palette__option {
-      min-block-size: var(--fk-control-target);
+    .ty-palette__option {
+      min-block-size: var(--ty-control-target);
     }
   }
   @media (max-width: 639.98px) {
-    .fk-palette__backdrop {
+    .ty-palette__backdrop {
       padding: 0;
     }
-    .fk-palette {
+    .ty-palette {
       inline-size: 100%;
       block-size: 100dvh;
       max-block-size: 100dvh;
       border-radius: 0;
     }
-    .fk-palette__main {
+    .ty-palette__main {
       flex-direction: column;
     }
-    .fk-palette__scopes {
+    .ty-palette__scopes {
       flex-direction: row;
       inline-size: auto;
       border-inline-end: 0;
-      border-block-end: 1px solid var(--fk-line);
+      border-block-end: 1px solid var(--ty-line);
       overflow-x: auto;
     }
-    .fk-palette__scope {
-      border: 1px solid var(--fk-line-strong);
-      border-radius: var(--fk-radius-pill);
+    .ty-palette__scope {
+      border: 1px solid var(--ty-line-strong);
+      border-radius: var(--ty-radius-pill);
       white-space: nowrap;
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .fk-palette[data-entering],
-    .fk-palette__backdrop[data-entering] {
+    .ty-palette[data-entering],
+    .ty-palette__backdrop[data-entering] {
       animation: none;
     }
   }
   @media (prefers-reduced-transparency: reduce) {
-    .fk-palette {
-      background: var(--fk-surface-raised-solid);
+    .ty-palette {
+      background: var(--ty-surface-raised-solid);
       backdrop-filter: none;
     }
   }
   @media (forced-colors: active) {
-    .fk-palette {
+    .ty-palette {
       border: 1px solid CanvasText;
     }
-    .fk-palette__option[data-highlighted] {
+    .ty-palette__option[data-highlighted] {
       background: Highlight;
       color: HighlightText;
       box-shadow: none;
       forced-color-adjust: none;
     }
-    .fk-palette__mark {
+    .ty-palette__mark {
       color: inherit;
       text-decoration: underline;
     }

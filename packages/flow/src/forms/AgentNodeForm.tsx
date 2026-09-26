@@ -2,7 +2,7 @@
 // per-run user prompt; every other agent setting lives on the saved agent.
 
 import { useEffect, useState } from 'react'
-import { ActorChip, InlineNotice, Link, ListboxSelect, Spinner, TextArea } from '@fakhir/ui'
+import { ActorChip, InlineNotice, Link, ListboxSelect, Spinner, TextArea } from '@datatechsolutions/tympan'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { NodeFormFooter } from './NodeFormFooter'
 
@@ -137,7 +137,7 @@ export function AgentNodeForm({ config, onSave, onCancel, agents, loadAgents, ag
   }
 
   return (
-    <div className="fk-node-form fk-agent-form">
+    <div className="ty-node-form ty-agent-form">
       {legacy ? (
         <InlineNotice tone="warning" urgency="none">
           {l.legacy}
@@ -145,7 +145,7 @@ export function AgentNodeForm({ config, onSave, onCancel, agents, loadAgents, ag
       ) : null}
       {load.state === 'error' ? <InlineNotice tone="danger">{fill(l.loadError, { message: load.message ?? '' }, locale)}</InlineNotice> : null}
       {load.state === 'loading' ? (
-        <p className="fk-agent-form__loading" role="status">
+        <p className="ty-agent-form__loading" role="status">
           <Spinner size="small" label={l.loading} />
           <span aria-hidden="true">{l.loading}</span>
         </p>
@@ -160,7 +160,7 @@ export function AgentNodeForm({ config, onSave, onCancel, agents, loadAgents, ag
         />
       )}
       {chosen ? (
-        <div className="fk-agent-form__summary">
+        <div className="ty-agent-form__summary">
           {/* ActorChip shows the model identifier in mono (§2.11). */}
           <ActorChip kind="agent" name={chosen.name} {...(chosen.model ? { model: chosen.model } : {})} />
         </div>

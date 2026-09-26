@@ -68,16 +68,16 @@ function present(parts: Part[]): Part[] {
 function TrailLine({ levels, label }: { levels: PageHeaderTrailLevel[]; label: string }) {
   const lastIndex = levels.length - 1
   return (
-    <nav className="fk-page-header__trail" aria-label={label}>
-      <ol className="fk-page-header__trail-list">
+    <nav className="ty-page-header__trail" aria-label={label}>
+      <ol className="ty-page-header__trail-list">
         {levels.map((level, index) => {
           const isHere = index === lastIndex
           return (
-            <li key={`${index}:${level.label}`} className="fk-page-header__trail-level" data-here={isHere || undefined}>
+            <li key={`${index}:${level.label}`} className="ty-page-header__trail-level" data-here={isHere || undefined}>
               {isHere || !level.href ? (
                 <span aria-current={isHere ? 'page' : undefined} dir="auto">{level.label}</span>
               ) : (
-                <AriaLink className="fk-page-header__trail-link" href={level.href} dir="auto">
+                <AriaLink className="ty-page-header__trail-link" href={level.href} dir="auto">
                   {level.label}
                 </AriaLink>
               )}
@@ -91,12 +91,12 @@ function TrailLine({ levels, label }: { levels: PageHeaderTrailLevel[]; label: s
 
 function MetaRow({ items }: { items: PageHeaderMetaItem[] }) {
   return (
-    <ul className="fk-page-header__meta">
+    <ul className="ty-page-header__meta">
       {items.map((entry, position) => {
         const Glyph = entry.icon
         return (
-          <li key={position + entry.text} className="fk-page-header__meta-item">
-            {Glyph ? <Glyph className="fk-icon" aria-hidden="true" focusable="false" /> : null}
+          <li key={position + entry.text} className="ty-page-header__meta-item">
+            {Glyph ? <Glyph className="ty-icon" aria-hidden="true" focusable="false" /> : null}
             <span dir="auto">{entry.text}</span>
           </li>
         )
@@ -111,17 +111,17 @@ function EditableTitle({ level, id, edit }: { level: 1 | 2 | 3; id: string; edit
   return (
     <>
       {/* The outline keeps one heading; the field carries its own name. */}
-      <Heading level={level} id={id} className="fk-visually-hidden">
+      <Heading level={level} id={id} className="ty-visually-hidden">
         {edit.value || edit.placeholder}
       </Heading>
-      <TextField className="fk-page-header__edit" value={edit.value} onChange={edit.onChange} isInvalid={invalid} aria-describedby={invalid ? errorId : undefined}>
+      <TextField className="ty-page-header__edit" value={edit.value} onChange={edit.onChange} isInvalid={invalid} aria-describedby={invalid ? errorId : undefined}>
         <Label>
           <VisuallyHidden>{edit.label}</VisuallyHidden>
         </Label>
-        <Input className="fk-page-header__title fk-page-header__title-input" placeholder={edit.placeholder} />
+        <Input className="ty-page-header__title ty-page-header__title-input" placeholder={edit.placeholder} />
       </TextField>
       {invalid ? (
-        <p id={errorId} className="fk-page-header__error">
+        <p id={errorId} className="ty-page-header__error">
           {edit.errorMessage}
         </p>
       ) : null}
@@ -136,33 +136,33 @@ export function PageHeader(props: PageHeaderProps) {
   const roomy = useMinWidth(breakpoints.sm)
   const level = props.headingLevel ?? 1
   const editorial = props.variant === 'editorial'
-  const titleId = props.headingId ?? `fk-page-header-${autoId.replace(/:/g, '')}`
+  const titleId = props.headingId ?? `ty-page-header-${autoId.replace(/:/g, '')}`
   const Icon = props.icon
 
   const title = props.editableTitle ? (
     <EditableTitle level={level} id={titleId} edit={props.editableTitle} />
   ) : (
-    <Heading level={level} id={titleId} className="fk-page-header__title" dir="auto">
+    <Heading level={level} id={titleId} className="ty-page-header__title" dir="auto">
       {props.title}
     </Heading>
   )
 
   const textParts = present([
-    ['eyebrow', props.eyebrow ? <p className="fk-page-header__eyebrow" dir="auto">{props.eyebrow}</p> : null],
+    ['eyebrow', props.eyebrow ? <p className="ty-page-header__eyebrow" dir="auto">{props.eyebrow}</p> : null],
     ['title', title],
-    ['summary', props.summary ? <p className="fk-page-header__summary" dir="auto">{props.summary}</p> : null],
-    ['lead', props.lead ? <div className="fk-page-header__lead" dir="auto">{props.lead}</div> : null],
+    ['summary', props.summary ? <p className="ty-page-header__summary" dir="auto">{props.summary}</p> : null],
+    ['lead', props.lead ? <div className="ty-page-header__lead" dir="auto">{props.lead}</div> : null],
     ['meta', props.meta?.length ? <MetaRow items={props.meta} /> : null],
   ])
 
   const above = present([
     ['trail', props.trail?.length ? <TrailLine levels={props.trail} label={copy.pageTrail.label} /> : null],
-    ['breadcrumbs', props.breadcrumbs?.length ? <Breadcrumbs items={props.breadcrumbs} className="fk-page-header__breadcrumbs" /> : null],
+    ['breadcrumbs', props.breadcrumbs?.length ? <Breadcrumbs items={props.breadcrumbs} className="ty-page-header__breadcrumbs" /> : null],
   ])
 
   return (
     <div
-      className={cx('fk-page-header', props.className)}
+      className={cx('ty-page-header', props.className)}
       data-scale={props.scale ?? 'page'}
       data-variant={editorial ? 'editorial' : undefined}
       data-divider={(props.divider ?? editorial) || undefined}
@@ -171,20 +171,20 @@ export function PageHeader(props: PageHeaderProps) {
       {above.map(([slot, node]) => (
         <SlotFragment key={slot}>{node}</SlotFragment>
       ))}
-      <div className="fk-page-header__row">
+      <div className="ty-page-header__row">
         {Icon ? (
-          <span className="fk-page-header__icon" aria-hidden="true">
-            <Icon className="fk-icon" aria-hidden="true" focusable="false" />
+          <span className="ty-page-header__icon" aria-hidden="true">
+            <Icon className="ty-icon" aria-hidden="true" focusable="false" />
           </span>
         ) : null}
-        <div className="fk-page-header__text">
+        <div className="ty-page-header__text">
           {textParts.map(([slot, node]) => (
             <SlotFragment key={slot}>{node}</SlotFragment>
           ))}
         </div>
-        {props.actions ? <div className="fk-page-header__actions">{props.actions}</div> : null}
+        {props.actions ? <div className="ty-page-header__actions">{props.actions}</div> : null}
       </div>
-      {props.children ? <div className="fk-page-header__extra">{props.children}</div> : null}
+      {props.children ? <div className="ty-page-header__extra">{props.children}</div> : null}
     </div>
   )
 }

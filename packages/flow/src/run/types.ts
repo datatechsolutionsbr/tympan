@@ -1,7 +1,7 @@
 // Words and shapes the run group speaks: stored runs as the host returns
 // them, the live event stream, and the status vocabulary shown on screen.
 
-import type { ActorKind } from '@fakhir/ui'
+import type { ActorKind } from '@datatechsolutions/tympan'
 
 /** Status word every run view shows (always beside an icon). */
 export type RunWord = 'idle' | 'pending' | 'running' | 'completed' | 'failed' | 'skipped' | 'restored' | 'unknown'

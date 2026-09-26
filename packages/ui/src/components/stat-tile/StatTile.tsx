@@ -35,7 +35,7 @@ export interface StatTileProps {
 
 function Figure({ value, live }: { value: string | number; live: boolean }) {
   return (
-    <span className="fk-stat-tile__value" {...(live ? { 'aria-live': 'polite' as const, 'aria-atomic': true } : {})}>
+    <span className="ty-stat-tile__value" {...(live ? { 'aria-live': 'polite' as const, 'aria-atomic': true } : {})}>
       {value}
     </span>
   )
@@ -45,11 +45,11 @@ function Explain({ label, explanation }: { label: string; explanation: StatTileE
   const m = useMessages().statTile
   return (
     <Popover triggerLabel={m.explain(label)} title={explanation.title} placement="bottom" align="end">
-      {explanation.body ? <p className="fk-stat-tile__explain-body">{explanation.body}</p> : null}
+      {explanation.body ? <p className="ty-stat-tile__explain-body">{explanation.body}</p> : null}
       {explanation.blocks?.length ? (
-        <dl className="fk-stat-tile__blocks">
+        <dl className="ty-stat-tile__blocks">
           {explanation.blocks.map((b, i) => (
-            <div key={`${b.label}-${i}`} className="fk-stat-tile__block">
+            <div key={`${b.label}-${i}`} className="ty-stat-tile__block">
               <dt>{b.label}</dt>
               <dd>
                 <code>{b.text}</code>
@@ -74,27 +74,27 @@ export function StatTile(props: StatTileProps) {
 
   const face = (
     <>
-      <span className="fk-stat-tile__top">
+      <span className="ty-stat-tile__top">
         {props.icon ? (
-          <span className="fk-stat-tile__icon" aria-hidden="true">
+          <span className="ty-stat-tile__icon" aria-hidden="true">
             {props.icon}
           </span>
         ) : null}
-        {props.qualifier ? <span className="fk-stat-tile__qualifier">{props.qualifier}</span> : null}
-        {toggles && selected ? <Check className="fk-stat-tile__check" aria-hidden="true" focusable="false" /> : null}
+        {props.qualifier ? <span className="ty-stat-tile__qualifier">{props.qualifier}</span> : null}
+        {toggles && selected ? <Check className="ty-stat-tile__check" aria-hidden="true" focusable="false" /> : null}
       </span>
       <Figure value={value} live={live} />
-      <span className="fk-stat-tile__label">{label}</span>
+      <span className="ty-stat-tile__label">{label}</span>
       {tone === 'attention' || filtered ? (
-        <span className="fk-stat-tile__marks">
+        <span className="ty-stat-tile__marks">
           {tone === 'attention' ? (
-            <span className="fk-stat-tile__mark" data-mark="attention">
+            <span className="ty-stat-tile__mark" data-mark="attention">
               <CircleAlert aria-hidden="true" focusable="false" />
               {m.attention}
             </span>
           ) : null}
           {filtered ? (
-            <span className="fk-stat-tile__mark" data-mark="filtered">
+            <span className="ty-stat-tile__mark" data-mark="filtered">
               <Filter aria-hidden="true" focusable="false" />
               {m.filtered}
             </span>
@@ -109,18 +109,18 @@ export function StatTile(props: StatTileProps) {
     .join(', ')
 
   return (
-    <div className={cx('fk-stat-tile', props.className)} data-tone={tone} data-interactive={toggles || undefined}>
+    <div className={cx('ty-stat-tile', props.className)} data-tone={tone} data-interactive={toggles || undefined}>
       {toggles ? (
-        <ToggleButton className="fk-stat-tile__face" isSelected={selected} onChange={() => props.onPress?.()} aria-label={name}>
+        <ToggleButton className="ty-stat-tile__face" isSelected={selected} onChange={() => props.onPress?.()} aria-label={name}>
           {face}
         </ToggleButton>
       ) : (
-        <div className="fk-stat-tile__face" role="group" aria-label={name}>
+        <div className="ty-stat-tile__face" role="group" aria-label={name}>
           {face}
         </div>
       )}
       {props.explanation ? (
-        <span className="fk-stat-tile__explain">
+        <span className="ty-stat-tile__explain">
           <Explain label={label} explanation={props.explanation} />
         </span>
       ) : null}

@@ -51,16 +51,16 @@ export function DeltaMark(props: {
   const Glyph = GLYPH[dir]
   return (
     <span
-      className={cx('fk-delta', props.className)}
+      className={cx('ty-delta', props.className)}
       data-trend={props.trend}
       data-sentiment={props.sentiment}
       data-appearance={props.appearance ?? 'inline'}
       data-size={props.size ?? 'small'}
     >
       {/* Diagonal and flat arrows point along the reading direction: mirrored in RTL (up stays up). */}
-      <Glyph className="fk-delta__glyph fk-mirror-rtl" aria-hidden="true" focusable="false" />
-      <span className="fk-visually-hidden">{words[props.trend]} </span>
-      {props.text ? <span className="fk-delta__value">{props.text}</span> : null}
+      <Glyph className="ty-delta__glyph ty-mirror-rtl" aria-hidden="true" focusable="false" />
+      <span className="ty-visually-hidden">{words[props.trend]} </span>
+      {props.text ? <span className="ty-delta__value">{props.text}</span> : null}
     </span>
   )
 }

@@ -109,13 +109,13 @@ function Entry({ notice, now, onDismiss, buttonRef }: { notice: Notice; now: num
   const copy = useMessages().notificationCenter
   const Glyph = TONE_GLYPH[notice.tone]
   return (
-    <li className="fk-notification-center__entry" data-tone={notice.tone}>
-      <Glyph className="fk-icon fk-notification-center__glyph" aria-hidden="true" focusable="false" />
-      <div className="fk-notification-center__text">
-        <p className="fk-notification-center__tone">{copy.tone[notice.tone]}</p>
-        <p className="fk-notification-center__title">{notice.title}</p>
-        {notice.message ? <p className="fk-notification-center__message">{notice.message}</p> : null}
-        <p className="fk-notification-center__time">{relativeNoticeTime(notice.createdAt, now, copy.time)}</p>
+    <li className="ty-notification-center__entry" data-tone={notice.tone}>
+      <Glyph className="ty-icon ty-notification-center__glyph" aria-hidden="true" focusable="false" />
+      <div className="ty-notification-center__text">
+        <p className="ty-notification-center__tone">{copy.tone[notice.tone]}</p>
+        <p className="ty-notification-center__title">{notice.title}</p>
+        {notice.message ? <p className="ty-notification-center__message">{notice.message}</p> : null}
+        <p className="ty-notification-center__time">{relativeNoticeTime(notice.createdAt, now, copy.time)}</p>
       </div>
       <Button
         ref={buttonRef}
@@ -172,8 +172,8 @@ export function NotificationCenter({ className }: NotificationCenterProps) {
   }
 
   return (
-    <span className={cx('fk-notification-center', className)}>
-      <span className="fk-notification-center__bell">
+    <span className={cx('ty-notification-center', className)}>
+      <span className="ty-notification-center__bell">
         <Button
           variant="quiet"
           iconOnly
@@ -185,12 +185,12 @@ export function NotificationCenter({ className }: NotificationCenterProps) {
         />
         <CountBadge count={center.unseenCount} />
       </span>
-      <ModalOverlay className="fk-notification-center__backdrop" isOpen={center.isOpen} onOpenChange={(o) => !o && center.close()} isDismissable>
-        <Modal className="fk-notification-center__drawer">
-          <Dialog className="fk-notification-center__dialog">
-            <header className="fk-notification-center__head">
-              <Bell className="fk-icon" aria-hidden="true" focusable="false" />
-              <Heading slot="title" level={2} ref={focus.titleRef} tabIndex={-1} className="fk-notification-center__heading">
+      <ModalOverlay className="ty-notification-center__backdrop" isOpen={center.isOpen} onOpenChange={(o) => !o && center.close()} isDismissable>
+        <Modal className="ty-notification-center__drawer">
+          <Dialog className="ty-notification-center__dialog">
+            <header className="ty-notification-center__head">
+              <Bell className="ty-icon" aria-hidden="true" focusable="false" />
+              <Heading slot="title" level={2} ref={focus.titleRef} tabIndex={-1} className="ty-notification-center__heading">
                 {copy.title}
               </Heading>
               {center.history.length > 0 ? (
@@ -201,12 +201,12 @@ export function NotificationCenter({ className }: NotificationCenterProps) {
               <Button variant="quiet" size="compact" shape="circle" iconOnly accessibleLabel={closeLabel} leadingIcon={<X />} onPress={center.close} />
             </header>
             {center.history.length === 0 ? (
-              <div className="fk-notification-center__empty">
-                <BellOff className="fk-icon" aria-hidden="true" focusable="false" />
+              <div className="ty-notification-center__empty">
+                <BellOff className="ty-icon" aria-hidden="true" focusable="false" />
                 <p>{copy.empty}</p>
               </div>
             ) : (
-              <ul className="fk-notification-center__list">
+              <ul className="ty-notification-center__list">
                 {center.history.map((notice, index) => (
                   <Entry
                     key={notice.id}

@@ -4,7 +4,7 @@
 
 import { useId } from 'react'
 import { CircleCheck, CircleSlash } from 'lucide-react'
-import { Tag } from '@fakhir/ui'
+import { Tag } from '@datatechsolutions/tympan'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { FlowNode, LayoutDirection } from '../model/types'
 import { ConnectionPorts } from './ConnectionPorts'
@@ -158,19 +158,19 @@ export function DataSourceNode(props: DataSourceNodeProps) {
       badges={dialect && density === 'detailed' ? <NodeBadge>{dialect}</NodeBadge> : undefined}
       meta={
         configured ? (
-          <span className="fk-datasource-node__meta" id={detailId}>
+          <span className="ty-datasource-node__meta" id={detailId}>
             {showConnection ? (
-              <span className="fk-datasource-node__connection" data-connected={source?.connected ? 'true' : 'false'}>
+              <span className="ty-datasource-node__connection" data-connected={source?.connected ? 'true' : 'false'}>
                 {source?.connected ? <CircleCheck aria-hidden="true" focusable="false" /> : <CircleSlash aria-hidden="true" focusable="false" />}
                 {connectionWord}
               </span>
             ) : null}
             {readOnly ? <Tag size="small">{l.sample}</Tag> : null}
-            {counts.length ? <span className="fk-datasource-node__counts">{counts.join(' · ')}</span> : null}
+            {counts.length ? <span className="ty-datasource-node__counts">{counts.join(' · ')}</span> : null}
           </span>
         ) : undefined
       }
-      className="fk-flow-node fk-datasource-node"
+      className="ty-flow-node ty-datasource-node"
     >
       <ConnectionPorts nodeId={id} nodeLabel={title} inputs={k.inputs} outputs={k.outputs} tone={k.tone} preview={preview} />
       <NodeRunIndicator nodeId={id} kind="datasource" nodeLabel={title} />

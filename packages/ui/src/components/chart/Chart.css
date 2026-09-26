@@ -1,214 +1,214 @@
 /* Chart (spec: wave-2/chart.md; design direction §2.2, §2.3, §2.7, §5). */
-@layer fakhir.components {
-  .fk-chart {
-    --fk-chart-ink: var(--fk-ink-3);
+@layer tympan.components {
+  .ty-chart {
+    --ty-chart-ink: var(--ty-ink-3);
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
     margin: 0;
     min-inline-size: 0;
   }
 
-  .fk-chart__caption {
+  .ty-chart__caption {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
   }
-  .fk-chart__title {
-    color: var(--fk-ink);
-    font-family: var(--fk-font-serif);
-    font-size: var(--fk-font-size-h3);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-h3);
+  .ty-chart__title {
+    color: var(--ty-ink);
+    font-family: var(--ty-font-serif);
+    font-size: var(--ty-font-size-h3);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-h3);
   }
-  .fk-chart__subtitle {
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+  .ty-chart__subtitle {
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
-  .fk-chart__finding {
-    max-inline-size: var(--fk-measure-summary);
-    color: var(--fk-ink-2);
-    font-size: var(--fk-font-size-body);
-    line-height: var(--fk-font-line-height-body);
+  .ty-chart__finding {
+    max-inline-size: var(--ty-measure-summary);
+    color: var(--ty-ink-2);
+    font-size: var(--ty-font-size-body);
+    line-height: var(--ty-font-line-height-body);
   }
 
-  .fk-chart__tools {
+  .ty-chart__tools {
     display: flex;
     justify-content: flex-end;
   }
 
-  .fk-chart__legend {
+  .ty-chart__legend {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--fk-space-2) var(--fk-space-4);
+    gap: var(--ty-space-2) var(--ty-space-4);
     margin: 0;
     padding: 0;
     list-style: none;
   }
-  .fk-chart__legend-item {
+  .ty-chart__legend-item {
     display: inline-flex;
     align-items: center;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
-  .fk-chart__swatch {
+  .ty-chart__swatch {
     inline-size: 24px;
     block-size: 12px;
     stroke: currentColor;
     stroke-width: 3;
   }
-  .fk-chart__legend-name {
-    color: var(--fk-ink-2);
-    font-size: var(--fk-font-size-meta);
+  .ty-chart__legend-name {
+    color: var(--ty-ink-2);
+    font-size: var(--ty-font-size-meta);
   }
 
-  .fk-chart__plot {
+  .ty-chart__plot {
     position: relative;
-    border-radius: var(--fk-radius-control);
+    border-radius: var(--ty-radius-control);
     outline: none;
     touch-action: pan-y;
   }
-  .fk-chart__plot:focus-visible {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-chart__plot:focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
-  .fk-chart__svg {
+  .ty-chart__svg {
     display: block;
     inline-size: 100%;
     block-size: auto;
     overflow: visible;
   }
 
-  .fk-chart__grid {
-    stroke: var(--fk-line);
+  .ty-chart__grid {
+    stroke: var(--ty-line);
     stroke-width: 1;
   }
-  .fk-chart__baseline {
-    stroke: var(--fk-line-strong);
+  .ty-chart__baseline {
+    stroke: var(--ty-line-strong);
     stroke-width: 1;
   }
-  .fk-chart__tick {
-    fill: var(--fk-chart-ink);
-    font-family: var(--fk-font-sans);
+  .ty-chart__tick {
+    fill: var(--ty-chart-ink);
+    font-family: var(--ty-font-sans);
     font-size: 12px;
     font-variant-numeric: tabular-nums;
   }
 
-  .fk-chart__line {
+  .ty-chart__line {
     fill: none;
     stroke: currentColor;
     stroke-width: 2;
     stroke-linejoin: round;
     stroke-linecap: round;
   }
-  .fk-chart__area {
+  .ty-chart__area {
     fill: currentColor;
     fill-opacity: 0.16;
     stroke: none;
   }
-  .fk-chart__mark {
+  .ty-chart__mark {
     fill: currentColor;
-    stroke: var(--fk-surface-solid);
+    stroke: var(--ty-surface-solid);
     stroke-width: 1;
   }
-  .fk-chart__bar {
+  .ty-chart__bar {
     stroke-width: 0;
   }
-  .fk-chart__bar[data-overlap] {
+  .ty-chart__bar[data-overlap] {
     fill-opacity: 0.55;
   }
-  .fk-chart__mark[data-active] {
-    stroke: var(--fk-ink);
+  .ty-chart__mark[data-active] {
+    stroke: var(--ty-ink);
     stroke-width: 2;
   }
 
-  .fk-chart__annotation line {
-    stroke: var(--fk-ink-3);
+  .ty-chart__annotation line {
+    stroke: var(--ty-ink-3);
     stroke-width: 1;
     stroke-dasharray: 3 3;
   }
-  .fk-chart__annotation text {
-    fill: var(--fk-ink-2);
-    font-family: var(--fk-font-sans);
+  .ty-chart__annotation text {
+    fill: var(--ty-ink-2);
+    font-family: var(--ty-font-sans);
     font-size: 12px;
   }
 
-  .fk-chart__readout {
+  .ty-chart__readout {
     position: absolute;
-    inset-block-start: var(--fk-space-2);
+    inset-block-start: var(--ty-space-2);
     translate: -50% 0;
-    padding: var(--fk-space-1) var(--fk-space-2);
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-surface-raised);
-    box-shadow: var(--fk-shadow-floating);
-    color: var(--fk-ink);
-    font-size: var(--fk-font-size-meta);
+    padding: var(--ty-space-1) var(--ty-space-2);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-surface-raised);
+    box-shadow: var(--ty-shadow-floating);
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-meta);
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
     pointer-events: none;
   }
-  .fk-chart__readout[data-edge='end'] {
+  .ty-chart__readout[data-edge='end'] {
     translate: -100% 0;
   }
-  .fk-chart__readout[data-edge='start'] {
+  .ty-chart__readout[data-edge='start'] {
     translate: 0 0;
   }
   /* The bubble is placed from the inline start; its own shift mirrors in RTL. */
-  [dir='rtl'] .fk-chart__readout {
+  [dir='rtl'] .ty-chart__readout {
     translate: 50% 0;
   }
-  [dir='rtl'] .fk-chart__readout[data-edge='end'] {
+  [dir='rtl'] .ty-chart__readout[data-edge='end'] {
     translate: 100% 0;
   }
-  [dir='rtl'] .fk-chart__readout[data-edge='start'] {
+  [dir='rtl'] .ty-chart__readout[data-edge='start'] {
     translate: 0 0;
   }
 
-  .fk-chart__missing {
-    color: var(--fk-ink-3);
+  .ty-chart__missing {
+    color: var(--ty-ink-3);
   }
 
   /* No drawing animation anywhere; nothing to remove beyond transitions. */
   @media (prefers-reduced-motion: reduce) {
-    .fk-chart * {
+    .ty-chart * {
       transition: none;
       animation: none;
     }
   }
 
   @media (prefers-reduced-transparency: reduce) {
-    .fk-chart__readout {
-      background: var(--fk-surface-raised-solid);
+    .ty-chart__readout {
+      background: var(--ty-surface-raised-solid);
     }
   }
 
   @media (forced-colors: active) {
-    .fk-chart__legend-item,
-    .fk-chart__marks g {
+    .ty-chart__legend-item,
+    .ty-chart__marks g {
       color: CanvasText;
     }
-    .fk-chart__mark {
+    .ty-chart__mark {
       stroke: Canvas;
     }
-    .fk-chart__marks g[data-index='1'] .fk-chart__bar,
-    .fk-chart__marks g[data-index='3'] .fk-chart__bar {
+    .ty-chart__marks g[data-index='1'] .ty-chart__bar,
+    .ty-chart__marks g[data-index='3'] .ty-chart__bar {
       fill: Canvas;
       stroke: CanvasText;
       stroke-width: 1.5;
     }
-    .fk-chart__mark[data-active] {
+    .ty-chart__mark[data-active] {
       fill: Highlight;
       stroke: Highlight;
     }
-    .fk-chart__grid,
-    .fk-chart__baseline {
+    .ty-chart__grid,
+    .ty-chart__baseline {
       stroke: GrayText;
     }
-    .fk-chart__tick {
+    .ty-chart__tick {
       fill: CanvasText;
     }
-    .fk-chart__readout {
+    .ty-chart__readout {
       border-color: CanvasText;
     }
   }

@@ -5,7 +5,7 @@ export type ThemeMode = 'system' | 'light' | 'dark'
 export type ThemeDensity = 'compact' | 'default' | 'comfortable'
 
 export interface ThemeState {
-  /** Token theme (`fakhir`, `neutral`, `high-contrast` or a generated one). */
+  /** Token theme (`tympan`, `fakhir`, `neutral`, `high-contrast` or a generated one). */
   theme: string
   mode: ThemeMode
   /** `mode` with `system` resolved through `prefers-color-scheme`. */
@@ -83,13 +83,13 @@ function useControllable<T>(value: T | undefined, initial: T, onChange?: (v: T) 
 }
 
 /**
- * Theming root. Sets `data-fk-theme`, `data-fk-mode` and `data-fk-density`,
+ * Theming root. Sets `data-ty-theme`, `data-ty-mode` and `data-ty-density`,
  * which the token stylesheet reads; no styles are injected at runtime.
  */
 export function ThemeProvider(props: ThemeProviderProps) {
   const { target = 'document', storageKey, className, children } = props
   const stored = useMemo(() => readStored(storageKey), [storageKey])
-  const [theme, setTheme] = useControllable(props.theme, stored.theme ?? props.defaultTheme ?? 'fakhir', props.onThemeChange)
+  const [theme, setTheme] = useControllable(props.theme, stored.theme ?? props.defaultTheme ?? 'tympan', props.onThemeChange)
   const [mode, setMode] = useControllable<ThemeMode>(props.mode, stored.mode ?? props.defaultMode ?? 'system', props.onModeChange)
   const [density, setDensity] = useControllable<ThemeDensity>(
     props.density,
@@ -106,9 +106,9 @@ export function ThemeProvider(props: ThemeProviderProps) {
   useEffect(() => {
     if (target !== 'document' || typeof document === 'undefined') return
     const el = document.documentElement
-    el.setAttribute('data-fk-theme', theme)
-    el.setAttribute('data-fk-mode', mode)
-    el.setAttribute('data-fk-density', density)
+    el.setAttribute('data-ty-theme', theme)
+    el.setAttribute('data-ty-mode', mode)
+    el.setAttribute('data-ty-density', density)
   }, [target, theme, mode, density])
 
   const value = useMemo<ThemeState>(
@@ -119,7 +119,7 @@ export function ThemeProvider(props: ThemeProviderProps) {
   return (
     <ThemeContext.Provider value={value}>
       {target === 'scope' ? (
-        <div className={className ? `fk-theme-scope ${className}` : 'fk-theme-scope'} data-fk-theme={theme} data-fk-mode={mode} data-fk-density={density}>
+        <div className={className ? `ty-theme-scope ${className}` : 'ty-theme-scope'} data-ty-theme={theme} data-ty-mode={mode} data-ty-density={density}>
           {children}
         </div>
       ) : (
@@ -142,7 +142,7 @@ export function useTheme(): ThemeState {
  * wrong theme). It only sets attributes; it reads the same key as
  * `ThemeProvider storageKey`.
  */
-export function themeInitScript(storageKey = 'fk-theme', defaults: Stored = {}): string {
-  const d = JSON.stringify({ theme: defaults.theme ?? 'fakhir', mode: defaults.mode ?? 'system', density: defaults.density ?? 'default' })
-  return `(function(){try{var d=${d};var s=JSON.parse(localStorage.getItem(${JSON.stringify(storageKey)})||'{}');var e=document.documentElement;e.setAttribute('data-fk-theme',s.theme||d.theme);e.setAttribute('data-fk-mode',s.mode||d.mode);e.setAttribute('data-fk-density',s.density||d.density);}catch(_){}})();`
+export function themeInitScript(storageKey = 'ty-theme', defaults: Stored = {}): string {
+  const d = JSON.stringify({ theme: defaults.theme ?? 'tympan', mode: defaults.mode ?? 'system', density: defaults.density ?? 'default' })
+  return `(function(){try{var d=${d};var s=JSON.parse(localStorage.getItem(${JSON.stringify(storageKey)})||'{}');var e=document.documentElement;e.setAttribute('data-ty-theme',s.theme||d.theme);e.setAttribute('data-ty-mode',s.mode||d.mode);e.setAttribute('data-ty-density',s.density||d.density);}catch(_){}})();`
 }

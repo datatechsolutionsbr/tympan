@@ -54,7 +54,7 @@ export const Checkbox = forwardRef<HTMLLabelElement, CheckboxProps>(function Che
   const describedBy = [descId, errorId].filter(Boolean).join(' ') || undefined
   const appeared = useAppearedAfterMount(!!errorMessage)
   return (
-    <div className={cx('fk-checkbox', className)} data-appearance={appearance}>
+    <div className={cx('ty-checkbox', className)} data-appearance={appearance}>
       <AriaCheckbox
         ref={ref}
         id={id}
@@ -70,22 +70,22 @@ export const Checkbox = forwardRef<HTMLLabelElement, CheckboxProps>(function Che
         aria-label={label ? undefined : accessibleLabel}
         aria-labelledby={labelId}
         aria-describedby={describedBy}
-        className="fk-checkbox__row"
+        className="ty-checkbox__row"
       >
         {({ isSelected: checked, isIndeterminate: mixed }) => (
           <>
-            <span className="fk-checkbox__indicator" aria-hidden="true">
-              {mixed ? <Minus className="fk-icon" focusable="false" /> : checked ? <Check className="fk-icon" focusable="false" /> : null}
+            <span className="ty-checkbox__indicator" aria-hidden="true">
+              {mixed ? <Minus className="ty-icon" focusable="false" /> : checked ? <Check className="ty-icon" focusable="false" /> : null}
             </span>
             {label || description != null ? (
-              <span className="fk-checkbox__text">
+              <span className="ty-checkbox__text">
                 {label ? (
-                  <span id={labelId} className="fk-checkbox__label">
+                  <span id={labelId} className="ty-checkbox__label">
                     {label}
                   </span>
                 ) : null}
                 {description != null ? (
-                  <span id={descId} className="fk-checkbox__description">
+                  <span id={descId} className="ty-checkbox__description">
                     {description}
                   </span>
                 ) : null}
@@ -95,8 +95,8 @@ export const Checkbox = forwardRef<HTMLLabelElement, CheckboxProps>(function Che
         )}
       </AriaCheckbox>
       {errorMessage ? (
-        <p id={errorId} className="fk-checkbox__error" aria-live={appeared ? 'polite' : undefined}>
-          <CircleAlert className="fk-icon" aria-hidden="true" focusable="false" />
+        <p id={errorId} className="ty-checkbox__error" aria-live={appeared ? 'polite' : undefined}>
+          <CircleAlert className="ty-icon" aria-hidden="true" focusable="false" />
           <span>{errorMessage}</span>
         </p>
       ) : null}
@@ -139,7 +139,7 @@ export function CheckboxGroup({
   const errorId = errorMessage ? `${base}-error` : undefined
   return (
     <AriaCheckboxGroup
-      className={cx('fk-checkbox-group', className)}
+      className={cx('ty-checkbox-group', className)}
       value={value}
       defaultValue={defaultValue}
       onChange={onChange}
@@ -150,16 +150,16 @@ export function CheckboxGroup({
       aria-describedby={[descId, errorId].filter(Boolean).join(' ') || undefined}
       data-orientation={orientation}
     >
-      <Label className="fk-checkbox-group__label">{label}</Label>
+      <Label className="ty-checkbox-group__label">{label}</Label>
       {description != null ? (
-        <p id={descId} className="fk-checkbox-group__description">
+        <p id={descId} className="ty-checkbox-group__description">
           {description}
         </p>
       ) : null}
-      <div className="fk-checkbox-group__items">{children}</div>
+      <div className="ty-checkbox-group__items">{children}</div>
       {errorMessage ? (
-        <p id={errorId} className="fk-checkbox__error">
-          <CircleAlert className="fk-icon" aria-hidden="true" focusable="false" />
+        <p id={errorId} className="ty-checkbox__error">
+          <CircleAlert className="ty-icon" aria-hidden="true" focusable="false" />
           <span>{errorMessage}</span>
         </p>
       ) : null}

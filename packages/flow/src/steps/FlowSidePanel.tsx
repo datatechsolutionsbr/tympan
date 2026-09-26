@@ -6,7 +6,7 @@
 
 import { ArrowRight, Check, Ellipsis } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
-import { ActionMenu, Button, ListboxSelect, Switch, TextArea, TextField } from '@fakhir/ui'
+import { ActionMenu, Button, ListboxSelect, Switch, TextArea, TextField } from '@datatechsolutions/tympan'
 import { fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { FlowNode } from '../model/types'
 import { ShapeFlow } from './ShapeChip'
@@ -59,7 +59,7 @@ export function FlowSidePanel(p: FlowSidePanelProps) {
 
 function Fact({ label, value }: { label: string; value: string }) {
   return (
-    <div className="fk-flow-side__fact">
+    <div className="ty-flow-side__fact">
       <dt>{label}</dt>
       <dd>{value}</dd>
     </div>
@@ -75,12 +75,12 @@ function FlowOverview({ nodes, facts = {}, validation, onRunFlow, onValidate }: 
   const outputs = specs.filter((s): s is ReadyStep => s?.verb === 'output' && !!s.output).map((s) => s.output as DataShape)
   const num = (v: number) => new Intl.NumberFormat(locale).format(v)
   return (
-    <section className="fk-flow-side" aria-labelledby="fk-flow-side-title">
-      <span className="fk-flow-side__eyebrow">{w.eyebrowFlow}</span>
-      <h2 id="fk-flow-side-title" className="fk-flow-side__title">
+    <section className="ty-flow-side" aria-labelledby="ty-flow-side-title">
+      <span className="ty-flow-side__eyebrow">{w.eyebrowFlow}</span>
+      <h2 id="ty-flow-side-title" className="ty-flow-side__title">
         {facts.name ?? w.summaryTitle}
       </h2>
-      <dl className="fk-flow-side__facts">
+      <dl className="ty-flow-side__facts">
         {facts.version ? <Fact label={w.version} value={facts.version} /> : null}
         {facts.runsOn ? <Fact label={w.runsOn} value={facts.runsOn} /> : null}
         {facts.runsOverEdition !== undefined ? <Fact label={w.runs} value={num(facts.runsOverEdition)} /> : null}
@@ -91,9 +91,9 @@ function FlowOverview({ nodes, facts = {}, validation, onRunFlow, onValidate }: 
         ) : null}
         <Fact label={w.citable} value={outputs.length ? shapeCounts(outputs, rt.counts, locale) : w.none} />
       </dl>
-      <div className="fk-flow-side__stack">
+      <div className="ty-flow-side__stack">
         {onRunFlow ? (
-          <Button variant="primary" fullWidth leadingIcon={<ArrowRight className="fk-flow-side__arrow" />} onPress={onRunFlow}>
+          <Button variant="primary" fullWidth leadingIcon={<ArrowRight className="ty-flow-side__arrow" />} onPress={onRunFlow}>
             {w.runFlow}
           </Button>
         ) : null}
@@ -101,8 +101,8 @@ function FlowOverview({ nodes, facts = {}, validation, onRunFlow, onValidate }: 
           {w.validate}
         </Button>
       </div>
-      <p className="fk-flow-side__hint">{w.nothingSelected}</p>
-      <p className="fk-flow-side__status" role="status">
+      <p className="ty-flow-side__hint">{w.nothingSelected}</p>
+      <p className="ty-flow-side__status" role="status">
         {validation ?? ''}
       </p>
     </section>
@@ -124,9 +124,9 @@ function StepSettings({ node, spec, preview, locked, onTestStep, onRemove, onEdi
     onEdit(node.id, { [spec.configIn]: next })
   }
   return (
-    <section className="fk-flow-side" aria-labelledby="fk-flow-side-title" data-step={node.id}>
-      <div className="fk-flow-side__top">
-        <span className="fk-flow-side__eyebrow">{w.eyebrowStep}</span>
+    <section className="ty-flow-side" aria-labelledby="ty-flow-side-title" data-step={node.id}>
+      <div className="ty-flow-side__top">
+        <span className="ty-flow-side__eyebrow">{w.eyebrowStep}</span>
         <ActionMenu
           label={w.moreStep}
           trigger={<Button variant="quiet" size="compact" shape="circle" iconOnly accessibleLabel={w.moreStep} leadingIcon={<Ellipsis />} />}
@@ -137,13 +137,13 @@ function StepSettings({ node, spec, preview, locked, onTestStep, onRemove, onEdi
           onAction={(id) => (id === 'back' ? onBack() : onRemove(node.id))}
         />
       </div>
-      <h2 id="fk-flow-side-title" className="fk-flow-side__title" dir="auto">
+      <h2 id="ty-flow-side-title" className="ty-flow-side__title" dir="auto">
         {title}
       </h2>
       {spec && !spec.primitive ? <ShapeFlow inputs={spec.inputs} output={spec.output} words={rt.shapes} labels={w} /> : null}
-      <form className="fk-flow-side__form" onSubmit={(e) => e.preventDefault()} noValidate>
+      <form className="ty-flow-side__form" onSubmit={(e) => e.preventDefault()} noValidate>
         {problems[''] ? (
-          <p className="fk-flow-side__problem" role="alert">
+          <p className="ty-flow-side__problem" role="alert">
             {problems['']}
           </p>
         ) : null}
@@ -152,9 +152,9 @@ function StepSettings({ node, spec, preview, locked, onTestStep, onRemove, onEdi
         ))}
         <Draft label={w.stepName} value={typeof node.data.label === 'string' ? node.data.label : ''} placeholder={spec?.name ?? ''} disabled={!!locked} onCommit={(v) => onEdit(node.id, { label: v || undefined })} />
       </form>
-      <span className="fk-flow-side__eyebrow">{w.preview}</span>
+      <span className="ty-flow-side__eyebrow">{w.preview}</span>
       {preview && preview.rows.length ? (
-        <div className="fk-flow-side__preview">
+        <div className="ty-flow-side__preview">
           <table>
             <thead>
               <tr>
@@ -179,12 +179,12 @@ function StepSettings({ node, spec, preview, locked, onTestStep, onRemove, onEdi
           </table>
         </div>
       ) : (
-        <p className="fk-flow-side__hint">{w.noPreview}</p>
+        <p className="ty-flow-side__hint">{w.noPreview}</p>
       )}
       {!locked ? (
-        <div className="fk-flow-side__row">
+        <div className="ty-flow-side__row">
           {onTestStep ? (
-            <Button variant="secondary" leadingIcon={<ArrowRight className="fk-flow-side__arrow" />} onPress={() => onTestStep(node.id)}>
+            <Button variant="secondary" leadingIcon={<ArrowRight className="ty-flow-side__arrow" />} onPress={() => onTestStep(node.id)}>
               {w.testStep}
             </Button>
           ) : null}
@@ -212,15 +212,15 @@ function Field({ field, value, error, disabled, onCommit }: { field: StepField; 
   const req = field.required ? { required: true } : {}
   if (field.type === 'choice') {
     return (
-      <div className="fk-flow-side__field">
+      <div className="ty-flow-side__field">
         <ListboxSelect label={label} options={options} value={current || null} disabled={disabled} {...req} {...(error ? { errorMessage: error } : {})} onChange={(v) => v !== current && onCommit(v)} />
       </div>
     )
   }
   if (field.type === 'boolean') {
     return (
-      <div className="fk-flow-side__field">
-        <Switch label={label} isSelected={value === true} disabled={disabled} onChange={(on) => onCommit(on)} {...(error ? { description: <span className="fk-flow-side__problem">{error}</span> } : {})} />
+      <div className="ty-flow-side__field">
+        <Switch label={label} isSelected={value === true} disabled={disabled} onChange={(on) => onCommit(on)} {...(error ? { description: <span className="ty-flow-side__problem">{error}</span> } : {})} />
       </div>
     )
   }
@@ -281,7 +281,7 @@ function JsonDraft({ label, value, error, disabled, required, invalid, onCommit 
   }
   const shown = parseError ?? error
   return (
-    <div className="fk-flow-side__field" onBlur={commit}>
+    <div className="ty-flow-side__field" onBlur={commit}>
       <TextArea label={label} value={draft} onChange={setDraft} monospace autoGrow rows={3} maxRows={12} disabled={disabled} {...(required ? { required: true } : {})} {...(shown ? { errorMessage: shown } : {})} />
     </div>
   )
@@ -296,7 +296,7 @@ function Draft({ label, value, placeholder, numeric, hint, error, required, disa
   }
   return (
     <div
-      className="fk-flow-side__field"
+      className="ty-flow-side__field"
       onKeyDown={(e) => {
         if (e.key === 'Enter') commit()
       }}

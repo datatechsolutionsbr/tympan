@@ -38,7 +38,7 @@ export interface AuthBrandMessages {
 }
 
 export const authBrandEn: AuthBrandMessages = {
-  brand: { productName: 'Fakhir' },
+  brand: { productName: 'Tympan' },
   federatedSignIn: { continueWith: (p) => `Continue with ${p}`, groupLabel: 'Other ways to sign in' },
   providerMark: { otherProvider: 'Other provider' },
   upgradeGate: {
@@ -79,7 +79,7 @@ export const authBrandEn: AuthBrandMessages = {
 }
 
 export const authBrandPtBR: AuthBrandMessages = {
-  brand: { productName: 'Fakhir' },
+  brand: { productName: 'Tympan' },
   federatedSignIn: { continueWith: (p) => `Continuar com ${p}`, groupLabel: 'Outras formas de entrar' },
   providerMark: { otherProvider: 'Outro provedor' },
   upgradeGate: {
@@ -120,7 +120,7 @@ export const authBrandPtBR: AuthBrandMessages = {
 }
 
 export const authBrandEs: AuthBrandMessages = {
-  brand: { productName: 'Fakhir' },
+  brand: { productName: 'Tympan' },
   federatedSignIn: { continueWith: (p) => `Continuar con ${p}`, groupLabel: 'Otras formas de iniciar sesión' },
   providerMark: { otherProvider: 'Otro proveedor' },
   upgradeGate: {

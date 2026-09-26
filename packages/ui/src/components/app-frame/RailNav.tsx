@@ -23,13 +23,13 @@ export interface RailNavSectionProps {
 export function RailNavSection({ label, children, className }: RailNavSectionProps) {
   const labelId = useId()
   return (
-    <div className={cx('fk-rail-section', className)}>
+    <div className={cx('ty-rail-section', className)}>
       {label ? (
-        <p className="fk-rail-section__label" id={labelId} dir="auto">
+        <p className="ty-rail-section__label" id={labelId} dir="auto">
           {label}
         </p>
       ) : null}
-      <ul className="fk-rail-section__list" aria-labelledby={label ? labelId : undefined}>
+      <ul className="ty-rail-section__list" aria-labelledby={label ? labelId : undefined}>
         {children}
       </ul>
     </div>
@@ -52,10 +52,10 @@ export interface RailNavItemProps {
 function ItemBody({ icon: Glyph, label, count }: { icon?: IconComponent; label: string; count?: string }) {
   return (
     <>
-      {Glyph ? <Glyph className="fk-icon fk-rail-item__icon" aria-hidden="true" focusable="false" /> : null}
-      <span className="fk-rail-item__label" dir="auto">{label}</span>
+      {Glyph ? <Glyph className="ty-icon ty-rail-item__icon" aria-hidden="true" focusable="false" /> : null}
+      <span className="ty-rail-item__label" dir="auto">{label}</span>
       {count ? (
-        <span className="fk-rail-item__count" aria-hidden="true">
+        <span className="ty-rail-item__count" aria-hidden="true">
           {count}
         </span>
       ) : null}
@@ -70,9 +70,9 @@ export function RailNavItem(props: RailNavItemProps) {
   const name = props.count ? speech.join(props.label, props.countLabel ?? words.count(props.count)) : undefined
   const shown = props.count ? (props.count > 999 ? words.capped(speech.number(999)) : speech.number(props.count)) : undefined
   const body = <ItemBody icon={props.icon} label={props.label} count={shown} />
-  const shared = { className: 'fk-rail-item', 'aria-label': name, 'data-current': props.current || undefined }
+  const shared = { className: 'ty-rail-item', 'aria-label': name, 'data-current': props.current || undefined }
   return (
-    <li className="fk-rail-section__entry">
+    <li className="ty-rail-section__entry">
       {props.href ? (
         <AriaLink {...shared} href={props.href} onPress={props.onPress} aria-current={props.current ? 'page' : undefined}>
           {body}
@@ -107,12 +107,12 @@ export const RailContextButton = forwardRef<HTMLButtonElement, RailContextButton
 ) {
   const speech = useLocaleText()
   return (
-    <AriaButton ref={ref} className={cx('fk-rail-context', className)} onPress={onPress} aria-label={accessibleLabel ?? speech.join(scope, name)}>
-      <span className="fk-rail-context__lines">
-        <span className="fk-rail-context__scope" dir="auto">{scope}</span>
-        <span className="fk-rail-context__name" dir="auto">{name}</span>
+    <AriaButton ref={ref} className={cx('ty-rail-context', className)} onPress={onPress} aria-label={accessibleLabel ?? speech.join(scope, name)}>
+      <span className="ty-rail-context__lines">
+        <span className="ty-rail-context__scope" dir="auto">{scope}</span>
+        <span className="ty-rail-context__name" dir="auto">{name}</span>
       </span>
-      <ChevronsUpDown className="fk-icon fk-rail-context__glyph" aria-hidden="true" focusable="false" />
+      <ChevronsUpDown className="ty-icon ty-rail-context__glyph" aria-hidden="true" focusable="false" />
     </AriaButton>
   )
 })

@@ -42,7 +42,7 @@ function LocaleList(props: { locales: LocaleEntry[]; value: string; label: strin
   return (
     <ListBox
       aria-label={props.label}
-      className="fk-locale-picker__list"
+      className="ty-locale-picker__list"
       data-layout={props.grid ? 'grid' : 'list'}
       layout={props.grid ? 'grid' : 'stack'}
       items={props.locales.map((l) => ({ ...l, id: l.code }))}
@@ -52,21 +52,21 @@ function LocaleList(props: { locales: LocaleEntry[]; value: string; label: strin
       autoFocus
     >
       {(entry) => (
-        <ListBoxItem id={entry.code} textValue={entry.nativeName} className="fk-locale-picker__option">
+        <ListBoxItem id={entry.code} textValue={entry.nativeName} className="ty-locale-picker__option">
           {({ isSelected }) => (
             <>
               {entry.flag ? (
-                <span className="fk-locale-picker__flag" aria-hidden="true">
+                <span className="ty-locale-picker__flag" aria-hidden="true">
                   {entry.flag}
                 </span>
               ) : null}
-              <span className="fk-locale-picker__name" lang={entry.code}>
+              <span className="ty-locale-picker__name" lang={entry.code}>
                 {entry.nativeName}
               </span>
-              <span className="fk-locale-picker__code" aria-hidden="true">
+              <span className="ty-locale-picker__code" aria-hidden="true">
                 {shortOf(entry)}
               </span>
-              <Check className="fk-icon fk-locale-picker__check" aria-hidden="true" focusable="false" data-shown={isSelected || undefined} />
+              <Check className="ty-icon ty-locale-picker__check" aria-hidden="true" focusable="false" data-shown={isSelected || undefined} />
             </>
           )}
         </ListBoxItem>
@@ -93,14 +93,14 @@ export function LocalePicker(props: LocalePickerProps) {
   }
   const dialog = props.presentation === 'dialog'
   const body = (
-    <div className="fk-locale-picker__body">
+    <div className="ty-locale-picker__body">
       <LocaleList locales={props.locales} value={props.value} label={t.list} grid={dialog} onPick={pick} />
-      <p className="fk-locale-picker__footer">{t.current(currentName, current ? shortOf(current) : props.value)}</p>
+      <p className="ty-locale-picker__footer">{t.current(currentName, current ? shortOf(current) : props.value)}</p>
     </div>
   )
 
   return (
-    <span className={cx('fk-locale-picker', props.className)}>
+    <span className={cx('ty-locale-picker', props.className)}>
       {props.showTrigger === false ? null : (
         <Button
           variant="quiet"
@@ -108,9 +108,9 @@ export function LocalePicker(props: LocalePickerProps) {
           aria-haspopup="dialog"
           aria-expanded={open}
           onPress={() => setOpen(true)}
-          className="fk-locale-picker__trigger"
+          className="ty-locale-picker__trigger"
         >
-          <span className="fk-visually-hidden">{t.trigger(title, currentName)}</span>
+          <span className="ty-visually-hidden">{t.trigger(title, currentName)}</span>
           <span aria-hidden="true">{current?.flag ?? (current ? shortOf(current) : props.value)}</span>
         </Button>
       )}

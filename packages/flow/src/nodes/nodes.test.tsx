@@ -2,7 +2,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { ReactNode } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import { cssOf, mediaBlock } from '../../test/css'
 import { nodeKindCatalog } from '../catalog/kindCatalog'
@@ -35,7 +35,7 @@ function withStore(ui: ReactNode, store: FlowEditorStore = createFlowEditorStore
   return { store, ...render(<FlowEditorStateProvider store={store}>{ui}</FlowEditorStateProvider>) }
 }
 
-const card = (root: ParentNode = document) => root.querySelector('.fk-node-card__activator') as HTMLElement
+const card = (root: ParentNode = document) => root.querySelector('.ty-node-card__activator') as HTMLElement
 
 const node = (id: string, kind: string, data: Record<string, unknown> = {}, extra: Partial<FlowNode> = {}): FlowNode => ({ id, kind, position: { x: 0, y: 0 }, data, ...extra })
 
@@ -45,23 +45,23 @@ describe('GenericNode', () => {
     const { container } = render(<GenericNode id="g1" kind="geocode" onConfigure={() => {}} />)
     expect(card()).toHaveAccessibleName(/Geocode/)
     expect(screen.getAllByText('Geocode').length).toBeGreaterThan(0)
-    expect(container.querySelector('.fk-node-card__bubble svg')).not.toBeNull()
+    expect(container.querySelector('.ty-node-card__bubble svg')).not.toBeNull()
   })
 
   it('shows the per-instance label instead of the catalog label', () => {
     nodeKindCatalog.install([{ kind: 'code', label: 'Compute', category: 'Data' }])
     render(<GenericNode id="g1" kind="code" label="Count by stage" />)
     expect(screen.getByText('Count by stage')).toBeInTheDocument()
-    expect(screen.queryByText('Compute', { selector: '.fk-node-card__title' })).toBeNull()
+    expect(screen.queryByText('Compute', { selector: '.ty-node-card__title' })).toBeNull()
   })
 
   it('renders one labelled output port per dynamic output', () => {
     const { container } = render(
       <GenericNode id="g1" kind="switch" dynamicOutputs={[{ id: 'a', label: 'A' }, { id: 'b', label: 'B', tone: 'success' }, { id: 'c', label: 'C' }]} />,
     )
-    const outs = container.querySelectorAll('[data-fk-port-role="source"]')
+    const outs = container.querySelectorAll('[data-ty-port-role="source"]')
     expect(outs).toHaveLength(3)
-    expect([...outs].map((o) => o.getAttribute('data-fk-port-id'))).toEqual(['a', 'b', 'c'])
+    expect([...outs].map((o) => o.getAttribute('data-ty-port-id'))).toEqual(['a', 'b', 'c'])
     expect(screen.getByText('B')).toBeInTheDocument()
   })
 
@@ -107,17 +107,17 @@ describe('AgentNode and AgentIdentity', () => {
 
   it('derives the same generated mark from the name on every render', () => {
     const { container, rerender } = render(<AgentNode id="n1" agent={{ id: 'a', name: 'Stage counter' }} />)
-    const first = container.querySelector('.fk-agent-mark__generated')?.getAttribute('data-hash')
+    const first = container.querySelector('.ty-agent-mark__generated')?.getAttribute('data-hash')
     rerender(<AgentNode id="n1" agent={{ id: 'a', name: 'Stage counter' }} />)
     expect(first).toBeTruthy()
-    expect(container.querySelector('.fk-agent-mark__generated')?.getAttribute('data-hash')).toBe(first)
+    expect(container.querySelector('.ty-agent-mark__generated')?.getAttribute('data-hash')).toBe(first)
   })
 
   it('shows a problem card with the label and "not found" when the agent is missing, ports kept', () => {
     const { container } = render(<AgentNode id="n1" agent={null} label="Classifier" />)
     expect(screen.getByText('Classifier')).toBeInTheDocument()
     expect(screen.getByText(/not found/i)).toBeInTheDocument()
-    expect(container.querySelectorAll('[data-fk-port]').length).toBeGreaterThan(0)
+    expect(container.querySelectorAll('[data-ty-port]').length).toBeGreaterThan(0)
   })
 
   it('removes without opening', async () => {
@@ -131,7 +131,7 @@ describe('AgentNode and AgentIdentity', () => {
 
   it('makes the full model id available on focus', async () => {
     const { container } = render(<AgentNode id="n1" agent={agent} onOpen={() => {}} />)
-    const mark = container.querySelector('.fk-model-mark') as HTMLElement
+    const mark = container.querySelector('.ty-model-mark') as HTMLElement
     expect(mark).toHaveAccessibleName('model prov/family-2026')
     await expectNoAxeViolations(container)
   })
@@ -140,7 +140,7 @@ describe('AgentNode and AgentIdentity', () => {
     const { container } = render(<AgentIdentity agent={{ name: 'Coder', image: 'x.png' }} />)
     fireEvent.error(container.querySelector('img')!)
     expect(container.querySelector('img')).toBeNull()
-    expect(container.querySelector('.fk-agent-mark__bot')).not.toBeNull()
+    expect(container.querySelector('.ty-agent-mark__bot')).not.toBeNull()
     expect(screen.getByText('agent')).toBeInTheDocument()
   })
 
@@ -149,7 +149,7 @@ describe('AgentNode and AgentIdentity', () => {
     expect(screen.getByText('Reviewer')).toBeInTheDocument()
     expect(screen.getByText('p · m1')).toBeInTheDocument()
     rerender(<AgentIdentity agent={{ name: 'C', provider: 'p', model: 'm1' }} />)
-    expect(screen.getByText('p · m1')).toHaveClass('fk-agent-identity__secondary')
+    expect(screen.getByText('p · m1')).toHaveClass('ty-agent-identity__secondary')
   })
 
   it('agentTier maps ratings with thresholds and treats missing as the lowest', () => {
@@ -189,7 +189,7 @@ describe('RuleNode', () => {
 
   it('shows the problem card without rule or config', () => {
     const { container } = render(<RuleNode id="n" />)
-    expect(container.querySelector('.fk-node-card')).toHaveAttribute('data-problem', 'true')
+    expect(container.querySelector('.ty-node-card')).toHaveAttribute('data-problem', 'true')
   })
 })
 
@@ -215,7 +215,7 @@ describe('NoteNode', () => {
         <NoteNode id="n" text="x" tone="purple" onTextChange={() => {}} />
       </div>,
     )
-    expect(container.querySelector('.fk-note-node')).toHaveAttribute('data-tone', 'categorical-1')
+    expect(container.querySelector('.ty-note-node')).toHaveAttribute('data-tone', 'categorical-1')
     await userEvent.dblClick(screen.getByText('x'))
     shortcut.mockClear()
     await userEvent.keyboard('a')
@@ -262,7 +262,7 @@ describe('GroupNode', () => {
   it('has no delete control without onRemove and no resize handle while locked', () => {
     const { container } = render(<GroupNode id="g" name="Intake" onToggleExpanded={() => {}} onResize={() => {}} selected locked />)
     expect(screen.queryByRole('button', { name: /Remove|Delete/i })).toBeNull()
-    expect(container.querySelector('.fk-group-node__resize')).toBeNull()
+    expect(container.querySelector('.ty-group-node__resize')).toBeNull()
   })
 })
 
@@ -271,23 +271,23 @@ describe('DataSourceNode', () => {
 
   it('reads the counts in order and omits zero counts', () => {
     const { container, rerender } = render(<DataSourceNode id="d" config={config} source={{ name: 'Census' }} />)
-    const text = container.querySelector('.fk-datasource-node__counts')!.textContent!
+    const text = container.querySelector('.ty-datasource-node__counts')!.textContent!
     expect(text.indexOf('3')).toBeLessThan(text.indexOf('2'))
     expect(text).toMatch(/100/)
     rerender(<DataSourceNode id="d" config={{ ...config, filters: [] }} source={{ name: 'Census' }} />)
-    expect(container.querySelector('.fk-datasource-node__counts')!.textContent).not.toMatch(/filter/i)
+    expect(container.querySelector('.ty-datasource-node__counts')!.textContent).not.toMatch(/filter/i)
   })
 
   it('shows the problem card with both ports when not configured', () => {
     const { container } = render(<DataSourceNode id="d" config={null} />)
-    expect(container.querySelector('.fk-node-card')).toHaveAttribute('data-problem', 'true')
-    expect(container.querySelectorAll('[data-fk-port]')).toHaveLength(2)
+    expect(container.querySelector('.ty-node-card')).toHaveAttribute('data-problem', 'true')
+    expect(container.querySelectorAll('[data-ty-port]')).toHaveLength(2)
   })
 
   it('read-only sample: "sample" shown and no connection indicator', () => {
     const { container } = render(<DataSourceNode id="d" config={config} readOnly source={{ name: 'S', connected: true }} />)
     expect(screen.getAllByText(/sample/i).length).toBeGreaterThan(0)
-    expect(container.querySelector('.fk-datasource-node__connection')).toBeNull()
+    expect(container.querySelector('.ty-datasource-node__connection')).toBeNull()
   })
 
   it('uses the neutral glyph without a mark, hides a registered mark from AT, falls back when it fails', () => {
@@ -296,7 +296,7 @@ describe('DataSourceNode', () => {
     expect(screen.getAllByText('PostgreSQL').length).toBeGreaterThan(0)
     registerSourceMarks({ postgresql: { src: 'pg.svg' } as never })
     rerender(<DataSourceNode id="d2" config={config} dialects={[{ key: 'postgresql', displayName: 'PostgreSQL' }]} />)
-    const img = container.querySelector('img.fk-source-mark')!
+    const img = container.querySelector('img.ty-source-mark')!
     expect(img).toHaveAttribute('aria-hidden', 'true')
     fireEvent.error(img)
     expect(container.querySelector('[data-mark="fallback"]')).not.toBeNull()
@@ -311,7 +311,7 @@ describe('DataSourceNode', () => {
 
   it('reads "not connected" with its icon', () => {
     const { container } = render(<DataSourceNode id="d" config={config} source={{ name: 'S', connected: false }} />)
-    const ind = container.querySelector('.fk-datasource-node__connection')!
+    const ind = container.querySelector('.ty-datasource-node__connection')!
     expect(ind).toHaveTextContent(/not connected/i)
     expect(ind.querySelector('svg')).not.toBeNull()
   })
@@ -324,9 +324,9 @@ describe('NodeRunIndicator', () => {
 
   it('renders nothing without a result; success shows the mark and "340 ms"', () => {
     const { store, container } = withStore(<NodeRunIndicator nodeId="n" />)
-    expect(container.querySelector('.fk-node-run-indicator')).toBeNull()
+    expect(container.querySelector('.ty-node-run-indicator')).toBeNull()
     setResult(store, { status: 'success', durationMs: 340 })
-    expect(container.querySelector('.fk-node-run-indicator svg')).not.toBeNull()
+    expect(container.querySelector('.ty-node-run-indicator svg')).not.toBeNull()
     expect(screen.getByText('340 ms')).toBeInTheDocument()
   })
 
@@ -355,8 +355,8 @@ describe('NodeRunIndicator', () => {
 
   it('stops spinning under reduced motion and keeps glyphs in forced colours', () => {
     const css = cssOf('nodes/flow-nodes.css')
-    expect(mediaBlock(css, /\(prefers-reduced-motion: reduce\)/)).toMatch(/fk-node-run-indicator__mark[^}]*\{[^}]*animation:\s*none/)
-    expect(mediaBlock(css, /\(forced-colors: active\)/)).toMatch(/\.fk-node-run-indicator svg[^}]*\{[^}]*CanvasText/)
+    expect(mediaBlock(css, /\(prefers-reduced-motion: reduce\)/)).toMatch(/ty-node-run-indicator__mark[^}]*\{[^}]*animation:\s*none/)
+    expect(mediaBlock(css, /\(forced-colors: active\)/)).toMatch(/\.ty-node-run-indicator svg[^}]*\{[^}]*CanvasText/)
   })
 })
 
@@ -369,16 +369,16 @@ describe('ConnectionPorts', () => {
 
   it('spreads a port set of three at quarters with prefixed ids', () => {
     const { container } = render(<PortSet count={3} idPrefix="case" direction="output" side="end" nodeId="n" nodeLabel="Check stock" />)
-    const ports = [...container.querySelectorAll('[data-fk-port]')]
-    expect(ports.map((p) => p.getAttribute('data-fk-port-id'))).toEqual(['case-0', 'case-1', 'case-2'])
-    expect(ports.map((p) => (p as HTMLElement).style.getPropertyValue('--fk-port-along'))).toEqual(['25%', '50%', '75%'])
+    const ports = [...container.querySelectorAll('[data-ty-port]')]
+    expect(ports.map((p) => p.getAttribute('data-ty-port-id'))).toEqual(['case-0', 'case-1', 'case-2'])
+    expect(ports.map((p) => (p as HTMLElement).style.getPropertyValue('--ty-port-along'))).toEqual(['25%', '50%', '75%'])
   })
 
   it('names ports and does not make them tab stops', () => {
     const p = portsOf(node('n', 'if-else'), { ports: () => undefined }, 'right')
     const { container } = render(<ConnectionPorts nodeId="n" nodeLabel="Check stock" inputs={p.inputs} outputs={p.outputs} />)
     expect(container).toHaveTextContent('output true of Check stock')
-    expect(container.querySelectorAll('[data-fk-port][tabindex]')).toHaveLength(0)
+    expect(container.querySelectorAll('[data-ty-port][tabindex]')).toHaveLength(0)
   })
 
   it('floating mode: dropping anywhere on a valid node connects; a plain click still activates', () => {
@@ -399,7 +399,7 @@ describe('ConnectionPorts', () => {
         />
       </NodeKindCatalogProvider>,
     )
-    const out = document.querySelector('[data-fk-port-node="a"][data-fk-port-role="source"]')!
+    const out = document.querySelector('[data-ty-port-node="a"][data-ty-port-role="source"]')!
     const pe = (type: string) => {
       const e = new MouseEvent(type, { bubbles: true, cancelable: true, clientX: 1, clientY: 1, button: 0 })
       Object.defineProperty(e, 'pointerId', { value: 1 })
@@ -411,7 +411,7 @@ describe('ConnectionPorts', () => {
     fireEvent(cardB, pe('pointermove'))
     fireEvent(cardB, pe('pointerup'))
     expect(onConnect).toHaveBeenCalledWith(expect.objectContaining({ nodeId: 'a' }), expect.objectContaining({ nodeId: 'b', role: 'target' }))
-    fireEvent.click(document.querySelector('[data-fk-node-id="b"] .fk-node-card__activator')!)
+    fireEvent.click(document.querySelector('[data-ty-node-id="b"] .ty-node-card__activator')!)
     expect(onActivate).toHaveBeenCalled()
   })
 
@@ -426,9 +426,9 @@ describe('ConnectionPorts', () => {
 
   it('keeps 44 px hit areas, no pulse under reduced motion, bordered dots in forced colours', () => {
     const css = cssOf('nodes/flow-nodes.css')
-    expect(css).toMatch(/\.fk-port\s*\{[^}]*var\(--fk-control-target, 44px\)/)
+    expect(css).toMatch(/\.ty-port\s*\{[^}]*var\(--ty-control-target, 44px\)/)
     expect(mediaBlock(css, /\(prefers-reduced-motion: reduce\)/)).toMatch(/data-target='valid'/)
-    expect(mediaBlock(css, /\(forced-colors: active\)/)).toMatch(/\.fk-port__dot\s*\{[^}]*CanvasText/)
+    expect(mediaBlock(css, /\(forced-colors: active\)/)).toMatch(/\.ty-port__dot\s*\{[^}]*CanvasText/)
     expect(css).not.toMatch(/(^|[^-])(left|right)\s*:/m)
   })
 })
@@ -497,15 +497,15 @@ describe('registry', () => {
 describe('locales and right-to-left', () => {
   it('uses the built-in Portuguese and Spanish strings', () => {
     const { rerender } = render(
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <AgentNode id="n" agent={{ id: 'a', name: 'Codificador' }} onRemove={() => {}} />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(screen.getByRole('button', { name: /Remover Codificador/ })).toBeInTheDocument()
     rerender(
-      <FakhirProvider locale="es">
+      <TympanProvider locale="es">
         <NoteNode id="n" text="" onTextChange={() => {}} />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(document.body.textContent).not.toMatch(/Write a note|Add a note/)
   })
@@ -513,13 +513,13 @@ describe('locales and right-to-left', () => {
   it('works under Arabic (RTL): ports keep logical sides, keyboard rename still works', async () => {
     const onRename = vi.fn()
     const { container } = render(
-      <FakhirProvider locale="ar">
+      <TympanProvider locale="ar">
         <div dir="rtl">
           <GenericNode id="n" kind="code" label="عدّ حسب المرحلة" onConfigure={() => {}} onRename={onRename} />
         </div>
-      </FakhirProvider>,
+      </TympanProvider>,
     )
-    expect(container.querySelector('[data-fk-port-role="target"]')).toHaveAttribute('data-side', 'start')
+    expect(container.querySelector('[data-ty-port-role="target"]')).toHaveAttribute('data-side', 'start')
     act(() => card().focus())
     await userEvent.keyboard('{F2}')
     await userEvent.clear(screen.getByRole('textbox'))

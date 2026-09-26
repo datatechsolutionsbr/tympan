@@ -1,89 +1,89 @@
 /* Drawer (spec: wave-1/drawer.md; design direction §2.4, §2.5, §2.7, §2.8). */
-@layer fakhir.components {
-  .fk-drawer__backdrop {
+@layer tympan.components {
+  .ty-drawer__backdrop {
     position: fixed;
     inset: 0;
-    z-index: var(--fk-z-modal);
+    z-index: var(--ty-z-modal);
     display: flex;
-    background: var(--fk-backdrop);
+    background: var(--ty-backdrop);
   }
-  .fk-drawer__backdrop[data-placement='bottom'] {
+  .ty-drawer__backdrop[data-placement='bottom'] {
     align-items: flex-end;
     justify-content: center;
   }
-  .fk-drawer__backdrop[data-placement='end'] {
+  .ty-drawer__backdrop[data-placement='end'] {
     justify-content: flex-end;
   }
-  .fk-drawer__backdrop[data-entering] {
-    animation: fk-drawer-fade var(--fk-dur-base) var(--fk-ease);
+  .ty-drawer__backdrop[data-entering] {
+    animation: ty-drawer-fade var(--ty-dur-base) var(--ty-ease);
   }
-  .fk-drawer__backdrop[data-exiting] {
-    animation: fk-drawer-fade var(--fk-dur-base) var(--fk-ease-out) reverse;
+  .ty-drawer__backdrop[data-exiting] {
+    animation: ty-drawer-fade var(--ty-dur-base) var(--ty-ease-out) reverse;
   }
 
-  .fk-drawer {
+  .ty-drawer {
     box-sizing: border-box;
     display: flex;
-    border: 1px solid var(--fk-line);
-    background: var(--fk-surface-raised);
-    color: var(--fk-on-surface-raised);
-    box-shadow: var(--fk-shadow-modal);
-    backdrop-filter: blur(var(--fk-glass-blur-floating)) saturate(var(--fk-glass-saturate));
-    -webkit-backdrop-filter: blur(var(--fk-glass-blur-floating)) saturate(var(--fk-glass-saturate));
+    border: 1px solid var(--ty-line);
+    background: var(--ty-surface-raised);
+    color: var(--ty-on-surface-raised);
+    box-shadow: var(--ty-shadow-modal);
+    backdrop-filter: blur(var(--ty-glass-blur-floating)) saturate(var(--ty-glass-saturate));
+    -webkit-backdrop-filter: blur(var(--ty-glass-blur-floating)) saturate(var(--ty-glass-saturate));
     overflow: hidden;
-    transition: transform var(--fk-dur-base) var(--fk-ease);
+    transition: transform var(--ty-dur-base) var(--ty-ease);
   }
 
   /* Radius only on the attached edge's opposite corners. */
-  .fk-drawer[data-placement='bottom'] {
+  .ty-drawer[data-placement='bottom'] {
     inline-size: 100%;
     max-inline-size: 48rem;
     max-block-size: 85dvh;
     border-block-end: 0;
-    border-start-start-radius: var(--fk-radius-sheet);
-    border-start-end-radius: var(--fk-radius-sheet);
+    border-start-start-radius: var(--ty-radius-sheet);
+    border-start-end-radius: var(--ty-radius-sheet);
   }
-  .fk-drawer[data-placement='end'] {
-    --fk-drawer-width: 28rem;
-    inline-size: min(var(--fk-drawer-width), 100%);
+  .ty-drawer[data-placement='end'] {
+    --ty-drawer-width: 28rem;
+    inline-size: min(var(--ty-drawer-width), 100%);
     block-size: 100%;
     border-inline-end: 0;
-    border-start-start-radius: var(--fk-radius-sheet);
-    border-end-start-radius: var(--fk-radius-sheet);
+    border-start-start-radius: var(--ty-radius-sheet);
+    border-end-start-radius: var(--ty-radius-sheet);
   }
-  .fk-drawer[data-placement='end'][data-width='large'] { --fk-drawer-width: var(--fk-layout-aside); }
-  .fk-drawer[data-placement='end'][data-width='wide'] { --fk-drawer-width: 40rem; }
+  .ty-drawer[data-placement='end'][data-width='large'] { --ty-drawer-width: var(--ty-layout-aside); }
+  .ty-drawer[data-placement='end'][data-width='wide'] { --ty-drawer-width: 40rem; }
 
-  .fk-drawer[data-placement='bottom'][data-entering] {
-    animation: fk-drawer-up var(--fk-dur-base) var(--fk-ease);
+  .ty-drawer[data-placement='bottom'][data-entering] {
+    animation: ty-drawer-up var(--ty-dur-base) var(--ty-ease);
   }
-  .fk-drawer[data-placement='bottom'][data-exiting] {
-    animation: fk-drawer-up var(--fk-dur-base) var(--fk-ease-out) reverse;
+  .ty-drawer[data-placement='bottom'][data-exiting] {
+    animation: ty-drawer-up var(--ty-dur-base) var(--ty-ease-out) reverse;
   }
-  .fk-drawer[data-placement='end'][data-entering] {
-    animation: fk-drawer-in-end var(--fk-dur-base) var(--fk-ease);
+  .ty-drawer[data-placement='end'][data-entering] {
+    animation: ty-drawer-in-end var(--ty-dur-base) var(--ty-ease);
   }
-  .fk-drawer[data-placement='end'][data-exiting] {
-    animation: fk-drawer-in-end var(--fk-dur-base) var(--fk-ease-out) reverse;
+  .ty-drawer[data-placement='end'][data-exiting] {
+    animation: ty-drawer-in-end var(--ty-dur-base) var(--ty-ease-out) reverse;
   }
 
-  @keyframes fk-drawer-fade {
+  @keyframes ty-drawer-fade {
     from { opacity: 0; }
   }
-  @keyframes fk-drawer-up {
+  @keyframes ty-drawer-up {
     from { transform: translateY(100%); }
   }
-  @keyframes fk-drawer-in-end {
+  @keyframes ty-drawer-in-end {
     from { transform: translateX(100%); }
   }
-  [dir='rtl'] .fk-drawer[data-placement='end'][data-entering] {
-    animation-name: fk-drawer-in-start;
+  [dir='rtl'] .ty-drawer[data-placement='end'][data-entering] {
+    animation-name: ty-drawer-in-start;
   }
-  @keyframes fk-drawer-in-start {
+  @keyframes ty-drawer-in-start {
     from { transform: translateX(-100%); }
   }
 
-  .fk-drawer__dialog {
+  .ty-drawer__dialog {
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -91,85 +91,85 @@
     outline: none;
   }
 
-  .fk-drawer__header {
+  .ty-drawer__header {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--fk-space-3);
-    padding: var(--fk-space-5) var(--fk-space-5) var(--fk-space-3);
+    gap: var(--ty-space-3);
+    padding: var(--ty-space-5) var(--ty-space-5) var(--ty-space-3);
   }
-  .fk-drawer[data-placement='bottom'] .fk-drawer__header {
-    padding-block-start: var(--fk-space-6);
+  .ty-drawer[data-placement='bottom'] .ty-drawer__header {
+    padding-block-start: var(--ty-space-6);
     touch-action: none;
     cursor: grab;
   }
-  .fk-drawer[data-dragging] .fk-drawer__header {
+  .ty-drawer[data-dragging] .ty-drawer__header {
     cursor: grabbing;
   }
 
   /* Handle with a 44 px tall grab area. */
-  .fk-drawer__handle {
+  .ty-drawer__handle {
     position: absolute;
-    inset-block-start: var(--fk-space-2);
+    inset-block-start: var(--ty-space-2);
     /* physical: centring with translate(-50%) is the same in both directions */
     left: 50%;
-    inline-size: var(--fk-space-7);
-    block-size: var(--fk-space-1);
-    border-radius: var(--fk-radius-pill);
-    background: var(--fk-line-strong);
+    inline-size: var(--ty-space-7);
+    block-size: var(--ty-space-1);
+    border-radius: var(--ty-radius-pill);
+    background: var(--ty-line-strong);
     transform: translateX(-50%);
   }
-  .fk-drawer__handle::before {
+  .ty-drawer__handle::before {
     content: '';
     position: absolute;
     /* physical: centring with translate(-50%) is the same in both directions */
     left: 50%;
     inset-block-start: 50%;
-    inline-size: max(100%, var(--fk-control-target));
-    block-size: max(100%, var(--fk-control-target));
+    inline-size: max(100%, var(--ty-control-target));
+    block-size: max(100%, var(--ty-control-target));
     transform: translate(-50%, -50%);
   }
 
-  .fk-drawer__title {
+  .ty-drawer__title {
     margin: 0;
-    color: var(--fk-ink);
-    font-family: var(--fk-font-serif);
-    font-size: var(--fk-font-size-h3);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-h3);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-serif);
+    font-size: var(--ty-font-size-h3);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-h3);
   }
 
-  .fk-drawer__body {
+  .ty-drawer__body {
     flex: 1;
     min-block-size: 0;
-    padding: 0 var(--fk-space-5) var(--fk-space-5);
+    padding: 0 var(--ty-space-5) var(--ty-space-5);
     overflow: auto;
     overscroll-behavior: contain;
   }
 
-  .fk-drawer__inset {
+  .ty-drawer__inset {
     flex: none;
     block-size: env(safe-area-inset-bottom, 0px);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-drawer {
+    .ty-drawer {
       transition: none;
     }
-    .fk-drawer[data-entering],
-    .fk-drawer[data-exiting] {
-      animation: fk-drawer-fade var(--fk-dur-base) linear;
+    .ty-drawer[data-entering],
+    .ty-drawer[data-exiting] {
+      animation: ty-drawer-fade var(--ty-dur-base) linear;
     }
   }
 
   @media (forced-colors: active) {
-    .fk-drawer {
+    .ty-drawer {
       border: 1px solid CanvasText;
       background: Canvas;
       backdrop-filter: none;
     }
-    .fk-drawer__handle {
+    .ty-drawer__handle {
       background: CanvasText;
     }
   }

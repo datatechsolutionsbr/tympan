@@ -6,7 +6,7 @@
 
 import { useEffect, useId, useRef, type KeyboardEvent, type ReactNode } from 'react'
 import { X } from 'lucide-react'
-import { Button, useMediaQuery, useMessages } from '@fakhir/ui'
+import { Button, useMediaQuery, useMessages } from '@datatechsolutions/tympan'
 
 export interface DockedPanelProps {
   title: ReactNode
@@ -64,7 +64,7 @@ export function DockedPanel(props: DockedPanelProps) {
   const Tag = landmark === 'complementary' ? 'aside' : 'section'
   return (
     <Tag
-      className={['fk-docked-panel', className].filter(Boolean).join(' ')}
+      className={['ty-docked-panel', className].filter(Boolean).join(' ')}
       aria-labelledby={label ? undefined : headingId}
       aria-label={label}
       aria-busy={busy || undefined}
@@ -73,23 +73,23 @@ export function DockedPanel(props: DockedPanelProps) {
       {...(landmark === 'region' ? { role: 'region' } : {})}
       {...data}
     >
-      <header className="fk-docked-panel__header">
+      <header className="ty-docked-panel__header">
         {icon ? (
-          <span className="fk-docked-panel__icon" aria-hidden="true">
+          <span className="ty-docked-panel__icon" aria-hidden="true">
             {icon}
           </span>
         ) : null}
-        <h2 id={headingId} ref={headingRef} tabIndex={-1} className="fk-docked-panel__title">
+        <h2 id={headingId} ref={headingRef} tabIndex={-1} className="ty-docked-panel__title">
           {title}
         </h2>
-        <div className="fk-docked-panel__actions">
+        <div className="ty-docked-panel__actions">
           {actions}
           {onClose ? (
             <Button variant="quiet" size="compact" shape="circle" iconOnly accessibleLabel={closeLabel ?? messages.close} leadingIcon={<X />} onPress={onClose} />
           ) : null}
         </div>
       </header>
-      <div className="fk-docked-panel__body">{children}</div>
+      <div className="ty-docked-panel__body">{children}</div>
     </Tag>
   )
 }

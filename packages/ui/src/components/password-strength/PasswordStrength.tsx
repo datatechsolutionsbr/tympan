@@ -72,9 +72,9 @@ export function PasswordStrength({ password, policy, showRequirements = false, l
   }
 
   return (
-    <div id={id} className={cx('fk-password-strength', className)} data-level={level} data-tone={TONE[level]}>
+    <div id={id} className={cx('ty-password-strength', className)} data-level={level} data-tone={TONE[level]}>
       <div
-        className="fk-password-strength__meter"
+        className="ty-password-strength__meter"
         role="meter"
         aria-label={copy.label}
         aria-valuemin={0}
@@ -82,22 +82,22 @@ export function PasswordStrength({ password, policy, showRequirements = false, l
         aria-valuenow={level}
         aria-valuetext={word}
       >
-        <span className="fk-password-strength__bar" aria-hidden="true">
+        <span className="ty-password-strength__bar" aria-hidden="true">
           {[1, 2, 3, 4].map((n) => (
-            <span key={n} className="fk-password-strength__segment" data-filled={n <= level || undefined} />
+            <span key={n} className="ty-password-strength__segment" data-filled={n <= level || undefined} />
           ))}
         </span>
-        <span className="fk-password-strength__word">{word}</span>
+        <span className="ty-password-strength__word">{word}</span>
       </div>
       <LiveNote text={copy.announce(word)} delay={700} />
       {showRequirements ? (
-        <ul className="fk-password-strength__rules">
+        <ul className="ty-password-strength__rules">
           {rules.map((r) => {
             const Glyph = r.met ? CircleCheck : CircleDashed
             return (
-              <li key={r.key} className="fk-password-strength__rule" data-met={r.met || undefined}>
-                <Glyph className="fk-password-strength__glyph" aria-hidden="true" focusable="false" />
-                <span className="fk-visually-hidden">{r.met ? copy.met : copy.notMet} </span>
+              <li key={r.key} className="ty-password-strength__rule" data-met={r.met || undefined}>
+                <Glyph className="ty-password-strength__glyph" aria-hidden="true" focusable="false" />
+                <span className="ty-visually-hidden">{r.met ? copy.met : copy.notMet} </span>
                 {textOf(r.key)}
               </li>
             )

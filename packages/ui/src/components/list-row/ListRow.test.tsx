@@ -52,14 +52,14 @@ describe('ListRow', () => {
 
   it('marks the emphasised variant with text as well as the background', () => {
     const { container } = render(<ListRow title="Plan" variant="emphasised" />)
-    expect(container.querySelector('.fk-list-row')).toHaveAttribute('data-variant', 'emphasised')
+    expect(container.querySelector('.ty-list-row')).toHaveAttribute('data-variant', 'emphasised')
     expect(screen.getByText('Current')).toBeInTheDocument()
   })
 
   it('stacks actions under the summary below 640 px with 44 px targets', () => {
     const narrow = mediaBlock(cssOf('components/list-row/ListRow.css'), /\(max-width:\s*639\.98px\)/)
-    expect(narrow).toMatch(/\.fk-list-row\s*\{[^}]*flex-direction:\s*column/)
-    expect(narrow).toMatch(/\.fk-list-row__action\s*\{[^}]*min-block-size:\s*var\(--fk-control-target\)/)
+    expect(narrow).toMatch(/\.ty-list-row\s*\{[^}]*flex-direction:\s*column/)
+    expect(narrow).toMatch(/\.ty-list-row__action\s*\{[^}]*min-block-size:\s*var\(--ty-control-target\)/)
   })
 
   it('has no axe violations in every variant, light and dark', async () => {

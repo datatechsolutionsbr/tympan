@@ -15,7 +15,7 @@ import { renderRtl } from '../../../test/rtl'
 describe('Tag', () => {
   it('static tag is inline text with no interactive role', () => {
     const { container } = render(<Tag>Survey</Tag>)
-    expect(container.querySelector('.fk-tag')?.tagName).toBe('SPAN')
+    expect(container.querySelector('.ty-tag')?.tagName).toBe('SPAN')
     expect(screen.queryByRole('button')).toBeNull()
     expect(screen.queryByRole('link')).toBeNull()
   })
@@ -83,8 +83,8 @@ describe('Tag', () => {
 
   it('keeps text at least 12 px at size small', () => {
     const { container } = render(<Tag size="small">Tiny</Tag>)
-    expect(container.querySelector('.fk-tag')).toHaveAttribute('data-size', 'small')
-    expect(cssOf('components/tag/Tag.css')).toMatch(/\.fk-tag\[data-size='small'\]\s*\{[^}]*font-size:\s*var\(--fk-font-size-meta\)/)
+    expect(container.querySelector('.ty-tag')).toHaveAttribute('data-size', 'small')
+    expect(cssOf('components/tag/Tag.css')).toMatch(/\.ty-tag\[data-size='small'\]\s*\{[^}]*font-size:\s*var\(--ty-font-size-meta\)/)
   })
 
   it('uses a categorical square for tone category', () => {
@@ -93,12 +93,12 @@ describe('Tag', () => {
         Stage 3
       </Tag>,
     )
-    const swatch = container.querySelector<HTMLElement>('.fk-tag__swatch')!
-    expect(swatch.style.getPropertyValue('--fk-tag-category')).toBe('var(--fk-chart-3)')
+    const swatch = container.querySelector<HTMLElement>('.ty-tag__swatch')!
+    expect(swatch.style.getPropertyValue('--ty-tag-category')).toBe('var(--ty-chart-3)')
   })
 
   it('gives interactive parts a 44 px hit area', () => {
-    expect(cssOf('components/tag/Tag.css')).toMatch(/\.fk-tag__remove::before[^{]*\{[^}]*max\(100%,\s*var\(--fk-control-target\)\)/)
+    expect(cssOf('components/tag/Tag.css')).toMatch(/\.ty-tag__remove::before[^{]*\{[^}]*max\(100%,\s*var\(--ty-control-target\)\)/)
   })
 
   it('has no axe violations', async () => {

@@ -1,33 +1,33 @@
-# @fakhir/flow
+# @datatechsolutions/tympan-flow
 
-Accessible React 19 canvases for Fakhir, the research platform: a **W3C PROV
+Tympan's accessible React 19 canvases for research platforms: a **W3C PROV
 provenance graph viewer** with a synced keyboard list, a **DAG workflow
 editor** for analyses (including a generic decision step), run inspection
 (panel and drawer, timeline, trace, replay and rewind), and the forms and
-dialogs around them. Built on `@fakhir/ui` and React Aria
-Components, styled with plain CSS in `@layer fakhir.components`. No Tailwind.
+dialogs around them. Built on `@datatechsolutions/tympan` and React Aria
+Components, styled with plain CSS in `@layer tympan.components`.
 Licence: FSL-1.1-ALv2 (Functional Source License, Version 1.1, Apache 2.0
 Future License), Copyright 2026 Natalia Mesquita; see `LICENSE`.
 
 ```sh
-npm run build -w @fakhir/flow          # dist/index.js, index.d.ts, styles.css
-npm run typecheck -w @fakhir/flow
-npm test -w @fakhir/flow               # vitest + Testing Library + axe-core
-npm run gallery -w @fakhir/flow        # http://localhost:3320 (provenance, DAG editor, components)
-npm run gallery:build -w @fakhir/flow  # static gallery in dist-gallery/
+npm run build -w @datatechsolutions/tympan-flow          # dist/index.js, index.d.ts, styles.css
+npm run typecheck -w @datatechsolutions/tympan-flow
+npm test -w @datatechsolutions/tympan-flow               # vitest + Testing Library + axe-core
+npm run gallery -w @datatechsolutions/tympan-flow        # http://localhost:3320 (provenance, DAG editor, components)
+npm run gallery:build -w @datatechsolutions/tympan-flow  # static gallery in dist-gallery/
 ```
 
 ## Usage
 
 ```tsx
-import '@fakhir/ui/styles.css'
-import '@fakhir/flow/styles.css'
-import { FakhirProvider } from '@fakhir/ui'
-import { ProvenanceGraph, FlowEditor } from '@fakhir/flow'
+import '@datatechsolutions/tympan/styles.css'
+import '@datatechsolutions/tympan-flow/styles.css'
+import { TympanProvider } from '@datatechsolutions/tympan'
+import { ProvenanceGraph, FlowEditor } from '@datatechsolutions/tympan-flow'
 
-<FakhirProvider locale="pt-BR">
+<TympanProvider locale="pt-BR">
   <ProvenanceGraph items={items} statements={statements} defaultFocusId="as-reg-position" defaultHops={3} />
-</FakhirProvider>
+</TympanProvider>
 ```
 
 ## What is inside
@@ -89,7 +89,7 @@ can place the dock at sheet level.
 
 Every visible string is a label. Components ship English, Brazilian
 Portuguese and Spanish bundles (`defineLabels`), resolved from the React Aria
-locale that `FakhirProvider` sets; hosts add any language through
+locale that `TympanProvider` sets; hosts add any language through
 `<FlowMessagesProvider messages={{ ComponentKey: {...} }}>` or per-component
 `labels`. Templates use an ICU MessageFormat subset (plural, select, number).
 Numbers, dates and durations go through `Intl` with the provider locale.

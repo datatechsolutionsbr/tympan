@@ -17,8 +17,8 @@ function Node({ id }: { id: string }) {
   return (
     <div>
       <button type="button">node {id}</button>
-      <span data-fk-port="" data-fk-port-node={id} data-fk-port-role="source" data-fk-port-id="out" data-testid={`out-${id}`} />
-      <span data-fk-port="" data-fk-port-node={id} data-fk-port-role="target" data-fk-port-id="in" data-testid={`in-${id}`} />
+      <span data-ty-port="" data-ty-port-node={id} data-ty-port-role="source" data-ty-port-id="out" data-testid={`out-${id}`} />
+      <span data-ty-port="" data-ty-port-node={id} data-ty-port-role="target" data-ty-port-id="in" data-testid={`in-${id}`} />
     </div>
   )
 }
@@ -38,13 +38,13 @@ describe('CanvasSurface', () => {
     const { container } = render(<CanvasSurface label="Flow" roleDescription="canvas" nodes={nodes} renderNode={(n) => <Node id={n.id} />} />)
     const group = screen.getByRole('group', { name: 'Flow' })
     expect(group).toHaveAttribute('aria-roledescription', 'canvas')
-    expect([...container.querySelectorAll('[data-fk-node-id]')].map((e) => e.getAttribute('data-fk-node-id'))).toEqual(['a', 'b'])
+    expect([...container.querySelectorAll('[data-ty-node-id]')].map((e) => e.getAttribute('data-ty-node-id'))).toEqual(['a', 'b'])
     await expectNoAxeViolations(container)
   })
 
   it('draws a connector path for each visible connector', () => {
     const { container } = render(<CanvasSurface label="Flow" nodes={nodes} connectors={[{ id: 'c', source: 'a', target: 'b' }]} renderNode={(n) => <Node id={n.id} />} />)
-    expect(container.querySelectorAll('.fk-flow-surface__connector')).toHaveLength(1)
+    expect(container.querySelectorAll('.ty-flow-surface__connector')).toHaveLength(1)
   })
 
   it('fits on mount and zooms with the ladder through its handle', () => {
@@ -92,11 +92,11 @@ describe('CanvasSurface', () => {
     const { container } = render(<CanvasSurface label="Flow" nodes={nodes} renderNode={(n) => <Node id={n.id} />} connect={{ canConnect: () => false, onConnect, nameOf: (id) => `Node ${id}` }} />)
     fireEvent(screen.getByTestId('out-a'), pe('pointerdown', 10, 10))
     fireEvent(screen.getByTestId('in-b'), pe('pointermove', 400, 20))
-    expect(container.querySelector('.fk-connection-preview')).toHaveAttribute('data-validity', 'invalid')
+    expect(container.querySelector('.ty-connection-preview')).toHaveAttribute('data-validity', 'invalid')
     expect(screen.getByRole('status')).toHaveTextContent('Node b: cannot connect')
     fireEvent(screen.getByTestId('in-b'), pe('pointerup', 400, 20))
     expect(onConnect).not.toHaveBeenCalled()
-    expect(container.querySelector('.fk-connection-preview')).toBeNull()
+    expect(container.querySelector('.ty-connection-preview')).toBeNull()
   })
 
   it('drags nodes after a small threshold and reports the delta in canvas units', () => {
@@ -135,14 +135,14 @@ describe('CanvasSurface', () => {
         <ConnectionPreviewLine from={{ x: 0, y: 0, side: 'end' }} to={{ x: 100, y: 50 }} validity="invalid" />
       </svg>,
     )
-    expect(container.querySelector('.fk-connection-preview__refusal')).not.toBeNull()
-    expect(container.querySelector('.fk-connection-preview')).toHaveAttribute('aria-hidden', 'true')
+    expect(container.querySelector('.ty-connection-preview__refusal')).not.toBeNull()
+    expect(container.querySelector('.ty-connection-preview')).toHaveAttribute('aria-hidden', 'true')
   })
 
   it('draws the preview from an input port the same way', () => {
     const { container } = render(<CanvasSurface label="Flow" nodes={nodes} renderNode={(n) => <Node id={n.id} />} connect={{ canConnect: () => true, onConnect: () => {} }} />)
     fireEvent(screen.getByTestId('in-b'), pe('pointerdown', 400, 20))
     pointer(window, 'pointermove', 100, 100)
-    expect(container.querySelector('.fk-connection-preview__path')).not.toBeNull()
+    expect(container.querySelector('.ty-connection-preview__path')).not.toBeNull()
   })
 })

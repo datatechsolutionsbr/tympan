@@ -1,50 +1,50 @@
 /* CountBadge (spec: wave-2/count-badge.md; design direction §2.2, §2.3). */
-@layer fakhir.components {
-  .fk-count-badge {
-    --fk-count-badge-fill: var(--fk-danger);
-    --fk-count-badge-ink: var(--fk-on-danger);
+@layer tympan.components {
+  .ty-count-badge {
+    --ty-count-badge-fill: var(--ty-danger);
+    --ty-count-badge-ink: var(--ty-on-danger);
     position: absolute;
-    inset-block-start: calc(var(--fk-space-1) * -1);
-    inset-inline-end: calc(var(--fk-space-1) * -1);
+    inset-block-start: calc(var(--ty-space-1) * -1);
+    inset-inline-end: calc(var(--ty-space-1) * -1);
     pointer-events: none;
   }
-  .fk-count-badge[data-tone='neutral'] {
-    --fk-count-badge-fill: var(--fk-ink-3);
-    --fk-count-badge-ink: var(--fk-bg);
+  .ty-count-badge[data-tone='neutral'] {
+    --ty-count-badge-fill: var(--ty-ink-3);
+    --ty-count-badge-ink: var(--ty-bg);
   }
-  .fk-count-badge__value {
+  .ty-count-badge__value {
     display: inline-block;
     box-sizing: border-box;
     min-inline-size: 1.5em;
-    padding: 0 var(--fk-space-1);
-    border-radius: var(--fk-radius-pill);
-    background: var(--fk-count-badge-fill);
-    color: var(--fk-count-badge-ink);
-    font-family: var(--fk-font-sans);
-    font-size: var(--fk-font-size-meta);
-    font-weight: var(--fk-font-weight-semibold);
+    padding: 0 var(--ty-space-1);
+    border-radius: var(--ty-radius-pill);
+    background: var(--ty-count-badge-fill);
+    color: var(--ty-count-badge-ink);
+    font-family: var(--ty-font-sans);
+    font-size: var(--ty-font-size-meta);
+    font-weight: var(--ty-font-weight-semibold);
     font-variant-numeric: tabular-nums;
-    line-height: var(--fk-font-line-height-meta);
+    line-height: var(--ty-font-line-height-meta);
     text-align: center;
   }
   /* One brief emphasis on change; never a loop. */
-  .fk-count-badge[data-changed] .fk-count-badge__value {
-    animation: fk-count-badge-bump var(--fk-dur-quick) var(--fk-ease) 1;
+  .ty-count-badge[data-changed] .ty-count-badge__value {
+    animation: ty-count-badge-bump var(--ty-dur-quick) var(--ty-ease) 1;
   }
-  @keyframes fk-count-badge-bump {
+  @keyframes ty-count-badge-bump {
     from {
       opacity: 0.4;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-count-badge[data-changed] .fk-count-badge__value {
+    .ty-count-badge[data-changed] .ty-count-badge__value {
       animation: none;
     }
   }
 
   @media (forced-colors: active) {
-    .fk-count-badge__value {
+    .ty-count-badge__value {
       border: 1px solid CanvasText;
       background: Mark;
       color: MarkText;

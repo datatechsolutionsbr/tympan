@@ -4,7 +4,7 @@
 
 import { useId, useRef, useState } from 'react'
 import { Plus, Trash2 } from 'lucide-react'
-import { Button, InlineNotice, NativeSelect, TextArea, TextField } from '@fakhir/ui'
+import { Button, InlineNotice, NativeSelect, TextArea, TextField } from '@datatechsolutions/tympan'
 import type { DecisionConfig, DecisionOption } from '../decision/types'
 import { createId } from '../internal/ids'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
@@ -205,10 +205,10 @@ export function DecisionNodeForm({ value, references = [], providers = [], model
   }
 
   return (
-    <div className="fk-node-form fk-decision-form">
-      <div className="fk-decision-form__input">
+    <div className="ty-node-form ty-decision-form">
+      <div className="ty-decision-form__input">
         <TextField
-          className="fk-ltr-text"
+          className="ty-ltr-text"
           label={l.input}
           hint={l.inputHint}
           value={inputRef}
@@ -217,23 +217,23 @@ export function DecisionNodeForm({ value, references = [], providers = [], model
           {...(attempted && v.input ? { errorMessage: l.inputRequired } : {})}
         />
         {references.length ? (
-          <div className="fk-decision-form__refs" role="group" aria-label={l.references}>
+          <div className="ty-decision-form__refs" role="group" aria-label={l.references}>
             {references.map((r) => (
               <Button key={r} size="compact" variant={r === inputRef ? 'primary' : 'secondary'} current={r === inputRef} onPress={() => setInputRef(r)}>
-                <span className="fk-ltr-text">{r}</span>
+                <span className="ty-ltr-text">{r}</span>
               </Button>
             ))}
           </div>
         ) : null}
       </div>
 
-      <section className="fk-decision-form__options" aria-label={l.options}>
-        <h3 className="fk-decision-form__heading">{l.options}</h3>
+      <section className="ty-decision-form__options" aria-label={l.options}>
+        <h3 className="ty-decision-form__heading">{l.options}</h3>
         {rows.map((r, i) => (
-          <fieldset key={r.key} className="fk-decision-form__option">
-            <legend className="fk-decision-form__legend">{fill(l.optionLegend, { n: i + 1 }, locale)}</legend>
+          <fieldset key={r.key} className="ty-decision-form__option">
+            <legend className="ty-decision-form__legend">{fill(l.optionLegend, { n: i + 1 }, locale)}</legend>
             <TextField
-              className="fk-ltr-text"
+              className="ty-ltr-text"
               label={l.optionValue}
               value={r.value}
               autoFocus={focusKey.current === r.key}
@@ -272,7 +272,7 @@ export function DecisionNodeForm({ value, references = [], providers = [], model
       </section>
 
       <TextArea label={l.instruction} hint={l.instructionHint} rows={3} value={instruction} onChange={setInstruction} />
-      <div className="fk-decision-form__model">
+      <div className="ty-decision-form__model">
         <NativeSelect
           label={l.provider}
           options={[{ value: '', label: l.none }, ...providers.map((p) => ({ value: p.id, label: p.name }))]}
@@ -283,10 +283,10 @@ export function DecisionNodeForm({ value, references = [], providers = [], model
           }}
         />
         <NativeSelect label={l.model} options={[{ value: '', label: l.none }, ...shownModels.map((m) => ({ value: m.id, label: m.name ?? m.id }))]} value={model} onChange={setModel} />
-        <TextField className="fk-ltr-text fk-mono" label={l.modelVersion} hint={l.modelVersionHint} value={modelVersion} onChange={setModelVersion} />
+        <TextField className="ty-ltr-text ty-mono" label={l.modelVersion} hint={l.modelVersionHint} value={modelVersion} onChange={setModelVersion} />
       </div>
-      <div className="fk-decision-form__model">
-        <TextField className="fk-ltr-text" label={l.outputVariable} value={outputVariable} onChange={setOutputVariable} />
+      <div className="ty-decision-form__model">
+        <TextField className="ty-ltr-text" label={l.outputVariable} value={outputVariable} onChange={setOutputVariable} />
         <TextField
           inputType="number"
           label={l.threshold}

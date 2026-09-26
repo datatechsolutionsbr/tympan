@@ -5,12 +5,12 @@ import '../../../ui/src/styles.css'
 import '../../src/styles.css'
 import './gallery.css'
 import './shell/shell.css'
-import { FakhirProvider, SegmentedControl, ThemeProvider, ToastProvider, useTheme, type ThemeMode } from '@fakhir/ui'
+import { TympanProvider, SegmentedControl, ThemeProvider, ToastProvider, useTheme, type ThemeMode } from '@datatechsolutions/tympan'
 import { ComponentsPage } from './pages/ComponentsPage'
 import { FlowEditorPage } from './pages/FlowEditorPage'
 import { ProvenancePage } from './pages/ProvenancePage'
 
-const STORAGE_KEY = 'fk-flow-gallery-theme'
+const STORAGE_KEY = 'ty-flow-gallery-theme'
 
 // Storyboard pages render full screen inside the research shell; the
 // components page keeps the gallery bar.
@@ -36,10 +36,10 @@ function Shell() {
   const page = PAGES.find((p) => hash.startsWith(p.hash)) ?? PAGES[0]!
   if (page.shell) return page.render()
   return (
-    <div className="fk-gallery">
-      <header className="fk-gallery__bar">
-        <strong className="fk-gallery__brand">Fakhir flow canvas</strong>
-        <nav className="fk-gallery__nav" aria-label="Gallery pages">
+    <div className="ty-gallery">
+      <header className="ty-gallery__bar">
+        <strong className="ty-gallery__brand">Tympan flow canvas</strong>
+        <nav className="ty-gallery__nav" aria-label="Gallery pages">
           {PAGES.map((p) => (
             <a key={p.hash} href={p.hash} aria-current={p === page ? 'page' : undefined}>
               {p.label}
@@ -48,7 +48,7 @@ function Shell() {
         </nav>
         <SegmentedControl label="Mode" size="compact" options={['system', 'light', 'dark']} value={theme.mode} onChange={(m) => theme.setMode(m as ThemeMode)} />
       </header>
-      <main className="fk-gallery__main" id="main">
+      <main className="ty-gallery__main" id="main">
         {page.render()}
       </main>
     </div>
@@ -57,12 +57,12 @@ function Shell() {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <FakhirProvider>
+    <TympanProvider>
       <ThemeProvider storageKey={STORAGE_KEY}>
         <ToastProvider>
           <Shell />
         </ToastProvider>
       </ThemeProvider>
-    </FakhirProvider>
+    </TympanProvider>
   </StrictMode>,
 )

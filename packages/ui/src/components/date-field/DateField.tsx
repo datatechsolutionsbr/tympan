@@ -105,7 +105,7 @@ export function DateField(props: DateFieldProps) {
 
   const calendar = (
     <Calendar
-      className="fk-date-field__calendar"
+      className="ty-date-field__calendar"
       aria-label={props.label}
       value={props.value ? fromDate(props.value) : null}
       onChange={(d) => choose(d as CalendarDate)}
@@ -115,24 +115,24 @@ export function DateField(props: DateFieldProps) {
       maxValue={max}
       autoFocus
     >
-      <div className="fk-fb-stepper">
-        <AriaButton slot="previous" className="fk-fb-nav" aria-label={t.previousMonth}>
-          <ChevronLeft className="fk-icon fk-mirror-rtl" aria-hidden="true" focusable="false" />
+      <div className="ty-fb-stepper">
+        <AriaButton slot="previous" className="ty-fb-nav" aria-label={t.previousMonth}>
+          <ChevronLeft className="ty-icon ty-mirror-rtl" aria-hidden="true" focusable="false" />
         </AriaButton>
-        <AriaButton slot={null} className="fk-date-field__heading" onPress={() => setView('months')} aria-label={t.chooseMonth(heading)}>
+        <AriaButton slot={null} className="ty-date-field__heading" onPress={() => setView('months')} aria-label={t.chooseMonth(heading)}>
           <span aria-live="polite">{heading}</span>
         </AriaButton>
-        <AriaButton slot="next" className="fk-fb-nav" aria-label={t.nextMonth}>
-          <ChevronRight className="fk-icon fk-mirror-rtl" aria-hidden="true" focusable="false" />
+        <AriaButton slot="next" className="ty-fb-nav" aria-label={t.nextMonth}>
+          <ChevronRight className="ty-icon ty-mirror-rtl" aria-hidden="true" focusable="false" />
         </AriaButton>
       </div>
-      <CalendarGrid className="fk-date-field__grid" weekdayStyle="short">
-        <CalendarGridHeader>{(day) => <CalendarHeaderCell className="fk-date-field__weekday">{day}</CalendarHeaderCell>}</CalendarGridHeader>
+      <CalendarGrid className="ty-date-field__grid" weekdayStyle="short">
+        <CalendarGridHeader>{(day) => <CalendarHeaderCell className="ty-date-field__weekday">{day}</CalendarHeaderCell>}</CalendarGridHeader>
         <CalendarGridBody>
           {(date) => (
-            <CalendarCell date={date} className="fk-date-field__day">
+            <CalendarCell date={date} className="ty-date-field__day">
               {({ formattedDate, isToday }) => (
-                <span className="fk-date-field__day-number" data-today={isToday || undefined}>
+                <span className="ty-date-field__day-number" data-today={isToday || undefined}>
                   {formattedDate}
                 </span>
               )}
@@ -143,7 +143,7 @@ export function DateField(props: DateFieldProps) {
     </Calendar>
   )
   const todayRow = (
-    <div className="fk-date-field__footer">
+    <div className="ty-date-field__footer">
       <Button variant="quiet" size="compact" disabled={!within(now)} onPress={() => choose(now)}>
         {t.today}
       </Button>
@@ -151,7 +151,7 @@ export function DateField(props: DateFieldProps) {
   )
 
   const monthView = (
-    <div className="fk-date-field__months">
+    <div className="ty-date-field__months">
       <StepperHeader
         heading={focused.year}
         previousLabel={t.previousYear}
@@ -175,9 +175,9 @@ export function DateField(props: DateFieldProps) {
         onYearStep={(d) => setYear(focused.year + d)}
       />
       {years.length > 1 ? (
-        <div className="fk-fb-chips" role="group" aria-label={t.years}>
+        <div className="ty-fb-chips" role="group" aria-label={t.years}>
           {years.map((y) => (
-            <AriaButton key={y} className="fk-fb-chip" aria-pressed={y === focused.year} onPress={() => setYear(y)}>
+            <AriaButton key={y} className="ty-fb-chip" aria-pressed={y === focused.year} onPress={() => setYear(y)}>
               {y}
             </AriaButton>
           ))}
@@ -190,9 +190,9 @@ export function DateField(props: DateFieldProps) {
   )
 
   return (
-    <div className={cx('fk-date-field', props.className)} data-invalid={invalid || undefined}>
+    <div className={cx('ty-date-field', props.className)} data-invalid={invalid || undefined}>
       <FieldLine kind="label" id={labelId}>
-        <span className={props.hideLabel ? 'fk-visually-hidden' : undefined}>{props.label}</span>
+        <span className={props.hideLabel ? 'ty-visually-hidden' : undefined}>{props.label}</span>
       </FieldLine>
       {hintId ? (
         <FieldLine kind="hint" id={hintId}>
@@ -201,20 +201,20 @@ export function DateField(props: DateFieldProps) {
       ) : null}
       <DialogTrigger isOpen={open} onOpenChange={openChange}>
         <AriaButton
-          className="fk-fb-trigger"
+          className="ty-fb-trigger"
           isDisabled={props.disabled}
           aria-labelledby={`${labelId} ${textId}`}
           aria-describedby={joinIds(hintId, errorId)}
           data-invalid={invalid || undefined}
         >
-          <span className="fk-fb-trigger__glyph" aria-hidden="true">
+          <span className="ty-fb-trigger__glyph" aria-hidden="true">
             <CalendarDays />
           </span>
-          <span id={textId} className="fk-fb-trigger__text" data-placeholder={props.value ? undefined : true}>
+          <span id={textId} className="ty-fb-trigger__text" data-placeholder={props.value ? undefined : true}>
             {props.value ? longDate.format(props.value) : (props.placeholder ?? t.placeholder)}
           </span>
         </AriaButton>
-        <FloatSurface labelledBy={labelId} className="fk-date-field__surface">
+        <FloatSurface labelledBy={labelId} className="ty-date-field__surface">
           {view === 'days' ? (
             <>
               {calendar}

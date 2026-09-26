@@ -21,11 +21,11 @@ const figure: ChartFigure = {
 describe('Chart in right-to-left locales', () => {
   it('runs categories from the inline start (right) and puts the value axis on the right', () => {
     const { container } = inRtl(<Chart figure={figure} />, 'ar-EG')
-    expect(container.querySelector('.fk-chart')).toHaveAttribute('data-direction', 'rtl')
-    const bars = [...container.querySelectorAll<SVGRectElement>('.fk-chart__bar')].map((b) => Number(b.getAttribute('x')))
+    expect(container.querySelector('.ty-chart')).toHaveAttribute('data-direction', 'rtl')
+    const bars = [...container.querySelectorAll<SVGRectElement>('.ty-chart__bar')].map((b) => Number(b.getAttribute('x')))
     expect(bars[0]).toBeGreaterThan(bars[1]!)
     expect(bars[1]).toBeGreaterThan(bars[2]!)
-    const tick = container.querySelector('.fk-chart__axes text')!
+    const tick = container.querySelector('.ty-chart__axes text')!
     expect(Number(tick.getAttribute('x'))).toBeGreaterThan(560)
     expect(tick.textContent).toMatch(/[٠-٩]/)
   })

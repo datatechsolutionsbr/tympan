@@ -106,17 +106,17 @@ export function ImagePicker(props: ImagePickerProps) {
   const trigger = (
     <AriaButton
       ref={triggerRef}
-      className="fk-image-picker__trigger"
+      className="ty-image-picker__trigger"
       aria-label={props.label ?? m.change}
       aria-describedby={describedBy}
       isDisabled={props.disabled || busy}
       onPress={() => fileRef.current?.click()}
     >
-      <span className="fk-image-picker__frame" aria-hidden="true">
-        {shown ? <img className="fk-image-picker__image" src={shown} alt="" /> : <span className="fk-image-picker__initials">{props.fallbackText}</span>}
+      <span className="ty-image-picker__frame" aria-hidden="true">
+        {shown ? <img className="ty-image-picker__image" src={shown} alt="" /> : <span className="ty-image-picker__initials">{props.fallbackText}</span>}
       </span>
-      <span className="fk-image-picker__badge" aria-hidden="true">
-        {busy ? <LoaderCircle className="fk-icon fk-image-picker__spin" /> : phase.kind === 'done' ? <Check className="fk-icon" /> : <Camera className="fk-icon" />}
+      <span className="ty-image-picker__badge" aria-hidden="true">
+        {busy ? <LoaderCircle className="ty-icon ty-image-picker__spin" /> : phase.kind === 'done' ? <Check className="ty-icon" /> : <Camera className="ty-icon" />}
       </span>
     </AriaButton>
   )
@@ -132,9 +132,9 @@ export function ImagePicker(props: ImagePickerProps) {
   }
 
   return (
-    <div className={cx('fk-image-picker', props.className)} data-shape={props.shape ?? 'circle'} data-size={props.size ?? 'lg'} data-phase={phase.kind}>
+    <div className={cx('ty-image-picker', props.className)} data-shape={props.shape ?? 'circle'} data-size={props.size ?? 'lg'} data-phase={phase.kind}>
       {props.droppable ? (
-        <DropZone className="fk-image-picker__drop" onDrop={onDrop} isDisabled={props.disabled} aria-label={props.label ?? m.change}>
+        <DropZone className="ty-image-picker__drop" onDrop={onDrop} isDisabled={props.disabled} aria-label={props.label ?? m.change}>
           {trigger}
         </DropZone>
       ) : (
@@ -143,7 +143,7 @@ export function ImagePicker(props: ImagePickerProps) {
       <input
         ref={fileRef}
         type="file"
-        className="fk-visually-hidden"
+        className="ty-visually-hidden"
         accept={accept.join(',')}
         tabIndex={-1}
         aria-hidden="true"
@@ -155,11 +155,11 @@ export function ImagePicker(props: ImagePickerProps) {
         }}
       />
       {props.hint != null ? (
-        <p id={hintId} className="fk-image-picker__hint">
+        <p id={hintId} className="ty-image-picker__hint">
           {props.hint}
         </p>
       ) : null}
-      <p id={statusId} className="fk-image-picker__status" role="status" data-tone={phase.kind}>
+      <p id={statusId} className="ty-image-picker__status" role="status" data-tone={phase.kind}>
         {statusText}
       </p>
     </div>

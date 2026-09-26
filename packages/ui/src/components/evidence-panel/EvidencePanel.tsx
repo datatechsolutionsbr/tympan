@@ -43,11 +43,11 @@ function usePlacement(requested: EvidencePlacement): Exclude<EvidencePlacement, 
 function Contents({ proof, footer, children }: Pick<EvidencePanelProps, 'proof' | 'footer' | 'children'>) {
   return (
     <>
-      <div className="fk-evidence__body">
+      <div className="ty-evidence__body">
         {proof ? <ProofBadge {...proof} size="block" /> : null}
         {children}
       </div>
-      {footer ? <div className="fk-evidence__footer">{footer}</div> : null}
+      {footer ? <div className="ty-evidence__footer">{footer}</div> : null}
     </>
   )
 }
@@ -80,9 +80,9 @@ export function EvidencePanel(props: EvidencePanelProps) {
         title={props.title}
         placement={placement === 'overlay' ? 'end' : 'bottom'}
         maxHeight={placement === 'sheet' ? '80dvh' : undefined}
-        className={cx('fk-evidence-modal', props.className)}
+        className={cx('ty-evidence-modal', props.className)}
       >
-        {props.subtitle ? <p className="fk-evidence__subtitle" dir="auto">{props.subtitle}</p> : null}
+        {props.subtitle ? <p className="ty-evidence__subtitle" dir="auto">{props.subtitle}</p> : null}
         <Contents proof={props.proof} footer={props.footer}>
           {props.children}
         </Contents>
@@ -97,18 +97,18 @@ export function EvidencePanel(props: EvidencePanelProps) {
 
   return (
     <aside
-      className={cx('fk-evidence', props.className)}
+      className={cx('ty-evidence', props.className)}
       aria-labelledby={titleId}
       data-placement="docked"
-      style={{ '--fk-evidence-width': `${width}px` } as CSSProperties}
+      style={{ '--ty-evidence-width': `${width}px` } as CSSProperties}
     >
-      {props.onWidthChange ? <div {...splitter} aria-label={words.resize} className="fk-evidence__handle" /> : null}
-      <header className="fk-evidence__head">
-        <div className="fk-evidence__titles">
-          <h2 id={titleId} className="fk-evidence__title" dir="auto">
+      {props.onWidthChange ? <div {...splitter} aria-label={words.resize} className="ty-evidence__handle" /> : null}
+      <header className="ty-evidence__head">
+        <div className="ty-evidence__titles">
+          <h2 id={titleId} className="ty-evidence__title" dir="auto">
             {props.title}
           </h2>
-          {props.subtitle ? <p className="fk-evidence__subtitle" dir="auto">{props.subtitle}</p> : null}
+          {props.subtitle ? <p className="ty-evidence__subtitle" dir="auto">{props.subtitle}</p> : null}
         </div>
         <Button variant="quiet" iconOnly accessibleLabel={words.close} leadingIcon={<X />} onPress={close} />
       </header>

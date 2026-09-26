@@ -1,11 +1,11 @@
 /* SkipLink (spec: wave-1/skip-link.md; design direction §2.6). */
-@layer fakhir.components {
+@layer tympan.components {
   /* Hidden until focused, but never removed from rendering (stays in the accessibility tree). */
-  .fk-skip-link {
+  .ty-skip-link {
     position: fixed;
-    inset-block-start: var(--fk-space-2);
-    inset-inline-start: var(--fk-space-2);
-    z-index: var(--fk-z-skip-link);
+    inset-block-start: var(--ty-space-2);
+    inset-inline-start: var(--ty-space-2);
+    z-index: var(--ty-z-skip-link);
     inline-size: 1px;
     block-size: 1px;
     overflow: hidden;
@@ -13,37 +13,37 @@
     white-space: nowrap;
   }
 
-  .fk-skip-link:focus,
-  .fk-skip-link:focus-visible {
+  .ty-skip-link:focus,
+  .ty-skip-link:focus-visible {
     display: inline-flex;
     align-items: center;
     inline-size: auto;
     block-size: auto;
-    min-block-size: var(--fk-control-target);
-    padding-inline: var(--fk-space-4);
+    min-block-size: var(--ty-control-target);
+    padding-inline: var(--ty-space-4);
     overflow: visible;
     clip-path: none;
-    border: 1px solid var(--fk-line-strong);
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-surface-raised-solid);
-    color: var(--fk-accent);
-    box-shadow: var(--fk-shadow-floating);
-    font-weight: var(--fk-font-weight-semibold);
+    border: 1px solid var(--ty-line-strong);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-surface-raised-solid);
+    color: var(--ty-accent);
+    box-shadow: var(--ty-shadow-floating);
+    font-weight: var(--ty-font-weight-semibold);
     text-decoration: underline;
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
 
   /* No animation when it appears. */
   @media (prefers-reduced-motion: reduce) {
-    .fk-skip-link {
+    .ty-skip-link {
       transition: none;
     }
   }
 
   @media (forced-colors: active) {
-    .fk-skip-link:focus,
-    .fk-skip-link:focus-visible {
+    .ty-skip-link:focus,
+    .ty-skip-link:focus-visible {
       border: 1px solid LinkText;
       background: Canvas;
       color: LinkText;

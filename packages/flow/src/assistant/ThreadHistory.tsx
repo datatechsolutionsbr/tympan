@@ -6,7 +6,7 @@
 import type { ReactNode } from 'react'
 import { MessageSquarePlus, Star, Trash2 } from 'lucide-react'
 import { ToggleButton } from 'react-aria-components'
-import { Button } from '@fakhir/ui'
+import { Button } from '@datatechsolutions/tympan'
 import { fill, useFlowLocale, useLabels } from '../internal/labels'
 import { assistantLabels, type AssistantLabels } from './AssistantConversation'
 import { groupThreadsByDay, type DayBucket } from './threadDays'
@@ -26,7 +26,7 @@ export interface StarredThreads {
   onChange: (ids: string[]) => void
 }
 
-const PIN_KEY = 'fk-assistant-favourites'
+const PIN_KEY = 'ty-assistant-favourites'
 
 function readPins(): string[] {
   const raw = window.localStorage.getItem(PIN_KEY)
@@ -60,16 +60,16 @@ export function ThreadMetaLine({ id, agents = [], labels }: { id: string; agents
   const { locale } = useFlowLocale()
   const [visible, hidden] = [agents.slice(0, SHOWN_AGENTS), Math.max(0, agents.length - SHOWN_AGENTS)]
   return (
-    <span className="fk-convo-meta">
-      <code className="fk-convo-meta__id" title={id}>
+    <span className="ty-convo-meta">
+      <code className="ty-convo-meta__id" title={id}>
         {id.slice(0, 8)}
       </code>
       {visible.map((name) => (
-        <span key={name} className="fk-convo-meta__agent" dir="auto">
+        <span key={name} className="ty-convo-meta__agent" dir="auto">
           {name}
         </span>
       ))}
-      {hidden ? <span className="fk-convo-meta__more">{fill(words.moreAgents, { n: hidden }, locale)}</span> : null}
+      {hidden ? <span className="ty-convo-meta__more">{fill(words.moreAgents, { n: hidden }, locale)}</span> : null}
     </span>
   )
 }
@@ -102,15 +102,15 @@ function arrange(p: ThreadHistoryProps): Shelf[] | string {
 /** The three parts of an entry, drawn in this order. */
 const ENTRY_PARTS: ReadonlyArray<(t: ThreadSummary, p: ThreadHistoryProps) => ReactNode> = [
   (t, p) => (
-    <button key="open" type="button" className="fk-convo-row__main" aria-current={t.id === p.currentId ? 'page' : undefined} title={t.title} onClick={() => p.onOpen(t.id)}>
-      <span className="fk-convo-row__title" dir="auto">
+    <button key="open" type="button" className="ty-convo-row__main" aria-current={t.id === p.currentId ? 'page' : undefined} title={t.title} onClick={() => p.onOpen(t.id)}>
+      <span className="ty-convo-row__title" dir="auto">
         {t.title}
       </span>
       <ThreadMetaLine id={t.id} {...(t.agents ? { agents: t.agents } : {})} labels={p.labels} />
     </button>
   ),
   (t, p) => (
-    <ToggleButton key="star" className="fk-convo-row__fav" aria-label={fill(p.labels.favourite, { title: t.title }, p.locale)} isSelected={p.starred.includes(t.id)} onChange={(on) => p.onStar(t.id, on)}>
+    <ToggleButton key="star" className="ty-convo-row__fav" aria-label={fill(p.labels.favourite, { title: t.title }, p.locale)} isSelected={p.starred.includes(t.id)} onChange={(on) => p.onStar(t.id, on)}>
       <Star aria-hidden="true" focusable="false" />
     </ToggleButton>
   ),
@@ -119,15 +119,15 @@ const ENTRY_PARTS: ReadonlyArray<(t: ThreadSummary, p: ThreadHistoryProps) => Re
 
 function ShelfBlock({ shelf, p }: { shelf: Shelf; p: ThreadHistoryProps }) {
   const [key, caption, entries] = shelf
-  const captionId = `fk-convo-group-${key}`
+  const captionId = `ty-convo-group-${key}`
   return (
-    <section className="fk-convo-history__group" aria-labelledby={captionId}>
-      <h3 id={captionId} className="fk-convo-history__group-title">
+    <section className="ty-convo-history__group" aria-labelledby={captionId}>
+      <h3 id={captionId} className="ty-convo-history__group-title">
         {caption}
       </h3>
-      <ul className="fk-convo-history__list">
+      <ul className="ty-convo-history__list">
         {entries.map((t) => (
-          <li key={t.id} className="fk-convo-row" data-active={t.id === p.currentId || undefined}>
+          <li key={t.id} className="ty-convo-row" data-active={t.id === p.currentId || undefined}>
             {ENTRY_PARTS.map((draw) => draw(t, p))}
           </li>
         ))}
@@ -140,17 +140,17 @@ export function ThreadHistory(props: ThreadHistoryProps) {
   const words = props.labels
   const layout = arrange(props)
   return (
-    <nav className="fk-convo-history" aria-label={words.history}>
-      <div className="fk-convo-history__tools">
+    <nav className="ty-convo-history" aria-label={words.history}>
+      <div className="ty-convo-history__tools">
         <Button variant="secondary" size="compact" leadingIcon={<MessageSquarePlus />} onPress={props.onStart}>
           {words.newConversation}
         </Button>
-        <ToggleButton className="fk-convo-toggle" isSelected={props.starredOnly} onChange={props.onStarredOnly}>
+        <ToggleButton className="ty-convo-toggle" isSelected={props.starredOnly} onChange={props.onStarredOnly}>
           <Star aria-hidden="true" focusable="false" />
           <span>{words.favouritesOnly}</span>
         </ToggleButton>
       </div>
-      {typeof layout === 'string' ? <p className="fk-convo-history__empty">{layout}</p> : layout.map((shelf) => <ShelfBlock key={shelf[0]} shelf={shelf} p={props} />)}
+      {typeof layout === 'string' ? <p className="ty-convo-history__empty">{layout}</p> : layout.map((shelf) => <ShelfBlock key={shelf[0]} shelf={shelf} p={props} />)}
     </nav>
   )
 }

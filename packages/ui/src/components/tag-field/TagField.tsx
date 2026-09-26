@@ -102,7 +102,7 @@ function TypingInput({ id, holder, plan, inputRef }: { id: string; holder?: stri
     plan.commitOption(String(pointed))
     combo?.close()
   }
-  return <Input id={id} ref={inputRef} className="fk-tag-field__typing" placeholder={holder} onKeyDown={onKeyDown} />
+  return <Input id={id} ref={inputRef} className="ty-tag-field__typing" placeholder={holder} onKeyDown={onKeyDown} />
 }
 
 /* ---------------------------------------------------------------- chips -- */
@@ -110,9 +110,9 @@ function TypingInput({ id, holder, plan, inputRef }: { id: string; holder?: stri
 function DropChip({ spoken, off }: { spoken: string; off?: boolean }) {
   const nameId = useId()
   return (
-    <AriaButton slot="remove" className="fk-tag-field__drop" aria-labelledby={nameId} isDisabled={off}>
-      <X className="fk-icon" aria-hidden="true" focusable="false" />
-      <span id={nameId} className="fk-visually-hidden">
+    <AriaButton slot="remove" className="ty-tag-field__drop" aria-labelledby={nameId} isDisabled={off}>
+      <X className="ty-icon" aria-hidden="true" focusable="false" />
+      <span id={nameId} className="ty-visually-hidden">
         {spoken}
       </span>
     </AriaButton>
@@ -121,11 +121,11 @@ function DropChip({ spoken, off }: { spoken: string; off?: boolean }) {
 
 function ChipStrip(props: { name: string; chips: Array<{ id: string; text: string }>; off?: boolean; dropName: (text: string) => string; onDrop?: (keys: Set<Key>) => void }) {
   return (
-    <TagGroup aria-label={props.name} onRemove={props.onDrop} className="fk-tag-field__chips">
-      <TagList items={props.chips} className="fk-tag-field__chip-list">
+    <TagGroup aria-label={props.name} onRemove={props.onDrop} className="ty-tag-field__chips">
+      <TagList items={props.chips} className="ty-tag-field__chip-list">
         {(chip) => (
-          <Tag id={chip.id} textValue={chip.text} className="fk-tag-field__chip" isDisabled={props.off}>
-            <span className="fk-tag-field__chip-text">{chip.text}</span>
+          <Tag id={chip.id} textValue={chip.text} className="ty-tag-field__chip" isDisabled={props.off}>
+            <span className="ty-tag-field__chip-text">{chip.text}</span>
             <DropChip spoken={props.dropName(chip.text)} off={props.off} />
           </Tag>
         )}
@@ -137,7 +137,7 @@ function ChipStrip(props: { name: string; chips: Array<{ id: string; text: strin
 /* ------------------------------------------------------------ component -- */
 
 const tint = (tone: TagFieldTone): CSSProperties | undefined =>
-  typeof tone === 'number' ? ({ '--fk-tag-field-tint': `var(--fk-categorical-${tone})` } as CSSProperties) : undefined
+  typeof tone === 'number' ? ({ '--ty-tag-field-tint': `var(--ty-categorical-${tone})` } as CSSProperties) : undefined
 
 /**
  * Short values typed into removable chips, optionally assisted by (or
@@ -184,7 +184,7 @@ export function TagField(props: TagFieldProps) {
 
   // The chips sit beside (not inside) the text primitive so the two collections never share state.
   const hostProps = {
-    className: 'fk-tag-field__typing-host',
+    className: 'ty-tag-field__typing-host',
     'aria-label': props.label ? undefined : props.ariaLabel,
     'aria-labelledby': props.label ? ids.caption : undefined,
     'aria-describedby': [ids.note, ids.fault].filter(Boolean).join(' ') || undefined,
@@ -207,10 +207,10 @@ export function TagField(props: TagFieldProps) {
       onSelectionChange={(key) => key != null && admit(String(key))}
     >
       {input}
-      <Popover className="fk-tag-field__menu-layer" offset={4} triggerRef={wellRef}>
-        <ListBox className="fk-tag-field__menu" aria-label={copy.suggestions}>
+      <Popover className="ty-tag-field__menu-layer" offset={4} triggerRef={wellRef}>
+        <ListBox className="ty-tag-field__menu" aria-label={copy.suggestions}>
           {(offer: { id: string; text: string }) => (
-            <ListBoxItem id={offer.id} textValue={offer.text} className="fk-tag-field__choice">
+            <ListBoxItem id={offer.id} textValue={offer.text} className="ty-tag-field__choice">
               {offer.text}
             </ListBoxItem>
           )}
@@ -224,23 +224,23 @@ export function TagField(props: TagFieldProps) {
   )
 
   const lines: Array<[string | undefined, string | undefined, string]> = [
-    [ids.note, props.helperText, 'fk-tag-field__note'],
-    [ids.fault, props.errorText, 'fk-tag-field__fault'],
+    [ids.note, props.helperText, 'ty-tag-field__note'],
+    [ids.fault, props.errorText, 'ty-tag-field__fault'],
   ]
 
   return (
     <div
-      className={cx('fk-tag-field', props.className)}
+      className={cx('ty-tag-field', props.className)}
       data-tone={typeof tone === 'number' ? 'category' : tone}
       data-invalid={props.errorText ? true : undefined}
       style={tint(tone)}
     >
       {props.label ? (
-        <label id={ids.caption} htmlFor={ids.input} className="fk-tag-field__caption">
+        <label id={ids.caption} htmlFor={ids.input} className="ty-tag-field__caption">
           {props.label}
         </label>
       ) : null}
-      <div ref={wellRef} className="fk-tag-field__well" data-disabled={props.disabled || undefined}>
+      <div ref={wellRef} className="ty-tag-field__well" data-disabled={props.disabled || undefined}>
         <ChipStrip
           name={copy.chosen(props.label ?? props.ariaLabel ?? '')}
           chips={held.map((v) => ({ id: v, text: shown(v) }))}

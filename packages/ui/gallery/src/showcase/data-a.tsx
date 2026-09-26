@@ -39,7 +39,7 @@ select stage, count(*) from cases group by stage
 function NotificationDemo() {
   const toast = useToast()
   return (
-    <div className="fk-gallery-row">
+    <div className="ty-gallery-row">
       <Button onPress={() => toast.success('Upload finished', { message: 'Three sources were attached.' })}>Raise a success</Button>
       <Button onPress={() => toast.warning('Rule changed', { message: 'Stage rule v2 is now active.' })}>Raise a warning</Button>
       <NotificationCenter />
@@ -116,7 +116,7 @@ export function DataAShowcase({ scope }: { scope: string }) {
       </Section>
 
       <Section id={id('badges')} title="CountBadge, ProfileAvatar, CopyIdentifier">
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <span style={{ position: 'relative', display: 'inline-flex' }}>
             <Button iconOnly accessibleLabel="Approvals" leadingIcon={<Bell />} aria-describedby={id('badge')} />
             <CountBadge count={12} id={id('badge')} itemNoun={{ one: 'approval', other: 'approvals' }} />

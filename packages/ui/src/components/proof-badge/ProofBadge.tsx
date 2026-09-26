@@ -45,7 +45,7 @@ export function ProofBadge({ state, size = 'inline', label, detail, interactive 
   const word = label ?? messages.proof[key]
   const Icon = ICONS[key]
   const common = {
-    className: cx('fk-proof-badge', className),
+    className: cx('ty-proof-badge', className),
     'data-state': key.replace('_', '-'),
     'data-size': size,
   }
@@ -53,18 +53,18 @@ export function ProofBadge({ state, size = 'inline', label, detail, interactive 
   if (size === 'block') {
     return (
       <div {...common}>
-        <div className="fk-proof-badge__head">
-          <Icon className="fk-proof-badge__icon" aria-hidden="true" focusable="false" />
-          <span className="fk-proof-badge__word">{word}</span>
-          {detail ? <span className="fk-proof-badge__detail">{detail}</span> : null}
+        <div className="ty-proof-badge__head">
+          <Icon className="ty-proof-badge__icon" aria-hidden="true" focusable="false" />
+          <span className="ty-proof-badge__word">{word}</span>
+          {detail ? <span className="ty-proof-badge__detail">{detail}</span> : null}
         </div>
         {provedBy != null || at != null || rule ? (
-          <p className="fk-proof-badge__meta">
+          <p className="ty-proof-badge__meta">
             {provedBy != null ? (
-              <span className="fk-proof-badge__by">{typeof provedBy === 'string' ? messages.proof.provedBy(provedBy) : provedBy}</span>
+              <span className="ty-proof-badge__by">{typeof provedBy === 'string' ? messages.proof.provedBy(provedBy) : provedBy}</span>
             ) : null}
-            {at != null ? <span className="fk-proof-badge__at">{at}</span> : null}
-            {rule ? <code className="fk-proof-badge__rule">{messages.proof.rule(rule)}</code> : null}
+            {at != null ? <span className="ty-proof-badge__at">{at}</span> : null}
+            {rule ? <code className="ty-proof-badge__rule">{messages.proof.rule(rule)}</code> : null}
           </p>
         ) : null}
       </div>
@@ -72,9 +72,9 @@ export function ProofBadge({ state, size = 'inline', label, detail, interactive 
   }
 
   if (size === 'compact') {
-    const glyph = <Icon className="fk-proof-badge__icon" aria-hidden="true" focusable="false" />
+    const glyph = <Icon className="ty-proof-badge__icon" aria-hidden="true" focusable="false" />
     const tail = detail ? (
-      <span className="fk-proof-badge__detail" aria-hidden={interactive ? true : undefined}>
+      <span className="ty-proof-badge__detail" aria-hidden={interactive ? true : undefined}>
         {detail}
       </span>
     ) : null
@@ -88,7 +88,7 @@ export function ProofBadge({ state, size = 'inline', label, detail, interactive 
               {tail}
             </span>
           </Focusable>
-          <Tooltip className="fk-proof-badge__tooltip" offset={6}>
+          <Tooltip className="ty-proof-badge__tooltip" offset={6}>
             {word}
           </Tooltip>
         </TooltipTrigger>
@@ -97,7 +97,7 @@ export function ProofBadge({ state, size = 'inline', label, detail, interactive 
     return (
       <span {...common} title={word}>
         {glyph}
-        <span className="fk-visually-hidden">{word}</span>
+        <span className="ty-visually-hidden">{word}</span>
         {tail}
       </span>
     )
@@ -105,9 +105,9 @@ export function ProofBadge({ state, size = 'inline', label, detail, interactive 
 
   return (
     <span {...common}>
-      <Icon className="fk-proof-badge__icon" aria-hidden="true" focusable="false" />
-      <span className="fk-proof-badge__word">{word}</span>
-      {detail ? <span className="fk-proof-badge__detail">{detail}</span> : null}
+      <Icon className="ty-proof-badge__icon" aria-hidden="true" focusable="false" />
+      <span className="ty-proof-badge__word">{word}</span>
+      {detail ? <span className="ty-proof-badge__detail">{detail}</span> : null}
     </span>
   )
 }

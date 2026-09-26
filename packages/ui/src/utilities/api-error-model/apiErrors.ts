@@ -1,8 +1,8 @@
 // ApiErrorModel (spec: wave-2/api-error-model.md): one error shape for API
 // failures, an RFC 9457 problem variant, and the run-domain types consumed by
 // live-run components. The run vocabulary is the library's; the functions at
-// the end translate the Fakhir OpenAPI contract's enums into it (a test reads
-// the contract so both stay in step).
+// the end translate the run enums of the host's OpenAPI workflows contract into
+// it (a test reads that contract, when present, so both stay in step).
 
 export interface SerializedApiError {
   message: string

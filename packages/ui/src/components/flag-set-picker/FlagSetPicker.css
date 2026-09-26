@@ -1,31 +1,31 @@
 /* FlagSetPicker (spec: wave-2/flag-set-picker.md). Presets reuse ChoiceCard, options reuse Checkbox. */
-@layer fakhir.components {
-  .fk-flag-set {
+@layer tympan.components {
+  .ty-flag-set {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-4);
+    gap: var(--ty-space-4);
   }
-  .fk-flag-set__title {
-    color: var(--fk-ink);
-    font-family: var(--fk-font-serif);
-    font-size: var(--fk-font-size-h3);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-h3);
+  .ty-flag-set__title {
+    color: var(--ty-ink);
+    font-family: var(--ty-font-serif);
+    font-size: var(--ty-font-size-h3);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-h3);
   }
-  .fk-flag-set__presets .fk-choice-card-group__cards {
+  .ty-flag-set__presets .ty-choice-card-group__cards {
     display: flex;
     flex-wrap: wrap;
   }
-  .fk-flag-set__presets .fk-choice-card {
+  .ty-flag-set__presets .ty-choice-card {
     flex: 1 1 220px;
   }
   @media (max-width: 639.98px) {
-    .fk-flag-set__presets .fk-choice-card-group__cards {
+    .ty-flag-set__presets .ty-choice-card-group__cards {
       flex-direction: column;
     }
   }
   @media (forced-colors: active) {
-    .fk-flag-set__presets .fk-choice-card[data-selected] {
+    .ty-flag-set__presets .ty-choice-card[data-selected] {
       border-color: Highlight;
     }
   }

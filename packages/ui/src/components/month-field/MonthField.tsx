@@ -43,9 +43,9 @@ const clampYear = (year: number, low?: number, high?: number) => (low === undefi
 function YearChips({ years, shown, label, onPick }: { years: number[]; shown: number; label: string; onPick: (y: number) => void }) {
   if (years.length < 2) return null
   return (
-    <div className="fk-fb-chips" role="group" aria-label={label}>
+    <div className="ty-fb-chips" role="group" aria-label={label}>
       {years.map((y) => (
-        <AriaButton key={y} className="fk-fb-chip" aria-pressed={y === shown} onPress={() => onPick(y)}>
+        <AriaButton key={y} className="ty-fb-chip" aria-pressed={y === shown} onPress={() => onPick(y)}>
           {y}
         </AriaButton>
       ))}
@@ -76,10 +76,10 @@ export function MonthField(props: MonthFieldProps) {
 
   const face = props.triggerContent ?? (
     <>
-      <span className="fk-fb-trigger__glyph" aria-hidden="true">
+      <span className="ty-fb-trigger__glyph" aria-hidden="true">
         <CalendarDays />
       </span>
-      <span className="fk-fb-trigger__text" data-placeholder={props.value ? undefined : true}>
+      <span className="ty-fb-trigger__text" data-placeholder={props.value ? undefined : true}>
         {caption}
       </span>
     </>
@@ -88,7 +88,7 @@ export function MonthField(props: MonthFieldProps) {
   return (
     <DialogTrigger isOpen={open} onOpenChange={toggle}>
       <AriaButton
-        className={cx('fk-fb-trigger', 'fk-month-field', props.className)}
+        className={cx('ty-fb-trigger', 'ty-month-field', props.className)}
         aria-label={`${props.label}, ${caption}`}
         isDisabled={props.disabled}
         data-embedded={props.embedded || undefined}

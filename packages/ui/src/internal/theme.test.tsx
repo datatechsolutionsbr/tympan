@@ -24,15 +24,15 @@ describe('ThemeProvider', () => {
       </ThemeProvider>,
     )
     const html = document.documentElement
-    expect(html).toHaveAttribute('data-fk-theme', 'fakhir')
-    expect(html).toHaveAttribute('data-fk-mode', 'system')
-    expect(html).toHaveAttribute('data-fk-density', 'default')
+    expect(html).toHaveAttribute('data-ty-theme', 'tympan')
+    expect(html).toHaveAttribute('data-ty-mode', 'system')
+    expect(html).toHaveAttribute('data-ty-density', 'default')
     await userEvent.click(screen.getByText('dark'))
     await userEvent.click(screen.getByText('compact'))
     await userEvent.click(screen.getByText('neutral'))
-    expect(html).toHaveAttribute('data-fk-mode', 'dark')
-    expect(html).toHaveAttribute('data-fk-density', 'compact')
-    expect(html).toHaveAttribute('data-fk-theme', 'neutral')
+    expect(html).toHaveAttribute('data-ty-mode', 'dark')
+    expect(html).toHaveAttribute('data-ty-density', 'compact')
+    expect(html).toHaveAttribute('data-ty-theme', 'neutral')
   })
 
   it('resolves system mode through prefers-color-scheme', () => {
@@ -41,9 +41,9 @@ describe('ThemeProvider', () => {
         <Probe />
       </ThemeProvider>,
     )
-    expect(screen.getByLabelText('state')).toHaveTextContent('fakhir|system|light|default')
+    expect(screen.getByLabelText('state')).toHaveTextContent('tympan|system|light|default')
     setMedia({ dark: true })
-    expect(screen.getByLabelText('state')).toHaveTextContent('fakhir|system|dark|default')
+    expect(screen.getByLabelText('state')).toHaveTextContent('tympan|system|dark|default')
   })
 
   it('scopes attributes to a wrapper in scope mode and supports controlled values', async () => {
@@ -54,27 +54,27 @@ describe('ThemeProvider', () => {
       </ThemeProvider>,
     )
     const scope = container.firstElementChild!
-    expect(scope).toHaveAttribute('data-fk-theme', 'high-contrast')
+    expect(scope).toHaveAttribute('data-ty-theme', 'high-contrast')
     await userEvent.click(screen.getByText('dark'))
     expect(onModeChange).toHaveBeenCalledWith('dark')
-    expect(scope).toHaveAttribute('data-fk-mode', 'light')
+    expect(scope).toHaveAttribute('data-ty-mode', 'light')
   })
 
   it('persists to storage when a key is given, and the init script restores it', async () => {
-    window.localStorage.removeItem('fk-test')
+    window.localStorage.removeItem('ty-test')
     const { unmount } = render(
-      <ThemeProvider storageKey="fk-test" target="scope">
+      <ThemeProvider storageKey="ty-test" target="scope">
         <Probe />
       </ThemeProvider>,
     )
     await userEvent.click(screen.getByText('dark'))
-    expect(JSON.parse(window.localStorage.getItem('fk-test')!)).toMatchObject({ mode: 'dark' })
+    expect(JSON.parse(window.localStorage.getItem('ty-test')!)).toMatchObject({ mode: 'dark' })
     unmount()
-    document.documentElement.removeAttribute('data-fk-mode')
+    document.documentElement.removeAttribute('data-ty-mode')
     act(() => {
-      new Function(themeInitScript('fk-test'))()
+      new Function(themeInitScript('ty-test'))()
     })
-    expect(document.documentElement).toHaveAttribute('data-fk-mode', 'dark')
+    expect(document.documentElement).toHaveAttribute('data-ty-mode', 'dark')
   })
 
   it('throws a descriptive error outside the provider', () => {

@@ -18,13 +18,13 @@ export type LoaderTone = (typeof loaderToneNames)[number]
 
 /** Custom property holding the tone colour, read by the BrandLoader stylesheet. */
 export function loaderToneColour(tone: LoaderTone): string {
-  if (tone.startsWith('categorical-')) return `var(--fk-${tone})`
+  if (tone.startsWith('categorical-')) return `var(--ty-${tone})`
   const semantic: Record<string, string> = {
-    accent: 'var(--fk-accent)',
-    success: 'var(--fk-success)',
-    pending: 'var(--fk-warning)',
-    error: 'var(--fk-danger)',
-    neutral: 'var(--fk-ink-3)',
+    accent: 'var(--ty-accent)',
+    success: 'var(--ty-success)',
+    pending: 'var(--ty-warning)',
+    error: 'var(--ty-danger)',
+    neutral: 'var(--ty-ink-3)',
   }
   return semantic[tone] ?? semantic.accent!
 }
@@ -44,7 +44,7 @@ export interface LoaderPresetRegistry {
   ids(): string[]
 }
 
-/** The only preset shipped: Fakhir's mark and the accent tone. */
+/** The only preset shipped: the product mark and the accent tone. */
 export const defaultLoaderPreset: LoaderPreset = Object.freeze({
   id: 'default',
   mark: <BrandMark showWordmark={false} size="large" />,

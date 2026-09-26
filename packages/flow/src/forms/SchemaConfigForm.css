@@ -1,6 +1,6 @@
 /* SchemaConfigForm: structured-text areas scroll inside themselves, never the page. */
-@layer fakhir.components {
-  .fk-schema-form textarea {
+@layer tympan.components {
+  .ty-schema-form textarea {
     white-space: pre;
     overflow-x: auto;
   }

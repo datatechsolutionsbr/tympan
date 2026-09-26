@@ -48,17 +48,17 @@ function StateMark({ state }: { state: RecordCardProps['state'] }) {
 export function RecordCard(props: RecordCardProps) {
   const Tag = props.standalone ? 'article' : 'li'
   const plainTitle = props.titleText ?? (typeof props.title === 'string' ? props.title : undefined)
-  const strip = props.accent ? ({ '--fk-record-accent': `var(--fk-categorical-${props.accent})` } as CSSProperties) : undefined
+  const strip = props.accent ? ({ '--ty-record-accent': `var(--ty-categorical-${props.accent})` } as CSSProperties) : undefined
 
   const titleRun = (
-    <span className="fk-record-card__title" title={plainTitle}>
+    <span className="ty-record-card__title" title={plainTitle}>
       {props.title}
     </span>
   )
 
   return (
     <Tag
-      className={cx('fk-record-card', props.className)}
+      className={cx('ty-record-card', props.className)}
       style={strip}
       data-accent={props.accent ? '' : undefined}
       data-interactive={props.onOpen ? '' : undefined}
@@ -66,24 +66,24 @@ export function RecordCard(props: RecordCardProps) {
       aria-label={props.standalone ? plainTitle : undefined}
       {...props.dragHandlers}
     >
-      <div className="fk-record-card__head">
-        {props.leading ? <span className="fk-record-card__leading">{props.leading}</span> : null}
-        <div className="fk-record-card__names">
+      <div className="ty-record-card__head">
+        {props.leading ? <span className="ty-record-card__leading">{props.leading}</span> : null}
+        <div className="ty-record-card__names">
           {props.onOpen ? (
-            <AriaButton className="fk-record-card__open" onPress={props.onOpen}>
+            <AriaButton className="ty-record-card__open" onPress={props.onOpen}>
               {titleRun}
             </AriaButton>
           ) : (
             titleRun
           )}
-          {props.secondary ? <span className="fk-record-card__secondary">{props.secondary}</span> : null}
+          {props.secondary ? <span className="ty-record-card__secondary">{props.secondary}</span> : null}
         </div>
-        <span className="fk-record-card__state">
+        <span className="ty-record-card__state">
           <StateMark state={props.state} />
         </span>
       </div>
-      {props.children ? <div className="fk-record-card__body">{props.children}</div> : null}
-      {props.footer ? <div className="fk-record-card__footer">{props.footer}</div> : null}
+      {props.children ? <div className="ty-record-card__body">{props.children}</div> : null}
+      {props.footer ? <div className="ty-record-card__footer">{props.footer}</div> : null}
     </Tag>
   )
 }
@@ -120,12 +120,12 @@ export function RecordActions(props: RecordActionsProps) {
   const named = (label: string) => (
     <>
       {`${label} `}
-      <span className="fk-visually-hidden">{props.recordTitle}</span>
+      <span className="ty-visually-hidden">{props.recordTitle}</span>
     </>
   )
 
   return (
-    <div className="fk-record-actions">
+    <div className="ty-record-actions">
       <Button variant="quiet" size="compact" leadingIcon={<Pencil />} onPress={props.onEdit} disabled={busy}>
         {named(props.editLabel)}
       </Button>

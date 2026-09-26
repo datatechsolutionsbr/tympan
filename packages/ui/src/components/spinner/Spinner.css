@@ -1,99 +1,99 @@
 /* Spinner (spec: wave-1/spinner.md; design direction §2.5, §2.7, §2.12). */
-@layer fakhir.components {
-  .fk-spinner {
-    --fk-spinner-size: 1.25rem;
+@layer tympan.components {
+  .ty-spinner {
+    --ty-spinner-size: 1.25rem;
     display: inline-flex;
     align-items: center;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
     color: inherit;
-    font-size: var(--fk-font-size-label);
-    line-height: var(--fk-font-line-height-label);
+    font-size: var(--ty-font-size-label);
+    line-height: var(--ty-font-line-height-label);
     vertical-align: middle;
   }
-  .fk-spinner[data-size='small'] {
-    --fk-spinner-size: 1em;
+  .ty-spinner[data-size='small'] {
+    --ty-spinner-size: 1em;
   }
-  .fk-spinner[data-size='large'] {
-    --fk-spinner-size: 2rem;
+  .ty-spinner[data-size='large'] {
+    --ty-spinner-size: 2rem;
   }
-  .fk-spinner[data-tone='accent'] {
-    color: var(--fk-accent);
+  .ty-spinner[data-tone='accent'] {
+    color: var(--ty-accent);
   }
-  .fk-spinner[data-tone='on-accent'] {
-    color: var(--fk-accent-ink);
+  .ty-spinner[data-tone='on-accent'] {
+    color: var(--ty-accent-ink);
   }
-  .fk-spinner[data-tone='neutral'] {
-    color: var(--fk-ink-3);
+  .ty-spinner[data-tone='neutral'] {
+    color: var(--ty-ink-3);
   }
 
   /* CSS-only ring: a full faint circle with one solid quarter arc. */
-  .fk-spinner__ring {
+  .ty-spinner__ring {
     box-sizing: border-box;
     flex: none;
-    inline-size: var(--fk-spinner-size);
-    block-size: var(--fk-spinner-size);
-    border: max(2px, calc(var(--fk-spinner-size) / 9)) solid color-mix(in srgb, currentColor 25%, transparent);
+    inline-size: var(--ty-spinner-size);
+    block-size: var(--ty-spinner-size);
+    border: max(2px, calc(var(--ty-spinner-size) / 9)) solid color-mix(in srgb, currentColor 25%, transparent);
     border-block-start-color: currentColor;
     border-radius: 50%;
-    animation: fk-spinner-rotate 900ms linear infinite;
+    animation: ty-spinner-rotate 900ms linear infinite;
   }
 
-  .fk-spinner__dots {
+  .ty-spinner__dots {
     display: inline-flex;
-    gap: calc(var(--fk-spinner-size) / 6);
+    gap: calc(var(--ty-spinner-size) / 6);
     align-items: center;
-    block-size: var(--fk-spinner-size);
+    block-size: var(--ty-spinner-size);
   }
-  .fk-spinner__dot {
-    inline-size: calc(var(--fk-spinner-size) / 4);
-    block-size: calc(var(--fk-spinner-size) / 4);
-    border-radius: var(--fk-radius-pill);
+  .ty-spinner__dot {
+    inline-size: calc(var(--ty-spinner-size) / 4);
+    block-size: calc(var(--ty-spinner-size) / 4);
+    border-radius: var(--ty-radius-pill);
     background: currentColor;
-    animation: fk-spinner-pulse var(--fk-dur-pulse) ease-in-out infinite;
+    animation: ty-spinner-pulse var(--ty-dur-pulse) ease-in-out infinite;
   }
-  .fk-spinner__dot:nth-child(2) {
+  .ty-spinner__dot:nth-child(2) {
     animation-delay: 200ms;
   }
-  .fk-spinner__dot:nth-child(3) {
+  .ty-spinner__dot:nth-child(3) {
     animation-delay: 400ms;
   }
 
-  .fk-spinner__label {
+  .ty-spinner__label {
     color: inherit;
   }
 
   /* Overlay variant */
-  .fk-spinner-region {
+  .ty-spinner-region {
     position: relative;
   }
-  .fk-spinner-overlay {
+  .ty-spinner-overlay {
     position: absolute;
     inset: 0;
-    z-index: var(--fk-z-sticky);
+    z-index: var(--ty-z-sticky);
     display: grid;
     place-items: center;
     border-radius: inherit;
-    background: color-mix(in srgb, var(--fk-backdrop) 50%, transparent);
+    background: color-mix(in srgb, var(--ty-backdrop) 50%, transparent);
   }
-  .fk-spinner-overlay__card {
+  .ty-spinner-overlay__card {
     display: inline-flex;
     align-items: center;
-    gap: var(--fk-space-2);
-    padding: var(--fk-space-3) var(--fk-space-4);
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-card);
-    background: var(--fk-surface-raised);
-    color: var(--fk-on-surface-raised);
-    box-shadow: var(--fk-shadow-raised);
-    font-size: var(--fk-font-size-label);
+    gap: var(--ty-space-2);
+    padding: var(--ty-space-3) var(--ty-space-4);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-card);
+    background: var(--ty-surface-raised);
+    color: var(--ty-on-surface-raised);
+    box-shadow: var(--ty-shadow-raised);
+    font-size: var(--ty-font-size-label);
   }
 
-  @keyframes fk-spinner-rotate {
+  @keyframes ty-spinner-rotate {
     to {
       transform: rotate(1turn);
     }
   }
-  @keyframes fk-spinner-pulse {
+  @keyframes ty-spinner-pulse {
     0%,
     100% {
       opacity: 0.3;
@@ -104,30 +104,30 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-spinner__ring,
-    .fk-spinner__dot {
+    .ty-spinner__ring,
+    .ty-spinner__dot {
       animation: none;
     }
   }
 
   @media (prefers-reduced-transparency: reduce) {
-    .fk-spinner-overlay__card {
-      background: var(--fk-surface-raised-solid);
+    .ty-spinner-overlay__card {
+      background: var(--ty-surface-raised-solid);
     }
   }
 
   @media (forced-colors: active) {
-    .fk-spinner {
+    .ty-spinner {
       color: CanvasText;
     }
-    .fk-spinner__dot {
+    .ty-spinner__dot {
       background: CanvasText;
     }
-    .fk-spinner__ring {
+    .ty-spinner__ring {
       border-color: GrayText;
       border-block-start-color: CanvasText;
     }
-    .fk-spinner-overlay__card {
+    .ty-spinner-overlay__card {
       border-color: CanvasText;
     }
   }

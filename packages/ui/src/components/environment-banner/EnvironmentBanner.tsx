@@ -56,13 +56,13 @@ export function EnvironmentBanner(props: EnvironmentBannerProps) {
   const present = rows.filter((r): r is [string, string | number] => r[1] !== undefined && r[1] !== '')
 
   return (
-    <section className={props.className ? `fk-env-banner ${props.className}` : 'fk-env-banner'} aria-label={t.label}>
+    <section className={props.className ? `ty-env-banner ${props.className}` : 'ty-env-banner'} aria-label={t.label}>
       <Tag>{props.environmentWord ?? env ?? t.label}</Tag>
-      <p className="fk-env-banner__message">{t.message}</p>
+      <p className="ty-env-banner__message">{t.message}</p>
       {present.length ? (
-        <dl className="fk-env-banner__facts">
+        <dl className="ty-env-banner__facts">
           {present.map(([term, value]) => (
-            <div key={term} className="fk-env-banner__fact">
+            <div key={term} className="ty-env-banner__fact">
               <dt>{term}</dt>
               <dd>{value}</dd>
             </div>

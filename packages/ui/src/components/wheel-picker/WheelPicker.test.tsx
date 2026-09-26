@@ -115,7 +115,7 @@ describe('WheelPicker', () => {
 
   it('keeps 44 px rows and a system-highlight band in forced colours', () => {
     const css = cssOf('components/wheel-picker/WheelPicker.css')
-    expect(css).toMatch(/--fk-wheel-row:\s*var\(--fk-control-target\)/)
+    expect(css).toMatch(/--ty-wheel-row:\s*var\(--ty-control-target\)/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/Highlight/)
     expect(mediaBlock(css, /\(prefers-reduced-transparency:\s*reduce\)/)).toMatch(/surface-raised-solid/)
   })

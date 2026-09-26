@@ -1,21 +1,21 @@
 /* FederatedSignIn (spec: wave-2/federated-sign-in.md; design direction §2.10). Buttons come from Button. */
-@layer fakhir.components {
-  .fk-federated {
+@layer tympan.components {
+  .ty-federated {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
   }
-  .fk-federated[data-arrangement='row'] {
+  .ty-federated[data-arrangement='row'] {
     grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
     grid-auto-flow: column;
   }
-  .fk-federated__button {
-    min-block-size: var(--fk-control-target);
+  .ty-federated__button {
+    min-block-size: var(--ty-control-target);
   }
 
   /* Row falls back to a stack on phones. */
   @media (max-width: 639.98px) {
-    .fk-federated[data-arrangement='row'] {
+    .ty-federated[data-arrangement='row'] {
       grid-template-columns: minmax(0, 1fr);
       grid-auto-flow: row;
     }

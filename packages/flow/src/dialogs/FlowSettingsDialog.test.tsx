@@ -1,7 +1,7 @@
 import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import { cssOf, mediaBlock } from '../../test/css'
 import { createDialogStack, DialogStackProvider, type FlowSettingsPayload } from '../state/dialogStack'
@@ -10,11 +10,11 @@ import { FlowSettingsDialog, flowSettingsPatch } from './FlowSettingsDialog'
 function setup(payload: FlowSettingsPayload, onSave = vi.fn(() => Promise.resolve()), locale?: string) {
   const stack = createDialogStack()
   const view = render(
-    <FakhirProvider {...(locale ? { locale } : {})}>
+    <TympanProvider {...(locale ? { locale } : {})}>
       <DialogStackProvider stack={stack}>
         <FlowSettingsDialog onSave={onSave} />
       </DialogStackProvider>
-    </FakhirProvider>,
+    </TympanProvider>,
   )
   act(() => stack.open('flow-settings', payload))
   return { ...view, stack, onSave }
@@ -89,7 +89,7 @@ describe('FlowSettingsDialog', () => {
 
   it('fills the screen on phones and shows switches with system colours', () => {
     const css = cssOf('dialogs/Dialogs.css')
-    expect(mediaBlock(css, /\(max-width: 639px\)/)).toMatch(/fk-flow-settings[\s\S]*100vw/)
-    expect(css).toMatch(/min-block-size: var\(--fk-control-target, 44px\)/)
+    expect(mediaBlock(css, /\(max-width: 639px\)/)).toMatch(/ty-flow-settings[\s\S]*100vw/)
+    expect(css).toMatch(/min-block-size: var\(--ty-control-target, 44px\)/)
   })
 })

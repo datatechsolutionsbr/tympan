@@ -2,7 +2,7 @@ import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { ReactNode } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import { NodeKindCatalogStore } from '../catalog/kindCatalog'
 import { createDialogStack, DialogStackProvider, type NodeConfigPayload } from '../state/dialogStack'
@@ -22,7 +22,7 @@ function fakeForm(name: string) {
         <button type="button" onClick={props.onCancel}>
           Cancel
         </button>
-        <button type="button" data-fk-form-save="" onClick={() => props.onSave({ kind: name, x: 1 })}>
+        <button type="button" data-ty-form-save="" onClick={() => props.onSave({ kind: name, x: 1 })}>
           Save
         </button>
       </div>
@@ -55,16 +55,16 @@ function setup(payload: Partial<NodeConfigPayload> & { kind: string }, extra: Re
   const onSave = vi.fn()
   const store = catalog()
   const Wrap = ({ children }: { children: ReactNode }) => (
-    <FakhirProvider {...(locale ? { locale } : {})}>
+    <TympanProvider {...(locale ? { locale } : {})}>
       <FlowEditorStateProvider>
         <DialogStackProvider stack={stack}>{children}</DialogStackProvider>
       </FlowEditorStateProvider>
-    </FakhirProvider>
+    </TympanProvider>
   )
   const view = render(
     <Wrap>
-      <div data-fk-node-id="n1">
-        <button type="button" data-fk-node-focus="">
+      <div data-ty-node-id="n1">
+        <button type="button" data-ty-node-focus="">
           node n1
         </button>
       </div>

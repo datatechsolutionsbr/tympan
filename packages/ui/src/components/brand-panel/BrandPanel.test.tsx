@@ -35,13 +35,13 @@ describe('BrandPanel', () => {
 
   it('renders no empty footnote line', () => {
     const { container } = render(<BrandPanel mark={null} title="T" subtitle="S" />)
-    expect(container.querySelector('.fk-brand-panel__footnote')).toBeNull()
+    expect(container.querySelector('.ty-brand-panel__footnote')).toBeNull()
   })
 
   it('borders each tile and hides decoration under forced colours', () => {
     const forced = mediaBlock(cssOf('components/brand-panel/BrandPanel.css'), /\(forced-colors:\s*active\)/)
-    expect(forced).toMatch(/\.fk-brand-panel__figure\s*\{[^}]*border:\s*1px solid CanvasText/)
-    expect(forced).toMatch(/\.fk-brand-panel__decor\s*\{[^}]*display:\s*none/)
+    expect(forced).toMatch(/\.ty-brand-panel__figure\s*\{[^}]*border:\s*1px solid CanvasText/)
+    expect(forced).toMatch(/\.ty-brand-panel__decor\s*\{[^}]*display:\s*none/)
   })
 
   it('has no axe violations, light and dark', async () => {

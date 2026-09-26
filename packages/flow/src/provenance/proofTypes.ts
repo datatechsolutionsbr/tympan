@@ -24,7 +24,7 @@ export interface ProofCertificate {
   /** The claim in words, as the root of the obligation tree. */
   claim: string
   verdict: Exclude<ProvProofState, 'not_disclosed'>
-  /** Verifier name and version, e.g. "fakhir-verify 0.7.2". */
+  /** Verifier name and version, e.g. "proof-verify 0.7.2". */
   verifier: string
   /** When the verifier ran (ISO 8601). */
   ranAt: string

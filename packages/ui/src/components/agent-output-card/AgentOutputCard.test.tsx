@@ -13,16 +13,16 @@ describe('AgentOutputCard', () => {
     const { container } = render(<AgentOutputCard agentName="Coder" duration="3.4 s" output="Done." />)
     const card = screen.getByRole('article', { name: 'Coder' })
     expect(card).toHaveTextContent('agent')
-    expect(container.querySelector('.fk-avatar')).toHaveAttribute('data-kind', 'agent')
+    expect(container.querySelector('.ty-avatar')).toHaveAttribute('data-kind', 'agent')
     expect(screen.getByText('completed')).toBeInTheDocument()
     expect(container.querySelector('[data-outcome="completed"] svg')).toHaveAttribute('aria-hidden', 'true')
   })
 
   it('clamps a long output to maxLines while the full text stays reachable via onOpen', () => {
     const { container } = render(<AgentOutputCard agentName="Coder" duration="1 s" output={long} maxLines={4} onOpen={() => {}} />)
-    const excerpt = container.querySelector('.fk-agent-output__excerpt') as HTMLElement
-    expect(excerpt.style.getPropertyValue('--fk-agent-output-lines')).toBe('4')
-    expect(cssOf('components/agent-output-card/AgentOutputCard.css')).toMatch(/-webkit-line-clamp:\s*var\(--fk-agent-output-lines/)
+    const excerpt = container.querySelector('.ty-agent-output__excerpt') as HTMLElement
+    expect(excerpt.style.getPropertyValue('--ty-agent-output-lines')).toBe('4')
+    expect(cssOf('components/agent-output-card/AgentOutputCard.css')).toMatch(/-webkit-line-clamp:\s*var\(--ty-agent-output-lines/)
     expect(screen.getByRole('button', { name: /Coder/ })).toBeInTheDocument()
   })
 
@@ -45,7 +45,7 @@ describe('AgentOutputCard', () => {
   it('uses no font size below the 12 px meta step', () => {
     const css = cssOf('components/agent-output-card/AgentOutputCard.css')
     const sizes = [...css.matchAll(/font-size:\s*([^;]+);/g)].map((m) => m[1])
-    for (const s of sizes) expect(s).toMatch(/--fk-font-size-(meta|body|label)/)
+    for (const s of sizes) expect(s).toMatch(/--ty-font-size-(meta|body|label)/)
   })
 
   it('has no axe violations, light and dark', async () => {

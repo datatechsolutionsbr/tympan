@@ -70,12 +70,12 @@ function absorb(entries: string[], state: Pending): Pending {
 function ChipFace({ item }: { item: ChipItem }) {
   return (
     <>
-      <span className="fk-chip-group__tick" aria-hidden="true">
+      <span className="ty-chip-group__tick" aria-hidden="true">
         <Check focusable="false" />
       </span>
-      {item.marker ? <span className="fk-chip-group__marker" aria-hidden="true" style={categoricalVar('--fk-chip-marker', item.marker)} /> : null}
-      {item.code ? <span className="fk-chip-group__code">{item.code}</span> : null}
-      <span className="fk-chip-group__name">{item.name}</span>
+      {item.marker ? <span className="ty-chip-group__marker" aria-hidden="true" style={categoricalVar('--ty-chip-marker', item.marker)} /> : null}
+      {item.code ? <span className="ty-chip-group__code">{item.code}</span> : null}
+      <span className="ty-chip-group__name">{item.name}</span>
     </>
   )
 }
@@ -116,26 +116,26 @@ export function ChipGroup(props: ChipGroupProps) {
   }
 
   let body
-  if (props.loading) body = <p className="fk-chip-group__note">{s.loading}</p>
-  else if (!items.length && !props.allowCustom) body = <p className="fk-chip-group__note">{s.empty}</p>
+  if (props.loading) body = <p className="ty-chip-group__note">{s.loading}</p>
+  else if (!items.length && !props.allowCustom) body = <p className="ty-chip-group__note">{s.empty}</p>
   else
     body = (
-      <div className="fk-chip-group__row">
+      <div className="ty-chip-group__row">
         {items.map((item) => (
-          <span key={item.id} className="fk-chip-group__slot" data-custom={item.custom || undefined}>
-            <Checkbox value={item.id} className="fk-chip-group__chip">
+          <span key={item.id} className="ty-chip-group__slot" data-custom={item.custom || undefined}>
+            <Checkbox value={item.id} className="ty-chip-group__chip">
               <ChipFace item={item} />
             </Checkbox>
             {item.custom ? (
-              <AriaButton className="fk-chip-group__remove" aria-label={s.remove(item.name)} onPress={() => removeItem(item.id)}>
+              <AriaButton className="ty-chip-group__remove" aria-label={s.remove(item.name)} onPress={() => removeItem(item.id)}>
                 <X aria-hidden="true" focusable="false" />
               </AriaButton>
             ) : null}
           </span>
         ))}
         {props.allowCustom ? (
-          <TextField className="fk-chip-group__add" value={draft} onChange={onDraft} onBlur={() => (draft.trim() ? (commit(draft), setDraft('')) : undefined)} aria-label={s.addLabel}>
-            <Input className="fk-chip-group__add-input" placeholder={s.addPlaceholder} onKeyDown={onAddKey} />
+          <TextField className="ty-chip-group__add" value={draft} onChange={onDraft} onBlur={() => (draft.trim() ? (commit(draft), setDraft('')) : undefined)} aria-label={s.addLabel}>
+            <Input className="ty-chip-group__add-input" placeholder={s.addPlaceholder} onKeyDown={onAddKey} />
           </TextField>
         ) : null}
       </div>
@@ -143,22 +143,22 @@ export function ChipGroup(props: ChipGroupProps) {
 
   return (
     <CheckboxGroup
-      className={cx('fk-chip-group', props.className)}
+      className={cx('ty-chip-group', props.className)}
       value={selectedIds}
       onChange={props.onSelectionChange}
       isDisabled={props.disabled}
       data-loading={props.loading || undefined}
     >
-      <Label className="fk-chip-group__label">{props.label}</Label>
+      <Label className="ty-chip-group__label">{props.label}</Label>
       {props.showSummary !== false && !props.loading ? (
-        <div className="fk-chip-group__summary">
-          <span className="fk-chip-group__count" role="status" aria-live="polite">
+        <div className="ty-chip-group__summary">
+          <span className="ty-chip-group__count" role="status" aria-live="polite">
             {s.selected(selectedIds.length)}
           </span>
-          <AriaButton className="fk-chip-group__bulk" onPress={() => props.onSelectionChange(items.map((it) => it.id))}>
+          <AriaButton className="ty-chip-group__bulk" onPress={() => props.onSelectionChange(items.map((it) => it.id))}>
             {s.selectAll}
           </AriaButton>
-          <AriaButton className="fk-chip-group__bulk" onPress={() => props.onSelectionChange([])}>
+          <AriaButton className="ty-chip-group__bulk" onPress={() => props.onSelectionChange([])}>
             {s.clear}
           </AriaButton>
         </div>

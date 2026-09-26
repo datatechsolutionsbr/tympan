@@ -4,7 +4,7 @@
 
 import type { ReactNode } from 'react'
 import { History, RotateCw, type LucideIcon } from 'lucide-react'
-import { Button, InlineNotice, NativeSelect, TextField } from '@fakhir/ui'
+import { Button, InlineNotice, NativeSelect, TextField } from '@datatechsolutions/tympan'
 import { SectionedModal } from '../internal/SectionedModal'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { useRewindPlan, type RewindNode } from './rewindPlan'
@@ -93,17 +93,17 @@ export interface RunRewindDialogProps {
 
 /** The two preview columns, described once and drawn the same way. */
 const PREVIEW_COLUMNS: ReadonlyArray<{ id: string; icon: LucideIcon; heading: 'keptHeading' | 'rerunHeading'; pick: 'kept' | 'rerun' }> = [
-  { id: 'fk-rewind-kept', icon: History, heading: 'keptHeading', pick: 'kept' },
-  { id: 'fk-rewind-rerun', icon: RotateCw, heading: 'rerunHeading', pick: 'rerun' },
+  { id: 'ty-rewind-kept', icon: History, heading: 'keptHeading', pick: 'kept' },
+  { id: 'ty-rewind-rerun', icon: RotateCw, heading: 'rerunHeading', pick: 'rerun' },
 ]
 
 function stepLines(steps: readonly RewindNode[], labelledBy: string, emptyWord: string): ReactNode {
-  if (!steps.length) return <p className="fk-run-hint">{emptyWord}</p>
+  if (!steps.length) return <p className="ty-run-hint">{emptyWord}</p>
   return (
-    <ul aria-labelledby={labelledBy} className="fk-run-rewind__items">
+    <ul aria-labelledby={labelledBy} className="ty-run-rewind__items">
       {steps.map(({ nodeId, nodeKind }) => (
         <li key={nodeId}>
-          <code className="fk-run-mono">{nodeId}</code> <span className="fk-run-row__kind">{nodeKind}</span>
+          <code className="ty-run-mono">{nodeId}</code> <span className="ty-run-row__kind">{nodeKind}</span>
         </li>
       ))}
     </ul>
@@ -135,9 +135,9 @@ export function RunRewindDialog(props: RunRewindDialogProps) {
     const steps = split[col.pick]
     const Icon = col.icon
     return (
-      <section key={col.id} className="fk-run-rewind__list" aria-labelledby={col.id}>
-        <h3 id={col.id} className="fk-run-section__title">
-          <Icon aria-hidden="true" focusable="false" className="fk-run-rewind__icon" />
+      <section key={col.id} className="ty-run-rewind__list" aria-labelledby={col.id}>
+        <h3 id={col.id} className="ty-run-section__title">
+          <Icon aria-hidden="true" focusable="false" className="ty-run-rewind__icon" />
           {fill(text[col.heading], { count: steps.length }, locale)}
         </h3>
         {stepLines(steps, col.id, text.none)}
@@ -146,7 +146,7 @@ export function RunRewindDialog(props: RunRewindDialogProps) {
   })
 
   const form = (
-    <div className="fk-run-form">
+    <div className="ty-run-form">
       {draft.phase.name === 'failed' ? (
         <InlineNotice tone="danger" urgency="assertive">
           {draft.phase.message}
@@ -154,16 +154,16 @@ export function RunRewindDialog(props: RunRewindDialogProps) {
       ) : null}
       <NativeSelect label={text.picker} options={eligible.map((s) => ({ value: s.nodeId, label: `${s.nodeId}, ${s.nodeKind}` }))} value={draft.cut ?? ''} onChange={moveCut} />
       <TextField label={text.reason} placeholder={text.reasonPlaceholder} value={draft.reason} onChange={(t) => act({ kind: 'reason', text: t })} />
-      <div className="fk-run-rewind__preview">{preview}</div>
-      <p className="fk-visually-hidden" role="status" aria-live="polite">
+      <div className="ty-run-rewind__preview">{preview}</div>
+      <p className="ty-visually-hidden" role="status" aria-live="polite">
         {draft.echo ? fill(text.counts, draft.echo, locale) : ''}
       </p>
     </div>
   )
 
   const footer = (
-    <div className="fk-run-dialog-footer">
-      <span className="fk-run-dialog-footer__ids">
+    <div className="ty-run-dialog-footer">
+      <span className="ty-run-dialog-footer__ids">
         <ShortId id={props.runId} label={text.run} />
       </span>
       <Button variant="quiet" onPress={props.onClose} disabled={sending}>
@@ -188,7 +188,7 @@ export function RunRewindDialog(props: RunRewindDialogProps) {
       tone="warning"
       width="wide"
       busy={sending}
-      className="fk-run-rewind"
+      className="ty-run-rewind"
       footer={footer}
     >
       {nothingToKeep ? <InlineNotice tone="warning">{text.noEligible}</InlineNotice> : form}

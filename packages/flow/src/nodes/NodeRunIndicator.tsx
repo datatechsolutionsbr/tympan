@@ -121,7 +121,7 @@ export function NodeRunIndicator({ nodeId, kind, nodeLabel, labels }: NodeRunInd
     previous.current = result?.status
     if (!result || before === undefined || before === result.status) return
     // One region per editor: announce only for the node that has focus.
-    const card = ref.current?.closest('.fk-node-card, [data-fk-node-id]')
+    const card = ref.current?.closest('.ty-node-card, [data-ty-node-id]')
     if (card && card.contains(document.activeElement)) {
       announce(fill(l.announce, { node: nodeLabel ?? nodeId, state: runWords(result, locale, l) ?? '' }, locale))
     }
@@ -131,9 +131,9 @@ export function NodeRunIndicator({ nodeId, kind, nodeLabel, labels }: NodeRunInd
   const Mark = MARKS[result.status]
   const done = result.status === 'success' || result.status === 'error'
   return (
-    <span ref={ref} className="fk-node-run-indicator" data-status={result.status} data-kind={kind} aria-hidden="true" title={result.error}>
-      <Mark className="fk-node-run-indicator__mark" focusable="false" />
-      {done && result.durationMs !== undefined ? <span className="fk-node-run-indicator__duration">{formatRunDuration(result.durationMs, locale, l)}</span> : null}
+    <span ref={ref} className="ty-node-run-indicator" data-status={result.status} data-kind={kind} aria-hidden="true" title={result.error}>
+      <Mark className="ty-node-run-indicator__mark" focusable="false" />
+      {done && result.durationMs !== undefined ? <span className="ty-node-run-indicator__duration">{formatRunDuration(result.durationMs, locale, l)}</span> : null}
     </span>
   )
 }

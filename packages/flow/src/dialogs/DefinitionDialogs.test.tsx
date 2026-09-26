@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import { cssOf, mediaBlock } from '../../test/css'
 import type { FlowGraph } from '../model/types'
@@ -90,9 +90,9 @@ describe('DefinitionExportDialog', () => {
 
   it('formats counts with the provider locale and uses es strings', () => {
     render(
-      <FakhirProvider locale="es">
+      <TympanProvider locale="es">
         <DefinitionExportDialog open onClose={() => {}} flow={flow} graph={graph} now={at} />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(screen.getByRole('button', { name: 'Descargar' })).toBeInTheDocument()
   })
@@ -160,16 +160,16 @@ describe('DefinitionImportDialog', () => {
 
   it('marks drag-over with a thicker border, not colour alone, and stops the transition under reduced motion', () => {
     const css = cssOf('dialogs/Dialogs.css')
-    expect(css).toMatch(/\.fk-definition-import__zone\[data-drop-target\]\s*\{[^}]*border: 3px solid/)
+    expect(css).toMatch(/\.ty-definition-import__zone\[data-drop-target\]\s*\{[^}]*border: 3px solid/)
     expect(mediaBlock(css, /\(forced-colors: active\)/)).toMatch(/4px solid Highlight/)
     expect(mediaBlock(css, /\(prefers-reduced-motion: reduce\)/)).toMatch(/transition: none/)
   })
 
   it('lists validation messages in pt-BR', async () => {
     render(
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <DefinitionImportDialog open onClose={() => {}} onImport={() => {}} />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     await userEvent.upload(document.querySelector<HTMLInputElement>('input[type="file"]')!, file('[]'))
     expect(await screen.findByText('A definição precisa ser um objeto.')).toBeInTheDocument()

@@ -10,14 +10,14 @@ export type SkeletonSize = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | (string & {})
  * to give it the skeleton fill and pulse (the stylesheet selects on it).
  */
 export function skeletonFill(variant: SkeletonFillVariant = 'surface', animated = true): Record<string, string> {
-  const hook: Record<string, string> = { 'data-fk-skeleton': variant }
-  if (!animated) hook['data-fk-skeleton-static'] = ''
+  const hook: Record<string, string> = { 'data-ty-skeleton': variant }
+  if (!animated) hook['data-ty-skeleton-static'] = ''
   return hook
 }
 
 function sizeValue(size: SkeletonSize | undefined): string | undefined {
   if (size === undefined) return undefined
-  return typeof size === 'number' ? `var(--fk-space-${size})` : size
+  return typeof size === 'number' ? `var(--ty-space-${size})` : size
 }
 
 export interface SkeletonBlockProps {
@@ -34,12 +34,12 @@ export function SkeletonBlock({ shape = 'line', variant, width, height, animated
   const dims: Record<string, string> = {}
   const w = sizeValue(width)
   const h = sizeValue(height)
-  if (w) dims['--fk-skeleton-w'] = w
-  if (h) dims['--fk-skeleton-h'] = h
+  if (w) dims['--ty-skeleton-w'] = w
+  if (h) dims['--ty-skeleton-h'] = h
   return (
     <span
       aria-hidden="true"
-      className={className ? `fk-skeleton-block ${className}` : 'fk-skeleton-block'}
+      className={className ? `ty-skeleton-block ${className}` : 'ty-skeleton-block'}
       data-shape={shape}
       style={dims as CSSProperties}
       {...skeletonFill(variant, animated)}

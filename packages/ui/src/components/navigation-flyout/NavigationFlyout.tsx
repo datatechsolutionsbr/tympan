@@ -94,17 +94,17 @@ export function NavigationFlyout(props: NavigationFlyoutProps) {
     const current = d.href === currentHref
     const inner = (
       <>
-        <span className="fk-flyout__tile-icon" aria-hidden="true">
+        <span className="ty-flyout__tile-icon" aria-hidden="true">
           {d.icon}
         </span>
-        <span className="fk-flyout__tile-text">
-          <span className="fk-flyout__tile-label">{d.label}</span>
-          {d.subtitle ? <span className="fk-flyout__tile-sub">{d.subtitle}</span> : null}
+        <span className="ty-flyout__tile-text">
+          <span className="ty-flyout__tile-label">{d.label}</span>
+          {d.subtitle ? <span className="ty-flyout__tile-sub">{d.subtitle}</span> : null}
         </span>
       </>
     )
     const common = {
-      className: 'fk-flyout__tile',
+      className: 'ty-flyout__tile',
       'aria-current': current ? ('page' as const) : undefined,
       'data-current': current || undefined,
       ref: current ? currentRef : undefined,
@@ -132,35 +132,35 @@ export function NavigationFlyout(props: NavigationFlyoutProps) {
 
   const qa = props.quickActions
   return (
-    <ModalOverlay isOpen={props.open} onOpenChange={props.onOpenChange} isDismissable className="fk-flyout__backdrop">
-      <Modal className={cx('fk-flyout', props.className)}>
-        <Dialog className="fk-flyout__dialog" aria-labelledby={props.title ? titleId : undefined} aria-label={props.title ? undefined : copy.title}>
+    <ModalOverlay isOpen={props.open} onOpenChange={props.onOpenChange} isDismissable className="ty-flyout__backdrop">
+      <Modal className={cx('ty-flyout', props.className)}>
+        <Dialog className="ty-flyout__dialog" aria-labelledby={props.title ? titleId : undefined} aria-label={props.title ? undefined : copy.title}>
           {props.title ? (
-            <Heading slot="title" id={titleId} level={2} className="fk-flyout__title">
+            <Heading slot="title" id={titleId} level={2} className="ty-flyout__title">
               {props.title}
             </Heading>
           ) : null}
           {searchable ? (
-            <div className="fk-flyout__search">
+            <div className="ty-flyout__search">
               <TextField mode="search" accessibleLabel={t.search} placeholder={t.search} value={query} onChange={setQuery} autoFocus />
-              <span role="status" className="fk-visually-hidden">
+              <span role="status" className="ty-visually-hidden">
                 {query.trim() ? copy.count(shown.length) : ''}
               </span>
             </div>
           ) : null}
-          <nav aria-label={copy.destinations} className="fk-flyout__nav">
+          <nav aria-label={copy.destinations} className="ty-flyout__nav">
             {shown.length ? (
-              <ul className="fk-flyout__grid">
+              <ul className="ty-flyout__grid">
                 {shown.map((d) => (
                   <li key={d.id}>{tile(d)}</li>
                 ))}
               </ul>
             ) : (
-              <p className="fk-flyout__empty">{t.noResults}</p>
+              <p className="ty-flyout__empty">{t.noResults}</p>
             )}
           </nav>
           {qa ? (
-            <div className="fk-flyout__quick">
+            <div className="ty-flyout__quick">
               {qa.onNotifications ? (
                 <Button
                   variant="quiet"
@@ -170,7 +170,7 @@ export function NavigationFlyout(props: NavigationFlyoutProps) {
                 >
                   {t.notifications}
                   {qa.unseenCount ? (
-                    <span className="fk-flyout__count" aria-hidden="true">
+                    <span className="ty-flyout__count" aria-hidden="true">
                       {cappedCount(qa.unseenCount, undefined, locale)}
                     </span>
                   ) : null}
@@ -179,7 +179,7 @@ export function NavigationFlyout(props: NavigationFlyoutProps) {
               <Switch label={t.theme ?? copy.darkTheme} isSelected={qa.theme === 'dark'} onChange={(dark) => qa.onThemeChange(dark ? 'dark' : 'light')} />
               <Button
                 variant="quiet"
-                leadingIcon={qa.personInitial ? <span className="fk-flyout__initial">{qa.personInitial}</span> : <UserRound />}
+                leadingIcon={qa.personInitial ? <span className="ty-flyout__initial">{qa.personInitial}</span> : <UserRound />}
                 onPress={thenClose(qa.onProfile)}
               >
                 {qa.personName ?? t.profile}

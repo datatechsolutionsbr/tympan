@@ -1,20 +1,20 @@
 /* SkeletonFill and SkeletonBlock (spec: wave-4/skeleton-fill.md; design direction §2.3, §2.7, §2.12).
    The fill tokens are defined on the hooked element so they resolve in the surrounding theme. */
-@layer fakhir.components {
-  [data-fk-skeleton] {
-    --fk-skeleton-fill: var(--fk-line);
-    --fk-skeleton-fill-on-accent: color-mix(in oklab, var(--fk-accent-ink) 55%, transparent);
-    background: var(--fk-skeleton-fill);
-    animation: fk-skeleton-fill-pulse var(--fk-dur-pulse) var(--fk-ease) infinite alternate;
+@layer tympan.components {
+  [data-ty-skeleton] {
+    --ty-skeleton-fill: var(--ty-line);
+    --ty-skeleton-fill-on-accent: color-mix(in oklab, var(--ty-accent-ink) 55%, transparent);
+    background: var(--ty-skeleton-fill);
+    animation: ty-skeleton-fill-pulse var(--ty-dur-pulse) var(--ty-ease) infinite alternate;
   }
-  [data-fk-skeleton='on-accent'] {
-    background: var(--fk-skeleton-fill-on-accent);
+  [data-ty-skeleton='on-accent'] {
+    background: var(--ty-skeleton-fill-on-accent);
   }
-  [data-fk-skeleton][data-fk-skeleton-static] {
+  [data-ty-skeleton][data-ty-skeleton-static] {
     animation: none;
     opacity: 0.7;
   }
-  @keyframes fk-skeleton-fill-pulse {
+  @keyframes ty-skeleton-fill-pulse {
     from {
       opacity: 1;
     }
@@ -23,42 +23,42 @@
     }
   }
 
-  .fk-skeleton-block {
-    --fk-skeleton-w: 100%;
-    --fk-skeleton-h: calc(var(--fk-font-line-height-body) * 0.6);
+  .ty-skeleton-block {
+    --ty-skeleton-w: 100%;
+    --ty-skeleton-h: calc(var(--ty-font-line-height-body) * 0.6);
     display: block;
-    inline-size: var(--fk-skeleton-w);
-    block-size: var(--fk-skeleton-h);
-    border-radius: var(--fk-radius-control);
+    inline-size: var(--ty-skeleton-w);
+    block-size: var(--ty-skeleton-h);
+    border-radius: var(--ty-radius-control);
   }
-  .fk-skeleton-block[data-shape='block'] {
-    --fk-skeleton-h: var(--fk-space-8);
-    border-radius: var(--fk-radius-card);
+  .ty-skeleton-block[data-shape='block'] {
+    --ty-skeleton-h: var(--ty-space-8);
+    border-radius: var(--ty-radius-card);
   }
-  .fk-skeleton-block[data-shape='circle'] {
-    --fk-skeleton-w: var(--fk-space-6);
-    --fk-skeleton-h: var(--fk-space-6);
+  .ty-skeleton-block[data-shape='circle'] {
+    --ty-skeleton-w: var(--ty-space-6);
+    --ty-skeleton-h: var(--ty-space-6);
     border-radius: 50%;
   }
-  .fk-skeleton-block[data-shape='pill'] {
-    --fk-skeleton-w: var(--fk-space-8);
-    --fk-skeleton-h: var(--fk-space-5);
-    border-radius: var(--fk-radius-pill);
+  .ty-skeleton-block[data-shape='pill'] {
+    --ty-skeleton-w: var(--ty-space-8);
+    --ty-skeleton-h: var(--ty-space-5);
+    border-radius: var(--ty-radius-pill);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    [data-fk-skeleton] {
+    [data-ty-skeleton] {
       animation: none;
       opacity: 0.7;
     }
   }
   @media print {
-    [data-fk-skeleton] {
+    [data-ty-skeleton] {
       animation: none;
     }
   }
   @media (forced-colors: active) {
-    [data-fk-skeleton] {
+    [data-ty-skeleton] {
       background: transparent;
       outline: 1px solid GrayText;
       outline-offset: -1px;

@@ -56,11 +56,11 @@ export function CountBadge({ count, itemNoun, max = 99, tone = 'attention', anno
   const digits = new Intl.NumberFormat(locale)
   const shown = count > max ? `${digits.format(max)}+` : digits.format(count)
   return (
-    <span className={cx('fk-count-badge', className)} data-tone={tone} data-changed={rose || undefined}>
-      <span className="fk-count-badge__value" aria-hidden="true">
+    <span className={cx('ty-count-badge', className)} data-tone={tone} data-changed={rose || undefined}>
+      <span className="ty-count-badge__value" aria-hidden="true">
         {shown}
       </span>
-      <span className="fk-visually-hidden" id={id ?? autoId}>
+      <span className="ty-visually-hidden" id={id ?? autoId}>
         {sentence}
       </span>
     </span>

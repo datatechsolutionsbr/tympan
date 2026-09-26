@@ -26,7 +26,7 @@ function Block({ shape = 'line', width = 'full', className }: { shape?: Skeleton
   const style: CSSProperties | undefined = named ? undefined : { inlineSize: width }
   return (
     <span
-      className={cx('fk-skeleton', className)}
+      className={cx('ty-skeleton', className)}
       data-shape={shape}
       data-width={named ? width : 'custom'}
       style={style}
@@ -36,7 +36,7 @@ function Block({ shape = 'line', width = 'full', className }: { shape?: Skeleton
 
 function Lines({ lines, width }: { lines: number; width?: SkeletonWidth }) {
   return (
-    <span className="fk-skeleton-lines">
+    <span className="ty-skeleton-lines">
       {Array.from({ length: lines }, (_, i) => {
         const w = lines === 1 ? (width ?? 'full') : i === lines - 1 ? 'short' : (lineCycle[i % lineCycle.length] ?? 'full')
         return <Block key={i} shape="line" width={w} />
@@ -47,7 +47,7 @@ function Lines({ lines, width }: { lines: number; width?: SkeletonWidth }) {
 
 function Grid({ columns, children, kind }: { columns: number; children: ReactNode; kind: string }) {
   return (
-    <span className="fk-skeleton-grid" data-preset={kind} style={{ '--fk-skeleton-columns': columns } as CSSProperties}>
+    <span className="ty-skeleton-grid" data-preset={kind} style={{ '--ty-skeleton-columns': columns } as CSSProperties}>
       {children}
     </span>
   )
@@ -60,7 +60,7 @@ function Preset({ preset, count, columns }: { preset: SkeletonPreset; count?: nu
       return (
         <Grid columns={columns ?? n} kind="stats">
           {Array.from({ length: n }, (_, i) => (
-            <span key={i} className="fk-skeleton-tile" data-part="stat">
+            <span key={i} className="ty-skeleton-tile" data-part="stat">
               <Block shape="circle" />
               <Block shape="heading" width="medium" />
               <Block shape="line" width="short" />
@@ -74,7 +74,7 @@ function Preset({ preset, count, columns }: { preset: SkeletonPreset; count?: nu
       return (
         <Grid columns={columns ?? 3} kind="cards">
           {Array.from({ length: n }, (_, i) => (
-            <span key={i} className="fk-skeleton-tile" data-part="card">
+            <span key={i} className="ty-skeleton-tile" data-part="card">
               <Block shape="heading" width="long" />
               <Lines lines={2} />
               <Block shape="line" width="short" />
@@ -85,9 +85,9 @@ function Preset({ preset, count, columns }: { preset: SkeletonPreset; count?: nu
     }
     case 'section-heading':
       return (
-        <span className="fk-skeleton-row" data-preset="section-heading">
+        <span className="ty-skeleton-row" data-preset="section-heading">
           <Block shape="circle" />
-          <span className="fk-skeleton-lines">
+          <span className="ty-skeleton-lines">
             <Block shape="heading" width="medium" />
             <Block shape="line" width="long" />
           </span>
@@ -96,9 +96,9 @@ function Preset({ preset, count, columns }: { preset: SkeletonPreset; count?: nu
     case 'filters': {
       const n = count ?? 5
       return (
-        <span className="fk-skeleton-row" data-preset="filters">
+        <span className="ty-skeleton-row" data-preset="filters">
           {Array.from({ length: n }, (_, i) => (
-            <span key={i} className="fk-skeleton fk-skeleton--pill" data-shape="pill" />
+            <span key={i} className="ty-skeleton ty-skeleton--pill" data-shape="pill" />
           ))}
         </span>
       )
@@ -106,10 +106,10 @@ function Preset({ preset, count, columns }: { preset: SkeletonPreset; count?: nu
     case 'analysis': {
       const n = count ?? 3
       return (
-        <span className="fk-skeleton-tile" data-preset="analysis">
+        <span className="ty-skeleton-tile" data-preset="analysis">
           <Block shape="heading" width="medium" />
           {Array.from({ length: n }, (_, i) => (
-            <span key={i} className="fk-skeleton-row" data-part="item">
+            <span key={i} className="ty-skeleton-row" data-part="item">
               <Block shape="circle" />
               <Lines lines={2} />
             </span>
@@ -127,7 +127,7 @@ export function Skeleton({ shape = 'line', width, lines = 1, preset, count, colu
   else if (lines > 1 && (shape === 'line' || shape === 'heading')) body = <Lines lines={lines} width={width} />
   else body = <Block shape={shape} width={width ?? (shape === 'circle' ? 'short' : 'full')} />
   return (
-    <span className={cx('fk-skeleton-root', className)} aria-hidden="true">
+    <span className={cx('ty-skeleton-root', className)} aria-hidden="true">
       {body}
     </span>
   )
@@ -151,8 +151,8 @@ export function PageLoadingState({ label, compact = false, preset, count, column
   const messages = useMessages()
   const text = label ?? messages.loading
   return (
-    <div className={cx('fk-page-loading', className)} data-compact={compact || undefined} aria-busy="true">
-      <span role="status" className="fk-visually-hidden">
+    <div className={cx('ty-page-loading', className)} data-compact={compact || undefined} aria-busy="true">
+      <span role="status" className="ty-visually-hidden">
         {text}
       </span>
       {children ? (

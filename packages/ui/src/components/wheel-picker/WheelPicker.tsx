@@ -171,20 +171,20 @@ export function WheelPicker(props: WheelPickerProps) {
     requestAnimationFrame(() => listRef.current?.querySelector<HTMLElement>(`[data-key="${CSS.escape(String(row?.id ?? ''))}"]`)?.focus())
   }
 
-  const style = { '--fk-wheel-rows': visible, '--fk-wheel-share': props.share ?? 1 } as CSSProperties
+  const style = { '--ty-wheel-rows': visible, '--ty-wheel-share': props.share ?? 1 } as CSSProperties
   return (
-    <div className={cx('fk-wheel', props.className)} style={style} data-disabled={props.disabled || undefined} onKeyDownCapture={pageKeys}>
+    <div className={cx('ty-wheel', props.className)} style={style} data-disabled={props.disabled || undefined} onKeyDownCapture={pageKeys}>
       {props.showLabel ? (
-        <span className="fk-wheel__caption" aria-hidden="true">
+        <span className="ty-wheel__caption" aria-hidden="true">
           {props.label}
         </span>
       ) : null}
-      <div className="fk-wheel__viewport">
-        <span className="fk-wheel__band" aria-hidden="true" />
+      <div className="ty-wheel__viewport">
+        <span className="ty-wheel__band" aria-hidden="true" />
         <ListBox
           ref={listRef}
           aria-label={props.label}
-          className="fk-wheel__list"
+          className="ty-wheel__list"
           items={rows}
           selectionMode="single"
           selectionBehavior="replace"
@@ -195,7 +195,7 @@ export function WheelPicker(props: WheelPickerProps) {
           disabledKeys={props.disabled ? rows.map((r) => r.id) : undefined}
         >
           {(row) => (
-            <ListBoxItem id={row.id} textValue={row.text} className="fk-wheel__row" data-distance={Math.min(3, Math.abs(rows.indexOf(row) - centre))}>
+            <ListBoxItem id={row.id} textValue={row.text} className="ty-wheel__row" data-distance={Math.min(3, Math.abs(rows.indexOf(row) - centre))}>
               {row.text}
             </ListBoxItem>
           )}
@@ -219,7 +219,7 @@ export interface WheelPickerGroupProps {
 /** Several wheels side by side for compound values (day, month, year). */
 export function WheelPickerGroup({ columns, label, visibleRows, disabled, className }: WheelPickerGroupProps) {
   return (
-    <div role="group" aria-label={label} className={cx('fk-wheel-group', className)}>
+    <div role="group" aria-label={label} className={cx('ty-wheel-group', className)}>
       {columns.map((column) => (
         <WheelPicker key={column.label} {...column} visibleRows={visibleRows} disabled={disabled} showLabel />
       ))}

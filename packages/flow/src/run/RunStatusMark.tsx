@@ -71,9 +71,9 @@ export function RunStatusMark({ status, labels, quiet = false, className }: RunS
   const word = runWordOf(status)
   const Icon = ICONS[word]
   return (
-    <span className={['fk-run-status', className].filter(Boolean).join(' ')} data-status={word}>
-      <Icon className="fk-run-status__icon" aria-hidden="true" focusable="false" />
-      <span className={quiet ? 'fk-visually-hidden' : 'fk-run-status__word'}>{l[word]}</span>
+    <span className={['ty-run-status', className].filter(Boolean).join(' ')} data-status={word}>
+      <Icon className="ty-run-status__icon" aria-hidden="true" focusable="false" />
+      <span className={quiet ? 'ty-visually-hidden' : 'ty-run-status__word'}>{l[word]}</span>
     </span>
   )
 }

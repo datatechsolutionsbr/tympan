@@ -2,13 +2,13 @@ import { StrictMode, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import '../../src/styles.css'
 import './gallery.css'
-import { FakhirProvider, ThemeProvider, ToastProvider } from '../../src'
+import { TympanProvider, ThemeProvider, ToastProvider } from '../../src'
 import { GalleryLocaleContext, useGalleryLocaleState } from './locale'
 import { Customizer } from './Customizer'
 import { Gallery } from './Gallery'
 import { ResearchShellDemo } from './ResearchShell'
 
-const STORAGE_KEY = 'fk-gallery-theme'
+const STORAGE_KEY = 'ty-gallery-theme'
 
 function useHashRoute() {
   const [hash, setHash] = useState(() => window.location.hash)
@@ -28,7 +28,7 @@ function App() {
   const locale = useGalleryLocaleState()
   return (
     <GalleryLocaleContext.Provider value={locale}>
-    <FakhirProvider navigate={navigate} locale={locale.locale} pseudo={locale.pseudo}>
+    <TympanProvider navigate={navigate} locale={locale.locale} pseudo={locale.pseudo}>
       <ThemeProvider storageKey={STORAGE_KEY}>
         <ToastProvider>
           {hash.startsWith('#/customizer') ? (
@@ -40,7 +40,7 @@ function App() {
           )}
         </ToastProvider>
       </ThemeProvider>
-    </FakhirProvider>
+    </TympanProvider>
     </GalleryLocaleContext.Provider>
   )
 }

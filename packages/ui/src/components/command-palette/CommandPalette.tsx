@@ -64,7 +64,7 @@ function Marked({ text, marks }: { text: string; marks: number[] }) {
     <>
       {markPieces(text, marks).map((p, i) =>
         p.marked ? (
-          <mark key={i} className="fk-palette__mark">
+          <mark key={i} className="ty-palette__mark">
             {p.text}
           </mark>
         ) : (
@@ -208,20 +208,20 @@ export function CommandPalette(props: CommandPaletteProps) {
       : ''
 
   return (
-    <ModalOverlay isOpen={props.open} onOpenChange={(o) => !o && props.onClose()} isDismissable isKeyboardDismissDisabled className="fk-palette__backdrop">
-      <Modal className={cx('fk-palette', props.className)}>
-        <Dialog className="fk-palette__dialog" aria-label={name}>
-          <div className="fk-palette__field">
-            <Search className="fk-palette__search-icon" aria-hidden="true" />
+    <ModalOverlay isOpen={props.open} onOpenChange={(o) => !o && props.onClose()} isDismissable isKeyboardDismissDisabled className="ty-palette__backdrop">
+      <Modal className={cx('ty-palette', props.className)}>
+        <Dialog className="ty-palette__dialog" aria-label={name}>
+          <div className="ty-palette__field">
+            <Search className="ty-palette__search-icon" aria-hidden="true" />
             {scopeLabel ? (
-              <AriaButton className="fk-palette__chip" aria-label={copy.removeScope(scopeLabel)} onPress={() => setScope(null)}>
+              <AriaButton className="ty-palette__chip" aria-label={copy.removeScope(scopeLabel)} onPress={() => setScope(null)}>
                 {scopeLabel}
                 <X aria-hidden="true" />
               </AriaButton>
             ) : null}
             <input
               ref={inputRef}
-              className="fk-palette__input"
+              className="ty-palette__input"
               role="combobox"
               aria-label={name}
               aria-autocomplete="list"
@@ -237,29 +237,29 @@ export function CommandPalette(props: CommandPaletteProps) {
               onKeyDown={onKey}
             />
           </div>
-          <div className="fk-palette__main">
+          <div className="ty-palette__main">
             {scopes.length ? (
-              <div className="fk-palette__scopes" role="group" aria-label={copy.scopes}>
+              <div className="ty-palette__scopes" role="group" aria-label={copy.scopes}>
                 {scopes.map((s) => (
-                  <AriaButton key={s.id} className="fk-palette__scope" aria-pressed={scope === s.id} excludeFromTabOrder onPress={() => pickScope(s.id)}>
+                  <AriaButton key={s.id} className="ty-palette__scope" aria-pressed={scope === s.id} excludeFromTabOrder onPress={() => pickScope(s.id)}>
                     {s.icon ? <span aria-hidden="true">{s.icon}</span> : null}
                     {s.label}
                   </AriaButton>
                 ))}
               </div>
             ) : null}
-            <div className="fk-palette__results">
+            <div className="ty-palette__results">
               {props.loading ? (
-                <div className="fk-palette__loading" aria-hidden="true">
+                <div className="ty-palette__loading" aria-hidden="true">
                   {[0, 1, 2].map((i) => (
                     <Skeleton key={i} shape="line" />
                   ))}
                 </div>
               ) : null}
-              <div id={listId} role="listbox" aria-label={name} className="fk-palette__list">
+              <div id={listId} role="listbox" aria-label={name} className="ty-palette__list">
                 {sections.map((section) => (
-                  <div key={section.key} role="group" aria-labelledby={`${listId}-${section.key}`} className="fk-palette__group">
-                    <div id={`${listId}-${section.key}`} role="presentation" className="fk-palette__heading">
+                  <div key={section.key} role="group" aria-labelledby={`${listId}-${section.key}`} className="ty-palette__group">
+                    <div id={`${listId}-${section.key}`} role="presentation" className="ty-palette__heading">
                       {section.heading}
                     </div>
                     {section.rows.map((row) => {
@@ -272,34 +272,34 @@ export function CommandPalette(props: CommandPaletteProps) {
                           aria-selected={on}
                           data-highlighted={on || undefined}
                           data-kind={row.kind}
-                          className="fk-palette__option"
+                          className="ty-palette__option"
                           onPointerMove={() => !on && send({ type: 'point', cursor: rows.indexOf(row) })}
                           onMouseDown={(e) => e.preventDefault()}
                           onClick={() => run(row)}
                         >
                           {row.icon ? (
-                            <span className="fk-palette__icon" aria-hidden="true">
+                            <span className="ty-palette__icon" aria-hidden="true">
                               {row.icon}
                             </span>
                           ) : null}
-                          <span className="fk-palette__text">
-                            <span className="fk-palette__label">
+                          <span className="ty-palette__text">
+                            <span className="ty-palette__label">
                               <Marked text={row.label} marks={row.marks} />
                             </span>
-                            {row.description ? <span className="fk-palette__description">{row.description}</span> : null}
+                            {row.description ? <span className="ty-palette__description">{row.description}</span> : null}
                           </span>
-                          {row.hint ? <span className="fk-palette__hint">{row.hint}</span> : null}
-                          {row.shortcut ? <kbd className="fk-palette__kbd">{row.shortcut}</kbd> : null}
+                          {row.hint ? <span className="ty-palette__hint">{row.hint}</span> : null}
+                          {row.shortcut ? <kbd className="ty-palette__kbd">{row.shortcut}</kbd> : null}
                           {row.item?.actions?.length && !state.sub ? (
                             <span
-                              className="fk-palette__chevron"
+                              className="ty-palette__chevron"
                               aria-hidden="true"
                               onClick={(e) => {
                                 e.stopPropagation()
                                 if (row.item) send({ type: 'open-sub', item: row.item })
                               }}
                             >
-                              <ChevronRight className="fk-mirror-rtl" />
+                              <ChevronRight className="ty-mirror-rtl" />
                             </span>
                           ) : null}
                         </div>
@@ -309,28 +309,28 @@ export function CommandPalette(props: CommandPaletteProps) {
                 ))}
               </div>
               {!props.loading && !rows.length ? (
-                <p className="fk-palette__empty">{state.query.trim() ? copy.noResults(state.query.trim()) : copy.empty}</p>
+                <p className="ty-palette__empty">{state.query.trim() ? copy.noResults(state.query.trim()) : copy.empty}</p>
               ) : null}
             </div>
           </div>
-          <div className="fk-palette__footer" aria-hidden="true">
+          <div className="ty-palette__footer" aria-hidden="true">
             <span>
-              <kbd className="fk-palette__kbd">↑↓</kbd> {copy.hints.navigate}
+              <kbd className="ty-palette__kbd">↑↓</kbd> {copy.hints.navigate}
             </span>
             <span>
-              <kbd className="fk-palette__kbd">↵</kbd> {copy.hints.select}
+              <kbd className="ty-palette__kbd">↵</kbd> {copy.hints.select}
             </span>
             <span>
-              <kbd className="fk-palette__kbd">→</kbd> {copy.hints.actions}
+              <kbd className="ty-palette__kbd">→</kbd> {copy.hints.actions}
             </span>
             <span>
-              <kbd className="fk-palette__kbd">←</kbd> {copy.hints.back}
+              <kbd className="ty-palette__kbd">←</kbd> {copy.hints.back}
             </span>
             <span>
-              <kbd className="fk-palette__kbd">esc</kbd> {copy.hints.close}
+              <kbd className="ty-palette__kbd">esc</kbd> {copy.hints.close}
             </span>
           </div>
-          <span role="status" className="fk-visually-hidden">
+          <span role="status" className="ty-visually-hidden">
             {announcement}
           </span>
         </Dialog>

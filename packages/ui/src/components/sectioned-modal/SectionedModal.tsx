@@ -71,29 +71,29 @@ function groupSections(list: ModalSection[]): Array<[string | undefined, ModalSe
 
 function SectionRail(props: { label: string; sections: ModalSection[]; active: string; onPick: (id: string) => void; identity?: ReactNode; extras?: ReactNode; foot?: ReactNode }) {
   return (
-    <div className="fk-sectioned-modal__rail">
-      {props.identity ? <div className="fk-sectioned-modal__identity">{props.identity}</div> : null}
+    <div className="ty-sectioned-modal__rail">
+      {props.identity ? <div className="ty-sectioned-modal__identity">{props.identity}</div> : null}
       {props.extras}
-      <nav aria-label={props.label} className="fk-sectioned-modal__nav">
+      <nav aria-label={props.label} className="ty-sectioned-modal__nav">
         {groupSections(props.sections).map(([group, items]) => (
-          <div key={group ?? '·'} className="fk-sectioned-modal__group">
-            {group ? <p className="fk-sectioned-modal__group-name">{group}</p> : null}
-            <ul className="fk-sectioned-modal__list">
+          <div key={group ?? '·'} className="ty-sectioned-modal__group">
+            {group ? <p className="ty-sectioned-modal__group-name">{group}</p> : null}
+            <ul className="ty-sectioned-modal__list">
               {items.map((s) => (
                 <li key={s.id}>
                   <AriaButton
-                    className="fk-sectioned-modal__item"
+                    className="ty-sectioned-modal__item"
                     aria-current={s.id === props.active ? 'page' : undefined}
                     data-active={s.id === props.active || undefined}
                     onPress={() => props.onPick(s.id)}
                   >
                     {s.icon ? (
-                      <span className="fk-sectioned-modal__item-icon" aria-hidden="true">
+                      <span className="ty-sectioned-modal__item-icon" aria-hidden="true">
                         {s.icon}
                       </span>
                     ) : null}
-                    <span className="fk-sectioned-modal__item-label">{s.label}</span>
-                    {s.count !== undefined ? <span className="fk-sectioned-modal__count">{s.count}</span> : null}
+                    <span className="ty-sectioned-modal__item-label">{s.label}</span>
+                    {s.count !== undefined ? <span className="ty-sectioned-modal__count">{s.count}</span> : null}
                   </AriaButton>
                 </li>
               ))}
@@ -101,7 +101,7 @@ function SectionRail(props: { label: string; sections: ModalSection[]; active: s
           </div>
         ))}
       </nav>
-      {props.foot ? <div className="fk-sectioned-modal__rail-foot">{props.foot}</div> : null}
+      {props.foot ? <div className="ty-sectioned-modal__rail-foot">{props.foot}</div> : null}
     </div>
   )
 }
@@ -143,24 +143,24 @@ export function SectionedModal(props: SectionedModalProps) {
 
   const header =
     layout === 'bare' ? null : (
-      <div className="fk-sectioned-modal__head" data-accent={props.accent || undefined}>
+      <div className="ty-sectioned-modal__head" data-accent={props.accent || undefined}>
         {props.icon ? (
-          <span className="fk-sectioned-modal__head-icon" aria-hidden="true">
+          <span className="ty-sectioned-modal__head-icon" aria-hidden="true">
             {props.icon}
           </span>
         ) : null}
-        <div className="fk-sectioned-modal__titles">
-          {props.eyebrow ? <p className="fk-sectioned-modal__eyebrow">{props.eyebrow}</p> : null}
-          <Heading slot="title" id={titleId} level={2} ref={headingRef} tabIndex={-1} className="fk-sectioned-modal__title">
+        <div className="ty-sectioned-modal__titles">
+          {props.eyebrow ? <p className="ty-sectioned-modal__eyebrow">{props.eyebrow}</p> : null}
+          <Heading slot="title" id={titleId} level={2} ref={headingRef} tabIndex={-1} className="ty-sectioned-modal__title">
             {props.title}
           </Heading>
           {props.subtitle ? (
-            <p id={subtitleId} className="fk-sectioned-modal__subtitle">
+            <p id={subtitleId} className="ty-sectioned-modal__subtitle">
               {props.subtitle}
             </p>
           ) : null}
         </div>
-        <div className="fk-sectioned-modal__head-actions">
+        <div className="ty-sectioned-modal__head-actions">
           {props.headerActions}
           <Button variant="quiet" shape="circle" iconOnly accessibleLabel={props.closeLabel ?? copy.close} leadingIcon={<X />} onPress={props.onClose} disabled={pending} />
         </div>
@@ -175,7 +175,7 @@ export function SectionedModal(props: SectionedModalProps) {
         </InlineNotice>
       ) : null}
       {layout === 'sectioned' && shown ? (
-        <section aria-label={shown.label} className="fk-sectioned-modal__section">
+        <section aria-label={shown.label} className="ty-sectioned-modal__section">
           {shown.content ?? props.children}
         </section>
       ) : (
@@ -197,16 +197,16 @@ export function SectionedModal(props: SectionedModalProps) {
 
   const inner = (
     <>
-      <div ref={bodyRef} className="fk-sectioned-modal__body">
+      <div ref={bodyRef} className="ty-sectioned-modal__body">
         {bodyContent}
       </div>
-      {footerContent ? <div className="fk-sectioned-modal__foot">{footerContent}</div> : null}
+      {footerContent ? <div className="ty-sectioned-modal__foot">{footerContent}</div> : null}
     </>
   )
 
   const main = props.onSubmit ? (
     <form
-      className="fk-sectioned-modal__form"
+      className="ty-sectioned-modal__form"
       noValidate
       onKeyDown={submitShortcut}
       onSubmit={(e) => {
@@ -217,7 +217,7 @@ export function SectionedModal(props: SectionedModalProps) {
       {inner}
     </form>
   ) : (
-    <div className="fk-sectioned-modal__form">{inner}</div>
+    <div className="ty-sectioned-modal__form">{inner}</div>
   )
 
   return (
@@ -228,16 +228,16 @@ export function SectionedModal(props: SectionedModalProps) {
       onOpenChange={(next) => {
         if (!next) props.onClose()
       }}
-      className="fk-sectioned-modal__backdrop"
+      className="ty-sectioned-modal__backdrop"
     >
-      <Modal className={cx('fk-sectioned-modal', props.className)} data-size={props.size ?? 'lg'} data-layout={layout}>
+      <Modal className={cx('ty-sectioned-modal', props.className)} data-size={props.size ?? 'lg'} data-layout={layout}>
         <Dialog
-          className="fk-sectioned-modal__dialog"
+          className="ty-sectioned-modal__dialog"
           aria-label={layout === 'bare' ? props.ariaLabel : undefined}
           aria-describedby={props.subtitle && layout !== 'bare' ? subtitleId : undefined}
         >
           {header}
-          <div className="fk-sectioned-modal__frame">
+          <div className="ty-sectioned-modal__frame">
             {layout === 'sectioned' ? (
               <SectionRail
                 label={props.title ?? props.ariaLabel ?? ''}

@@ -47,7 +47,7 @@ describe('SectionHeading', () => {
   })
 
   it('wraps the trailing slot in a narrow container', () => {
-    expect(cssOf('components/section-heading/SectionHeading.css')).toMatch(/\.fk-section-heading__row\s*\{[^}]*flex-wrap:\s*wrap/)
+    expect(cssOf('components/section-heading/SectionHeading.css')).toMatch(/\.ty-section-heading__row\s*\{[^}]*flex-wrap:\s*wrap/)
   })
 
   it('has no axe violations', async () => {

@@ -1,133 +1,133 @@
 /* Editor dialogs: node configuration, flow settings, definition export and import. */
-@layer fakhir.components {
-  .fk-node-config-dialog__body,
-  .fk-flow-settings__fields,
-  .fk-definition-import__result {
+@layer tympan.components {
+  .ty-node-config-dialog__body,
+  .ty-flow-settings__fields,
+  .ty-definition-import__result {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-5);
+    gap: var(--ty-space-5);
   }
-  .fk-flow-settings__switch {
-    min-block-size: var(--fk-control-target, 44px);
+  .ty-flow-settings__switch {
+    min-block-size: var(--ty-control-target, 44px);
   }
 
-  .fk-definition-export__meta {
+  .ty-definition-export__meta {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
     margin: 0;
   }
-  .fk-definition-export__meta dt {
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+  .ty-definition-export__meta dt {
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
-  .fk-definition-export__meta dd {
+  .ty-definition-export__meta dd {
     margin: 0;
-    color: var(--fk-ink);
-    font-weight: var(--fk-font-weight-semibold);
+    color: var(--ty-ink);
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-definition-export__mono {
-    font-family: var(--fk-font-mono);
+  .ty-definition-export__mono {
+    font-family: var(--ty-font-mono);
     font-variant-numeric: tabular-nums;
   }
-  .fk-definition-export__preview {
+  .ty-definition-export__preview {
     max-block-size: 360px;
     margin: 0;
     overflow: auto;
-    padding: var(--fk-space-3);
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-surface-sunken);
-    color: var(--fk-ink-2);
-    font-family: var(--fk-font-mono);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    padding: var(--ty-space-3);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-surface-sunken);
+    color: var(--ty-ink-2);
+    font-family: var(--ty-font-mono);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
     white-space: pre;
   }
-  .fk-definition-export__preview:focus-visible {
-    outline: 2px solid var(--fk-accent);
+  .ty-definition-export__preview:focus-visible {
+    outline: 2px solid var(--ty-accent);
     outline-offset: 2px;
   }
 
-  .fk-definition-import__zone {
+  .ty-definition-import__zone {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--fk-space-2);
-    padding: var(--fk-space-6) var(--fk-space-4);
-    border: 1.5px dashed var(--fk-input);
-    border-radius: var(--fk-radius-card);
-    background: var(--fk-surface-sunken);
+    gap: var(--ty-space-2);
+    padding: var(--ty-space-6) var(--ty-space-4);
+    border: 1.5px dashed var(--ty-input);
+    border-radius: var(--ty-radius-card);
+    background: var(--ty-surface-sunken);
     text-align: center;
-    transition: border-color var(--fk-dur-quick) var(--fk-ease);
+    transition: border-color var(--ty-dur-quick) var(--ty-ease);
   }
-  .fk-definition-import__zone[data-drop-target] {
-    border: 3px solid var(--fk-accent);
-    background: var(--fk-accent-soft);
+  .ty-definition-import__zone[data-drop-target] {
+    border: 3px solid var(--ty-accent);
+    background: var(--ty-accent-soft);
   }
-  .fk-definition-import__icon {
+  .ty-definition-import__icon {
     inline-size: 24px;
     block-size: 24px;
-    color: var(--fk-ink-3);
+    color: var(--ty-ink-3);
   }
-  .fk-definition-import__instruction {
+  .ty-definition-import__instruction {
     margin: 0;
-    color: var(--fk-ink);
-    font-weight: var(--fk-font-weight-semibold);
+    color: var(--ty-ink);
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-definition-import__hint,
-  .fk-definition-import__reading {
+  .ty-definition-import__hint,
+  .ty-definition-import__reading {
     margin: 0;
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
   }
-  .fk-definition-import__file {
+  .ty-definition-import__file {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
-  .fk-definition-import__file-name {
+  .ty-definition-import__file-name {
     overflow-wrap: anywhere;
-    font-family: var(--fk-font-mono);
-    font-size: var(--fk-font-size-meta);
+    font-family: var(--ty-font-mono);
+    font-size: var(--ty-font-size-meta);
   }
-  .fk-definition-import__errors {
+  .ty-definition-import__errors {
     margin: 0;
-    padding-inline-start: var(--fk-space-5);
+    padding-inline-start: var(--ty-space-5);
   }
 
   /* Phones: the dialogs fill the screen (SectionedModal widens them to xwide). */
   @media (max-width: 639px) {
-    .fk-flow-sectioned-modal.fk-flow-settings,
-    .fk-flow-sectioned-modal.fk-definition-export,
-    .fk-flow-sectioned-modal.fk-definition-import,
-    .fk-flow-sectioned-modal.fk-node-config-dialog {
+    .ty-flow-sectioned-modal.ty-flow-settings,
+    .ty-flow-sectioned-modal.ty-definition-export,
+    .ty-flow-sectioned-modal.ty-definition-import,
+    .ty-flow-sectioned-modal.ty-node-config-dialog {
       inline-size: 100vw;
       max-inline-size: 100vw;
       min-block-size: 100dvh;
       border-radius: 0;
     }
-    .fk-definition-export__preview {
+    .ty-definition-export__preview {
       max-block-size: none;
       flex: 1 1 auto;
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .fk-definition-import__zone {
+    .ty-definition-import__zone {
       transition: none;
     }
   }
   @media (forced-colors: active) {
-    .fk-definition-export__preview {
+    .ty-definition-export__preview {
       border-color: CanvasText;
     }
-    .fk-definition-import__zone {
+    .ty-definition-import__zone {
       border-color: CanvasText;
     }
-    .fk-definition-import__zone[data-drop-target] {
+    .ty-definition-import__zone[data-drop-target] {
       border: 4px solid Highlight;
     }
   }

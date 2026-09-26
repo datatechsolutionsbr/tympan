@@ -54,6 +54,6 @@ describe('bidi isolation of content text in a right-to-left frame', () => {
   it('truncates the context name at the inline end of its own direction', () => {
     render(<RailContextButton scope="EACH/USP" name="Censo de assistentes de IA governamentais" />)
     expect(screen.getByText('Censo de assistentes de IA governamentais')).toHaveAttribute('dir', 'auto')
-    expect(cssOf('components/app-frame/AppFrameRail.css')).toMatch(/\.fk-rail-context__name\s*\{[^}]*text-overflow:\s*ellipsis/)
+    expect(cssOf('components/app-frame/AppFrameRail.css')).toMatch(/\.ty-rail-context__name\s*\{[^}]*text-overflow:\s*ellipsis/)
   })
 })

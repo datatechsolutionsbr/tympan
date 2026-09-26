@@ -1,22 +1,22 @@
 /* Shared pieces of the forms-a group: the selected check glyph. */
-@layer fakhir.components {
-  .fk-selected-mark {
+@layer tympan.components {
+  .ty-selected-mark {
     display: inline-grid;
     place-items: center;
     flex: none;
     inline-size: 20px;
     block-size: 20px;
-    border-radius: var(--fk-radius-pill);
-    background: var(--fk-accent);
-    color: var(--fk-accent-ink);
+    border-radius: var(--ty-radius-pill);
+    background: var(--ty-accent);
+    color: var(--ty-accent-ink);
   }
-  .fk-selected-mark > svg {
+  .ty-selected-mark > svg {
     inline-size: 14px;
     block-size: 14px;
     stroke-width: 3;
   }
   @media (forced-colors: active) {
-    .fk-selected-mark {
+    .ty-selected-mark {
       background: Highlight;
       color: HighlightText;
       forced-color-adjust: none;

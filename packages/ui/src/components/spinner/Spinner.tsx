@@ -27,11 +27,11 @@ export interface SpinnerProps {
 
 /** Drawing of the indicator: a CSS ring (border arc) or three pulsing dots. Never announced. */
 const glyphs: Record<SpinnerShape, () => ReactNode> = {
-  ring: () => <span className="fk-spinner__ring" aria-hidden="true" />,
+  ring: () => <span className="ty-spinner__ring" aria-hidden="true" />,
   dots: () => (
-    <span className="fk-spinner__dots" aria-hidden="true">
+    <span className="ty-spinner__dots" aria-hidden="true">
       {[0, 1, 2].map((n) => (
-        <span key={n} className="fk-spinner__dot" />
+        <span key={n} className="ty-spinner__dot" />
       ))}
     </span>
   ),
@@ -46,17 +46,17 @@ interface Look {
 function Covered(p: { look: Look; name: string; shown: boolean; reduced: boolean; className?: string; children?: ReactNode }) {
   const busy = p.shown || undefined
   return (
-    <div className={cx('fk-spinner-region', p.className)} aria-busy={busy}>
-      <div className="fk-spinner-region__content" {...inertProps(busy)}>
+    <div className={cx('ty-spinner-region', p.className)} aria-busy={busy}>
+      <div className="ty-spinner-region__content" {...inertProps(busy)}>
         {p.children}
       </div>
       {p.shown && (
-        <div className="fk-spinner-overlay" data-reduced-motion={p.reduced || undefined}>
-          <div className="fk-spinner-overlay__card">
-            <span className="fk-spinner" aria-hidden="true" {...p.look}>
+        <div className="ty-spinner-overlay" data-reduced-motion={p.reduced || undefined}>
+          <div className="ty-spinner-overlay__card">
+            <span className="ty-spinner" aria-hidden="true" {...p.look}>
               {glyphs[p.look['data-shape']]()}
             </span>
-            <span className="fk-spinner__label" role="status" aria-live="polite">
+            <span className="ty-spinner__label" role="status" aria-live="polite">
               {p.name}
             </span>
           </div>
@@ -88,10 +88,10 @@ export function Spinner(props: SpinnerProps) {
   // A static indicator says nothing by itself, so reduced motion reveals the label.
   const caption = (props.showLabel ?? false) || reduced
   return (
-    <AriaProgressBar isIndeterminate aria-label={name} className={cx('fk-spinner', props.className)} data-reduced-motion={reduced || undefined} {...look}>
+    <AriaProgressBar isIndeterminate aria-label={name} className={cx('ty-spinner', props.className)} data-reduced-motion={reduced || undefined} {...look}>
       {glyphs[look['data-shape']]()}
       {caption && (
-        <span className="fk-spinner__label" aria-hidden="true">
+        <span className="ty-spinner__label" aria-hidden="true">
           {name}
         </span>
       )}

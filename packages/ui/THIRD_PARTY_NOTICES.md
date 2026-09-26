@@ -1,6 +1,6 @@
 # Third-party notices
 
-`@fakhir/ui` and `@fakhir/tokens` are licensed under FSL-1.1-ALv2
+`@datatechsolutions/tympan` and `@datatechsolutions/tympan-tokens` are licensed under FSL-1.1-ALv2
 (Copyright 2026 Natalia Mesquita). They depend on, but do not copy, the packages
 below. Versions are those resolved on 2026-09-26.
 
@@ -42,7 +42,7 @@ dependency and marked external; no d3 code is copied into `dist/`.
 ## Methods implemented from public descriptions
 
 - OKLab / OKLCH conversion: formulas and matrices published by Björn Ottosson
-  (public domain / MIT description), implemented in `@fakhir/tokens/src/color.ts`.
+  (public domain / MIT description), implemented in `@datatechsolutions/tympan-tokens/src/color.ts`.
 - WCAG 2.x relative luminance and contrast ratio (W3C).
 - APCA lightness contrast: implemented from the public description of the
   APCA-W3 0.0.98G constants, used only for an informational report, never as a

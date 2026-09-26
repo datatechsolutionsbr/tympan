@@ -5,10 +5,11 @@ The clean-room packages (`packages/tokens`, `packages/ui`,
 library. Two layers guard that:
 
 1. **In-repo guardrails** (run by `npm run check`):
-   - `npm run check:no-tailwind` (`tools/guardrails/no-tailwind.mjs`): no
-     Tailwind or class-variance-authority dependency in either package or its
-     lockfile entries, no shadcn registry file, no Tailwind CSS directives, and
-     every static class token in TS/TSX is `fk-` prefixed (no utility classes).
+   - `npm run check:no-utility-css` (`tools/guardrails/no-utility-css.mjs`):
+     no utility-CSS framework or
+     class-variance-authority dependency in any package or its lockfile
+     entries, no shadcn registry file, no utility-framework CSS directives, and
+     every static class token in TS/TSX is `ty-` prefixed (no utility classes).
    - `npm run check:provenance` (`tools/guardrails/provenance.mjs`): hard-fail
      markers (slot data-attribute selectors, the fork's hit-area component
      name, `--btn-*` properties, arbitrary forced-colours variants, colour API

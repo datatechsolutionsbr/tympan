@@ -126,13 +126,13 @@ export interface PullToRefreshHandle {
 function Ring({ state, label }: { state: PullState; label: string }) {
   return (
     <ProgressBar
-      className="fk-pull__ring"
+      className="ty-pull__ring"
       aria-label={label}
       isIndeterminate={state.refreshing}
       value={state.refreshing ? undefined : Math.round(state.progress * 100)}
-      style={{ '--fk-pull-progress': String(state.progress) } as React.CSSProperties}
+      style={{ '--ty-pull-progress': String(state.progress) } as React.CSSProperties}
     >
-      <span className="fk-pull__ring-track" aria-hidden="true" />
+      <span className="ty-pull__ring-track" aria-hidden="true" />
     </ProgressBar>
   )
 }
@@ -150,7 +150,7 @@ export const PullToRefresh = forwardRef<PullToRefreshHandle, PullToRefreshProps>
     typeof indicator === 'function' ? (
       indicator(pull)
     ) : indicator === 'dots' ? (
-      <span className="fk-pull__dots" aria-hidden="true">
+      <span className="ty-pull__dots" aria-hidden="true">
         <span />
         <span />
         <span />
@@ -162,20 +162,20 @@ export const PullToRefresh = forwardRef<PullToRefreshHandle, PullToRefreshProps>
   return (
     <div
       ref={pull.containerRef}
-      className={cx('fk-pull', className)}
+      className={cx('ty-pull', className)}
       aria-busy={pull.refreshing || undefined}
       data-refreshing={pull.refreshing || undefined}
       data-armed={pull.armed || undefined}
       data-reduced={reduced || undefined}
-      style={{ '--fk-pull-distance': `${reduced ? 0 : pull.distance}px` } as React.CSSProperties}
+      style={{ '--ty-pull-distance': `${reduced ? 0 : pull.distance}px` } as React.CSSProperties}
     >
-      <div className="fk-pull__indicator" data-visible={visible || undefined}>
+      <div className="ty-pull__indicator" data-visible={visible || undefined}>
         {visible ? look : null}
       </div>
-      <span className="fk-visually-hidden" role="status">
+      <span className="ty-visually-hidden" role="status">
         {pull.refreshing ? label : ''}
       </span>
-      <div className="fk-pull__content">{children}</div>
+      <div className="ty-pull__content">{children}</div>
     </div>
   )
 })

@@ -33,34 +33,34 @@ describe('AuthFrame', () => {
     const { container } = render(<AuthFrame brandPanel={panel}>{form}</AuthFrame>)
     expect(screen.queryByRole('complementary')).toBeNull()
     expect(container.textContent).not.toContain('Evidence first')
-    expect(css).toMatch(/\.fk-auth-frame__form-side\s*\{[^}]*padding:\s*var\(--fk-space-6\)\s+var\(--fk-space-4\)/)
-    expect(css).toMatch(/\.fk-auth-frame__column\s*\{[^}]*inline-size:\s*100%/)
+    expect(css).toMatch(/\.ty-auth-frame__form-side\s*\{[^}]*padding:\s*var\(--ty-space-6\)\s+var\(--ty-space-4\)/)
+    expect(css).toMatch(/\.ty-auth-frame__column\s*\{[^}]*inline-size:\s*100%/)
   })
 
   it('centres the surface without a brand panel', () => {
     const { container } = render(<AuthFrame>{form}</AuthFrame>)
     expect(container.firstElementChild).not.toHaveAttribute('data-split')
-    expect(css).toMatch(/\.fk-auth-frame__form-side\s*\{[^}]*place-items:\s*center/)
+    expect(css).toMatch(/\.ty-auth-frame__form-side\s*\{[^}]*place-items:\s*center/)
   })
 
   it('narrow is narrower than regular', () => {
     const { container } = render(<AuthFrame width="narrow">{form}</AuthFrame>)
-    expect(container.querySelector('.fk-auth-frame__column')).toHaveAttribute('data-width', 'narrow')
+    expect(container.querySelector('.ty-auth-frame__column')).toHaveAttribute('data-width', 'narrow')
     const px = (sel: string) => Number(new RegExp(`${sel}\\s*\\{[^}]*max-inline-size:\\s*(\\d+)px`).exec(css)?.[1])
-    expect(px("\\.fk-auth-frame__column\\[data-width='narrow'\\]")).toBeLessThan(px('\\.fk-auth-frame__column'))
+    expect(px("\\.ty-auth-frame__column\\[data-width='narrow'\\]")).toBeLessThan(px('\\.ty-auth-frame__column'))
   })
 
   it('puts the mark before the form surface in reading order', () => {
     const { container } = render(<AuthFrame mark={<BrandMark />}>{form}</AuthFrame>)
-    const mark = container.querySelector('.fk-auth-frame__mark')!
-    const sheet = container.querySelector('.fk-auth-frame__sheet')!
+    const mark = container.querySelector('.ty-auth-frame__mark')!
+    const sheet = container.querySelector('.ty-auth-frame__sheet')!
     expect(mark.compareDocumentPosition(sheet) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 
   it('scrolls when taller than the viewport, so every field stays reachable', () => {
-    expect(css).toMatch(/\.fk-auth-frame__form-side\s*\{[^}]*overflow-y:\s*auto/)
+    expect(css).toMatch(/\.ty-auth-frame__form-side\s*\{[^}]*overflow-y:\s*auto/)
     expect(css).toMatch(/min-block-size:\s*100dvh/)
-    expect(css).not.toMatch(/\.fk-auth-frame[^{]*\{[^}]*overflow:\s*hidden/)
+    expect(css).not.toMatch(/\.ty-auth-frame[^{]*\{[^}]*overflow:\s*hidden/)
   })
 
   it('keeps a system border and becomes opaque when asked', () => {

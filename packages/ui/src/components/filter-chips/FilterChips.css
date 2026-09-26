@@ -1,144 +1,144 @@
 /* FilterChips (spec: wave-2/filter-chips.md; design direction §2.3, §2.4, §2.5). */
-@layer fakhir.components {
-  .fk-filter-chips {
+@layer tympan.components {
+  .ty-filter-chips {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--fk-space-2) var(--fk-space-3);
+    gap: var(--ty-space-2) var(--ty-space-3);
   }
-  .fk-filter-chips__list {
+  .ty-filter-chips__list {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
-  .fk-filter-chips__chip {
-    --fk-filter-chip-fill: var(--fk-surface-sunken);
-    --fk-filter-chip-ink: var(--fk-ink-2);
+  .ty-filter-chips__chip {
+    --ty-filter-chip-fill: var(--ty-surface-sunken);
+    --ty-filter-chip-ink: var(--ty-ink-2);
     position: relative;
     box-sizing: border-box;
     display: inline-flex;
     align-items: center;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
     min-block-size: 28px;
-    padding-inline: var(--fk-space-3) var(--fk-space-1);
-    border: 1px solid var(--fk-line-strong);
-    border-radius: var(--fk-radius-pill);
-    background: var(--fk-filter-chip-fill);
-    color: var(--fk-filter-chip-ink);
-    font-size: var(--fk-font-size-label);
-    line-height: var(--fk-font-line-height-label);
+    padding-inline: var(--ty-space-3) var(--ty-space-1);
+    border: 1px solid var(--ty-line-strong);
+    border-radius: var(--ty-radius-pill);
+    background: var(--ty-filter-chip-fill);
+    color: var(--ty-filter-chip-ink);
+    font-size: var(--ty-font-size-label);
+    line-height: var(--ty-font-line-height-label);
     outline: none;
-    animation: fk-filter-chip-in var(--fk-dur-quick) var(--fk-ease);
+    animation: ty-filter-chip-in var(--ty-dur-quick) var(--ty-ease);
   }
-  .fk-filter-chips__chip[data-tone='accent'] {
-    --fk-filter-chip-fill: var(--fk-accent-soft);
-    --fk-filter-chip-ink: var(--fk-on-accent-soft);
+  .ty-filter-chips__chip[data-tone='accent'] {
+    --ty-filter-chip-fill: var(--ty-accent-soft);
+    --ty-filter-chip-ink: var(--ty-on-accent-soft);
   }
-  .fk-filter-chips__chip[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-filter-chips__chip[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
-  .fk-filter-chips__icon {
+  .ty-filter-chips__icon {
     inline-size: 14px;
     block-size: 14px;
-    color: var(--fk-ink-3);
+    color: var(--ty-ink-3);
   }
-  span.fk-filter-chips__icon {
+  span.ty-filter-chips__icon {
     display: inline-flex;
   }
-  span.fk-filter-chips__icon > svg {
+  span.ty-filter-chips__icon > svg {
     inline-size: 100%;
     block-size: 100%;
   }
-  .fk-filter-chips__marker {
+  .ty-filter-chips__marker {
     inline-size: 8px;
     block-size: 8px;
-    background: var(--fk-filter-chip-marker, var(--fk-ink-3));
+    background: var(--ty-filter-chip-marker, var(--ty-ink-3));
   }
-  .fk-filter-chips__text {
+  .ty-filter-chips__text {
     max-inline-size: 24ch;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .fk-filter-chips__remove,
-  .fk-filter-chips__clear-all {
+  .ty-filter-chips__remove,
+  .ty-filter-chips__clear-all {
     position: relative;
     display: inline-grid;
     place-items: center;
     padding: 0;
     border: 0;
     background: transparent;
-    color: var(--fk-ink-3);
+    color: var(--ty-ink-3);
     font: inherit;
     cursor: pointer;
     outline: none;
   }
-  .fk-filter-chips__remove {
+  .ty-filter-chips__remove {
     inline-size: 22px;
     block-size: 22px;
-    border-radius: var(--fk-radius-pill);
+    border-radius: var(--ty-radius-pill);
   }
-  .fk-filter-chips__remove > svg {
+  .ty-filter-chips__remove > svg {
     inline-size: 14px;
     block-size: 14px;
   }
-  .fk-filter-chips__clear-all {
+  .ty-filter-chips__clear-all {
     min-block-size: 28px;
-    color: var(--fk-accent);
-    font-size: var(--fk-font-size-label);
-    font-weight: var(--fk-font-weight-semibold);
+    color: var(--ty-accent);
+    font-size: var(--ty-font-size-label);
+    font-weight: var(--ty-font-weight-semibold);
   }
   /* 44 x 44 hit areas on small visible controls (§2.10). */
-  .fk-filter-chips__remove::before,
-  .fk-filter-chips__clear-all::before {
+  .ty-filter-chips__remove::before,
+  .ty-filter-chips__clear-all::before {
     content: '';
     position: absolute;
     inset-block-start: 50%;
     /* physical: centring with translate(-50%) is the same in both directions */
     left: 50%;
-    inline-size: max(100%, var(--fk-control-target));
-    block-size: max(100%, var(--fk-control-target));
+    inline-size: max(100%, var(--ty-control-target));
+    block-size: max(100%, var(--ty-control-target));
     transform: translate(-50%, -50%);
   }
-  .fk-filter-chips__remove[data-hovered] {
-    background: var(--fk-line);
-    color: var(--fk-ink);
+  .ty-filter-chips__remove[data-hovered] {
+    background: var(--ty-line);
+    color: var(--ty-ink);
   }
-  .fk-filter-chips__clear-all[data-hovered] {
-    color: var(--fk-accent-strong);
+  .ty-filter-chips__clear-all[data-hovered] {
+    color: var(--ty-accent-strong);
     text-decoration: underline;
   }
-  .fk-filter-chips__remove[data-focus-visible],
-  .fk-filter-chips__clear-all[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-filter-chips__remove[data-focus-visible],
+  .ty-filter-chips__clear-all[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 1px;
   }
-  @keyframes fk-filter-chip-in {
+  @keyframes ty-filter-chip-in {
     from {
       opacity: 0;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-filter-chips__chip {
+    .ty-filter-chips__chip {
       animation: none;
     }
   }
   @media (prefers-reduced-transparency: reduce) {
-    .fk-filter-chips__chip {
-      --fk-filter-chip-fill: var(--fk-surface-solid);
+    .ty-filter-chips__chip {
+      --ty-filter-chip-fill: var(--ty-surface-solid);
     }
   }
   @media (forced-colors: active) {
-    .fk-filter-chips__chip {
+    .ty-filter-chips__chip {
       border-color: ButtonText;
     }
-    .fk-filter-chips__icon {
+    .ty-filter-chips__icon {
       color: ButtonText;
     }
-    .fk-filter-chips__remove[data-focus-visible],
-    .fk-filter-chips__chip[data-focus-visible] {
+    .ty-filter-chips__remove[data-focus-visible],
+    .ty-filter-chips__chip[data-focus-visible] {
       outline-color: Highlight;
     }
   }

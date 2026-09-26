@@ -2,21 +2,21 @@
  * SectionedModal (spec: wave-2/sectioned-modal.md; design direction §2.4, §2.5, §2.7, §2.8).
  * Organised by part. Each part carries its own states, breakpoints and
  * preference queries nested inside it; sizes and layout switches are read
- * from --fk-smd-* properties so a breakpoint only has to change a value.
+ * from --ty-smd-* properties so a breakpoint only has to change a value.
  */
-@layer fakhir.components {
+@layer tympan.components {
   /* Veil behind the panel. */
-  .fk-sectioned-modal__backdrop {
+  .ty-sectioned-modal__backdrop {
     position: fixed;
     inset: 0;
-    z-index: var(--fk-z-modal);
+    z-index: var(--ty-z-modal);
     display: grid;
     place-items: center;
-    padding: var(--fk-space-5);
-    background: var(--fk-backdrop);
+    padding: var(--ty-space-5);
+    background: var(--ty-backdrop);
 
     &[data-entering] {
-      animation: fk-smd-fade var(--fk-dur-base) var(--fk-ease);
+      animation: ty-smd-fade var(--ty-dur-base) var(--ty-ease);
     }
     @media (prefers-reduced-transparency: reduce) {
       background: rgb(15 23 42 / 0.6);
@@ -24,57 +24,57 @@
   }
 
   /* Panel (level 4). */
-  .fk-sectioned-modal {
-    --fk-smd-width: 52rem;
-    --fk-smd-pad-x: var(--fk-space-6);
-    --fk-smd-margin: var(--fk-space-5);
-    --fk-smd-direction: row;
-    --fk-smd-nav-width: 15rem;
-    --fk-smd-current: inset calc(3px * var(--fk-inline-sign)) 0 0 var(--fk-accent);
+  .ty-sectioned-modal {
+    --ty-smd-width: 52rem;
+    --ty-smd-pad-x: var(--ty-space-6);
+    --ty-smd-margin: var(--ty-space-5);
+    --ty-smd-direction: row;
+    --ty-smd-nav-width: 15rem;
+    --ty-smd-current: inset calc(3px * var(--ty-inline-sign)) 0 0 var(--ty-accent);
 
     display: flex;
     box-sizing: border-box;
-    inline-size: min(var(--fk-smd-width), 100%);
-    max-block-size: calc(100dvh - var(--fk-smd-margin) * 2);
+    inline-size: min(var(--ty-smd-width), 100%);
+    max-block-size: calc(100dvh - var(--ty-smd-margin) * 2);
     overflow: hidden;
-    color: var(--fk-on-surface-raised);
-    background: var(--fk-surface-raised);
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-sheet);
-    box-shadow: var(--fk-shadow-modal);
-    backdrop-filter: blur(var(--fk-glass-blur-floating)) saturate(var(--fk-glass-saturate));
-    -webkit-backdrop-filter: blur(var(--fk-glass-blur-floating)) saturate(var(--fk-glass-saturate));
+    color: var(--ty-on-surface-raised);
+    background: var(--ty-surface-raised);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-sheet);
+    box-shadow: var(--ty-shadow-modal);
+    backdrop-filter: blur(var(--ty-glass-blur-floating)) saturate(var(--ty-glass-saturate));
+    -webkit-backdrop-filter: blur(var(--ty-glass-blur-floating)) saturate(var(--ty-glass-saturate));
     outline: none;
 
     &[data-size='sm'] {
-      --fk-smd-width: 28rem;
+      --ty-smd-width: 28rem;
     }
     &[data-size='md'] {
-      --fk-smd-width: 40rem;
+      --ty-smd-width: 40rem;
     }
     &[data-size='xl'] {
-      --fk-smd-width: 68rem;
+      --ty-smd-width: 68rem;
     }
     &[data-size='full'] {
-      --fk-smd-width: 100%;
+      --ty-smd-width: 100%;
       block-size: 100%;
     }
     &[data-entering] {
-      animation: fk-smd-lift var(--fk-dur-base) var(--fk-ease);
+      animation: ty-smd-lift var(--ty-dur-base) var(--ty-ease);
     }
 
     @media (max-width: 1023.98px) {
-      --fk-smd-direction: column;
-      --fk-smd-nav-width: auto;
-      --fk-smd-current: inset 0 -3px 0 var(--fk-accent);
+      --ty-smd-direction: column;
+      --ty-smd-nav-width: auto;
+      --ty-smd-current: inset 0 -3px 0 var(--ty-accent);
     }
     @media (prefers-reduced-motion: reduce) {
       &[data-entering] {
-        animation: fk-smd-fade var(--fk-dur-base) linear;
+        animation: ty-smd-fade var(--ty-dur-base) linear;
       }
     }
     @media (prefers-reduced-transparency: reduce) {
-      background: var(--fk-surface-raised-solid);
+      background: var(--ty-surface-raised-solid);
       backdrop-filter: none;
     }
     @media (forced-colors: active) {
@@ -84,7 +84,7 @@
   }
 
   /* Shrinkable columns and the frame that places navigation and content. */
-  :is(.fk-sectioned-modal__dialog, .fk-sectioned-modal__form, .fk-sectioned-modal__body) {
+  :is(.ty-sectioned-modal__dialog, .ty-sectioned-modal__form, .ty-sectioned-modal__body) {
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -92,21 +92,21 @@
     min-block-size: 0;
     outline: none;
   }
-  .fk-sectioned-modal__frame {
+  .ty-sectioned-modal__frame {
     display: flex;
     flex: 1;
-    flex-direction: var(--fk-smd-direction);
+    flex-direction: var(--ty-smd-direction);
     min-block-size: 0;
   }
 
   /* Header block. */
-  .fk-sectioned-modal__head {
+  .ty-sectioned-modal__head {
     position: relative;
     display: flex;
     align-items: flex-start;
-    gap: var(--fk-space-3);
-    padding: var(--fk-space-5) var(--fk-smd-pad-x);
-    border-block-end: 1px solid var(--fk-line);
+    gap: var(--ty-space-3);
+    padding: var(--ty-space-5) var(--ty-smd-pad-x);
+    border-block-end: 1px solid var(--ty-line);
 
     &[data-accent]::before {
       content: '';
@@ -114,80 +114,80 @@
       inset-inline: 0;
       inset-block-start: 0;
       block-size: 3px;
-      background: var(--fk-accent);
+      background: var(--ty-accent);
     }
   }
-  .fk-sectioned-modal__head-icon {
+  .ty-sectioned-modal__head-icon {
     display: inline-grid;
     place-items: center;
     inline-size: 40px;
     block-size: 40px;
-    color: var(--fk-ink-2);
-    background: var(--fk-surface-sunken);
-    border-radius: var(--fk-radius-control);
+    color: var(--ty-ink-2);
+    background: var(--ty-surface-sunken);
+    border-radius: var(--ty-radius-control);
   }
-  .fk-sectioned-modal__titles {
+  .ty-sectioned-modal__titles {
     flex: 1;
     min-inline-size: 0;
   }
-  .fk-sectioned-modal__title {
+  .ty-sectioned-modal__title {
     margin: 0;
-    color: var(--fk-ink);
-    font-family: var(--fk-font-serif);
-    font-size: var(--fk-font-size-h2);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-h2);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-serif);
+    font-size: var(--ty-font-size-h2);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-h2);
     outline: none;
 
     &:focus-visible {
-      outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+      outline: var(--ty-focus-width) solid var(--ty-focus-ring);
       outline-offset: 2px;
     }
   }
-  .fk-sectioned-modal__subtitle {
-    margin: var(--fk-space-1) 0 0;
-    color: var(--fk-ink-3);
+  .ty-sectioned-modal__subtitle {
+    margin: var(--ty-space-1) 0 0;
+    color: var(--ty-ink-3);
   }
-  .fk-sectioned-modal__head-actions {
+  .ty-sectioned-modal__head-actions {
     display: flex;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
-  :is(.fk-sectioned-modal__eyebrow, .fk-sectioned-modal__group-name) {
+  :is(.ty-sectioned-modal__eyebrow, .ty-sectioned-modal__group-name) {
     margin: 0;
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-eyebrow);
-    font-weight: var(--fk-font-weight-semibold);
-    letter-spacing: var(--fk-font-tracking-eyebrow);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-eyebrow);
+    font-weight: var(--ty-font-weight-semibold);
+    letter-spacing: var(--ty-font-tracking-eyebrow);
     text-transform: uppercase;
   }
 
   /* Navigation between sections. */
-  .fk-sectioned-modal__rail {
+  .ty-sectioned-modal__rail {
     display: flex;
     flex: none;
     flex-direction: column;
-    gap: var(--fk-space-4);
-    inline-size: var(--fk-smd-nav-width);
-    padding: var(--fk-space-4);
+    gap: var(--ty-space-4);
+    inline-size: var(--ty-smd-nav-width);
+    padding: var(--ty-space-4);
     overflow-y: auto;
-    background: var(--fk-surface-sunken);
-    border-inline-end: 1px solid var(--fk-line);
+    background: var(--ty-surface-sunken);
+    border-inline-end: 1px solid var(--ty-line);
 
     @media (max-width: 1023.98px) {
       flex-direction: row;
       align-items: center;
-      padding: var(--fk-space-2) var(--fk-space-4);
+      padding: var(--ty-space-2) var(--ty-space-4);
       overflow-x: auto;
       border-inline-end: 0;
-      border-block-end: 1px solid var(--fk-line);
+      border-block-end: 1px solid var(--ty-line);
     }
   }
-  .fk-sectioned-modal__nav {
+  .ty-sectioned-modal__nav {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-4);
+    gap: var(--ty-space-4);
   }
-  .fk-sectioned-modal__list {
+  .ty-sectioned-modal__list {
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -195,49 +195,49 @@
     padding: 0;
     list-style: none;
   }
-  :is(.fk-sectioned-modal__nav, .fk-sectioned-modal__list) {
+  :is(.ty-sectioned-modal__nav, .ty-sectioned-modal__list) {
     @media (max-width: 1023.98px) {
       flex-direction: row;
     }
   }
-  .fk-sectioned-modal__group-name {
-    margin-block-end: var(--fk-space-1);
-    padding-inline: var(--fk-space-3);
+  .ty-sectioned-modal__group-name {
+    margin-block-end: var(--ty-space-1);
+    padding-inline: var(--ty-space-3);
   }
-  :is(.fk-sectioned-modal__group-name, .fk-sectioned-modal__identity) {
+  :is(.ty-sectioned-modal__group-name, .ty-sectioned-modal__identity) {
     @media (max-width: 1023.98px) {
       display: none;
     }
   }
-  .fk-sectioned-modal__item {
+  .ty-sectioned-modal__item {
     position: relative;
     display: flex;
     align-items: center;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
     inline-size: 100%;
-    min-block-size: var(--fk-control-target);
-    padding: 0 var(--fk-space-3);
-    color: var(--fk-ink-2);
+    min-block-size: var(--ty-control-target);
+    padding: 0 var(--ty-space-3);
+    color: var(--ty-ink-2);
     font: inherit;
     text-align: start;
     background: transparent;
     border: 0;
-    border-radius: var(--fk-radius-control);
+    border-radius: var(--ty-radius-control);
     cursor: pointer;
     outline: none;
 
     &[data-hovered] {
-      background: var(--fk-surface);
+      background: var(--ty-surface);
     }
     &[data-focus-visible] {
-      outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+      outline: var(--ty-focus-width) solid var(--ty-focus-ring);
       outline-offset: -2px;
     }
     &[data-active] {
-      color: var(--fk-accent);
-      font-weight: var(--fk-font-weight-semibold);
-      background: var(--fk-accent-soft);
-      box-shadow: var(--fk-smd-current);
+      color: var(--ty-accent);
+      font-weight: var(--ty-font-weight-semibold);
+      background: var(--ty-accent-soft);
+      box-shadow: var(--ty-smd-current);
     }
     @media (max-width: 1023.98px) {
       white-space: nowrap;
@@ -250,22 +250,22 @@
       }
     }
   }
-  .fk-sectioned-modal__item-icon > svg {
+  .ty-sectioned-modal__item-icon > svg {
     inline-size: 18px;
     block-size: 18px;
   }
-  .fk-sectioned-modal__item-label {
+  .ty-sectioned-modal__item-label {
     flex: 1;
   }
-  .fk-sectioned-modal__count {
-    color: var(--fk-ink-3);
-    font-family: var(--fk-font-mono);
-    font-size: var(--fk-font-size-meta);
+  .ty-sectioned-modal__count {
+    color: var(--ty-ink-3);
+    font-family: var(--ty-font-mono);
+    font-size: var(--ty-font-size-meta);
   }
-  .fk-sectioned-modal__rail-foot {
+  .ty-sectioned-modal__rail-foot {
     margin-block-start: auto;
-    padding-block-start: var(--fk-space-3);
-    border-block-start: 1px solid var(--fk-line);
+    padding-block-start: var(--ty-space-3);
+    border-block-start: 1px solid var(--ty-line);
 
     @media (max-width: 1023.98px) {
       margin: 0;
@@ -276,48 +276,48 @@
   }
 
   /* Content and actions. */
-  .fk-sectioned-modal__body {
-    gap: var(--fk-space-4);
-    padding: var(--fk-space-6) var(--fk-smd-pad-x);
+  .ty-sectioned-modal__body {
+    gap: var(--ty-space-4);
+    padding: var(--ty-space-6) var(--ty-smd-pad-x);
     overflow-y: auto;
   }
-  .fk-sectioned-modal__foot {
+  .ty-sectioned-modal__foot {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
-    gap: var(--fk-space-3);
-    padding-inline: var(--fk-smd-pad-x);
-    padding-block: var(--fk-space-4) calc(var(--fk-space-4) + env(safe-area-inset-bottom, 0px));
-    border-block-start: 1px solid var(--fk-line);
+    gap: var(--ty-space-3);
+    padding-inline: var(--ty-smd-pad-x);
+    padding-block: var(--ty-space-4) calc(var(--ty-space-4) + env(safe-area-inset-bottom, 0px));
+    border-block-start: 1px solid var(--ty-line);
   }
 
   /* Phones: the panel fills the screen and the footer stays above the safe area. */
   @media (max-width: 639.98px) {
-    .fk-sectioned-modal {
-      --fk-smd-pad-x: var(--fk-space-4);
-      --fk-smd-margin: 0px;
+    .ty-sectioned-modal {
+      --ty-smd-pad-x: var(--ty-space-4);
+      --ty-smd-margin: 0px;
       inline-size: 100%;
       block-size: 100dvh;
       max-block-size: 100dvh;
       border-radius: 0;
     }
-    .fk-sectioned-modal__backdrop {
+    .ty-sectioned-modal__backdrop {
       padding: 0;
     }
-    .fk-sectioned-modal__foot {
+    .ty-sectioned-modal__foot {
       position: sticky;
       inset-block-end: 0;
-      background: var(--fk-surface-raised);
+      background: var(--ty-surface-raised);
     }
   }
 
-  @keyframes fk-smd-lift {
+  @keyframes ty-smd-lift {
     from {
       opacity: 0;
       translate: 0 12px;
     }
   }
-  @keyframes fk-smd-fade {
+  @keyframes ty-smd-fade {
     from {
       opacity: 0;
     }

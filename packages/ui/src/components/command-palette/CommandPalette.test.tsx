@@ -144,9 +144,9 @@ describe('CommandPalette', () => {
   })
 
   it('orders recent choices by count then recency', async () => {
-    window.localStorage.removeItem('fk-palette-test')
+    window.localStorage.removeItem('ty-palette-test')
     const spy = vi.fn()
-    render(<Harness spy={spy} recent={{ storageKey: 'fk-palette-test' }} />)
+    render(<Harness spy={spy} recent={{ storageKey: 'ty-palette-test' }} />)
     const choose = async (text: string) => {
       await userEvent.click(screen.getByRole('button', { name: 'Search' }))
       await userEvent.keyboard(text)

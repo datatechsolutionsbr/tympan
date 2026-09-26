@@ -45,7 +45,7 @@ export function ProgressBar({
       isIndeterminate={indeterminate}
       valueLabel={valueLabel}
       aria-label={label ? undefined : rest['aria-label']}
-      className={cx('fk-progress', className)}
+      className={cx('ty-progress', className)}
       data-tone={tone}
       data-size={size}
       data-indeterminate={indeterminate || undefined}
@@ -54,18 +54,18 @@ export function ProgressBar({
       {({ percentage, valueText }) => (
         <>
           {label || (showValue && !indeterminate) || indeterminate ? (
-            <div className="fk-progress__header">
-              {label ? <Label className="fk-progress__label">{label}</Label> : <span />}
+            <div className="ty-progress__header">
+              {label ? <Label className="ty-progress__label">{label}</Label> : <span />}
               {indeterminate ? (
-                <span className="fk-progress__value fk-progress__value--indeterminate">{messages.inProgress}</span>
+                <span className="ty-progress__value ty-progress__value--indeterminate">{messages.inProgress}</span>
               ) : showValue ? (
-                <span className="fk-progress__value">{valueText}</span>
+                <span className="ty-progress__value">{valueText}</span>
               ) : null}
             </div>
           ) : null}
-          <div className="fk-progress__track" aria-hidden="true">
+          <div className="ty-progress__track" aria-hidden="true">
             <div
-              className="fk-progress__fill"
+              className="ty-progress__fill"
               style={indeterminate ? undefined : { inlineSize: `${percentage ?? 0}%` }}
             />
           </div>

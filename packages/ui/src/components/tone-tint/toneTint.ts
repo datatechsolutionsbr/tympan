@@ -28,7 +28,7 @@ export function isToneName(value: unknown): value is ToneName {
   return typeof value === 'string' && (toneNames as readonly string[]).includes(value)
 }
 
-const ref = (tone: ToneName, part: 'rgb' | 'soft' | 'ring') => `var(--fk-tint-${tone}-${part})`
+const ref = (tone: ToneName, part: 'rgb' | 'soft' | 'ring') => `var(--ty-tint-${tone}-${part})`
 
 /** Token references for a tone; unknown input falls back to `fallback`, then to neutral. */
 export function resolveTint(tone?: unknown, fallback?: ToneName): TintReferences {
@@ -38,11 +38,11 @@ export function resolveTint(tone?: unknown, fallback?: ToneName): TintReferences
 
 /**
  * Inline style for a tinted surface root: sets the one property the glass
- * rule reads (`--fk-surface-tint`) plus its ring. Pair with `data-fk-tinted`.
+ * rule reads (`--ty-surface-tint`) plus its ring. Pair with `data-ty-tinted`.
  */
 export function tintStyle(tone?: unknown, fallback?: ToneName): CSSProperties {
   const t = resolveTint(tone, fallback)
-  return { ['--fk-surface-tint' as string]: t.soft, ['--fk-surface-tint-ring' as string]: t.ring } as CSSProperties
+  return { ['--ty-surface-tint' as string]: t.soft, ['--ty-surface-tint-ring' as string]: t.ring } as CSSProperties
 }
 
 /**

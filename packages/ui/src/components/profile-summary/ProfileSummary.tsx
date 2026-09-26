@@ -33,16 +33,16 @@ export function ProfileSummary({ role, email, showEmail = false, pictureUrl, ini
   const lines: Array<[string, string]> = [['name', name]]
   if (showEmail && email) lines.push(['email', email])
   return (
-    <div className={cx('fk-profile-summary', className)}>
+    <div className={cx('ty-profile-summary', className)}>
       <Avatar decorative src={pictureUrl} fallbackText={initials ?? deriveInitials(name)} size="regular" />
-      <div className="fk-profile-summary__text">
+      <div className="ty-profile-summary__text">
         {role ? (
-          <span className="fk-profile-summary__role">
+          <span className="ty-profile-summary__role">
             <Tag size="small">{role}</Tag>
           </span>
         ) : null}
         {lines.map(([kind, text]) => (
-          <span key={kind} className="fk-profile-summary__line" data-line={kind} title={text}>
+          <span key={kind} className="ty-profile-summary__line" data-line={kind} title={text}>
             {text}
           </span>
         ))}

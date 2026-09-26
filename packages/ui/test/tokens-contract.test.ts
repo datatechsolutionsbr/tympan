@@ -1,5 +1,5 @@
 // Every custom property a component reads must exist: either in the token
-// stylesheet of @fakhir/tokens or declared by the component itself.
+// stylesheet of @datatechsolutions/tympan-tokens or declared by the component itself.
 import { readdirSync, readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
@@ -16,24 +16,24 @@ function cssFiles(dir: string): string[] {
 }
 
 describe('token contract', () => {
-  const tokensCss = readFileSync(require.resolve('@fakhir/tokens/tokens.css'), 'utf8')
-  const defined = new Set([...tokensCss.matchAll(/(--fk-[\w-]+)\s*:/g)].map((m) => m[1]))
+  const tokensCss = readFileSync(require.resolve('@datatechsolutions/tympan-tokens/tokens.css'), 'utf8')
+  const defined = new Set([...tokensCss.matchAll(/(--ty-[\w-]+)\s*:/g)].map((m) => m[1]))
 
   it('the token stylesheet was built', () => {
     expect(defined.size).toBeGreaterThan(200)
   })
 
   for (const file of cssFiles(src)) {
-    it(`${file.slice(src.length + 1)} only reads defined --fk-* properties`, () => {
+    it(`${file.slice(src.length + 1)} only reads defined --ty-* properties`, () => {
       const css = readFileSync(file, 'utf8')
       // Component-scoped properties may also be set inline from the sibling TSX.
       const siblings = readdirSync(dirname(file))
         .filter((f) => f.endsWith('.tsx') && !f.endsWith('.test.tsx'))
         .map((f) => readFileSync(join(dirname(file), f), 'utf8'))
         .join('\n')
-      const local = new Set([...css.matchAll(/(--fk-[\w-]+)\s*:/g)].map((m) => m[1]))
-      for (const m of siblings.matchAll(/['"](--fk-[\w-]+)['"]/g)) local.add(m[1])
-      const used = [...new Set([...css.matchAll(/var\(\s*(--fk-[\w-]+)/g)].map((m) => m[1]!))]
+      const local = new Set([...css.matchAll(/(--ty-[\w-]+)\s*:/g)].map((m) => m[1]))
+      for (const m of siblings.matchAll(/['"](--ty-[\w-]+)['"]/g)) local.add(m[1])
+      const used = [...new Set([...css.matchAll(/var\(\s*(--ty-[\w-]+)/g)].map((m) => m[1]!))]
       const missing = used.filter((n) => !defined.has(n) && !local.has(n))
       expect(missing).toEqual([])
     })

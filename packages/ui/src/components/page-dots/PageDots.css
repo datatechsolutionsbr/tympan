@@ -1,89 +1,89 @@
 /* PageDots (spec: wave-2/page-dots.md; design direction §2.3, §2.7, §2.10). */
-@layer fakhir.components {
-  .fk-page-dots {
-    --fk-pip: 8px;
-    --fk-pip-rest: var(--fk-line-strong);
-    --fk-pip-on: var(--fk-accent);
+@layer tympan.components {
+  .ty-page-dots {
+    --ty-pip: 8px;
+    --ty-pip-rest: var(--ty-line-strong);
+    --ty-pip-on: var(--ty-accent);
     display: inline-flex;
     align-items: center;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
     margin: 0;
-    color: var(--fk-ink-3);
+    color: var(--ty-ink-3);
   }
-  .fk-page-dots[data-size='small'] { --fk-pip: 6px; }
-  .fk-page-dots[data-size='large'] { --fk-pip: 10px; }
-  .fk-page-dots[data-contrast='onDark'] {
-    --fk-pip-rest: rgb(238 242 247 / 0.45);
-    --fk-pip-on: #eef2f7;
+  .ty-page-dots[data-size='small'] { --ty-pip: 6px; }
+  .ty-page-dots[data-size='large'] { --ty-pip: 10px; }
+  .ty-page-dots[data-contrast='onDark'] {
+    --ty-pip-rest: rgb(238 242 247 / 0.45);
+    --ty-pip-on: #eef2f7;
     color: #eef2f7;
   }
-  .fk-page-dots[data-contrast='onLight'] {
-    --fk-pip-rest: rgb(15 23 42 / 0.35);
-    --fk-pip-on: #0f172a;
+  .ty-page-dots[data-contrast='onLight'] {
+    --ty-pip-rest: rgb(15 23 42 / 0.35);
+    --ty-pip-on: #0f172a;
     color: #0f172a;
   }
-  .fk-page-dots__pip {
+  .ty-page-dots__pip {
     display: block;
-    inline-size: var(--fk-pip);
-    block-size: var(--fk-pip);
-    border-radius: var(--fk-radius-pill);
-    background: var(--fk-pip-rest);
+    inline-size: var(--ty-pip);
+    block-size: var(--ty-pip);
+    border-radius: var(--ty-radius-pill);
+    background: var(--ty-pip-rest);
     transition:
-      inline-size var(--fk-dur-instant) var(--fk-ease),
-      background-color var(--fk-dur-instant) var(--fk-ease);
+      inline-size var(--ty-dur-instant) var(--ty-ease),
+      background-color var(--ty-dur-instant) var(--ty-ease);
   }
-  .fk-page-dots__pip[data-on] {
-    background: var(--fk-pip-on);
+  .ty-page-dots__pip[data-on] {
+    background: var(--ty-pip-on);
   }
-  .fk-page-dots[data-appearance='pill'] .fk-page-dots__pip[data-on] {
-    inline-size: calc(var(--fk-pip) * 3);
+  .ty-page-dots[data-appearance='pill'] .ty-page-dots__pip[data-on] {
+    inline-size: calc(var(--ty-pip) * 3);
   }
   /* The button is the hit area: 44 px on touch, 24 px on fine pointers. */
-  .fk-page-dots__hit {
+  .ty-page-dots__hit {
     display: inline-grid;
     place-items: center;
-    min-inline-size: var(--fk-control-target);
-    min-block-size: var(--fk-control-target);
+    min-inline-size: var(--ty-control-target);
+    min-block-size: var(--ty-control-target);
     padding: 0;
     border: 0;
-    border-radius: var(--fk-radius-pill);
+    border-radius: var(--ty-radius-pill);
     background: transparent;
     cursor: pointer;
     outline: none;
   }
   @media (pointer: fine) {
-    .fk-page-dots__hit {
+    .ty-page-dots__hit {
       min-inline-size: 24px;
       min-block-size: 24px;
     }
   }
-  .fk-page-dots__hit[data-hovered] .fk-page-dots__pip:not([data-on]) {
-    background: var(--fk-ink-3);
+  .ty-page-dots__hit[data-hovered] .ty-page-dots__pip:not([data-on]) {
+    background: var(--ty-ink-3);
   }
-  .fk-page-dots__hit[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-page-dots__hit[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 0;
   }
-  .fk-page-dots__counter {
-    font-family: var(--fk-font-mono);
-    font-size: var(--fk-font-size-meta);
+  .ty-page-dots__counter {
+    font-family: var(--ty-font-mono);
+    font-size: var(--ty-font-size-meta);
     font-variant-numeric: tabular-nums;
   }
   @media (prefers-reduced-motion: reduce) {
-    .fk-page-dots__pip {
+    .ty-page-dots__pip {
       transition: none;
     }
   }
   @media (forced-colors: active) {
-    .fk-page-dots__pip {
+    .ty-page-dots__pip {
       background: Canvas;
       border: 1px solid CanvasText;
     }
-    .fk-page-dots__pip[data-on] {
+    .ty-page-dots__pip[data-on] {
       background: Highlight;
       border-color: Highlight;
     }
-    .fk-page-dots__hit[data-focus-visible] {
+    .ty-page-dots__hit[data-focus-visible] {
       outline: 2px solid Highlight;
     }
   }

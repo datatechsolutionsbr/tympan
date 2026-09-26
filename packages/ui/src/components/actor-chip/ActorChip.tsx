@@ -47,17 +47,17 @@ export function ActorChip({ kind, name, email, avatarSrc, initials, avatar = tru
   if (k === 'agent') {
     const meta = [agentKey, model].filter(Boolean)
     return (
-      <span className={cx('fk-actor-chip', className)} data-kind="agent" data-compact={compact || undefined}>
+      <span className={cx('ty-actor-chip', className)} data-kind="agent" data-compact={compact || undefined}>
         <Avatar actorKind="agent" decorative size={compact ? 'xsmall' : 'small'} />
-        <span className="fk-actor-chip__text">
-          <span className="fk-actor-chip__line">
-            <span className="fk-actor-chip__name">{name}</span>{' '}
-            <span className="fk-actor-chip__kind">{messages.actor.agent}</span>
+        <span className="ty-actor-chip__text">
+          <span className="ty-actor-chip__line">
+            <span className="ty-actor-chip__name">{name}</span>{' '}
+            <span className="ty-actor-chip__kind">{messages.actor.agent}</span>
           </span>
           {!compact && meta.length > 0 ? (
-            <span className="fk-actor-chip__meta">
+            <span className="ty-actor-chip__meta">
               {meta.map((m) => (
-                <code key={m} className="fk-actor-chip__mono">
+                <code key={m} className="ty-actor-chip__mono">
                   {m}
                 </code>
               ))}
@@ -70,12 +70,12 @@ export function ActorChip({ kind, name, email, avatarSrc, initials, avatar = tru
 
   if (k === 'system') {
     return (
-      <span className={cx('fk-actor-chip', className)} data-kind="system" data-compact={compact || undefined}>
-        <Server className="fk-actor-chip__icon" aria-hidden="true" focusable="false" />
-        <span className="fk-actor-chip__text">
-          <span className="fk-actor-chip__line">
-            <span className="fk-actor-chip__kind">{messages.actor.system}</span>{' '}
-            <code className="fk-actor-chip__mono fk-actor-chip__rule">{name}</code>
+      <span className={cx('ty-actor-chip', className)} data-kind="system" data-compact={compact || undefined}>
+        <Server className="ty-actor-chip__icon" aria-hidden="true" focusable="false" />
+        <span className="ty-actor-chip__text">
+          <span className="ty-actor-chip__line">
+            <span className="ty-actor-chip__kind">{messages.actor.system}</span>{' '}
+            <code className="ty-actor-chip__mono ty-actor-chip__rule">{name}</code>
           </span>
         </span>
       </span>
@@ -83,15 +83,15 @@ export function ActorChip({ kind, name, email, avatarSrc, initials, avatar = tru
   }
 
   return (
-    <span className={cx('fk-actor-chip', className)} data-kind="person" data-compact={compact || undefined}>
+    <span className={cx('ty-actor-chip', className)} data-kind="person" data-compact={compact || undefined}>
       {avatar ? (
         <Avatar decorative src={avatarSrc ?? null} fallbackText={initials ?? initialsOf(name)} size={compact ? 'xsmall' : 'small'} />
       ) : (
-        <User className="fk-actor-chip__icon" aria-hidden="true" focusable="false" />
+        <User className="ty-actor-chip__icon" aria-hidden="true" focusable="false" />
       )}
-      <span className="fk-actor-chip__text">
-        <span className="fk-actor-chip__name">{name}</span>
-        {!compact && email ? <span className="fk-actor-chip__meta">{email}</span> : null}
+      <span className="ty-actor-chip__text">
+        <span className="ty-actor-chip__name">{name}</span>
+        {!compact && email ? <span className="ty-actor-chip__meta">{email}</span> : null}
       </span>
     </span>
   )

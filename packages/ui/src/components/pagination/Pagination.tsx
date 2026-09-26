@@ -94,26 +94,26 @@ export function Pagination(props: PaginationProps) {
   }
 
   return (
-    <nav aria-label={labels.navigation} aria-busy={busy || undefined} className={cx('fk-pagination', className)}>
-      <p className="fk-pagination__range" role="status">
+    <nav aria-label={labels.navigation} aria-busy={busy || undefined} className={cx('ty-pagination', className)}>
+      <p className="ty-pagination__range" role="status">
         {labels.range(from, to, totalItems)}
       </p>
-      <div className="fk-pagination__controls">
-        <AriaButton ref={prevRef} className="fk-pagination__button" data-arrow="" isDisabled={busy || atStart} onPress={() => go(page - 1)}>
-          <ChevronLeft className="fk-icon fk-mirror-rtl" aria-hidden="true" focusable="false" />
-          <span className="fk-pagination__arrow-label">{labels.previous}</span>
+      <div className="ty-pagination__controls">
+        <AriaButton ref={prevRef} className="ty-pagination__button" data-arrow="" isDisabled={busy || atStart} onPress={() => go(page - 1)}>
+          <ChevronLeft className="ty-icon ty-mirror-rtl" aria-hidden="true" focusable="false" />
+          <span className="ty-pagination__arrow-label">{labels.previous}</span>
         </AriaButton>
         {wide ? (
-          <ul className="fk-pagination__pages">
+          <ul className="ty-pagination__pages">
             {pageSlots(page, pageCount, siblingCount).map((slot, i) =>
               slot === 'gap' ? (
-                <li key={`gap-${i}`} className="fk-pagination__gap" aria-hidden="true">
+                <li key={`gap-${i}`} className="ty-pagination__gap" aria-hidden="true">
                   …
                 </li>
               ) : (
                 <li key={slot}>
                   <AriaButton
-                    className="fk-pagination__button"
+                    className="ty-pagination__button"
                     data-page=""
                     aria-label={labels.page(slot)}
                     aria-current={slot === page ? 'page' : undefined}
@@ -128,21 +128,21 @@ export function Pagination(props: PaginationProps) {
             )}
           </ul>
         ) : (
-          <span className="fk-pagination__compact">{labels.pageOf(page, pageCount)}</span>
+          <span className="ty-pagination__compact">{labels.pageOf(page, pageCount)}</span>
         )}
-        <AriaButton ref={nextRef} className="fk-pagination__button" data-arrow="" isDisabled={busy || atEnd} onPress={() => go(page + 1)}>
-          <span className="fk-pagination__arrow-label">{labels.next}</span>
-          <ChevronRight className="fk-icon fk-mirror-rtl" aria-hidden="true" focusable="false" />
+        <AriaButton ref={nextRef} className="ty-pagination__button" data-arrow="" isDisabled={busy || atEnd} onPress={() => go(page + 1)}>
+          <span className="ty-pagination__arrow-label">{labels.next}</span>
+          <ChevronRight className="ty-icon ty-mirror-rtl" aria-hidden="true" focusable="false" />
         </AriaButton>
       </div>
       {pageSizeOptions ? (
-        <div className="fk-pagination__size">
-          <label htmlFor={selectId} className="fk-pagination__size-label">
+        <div className="ty-pagination__size">
+          <label htmlFor={selectId} className="ty-pagination__size-label">
             {labels.pageSize}
           </label>
           <select
             id={selectId}
-            className="fk-pagination__select"
+            className="ty-pagination__select"
             value={pageSize}
             disabled={busy}
             onChange={(e) => onPageSizeChange?.(Number(e.target.value))}

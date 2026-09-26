@@ -1,144 +1,144 @@
 /* FilterTile, FilterTileGroupHeading, FilterTileGrid (spec: wave-2/filter-tile.md; design direction §2.3, §2.4, §2.7). */
-@layer fakhir.components {
-  .fk-filter-tile-grid {
+@layer tympan.components {
+  .ty-filter-tile-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
   }
   @media (min-width: 640px) {
-    .fk-filter-tile-grid {
+    .ty-filter-tile-grid {
       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     }
   }
 
-  .fk-filter-tile {
+  .ty-filter-tile {
     position: relative;
     box-sizing: border-box;
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
-    gap: var(--fk-space-3);
-    min-block-size: var(--fk-control-target);
-    padding: var(--fk-space-3);
-    border: 1px solid var(--fk-line-strong);
-    border-radius: var(--fk-radius-card);
-    background: var(--fk-surface-raised);
-    color: var(--fk-ink-2);
+    gap: var(--ty-space-3);
+    min-block-size: var(--ty-control-target);
+    padding: var(--ty-space-3);
+    border: 1px solid var(--ty-line-strong);
+    border-radius: var(--ty-radius-card);
+    background: var(--ty-surface-raised);
+    color: var(--ty-ink-2);
     font: inherit;
     text-align: start;
     cursor: pointer;
     outline: none;
-    transition: background-color var(--fk-dur-instant) var(--fk-ease), border-color var(--fk-dur-instant) var(--fk-ease);
+    transition: background-color var(--ty-dur-instant) var(--ty-ease), border-color var(--ty-dur-instant) var(--ty-ease);
   }
-  .fk-filter-tile[data-hovered]:not([data-disabled]) {
-    border-color: var(--fk-ink-3);
+  .ty-filter-tile[data-hovered]:not([data-disabled]) {
+    border-color: var(--ty-ink-3);
   }
-  .fk-filter-tile[data-selected] {
-    border-color: var(--fk-accent);
-    background: var(--fk-accent-soft);
-    box-shadow: inset 0 0 0 1px var(--fk-accent);
+  .ty-filter-tile[data-selected] {
+    border-color: var(--ty-accent);
+    background: var(--ty-accent-soft);
+    box-shadow: inset 0 0 0 1px var(--ty-accent);
   }
-  .fk-filter-tile[data-pressed] {
+  .ty-filter-tile[data-pressed] {
     opacity: 0.85;
   }
-  .fk-filter-tile[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-filter-tile[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
-  .fk-filter-tile[data-disabled] {
+  .ty-filter-tile[data-disabled] {
     cursor: not-allowed;
     opacity: 0.55;
   }
-  .fk-filter-tile__well {
+  .ty-filter-tile__well {
     display: inline-grid;
     place-items: center;
     inline-size: 36px;
     block-size: 36px;
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-surface-sunken);
-    color: var(--fk-ink-2);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-surface-sunken);
+    color: var(--ty-ink-2);
   }
-  .fk-filter-tile__well[data-toned] {
-    background: color-mix(in oklab, var(--fk-filter-tile-tone) 16%, transparent);
-    color: var(--fk-ink);
+  .ty-filter-tile__well[data-toned] {
+    background: color-mix(in oklab, var(--ty-filter-tile-tone) 16%, transparent);
+    color: var(--ty-ink);
   }
-  .fk-filter-tile__well[data-surface='neutral'] {
-    background: var(--fk-neutral-50);
-    box-shadow: inset 0 0 0 1px var(--fk-line);
+  .ty-filter-tile__well[data-surface='neutral'] {
+    background: var(--ty-neutral-50);
+    box-shadow: inset 0 0 0 1px var(--ty-line);
   }
-  .fk-filter-tile__well > svg,
-  .fk-filter-tile__well > img {
+  .ty-filter-tile__well > svg,
+  .ty-filter-tile__well > img {
     inline-size: 20px;
     block-size: 20px;
   }
-  .fk-filter-tile__text {
+  .ty-filter-tile__text {
     display: flex;
     flex-direction: column;
     min-inline-size: 0;
   }
-  .fk-filter-tile__label {
+  .ty-filter-tile__label {
     overflow: hidden;
-    color: var(--fk-ink);
-    font-size: var(--fk-font-size-body);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-body);
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-body);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-body);
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .fk-filter-tile__detail {
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+  .ty-filter-tile__detail {
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
     font-variant-numeric: tabular-nums;
   }
 
-  .fk-filter-tile-heading {
+  .ty-filter-tile-heading {
     display: flex;
     align-items: center;
-    gap: var(--fk-space-2);
-    margin-block-end: var(--fk-space-3);
+    gap: var(--ty-space-2);
+    margin-block-end: var(--ty-space-3);
   }
-  .fk-filter-tile-heading__well {
+  .ty-filter-tile-heading__well {
     display: inline-grid;
     place-items: center;
     inline-size: 24px;
     block-size: 24px;
-    border-radius: var(--fk-radius-agent);
-    background: var(--fk-surface-sunken);
-    color: var(--fk-ink-3);
+    border-radius: var(--ty-radius-agent);
+    background: var(--ty-surface-sunken);
+    color: var(--ty-ink-3);
   }
-  .fk-filter-tile-heading__well > svg {
+  .ty-filter-tile-heading__well > svg {
     inline-size: 14px;
     block-size: 14px;
   }
-  .fk-filter-tile-heading__text {
+  .ty-filter-tile-heading__text {
     margin: 0;
-    color: var(--fk-ink);
-    font-family: var(--fk-font-sans);
-    font-size: var(--fk-font-size-label);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-label);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-sans);
+    font-size: var(--ty-font-size-label);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-label);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-filter-tile {
+    .ty-filter-tile {
       transition: none;
     }
   }
   @media (prefers-reduced-transparency: reduce) {
-    .fk-filter-tile {
-      background: var(--fk-surface-raised-solid);
+    .ty-filter-tile {
+      background: var(--ty-surface-raised-solid);
     }
   }
   @media (forced-colors: active) {
-    .fk-filter-tile {
+    .ty-filter-tile {
       border-color: ButtonText;
     }
-    .fk-filter-tile[data-selected] {
+    .ty-filter-tile[data-selected] {
       border: 3px solid Highlight;
       box-shadow: none;
     }
-    .fk-filter-tile[data-focus-visible] {
+    .ty-filter-tile[data-focus-visible] {
       outline-color: Highlight;
     }
   }

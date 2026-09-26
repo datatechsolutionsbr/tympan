@@ -1,8 +1,8 @@
-/* @fakhir/flow stylesheet entry (FSL-1.1-ALv2). Import after
-   '@fakhir/ui/styles.css'; everything lives in @layer fakhir.*.
-   The canvas tokens (--fk-flow-*) and the [data-tone] mapping come from
-   @fakhir/tokens (src/flow.ts), loaded by the @fakhir/ui stylesheet. */
-@layer fakhir.tokens, fakhir.base, fakhir.components;
+/* @datatechsolutions/tympan-flow stylesheet entry (FSL-1.1-ALv2). Import after
+   '@datatechsolutions/tympan/styles.css'; everything lives in @layer tympan.*.
+   The canvas tokens (--ty-flow-*) and the [data-tone] mapping come from
+   @datatechsolutions/tympan-tokens (src/flow.ts), loaded by the @datatechsolutions/tympan stylesheet. */
+@layer tympan.tokens, tympan.base, tympan.components;
 
 @import './internal/internal.css';
 @import './surface/surface.css';

@@ -5,7 +5,7 @@
 import { useMemo, useState, type CSSProperties } from 'react'
 import { Button as AriaButton, ComboBox, Input, Label, ListBox, ListBoxItem, Popover } from 'react-aria-components'
 import { Check, ChevronDown, Info, Minus, TriangleAlert, X } from 'lucide-react'
-import { Button, ModalDialog, NativeSelect } from '@fakhir/ui'
+import { Button, ModalDialog, NativeSelect } from '@datatechsolutions/tympan'
 import type { BranchTone } from '../catalog/kindCatalog'
 import { defineLabels, fill, useLabels } from '../internal/labels'
 import type { LayoutDirection, Side } from '../model/types'
@@ -33,7 +33,7 @@ const TONE_ICON: Record<BranchTone, typeof Check> = { success: Check, error: X, 
 export function BranchLabel({ label, tone = 'neutral' }: { label: string; tone?: BranchTone }) {
   const Icon = TONE_ICON[tone]
   return (
-    <span className="fk-branch-label" data-branch-tone={tone} aria-hidden="true">
+    <span className="ty-branch-label" data-branch-tone={tone} aria-hidden="true">
       <Icon focusable="false" />
       {label}
     </span>
@@ -120,9 +120,9 @@ function PortDot({ port, nodeId, nodeLabel, tone, preview, labels }: { port: Pla
   const name = fill(l.name, { direction: port.role === 'source' ? l.output : l.input, label: port.label ? ` ${port.label}` : '', node: nodeLabel })
   const target = surface.connectTarget?.nodeId === nodeId && surface.connecting && surface.connecting.role !== port.role ? (surface.connectTarget.valid ? 'valid' : 'invalid') : undefined
   const connectingFromHere = surface.connecting?.nodeId === nodeId && surface.connecting.portId === port.id && surface.connecting.role === port.role
-  const style = { '--fk-port-along': `${port.along * 100}%` } as CSSProperties
+  const style = { '--ty-port-along': `${port.along * 100}%` } as CSSProperties
   const common = {
-    className: 'fk-port',
+    className: 'ty-port',
     'data-side': port.side,
     'data-role': port.role,
     'data-tone': tone,
@@ -135,14 +135,14 @@ function PortDot({ port, nodeId, nodeLabel, tone, preview, labels }: { port: Pla
   if (preview) {
     return (
       <span {...common} data-preview="true" aria-hidden="true">
-        <span className="fk-port__dot" />
+        <span className="ty-port__dot" />
       </span>
     )
   }
   return (
-    <span {...common} data-fk-port="" data-fk-port-node={nodeId} data-fk-port-id={port.id} data-fk-port-role={port.role} data-port-id={port.id}>
-      <span className="fk-port__dot" aria-hidden="true" />
-      <span className="fk-visually-hidden">{name}</span>
+    <span {...common} data-ty-port="" data-ty-port-node={nodeId} data-ty-port-id={port.id} data-ty-port-role={port.role} data-port-id={port.id}>
+      <span className="ty-port__dot" aria-hidden="true" />
+      <span className="ty-visually-hidden">{name}</span>
       {port.label ? <BranchLabel label={port.label} {...(port.tone ? { tone: port.tone } : {})} /> : null}
     </span>
   )
@@ -244,32 +244,32 @@ export function ConnectToDialog({ isOpen, onOpenChange, sourceId, sourceLabel, o
         </>
       }
     >
-      <div className="fk-connect-to">
+      <div className="ty-connect-to">
         {outputs.length > 1 ? (
           <NativeSelect label={l.output} options={outputs.map((o) => ({ value: o.id, label: o.label ?? o.id }))} value={output ?? ''} onChange={setOutput} />
         ) : null}
         {items.length ? (
-          <ComboBox className="fk-connect-to__combo" items={items} selectedKey={target} onSelectionChange={(k) => setTarget(k === null ? null : String(k))} menuTrigger="focus">
-            <Label className="fk-connect-to__label">{l.target}</Label>
-            <div className="fk-connect-to__field">
-              <Input className="fk-connect-to__input" placeholder={l.targetPlaceholder} />
-              <AriaButton className="fk-connect-to__toggle">
+          <ComboBox className="ty-connect-to__combo" items={items} selectedKey={target} onSelectionChange={(k) => setTarget(k === null ? null : String(k))} menuTrigger="focus">
+            <Label className="ty-connect-to__label">{l.target}</Label>
+            <div className="ty-connect-to__field">
+              <Input className="ty-connect-to__input" placeholder={l.targetPlaceholder} />
+              <AriaButton className="ty-connect-to__toggle">
                 <ChevronDown aria-hidden="true" focusable="false" />
               </AriaButton>
             </div>
-            <Popover className="fk-connect-to__popover">
-              <ListBox className="fk-connect-to__list">
+            <Popover className="ty-connect-to__popover">
+              <ListBox className="ty-connect-to__list">
                 {(item: (typeof items)[number]) => (
-                  <ListBoxItem id={item.id} textValue={item.label} className="fk-connect-to__option">
+                  <ListBoxItem id={item.id} textValue={item.label} className="ty-connect-to__option">
                     {item.label}
-                    {item.kindLabel ? <span className="fk-connect-to__kind">{item.kindLabel}</span> : null}
+                    {item.kindLabel ? <span className="ty-connect-to__kind">{item.kindLabel}</span> : null}
                   </ListBoxItem>
                 )}
               </ListBox>
             </Popover>
           </ComboBox>
         ) : (
-          <p className="fk-connect-to__empty">{l.noTargets}</p>
+          <p className="ty-connect-to__empty">{l.noTargets}</p>
         )}
       </div>
     </ModalDialog>

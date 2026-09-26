@@ -4,7 +4,7 @@
 // both directions as buttons that move the selection along the trail.
 
 import { CircleCheck, CircleX, FileText, Hourglass, ShieldQuestion, X } from 'lucide-react'
-import { Button } from '@fakhir/ui'
+import { Button } from '@datatechsolutions/tympan'
 import type { ObligationStatus, ProofObligation } from './proofTypes'
 import { ActorMark, HashCheck, ProofPill } from './ProvenanceNode'
 import { fill } from '../internal/labels'
@@ -33,19 +33,19 @@ const OBLIGATION_ICON: Record<ObligationStatus, typeof CircleCheck> = { ok: Circ
 
 function Obligations({ list, l }: { list: ProofObligation[]; l: ProvenanceLabels }) {
   return (
-    <ul className="fk-prov-obligations">
+    <ul className="ty-prov-obligations">
       {list.map((o) => {
         const Icon = OBLIGATION_ICON[o.status]
         return (
-          <li key={o.id} className="fk-prov-obligation" data-status={o.status}>
-            <Icon className="fk-prov-obligation__icon" aria-hidden="true" focusable="false" />
-            <span className="fk-prov-obligation__text">
-              <span className="fk-prov-obligation__label">{o.label}</span>
-              <span className="fk-visually-hidden">
+          <li key={o.id} className="ty-prov-obligation" data-status={o.status}>
+            <Icon className="ty-prov-obligation__icon" aria-hidden="true" focusable="false" />
+            <span className="ty-prov-obligation__text">
+              <span className="ty-prov-obligation__label">{o.label}</span>
+              <span className="ty-visually-hidden">
                 , <span>{l.obligationStatus[o.status]}</span>
               </span>
               {o.detail ? (
-                <code className="fk-prov-obligation__detail" dir="ltr">
+                <code className="ty-prov-obligation__detail" dir="ltr">
                   {o.detail}
                 </code>
               ) : null}
@@ -70,19 +70,19 @@ export function ProvenanceInspector({ vertex, view, labels: l, locale, onSelect,
   }
   const relations = (links: ProvLink[], way: 'back' | 'ahead', heading: string) =>
     links.length ? (
-      <section className="fk-prov-inspector__relations" aria-labelledby={`fk-prov-rel-${way}-${vertex.id}`}>
-        <h3 id={`fk-prov-rel-${way}-${vertex.id}`} className="fk-prov-inspector__eyebrow">
+      <section className="ty-prov-inspector__relations" aria-labelledby={`ty-prov-rel-${way}-${vertex.id}`}>
+        <h3 id={`ty-prov-rel-${way}-${vertex.id}`} className="ty-prov-inspector__eyebrow">
           {heading}
         </h3>
-        <ul className="fk-prov-inspector__links">
+        <ul className="ty-prov-inspector__links">
           {links.map((link) => {
             const other = way === 'back' ? link.source : link.target
             const phrase = way === 'back' ? l.relations[link.relation] : l.relationsReversed[link.relation]
             return (
               <li key={link.id}>
-                <button type="button" className="fk-prov-inspector__link" aria-label={`${phrase} ${nameOf(other)}`} onClick={() => onSelect(other)}>
-                  <span className="fk-prov-inspector__relation">{phrase}</span>
-                  <span className="fk-prov-inspector__target" dir="auto">
+                <button type="button" className="ty-prov-inspector__link" aria-label={`${phrase} ${nameOf(other)}`} onClick={() => onSelect(other)}>
+                  <span className="ty-prov-inspector__relation">{phrase}</span>
+                  <span className="ty-prov-inspector__target" dir="auto">
                     {nameOf(other)}
                   </span>
                 </button>
@@ -96,17 +96,17 @@ export function ProvenanceInspector({ vertex, view, labels: l, locale, onSelect,
   const title = vertex.type === 'item' ? vertex.item.title : vertex.actor.name
   const eyebrow = vertex.type === 'item' ? fill(l.inFocus, { kind: capital(l.kinds[vertex.item.kind], locale) }, locale) : capital(l.actorKinds[vertex.actor.kind], locale)
   const close = onClose ? (
-    <Button className="fk-prov-inspector__close" variant="quiet" size="compact" shape="circle" iconOnly accessibleLabel={l.closeInspector} leadingIcon={<X />} onPress={onClose} />
+    <Button className="ty-prov-inspector__close" variant="quiet" size="compact" shape="circle" iconOnly accessibleLabel={l.closeInspector} leadingIcon={<X />} onPress={onClose} />
   ) : null
 
   if (vertex.type !== 'item') {
     return (
-      <aside className={['fk-prov-inspector', className].filter(Boolean).join(' ')} aria-label={`${l.inspector}: ${title}`}>
-        <div className="fk-prov-inspector__top">
-          <span className="fk-prov-inspector__eyebrow">{eyebrow}</span>
+      <aside className={['ty-prov-inspector', className].filter(Boolean).join(' ')} aria-label={`${l.inspector}: ${title}`}>
+        <div className="ty-prov-inspector__top">
+          <span className="ty-prov-inspector__eyebrow">{eyebrow}</span>
           {close}
         </div>
-        <h2 className="fk-prov-inspector__title">{title}</h2>
+        <h2 className="ty-prov-inspector__title">{title}</h2>
         <ActorMark actor={vertex.actor} />
         {relations(ahead, 'ahead', l.relationsReversed.wasAttributedTo)}
       </aside>
@@ -119,44 +119,44 @@ export function ProvenanceInspector({ vertex, view, labels: l, locale, onSelect,
   // A reading, a source, or a claim resting on quoted evidence can be reread.
   const canReread = !!onReread && (item.kind === 'retrieval' || item.kind === 'source' || (item.kind === 'assertion' && !!item.evidence))
   return (
-    <aside className={['fk-prov-inspector', className].filter(Boolean).join(' ')} aria-label={`${l.inspector}: ${title}`}>
-      <div className="fk-prov-inspector__top">
-        <span className="fk-prov-inspector__eyebrow">{eyebrow}</span>
+    <aside className={['ty-prov-inspector', className].filter(Boolean).join(' ')} aria-label={`${l.inspector}: ${title}`}>
+      <div className="ty-prov-inspector__top">
+        <span className="ty-prov-inspector__eyebrow">{eyebrow}</span>
         {close}
       </div>
-      <h2 className="fk-prov-inspector__title" dir="auto">
+      <h2 className="ty-prov-inspector__title" dir="auto">
         {title}
       </h2>
-      <div className="fk-prov-inspector__proof">
+      <div className="ty-prov-inspector__proof">
         <ProofPill state={proof} word={l.proof[proof]} />
         {note ? (
-          <span className="fk-prov-inspector__note">
-            {item.proofReason ? <span className="fk-visually-hidden">{l.reason}: </span> : null}
+          <span className="ty-prov-inspector__note">
+            {item.proofReason ? <span className="ty-visually-hidden">{l.reason}: </span> : null}
             {note}
           </span>
         ) : null}
         {item.hashCheck ? <HashCheck state={item.hashCheck} labels={l} /> : null}
       </div>
       {item.evidence ? (
-        <figure className="fk-prov-inspector__evidence">
-          <figcaption className="fk-visually-hidden">{l.evidence}</figcaption>
-          <blockquote className="fk-prov-inspector__quote" dir="auto">
+        <figure className="ty-prov-inspector__evidence">
+          <figcaption className="ty-visually-hidden">{l.evidence}</figcaption>
+          <blockquote className="ty-prov-inspector__quote" dir="auto">
             {item.evidence}
           </blockquote>
         </figure>
       ) : null}
       {item.obligations?.length ? (
-        <section className="fk-prov-inspector__section" aria-labelledby={`fk-prov-obl-${vertex.id}`}>
-          <h3 id={`fk-prov-obl-${vertex.id}`} className="fk-prov-inspector__eyebrow">
+        <section className="ty-prov-inspector__section" aria-labelledby={`ty-prov-obl-${vertex.id}`}>
+          <h3 id={`ty-prov-obl-${vertex.id}`} className="ty-prov-inspector__eyebrow">
             {l.obligations}
           </h3>
           <Obligations list={item.obligations} l={l} />
         </section>
       ) : null}
-      {item.summary ? <p className="fk-prov-inspector__summary">{item.summary}</p> : null}
-      <dl className="fk-prov-inspector__facts">
+      {item.summary ? <p className="ty-prov-inspector__summary">{item.summary}</p> : null}
+      <dl className="ty-prov-inspector__facts">
         {(item.details ?? []).map((d) => (
-          <div key={d.label} className="fk-prov-inspector__fact">
+          <div key={d.label} className="ty-prov-inspector__fact">
             <dt>{d.label}</dt>
             <dd data-mono={d.mono ? 'true' : undefined} dir={d.mono ? 'ltr' : 'auto'}>
               {d.value}
@@ -164,7 +164,7 @@ export function ProvenanceInspector({ vertex, view, labels: l, locale, onSelect,
           </div>
         ))}
         {item.actor && !item.details?.length ? (
-          <div className="fk-prov-inspector__fact">
+          <div className="ty-prov-inspector__fact">
             <dt>{l.attributedTo}</dt>
             <dd>
               <ActorMark actor={item.actor} />
@@ -172,7 +172,7 @@ export function ProvenanceInspector({ vertex, view, labels: l, locale, onSelect,
           </div>
         ) : null}
         {item.at ? (
-          <div className="fk-prov-inspector__fact">
+          <div className="ty-prov-inspector__fact">
             <dt>{l.when}</dt>
             <dd data-mono="true">
               <time dateTime={item.at}>{formatTime && Number.isFinite(Date.parse(item.at)) ? formatTime(Date.parse(item.at), 'detail') : formatDateTime(item.at, locale)}</time>
@@ -181,7 +181,7 @@ export function ProvenanceInspector({ vertex, view, labels: l, locale, onSelect,
         ) : null}
       </dl>
       {canReread || onRequestVerification ? (
-        <div className="fk-prov-inspector__actions">
+        <div className="ty-prov-inspector__actions">
           {canReread ? (
             <Button variant="secondary" leadingIcon={<FileText />} onPress={() => onReread!(vertex.id)}>
               {l.reread}

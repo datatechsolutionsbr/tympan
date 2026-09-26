@@ -4,7 +4,7 @@
 
 import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import { RotateCcw } from 'lucide-react'
-import { Button, InlineNotice, SegmentedControl, Tag, TextArea, TextField } from '@fakhir/ui'
+import { Button, InlineNotice, SegmentedControl, Tag, TextArea, TextField } from '@datatechsolutions/tympan'
 import { SectionedModal } from '../internal/SectionedModal'
 import { defineLabels, fill, useLabels } from '../internal/labels'
 import { NumberInput } from './NumberInput'
@@ -221,14 +221,14 @@ export function RunReplayDialog({ open, onClose, runId, flowId, originalInputs, 
     const draft = touched ? edited.get(key)! : codec.draft(originalInputs[key])
     const word = codec.word(l)
     return (
-      <div key={key} className="fk-run-replay-row" data-touched={touched || undefined}>
-        <div className="fk-run-replay-row__head">
-          <code className="fk-run-mono">{key}</code>
+      <div key={key} className="ty-run-replay-row" data-touched={touched || undefined}>
+        <div className="ty-run-replay-row__head">
+          <code className="ty-run-mono">{key}</code>
           <Tag size="small">{word}</Tag>
           {touched && (
-            <Button variant="quiet" size="compact" leadingIcon={<RotateCcw />} onPress={() => restore(key)} className="fk-run-replay-row__reset">
+            <Button variant="quiet" size="compact" leadingIcon={<RotateCcw />} onPress={() => restore(key)} className="ty-run-replay-row__reset">
               <span aria-hidden="true">{l.reset}</span>
-              <span className="fk-visually-hidden">{fill(l.resetKey, { key })}</span>
+              <span className="ty-visually-hidden">{fill(l.resetKey, { key })}</span>
             </Button>
           )}
         </div>
@@ -249,8 +249,8 @@ export function RunReplayDialog({ open, onClose, runId, flowId, originalInputs, 
       busy={sending}
       onSubmitShortcut={() => void send()}
       footer={
-        <div className="fk-run-dialog-footer">
-          <span className="fk-run-dialog-footer__ids">
+        <div className="ty-run-dialog-footer">
+          <span className="ty-run-dialog-footer__ids">
             <ShortId id={runId} label={l.run} />
             <ShortId id={flowId} label={l.flow} />
           </span>
@@ -263,15 +263,15 @@ export function RunReplayDialog({ open, onClose, runId, flowId, originalInputs, 
         </div>
       }
     >
-      <form id={formId} className="fk-run-form" onSubmit={(e) => void send(e)} noValidate>
+      <form id={formId} className="ty-run-form" onSubmit={(e) => void send(e)} noValidate>
         {notice && (
-          <div ref={noticeRef} tabIndex={-1} className="fk-run-dialog-error">
+          <div ref={noticeRef} tabIndex={-1} className="ty-run-dialog-error">
             <InlineNotice tone="danger" urgency="assertive">
               {notice}
             </InlineNotice>
           </div>
         )}
-        {rows.length ? rows : <p className="fk-run-empty">{l.empty}</p>}
+        {rows.length ? rows : <p className="ty-run-empty">{l.empty}</p>}
       </form>
     </SectionedModal>
   )

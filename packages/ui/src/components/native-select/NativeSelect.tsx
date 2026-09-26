@@ -125,7 +125,7 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(fun
       aria-hidden={hidden || undefined}
       tabIndex={hidden ? -1 : undefined}
       hidden={hidden}
-      className="fk-native-select__control"
+      className="ty-native-select__control"
     >
       <option value="" disabled>
         {placeholderText}
@@ -143,34 +143,34 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(fun
 
   return (
     <div
-      className={cx('fk-native-select', className)}
+      className={cx('ty-native-select', className)}
       data-invalid={wiring.invalid || undefined}
       data-disabled={wiring.disabled || undefined}
       data-presentation={wheel ? 'wheel' : 'native'}
     >
       {label ? (
         wheel ? (
-          <span id={labelId} className="fk-native-select__label">
+          <span id={labelId} className="ty-native-select__label">
             {label}
           </span>
         ) : (
-          <label htmlFor={wiring.id} className="fk-native-select__label">
+          <label htmlFor={wiring.id} className="ty-native-select__label">
             {label}
           </label>
         )
       ) : null}
       {hint != null ? (
-        <p id={hintId} className="fk-native-select__hint">
+        <p id={hintId} className="ty-native-select__hint">
           {hint}
         </p>
       ) : null}
-      <div className="fk-native-select__frame">
+      <div className="ty-native-select__frame">
         {wheel ? (
           <>
             <AriaButton
               ref={triggerRef}
               id={wiring.id}
-              className="fk-native-select__control fk-native-select__trigger"
+              className="ty-native-select__control ty-native-select__trigger"
               aria-label={`${labelText}: ${currentLabel || placeholderText}`}
               aria-describedby={wiring.describedBy}
               aria-haspopup="dialog"
@@ -178,7 +178,7 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(fun
               isDisabled={wiring.disabled}
               onPress={() => setOpen(true)}
             >
-              <span className="fk-native-select__value" data-placeholder={!currentLabel || undefined}>
+              <span className="ty-native-select__value" data-placeholder={!currentLabel || undefined}>
                 {currentLabel || placeholderText}
               </span>
             </AriaButton>
@@ -187,24 +187,24 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(fun
         ) : (
           selectEl(false)
         )}
-        <ChevronDown className="fk-icon fk-native-select__chevron" aria-hidden="true" focusable="false" />
+        <ChevronDown className="ty-icon ty-native-select__chevron" aria-hidden="true" focusable="false" />
       </div>
       {errorMessage ? (
-        <p id={errorId} className="fk-native-select__error" role={errorAppeared ? 'alert' : undefined}>
-          <CircleAlert className="fk-icon" aria-hidden="true" focusable="false" />
+        <p id={errorId} className="ty-native-select__error" role={errorAppeared ? 'alert' : undefined}>
+          <CircleAlert className="ty-icon" aria-hidden="true" focusable="false" />
           <span>{errorMessage}</span>
         </p>
       ) : null}
       {wheel ? (
-        <ModalOverlay isOpen={open} onOpenChange={setOpen} isDismissable className="fk-native-select__overlay">
-          <Modal className="fk-native-select__drawer">
-            <Dialog className="fk-native-select__dialog">
-              <Heading slot="title" className="fk-native-select__drawer-title">
+        <ModalOverlay isOpen={open} onOpenChange={setOpen} isDismissable className="ty-native-select__overlay">
+          <Modal className="ty-native-select__drawer">
+            <Dialog className="ty-native-select__dialog">
+              <Heading slot="title" className="ty-native-select__drawer-title">
                 {labelText}
               </Heading>
               <ListBox
                 aria-label={labelText}
-                className="fk-native-select__wheel"
+                className="ty-native-select__wheel"
                 selectionMode="single"
                 disallowEmptySelection
                 selectedKeys={current ? [current] : []}
@@ -217,12 +217,12 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(fun
                 autoFocus
               >
                 {flat.map((o) => (
-                  <ListBoxItem key={o.value} id={o.value} textValue={o.label} className="fk-native-select__wheel-item">
+                  <ListBoxItem key={o.value} id={o.value} textValue={o.label} className="ty-native-select__wheel-item">
                     {o.label}
                   </ListBoxItem>
                 ))}
               </ListBox>
-              <AriaButton className="fk-native-select__done" onPress={() => setOpen(false)}>
+              <AriaButton className="ty-native-select__done" onPress={() => setOpen(false)}>
                 {messages.select.done}
               </AriaButton>
             </Dialog>

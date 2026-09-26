@@ -69,7 +69,7 @@ describe('Checkbox', () => {
 
   it('keeps a 44 px row and declares motion and forced-colours rules', () => {
     const css = cssOf('components/checkbox/Checkbox.css')
-    expect(css).toMatch(/\.fk-checkbox__row\s*\{[^}]*min-block-size:\s*var\(--fk-control-target\)/)
+    expect(css).toMatch(/\.ty-checkbox__row\s*\{[^}]*min-block-size:\s*var\(--ty-control-target\)/)
     expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/transition:\s*none/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/CanvasText/)
   })

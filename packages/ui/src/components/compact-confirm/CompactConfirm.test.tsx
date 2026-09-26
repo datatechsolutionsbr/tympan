@@ -33,10 +33,10 @@ describe('CompactConfirm', () => {
   })
 
   it('shows custom labels and the source line', () => {
-    render(<CompactConfirm {...base} open confirmLabel="Sign out" cancelLabel="Stay" sourceLabel="Fakhir" message="You will need to sign in again." />)
+    render(<CompactConfirm {...base} open confirmLabel="Sign out" cancelLabel="Stay" sourceLabel="Tympan" message="You will need to sign in again." />)
     expect(screen.getByRole('button', { name: 'Sign out' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Stay' })).toBeInTheDocument()
-    expect(screen.getByText('Fakhir')).toBeInTheDocument()
+    expect(screen.getByText('Tympan')).toBeInTheDocument()
     expect(screen.getByRole('alertdialog')).toHaveAccessibleDescription('You will need to sign in again.')
   })
 
@@ -105,7 +105,7 @@ describe('CompactConfirm', () => {
   })
 
   it('has no axe violations', async () => {
-    render(<CompactConfirm {...base} open tone="neutral" sourceLabel="Fakhir" message="Consequence." />)
+    render(<CompactConfirm {...base} open tone="neutral" sourceLabel="Tympan" message="Consequence." />)
     await expectNoAxeViolations(document.body)
   })
 })

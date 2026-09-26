@@ -1,125 +1,125 @@
 /* DateField (spec: wave-2/date-field.md; design direction §2.3, §2.4, §2.6, §2.10). */
-@layer fakhir.components {
-  .fk-date-field {
+@layer tympan.components {
+  .ty-date-field {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
     min-inline-size: 0;
   }
-  .fk-date-field__calendar,
-  .fk-date-field__months {
+  .ty-date-field__calendar,
+  .ty-date-field__months {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
   }
-  .fk-date-field__heading {
+  .ty-date-field__heading {
     position: relative;
     flex: 1;
-    min-block-size: var(--fk-control-target);
-    padding-inline: var(--fk-space-2);
+    min-block-size: var(--ty-control-target);
+    padding-inline: var(--ty-space-2);
     border: 0;
-    border-radius: var(--fk-radius-control);
+    border-radius: var(--ty-radius-control);
     background: transparent;
-    color: var(--fk-ink);
+    color: var(--ty-ink);
     font: inherit;
-    font-size: var(--fk-font-size-label);
-    font-weight: var(--fk-font-weight-semibold);
+    font-size: var(--ty-font-size-label);
+    font-weight: var(--ty-font-weight-semibold);
     cursor: pointer;
     outline: none;
   }
-  .fk-date-field__heading[data-hovered] {
-    background: var(--fk-surface-sunken);
+  .ty-date-field__heading[data-hovered] {
+    background: var(--ty-surface-sunken);
   }
-  .fk-date-field__heading[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-date-field__heading[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
-  .fk-date-field__grid {
+  .ty-date-field__grid {
     inline-size: 100%;
     border-collapse: collapse;
     border-spacing: 0;
   }
-  .fk-date-field__weekday {
-    padding-block-end: var(--fk-space-1);
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    font-weight: var(--fk-font-weight-regular);
+  .ty-date-field__weekday {
+    padding-block-end: var(--ty-space-1);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    font-weight: var(--ty-font-weight-regular);
   }
-  .fk-date-field__grid td {
+  .ty-date-field__grid td {
     padding: 1px;
     text-align: center;
   }
-  .fk-date-field__day {
+  .ty-date-field__day {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-inline-size: calc(var(--fk-control-height) - var(--fk-space-1));
-    min-block-size: calc(var(--fk-control-height) - var(--fk-space-1));
-    border-radius: var(--fk-radius-control);
-    color: var(--fk-ink-2);
-    font-size: var(--fk-font-size-body);
+    min-inline-size: calc(var(--ty-control-height) - var(--ty-space-1));
+    min-block-size: calc(var(--ty-control-height) - var(--ty-space-1));
+    border-radius: var(--ty-radius-control);
+    color: var(--ty-ink-2);
+    font-size: var(--ty-font-size-body);
     font-variant-numeric: tabular-nums;
     cursor: pointer;
     outline: none;
   }
-  .fk-date-field__day[data-outside-month] {
+  .ty-date-field__day[data-outside-month] {
     display: none;
   }
-  .fk-date-field__day[data-hovered] {
-    background: var(--fk-surface-sunken);
+  .ty-date-field__day[data-hovered] {
+    background: var(--ty-surface-sunken);
   }
-  .fk-date-field__day-number[data-today] {
-    color: var(--fk-accent);
-    font-weight: var(--fk-font-weight-semibold);
+  .ty-date-field__day-number[data-today] {
+    color: var(--ty-accent);
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-date-field__day:has([data-today]) {
-    box-shadow: inset 0 0 0 1px var(--fk-accent);
+  .ty-date-field__day:has([data-today]) {
+    box-shadow: inset 0 0 0 1px var(--ty-accent);
   }
-  .fk-date-field__day[data-selected] {
-    background: var(--fk-accent);
-    color: var(--fk-accent-ink);
-    font-weight: var(--fk-font-weight-semibold);
+  .ty-date-field__day[data-selected] {
+    background: var(--ty-accent);
+    color: var(--ty-accent-ink);
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-date-field__day[data-selected] .fk-date-field__day-number {
+  .ty-date-field__day[data-selected] .ty-date-field__day-number {
     color: inherit;
   }
-  .fk-date-field__day[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-date-field__day[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 1px;
   }
-  .fk-date-field__day[data-disabled],
-  .fk-date-field__day[data-unavailable] {
-    color: var(--fk-ink-3);
+  .ty-date-field__day[data-disabled],
+  .ty-date-field__day[data-unavailable] {
+    color: var(--ty-ink-3);
     cursor: not-allowed;
     opacity: 0.45;
   }
-  .fk-date-field__footer {
+  .ty-date-field__footer {
     display: flex;
     justify-content: flex-end;
   }
 
   /* Touch: every day cell reaches 44 px. */
   @media (pointer: coarse), (max-width: 1023.98px) {
-    .fk-date-field__day {
-      min-inline-size: var(--fk-control-target);
-      min-block-size: var(--fk-control-target);
+    .ty-date-field__day {
+      min-inline-size: var(--ty-control-target);
+      min-block-size: var(--ty-control-target);
     }
   }
 
   @media (forced-colors: active) {
-    .fk-date-field__day[data-selected] {
+    .ty-date-field__day[data-selected] {
       background: Highlight;
       color: HighlightText;
       forced-color-adjust: none;
     }
-    .fk-date-field__day:has([data-today]) {
+    .ty-date-field__day:has([data-today]) {
       outline: 1px solid CanvasText;
     }
-    .fk-date-field__day[data-disabled] {
+    .ty-date-field__day[data-disabled] {
       color: GrayText;
       opacity: 1;
     }
-    .fk-date-field__day[data-focus-visible] {
+    .ty-date-field__day[data-focus-visible] {
       outline: 2px solid Highlight;
     }
   }

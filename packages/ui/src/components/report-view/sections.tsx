@@ -26,9 +26,9 @@ function Pairs({ pairs }: { pairs: Array<[string, ReactNode]> }) {
   const shown = pairs.filter(([, v]) => v !== '' && v !== null && v !== undefined)
   if (!shown.length) return null
   return (
-    <dl className="fk-report__pairs">
+    <dl className="ty-report__pairs">
       {shown.map(([k, v]) => (
-        <div key={k} className="fk-report__pair">
+        <div key={k} className="ty-report__pair">
           <dt>{k}</dt>
           <dd>{v}</dd>
         </div>
@@ -46,7 +46,7 @@ function fieldPairs(fields: unknown): Array<[string, ReactNode]> {
 const entity: Renderer = (d) => (
   <>
     {d.status ? <StatusPill status={text(d.status)} label={text(d.statusLabel ?? d.status)} tone="neutral" size="small" /> : null}
-    {d.subtitle ? <p className="fk-report__muted">{text(d.subtitle)}</p> : null}
+    {d.subtitle ? <p className="ty-report__muted">{text(d.subtitle)}</p> : null}
     <Pairs pairs={fieldPairs(d.fields)} />
   </>
 )
@@ -57,16 +57,16 @@ const narrative: Renderer = (d, ctx) => {
   return (
     <>
       {actor?.name || seconds !== null ? (
-        <div className="fk-report__byline">
+        <div className="ty-report__byline">
           {actor?.name ? <ActorChip kind={actor.kind ?? 'agent'} name={actor.name} compact /> : null}
-          {seconds !== null ? <span className="fk-report__muted">{ctx.copy.duration(seconds)}</span> : null}
+          {seconds !== null ? <span className="ty-report__muted">{ctx.copy.duration(seconds)}</span> : null}
         </div>
       ) : null}
       {text(d.text ?? d.body)
         .split(/\n{2,}/)
         .filter(Boolean)
         .map((para, i) => (
-          <p key={i} className="fk-report__prose">
+          <p key={i} className="ty-report__prose">
             {para}
           </p>
         ))}
@@ -75,13 +75,13 @@ const narrative: Renderer = (d, ctx) => {
 }
 
 const lifecycle: Renderer = (d, ctx) => (
-  <ol className="fk-report__steps">
+  <ol className="ty-report__steps">
     {rows(d.steps).map((step, i) => {
       const state = (['complete', 'current', 'upcoming'] as const).find((s) => s === step.state) ?? 'upcoming'
       return (
-        <li key={i} className="fk-report__step" data-state={state} aria-current={state === 'current' ? 'step' : undefined}>
-          <span className="fk-report__step-label">{text(step.label)}</span>
-          <span className="fk-report__step-state">{ctx.copy.lifecycle[state]}</span>
+        <li key={i} className="ty-report__step" data-state={state} aria-current={state === 'current' ? 'step' : undefined}>
+          <span className="ty-report__step-label">{text(step.label)}</span>
+          <span className="ty-report__step-state">{ctx.copy.lifecycle[state]}</span>
         </li>
       )
     })}
@@ -95,7 +95,7 @@ const receipt: Renderer = (d, ctx) => {
   const lines = rows(d.items)
   return (
     <>
-      <table className="fk-report__receipt">
+      <table className="ty-report__receipt">
         <thead>
           <tr>
             <th scope="col">{c.description}</th>
@@ -137,10 +137,10 @@ const approval: Renderer = (d, ctx) => {
   const tone = decision === 'approved' ? 'success' : decision === 'rejected' ? 'danger' : 'warning'
   return (
     <>
-      <div className="fk-report__byline">
+      <div className="ty-report__byline">
         <StatusPill status={decision} tone={tone} label={a[decision]} />
-        {d.by ? <span className="fk-report__muted">{a.by(text(d.by))}</span> : null}
-        {d.at ? <span className="fk-report__muted fk-report__mono">{text(d.at)}</span> : null}
+        {d.by ? <span className="ty-report__muted">{a.by(text(d.by))}</span> : null}
+        {d.at ? <span className="ty-report__muted ty-report__mono">{text(d.at)}</span> : null}
       </div>
       <Pairs
         pairs={[
@@ -154,7 +154,7 @@ const approval: Renderer = (d, ctx) => {
 
 const documentKind: Renderer = (d, ctx) => {
   const c = ctx.copy.document
-  const mono = (v: unknown) => (v ? <span className="fk-report__mono">{text(v)}</span> : '')
+  const mono = (v: unknown) => (v ? <span className="ty-report__mono">{text(v)}</span> : '')
   return (
     <>
       <Pairs
@@ -167,7 +167,7 @@ const documentKind: Renderer = (d, ctx) => {
         ]}
       />
       {typeof d.href === 'string' ? (
-        <a className="fk-report__link" href={d.href}>
+        <a className="ty-report__link" href={d.href}>
           {c.open}
         </a>
       ) : null}
@@ -176,10 +176,10 @@ const documentKind: Renderer = (d, ctx) => {
 }
 
 const feed: Renderer = (d) => (
-  <ul className="fk-report__feed">
+  <ul className="ty-report__feed">
     {rows(d.entries).map((e, i) => (
-      <li key={i} className="fk-report__feed-entry" data-tone={text(e.tone) || 'default'}>
-        <span className="fk-report__mono fk-report__muted">{text(e.at)}</span>
+      <li key={i} className="ty-report__feed-entry" data-tone={text(e.tone) || 'default'}>
+        <span className="ty-report__mono ty-report__muted">{text(e.at)}</span>
         <span>{text(e.text)}</span>
       </li>
     ))}
@@ -191,11 +191,11 @@ const score: Renderer = (d, ctx) => {
   const label = text(d.label)
   return (
     <>
-      <div className="fk-report__score">
-        <span className="fk-report__score-value">{ctx.copy.score.outOf(value)}</span>
-        {d.bucket ? <span className="fk-report__muted">{text(d.bucket)}</span> : null}
+      <div className="ty-report__score">
+        <span className="ty-report__score-value">{ctx.copy.score.outOf(value)}</span>
+        {d.bucket ? <span className="ty-report__muted">{text(d.bucket)}</span> : null}
       </div>
-      <meter className="fk-report__meter" min={0} max={100} value={value} aria-label={label || ctx.copy.score.outOf(value)} />
+      <meter className="ty-report__meter" min={0} max={100} value={value} aria-label={label || ctx.copy.score.outOf(value)} />
       {d.reasoning ? <Pairs pairs={[[ctx.copy.score.reasoning, text(d.reasoning)]]} /> : null}
     </>
   )
@@ -205,7 +205,7 @@ const note: Renderer = (d) => {
   const tone = text(d.tone)
   const body = text(d.text ?? d.body)
   if (tone === 'danger' || tone === 'warning' || tone === 'info' || tone === 'success') return <InlineNotice tone={tone}>{body}</InlineNotice>
-  return <p className="fk-report__note">{body}</p>
+  return <p className="ty-report__note">{body}</p>
 }
 
 const markdown: Renderer = (d, ctx) => {
@@ -216,10 +216,10 @@ const markdown: Renderer = (d, ctx) => {
 const regionMap: Renderer = (d, ctx) => {
   if (ctx.renderRegionMap) return ctx.renderRegionMap(d)
   return (
-    <ul className="fk-report__feed">
+    <ul className="ty-report__feed">
       {rows(d.items).map((item, i) => (
-        <li key={i} className="fk-report__feed-entry">
-          <span className="fk-report__mono">{text(item.code)}</span>
+        <li key={i} className="ty-report__feed-entry">
+          <span className="ty-report__mono">{text(item.code)}</span>
           <span>{text(item.label ?? item.name)}</span>
         </li>
       ))}
@@ -231,11 +231,11 @@ const inputRequest: Renderer = (d, ctx) => {
   if (ctx.renderInputRequest) return ctx.renderInputRequest(d)
   const fields = rows(d.fields)
   return (
-    <div className="fk-report__request" data-readonly="">
-      <p className="fk-report__muted">{ctx.copy.inputRequestPending}</p>
-      <p className="fk-report__prose">{text(d.prompt)}</p>
+    <div className="ty-report__request" data-readonly="">
+      <p className="ty-report__muted">{ctx.copy.inputRequestPending}</p>
+      <p className="ty-report__prose">{text(d.prompt)}</p>
       {fields.length ? (
-        <ul className="fk-report__field-list">
+        <ul className="ty-report__field-list">
           {fields.map((f, i) => (
             <li key={i}>{text(f.label ?? f.name)}</li>
           ))}
@@ -253,9 +253,9 @@ const unknown: Renderer = (d, ctx) => {
     raw = String(d.kind)
   }
   return (
-    <div className="fk-report__note" data-unknown="">
+    <div className="ty-report__note" data-unknown="">
       <p>{ctx.copy.unknownSection(text(d.kind))}</p>
-      <pre className="fk-report__raw">{raw}</pre>
+      <pre className="ty-report__raw">{raw}</pre>
     </div>
   )
 }

@@ -34,18 +34,18 @@ export interface TagProps {
 function categoryStyle(index: number | undefined): CSSProperties | undefined {
   if (!index) return undefined
   const n = ((Math.max(1, Math.round(index)) - 1) % 8) + 1
-  return { '--fk-tag-category': `var(--fk-chart-${n})` } as CSSProperties
+  return { '--ty-tag-category': `var(--ty-chart-${n})` } as CSSProperties
 }
 
 function Leading({ tone, categoryIndex, icon }: Pick<TagProps, 'tone' | 'categoryIndex' | 'icon'>) {
   if (icon) {
     return (
-      <span className="fk-tag__icon" aria-hidden="true">
+      <span className="ty-tag__icon" aria-hidden="true">
         {icon}
       </span>
     )
   }
-  if (tone === 'category') return <span className="fk-tag__swatch" aria-hidden="true" style={categoryStyle(categoryIndex)} />
+  if (tone === 'category') return <span className="ty-tag__swatch" aria-hidden="true" style={categoryStyle(categoryIndex)} />
   return null
 }
 
@@ -80,7 +80,7 @@ export function Tag({
   const inner = (
     <>
       <Leading tone={tone} categoryIndex={categoryIndex} icon={icon} />
-      <span className="fk-tag__text" title={text || undefined}>
+      <span className="ty-tag__text" title={text || undefined}>
         {children}
       </span>
     </>
@@ -89,22 +89,22 @@ export function Tag({
   let body: ReactNode
   if (href) {
     body = (
-      <AriaLink href={href} onPress={onPress} className={cx('fk-tag', className)} {...common}>
+      <AriaLink href={href} onPress={onPress} className={cx('ty-tag', className)} {...common}>
         {inner}
       </AriaLink>
     )
   } else if (onPress) {
     body = (
-      <AriaButton onPress={onPress} className={cx('fk-tag', className)} {...common}>
+      <AriaButton onPress={onPress} className={cx('ty-tag', className)} {...common}>
         {inner}
       </AriaButton>
     )
   } else {
     body = (
-      <span className={cx('fk-tag', className)} {...common} data-removable={removable || undefined}>
+      <span className={cx('ty-tag', className)} {...common} data-removable={removable || undefined}>
         {inner}
         {removable ? (
-          <AriaButton className="fk-tag__remove" aria-label={removeLabel ?? messages.tag.remove(text)} onPress={() => onRemove?.()}>
+          <AriaButton className="ty-tag__remove" aria-label={removeLabel ?? messages.tag.remove(text)} onPress={() => onRemove?.()}>
             <X aria-hidden="true" focusable="false" />
           </AriaButton>
         ) : null}
@@ -138,25 +138,25 @@ export function TagList({ label, items, onRemove, size = 'regular', className }:
   return (
     <AriaTagGroup
       aria-label={label}
-      className={cx('fk-tag-list', className)}
+      className={cx('ty-tag-list', className)}
       onRemove={onRemove ? (keys: Set<Key>) => keys.forEach((k) => onRemove(String(k))) : undefined}
     >
-      <AriaTagList className="fk-tag-list__items" items={items}>
+      <AriaTagList className="ty-tag-list__items" items={items}>
         {(item) => (
           <AriaTag
             id={item.id}
             textValue={item.label}
-            className="fk-tag"
+            className="ty-tag"
             data-tone={item.tone ?? 'neutral'}
             data-size={size}
             data-removable={onRemove ? true : undefined}
           >
             <Leading tone={item.tone} categoryIndex={item.categoryIndex} icon={item.icon} />
-            <span className="fk-tag__text" title={item.label}>
+            <span className="ty-tag__text" title={item.label}>
               {item.label}
             </span>
             {onRemove ? (
-              <AriaButton slot="remove" className="fk-tag__remove" aria-label={messages.tag.remove(item.label)}>
+              <AriaButton slot="remove" className="ty-tag__remove" aria-label={messages.tag.remove(item.label)}>
                 <X aria-hidden="true" focusable="false" />
               </AriaButton>
             ) : null}

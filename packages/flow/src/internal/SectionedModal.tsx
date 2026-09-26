@@ -1,10 +1,10 @@
-// Stand-in for the wave-2 SectionedModal (not yet in @fakhir/ui):
+// Stand-in for the wave-2 SectionedModal (not yet in @datatechsolutions/tympan):
 // ModalDialog with an eyebrow, a kind icon, an optional section rail and
-// Ctrl/Cmd+Enter to submit. Replace with the @fakhir/ui component when it
+// Ctrl/Cmd+Enter to submit. Replace with the @datatechsolutions/tympan component when it
 // lands; the props mirror its spec.
 
 import { useMemo, type KeyboardEvent, type ReactNode } from 'react'
-import { ModalDialog, Tabs, TabPanel, useMediaQuery, type ModalDialogWidth } from '@fakhir/ui'
+import { ModalDialog, Tabs, TabPanel, useMediaQuery, type ModalDialogWidth } from '@datatechsolutions/tympan'
 
 export interface ModalSection {
   id: string
@@ -47,19 +47,19 @@ export function SectionedModal(props: SectionedModalProps) {
 
   const heading = useMemo(
     () => (
-      <span className="fk-flow-sectioned-modal__heading">
+      <span className="ty-flow-sectioned-modal__heading">
         {icon ? (
-          <span className="fk-flow-sectioned-modal__icon" data-tone={tone ?? 'neutral'} aria-hidden="true">
+          <span className="ty-flow-sectioned-modal__icon" data-tone={tone ?? 'neutral'} aria-hidden="true">
             {icon}
           </span>
         ) : null}
-        <span className="fk-flow-sectioned-modal__titles">
+        <span className="ty-flow-sectioned-modal__titles">
           {eyebrow ? (
-            <span className="fk-flow-sectioned-modal__eyebrow" aria-hidden="true">
+            <span className="ty-flow-sectioned-modal__eyebrow" aria-hidden="true">
               {eyebrow}
             </span>
           ) : null}
-          <span className="fk-flow-sectioned-modal__title">{title}</span>
+          <span className="ty-flow-sectioned-modal__title">{title}</span>
         </span>
       </span>
     ),
@@ -74,8 +74,8 @@ export function SectionedModal(props: SectionedModalProps) {
   }
 
   const body = sections?.length ? (
-    <div className="fk-flow-sectioned-modal__rail-layout" data-rail={wide ? 'side' : 'top'}>
-      {railHeader ? <div className="fk-flow-sectioned-modal__rail-header">{railHeader}</div> : null}
+    <div className="ty-flow-sectioned-modal__rail-layout" data-rail={wide ? 'side' : 'top'}>
+      {railHeader ? <div className="ty-flow-sectioned-modal__rail-header">{railHeader}</div> : null}
       <Tabs
         label={railLabel ?? 'Sections'}
         tabs={sections.map((s) => ({ id: s.id, label: s.label }))}
@@ -90,7 +90,7 @@ export function SectionedModal(props: SectionedModalProps) {
           </TabPanel>
         ))}
       </Tabs>
-      {railFooter ? <div className="fk-flow-sectioned-modal__rail-footer">{railFooter}</div> : null}
+      {railFooter ? <div className="ty-flow-sectioned-modal__rail-footer">{railFooter}</div> : null}
       {children}
     </div>
   ) : (
@@ -107,9 +107,9 @@ export function SectionedModal(props: SectionedModalProps) {
       actions={footer}
       {...(busy !== undefined ? { busy } : {})}
       {...(role ? { role } : {})}
-      className={['fk-flow-sectioned-modal', className].filter(Boolean).join(' ')}
+      className={['ty-flow-sectioned-modal', className].filter(Boolean).join(' ')}
     >
-      <div className="fk-flow-sectioned-modal__body" data-phone={phone || undefined} onKeyDown={onKeyDown}>
+      <div className="ty-flow-sectioned-modal__body" data-phone={phone || undefined} onKeyDown={onKeyDown}>
         {body}
       </div>
     </ModalDialog>

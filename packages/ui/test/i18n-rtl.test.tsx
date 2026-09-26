@@ -3,7 +3,7 @@
 import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { GALLERY_PAGES } from '../gallery/src/Groups'
-import { FakhirProvider } from '../src/internal/provider'
+import { TympanProvider } from '../src/internal/provider'
 import { ThemeProvider } from '../src/internal/theme'
 import { ToastProvider } from '../src/components/toast/Toast'
 import { expectNoAxeViolations } from './axe'
@@ -12,7 +12,7 @@ function Page({ id, locale, pseudo = false }: { id: string; locale: string; pseu
   const page = GALLERY_PAGES.find((p) => p.id === id)!
   const Component = page.Component
   return (
-    <FakhirProvider locale={locale} pseudo={pseudo} navigate={() => {}}>
+    <TympanProvider locale={locale} pseudo={pseudo} navigate={() => {}}>
       <ThemeProvider target="scope">
         <ToastProvider>
           <div data-testid="page" lang={locale} dir={['ar', 'he', 'fa', 'ur'].includes(locale.split('-')[0]!) ? 'rtl' : 'ltr'}>
@@ -20,7 +20,7 @@ function Page({ id, locale, pseudo = false }: { id: string; locale: string; pseu
           </div>
         </ToastProvider>
       </ThemeProvider>
-    </FakhirProvider>
+    </TympanProvider>
   )
 }
 

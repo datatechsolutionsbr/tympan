@@ -2,7 +2,7 @@ import { act, fireEvent, render, renderHook, screen, waitFor, within } from '@te
 import userEvent from '@testing-library/user-event'
 import type { ReactNode } from 'react'
 import { describe, expect, it, vi } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import { cssOf, mediaBlock } from '../../test/css'
 import { setViewportWidth } from '../../test/media'
@@ -146,7 +146,7 @@ describe('RunPanel', () => {
     expect(screen.getByText('timeout')).toBeInTheDocument()
     expect(screen.getAllByText(/failed/).length).toBeGreaterThan(0)
     expect(screen.getByText('1.5 sec')).toBeInTheDocument()
-    expect(screen.queryByText('n', { selector: '.fk-run-row__label' })).toBeNull()
+    expect(screen.queryByText('n', { selector: '.ty-run-row__label' })).toBeNull()
     await expectNoAxeViolations(container)
   })
 })
@@ -440,11 +440,11 @@ describe('ExecutionTimeline', () => {
 
   it('works under RTL with Portuguese steps label', () => {
     render(
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <div dir="rtl">
           <ExecutionTimeline entries={entries} />
         </div>
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(screen.getByRole('listbox')).toBeInTheDocument()
   })
@@ -512,11 +512,11 @@ describe('VersionHistoryPanel', () => {
 
   it('uses Spanish strings in RTL', async () => {
     render(
-      <FakhirProvider locale="es">
+      <TympanProvider locale="es">
         <div dir="rtl">
           <VersionHistoryPanel {...base} loadVersions={() => Promise.resolve(versions)} />
         </div>
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(await screen.findByText('Versión 4')).toBeInTheDocument()
   })

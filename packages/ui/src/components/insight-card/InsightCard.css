@@ -1,108 +1,108 @@
 /* InsightCard (spec: wave-4/insight-card.md; design direction §2.2, §2.3, §2.5, §2.11, §2.12). */
-@layer fakhir.components {
-  .fk-insight-card {
+@layer tympan.components {
+  .ty-insight-card {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
     min-inline-size: 0;
-    padding: var(--fk-space-4);
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-card);
-    background: var(--fk-surface-raised);
-    box-shadow: var(--fk-shadow-raised);
-    color: var(--fk-ink-2);
-    font-size: var(--fk-font-size-body);
-    line-height: var(--fk-font-line-height-body);
+    padding: var(--ty-space-4);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-card);
+    background: var(--ty-surface-raised);
+    box-shadow: var(--ty-shadow-raised);
+    color: var(--ty-ink-2);
+    font-size: var(--ty-font-size-body);
+    line-height: var(--ty-font-line-height-body);
   }
-  .fk-insight-card__head {
+  .ty-insight-card__head {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
-  .fk-insight-card__title {
+  .ty-insight-card__title {
     margin: 0;
-    color: var(--fk-ink);
-    font-family: var(--fk-font-sans);
-    font-size: var(--fk-font-size-body);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-body);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-sans);
+    font-size: var(--ty-font-size-body);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-body);
   }
-  .fk-insight-card__value {
+  .ty-insight-card__value {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
-    gap: var(--fk-space-2) var(--fk-space-3);
+    gap: var(--ty-space-2) var(--ty-space-3);
     margin: 0;
   }
-  .fk-insight-card__figure {
-    color: var(--fk-ink);
-    font-size: var(--fk-font-size-body-lg);
+  .ty-insight-card__figure {
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-body-lg);
     font-variant-numeric: tabular-nums;
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-body-lg);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-body-lg);
     overflow-wrap: anywhere;
   }
-  .fk-insight-card__measures {
+  .ty-insight-card__measures {
     display: grid;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
     margin: 0;
   }
-  .fk-insight-card__measure {
+  .ty-insight-card__measure {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: baseline;
-    gap: 2px var(--fk-space-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    gap: 2px var(--ty-space-3);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
-  .fk-insight-card__measure dt {
-    color: var(--fk-ink-3);
+  .ty-insight-card__measure dt {
+    color: var(--ty-ink-3);
   }
-  .fk-insight-card__measure dd {
+  .ty-insight-card__measure dd {
     margin: 0;
-    color: var(--fk-ink);
+    color: var(--ty-ink);
     font-variant-numeric: tabular-nums;
   }
-  .fk-insight-card__meter {
+  .ty-insight-card__meter {
     grid-column: 1 / -1;
   }
-  .fk-insight-card__actions {
+  .ty-insight-card__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
-  .fk-insight-card__outcome {
+  .ty-insight-card__outcome {
     margin: 0;
-    padding: var(--fk-space-2) var(--fk-space-3);
-    border-inline-start: 3px solid var(--fk-line-strong);
-    color: var(--fk-ink-2);
+    padding: var(--ty-space-2) var(--ty-space-3);
+    border-inline-start: 3px solid var(--ty-line-strong);
+    color: var(--ty-ink-2);
     outline: none;
   }
-  .fk-insight-card__outcome:focus-visible {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-insight-card__outcome:focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
-  .fk-insight-card__footnote {
+  .ty-insight-card__footnote {
     margin: 0;
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
 
   @media (prefers-reduced-transparency: reduce) {
-    .fk-insight-card {
-      background: var(--fk-surface-raised-solid);
+    .ty-insight-card {
+      background: var(--ty-surface-raised-solid);
     }
   }
 
   @media (forced-colors: active) {
-    .fk-insight-card {
+    .ty-insight-card {
       border: 1px solid CanvasText;
       box-shadow: none;
     }
-    .fk-insight-card__outcome {
+    .ty-insight-card__outcome {
       border-inline-start-color: CanvasText;
     }
   }

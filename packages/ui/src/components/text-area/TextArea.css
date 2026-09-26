@@ -1,124 +1,124 @@
 /* TextArea (spec: wave-1/text-area.md; design direction §2.2, §2.10). */
-@layer fakhir.components {
-  .fk-text-area {
+@layer tympan.components {
+  .ty-text-area {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
     min-inline-size: 0;
   }
 
-  .fk-text-area__label {
-    color: var(--fk-ink);
-    font-size: var(--fk-font-size-label);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-label);
+  .ty-text-area__label {
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-label);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-label);
   }
 
-  .fk-text-area__hint,
-  .fk-text-area__counter {
+  .ty-text-area__hint,
+  .ty-text-area__counter {
     margin: 0;
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
 
-  .fk-text-area__counter {
+  .ty-text-area__counter {
     align-self: flex-end;
     font-variant-numeric: tabular-nums;
   }
 
-  .fk-text-area__counter[data-over-limit],
-  .fk-text-area__error {
-    color: var(--fk-danger);
+  .ty-text-area__counter[data-over-limit],
+  .ty-text-area__error {
+    color: var(--ty-danger);
   }
 
-  .fk-text-area__error {
+  .ty-text-area__error {
     display: flex;
     align-items: flex-start;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
     margin: 0;
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
 
-  .fk-text-area__input {
+  .ty-text-area__input {
     box-sizing: border-box;
     inline-size: 100%;
-    min-block-size: var(--fk-control-target);
-    padding: var(--fk-space-2) var(--fk-space-3);
-    border: 1px solid var(--fk-input);
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-surface-solid);
-    color: var(--fk-ink);
+    min-block-size: var(--ty-control-target);
+    padding: var(--ty-space-2) var(--ty-space-3);
+    border: 1px solid var(--ty-input);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-surface-solid);
+    color: var(--ty-ink);
     font: inherit;
-    font-family: var(--fk-font-sans);
-    font-size: var(--fk-font-size-body);
-    line-height: var(--fk-font-line-height-body);
+    font-family: var(--ty-font-sans);
+    font-size: var(--ty-font-size-body);
+    line-height: var(--ty-font-line-height-body);
     resize: vertical;
     overflow-y: hidden;
     outline: none;
-    transition: border-color var(--fk-dur-instant) var(--fk-ease);
+    transition: border-color var(--ty-dur-instant) var(--ty-ease);
   }
 
-  .fk-text-area:not([data-auto-grow]) .fk-text-area__input,
-  .fk-text-area[data-scrolling] .fk-text-area__input {
+  .ty-text-area:not([data-auto-grow]) .ty-text-area__input,
+  .ty-text-area[data-scrolling] .ty-text-area__input {
     overflow-y: auto;
   }
 
-  .fk-text-area[data-resize='none'] .fk-text-area__input,
-  .fk-text-area[data-auto-grow] .fk-text-area__input {
+  .ty-text-area[data-resize='none'] .ty-text-area__input,
+  .ty-text-area[data-auto-grow] .ty-text-area__input {
     resize: none;
   }
 
-  .fk-text-area[data-monospace] .fk-text-area__input {
-    font-family: var(--fk-font-mono);
+  .ty-text-area[data-monospace] .ty-text-area__input {
+    font-family: var(--ty-font-mono);
   }
 
-  .fk-text-area__input::placeholder {
-    color: var(--fk-ink-3);
+  .ty-text-area__input::placeholder {
+    color: var(--ty-ink-3);
   }
 
-  .fk-text-area__input[data-hovered] {
-    border-color: var(--fk-ink-3);
+  .ty-text-area__input[data-hovered] {
+    border-color: var(--ty-ink-3);
   }
 
-  .fk-text-area__input[data-focused] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-text-area__input[data-focused] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
 
-  .fk-text-area[data-invalid] .fk-text-area__input {
-    border-color: var(--fk-danger);
+  .ty-text-area[data-invalid] .ty-text-area__input {
+    border-color: var(--ty-danger);
   }
 
-  .fk-text-area[data-readonly] .fk-text-area__input {
-    background: var(--fk-surface-sunken);
+  .ty-text-area[data-readonly] .ty-text-area__input {
+    background: var(--ty-surface-sunken);
   }
 
-  .fk-text-area[data-disabled] .fk-text-area__input {
+  .ty-text-area[data-disabled] .ty-text-area__input {
     opacity: 0.55;
     cursor: not-allowed;
   }
 
   @media (pointer: coarse) {
-    .fk-text-area__input {
-      font-size: var(--fk-font-size-body-lg);
+    .ty-text-area__input {
+      font-size: var(--ty-font-size-body-lg);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-text-area__input {
+    .ty-text-area__input {
       transition: none;
     }
   }
 
   @media (forced-colors: active) {
-    .fk-text-area__input {
+    .ty-text-area__input {
       border: 1px solid FieldText;
       background: Field;
       color: FieldText;
     }
-    .fk-text-area__input[data-focused] {
+    .ty-text-area__input[data-focused] {
       outline-color: Highlight;
     }
   }

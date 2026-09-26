@@ -5,7 +5,7 @@
 import { useMemo } from 'react'
 import { Button as AriaButton, Tree, TreeItem, TreeItemContent, type Key } from 'react-aria-components'
 import { Check, ChevronRight, CircleCheck, CircleX, FileDown, Hourglass, ShieldCheck } from 'lucide-react'
-import { Button } from '@fakhir/ui'
+import { Button } from '@datatechsolutions/tympan'
 import { ProofPill } from './ProvenanceNode'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { ObligationStatus, ProofCertificate, ProofObligation } from './proofTypes'
@@ -123,8 +123,8 @@ export function ProvenanceCertificate({ certificate, onRerun, onDownload, busy =
 
   if (!certificate) {
     return (
-      <section className={['fk-cert', className].filter(Boolean).join(' ')} aria-label={l.title}>
-        <p className="fk-cert__empty">
+      <section className={['ty-cert', className].filter(Boolean).join(' ')} aria-label={l.title}>
+        <p className="ty-cert__empty">
           <ShieldCheck aria-hidden="true" focusable="false" />
           <span>{l.empty}</span>
         </p>
@@ -138,27 +138,27 @@ export function ProvenanceCertificate({ certificate, onRerun, onDownload, busy =
   const obligationRow = (o: ProofObligation, key: string) => {
     const Icon = STATUS_ICON[o.status]
     return (
-      <TreeItem key={key} id={key} textValue={fill(l.obligation, { label: o.label, status: l.status[o.status] }, locale)} className="fk-cert__item">
+      <TreeItem key={key} id={key} textValue={fill(l.obligation, { label: o.label, status: l.status[o.status] }, locale)} className="ty-cert__item">
         <TreeItemContent>
           {({ hasChildItems }) => (
-            <div className="fk-cert__row" data-status={o.status}>
+            <div className="ty-cert__row" data-status={o.status}>
               {hasChildItems ? (
-                <AriaButton slot="chevron" className="fk-cert__chevron">
+                <AriaButton slot="chevron" className="ty-cert__chevron">
                   <ChevronRight aria-hidden="true" focusable="false" />
                 </AriaButton>
               ) : (
-                <span className="fk-cert__spacer" aria-hidden="true" />
+                <span className="ty-cert__spacer" aria-hidden="true" />
               )}
-              <Icon className="fk-cert__icon" aria-hidden="true" focusable="false" />
-              <span className="fk-cert__text">
-                <span className="fk-cert__label">{o.label}</span>
+              <Icon className="ty-cert__icon" aria-hidden="true" focusable="false" />
+              <span className="ty-cert__text">
+                <span className="ty-cert__label">{o.label}</span>
                 {o.detail ? (
-                  <code className="fk-cert__detail" dir="ltr">
+                  <code className="ty-cert__detail" dir="ltr">
                     {o.detail}
                   </code>
                 ) : null}
               </span>
-              <span className="fk-cert__status">{l.status[o.status]}</span>
+              <span className="ty-cert__status">{l.status[o.status]}</span>
             </div>
           )}
         </TreeItemContent>
@@ -168,32 +168,32 @@ export function ProvenanceCertificate({ certificate, onRerun, onDownload, busy =
   }
 
   return (
-    <section className={['fk-cert', className].filter(Boolean).join(' ')} aria-label={l.title}>
-      <div className="fk-cert__main">
-        <h3 className="fk-cert__heading">{l.obligationsTitle}</h3>
-        <Tree aria-label={l.tree} className="fk-cert__tree" defaultExpandedKeys={expanded}>
-          <TreeItem id="root" textValue={`${certificate.claim}, ${l.verdicts[certificate.verdict]}`} className="fk-cert__item" data-root="">
+    <section className={['ty-cert', className].filter(Boolean).join(' ')} aria-label={l.title}>
+      <div className="ty-cert__main">
+        <h3 className="ty-cert__heading">{l.obligationsTitle}</h3>
+        <Tree aria-label={l.tree} className="ty-cert__tree" defaultExpandedKeys={expanded}>
+          <TreeItem id="root" textValue={`${certificate.claim}, ${l.verdicts[certificate.verdict]}`} className="ty-cert__item" data-root="">
             <TreeItemContent>
               {() => (
-                <div className="fk-cert__row fk-cert__row--root" data-status={certificate.verdict === 'proved' ? 'ok' : certificate.verdict === 'refuted' ? 'failed' : 'pending'}>
-                  <AriaButton slot="chevron" className="fk-cert__chevron">
+                <div className="ty-cert__row ty-cert__row--root" data-status={certificate.verdict === 'proved' ? 'ok' : certificate.verdict === 'refuted' ? 'failed' : 'pending'}>
+                  <AriaButton slot="chevron" className="ty-cert__chevron">
                     <ChevronRight aria-hidden="true" focusable="false" />
                   </AriaButton>
                   {(() => {
                     const Icon = STATUS_ICON[certificate.verdict === 'proved' ? 'ok' : certificate.verdict === 'refuted' ? 'failed' : 'pending']
-                    return <Icon className="fk-cert__icon" aria-hidden="true" focusable="false" />
+                    return <Icon className="ty-cert__icon" aria-hidden="true" focusable="false" />
                   })()}
-                  <span className="fk-cert__text">
-                    <span className="fk-cert__claim" dir="auto">
+                  <span className="ty-cert__text">
+                    <span className="ty-cert__claim" dir="auto">
                       {certificate.claim}
                     </span>
                     {certificate.note ? (
-                      <code className="fk-cert__detail" dir="auto">
+                      <code className="ty-cert__detail" dir="auto">
                         {certificate.note}
                       </code>
                     ) : null}
                   </span>
-                  <span className="fk-cert__status">{l.verdicts[certificate.verdict]}</span>
+                  <span className="ty-cert__status">{l.verdicts[certificate.verdict]}</span>
                 </div>
               )}
             </TreeItemContent>
@@ -201,40 +201,40 @@ export function ProvenanceCertificate({ certificate, onRerun, onDownload, busy =
           </TreeItem>
         </Tree>
       </div>
-      <aside className="fk-cert__side" aria-label={l.facts}>
-        <span className="fk-cert__eyebrow">{l.verdict}</span>
-        <div className="fk-cert__verdict">
+      <aside className="ty-cert__side" aria-label={l.facts}>
+        <span className="ty-cert__eyebrow">{l.verdict}</span>
+        <div className="ty-cert__verdict">
           <ProofPill state={certificate.verdict} word={l.verdicts[certificate.verdict]} />
-          <span className="fk-cert__open">{open.pending || open.failed ? fill(l.openCount, open, locale) : l.allHold}</span>
+          <span className="ty-cert__open">{open.pending || open.failed ? fill(l.openCount, open, locale) : l.allHold}</span>
         </div>
-        <p className="fk-cert__note">{l.deterministic}</p>
-        <dl className="fk-cert__facts">
+        <p className="ty-cert__note">{l.deterministic}</p>
+        <dl className="ty-cert__facts">
           <div>
             <dt>{l.verifier}</dt>
-            <dd className="fk-cert__mono" dir="ltr">
+            <dd className="ty-cert__mono" dir="ltr">
               {certificate.verifier}
             </dd>
           </div>
           <div>
             <dt>{l.ranAt}</dt>
-            <dd className="fk-cert__mono">
+            <dd className="ty-cert__mono">
               <time dateTime={certificate.ranAt}>{ranAt}</time>
             </dd>
           </div>
           <div>
             <dt>{l.inputEdition}</dt>
-            <dd className="fk-cert__mono" dir="ltr">
+            <dd className="ty-cert__mono" dir="ltr">
               {certificate.inputEdition}
             </dd>
           </div>
           <div>
             <dt>{l.hash}</dt>
-            <dd className="fk-cert__mono fk-cert__hash" dir="ltr">
+            <dd className="ty-cert__mono ty-cert__hash" dir="ltr">
               {certificate.hash}
             </dd>
           </div>
         </dl>
-        <div className="fk-cert__actions">
+        <div className="ty-cert__actions">
           {onRerun ? (
             <Button variant="secondary" leadingIcon={<Check />} busy={busy} busyLabel={l.rerunning} onPress={onRerun}>
               {l.rerun}

@@ -1,72 +1,72 @@
 /* ToneTint tokens and the tinted-glass rule (spec: wave-4/tone-tint-resolver.md; design direction §2.3, §2.5).
    Tints reference the semantic and categorical tokens, and are re-declared on every
    themed element so light and dark swap together with their source colours. */
-@layer fakhir.tokens {
+@layer tympan.tokens {
   :root,
-  [data-fk-theme],
-  [data-fk-mode] {
-    --fk-tint-accent-rgb: var(--fk-accent);
-    --fk-tint-success-rgb: var(--fk-success);
-    --fk-tint-pending-rgb: var(--fk-warning);
-    --fk-tint-error-rgb: var(--fk-danger);
-    --fk-tint-neutral-rgb: var(--fk-neutral);
-    --fk-tint-categorical-1-rgb: var(--fk-categorical-1);
-    --fk-tint-categorical-2-rgb: var(--fk-categorical-2);
-    --fk-tint-categorical-3-rgb: var(--fk-categorical-3);
-    --fk-tint-categorical-4-rgb: var(--fk-categorical-4);
-    --fk-tint-categorical-5-rgb: var(--fk-categorical-5);
-    --fk-tint-categorical-6-rgb: var(--fk-categorical-6);
-    --fk-tint-categorical-7-rgb: var(--fk-categorical-7);
-    --fk-tint-categorical-8-rgb: var(--fk-categorical-8);
+  [data-ty-theme],
+  [data-ty-mode] {
+    --ty-tint-accent-rgb: var(--ty-accent);
+    --ty-tint-success-rgb: var(--ty-success);
+    --ty-tint-pending-rgb: var(--ty-warning);
+    --ty-tint-error-rgb: var(--ty-danger);
+    --ty-tint-neutral-rgb: var(--ty-neutral);
+    --ty-tint-categorical-1-rgb: var(--ty-categorical-1);
+    --ty-tint-categorical-2-rgb: var(--ty-categorical-2);
+    --ty-tint-categorical-3-rgb: var(--ty-categorical-3);
+    --ty-tint-categorical-4-rgb: var(--ty-categorical-4);
+    --ty-tint-categorical-5-rgb: var(--ty-categorical-5);
+    --ty-tint-categorical-6-rgb: var(--ty-categorical-6);
+    --ty-tint-categorical-7-rgb: var(--ty-categorical-7);
+    --ty-tint-categorical-8-rgb: var(--ty-categorical-8);
 
-    --fk-tint-accent-soft: color-mix(in oklab, var(--fk-tint-accent-rgb) 9%, transparent);
-    --fk-tint-success-soft: color-mix(in oklab, var(--fk-tint-success-rgb) 9%, transparent);
-    --fk-tint-pending-soft: color-mix(in oklab, var(--fk-tint-pending-rgb) 9%, transparent);
-    --fk-tint-error-soft: color-mix(in oklab, var(--fk-tint-error-rgb) 9%, transparent);
-    --fk-tint-neutral-soft: color-mix(in oklab, var(--fk-tint-neutral-rgb) 7%, transparent);
-    --fk-tint-categorical-1-soft: color-mix(in oklab, var(--fk-tint-categorical-1-rgb) 10%, transparent);
-    --fk-tint-categorical-2-soft: color-mix(in oklab, var(--fk-tint-categorical-2-rgb) 10%, transparent);
-    --fk-tint-categorical-3-soft: color-mix(in oklab, var(--fk-tint-categorical-3-rgb) 10%, transparent);
-    --fk-tint-categorical-4-soft: color-mix(in oklab, var(--fk-tint-categorical-4-rgb) 10%, transparent);
-    --fk-tint-categorical-5-soft: color-mix(in oklab, var(--fk-tint-categorical-5-rgb) 10%, transparent);
-    --fk-tint-categorical-6-soft: color-mix(in oklab, var(--fk-tint-categorical-6-rgb) 10%, transparent);
-    --fk-tint-categorical-7-soft: color-mix(in oklab, var(--fk-tint-categorical-7-rgb) 10%, transparent);
-    --fk-tint-categorical-8-soft: color-mix(in oklab, var(--fk-tint-categorical-8-rgb) 10%, transparent);
+    --ty-tint-accent-soft: color-mix(in oklab, var(--ty-tint-accent-rgb) 9%, transparent);
+    --ty-tint-success-soft: color-mix(in oklab, var(--ty-tint-success-rgb) 9%, transparent);
+    --ty-tint-pending-soft: color-mix(in oklab, var(--ty-tint-pending-rgb) 9%, transparent);
+    --ty-tint-error-soft: color-mix(in oklab, var(--ty-tint-error-rgb) 9%, transparent);
+    --ty-tint-neutral-soft: color-mix(in oklab, var(--ty-tint-neutral-rgb) 7%, transparent);
+    --ty-tint-categorical-1-soft: color-mix(in oklab, var(--ty-tint-categorical-1-rgb) 10%, transparent);
+    --ty-tint-categorical-2-soft: color-mix(in oklab, var(--ty-tint-categorical-2-rgb) 10%, transparent);
+    --ty-tint-categorical-3-soft: color-mix(in oklab, var(--ty-tint-categorical-3-rgb) 10%, transparent);
+    --ty-tint-categorical-4-soft: color-mix(in oklab, var(--ty-tint-categorical-4-rgb) 10%, transparent);
+    --ty-tint-categorical-5-soft: color-mix(in oklab, var(--ty-tint-categorical-5-rgb) 10%, transparent);
+    --ty-tint-categorical-6-soft: color-mix(in oklab, var(--ty-tint-categorical-6-rgb) 10%, transparent);
+    --ty-tint-categorical-7-soft: color-mix(in oklab, var(--ty-tint-categorical-7-rgb) 10%, transparent);
+    --ty-tint-categorical-8-soft: color-mix(in oklab, var(--ty-tint-categorical-8-rgb) 10%, transparent);
 
-    --fk-tint-accent-ring: color-mix(in oklab, var(--fk-tint-accent-rgb) 38%, transparent);
-    --fk-tint-success-ring: color-mix(in oklab, var(--fk-tint-success-rgb) 38%, transparent);
-    --fk-tint-pending-ring: color-mix(in oklab, var(--fk-tint-pending-rgb) 38%, transparent);
-    --fk-tint-error-ring: color-mix(in oklab, var(--fk-tint-error-rgb) 38%, transparent);
-    --fk-tint-neutral-ring: color-mix(in oklab, var(--fk-tint-neutral-rgb) 30%, transparent);
-    --fk-tint-categorical-1-ring: color-mix(in oklab, var(--fk-tint-categorical-1-rgb) 40%, transparent);
-    --fk-tint-categorical-2-ring: color-mix(in oklab, var(--fk-tint-categorical-2-rgb) 40%, transparent);
-    --fk-tint-categorical-3-ring: color-mix(in oklab, var(--fk-tint-categorical-3-rgb) 40%, transparent);
-    --fk-tint-categorical-4-ring: color-mix(in oklab, var(--fk-tint-categorical-4-rgb) 40%, transparent);
-    --fk-tint-categorical-5-ring: color-mix(in oklab, var(--fk-tint-categorical-5-rgb) 40%, transparent);
-    --fk-tint-categorical-6-ring: color-mix(in oklab, var(--fk-tint-categorical-6-rgb) 40%, transparent);
-    --fk-tint-categorical-7-ring: color-mix(in oklab, var(--fk-tint-categorical-7-rgb) 40%, transparent);
-    --fk-tint-categorical-8-ring: color-mix(in oklab, var(--fk-tint-categorical-8-rgb) 40%, transparent);
+    --ty-tint-accent-ring: color-mix(in oklab, var(--ty-tint-accent-rgb) 38%, transparent);
+    --ty-tint-success-ring: color-mix(in oklab, var(--ty-tint-success-rgb) 38%, transparent);
+    --ty-tint-pending-ring: color-mix(in oklab, var(--ty-tint-pending-rgb) 38%, transparent);
+    --ty-tint-error-ring: color-mix(in oklab, var(--ty-tint-error-rgb) 38%, transparent);
+    --ty-tint-neutral-ring: color-mix(in oklab, var(--ty-tint-neutral-rgb) 30%, transparent);
+    --ty-tint-categorical-1-ring: color-mix(in oklab, var(--ty-tint-categorical-1-rgb) 40%, transparent);
+    --ty-tint-categorical-2-ring: color-mix(in oklab, var(--ty-tint-categorical-2-rgb) 40%, transparent);
+    --ty-tint-categorical-3-ring: color-mix(in oklab, var(--ty-tint-categorical-3-rgb) 40%, transparent);
+    --ty-tint-categorical-4-ring: color-mix(in oklab, var(--ty-tint-categorical-4-rgb) 40%, transparent);
+    --ty-tint-categorical-5-ring: color-mix(in oklab, var(--ty-tint-categorical-5-rgb) 40%, transparent);
+    --ty-tint-categorical-6-ring: color-mix(in oklab, var(--ty-tint-categorical-6-rgb) 40%, transparent);
+    --ty-tint-categorical-7-ring: color-mix(in oklab, var(--ty-tint-categorical-7-rgb) 40%, transparent);
+    --ty-tint-categorical-8-ring: color-mix(in oklab, var(--ty-tint-categorical-8-rgb) 40%, transparent);
   }
 }
 
-@layer fakhir.components {
-  /* Any surface with data-fk-tinted reads the tint set inline by tintStyle(). */
-  [data-fk-tinted] {
-    --fk-surface-tint: transparent;
-    --fk-surface-tint-ring: var(--fk-line);
-    background-image: linear-gradient(var(--fk-surface-tint), var(--fk-surface-tint));
-    border-color: var(--fk-surface-tint-ring);
+@layer tympan.components {
+  /* Any surface with data-ty-tinted reads the tint set inline by tintStyle(). */
+  [data-ty-tinted] {
+    --ty-surface-tint: transparent;
+    --ty-surface-tint-ring: var(--ty-line);
+    background-image: linear-gradient(var(--ty-surface-tint), var(--ty-surface-tint));
+    border-color: var(--ty-surface-tint-ring);
   }
 
   @media (prefers-reduced-transparency: reduce) {
-    [data-fk-tinted] {
-      background-color: var(--fk-surface-solid);
+    [data-ty-tinted] {
+      background-color: var(--ty-surface-solid);
       background-image: none;
     }
   }
 
   @media (forced-colors: active) {
-    [data-fk-tinted] {
+    [data-ty-tinted] {
       background-image: none;
       border-color: CanvasText;
     }

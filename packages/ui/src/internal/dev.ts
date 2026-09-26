@@ -8,5 +8,5 @@ const isDev = (() => {
 
 /** Logs a development-only warning with the library prefix. */
 export function devWarning(condition: boolean, message: string): void {
-  if (isDev && condition) console.warn(`[@fakhir/ui] ${message}`)
+  if (isDev && condition) console.warn(`[@datatechsolutions/tympan] ${message}`)
 }

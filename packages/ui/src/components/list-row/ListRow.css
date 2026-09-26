@@ -1,80 +1,80 @@
 /* ListRow (spec: wave-2/list-row.md; design direction §2.3, §2.5, §2.10). */
-@layer fakhir.components {
-  .fk-list-row {
-    --fk-list-row-fill: var(--fk-surface);
-    --fk-list-row-pad: var(--fk-space-4);
+@layer tympan.components {
+  .ty-list-row {
+    --ty-list-row-fill: var(--ty-surface);
+    --ty-list-row-pad: var(--ty-space-4);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: var(--fk-space-3) var(--fk-space-4);
-    padding: var(--fk-list-row-pad);
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-card);
-    background: var(--fk-list-row-fill);
+    gap: var(--ty-space-3) var(--ty-space-4);
+    padding: var(--ty-list-row-pad);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-card);
+    background: var(--ty-list-row-fill);
   }
-  .fk-list-row[data-variant='compact'] {
-    --fk-list-row-fill: transparent;
-    --fk-list-row-pad: var(--fk-space-2) 0;
+  .ty-list-row[data-variant='compact'] {
+    --ty-list-row-fill: transparent;
+    --ty-list-row-pad: var(--ty-space-2) 0;
     border-color: transparent;
     border-radius: 0;
   }
-  .fk-list-row[data-variant='card'] {
-    --fk-list-row-fill: var(--fk-surface-raised);
-    box-shadow: var(--fk-shadow-raised);
+  .ty-list-row[data-variant='card'] {
+    --ty-list-row-fill: var(--ty-surface-raised);
+    box-shadow: var(--ty-shadow-raised);
   }
-  .fk-list-row[data-variant='emphasised'] {
-    --fk-list-row-fill: var(--fk-accent-soft);
+  .ty-list-row[data-variant='emphasised'] {
+    --ty-list-row-fill: var(--ty-accent-soft);
     border-color: transparent;
   }
 
-  .fk-list-row__summary {
+  .ty-list-row__summary {
     display: flex;
     flex: 1 1 16rem;
     align-items: flex-start;
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
     min-inline-size: 0;
   }
-  .fk-list-row__summary > .fk-summary-row {
+  .ty-list-row__summary > .ty-summary-row {
     flex: 1;
   }
-  .fk-list-row__marker {
+  .ty-list-row__marker {
     flex: none;
-    padding: 0 var(--fk-space-2);
-    border-radius: var(--fk-radius-pill);
-    background: var(--fk-surface-solid);
-    color: var(--fk-accent);
-    font-size: var(--fk-font-size-meta);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-meta);
+    padding: 0 var(--ty-space-2);
+    border-radius: var(--ty-radius-pill);
+    background: var(--ty-surface-solid);
+    color: var(--ty-accent);
+    font-size: var(--ty-font-size-meta);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-meta);
   }
 
-  .fk-list-row__actions {
+  .ty-list-row__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
 
   /* Under 640: actions below the summary, each at least 44 px tall. */
   @media (max-width: 639.98px) {
-    .fk-list-row {
+    .ty-list-row {
       flex-direction: column;
       align-items: stretch;
     }
-    .fk-list-row__actions {
+    .ty-list-row__actions {
       inline-size: 100%;
     }
-    .fk-list-row__action {
+    .ty-list-row__action {
       flex: 1;
-      min-block-size: var(--fk-control-target);
+      min-block-size: var(--ty-control-target);
     }
   }
 
   @media (forced-colors: active) {
-    .fk-list-row[data-variant='emphasised'] {
+    .ty-list-row[data-variant='emphasised'] {
       border: 2px solid Highlight;
     }
-    .fk-list-row__action[data-focus-visible] {
+    .ty-list-row__action[data-focus-visible] {
       outline: 2px solid Highlight;
     }
   }

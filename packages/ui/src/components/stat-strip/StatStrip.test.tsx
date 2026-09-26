@@ -39,7 +39,7 @@ describe('StatStrip', () => {
 
   it('uses hairlines (no cards), two columns on phones, system colours when forced', () => {
     const css = cssOf('components/stat-strip/StatStrip.css')
-    expect(css).toMatch(/\.fk-stat-strip__item\s*\{[^}]*border-inline-start:\s*1px solid var\(--fk-line\)/)
+    expect(css).toMatch(/\.ty-stat-strip__item\s*\{[^}]*border-inline-start:\s*1px solid var\(--ty-line\)/)
     expect(css).not.toMatch(/box-shadow/)
     expect(mediaBlock(css, /\(max-width:\s*639\.98px\)/)).toMatch(/repeat\(2/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/CanvasText/)

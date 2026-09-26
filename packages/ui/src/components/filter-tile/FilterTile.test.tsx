@@ -22,7 +22,7 @@ describe('FilterTile', () => {
   it('reports pressed and shows a check mark when selected', () => {
     const { container } = render(<FilterTile selected onToggle={() => {}} label="Brazil" icon={<Flag />} />)
     expect(screen.getByRole('button', { name: 'Brazil' })).toHaveAttribute('aria-pressed', 'true')
-    expect(container.querySelector('.fk-selected-mark')).not.toBeNull()
+    expect(container.querySelector('.ty-selected-mark')).not.toBeNull()
   })
 
   it('describes the tile with its detail', () => {
@@ -39,7 +39,7 @@ describe('FilterTile', () => {
     const forced = mediaBlock(cssOf('components/filter-tile/FilterTile.css'), /\(forced-colors:\s*active\)/)
     expect(forced).toMatch(/\[data-selected\]\s*\{[^}]*border:\s*3px solid Highlight/)
     const css = cssOf('internal/forms-a/shared.css')
-    expect(css).toMatch(/\.fk-selected-mark/)
+    expect(css).toMatch(/\.ty-selected-mark/)
   })
 
   it('has no axe violations, light and dark', async () => {

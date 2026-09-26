@@ -49,18 +49,18 @@ export interface PreferenceGroupProps {
 export function PreferenceGroup(props: PreferenceGroupProps) {
   const headId = useId()
   return (
-    <div role="group" aria-labelledby={props.title ? headId : undefined} className={cx('fk-preference-group', props.className)}>
+    <div role="group" aria-labelledby={props.title ? headId : undefined} className={cx('ty-preference-group', props.className)}>
       {props.title ? (
-        <h3 id={headId} className="fk-preference-group__title">
+        <h3 id={headId} className="ty-preference-group__title">
           {props.icon ? (
-            <span aria-hidden="true" className="fk-preference-group__icon">
+            <span aria-hidden="true" className="ty-preference-group__icon">
               {props.icon}
             </span>
           ) : null}
           {props.title}
         </h3>
       ) : null}
-      <div className="fk-preference-group__body">{props.children}</div>
+      <div className="ty-preference-group__body">{props.children}</div>
     </div>
   )
 }
@@ -68,7 +68,7 @@ export function PreferenceGroup(props: PreferenceGroupProps) {
 function PageBody({ page }: { page: SettingsPage }) {
   return (
     <PreferenceGroup title={page.heading}>
-      {page.lead ? <p className="fk-settings-dialog__description">{page.lead}</p> : null}
+      {page.lead ? <p className="ty-settings-dialog__description">{page.lead}</p> : null}
       {page.items.map((item) => (
         <ItemControl key={item.id} item={item} />
       ))}
@@ -78,12 +78,12 @@ function PageBody({ page }: { page: SettingsPage }) {
 
 function Locked({ notice }: { notice: LockedNotice }) {
   return (
-    <div className="fk-settings-dialog__denied">
-      <span aria-hidden="true" className="fk-settings-dialog__denied-icon">
+    <div className="ty-settings-dialog__denied">
+      <span aria-hidden="true" className="ty-settings-dialog__denied-icon">
         {notice.glyph ?? <LockKeyhole />}
       </span>
-      <h3 className="fk-settings-dialog__denied-title">{notice.heading}</h3>
-      <p className="fk-settings-dialog__description">{notice.reason}</p>
+      <h3 className="ty-settings-dialog__denied-title">{notice.heading}</h3>
+      <p className="ty-settings-dialog__description">{notice.reason}</p>
     </div>
   )
 }
@@ -105,7 +105,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
   const drawPage = (id: string): ReactNode => {
     const page = props.content?.[id]
     if (page) return <PageBody page={page} />
-    return props.renderPage?.(id) ?? <p className="fk-settings-dialog__placeholder">{props.emptyText ?? words.placeholder}</p>
+    return props.renderPage?.(id) ?? <p className="ty-settings-dialog__placeholder">{props.emptyText ?? words.placeholder}</p>
   }
   const foot = props.exit ? (
     <Button fullWidth variant="danger" leadingIcon={props.exit.icon} onPress={props.exit.onPress}>
@@ -116,7 +116,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
     <SectionedModal
       {...shell}
       size="xl"
-      className="fk-settings-dialog"
+      className="ty-settings-dialog"
       sections={props.outline.map((entry) => ({ ...entry, content: drawPage(entry.id) }))}
       defaultSection={target}
       identity={props.whoCard}

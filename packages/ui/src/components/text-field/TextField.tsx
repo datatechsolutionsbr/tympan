@@ -130,7 +130,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
     'aria-label': label ? undefined : accessibleLabel,
     'aria-labelledby': !label && !accessibleLabel ? wiring.labelledBy : undefined,
     'aria-describedby': wiring.describedBy,
-    className: cx('fk-text-field', className),
+    className: cx('ty-text-field', className),
     'data-appearance': appearance,
     'data-mode': mode,
     onFocus,
@@ -139,55 +139,55 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
 
   const inner_ = (
     <>
-      {label ? <Label className="fk-text-field__label">{label}</Label> : null}
+      {label ? <Label className="ty-text-field__label">{label}</Label> : null}
       {hint != null ? (
-        <p id={hintId} className="fk-text-field__hint">
+        <p id={hintId} className="ty-text-field__hint">
           {hint}
         </p>
       ) : null}
-      <div className="fk-text-field__group">
+      <div className="ty-text-field__group">
         {icon ? (
-          <span className="fk-text-field__leading" aria-hidden="true">
+          <span className="ty-text-field__leading" aria-hidden="true">
             {icon}
           </span>
         ) : null}
-        <Input ref={ref} className="fk-text-field__input" type={type} placeholder={placeholder} />
+        <Input ref={ref} className="ty-text-field__input" type={type} placeholder={placeholder} />
         {showClear && mode === 'search' ? (
-          <AriaButton className="fk-text-field__action" aria-label={messages.textField.clear}>
-            <X className="fk-icon" aria-hidden="true" focusable="false" />
+          <AriaButton className="ty-text-field__action" aria-label={messages.textField.clear}>
+            <X className="ty-icon" aria-hidden="true" focusable="false" />
           </AriaButton>
         ) : null}
         {showClear && mode !== 'search' ? (
-          <AriaButton className="fk-text-field__action" aria-label={messages.textField.clear} onPress={clear}>
-            <X className="fk-icon" aria-hidden="true" focusable="false" />
+          <AriaButton className="ty-text-field__action" aria-label={messages.textField.clear} onPress={clear}>
+            <X className="ty-icon" aria-hidden="true" focusable="false" />
           </AriaButton>
         ) : null}
         {mode === 'password' && revealable ? (
           <AriaButton
-            className="fk-text-field__action"
+            className="ty-text-field__action"
             aria-label={revealed ? messages.textField.hidePassword : messages.textField.showPassword}
             aria-pressed={revealed}
             isDisabled={wiring.disabled}
             onPress={() => setRevealed((r) => !r)}
           >
-            {revealed ? <EyeOff className="fk-icon" aria-hidden="true" focusable="false" /> : <Eye className="fk-icon" aria-hidden="true" focusable="false" />}
+            {revealed ? <EyeOff className="ty-icon" aria-hidden="true" focusable="false" /> : <Eye className="ty-icon" aria-hidden="true" focusable="false" />}
           </AriaButton>
         ) : null}
-        {successId ? <CircleCheck className="fk-icon fk-text-field__success-mark" aria-hidden="true" focusable="false" /> : null}
+        {successId ? <CircleCheck className="ty-icon ty-text-field__success-mark" aria-hidden="true" focusable="false" /> : null}
       </div>
       {ownError ? (
-        <p id={errorId} className="fk-text-field__error" aria-live={errorAppeared ? 'polite' : undefined}>
-          <CircleAlert className="fk-icon" aria-hidden="true" focusable="false" />
+        <p id={errorId} className="ty-text-field__error" aria-live={errorAppeared ? 'polite' : undefined}>
+          <CircleAlert className="ty-icon" aria-hidden="true" focusable="false" />
           <span>{errorMessage}</span>
         </p>
       ) : null}
       {successId ? (
-        <p id={successId} className="fk-text-field__success">
+        <p id={successId} className="ty-text-field__success">
           {successMessage}
         </p>
       ) : null}
       {counterId && maxLength != null ? (
-        <p id={counterId} className="fk-text-field__counter" data-over-limit={overLimit || undefined}>
+        <p id={counterId} className="ty-text-field__counter" data-over-limit={overLimit || undefined}>
           {overLimit ? messages.textField.overLimit(current.length, maxLength) : messages.textField.counter(current.length, maxLength)}
         </p>
       ) : null}

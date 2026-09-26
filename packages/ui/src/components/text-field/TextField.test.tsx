@@ -105,8 +105,8 @@ describe('TextField', () => {
 
   it('keeps 44 px hit areas on trailing actions and 16 px text on touch', () => {
     const css = cssOf('components/text-field/TextField.css')
-    expect(css).toMatch(/\.fk-text-field__action::before\s*\{[^}]*inline-size:\s*max\(100%,\s*var\(--fk-control-target\)\)/)
-    expect(mediaBlock(css, /\(pointer:\s*coarse\)/)).toMatch(/font-size:\s*var\(--fk-font-size-body-lg\)/)
+    expect(css).toMatch(/\.ty-text-field__action::before\s*\{[^}]*inline-size:\s*max\(100%,\s*var\(--ty-control-target\)\)/)
+    expect(mediaBlock(css, /\(pointer:\s*coarse\)/)).toMatch(/font-size:\s*var\(--ty-font-size-body-lg\)/)
     expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/transition:\s*none/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/FieldText/)
   })

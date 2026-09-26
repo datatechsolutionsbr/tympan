@@ -36,9 +36,9 @@ describe('GlassCheckToggle', () => {
   })
 
   it('replaces the page background with the reserved test colour while on', () => {
-    // A level-1 surface is translucent over --fk-bg, so its computed backdrop changes with it.
-    expect(css).toMatch(/:root\[data-fk-glass-check\][^{]*\{[^}]*--fk-bg:\s*var\(--fk-debug-glass-check\)/)
-    expect(css).toMatch(/:root\[data-fk-glass-check\] body\s*\{[^}]*background:\s*transparent/)
+    // A level-1 surface is translucent over --ty-bg, so its computed backdrop changes with it.
+    expect(css).toMatch(/:root\[data-ty-glass-check\][^{]*\{[^}]*--ty-bg:\s*var\(--ty-debug-glass-check\)/)
+    expect(css).toMatch(/:root\[data-ty-glass-check\] body\s*\{[^}]*background:\s*transparent/)
   })
 
   it('explains that the check does not apply under reduced transparency', async () => {
@@ -51,7 +51,7 @@ describe('GlassCheckToggle', () => {
   })
 
   it('keeps a 44 px hit area and no switching animation; forced colours use system colours', () => {
-    expect(css).toMatch(/\.fk-glass-check::before\s*\{[^}]*max\(100%,\s*var\(--fk-control-target\)\)/)
+    expect(css).toMatch(/\.ty-glass-check::before\s*\{[^}]*max\(100%,\s*var\(--ty-control-target\)\)/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/Highlight/)
   })
 

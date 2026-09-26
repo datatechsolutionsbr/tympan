@@ -69,31 +69,31 @@ export function CanvasNodeSearch({ isOpen, onOpenChange, triggerRef, nodes, onPi
   // Filtered here (not by Autocomplete) so the announced count is exact.
   const items = useMemo(() => (query ? all.filter((n) => contains(n.text, query)) : all), [all, query, contains])
   return (
-    <Popover isOpen={isOpen} onOpenChange={onOpenChange} triggerRef={triggerRef} placement="top" className="fk-node-search" offset={8}>
-      <Dialog aria-label={l.title} className="fk-node-search__dialog">
+    <Popover isOpen={isOpen} onOpenChange={onOpenChange} triggerRef={triggerRef} placement="top" className="ty-node-search" offset={8}>
+      <Dialog aria-label={l.title} className="ty-node-search__dialog">
         <Autocomplete inputValue={query} onInputChange={setQuery}>
-          <SearchField className="fk-node-search__field" aria-label={l.field} autoFocus>
-            <Label className="fk-node-search__label">{l.field}</Label>
-            <Input className="fk-node-search__input" placeholder={l.placeholder} />
+          <SearchField className="ty-node-search__field" aria-label={l.field} autoFocus>
+            <Label className="ty-node-search__label">{l.field}</Label>
+            <Input className="ty-node-search__input" placeholder={l.placeholder} />
           </SearchField>
           <ListBox
-            className="fk-node-search__list"
+            className="ty-node-search__list"
             aria-label={l.title}
             items={items}
             selectionMode="single"
-            renderEmptyState={() => <p className="fk-node-search__empty">{l.empty}</p>}
+            renderEmptyState={() => <p className="ty-node-search__empty">{l.empty}</p>}
             onAction={(key) => {
               onPick(String(key))
               onOpenChange(false)
             }}
           >
             {(item) => (
-              <ListBoxItem id={item.id} textValue={item.text} className="fk-node-search__option">
-                <Text slot="label" className="fk-node-search__option-label">
+              <ListBoxItem id={item.id} textValue={item.text} className="ty-node-search__option">
+                <Text slot="label" className="ty-node-search__option-label">
                   {item.label}
                 </Text>
                 {item.kindLabel ? (
-                  <Text slot="description" className="fk-node-search__option-kind">
+                  <Text slot="description" className="ty-node-search__option-kind">
                     {item.kindLabel}
                   </Text>
                 ) : null}
@@ -101,7 +101,7 @@ export function CanvasNodeSearch({ isOpen, onOpenChange, triggerRef, nodes, onPi
             )}
           </ListBox>
         </Autocomplete>
-        <p className="fk-visually-hidden" role="status">
+        <p className="ty-visually-hidden" role="status">
           {fill(l.results, { count: items.length }, locale)}
         </p>
       </Dialog>

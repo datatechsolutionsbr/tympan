@@ -75,7 +75,7 @@ describe('ResizableSplit', () => {
 
   it('keeps a 44 px hit area and system colours when forced', () => {
     const css = cssOf('components/resizable-split/ResizableSplit.css')
-    expect(css).toMatch(/\.fk-split__handle::before\s*\{[^}]*inline-size:\s*var\(--fk-control-target\)/)
+    expect(css).toMatch(/\.ty-split__handle::before\s*\{[^}]*inline-size:\s*var\(--ty-control-target\)/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/Highlight/)
   })
 

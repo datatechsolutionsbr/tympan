@@ -90,13 +90,13 @@ export function EdgeSwipeBack({ enabled = true, onBack, edgeZone = EDGE_ZONE, co
       {children}
       {cue ? (
         <div
-          className="fk-edge-back"
+          className="ty-edge-back"
           aria-hidden="true"
           data-side={rtl ? 'right' : 'left'}
           data-ready={cue.progress >= 1 || undefined}
-          style={{ '--fk-edge-progress': String(cue.progress) } as React.CSSProperties}
+          style={{ '--ty-edge-progress': String(cue.progress) } as React.CSSProperties}
         >
-          <Arrow className="fk-edge-back__arrow" focusable="false" />
+          <Arrow className="ty-edge-back__arrow" focusable="false" />
         </div>
       ) : null}
     </>

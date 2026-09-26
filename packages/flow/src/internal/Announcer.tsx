@@ -37,7 +37,7 @@ export function AnnouncerProvider({ children }: { children: ReactNode }) {
     <SpeakerContext.Provider value={useStableSpeaker(speaker)}>
       {children}
       {REGIONS.map((r) => (
-        <div key={r.urgency} className="fk-visually-hidden" role={r.role} aria-live={r.urgency} data-fk-announcer={r.urgency}>
+        <div key={r.urgency} className="ty-visually-hidden" role={r.role} aria-live={r.urgency} data-ty-announcer={r.urgency}>
           {lines[r.urgency]}
         </div>
       ))}

@@ -7,11 +7,11 @@ import type { ReactNode } from 'react'
 export function Section(specimen: { id: string; title: string; children: ReactNode }) {
   const { id: anchor, title: name, children: states } = specimen
   return (
-    <section className="fk-gallery-section" data-component={name} aria-label={name}>
-      <h2 className="fk-gallery-section__title" id={anchor}>
+    <section className="ty-gallery-section" data-component={name} aria-label={name}>
+      <h2 className="ty-gallery-section__title" id={anchor}>
         {name}
       </h2>
-      <div className="fk-gallery-section__body">{states}</div>
+      <div className="ty-gallery-section__body">{states}</div>
     </section>
   )
 }

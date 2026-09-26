@@ -1,7 +1,7 @@
-/* @fakhir/ui stylesheet entry (FSL-1.1-ALv2). Everything lives in @layer fakhir.*. */
-@layer fakhir.tokens, fakhir.base, fakhir.components;
+/* @datatechsolutions/tympan stylesheet entry (FSL-1.1-ALv2). Everything lives in @layer tympan.*. */
+@layer tympan.tokens, tympan.base, tympan.components;
 
-@import '@fakhir/tokens/tokens.css';
+@import '@datatechsolutions/tympan-tokens/tokens.css';
 @import './base.css';
 @import './components/action-menu/ActionMenu.css';
 @import './components/actor-chip/ActorChip.css';

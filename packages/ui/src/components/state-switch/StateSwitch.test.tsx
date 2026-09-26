@@ -74,7 +74,7 @@ describe('StateSwitch', () => {
     const css = cssOf('components/state-switch/StateSwitch.css')
     expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/transition:\s*none/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/ButtonText/)
-    expect(css).toMatch(/max\(100%,\s*var\(--fk-control-target\)\)/)
+    expect(css).toMatch(/max\(100%,\s*var\(--ty-control-target\)\)/)
   })
 
   it('has no axe violations, light and dark', async () => {

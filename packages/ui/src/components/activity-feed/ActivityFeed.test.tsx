@@ -20,7 +20,7 @@ describe('ActivityFeed', () => {
     const list = screen.getByRole('list', { name: 'Recent activity' })
     expect(list.tagName).toBe('OL')
     const items = within(list).getAllByRole('listitem')
-    expect(items.map((i) => i.querySelector('.fk-activity__text')!.textContent)).toEqual([
+    expect(items.map((i) => i.querySelector('.ty-activity__text')!.textContent)).toEqual([
       'verified the launch year of TAMM',
       'ran the stage count',
       'froze edition 2026-09-20',

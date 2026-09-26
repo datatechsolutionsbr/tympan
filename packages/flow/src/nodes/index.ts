@@ -1,4 +1,4 @@
-// @fakhir/flow: nodes group barrel.
+// @datatechsolutions/tympan-flow: nodes group barrel.
 export * from './GraphNodeCard'
 export * from './types'
 export * from './registry'

@@ -2,7 +2,7 @@ import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
 import { describe, expect, it, vi } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import { cssOf, mediaBlock } from '../../test/css'
 import { setViewportWidth } from '../../test/media'
@@ -95,11 +95,11 @@ describe('AssistantConversation', () => {
   it('works right to left: bubbles align by logical side and Enter still sends', async () => {
     const send = vi.fn()
     const { container } = render(
-      <FakhirProvider locale="ar">
+      <TympanProvider locale="ar">
         <div dir="rtl">
           <AssistantConversation session={fakeSession({ ask: send, draft: 'مرحبا', utterances: [{ key: 'u', speaker: 'person', phase: 'settled', blocks: [{ kind: 'prose', body: 'سؤال' }] }] })} />
         </div>
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(container.querySelector('[data-speaker="person"]')).toHaveAttribute('data-align', 'end')
     screen.getByRole('textbox').focus()
@@ -109,9 +109,9 @@ describe('AssistantConversation', () => {
 
   it('uses the built-in Portuguese strings', () => {
     render(
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <AssistantConversation session={fakeSession()} />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(screen.getByRole('textbox', { name: 'Mensagem para o assistente' })).toBeInTheDocument()
   })
@@ -174,26 +174,26 @@ describe('ConversationShell', () => {
   it('marks the active row, keeps row actions visible, wraps long Japanese titles without cutting them, and passes axe', async () => {
     const long = '段階別の件数と凍結版の比較に関する長い会話のタイトルです'
     const { container } = render(
-      <FakhirProvider locale="ja">
+      <TympanProvider locale="ja">
         <ConversationShell session={fakeSession({ threadId: 'j1' })} threads={[{ id: 'j1', title: long, updatedAt: day(0) }]} onOpenThread={vi.fn()} onRemoveThread={vi.fn()} onStartThread={vi.fn()} />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
-    const row = container.querySelector('.fk-convo-row__main')!
+    const row = container.querySelector('.ty-convo-row__main')!
     expect(row).toHaveAttribute('aria-current', 'page')
     expect(row).toHaveAttribute('title', long)
-    expect(row.querySelector('.fk-convo-row__title')).toHaveTextContent(long)
-    expect(cssOf('assistant/assistant.css')).toMatch(/\.fk-convo-row__title\s*\{[^}]*line-clamp/)
+    expect(row.querySelector('.ty-convo-row__title')).toHaveTextContent(long)
+    expect(cssOf('assistant/assistant.css')).toMatch(/\.ty-convo-row__title\s*\{[^}]*line-clamp/)
     await expectNoAxeViolations(container)
   })
 
   it('works right to left with the history as a navigation landmark', async () => {
     const onSelect = vi.fn()
     render(
-      <FakhirProvider locale="ar">
+      <TympanProvider locale="ar">
         <div dir="rtl">
           <ConversationShell session={fakeSession()} threads={[{ id: 'a1', title: 'عدد الحالات', updatedAt: day(0) }]} onOpenThread={onSelect} onRemoveThread={vi.fn()} onStartThread={vi.fn()} />
         </div>
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     const nav = screen.getByRole('navigation')
     await userEvent.click(within(nav).getByText('عدد الحالات'))

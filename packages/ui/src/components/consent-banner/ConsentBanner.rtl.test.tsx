@@ -5,7 +5,7 @@ import { ConsentBanner } from './ConsentBanner'
 
 describe('ConsentBanner in right-to-left locales', () => {
   it('renders inside an Arabic right-to-left subtree and passes axe', async () => {
-    const { container } = inRtl(<ConsentBanner policyHref="#/privacy" storageKey={`fk-rtl-${Date.now()}`} />)
+    const { container } = inRtl(<ConsentBanner policyHref="#/privacy" storageKey={`ty-rtl-${Date.now()}`} />)
     expect(container.querySelector('[dir="rtl"]')).not.toBeNull()
     await expectNoAxeViolations(document.body, ['region'])
   })

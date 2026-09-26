@@ -51,7 +51,7 @@ export function useEditorShortcuts(handlers: ShortcutHandlers, options: Shortcut
       const { handlers: h, options: o } = latest.current
       if (binding.singleKey && o.singleKey === false) return
       // Connector handles and tool bars own Delete for themselves.
-      if (binding.action === 'delete' && e.target instanceof Element && e.target.closest('[data-fk-surface-chrome]')) return
+      if (binding.action === 'delete' && e.target instanceof Element && e.target.closest('[data-ty-surface-chrome]')) return
       const run = h[binding.action]
       if (binding.action === 'escape') {
         const cleared = run ? run() !== false : false

@@ -67,8 +67,8 @@ describe('ThirdPartyMarkSlot and ProviderMark', () => {
 
   it('keeps the mark hidden and the name as accessible text when showName is false', () => {
     const { container } = render(<ThirdPartyMarkSlot markKey="none" name="Service Y" showName={false} />)
-    expect(container.querySelector('.fk-mark__art')).toHaveAttribute('aria-hidden', 'true')
-    expect(screen.getByText('Service Y')).toHaveClass('fk-visually-hidden')
+    expect(container.querySelector('.ty-mark__art')).toHaveAttribute('aria-hidden', 'true')
+    expect(screen.getByText('Service Y')).toHaveClass('ty-visually-hidden')
   })
 
   it('ships no third-party mark data in the library sources', () => {

@@ -4,7 +4,7 @@
 // row ('inline') or in a canvas corner ('panel').
 
 import type { ReactNode } from 'react'
-import { ProofBadge } from '@fakhir/ui'
+import { ProofBadge } from '@datatechsolutions/tympan'
 import type { ProvenanceLabels } from './labels'
 import { PROOF_KEYS, PROV_RELATIONS, type ProofKey, type ProvRelation } from './model'
 
@@ -24,21 +24,21 @@ interface KeyGroup {
 
 function relationSample(r: ProvRelation) {
   return (
-    <svg className="fk-prov-legend__line" data-relation={r} viewBox="0 0 32 8" aria-hidden="true" focusable="false">
+    <svg className="ty-prov-legend__line" data-relation={r} viewBox="0 0 32 8" aria-hidden="true" focusable="false">
       <line x1="1" y1="4" x2="31" y2="4" />
     </svg>
   )
 }
 
 function proofSample(k: ProofKey) {
-  return <span className="fk-prov-legend__swatch" data-proof-state={k.replace('_', '-')} aria-hidden="true" />
+  return <span className="ty-prov-legend__swatch" data-proof-state={k.replace('_', '-')} aria-hidden="true" />
 }
 
 export function ProvenanceLegend({ labels: l, states = PROOF_KEYS, relations = PROV_RELATIONS, variant = 'panel' }: ProvenanceLegendProps) {
   const groups: KeyGroup[] = [
     {
       heading: l.relationLegend,
-      entries: relations.map((r) => ({ id: r, sample: relationSample(r), word: <span className="fk-prov-legend__word">{l.relations[r]}</span> })),
+      entries: relations.map((r) => ({ id: r, sample: relationSample(r), word: <span className="ty-prov-legend__word">{l.relations[r]}</span> })),
     },
     {
       heading: l.legend,
@@ -47,13 +47,13 @@ export function ProvenanceLegend({ labels: l, states = PROOF_KEYS, relations = P
   ]
   const shown = groups.filter((g) => g.entries.length)
   return (
-    <section className="fk-prov-legend" data-variant={variant} aria-label={states.length ? l.legend : l.relationLegend} data-fk-surface-chrome="">
+    <section className="ty-prov-legend" data-variant={variant} aria-label={states.length ? l.legend : l.relationLegend} data-ty-surface-chrome="">
       {shown.map((g) => (
-        <div key={g.heading} className="fk-prov-legend__group">
-          <h3 className="fk-prov-legend__title">{g.heading}</h3>
-          <ul className="fk-prov-legend__list">
+        <div key={g.heading} className="ty-prov-legend__group">
+          <h3 className="ty-prov-legend__title">{g.heading}</h3>
+          <ul className="ty-prov-legend__list">
             {g.entries.map((e) => (
-              <li key={e.id} className="fk-prov-legend__row">
+              <li key={e.id} className="ty-prov-legend__row">
                 {e.sample}
                 {e.word}
               </li>

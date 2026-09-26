@@ -50,7 +50,7 @@ export function GeneratedAgentMark({ name }: { name: string }) {
   }
   const tone = (h % 8) + 1
   return (
-    <svg className="fk-agent-mark__generated" viewBox="0 0 5 5" data-tone={`categorical-${tone}`} data-hash={h.toString(16)} aria-hidden="true" focusable="false">
+    <svg className="ty-agent-mark__generated" viewBox="0 0 5 5" data-tone={`categorical-${tone}`} data-hash={h.toString(16)} aria-hidden="true" focusable="false">
       {cells.map(([x, y]) => (
         <rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} />
       ))}
@@ -71,15 +71,15 @@ export function AgentMark({ name, image, size = 'md', fallback = 'bot' }: AgentM
   const [failedSrc, setFailedSrc] = useState<string | null>(null)
   const showImage = !!image && failedSrc !== image
   return (
-    <span className="fk-agent-mark" data-size={size} data-content={showImage ? 'image' : fallback} aria-hidden="true">
+    <span className="ty-agent-mark" data-size={size} data-content={showImage ? 'image' : fallback} aria-hidden="true">
       {showImage ? (
-        <img className="fk-agent-mark__image" src={image!} alt="" onError={() => setFailedSrc(image!)} />
+        <img className="ty-agent-mark__image" src={image!} alt="" onError={() => setFailedSrc(image!)} />
       ) : fallback === 'generated' ? (
         <GeneratedAgentMark name={name} />
       ) : (
-        <Bot className="fk-agent-mark__bot" focusable="false" />
+        <Bot className="ty-agent-mark__bot" focusable="false" />
       )}
-      <span className="fk-agent-mark__badge">
+      <span className="ty-agent-mark__badge">
         <Bot focusable="false" />
       </span>
     </span>
@@ -124,21 +124,21 @@ export function AgentIdentity({ agent, size = 'md', fallbackRole, showKindWord =
   const role = agent.role || fallbackRole
   const secondary = role ?? modelLine
   return (
-    <span className={['fk-agent-identity', className].filter(Boolean).join(' ')} data-size={size}>
+    <span className={['ty-agent-identity', className].filter(Boolean).join(' ')} data-size={size}>
       <AgentMark name={agent.name} image={agent.image ?? null} size={size} fallback={markFallback} />
-      <span className="fk-agent-identity__text">
-        <span className="fk-agent-identity__line">
-          <span className="fk-agent-identity__name" title={agent.name}>
+      <span className="ty-agent-identity__text">
+        <span className="ty-agent-identity__line">
+          <span className="ty-agent-identity__name" title={agent.name}>
             {agent.name}
           </span>
-          {showKindWord ? <span className="fk-agent-identity__kind">{l.agent}</span> : null}
+          {showKindWord ? <span className="ty-agent-identity__kind">{l.agent}</span> : null}
         </span>
         {secondary ? (
-          <span className="fk-agent-identity__secondary" title={secondary}>
+          <span className="ty-agent-identity__secondary" title={secondary}>
             {secondary}
           </span>
         ) : null}
-        {role && modelLine ? <span className="fk-agent-identity__model">{modelLine}</span> : null}
+        {role && modelLine ? <span className="ty-agent-identity__model">{modelLine}</span> : null}
       </span>
     </span>
   )

@@ -1,220 +1,220 @@
 /* report group: ReportView (figures, tables, charts, prose, region table). */
-@layer fakhir.components {
-  .fk-flow-report {
+@layer tympan.components {
+  .ty-flow-report {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-4);
+    gap: var(--ty-space-4);
     min-inline-size: 0;
-    color: var(--fk-ink-2);
-    font-family: var(--fk-font-sans);
-    font-size: var(--fk-font-size-body);
-    line-height: var(--fk-font-line-height-body);
+    color: var(--ty-ink-2);
+    font-family: var(--ty-font-sans);
+    font-size: var(--ty-font-size-body);
+    line-height: var(--ty-font-line-height-body);
   }
-  .fk-flow-report__title,
-  .fk-flow-report__section-title {
+  .ty-flow-report__title,
+  .ty-flow-report__section-title {
     margin: 0;
-    color: var(--fk-ink);
-    font-family: var(--fk-font-serif);
-    font-weight: var(--fk-font-weight-semibold);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-serif);
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-flow-report__title {
-    font-size: var(--fk-font-size-h3);
-    line-height: var(--fk-font-line-height-h3);
+  .ty-flow-report__title {
+    font-size: var(--ty-font-size-h3);
+    line-height: var(--ty-font-line-height-h3);
   }
-  .fk-flow-report__section-title {
-    font-size: var(--fk-font-size-body-lg);
-    line-height: var(--fk-font-line-height-body-lg);
+  .ty-flow-report__section-title {
+    font-size: var(--ty-font-size-body-lg);
+    line-height: var(--ty-font-line-height-body-lg);
   }
-  .fk-flow-report__subtitle,
-  .fk-flow-report__summary,
-  .fk-flow-report__note {
+  .ty-flow-report__subtitle,
+  .ty-flow-report__summary,
+  .ty-flow-report__note {
     margin: 0;
-    max-inline-size: var(--fk-measure-summary, 60ch);
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    max-inline-size: var(--ty-measure-summary, 60ch);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
-  .fk-flow-report__section {
+  .ty-flow-report__section {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
     min-inline-size: 0;
   }
 
-  .fk-flow-report__figures {
+  .ty-flow-report__figures {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
     margin: 0;
   }
-  .fk-flow-report__figure {
-    padding: var(--fk-space-3);
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-control);
+  .ty-flow-report__figure {
+    padding: var(--ty-space-3);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-control);
   }
-  .fk-flow-report__figure-label {
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
+  .ty-flow-report__figure-label {
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
   }
-  .fk-flow-report__figure-value {
+  .ty-flow-report__figure-value {
     margin: 0;
-    color: var(--fk-ink);
-    font-family: var(--fk-font-serif);
-    font-size: var(--fk-font-size-h2);
-    line-height: var(--fk-font-line-height-h2);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-serif);
+    font-size: var(--ty-font-size-h2);
+    line-height: var(--ty-font-line-height-h2);
     font-variant-numeric: tabular-nums;
   }
 
-  .fk-flow-report__table-wrap {
+  .ty-flow-report__table-wrap {
     max-inline-size: 100%;
     overflow-x: auto;
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-control);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-control);
   }
-  .fk-flow-report__table-wrap:focus-visible {
-    outline: 2px solid var(--fk-accent);
+  .ty-flow-report__table-wrap:focus-visible {
+    outline: 2px solid var(--ty-accent);
     outline-offset: 2px;
   }
-  .fk-flow-report__table {
+  .ty-flow-report__table {
     inline-size: 100%;
     border-collapse: collapse;
     font-variant-numeric: tabular-nums;
   }
-  .fk-flow-report__table th,
-  .fk-flow-report__table td {
-    padding: var(--fk-space-2) var(--fk-space-3);
-    border-block-end: 1px solid var(--fk-line);
+  .ty-flow-report__table th,
+  .ty-flow-report__table td {
+    padding: var(--ty-space-2) var(--ty-space-3);
+    border-block-end: 1px solid var(--ty-line);
     text-align: start;
     white-space: nowrap;
   }
-  .fk-flow-report__table thead th {
-    background: var(--fk-surface-sunken);
-    color: var(--fk-ink);
-    font-size: var(--fk-font-size-label);
-    font-weight: var(--fk-font-weight-semibold);
+  .ty-flow-report__table thead th {
+    background: var(--ty-surface-sunken);
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-label);
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-flow-report__table td[data-numeric] {
+  .ty-flow-report__table td[data-numeric] {
     text-align: end;
   }
-  .fk-flow-report__code {
-    color: var(--fk-ink-3);
-    font-family: var(--fk-font-mono);
-    font-size: var(--fk-font-size-meta);
+  .ty-flow-report__code {
+    color: var(--ty-ink-3);
+    font-family: var(--ty-font-mono);
+    font-size: var(--ty-font-size-meta);
   }
 
-  .fk-flow-report__chart {
+  .ty-flow-report__chart {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
     margin: 0;
   }
-  .fk-flow-report__caption {
+  .ty-flow-report__caption {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
   }
-  .fk-flow-report__svg {
+  .ty-flow-report__svg {
     inline-size: 100%;
     block-size: auto;
     aspect-ratio: 12 / 5;
     overflow: visible;
   }
-  .fk-flow-report__axis {
-    stroke: var(--fk-input);
+  .ty-flow-report__axis {
+    stroke: var(--ty-input);
     stroke-width: 1;
   }
-  .fk-flow-report__tick {
-    fill: var(--fk-ink-3);
+  .ty-flow-report__tick {
+    fill: var(--ty-ink-3);
     font-size: 12px;
   }
-  .fk-flow-report [data-series] {
-    --fk-series: var(--fk-chart-1);
+  .ty-flow-report [data-series] {
+    --ty-series: var(--ty-chart-1);
   }
-  .fk-flow-report [data-series='1'] { --fk-series: var(--fk-chart-2); }
-  .fk-flow-report [data-series='2'] { --fk-series: var(--fk-chart-3); }
-  .fk-flow-report [data-series='3'] { --fk-series: var(--fk-chart-4); }
-  .fk-flow-report [data-series='4'] { --fk-series: var(--fk-chart-5); }
-  .fk-flow-report [data-series='5'] { --fk-series: var(--fk-chart-6); }
-  .fk-flow-report [data-series='6'] { --fk-series: var(--fk-chart-7); }
-  .fk-flow-report [data-series='7'] { --fk-series: var(--fk-chart-8); }
-  .fk-flow-report__mark {
-    fill: var(--fk-series);
+  .ty-flow-report [data-series='1'] { --ty-series: var(--ty-chart-2); }
+  .ty-flow-report [data-series='2'] { --ty-series: var(--ty-chart-3); }
+  .ty-flow-report [data-series='3'] { --ty-series: var(--ty-chart-4); }
+  .ty-flow-report [data-series='4'] { --ty-series: var(--ty-chart-5); }
+  .ty-flow-report [data-series='5'] { --ty-series: var(--ty-chart-6); }
+  .ty-flow-report [data-series='6'] { --ty-series: var(--ty-chart-7); }
+  .ty-flow-report [data-series='7'] { --ty-series: var(--ty-chart-8); }
+  .ty-flow-report__mark {
+    fill: var(--ty-series);
   }
-  .fk-flow-report__line {
+  .ty-flow-report__line {
     fill: none;
-    stroke: var(--fk-series);
+    stroke: var(--ty-series);
     stroke-width: 2;
   }
   /* Line style also tells series apart (never colour alone). */
-  .fk-flow-report__line[data-series='1'] {
+  .ty-flow-report__line[data-series='1'] {
     stroke-dasharray: 6 4;
   }
-  .fk-flow-report__line[data-series='2'] {
+  .ty-flow-report__line[data-series='2'] {
     stroke-dasharray: 2 3;
   }
-  .fk-flow-report__area {
-    fill: color-mix(in oklab, var(--fk-series) 18%, transparent);
+  .ty-flow-report__area {
+    fill: color-mix(in oklab, var(--ty-series) 18%, transparent);
   }
-  .fk-flow-report__point {
-    fill: var(--fk-surface-solid);
-    stroke: var(--fk-series);
+  .ty-flow-report__point {
+    fill: var(--ty-surface-solid);
+    stroke: var(--ty-series);
     stroke-width: 2;
   }
-  .fk-flow-report__legend {
+  .ty-flow-report__legend {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
     margin: 0;
     padding: 0;
     list-style: none;
-    font-size: var(--fk-font-size-meta);
+    font-size: var(--ty-font-size-meta);
   }
-  .fk-flow-report__legend-item {
+  .ty-flow-report__legend-item {
     display: inline-flex;
     align-items: center;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
   }
-  .fk-flow-report__swatch {
+  .ty-flow-report__swatch {
     inline-size: 12px;
     block-size: 12px;
     border-radius: 2px;
-    background: var(--fk-series);
+    background: var(--ty-series);
   }
-  .fk-flow-report__toggle {
+  .ty-flow-report__toggle {
     align-self: flex-start;
     min-block-size: 44px;
-    padding-inline: var(--fk-space-2);
+    padding-inline: var(--ty-space-2);
     border: 0;
     background: transparent;
-    color: var(--fk-accent);
+    color: var(--ty-accent);
     font: inherit;
     text-decoration: underline;
     cursor: pointer;
   }
-  .fk-flow-report__toggle:focus-visible {
-    outline: 2px solid var(--fk-accent);
+  .ty-flow-report__toggle:focus-visible {
+    outline: 2px solid var(--ty-accent);
     outline-offset: 2px;
   }
 
   @media (forced-colors: active) {
-    .fk-flow-report__mark,
-    .fk-flow-report__area {
+    .ty-flow-report__mark,
+    .ty-flow-report__area {
       fill: CanvasText;
     }
-    .fk-flow-report__line,
-    .fk-flow-report__point,
-    .fk-flow-report__axis {
+    .ty-flow-report__line,
+    .ty-flow-report__point,
+    .ty-flow-report__axis {
       stroke: CanvasText;
     }
-    .fk-flow-report__tick {
+    .ty-flow-report__tick {
       fill: CanvasText;
     }
-    .fk-flow-report__swatch {
+    .ty-flow-report__swatch {
       border: 1px solid CanvasText;
       background: Canvas;
     }
-    .fk-flow-report__figure,
-    .fk-flow-report__table-wrap {
+    .ty-flow-report__figure,
+    .ty-flow-report__table-wrap {
       border-color: CanvasText;
     }
   }

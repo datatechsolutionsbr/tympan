@@ -5,7 +5,7 @@
 import { enclosingRect, sizeOf } from '../geometry/rect'
 import type { FlowConnector, FlowNode, Rect, Size } from '../model/types'
 
-/** Inner padding around members (§2.1 --fk-space-5). */
+/** Inner padding around members (§2.1 --ty-space-5). */
 export const GROUP_PADDING = 24
 /** Height of the frame's header band. */
 export const GROUP_HEADER = 48

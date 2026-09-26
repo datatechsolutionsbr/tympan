@@ -29,17 +29,17 @@ describe('Chart', () => {
     const figure = screen.getByRole('figure', { name: 'Cases by stage' })
     expect(within(figure).getAllByRole('listitem')).toHaveLength(2)
     for (const name of ['Stage 3', 'Stage 4']) {
-      expect(container.querySelectorAll(`g[data-series="${name}"] .fk-chart__mark`)).toHaveLength(4)
+      expect(container.querySelectorAll(`g[data-series="${name}"] .ty-chart__mark`)).toHaveLength(4)
     }
     expect(screen.getByText(line.reading!)).toBeInTheDocument()
-    expect(container.querySelector('.fk-chart__legend-item[data-dashed]')).not.toBeNull()
+    expect(container.querySelector('.ty-chart__legend-item[data-dashed]')).not.toBeNull()
   })
 
   it('draws histogram bins without gaps', () => {
     const { container } = render(
       <Chart figure={{ ...line, form: 'bins', layers: [{ field: 'Stage 3' }] }} />,
     )
-    const bins = [...container.querySelectorAll('rect.fk-chart__bar')]
+    const bins = [...container.querySelectorAll('rect.ty-chart__bar')]
     expect(bins).toHaveLength(4)
     for (let i = 1; i < bins.length; i++) {
       const prev = bins[i - 1]!
@@ -75,10 +75,10 @@ describe('Chart', () => {
 
   it('shows a readout when a point is tapped', () => {
     const { container } = render(<Chart figure={line} />)
-    const svg = container.querySelector('svg.fk-chart__svg')!
+    const svg = container.querySelector('svg.ty-chart__svg')!
     svg.getBoundingClientRect = () => ({ left: 0, top: 0, width: 640, height: 360, right: 640, bottom: 360, x: 0, y: 0, toJSON() {} })
     fireEvent.pointerDown(svg, { clientX: 60, clientY: 200 })
-    expect(container.querySelector('.fk-chart__readout')).toHaveTextContent('2022')
+    expect(container.querySelector('.ty-chart__readout')).toHaveTextContent('2022')
   })
 
   it('switches to a table with one column per series and one row per datum', async () => {
@@ -92,21 +92,21 @@ describe('Chart', () => {
   it('shows an empty message and no axes without data', () => {
     const { container } = render(<Chart figure={{ ...line, records: [] }} />)
     expect(screen.getByText('No data to plot')).toBeInTheDocument()
-    expect(container.querySelector('svg.fk-chart__svg')).toBeNull()
+    expect(container.querySelector('svg.ty-chart__svg')).toBeNull()
   })
 
   it('treats "n/a" as a missing value: a gap in the line, no mark', () => {
     const figure: ChartFigure = { ...line, layers: [{ field: 'Stage 3' }], records: line.records.map((r, i) => (i === 1 ? { ...r, 'Stage 3': 'n/a' } : r)) }
     const { container } = render(<Chart figure={figure} />)
-    expect(container.querySelectorAll('.fk-chart__mark')).toHaveLength(3)
-    expect(container.querySelectorAll('.fk-chart__line')).toHaveLength(2)
+    expect(container.querySelectorAll('.ty-chart__mark')).toHaveLength(3)
+    expect(container.querySelectorAll('.ty-chart__line')).toHaveLength(2)
   })
 
   it('places an annotation only at an existing category', () => {
     const { container } = render(
       <Chart figure={{ ...line, notes: [{ at: '2024', text: 'Rule v2' }, { at: '1999', text: 'Nowhere' }] }} />,
     )
-    const marks = container.querySelectorAll('.fk-chart__annotation')
+    const marks = container.querySelectorAll('.ty-chart__annotation')
     expect(marks).toHaveLength(1)
     expect(marks[0]).toHaveAttribute('data-category', '2024')
     expect(marks[0]).toHaveTextContent('Rule v2')
@@ -148,8 +148,8 @@ describe('Chart', () => {
 
 describe('Chart value axis with a long unit', () => {
   /** Left edge of the plot, read from the baseline (LTR). */
-  const plotStart = (container: HTMLElement) => Number(container.querySelector('.fk-chart__baseline')!.getAttribute('x1'))
-  const ticks = (container: HTMLElement) => Array.from(container.querySelectorAll('.fk-chart__axes > g > text.fk-chart__tick'), (t) => t.textContent ?? '')
+  const plotStart = (container: HTMLElement) => Number(container.querySelector('.ty-chart__baseline')!.getAttribute('x1'))
+  const ticks = (container: HTMLElement) => Array.from(container.querySelectorAll('.ty-chart__axes > g > text.ty-chart__tick'), (t) => t.textContent ?? '')
 
   it('widens the gutter so every tick label with its unit fits beside the axis', () => {
     const short = render(<Chart figure={line} />)
@@ -168,7 +168,7 @@ describe('Chart value axis with a long unit', () => {
   it('moves a unit too long for the gutter to one caption above the axis, never clipped', () => {
     const unit = 'registered public-service conversations per thousand residents'
     const { container } = render(<Chart figure={{ ...line, up: { caption: 'Cases', unit } }} />)
-    const caption = container.querySelector('.fk-chart__unit')
+    const caption = container.querySelector('.ty-chart__unit')
     expect(caption?.textContent).toBe(unit)
     for (const label of ticks(container)) {
       expect(label).not.toContain(unit)

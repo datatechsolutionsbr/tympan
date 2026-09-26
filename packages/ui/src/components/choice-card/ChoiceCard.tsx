@@ -43,19 +43,19 @@ function Face({ props, checked, labelId, descId }: Parts) {
   return (
     <>
       {props.icon ? (
-        <span className="fk-choice-card__well" aria-hidden="true">
+        <span className="ty-choice-card__well" aria-hidden="true">
           {props.icon}
         </span>
       ) : null}
-      <span className="fk-choice-card__body">
-        <span className="fk-choice-card__title">
-          <span id={labelId} className="fk-choice-card__name">
+      <span className="ty-choice-card__body">
+        <span className="ty-choice-card__title">
+          <span id={labelId} className="ty-choice-card__name">
             {props.label}
           </span>
-          {props.trailing ? <span className="fk-choice-card__trailing">{props.trailing}</span> : null}
+          {props.trailing ? <span className="ty-choice-card__trailing">{props.trailing}</span> : null}
         </span>
         {text ? (
-          <span id={descId} className={arrangement === 'inline' || blocked ? 'fk-choice-card__description' : 'fk-visually-hidden'}>
+          <span id={descId} className={arrangement === 'inline' || blocked ? 'ty-choice-card__description' : 'ty-visually-hidden'}>
             {text}
           </span>
         ) : null}
@@ -75,7 +75,7 @@ export function ChoiceCard(props: ChoiceCardProps) {
   const hasText = Boolean(blocked ? (props.unavailableReason ?? props.description) : props.description)
   const arrangement = props.arrangement ?? group?.arrangement ?? 'stacked'
   const common = {
-    className: cx('fk-choice-card', props.className),
+    className: cx('ty-choice-card', props.className),
     'data-arrangement': arrangement,
     'data-unavailable': blocked || undefined,
     'aria-labelledby': labelId,
@@ -124,14 +124,14 @@ export interface ChoiceCardGroupProps {
 export function ChoiceCardGroup({ label, value, onChange, arrangement = 'stacked', orientation = 'vertical', children, className }: ChoiceCardGroupProps) {
   return (
     <RadioGroup
-      className={cx('fk-choice-card-group', className)}
+      className={cx('ty-choice-card-group', className)}
       value={value}
       onChange={onChange}
       orientation={orientation}
       data-arrangement={arrangement}
     >
-      <Label className="fk-choice-card-group__label">{label}</Label>
-      <div className="fk-choice-card-group__cards">
+      <Label className="ty-choice-card-group__label">{label}</Label>
+      <div className="ty-choice-card-group__cards">
         <InGroup.Provider value={{ arrangement }}>{children}</InGroup.Provider>
       </div>
     </RadioGroup>

@@ -9,7 +9,7 @@ export default defineConfig({
   tsconfig: 'tsconfig.build.json',
   sourcemap: true,
   clean: true,
-  external: [/^react/, /^react-aria/, /^react-aria-components/, /^lucide-react/, /^@fakhir\/tokens/, /^d3-geo/, /^@internationalized\//],
+  external: [/^react/, /^react-aria/, /^react-aria-components/, /^lucide-react/, /^@datatechsolutions\/tympan-tokens/, /^d3-geo/, /^@internationalized\//],
   outExtensions: () => ({ js: '.js', dts: '.d.ts' }),
   // Components use React context and effects: client modules for RSC hosts.
   banner: { js: '"use client";' },

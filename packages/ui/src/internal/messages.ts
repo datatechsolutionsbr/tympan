@@ -1,6 +1,6 @@
 // Default copy of the library. Components never hard-code strings: they read
 // this catalogue through `useMessages()`, and hosts override any entry through
-// `<FakhirProvider messages={…}>` (for example from their own i18n adapter).
+// `<TympanProvider messages={…}>` (for example from their own i18n adapter).
 
 import { formsAEn, formsAEs, formsAPtBR, type FormsAMessages } from './messages/forms-a'
 import { formsBEn, formsBEs, formsBPtBR, type FormsBMessages } from './messages/forms-b'

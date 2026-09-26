@@ -23,9 +23,9 @@ function setup(extra: Partial<SwipeRowProps> = {}) {
       <span>Boti, Argentina</span>
     </SwipeRow>,
   )
-  const surface = utils.container.querySelector<HTMLElement>('.fk-swipe-row__surface')!
+  const surface = utils.container.querySelector<HTMLElement>('.ty-swipe-row__surface')!
   surface.getBoundingClientRect = () => ({ width: 400, height: 56, top: 0, left: 0, right: 400, bottom: 56 }) as DOMRect
-  const row = utils.container.querySelector<HTMLElement>('.fk-swipe-row')!
+  const row = utils.container.querySelector<HTMLElement>('.ty-swipe-row')!
   return { ...utils, surface, row, edit, remove, archive }
 }
 
@@ -77,7 +77,7 @@ describe('SwipeRow', () => {
         x
       </SwipeRow>,
     )
-    const surface = container.querySelector<HTMLElement>('.fk-swipe-row__surface')!
+    const surface = container.querySelector<HTMLElement>('.ty-swipe-row__surface')!
     surface.getBoundingClientRect = () => ({ width: 400 }) as DOMRect
     await act(async () => swipe(surface, -300))
     await waitFor(() => expect(remove).toHaveBeenCalledTimes(1))
@@ -104,7 +104,7 @@ describe('SwipeRow', () => {
   it('snaps without transitions under reduced motion; no pixel-valued props', () => {
     expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/transition:\s*none/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/ButtonText/)
-    expect(css).toMatch(/\.fk-swipe-row__action\s*\{[^}]*min-inline-size:\s*var\(--fk-control-target\)/)
+    expect(css).toMatch(/\.ty-swipe-row__action\s*\{[^}]*min-inline-size:\s*var\(--ty-control-target\)/)
   })
 
   it('has no axe violations, light and dark', async () => {

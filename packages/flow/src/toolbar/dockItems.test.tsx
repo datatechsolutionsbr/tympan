@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import { FloatingActionBar } from '@fakhir/ui'
+import { FloatingActionBar } from '@datatechsolutions/tympan'
 import { canvasToolItems } from './canvasTools'
 import { dockItemsFromCanvasTools } from './dockItems'
 
@@ -42,6 +42,6 @@ describe('dockItemsFromCanvasTools', () => {
     expect(screen.getByRole('button', { name: 'Select' })).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getByRole('button', { name: /100%/ })).toHaveTextContent('100%')
     // mode | view | layout | find
-    expect(container.querySelectorAll('.fk-action-bar__separator')).toHaveLength(3)
+    expect(container.querySelectorAll('.ty-action-bar__separator')).toHaveLength(3)
   })
 })

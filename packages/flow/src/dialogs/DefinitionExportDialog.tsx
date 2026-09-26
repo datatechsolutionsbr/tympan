@@ -2,7 +2,7 @@
 // graph), copies the whole text or downloads it as a file.
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Button, InlineNotice } from '@fakhir/ui'
+import { Button, InlineNotice } from '@datatechsolutions/tympan'
 import { SectionedModal } from '../internal/SectionedModal'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { FlowConnector, FlowNode, Viewport } from '../model/types'
@@ -117,7 +117,7 @@ async function copyText(text: string): Promise<boolean> {
     const area = document.createElement('textarea')
     area.value = text
     area.setAttribute('readonly', '')
-    area.className = 'fk-visually-hidden'
+    area.className = 'ty-visually-hidden'
     document.body.append(area)
     area.select()
     const ok = typeof document.execCommand === 'function' && document.execCommand('copy')
@@ -171,7 +171,7 @@ export function DefinitionExportDialog({ open, onClose, flow, graph, previewLine
     const a = document.createElement('a')
     a.href = url
     a.download = definitionFileName(flow)
-    a.className = 'fk-visually-hidden'
+    a.className = 'ty-visually-hidden'
     document.body.append(a)
     a.click()
     a.remove()
@@ -187,7 +187,7 @@ export function DefinitionExportDialog({ open, onClose, flow, graph, previewLine
       title={l.title}
       subtitle={l.description}
       width="wide"
-      className="fk-definition-export"
+      className="ty-definition-export"
       footer={
         <>
           <Button variant="secondary" onPress={() => void copy()}>
@@ -199,25 +199,25 @@ export function DefinitionExportDialog({ open, onClose, flow, graph, previewLine
         </>
       }
     >
-      <dl className="fk-definition-export__meta" dir={direction}>
+      <dl className="ty-definition-export__meta" dir={direction}>
         <div>
           <dt>{l.name}</dt>
           <dd>{flow.name}</dd>
         </div>
         <div>
           <dt>{l.version}</dt>
-          <dd className="fk-definition-export__mono">{n(flow.version)}</dd>
+          <dd className="ty-definition-export__mono">{n(flow.version)}</dd>
         </div>
         <div>
           <dt>{l.nodes}</dt>
-          <dd className="fk-definition-export__mono">{n(graph.nodes.length)}</dd>
+          <dd className="ty-definition-export__mono">{n(graph.nodes.length)}</dd>
         </div>
         <div>
           <dt>{l.connectors}</dt>
-          <dd className="fk-definition-export__mono">{n(graph.connectors.length)}</dd>
+          <dd className="ty-definition-export__mono">{n(graph.connectors.length)}</dd>
         </div>
       </dl>
-      <pre className="fk-definition-export__preview" dir="ltr" tabIndex={0} role="region" aria-label={l.preview}>
+      <pre className="ty-definition-export__preview" dir="ltr" tabIndex={0} role="region" aria-label={l.preview}>
         {shown.join('\n')}
         {hidden > 0 ? `\n${fill(l.more, { count: hidden }, locale)}` : ''}
       </pre>
@@ -226,7 +226,7 @@ export function DefinitionExportDialog({ open, onClose, flow, graph, previewLine
           {l.copyFailed}
         </InlineNotice>
       ) : null}
-      <p className="fk-visually-hidden" role="status" aria-live="polite">
+      <p className="ty-visually-hidden" role="status" aria-live="polite">
         {copyState === 'copied' ? l.copied : ''}
       </p>
     </SectionedModal>

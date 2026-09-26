@@ -104,7 +104,7 @@ export function GenericNode(props: GenericNodeProps) {
       {...((editable || preview) && onConfigure ? { onActivate: () => onConfigure(id) } : {})}
       {...(editable && (store || props.onRename) ? { onRename: rename } : {})}
       meta={runStatus ? <PreviewStatusMark status={runStatus} /> : undefined}
-      className="fk-flow-node"
+      className="ty-flow-node"
     >
       <NodeTools label={fill(l.tools, { label: k.title })} actions={tools} />
       <ConnectionPorts nodeId={id} nodeLabel={k.title} inputs={k.inputs} outputs={k.outputs} tone={k.tone} preview={preview} />

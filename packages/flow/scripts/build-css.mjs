@@ -1,6 +1,6 @@
 // Bundles src/styles.css into dist/styles.css by inlining its relative
-// @imports. The @fakhir/ui and token stylesheets are not inlined: hosts
-// import '@fakhir/ui/styles.css' once, before this file.
+// @imports. The @datatechsolutions/tympan and token stylesheets are not inlined: hosts
+// import '@datatechsolutions/tympan/styles.css' once, before this file.
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'

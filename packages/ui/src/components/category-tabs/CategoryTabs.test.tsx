@@ -20,13 +20,13 @@ describe('CategoryTabs', () => {
     render(<CategoryTabs label="Country" items={items} selected={null} onSelect={() => {}} />)
     const pt = screen.getByRole('radio', { name: /PT/ })
     expect(pt).toHaveTextContent('PT')
-    expect(pt.querySelector('.fk-category-tabs__name')).toHaveTextContent(/^Portugal$/)
+    expect(pt.querySelector('.ty-category-tabs__name')).toHaveTextContent(/^Portugal$/)
   })
 
   it('keeps the full name when removing the code leaves nothing', () => {
     render(<CategoryTabs label="Country" items={items} selected={null} onSelect={() => {}} />)
     const ee = screen.getAllByRole('radio')[2]!
-    expect(ee.querySelector('.fk-category-tabs__name')).toHaveTextContent(/^EE$/)
+    expect(ee.querySelector('.ty-category-tabs__name')).toHaveTextContent(/^EE$/)
   })
 
   it('reports the value (not the key) and shows it selected', async () => {
@@ -81,7 +81,7 @@ describe('CategoryTabs', () => {
         <CategoryLabel code="PT" name="Portugal" marker={1} />
       </>,
     )
-    const labels = document.querySelectorAll('.fk-category-label')
+    const labels = document.querySelectorAll('.ty-category-label')
     expect(labels[0]!.textContent).toBe(labels[1]!.textContent)
     expect(labels[0]).toHaveAttribute('data-size', 'small')
     expect(screen.getAllByText('Portugal')).toHaveLength(2)

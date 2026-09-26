@@ -6,7 +6,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent as ReactPointerEvent } from 'react'
 import { GripVertical } from 'lucide-react'
 import { Dialog, Heading, Popover } from 'react-aria-components'
-import { ActionMenu, useMediaQuery } from '@fakhir/ui'
+import { ActionMenu, useMediaQuery } from '@datatechsolutions/tympan'
 import { CanvasToolbar } from '../toolbar/CanvasToolbar'
 import type { CanvasToolItem } from '../toolbar/canvasTools'
 import { defineLabels, useFlowLocale, useLabels } from '../internal/labels'
@@ -241,16 +241,16 @@ export function CanvasCommandBar(props: CanvasCommandBarProps) {
   return (
     <div
       ref={barRef}
-      className={['fk-command-bar', props.className].filter(Boolean).join(' ')}
+      className={['ty-command-bar', props.className].filter(Boolean).join(' ')}
       data-docked={narrow ? 'bottom' : 'floating'}
       data-dragging={dragging || undefined}
-      data-fk-surface-chrome=""
+      data-ty-surface-chrome=""
       style={narrow ? undefined : { translate: `${offset.x}px ${offset.y}px` }}
     >
       {narrow ? null : (
         <button
           type="button"
-          className="fk-command-bar__grip"
+          className="ty-command-bar__grip"
           aria-label={l.grip}
           aria-describedby={undefined}
           onPointerDown={onGripDown}
@@ -285,22 +285,22 @@ export function CanvasCommandBar(props: CanvasCommandBarProps) {
         isNonModal
         placement="top"
         offset={8}
-        className="fk-command-bar__shortcuts"
+        className="ty-command-bar__shortcuts"
       >
         <Dialog
           aria-label={l.shortcutsTitle}
-          className="fk-command-bar__shortcuts-dialog"
+          className="ty-command-bar__shortcuts-dialog"
         >
-          <Heading slot="title" className="fk-command-bar__shortcuts-title">
+          <Heading slot="title" className="ty-command-bar__shortcuts-title">
             {l.shortcutsTitle}
           </Heading>
-          <dl className="fk-command-bar__keys">
+          <dl className="ty-command-bar__keys">
             {editorKeyMap.map((b) => (
-              <div key={b.action} className="fk-command-bar__key-row">
+              <div key={b.action} className="ty-command-bar__key-row">
                 <dt>{l.actions[b.action]}</dt>
                 <dd>
                   {b.chords.map((c) => (
-                    <kbd key={c} className="fk-command-bar__kbd">
+                    <kbd key={c} className="ty-command-bar__kbd">
                       {c.replace('Mod', apple ? '⌘' : 'Ctrl')}
                     </kbd>
                   ))}

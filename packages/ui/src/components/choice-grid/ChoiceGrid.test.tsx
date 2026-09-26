@@ -43,11 +43,11 @@ describe('ChoiceGrid', () => {
 
   it('stacked arrangement puts the symbol before (above) the label', () => {
     const { container } = render(<ChoiceGrid title="Currency" options={currencies} value="BRL" onChange={() => {}} arrangement="stacked" />)
-    expect(container.querySelector('.fk-choice-grid')).toHaveAttribute('data-arrangement', 'stacked')
+    expect(container.querySelector('.ty-choice-grid')).toHaveAttribute('data-arrangement', 'stacked')
     const label = screen.getByText('Euro')
-    const symbol = label.parentElement!.querySelector('.fk-choice-grid__symbol')!
+    const symbol = label.parentElement!.querySelector('.ty-choice-grid__symbol')!
     expect(symbol.compareDocumentPosition(label) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-    expect(cssOf('components/choice-grid/ChoiceGrid.css')).toMatch(/\[data-arrangement='stacked'\] \.fk-choice-grid__cell\s*\{[^}]*flex-direction:\s*column/)
+    expect(cssOf('components/choice-grid/ChoiceGrid.css')).toMatch(/\[data-arrangement='stacked'\] \.ty-choice-grid__cell\s*\{[^}]*flex-direction:\s*column/)
   })
 
   it('does not announce emoji flags', () => {

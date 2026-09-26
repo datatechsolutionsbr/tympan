@@ -1,28 +1,28 @@
 /* StartNodeForm: default fields in two columns from the medium breakpoint. */
-@layer fakhir.components {
-  .fk-start-form__defaults {
+@layer tympan.components {
+  .ty-start-form__defaults {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
   }
-  .fk-start-form__defaults-title {
-    color: var(--fk-ink);
-    font-size: var(--fk-font-size-label);
-    font-weight: var(--fk-font-weight-semibold);
+  .ty-start-form__defaults-title {
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-label);
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-start-form__grid {
+  .ty-start-form__grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--fk-space-4);
+    gap: var(--ty-space-4);
   }
   /* Variable names label the fields: identifiers in mono. */
-  .fk-start-form__default label {
-    font-family: var(--fk-font-mono);
+  .ty-start-form__default label {
+    font-family: var(--ty-font-mono);
     direction: ltr;
     unicode-bidi: isolate;
   }
   @media (min-width: 768px) {
-    .fk-start-form__grid {
+    .ty-start-form__grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }

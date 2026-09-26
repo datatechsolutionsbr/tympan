@@ -56,7 +56,7 @@ describe('DetailsPopover', () => {
     render(<DetailsPopover triggerLabel="Details" title="Note added" note={{ label: 'Note', value: 'Checked twice.' }} />)
     await userEvent.click(screen.getByRole('button'))
     const dialog = await screen.findByRole('dialog')
-    expect(dialog.querySelector('.fk-details-popover__row, .fk-details-popover__when, .fk-details-popover__change')).toBeNull()
+    expect(dialog.querySelector('.ty-details-popover__row, .ty-details-popover__when, .ty-details-popover__change')).toBeNull()
     expect(dialog).toHaveTextContent('Checked twice.')
   })
 
@@ -65,11 +65,11 @@ describe('DetailsPopover', () => {
     render(<DetailsPopover {...change} />)
     await userEvent.click(screen.getByRole('button', { name: 'Details of the change' }))
     expect(await screen.findByRole('dialog', { name: 'Status changed' })).toBeInTheDocument()
-    expect(document.querySelector('.fk-details-popover')).toBeNull()
+    expect(document.querySelector('.ty-details-popover')).toBeNull()
   })
 
   it('keeps a 44 px target', () => {
-    expect(cssOf('components/details-popover/DetailsPopover.css')).toMatch(/max\(100%,\s*var\(--fk-control-target\)\)/)
+    expect(cssOf('components/details-popover/DetailsPopover.css')).toMatch(/max\(100%,\s*var\(--ty-control-target\)\)/)
   })
 
   it('has no axe violations when open', async () => {
@@ -86,7 +86,7 @@ describe('DetailsPopover in right-to-left (ar)', () => {
     await rtlUser.click(rtlDom.screen.getByRole('button', { name: 'تفاصيل التغيير' }))
     const dialog = await rtlDom.screen.findByRole('dialog')
     // The from → to arrow points along the reading direction.
-    expect(dialog.querySelector('.fk-details-popover__arrow')).toHaveClass('fk-mirror-rtl')
+    expect(dialog.querySelector('.ty-details-popover__arrow')).toHaveClass('ty-mirror-rtl')
     await axeRtl(document.body)
   })
 })

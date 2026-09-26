@@ -74,13 +74,13 @@ describe('LegalDocumentFrame', () => {
   it('following a link focuses the heading, which clears the sticky bar', async () => {
     setViewportWidth(1440)
     render(
-      <LegalDocumentFrame title="Privacy" updatedAt="u" topBar={<a href="/">Fakhir</a>}>
+      <LegalDocumentFrame title="Privacy" updatedAt="u" topBar={<a href="/">Tympan</a>}>
         {body}
       </LegalDocumentFrame>,
     )
     await userEvent.click(screen.getByRole('link', { name: 'Retention' }))
     expect(screen.getByRole('heading', { name: 'Retention' })).toHaveFocus()
-    expect(cssOf('components/legal-document-frame/LegalDocumentFrame.css')).toMatch(/scroll-margin-block-start:\s*var\(--fk-layout-scroll-padding\)/)
+    expect(cssOf('components/legal-document-frame/LegalDocumentFrame.css')).toMatch(/scroll-margin-block-start:\s*var\(--ty-layout-scroll-padding\)/)
   })
 
   it('renders no empty banner landmark without a top bar', () => {

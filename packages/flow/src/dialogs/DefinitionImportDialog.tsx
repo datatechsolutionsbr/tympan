@@ -6,7 +6,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { DropZone, FileTrigger, type DropZoneProps } from 'react-aria-components'
 import { FileUp } from 'lucide-react'
-import { Button, InlineNotice, useMediaQuery } from '@fakhir/ui'
+import { Button, InlineNotice, useMediaQuery } from '@datatechsolutions/tympan'
 import { SectionedModal } from '../internal/SectionedModal'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { FlowConnector, FlowGraph, FlowNode } from '../model/types'
@@ -36,7 +36,7 @@ export interface DefinitionImportDialogLabels {
 export const definitionImportDialogLabels = defineLabels<DefinitionImportDialogLabels>('DefinitionImportDialog', {
   en: {
     title: 'Import definition',
-    description: 'Replace this flow with a definition exported from Fakhir.',
+    description: 'Replace this flow with an exported flow definition.',
     dropHere: 'Drop a definition file here',
     dropActive: 'Release to read the file',
     chooseFile: 'Choose file',
@@ -57,7 +57,7 @@ export const definitionImportDialogLabels = defineLabels<DefinitionImportDialogL
   },
   'pt-BR': {
     title: 'Importar definição',
-    description: 'Substitui este fluxo por uma definição exportada do Fakhir.',
+    description: 'Substitui este fluxo por uma definição de fluxo exportada.',
     dropHere: 'Solte aqui um arquivo de definição',
     dropActive: 'Solte para ler o arquivo',
     chooseFile: 'Escolher arquivo',
@@ -78,7 +78,7 @@ export const definitionImportDialogLabels = defineLabels<DefinitionImportDialogL
   },
   es: {
     title: 'Importar definición',
-    description: 'Reemplaza este flujo por una definición exportada de Fakhir.',
+    description: 'Reemplaza este flujo por una definición de flujo exportada.',
     dropHere: 'Suelta aquí un archivo de definición',
     dropActive: 'Suelta para leer el archivo',
     chooseFile: 'Elegir archivo',
@@ -226,7 +226,7 @@ export function DefinitionImportDialog({ open, onClose, onImport, labels }: Defi
       title={l.title}
       subtitle={l.description}
       width="regular"
-      className="fk-definition-import"
+      className="ty-definition-import"
       footer={
         <>
           <Button variant="secondary" onPress={onClose}>
@@ -248,9 +248,9 @@ export function DefinitionImportDialog({ open, onClose, onImport, labels }: Defi
       }
     >
       {picked ? (
-        <div className="fk-definition-import__result" dir={direction}>
-          <div className="fk-definition-import__file">
-            <span className="fk-definition-import__file-name">{picked.name}</span>
+        <div className="ty-definition-import__result" dir={direction}>
+          <div className="ty-definition-import__file">
+            <span className="ty-definition-import__file-name">{picked.name}</span>
             <Button
               variant="quiet"
               size="compact"
@@ -262,8 +262,8 @@ export function DefinitionImportDialog({ open, onClose, onImport, labels }: Defi
               {l.chooseAnother}
             </Button>
           </div>
-          <div role="status" aria-live="polite" className="fk-definition-import__status">
-            {picked.status === 'reading' ? <p className="fk-definition-import__reading">{l.reading}</p> : null}
+          <div role="status" aria-live="polite" className="ty-definition-import__status">
+            {picked.status === 'reading' ? <p className="ty-definition-import__reading">{l.reading}</p> : null}
             {check?.ok ? (
               <InlineNotice tone="success" urgency="none">
                 {fill(l.valid, { nodes: check.graph.nodes.length, connectors: check.graph.connectors.length }, locale)}
@@ -271,7 +271,7 @@ export function DefinitionImportDialog({ open, onClose, onImport, labels }: Defi
             ) : null}
             {check && !check.ok ? (
               <InlineNotice tone="danger" urgency="none" title={l.invalidTitle}>
-                <ul className="fk-definition-import__errors">
+                <ul className="ty-definition-import__errors">
                   {check.errors.map((e, i) => (
                     <li key={i}>{e}</li>
                   ))}
@@ -281,14 +281,14 @@ export function DefinitionImportDialog({ open, onClose, onImport, labels }: Defi
           </div>
         </div>
       ) : (
-        <DropZone className="fk-definition-import__zone" dir={direction} aria-label={l.dropHere} onDrop={(e) => void onDrop(e)}>
+        <DropZone className="ty-definition-import__zone" dir={direction} aria-label={l.dropHere} onDrop={(e) => void onDrop(e)}>
           {({ isDropTarget }) => (
             <>
-              <FileUp className="fk-definition-import__icon" aria-hidden="true" focusable="false" />
-              <p className="fk-definition-import__instruction" data-drop-target={isDropTarget || undefined}>
+              <FileUp className="ty-definition-import__icon" aria-hidden="true" focusable="false" />
+              <p className="ty-definition-import__instruction" data-drop-target={isDropTarget || undefined}>
                 {coarse ? l.chooseFile : isDropTarget ? l.dropActive : l.dropHere}
               </p>
-              <p className="fk-definition-import__hint">{l.fileHint}</p>
+              <p className="ty-definition-import__hint">{l.fileHint}</p>
               <FileTrigger acceptedFileTypes={['application/json', '.json']} onSelect={(files) => void accept(files?.[0])}>
                 <Button ref={pickerRef} variant="secondary">
                   {l.chooseFile}

@@ -69,7 +69,7 @@ describe('Drawer', () => {
     render(<Harness onChange={onChange} />)
     await userEvent.click(screen.getByRole('button', { name: 'Filters' }))
     const dialog = await screen.findByRole('dialog')
-    await userEvent.click(dialog.closest('.fk-drawer__backdrop') as HTMLElement)
+    await userEvent.click(dialog.closest('.ty-drawer__backdrop') as HTMLElement)
     expect(onChange).toHaveBeenCalledWith(false)
   })
 
@@ -78,7 +78,7 @@ describe('Drawer', () => {
     render(<Harness dismissible={false} onChange={onChange} />)
     await userEvent.click(screen.getByRole('button', { name: 'Filters' }))
     const dialog = await screen.findByRole('dialog')
-    await userEvent.click(dialog.closest('.fk-drawer__backdrop') as HTMLElement)
+    await userEvent.click(dialog.closest('.ty-drawer__backdrop') as HTMLElement)
     expect(onChange).not.toHaveBeenCalled()
     expect(screen.getByRole('dialog')).toBeInTheDocument()
   })
@@ -99,10 +99,10 @@ describe('Drawer', () => {
       </Drawer>,
     )
     const dialog = await screen.findByRole('dialog')
-    const header = dialog.querySelector('.fk-drawer__header') as HTMLElement
+    const header = dialog.querySelector('.ty-drawer__header') as HTMLElement
     drag(header, 40, 1000)
     expect(onOpenChange).not.toHaveBeenCalled()
-    expect((dialog.closest('.fk-drawer') as HTMLElement).style.transform).toBe('')
+    expect((dialog.closest('.ty-drawer') as HTMLElement).style.transform).toBe('')
     drag(header, 200, 1000)
     expect(onOpenChange).toHaveBeenCalledWith(false)
   })
@@ -115,13 +115,13 @@ describe('Drawer', () => {
       </Drawer>,
     )
     const dialog = await screen.findByRole('dialog')
-    drag(dialog.querySelector('.fk-drawer__header') as HTMLElement, 60, 50)
+    drag(dialog.querySelector('.ty-drawer__header') as HTMLElement, 60, 50)
     expect(onOpenChange).toHaveBeenCalledWith(false)
   })
 
   it('applies no translation under reduced motion', () => {
     const reduced = mediaBlock(cssOf('components/drawer/Drawer.css'), /\(prefers-reduced-motion:\s*reduce\)/)
-    expect(reduced).toMatch(/animation:\s*fk-drawer-fade/)
+    expect(reduced).toMatch(/animation:\s*ty-drawer-fade/)
     expect(reduced).not.toMatch(/translate/)
   })
 
@@ -146,7 +146,7 @@ describe('Drawer in right-to-left (ar)', () => {
     renderRtl(<Drawer open onOpenChange={() => {}} title="الدليل" placement="end"><p>نص</p></Drawer>)
     expect(await rtlDom.screen.findByRole('dialog', { name: 'الدليل' })).toBeInTheDocument()
     // The end drawer enters from the inline end, which is the left in right-to-left.
-    expect(cssOf('components/drawer/Drawer.css')).toMatch(/\[dir='rtl'\] \.fk-drawer\[data-placement='end'\]\[data-entering\]/)
+    expect(cssOf('components/drawer/Drawer.css')).toMatch(/\[dir='rtl'\] \.ty-drawer\[data-placement='end'\]\[data-entering\]/)
     await axeRtl(document.body)
   })
 })

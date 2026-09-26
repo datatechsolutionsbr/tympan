@@ -134,7 +134,7 @@ export function Field({ label, hint, errorMessage, required = false, controlId, 
   )
   return (
     <FieldContext.Provider value={value}>
-      <div {...rest} className={cx('fk-field', className)} data-invalid={hasError || undefined} data-disabled={value.disabled || undefined}>
+      <div {...rest} className={cx('ty-field', className)} data-invalid={hasError || undefined} data-disabled={value.disabled || undefined}>
         {label != null ? <FieldLabel>{label}</FieldLabel> : null}
         {hasHint ? <FieldHint>{hint}</FieldHint> : null}
         {children}
@@ -153,10 +153,10 @@ export function FieldLabel({ htmlFor, className, children, ...rest }: FieldLabel
   const field = useContext(FieldContext)
   const messages = useMessages()
   return (
-    <label {...rest} id={rest.id ?? field?.labelId} htmlFor={htmlFor ?? field?.controlId} className={cx('fk-field__label', className)}>
+    <label {...rest} id={rest.id ?? field?.labelId} htmlFor={htmlFor ?? field?.controlId} className={cx('ty-field__label', className)}>
       {children}
       {field?.required ? (
-        <span className="fk-field__required">
+        <span className="ty-field__required">
           {' '}
           ({messages.required})
         </span>
@@ -169,7 +169,7 @@ export function FieldLabel({ htmlFor, className, children, ...rest }: FieldLabel
 export function FieldHint({ className, children, ...rest }: HTMLAttributes<HTMLParagraphElement>) {
   const field = useContext(FieldContext)
   return (
-    <p {...rest} id={rest.id ?? field?.hintId} className={cx('fk-field__hint', className)}>
+    <p {...rest} id={rest.id ?? field?.hintId} className={cx('ty-field__hint', className)}>
       {children}
     </p>
   )
@@ -180,8 +180,8 @@ export function FieldError({ className, children, ...rest }: HTMLAttributes<HTML
   const field = useContext(FieldContext)
   const appeared = useAppearedAfterMount(true)
   return (
-    <p {...rest} id={rest.id ?? field?.errorId} className={cx('fk-field__error', className)} aria-live={appeared ? 'polite' : undefined}>
-      <CircleAlert className="fk-icon fk-field__error-icon" aria-hidden="true" focusable="false" />
+    <p {...rest} id={rest.id ?? field?.errorId} className={cx('ty-field__error', className)} aria-live={appeared ? 'polite' : undefined}>
+      <CircleAlert className="ty-icon ty-field__error-icon" aria-hidden="true" focusable="false" />
       <span>{children}</span>
     </p>
   )
@@ -204,15 +204,15 @@ export function Fieldset({ legend, description, disabled = false, className, chi
         {...rest}
         disabled={disabled || undefined}
         aria-describedby={description != null ? descId : rest['aria-describedby']}
-        className={cx('fk-fieldset', className)}
+        className={cx('ty-fieldset', className)}
       >
-        <legend className="fk-fieldset__legend">{legend}</legend>
+        <legend className="ty-fieldset__legend">{legend}</legend>
         {description != null ? (
-          <p id={descId} className="fk-fieldset__description">
+          <p id={descId} className="ty-fieldset__description">
             {description}
           </p>
         ) : null}
-        <div className="fk-fieldset__body">{children}</div>
+        <div className="ty-fieldset__body">{children}</div>
       </fieldset>
     </FieldsetDisabledContext.Provider>
   )
@@ -221,7 +221,7 @@ export function Fieldset({ legend, description, disabled = false, className, chi
 /** Vertical rhythm container for several Fields (§2.1 "between form fields"). */
 export function FieldStack({ className, children, ...rest }: HTMLAttributes<HTMLDivElement>) {
   return (
-    <div {...rest} className={cx('fk-field-stack', className)}>
+    <div {...rest} className={cx('ty-field-stack', className)}>
       {children}
     </div>
   )

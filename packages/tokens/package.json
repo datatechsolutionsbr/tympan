@@ -1,8 +1,22 @@
 {
-  "name": "@fakhir/tokens",
+  "name": "@datatechsolutions/tympan-tokens",
   "version": "0.1.0",
-  "description": "Fakhir design tokens: W3C DTCG source (colour, space, radius, type, elevation and glass, motion, z) with neutral and fakhir themes in light and dark, built to --fk-* CSS custom properties and a TypeScript export.",
+  "description": "Tympan design tokens: W3C DTCG source (colour, space, radius, type, elevation and glass, motion, z) and an OKLCH theme generator, with the tympan, fakhir, neutral and high-contrast presets in light and dark, built to --ty-* CSS custom properties, JSON and a TypeScript export.",
   "license": "FSL-1.1-ALv2",
+  "author": "Natalia Mesquita",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/datatechsolutionsbr/tympan.git",
+    "directory": "packages/tokens"
+  },
+  "keywords": [
+    "design-tokens",
+    "dtcg",
+    "oklch",
+    "theme",
+    "css-custom-properties",
+    "wcag"
+  ],
   "private": true,
   "type": "module",
   "sideEffects": [
@@ -13,7 +27,7 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "fakhir-source": "./src/index.ts",
+      "tympan-source": "./src/index.ts",
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },

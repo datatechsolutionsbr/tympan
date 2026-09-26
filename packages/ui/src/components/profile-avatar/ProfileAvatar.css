@@ -1,50 +1,50 @@
 /* ProfileAvatar (spec: wave-2/profile-avatar.md; design direction §2.11). */
-@layer fakhir.components {
-  .fk-profile-avatar {
-    --fk-profile-avatar-size: 100%;
+@layer tympan.components {
+  .ty-profile-avatar {
+    --ty-profile-avatar-size: 100%;
     container-type: inline-size;
     position: relative;
     display: inline-grid;
     flex: none;
     place-items: center;
     box-sizing: border-box;
-    inline-size: var(--fk-profile-avatar-size);
+    inline-size: var(--ty-profile-avatar-size);
     aspect-ratio: 1;
     overflow: hidden;
     border-radius: 50%;
-    background: var(--fk-accent-soft);
-    color: var(--fk-ink);
-    font-family: var(--fk-font-sans);
-    font-weight: var(--fk-font-weight-semibold);
+    background: var(--ty-accent-soft);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-sans);
+    font-weight: var(--ty-font-weight-semibold);
     line-height: 1;
   }
-  .fk-profile-avatar[data-size='sm'] {
-    --fk-profile-avatar-size: calc(var(--fk-space-6) - var(--fk-space-1));
+  .ty-profile-avatar[data-size='sm'] {
+    --ty-profile-avatar-size: calc(var(--ty-space-6) - var(--ty-space-1));
   }
-  .fk-profile-avatar[data-size='md'] {
-    --fk-profile-avatar-size: var(--fk-control-height);
+  .ty-profile-avatar[data-size='md'] {
+    --ty-profile-avatar-size: var(--ty-control-height);
   }
-  .fk-profile-avatar[data-size='lg'] {
-    --fk-profile-avatar-size: var(--fk-space-8);
+  .ty-profile-avatar[data-size='lg'] {
+    --ty-profile-avatar-size: var(--ty-space-8);
   }
-  .fk-profile-avatar__picture {
+  .ty-profile-avatar__picture {
     inline-size: 100%;
     block-size: 100%;
     object-fit: cover;
   }
   /* The initial scales with the disc at any size. */
-  .fk-profile-avatar__letter {
+  .ty-profile-avatar__letter {
     font-size: 45cqi;
     user-select: none;
   }
-  .fk-profile-avatar__glyph {
+  .ty-profile-avatar__glyph {
     inline-size: 55%;
     block-size: 55%;
-    color: var(--fk-ink-2);
+    color: var(--ty-ink-2);
   }
 
   @media (forced-colors: active) {
-    .fk-profile-avatar {
+    .ty-profile-avatar {
       border: 1px solid CanvasText;
     }
   }

@@ -5,7 +5,7 @@
 import { useId, useState, type KeyboardEvent } from 'react'
 import { Label, Radio, RadioGroup } from 'react-aria-components'
 import { Check } from 'lucide-react'
-import { TextArea, TextField } from '@fakhir/ui'
+import { TextArea, TextField } from '@datatechsolutions/tympan'
 import { defineLabels, useLabels } from '../internal/labels'
 import { NodeFormFooter } from './NodeFormFooter'
 
@@ -107,7 +107,7 @@ export function GroupNodeForm({ value, tones = DEFAULT_GROUP_TONES, onSave, onCa
   }
 
   return (
-    <div className="fk-node-form fk-group-form">
+    <div className="ty-node-form ty-group-form">
       <div onKeyDown={onNameKey}>
         <TextField
           label={l.name}
@@ -120,21 +120,21 @@ export function GroupNodeForm({ value, tones = DEFAULT_GROUP_TONES, onSave, onCa
         />
       </div>
       <TextArea label={l.description} placeholder={l.descriptionPlaceholder} rows={3} value={description} onChange={setDescription} />
-      <RadioGroup className="fk-group-form__tones" value={tone} onChange={setTone} orientation="horizontal" aria-labelledby={toneLabelId}>
-        <Label id={toneLabelId} className="fk-group-form__tones-label">
+      <RadioGroup className="ty-group-form__tones" value={tone} onChange={setTone} orientation="horizontal" aria-labelledby={toneLabelId}>
+        <Label id={toneLabelId} className="ty-group-form__tones-label">
           {l.tone}
         </Label>
-        <div className="fk-group-form__swatches">
+        <div className="ty-group-form__swatches">
           {tones.map((t) => {
             const word = l.toneNames[t] ?? t
             return (
-              <Radio key={t} value={t} className="fk-group-form__swatch" aria-label={word}>
+              <Radio key={t} value={t} className="ty-group-form__swatch" aria-label={word}>
                 {({ isSelected }) => (
                   <>
-                    <span className="fk-group-form__chip" data-tone={t} aria-hidden="true">
-                      {isSelected ? <Check className="fk-group-form__check" /> : null}
+                    <span className="ty-group-form__chip" data-tone={t} aria-hidden="true">
+                      {isSelected ? <Check className="ty-group-form__check" /> : null}
                     </span>
-                    <span className="fk-group-form__word">{word}</span>
+                    <span className="ty-group-form__word">{word}</span>
                   </>
                 )}
               </Radio>

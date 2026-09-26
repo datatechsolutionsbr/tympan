@@ -82,7 +82,7 @@ describe('SegmentedControl', () => {
 
   it('keeps 44 px hit areas and declares motion and forced-colours rules', () => {
     const css = cssOf('components/segmented-control/SegmentedControl.css')
-    expect(css).toMatch(/\.fk-segmented-control__segment::before\s*\{[^}]*block-size:\s*max\(100%,\s*var\(--fk-control-target\)\)/)
+    expect(css).toMatch(/\.ty-segmented-control__segment::before\s*\{[^}]*block-size:\s*max\(100%,\s*var\(--ty-control-target\)\)/)
     expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/transition:\s*none/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/Highlight/)
   })

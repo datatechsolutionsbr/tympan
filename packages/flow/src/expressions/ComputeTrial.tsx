@@ -3,7 +3,7 @@
 
 import { useReducer } from 'react'
 import { FlaskConical } from 'lucide-react'
-import { Button, InlineNotice, TextArea } from '@fakhir/ui'
+import { Button, InlineNotice, TextArea } from '@datatechsolutions/tympan'
 import { fill } from '../internal/labels'
 import { sampleFromText } from './computeDraft'
 import type { TraceReport } from './trace'
@@ -70,14 +70,14 @@ export function ComputeTrial({ words, locale, blocked, launch }: { words: TrialW
   ]
 
   return (
-    <div className="fk-expr-form__section">
+    <div className="ty-expr-form__section">
       <Button variant="secondary" leadingIcon={<FlaskConical />} aria-expanded={s.expanded} onPress={() => send({ on: 'toggle' })}>
         {words.testToggle}
       </Button>
       {s.expanded ? (
-        <div className="fk-expr-form__test">
+        <div className="ty-expr-form__test">
           {fields.map((f) => (
-            <TextArea key={f.key} className="fk-expr-form__code" label={f.label} hint={words.sampleHint} monospace rows={4} value={s[f.key]} onChange={(text) => send({ on: f.key, text })} />
+            <TextArea key={f.key} className="ty-expr-form__code" label={f.label} hint={words.sampleHint} monospace rows={4} value={s[f.key]} onChange={(text) => send({ on: f.key, text })} />
           ))}
           {blocked ? (
             <InlineNotice tone="warning" urgency="polite">
@@ -89,7 +89,7 @@ export function ComputeTrial({ words, locale, blocked, launch }: { words: TrialW
               {busy ? words.running : words.run}
             </Button>
           </div>
-          <div className="fk-expr-form__section" role="region" aria-label={words.results} aria-live="polite" aria-busy={busy || undefined}>
+          <div className="ty-expr-form__section" role="region" aria-label={words.results} aria-live="polite" aria-busy={busy || undefined}>
             {s.outcome.state === 'error' ? (
               <InlineNotice tone="danger" urgency="none">
                 {s.outcome.text}

@@ -17,6 +17,6 @@ describe('LoaderPresets', () => {
   })
 
   it('maps every tone to a token reference, never a literal colour', () => {
-    for (const tone of loaderToneNames) expect(loaderToneColour(tone)).toMatch(/^var\(--fk-[\w-]+\)$/)
+    for (const tone of loaderToneNames) expect(loaderToneColour(tone)).toMatch(/^var\(--ty-[\w-]+\)$/)
   })
 })

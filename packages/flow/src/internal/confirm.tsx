@@ -3,7 +3,7 @@
 // plug in their own through <ConfirmProvider confirm={...}>.
 
 import { createContext, useContext, useState, type ReactNode } from 'react'
-import { Button, ModalDialog } from '@fakhir/ui'
+import { Button, ModalDialog } from '@datatechsolutions/tympan'
 
 export interface ConfirmOptions {
   title: string

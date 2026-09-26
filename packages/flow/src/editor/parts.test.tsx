@@ -2,7 +2,7 @@ import { act, fireEvent, render, renderHook, screen, within } from '@testing-lib
 import userEvent from '@testing-library/user-event'
 import { useRef, useState } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import { cssOf, mediaBlock } from '../../test/css'
 import { setMedia, setViewportWidth } from '../../test/media'
@@ -265,7 +265,7 @@ describe('CanvasCommandBar', () => {
     const { container } = bar()
     const undo = screen.getByRole('button', { name: 'Undo' })
     act(() => undo.focus())
-    expect(undo.querySelector('.fk-canvas-tool__label')).toHaveTextContent('Undo')
+    expect(undo.querySelector('.ty-canvas-tool__label')).toHaveTextContent('Undo')
     await expectNoAxeViolations(container)
   })
 
@@ -288,7 +288,7 @@ describe('CanvasCommandBar', () => {
 
   it('moves with a grip drag but not when a tool is dragged', () => {
     const { container } = bar()
-    const root = container.querySelector('.fk-command-bar') as HTMLElement
+    const root = container.querySelector('.ty-command-bar') as HTMLElement
     const grip = screen.getByRole('button', { name: 'Move tool bar' })
     const pe = (type: string, x: number, y: number) => {
       const e = new MouseEvent(type, { bubbles: true, clientX: x, clientY: y, button: 0 })
@@ -347,7 +347,7 @@ describe('NodePalette', () => {
 
   it('drags a payload with kind, label and default configuration', () => {
     const [item] = paletteDragItems({ kind: 'code', label: 'Compute', config: { op: 'sum' } })
-    expect(JSON.parse(item!['application/x-fakhir-node']!)).toEqual({ kind: 'code', label: 'Compute', config: { op: 'sum' } })
+    expect(JSON.parse(item!['application/x-tympan-node']!)).toEqual({ kind: 'code', label: 'Compute', config: { op: 'sum' } })
   })
 
   it('places the focused item with Enter', async () => {
@@ -388,26 +388,26 @@ describe('FlowPreview', () => {
 
   it('draws each node with its rich card', () => {
     const { container } = render(<FlowPreview graph={graph} reference={{ agents: [{ id: 'a1', name: 'Coder' }] }} />)
-    expect(container.querySelector('.fk-datasource-node')).not.toBeNull()
+    expect(container.querySelector('.ty-datasource-node')).not.toBeNull()
     expect(screen.getByText('Coder')).toBeInTheDocument()
     expect(screen.getByText('Count')).toBeInTheDocument()
   })
 
   it('marks nodes without a status as not run', () => {
     const { container } = render(<FlowPreview graph={graph} nodeStatuses={{ ds: 'completed' }} />)
-    expect(container.querySelectorAll('.fk-preview-status[data-status="unknown"]').length).toBeGreaterThanOrEqual(1)
-    expect(container.querySelector('[data-fk-node-id="ds"] .fk-preview-status')).toHaveAttribute('data-status', 'completed')
+    expect(container.querySelectorAll('.ty-preview-status[data-status="unknown"]').length).toBeGreaterThanOrEqual(1)
+    expect(container.querySelector('[data-ty-node-id="ds"] .ty-preview-status')).toHaveAttribute('data-status', 'completed')
   })
 
   it('keeps saved positions with layout preserve', () => {
     const { container } = render(<FlowPreview graph={graph} layout="preserve" />)
-    expect((container.querySelector('[data-fk-node-id="ag"]') as HTMLElement).style.transform).toBe('translate(0px, 200px)')
+    expect((container.querySelector('[data-ty-node-id="ag"]') as HTMLElement).style.transform).toBe('translate(0px, 200px)')
   })
 
   it('calls onNodeActivate on click and on Enter', async () => {
     const onNodeActivate = vi.fn()
     const { container } = render(<FlowPreview graph={graph} onNodeActivate={onNodeActivate} />)
-    const btn = container.querySelector('[data-fk-node-id="g"] .fk-node-card__activator') as HTMLElement
+    const btn = container.querySelector('[data-ty-node-id="g"] .ty-node-card__activator') as HTMLElement
     await userEvent.click(btn)
     act(() => btn.focus())
     await userEvent.keyboard('{Enter}')
@@ -419,10 +419,10 @@ describe('FlowPreview', () => {
     const api = { current: null as CanvasApi | null }
     const { rerender, container } = render(<FlowPreview graph={graph} apiRef={api} selectedNodeId={null} />)
     const before = api.current!.getViewport()
-    const pos = (container.querySelector('[data-fk-node-id="g"]') as HTMLElement).style.transform
+    const pos = (container.querySelector('[data-ty-node-id="g"]') as HTMLElement).style.transform
     rerender(<FlowPreview graph={graph} apiRef={api} selectedNodeId="g" />)
     expect(api.current!.getViewport()).toEqual(before)
-    expect((container.querySelector('[data-fk-node-id="g"]') as HTMLElement).style.transform).toBe(pos)
+    expect((container.querySelector('[data-ty-node-id="g"]') as HTMLElement).style.transform).toBe(pos)
   })
 })
 
@@ -438,7 +438,7 @@ describe('FlowSwitcherBar', () => {
     const { container } = render(<FlowSwitcherBar flows={flows} activeFlowId="b" isLoading={false} onSelect={() => {}} onCreate={() => {}} onDelete={() => {}} />)
     expect(screen.getByRole('button', { name: /^Coding check/ })).toHaveAttribute('aria-current', 'page')
     const draft = screen.getByText('Draft')
-    expect(draft.closest('.fk-status-pill')?.querySelector('svg')).not.toBeNull()
+    expect(draft.closest('.ty-status-pill')?.querySelector('svg')).not.toBeNull()
     return expectNoAxeViolations(container)
   })
 
@@ -461,9 +461,9 @@ describe('FlowSwitcherBar', () => {
 
   it('reads relative time in Portuguese', () => {
     render(
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <FlowSwitcherBar flows={flows} activeFlowId="a" isLoading={false} now={new Date('2026-09-26T10:10:00Z')} onSelect={() => {}} onCreate={() => {}} onDelete={() => {}} />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(document.body.textContent).toMatch(/há 10 minutos/)
   })
@@ -508,12 +508,12 @@ describe('RunControls', () => {
     const { container } = render(<RunControls isRunning={false} onRun={() => {}} onStop={() => {}} onPublish={() => {}} isPublishing saveStatus={<span>Saved</span>} />)
     expect(screen.queryByRole('button', { name: 'Run history' })).toBeNull()
     expect(screen.getByRole('button', { name: /Publishing/ })).toBeDisabled()
-    expect(container.querySelector('.fk-run-controls')!.firstElementChild).toHaveClass('fk-run-controls__status')
+    expect(container.querySelector('.ty-run-controls')!.firstElementChild).toHaveClass('ty-run-controls__status')
   })
 
   it('replaces the spinner under reduced motion', () => {
     setMedia({ reducedMotion: true })
     const css = cssOf('editor/editor.css')
-    expect(mediaBlock(css, /\(prefers-reduced-motion: reduce\)/)).toMatch(/fk-run-controls__spinner[^}]*\{[^}]*animation:\s*none/)
+    expect(mediaBlock(css, /\(prefers-reduced-motion: reduce\)/)).toMatch(/ty-run-controls__spinner[^}]*\{[^}]*animation:\s*none/)
   })
 })

@@ -19,8 +19,8 @@ describe('FormLayout', () => {
       </FramedForm>,
     )
     const form = screen.getByRole('form', { name: 'New source' })
-    expect(form.querySelector('.fk-form-layout__header')).not.toBeNull()
-    expect(form.querySelector('.fk-form-layout__footer')).not.toBeNull()
+    expect(form.querySelector('.ty-form-layout__header')).not.toBeNull()
+    expect(form.querySelector('.ty-form-layout__footer')).not.toBeNull()
     expect(screen.getByRole('textbox', { name: 'Name' })).toBeInTheDocument()
   })
 

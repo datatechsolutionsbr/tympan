@@ -4,7 +4,7 @@
 
 import { useEffect, useId, useRef, useState } from 'react'
 import { Plus, Trash2 } from 'lucide-react'
-import { Button, Checkbox, NativeSelect, TextField } from '@fakhir/ui'
+import { Button, Checkbox, NativeSelect, TextField } from '@datatechsolutions/tympan'
 import { createId } from '../internal/ids'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 
@@ -195,8 +195,8 @@ export function OutputSchemaBuilder({ value, onChange, labels }: OutputSchemaBui
 
   if (value === undefined) {
     return (
-      <div className="fk-output-schema" data-state="empty">
-        <p className="fk-output-schema__text">{l.emptyText}</p>
+      <div className="ty-output-schema" data-state="empty">
+        <p className="ty-output-schema__text">{l.emptyText}</p>
         <Button variant="secondary" leadingIcon={<Plus />} onPress={() => onChange({ type: 'object', properties: {} })}>
           {l.addSchema}
         </Button>
@@ -205,8 +205,8 @@ export function OutputSchemaBuilder({ value, onChange, labels }: OutputSchemaBui
   }
   if (!supported) {
     return (
-      <div className="fk-output-schema" data-state="unsupported">
-        <p className="fk-output-schema__text">{l.unsupportedText}</p>
+      <div className="ty-output-schema" data-state="unsupported">
+        <p className="ty-output-schema__text">{l.unsupportedText}</p>
         <Button variant="secondary" onPress={() => onChange({ type: 'object', properties: {} })}>
           {l.reset}
         </Button>
@@ -214,9 +214,9 @@ export function OutputSchemaBuilder({ value, onChange, labels }: OutputSchemaBui
     )
   }
   return (
-    <section className="fk-output-schema" data-state="editing" aria-labelledby={headingId}>
-      <div className="fk-output-schema__head">
-        <h3 id={headingId} className="fk-output-schema__heading">
+    <section className="ty-output-schema" data-state="editing" aria-labelledby={headingId}>
+      <div className="ty-output-schema__head">
+        <h3 id={headingId} className="ty-output-schema__heading">
           {l.heading}
         </h3>
         <Button variant="quiet" size="compact" leadingIcon={<Trash2 />} onPress={() => onChange(undefined)}>
@@ -247,26 +247,26 @@ function FieldRows({ rows, onRows, depth, l }: { rows: Row[]; onRows: (rows: Row
   for (const r of rows) if (r.name.trim()) counts.set(r.name.trim(), (counts.get(r.name.trim()) ?? 0) + 1)
 
   return (
-    <div className="fk-output-schema__rows" data-depth={depth}>
+    <div className="ty-output-schema__rows" data-depth={depth}>
       {rows.map((r, index) => {
         const display = r.name.trim() || l.newField
         const nestedType = r.type === 'object' || r.type === 'array'
         const duplicate = !!r.name.trim() && (counts.get(r.name.trim()) ?? 0) > 1
         return (
-          <div key={r.key} className="fk-output-schema__row" role="group" aria-label={display}>
-            <div className="fk-output-schema__controls">
+          <div key={r.key} className="ty-output-schema__row" role="group" aria-label={display}>
+            <div className="ty-output-schema__controls">
               <TextField
                 ref={(el) => {
                   nameRefs.current.set(r.key, el)
                 }}
-                className="fk-output-schema__name fk-ltr-text"
+                className="ty-output-schema__name ty-ltr-text"
                 label={l.name}
                 value={r.name}
                 onChange={(name) => patch(r.key, { name })}
                 {...(duplicate ? { errorMessage: l.duplicate } : {})}
               />
               <NativeSelect
-                className="fk-output-schema__type"
+                className="ty-output-schema__type"
                 label={l.type}
                 options={TYPES.map((t) => ({ value: t, label: l.typeNames[t] }))}
                 value={r.type}
@@ -278,7 +278,7 @@ function FieldRows({ rows, onRows, depth, l }: { rows: Row[]; onRows: (rows: Row
                   onRows(rows.map((x) => (x.key === r.key ? { ...rest, type, children: nested ? (nestedType ? r.children : []) : [], ...(nested && nestedType && r.raw ? { raw: r.raw } : nested && depth >= OUTPUT_SCHEMA_MAX_DEPTH ? { raw: {} } : {}) } : x)))
                 }}
               />
-              <Checkbox className="fk-output-schema__required" label={l.required} isSelected={r.required} onChange={(required) => patch(r.key, { required })} />
+              <Checkbox className="ty-output-schema__required" label={l.required} isSelected={r.required} onChange={(required) => patch(r.key, { required })} />
               <Button
                 variant="quiet"
                 size="compact"
@@ -293,13 +293,13 @@ function FieldRows({ rows, onRows, depth, l }: { rows: Row[]; onRows: (rows: Row
                 }}
               />
             </div>
-            <TextField className="fk-output-schema__description" label={l.description} value={r.description} onChange={(description) => patch(r.key, { description })} />
+            <TextField className="ty-output-schema__description" label={l.description} value={r.description} onChange={(description) => patch(r.key, { description })} />
             {nestedType ? (
               depth >= OUTPUT_SCHEMA_MAX_DEPTH ? (
-                <p className="fk-output-schema__depth">{l.depthNotice}</p>
+                <p className="ty-output-schema__depth">{l.depthNotice}</p>
               ) : (
-                <section className="fk-output-schema__nested" aria-label={fill(l.nestedRegion, { name: display }, locale)}>
-                  <p className="fk-output-schema__nested-title">{r.type === 'array' ? l.itemShape : l.nested}</p>
+                <section className="ty-output-schema__nested" aria-label={fill(l.nestedRegion, { name: display }, locale)}>
+                  <p className="ty-output-schema__nested-title">{r.type === 'array' ? l.itemShape : l.nested}</p>
                   <FieldRows rows={r.children} onRows={(children) => patch(r.key, { children })} depth={depth + 1} l={l} />
                 </section>
               )

@@ -70,14 +70,14 @@ export function OverlaysNavShowcase({ scope }: { scope: string }) {
   const account = { name: 'Ana Souza', onProfile: () => {}, onSignOut: () => {}, theme, onThemeChange: setTheme }
 
   return (
-    <div className="fk-gallery-showcase">
+    <div className="ty-gallery-showcase">
       <Section id={id('app-navigation')} title="AppNavigation (sidebar and collapsed rail)">
-        <div className="fk-gallery-row" style={{ alignItems: 'stretch' }}>
-          <div style={{ inlineSize: 260, border: '1px solid var(--fk-line)', borderRadius: 16 }}>
+        <div className="ty-gallery-row" style={{ alignItems: 'stretch' }}>
+          <div style={{ inlineSize: 260, border: '1px solid var(--ty-line)', borderRadius: 16 }}>
             <AppNavigation
               entries={entries}
               pathname="#/verify"
-              brand={<strong>Fakhir</strong>}
+              brand={<strong>Acme Research</strong>}
               footer={<span>Edition 2026-09-20, verified</span>}
               account={account}
               collapsed={collapsed}
@@ -85,7 +85,7 @@ export function OverlaysNavShowcase({ scope }: { scope: string }) {
               labels={{ landmark: `Primary navigation ${scope}` }}
             />
           </div>
-          <div style={{ border: '1px solid var(--fk-line)', borderRadius: 16 }}>
+          <div style={{ border: '1px solid var(--ty-line)', borderRadius: 16 }}>
             <AppNavigation entries={entries} layout="rail" pathname="#/base" labels={{ landmark: `Rail navigation ${scope}` }} />
           </div>
         </div>
@@ -93,7 +93,7 @@ export function OverlaysNavShowcase({ scope }: { scope: string }) {
       </Section>
 
       <Section id={id('toolbar-trigger')} title="ToolbarTrigger">
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <ToolbarTrigger icon={<Bell />} label="Notifications" />
           <ToolbarTrigger icon={<Languages />} label="Language" caption="PT" controls="menu" expanded={false} />
           <ToolbarTrigger icon={<Sparkles />} label="Focus mode" pressed />
@@ -102,7 +102,7 @@ export function OverlaysNavShowcase({ scope }: { scope: string }) {
       </Section>
 
       <Section id={id('flyout-palette')} title="NavigationFlyout, CommandPalette">
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <Button onPress={() => setFlyout(true)}>Open navigation flyout</Button>
           <Button onPress={() => setPalette(true)}>Open command palette</Button>
         </div>
@@ -121,7 +121,7 @@ export function OverlaysNavShowcase({ scope }: { scope: string }) {
             { id: 'records', label: 'Records' },
             { id: 'screens', label: 'Screens' },
           ]}
-          recent={{ storageKey: 'fk-gallery-palette' }}
+          recent={{ storageKey: 'ty-gallery-palette' }}
           fallbackActions={[{ id: 'create', label: "Create record '{query}'", icon: <Plus />, onSelect: () => {} }]}
           groups={[
             {
@@ -164,7 +164,7 @@ export function OverlaysNavShowcase({ scope }: { scope: string }) {
       </Section>
 
       <Section id={id('modals')} title="SectionedModal, SettingsDialog, CompactConfirm, ConfirmService">
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <Button onPress={() => setModal(true)}>Edit source</Button>
           <Button onPress={() => setSettings(true)}>Settings</Button>
           <Button onPress={() => setCompact(true)}>Sign out</Button>
@@ -184,9 +184,9 @@ export function OverlaysNavShowcase({ scope }: { scope: string }) {
           formFooter={{}}
           error="The server refused the URL: it answered 404."
         >
-          <label className="fk-gallery-stack">
+          <label className="ty-gallery-stack">
             URL
-            <input className="fk-gallery-native-input" defaultValue="https://example.org" />
+            <input className="ty-gallery-native-input" defaultValue="https://example.org" />
           </label>
         </SectionedModal>
         <SettingsDialog
@@ -230,11 +230,11 @@ export function OverlaysNavShowcase({ scope }: { scope: string }) {
           }}
           exit={{ label: 'Sign out', icon: <LogOut />, onPress: () => setSettings(false) }}
         />
-        <CompactConfirm open={compact} title="Sign out?" message="You will need to sign in again." sourceLabel="Fakhir" onConfirm={() => setCompact(false)} onCancel={() => setCompact(false)} tone="neutral" />
+        <CompactConfirm open={compact} title="Sign out?" message="You will need to sign in again." sourceLabel="Acme Research" onConfirm={() => setCompact(false)} onCancel={() => setCompact(false)} tone="neutral" />
       </Section>
 
       <Section id={id('details')} title="DetailsPopover, LongPressMenu">
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <DetailsPopover
             triggerLabel="Details of the change"
             title="Status changed"
@@ -245,7 +245,7 @@ export function OverlaysNavShowcase({ scope }: { scope: string }) {
             note={{ label: 'Note', value: 'Source reopened and quote matched.' }}
           />
           <LongPressMenu label="Sources, hold for more" items={[{ label: 'Pin' }, { label: 'Remove', tone: 'danger' }]} onTap={() => {}}>
-            <span className="fk-gallery-native-input" style={{ display: 'inline-flex', alignItems: 'center' }}>
+            <span className="ty-gallery-native-input" style={{ display: 'inline-flex', alignItems: 'center' }}>
               Sources (hold, right click or Shift+F10)
             </span>
           </LongPressMenu>
@@ -255,7 +255,7 @@ export function OverlaysNavShowcase({ scope }: { scope: string }) {
       <Section id={id('steps')} title="StepList, PageDots">
         <StepList label="Project setup" currentIndex={1} steps={steps.map((s) => ({ id: s.id, name: s.title }))} onStepSelect={() => {}} />
         <StepList label="Security setup" appearance="bar" currentIndex={2} steps={steps.map((s) => ({ id: s.id, name: s.title }))} />
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <PageDots count={5} currentIndex={dot} onSelect={setDot} label={`Slides ${scope}`} />
           <PageDots count={5} currentIndex={dot} appearance="pill" />
           <PageDots count={14} currentIndex={dot} />

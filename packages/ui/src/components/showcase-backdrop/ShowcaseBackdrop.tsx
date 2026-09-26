@@ -23,13 +23,13 @@ export function ShowcaseBackdrop(props: ShowcaseBackdropProps) {
   return (
     <div
       aria-hidden="true"
-      className={cx('fk-showcase-backdrop', props.className)}
+      className={cx('ty-showcase-backdrop', props.className)}
       style={props.style}
       data-placement={props.placement ?? 'corners'}
       data-intensity={props.intensity ?? 'calm'}
     >
-      <span className="fk-showcase-backdrop__glow" data-hue="1" />
-      <span className="fk-showcase-backdrop__glow" data-hue="2" />
+      <span className="ty-showcase-backdrop__glow" data-hue="1" />
+      <span className="ty-showcase-backdrop__glow" data-hue="2" />
     </div>
   )
 }
@@ -43,5 +43,5 @@ export interface AccentBandProps {
 
 /** Thin strip of the brand accent marking the top (or bottom) of a showcase section. */
 export function AccentBand(props: AccentBandProps) {
-  return <div aria-hidden="true" className={cx('fk-accent-band', props.className)} style={props.style} data-edge={props.edge ?? 'top'} />
+  return <div aria-hidden="true" className={cx('ty-accent-band', props.className)} style={props.style} data-edge={props.edge ?? 'top'} />
 }

@@ -1,15 +1,20 @@
-# Fakhir UI
+# Tympan
 
-The user-interface packages of Fakhir, the research platform:
+Tympan is an Astrlabe-family component published by Datatech: design tokens,
+accessible React components and a flow and provenance canvas.
 
 | Package | Path | What it is |
 |---|---|---|
-| `@fakhir/tokens` | `packages/tokens` | Design tokens in the W3C DTCG format (colour, space, radius, type, elevation and glass, motion, z) and an OKLCH theme generator, built to `--fk-*` CSS custom properties, JSON and a TypeScript export. |
-| `@fakhir/ui` | `packages/ui` | Accessible React components (React 18.3 or 19) on React Aria Components, styled with plain CSS in `@layer fakhir`. Formerly `@fakhir/design-system`. |
-| `@fakhir/flow` | `packages/flow` | The flow and provenance canvas: a W3C PROV provenance graph viewer, a DAG workflow editor, run inspection and the forms and dialogs around them, built on `@fakhir/ui`. Formerly `@fakhir/flow-canvas`. |
+| `@datatechsolutions/tympan-tokens` | `packages/tokens` | Design tokens in the W3C DTCG format (colour, space, radius, type, elevation and glass, motion, z) and an OKLCH theme generator, built to `--ty-*` CSS custom properties, JSON and a TypeScript export. Presets: `tympan` (default), `fakhir`, `neutral`, `high-contrast`. Formerly `@fakhir/tokens`. |
+| `@datatechsolutions/tympan` | `packages/ui` | Accessible React components (React 18.3 or 19) on React Aria Components, styled with plain CSS in `@layer tympan`. Formerly `@fakhir/ui` (before that `@fakhir/design-system`). |
+| `@datatechsolutions/tympan-flow` | `packages/flow` | The flow and provenance canvas: a W3C PROV provenance graph viewer, a DAG workflow editor, run inspection and the forms and dialogs around them, built on `@datatechsolutions/tympan`. Formerly `@fakhir/flow` (before that `@fakhir/flow-canvas`). |
 
-No Tailwind: every class and custom property uses the `fk-` prefix, and layout
-CSS uses logical properties so right-to-left scripts work.
+Every class and custom property uses the `ty-` prefix (`--ty-*`), theming
+attributes are `data-ty-theme`, `data-ty-mode` and `data-ty-density`, and
+layout CSS uses logical properties so right-to-left scripts work.
+
+Repository: `github.com/datatechsolutionsbr/tympan`; npm packages under the
+`@datatechsolutions` scope.
 
 ## Build and test
 
@@ -26,13 +31,14 @@ npm run check        # guards, build, typecheck and tests
 
 Guards (`tools/guardrails/`):
 
-- `npm run check:no-tailwind`: no Tailwind, class-variance-authority or shadcn
-  dependency or file, no Tailwind CSS directives, and only `fk-` class names.
+- `npm run check:no-utility-css`: no utility-CSS framework,
+  class-variance-authority or shadcn dependency or file, no utility-framework
+  CSS directives, and only `ty-` class names.
 - `npm run check:logical-css`: no physical left/right properties in CSS.
 - `npm run check:provenance`: hard-fail markers of the forked component
   library or commercial templates the packages were written to replace.
 
-Galleries: `npm run gallery -w @fakhir/ui` and `npm run gallery -w @fakhir/flow`.
+Galleries: `npm run gallery -w @datatechsolutions/tympan` and `npm run gallery -w @datatechsolutions/tympan-flow`.
 
 ## Provenance
 

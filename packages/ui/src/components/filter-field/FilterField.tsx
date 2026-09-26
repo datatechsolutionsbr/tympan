@@ -26,7 +26,7 @@ export function FilterField(props: FilterFieldProps) {
   const noteId = useId()
   devWarning(!props.label && !props.ariaLabel, 'FilterField: provide `label` or `ariaLabel`; the placeholder is not a name.')
   return (
-    <div className={cx('fk-filter-field', props.className)}>
+    <div className={cx('ty-filter-field', props.className)}>
       <SearchInput
         value={props.value}
         onChange={props.onChange}

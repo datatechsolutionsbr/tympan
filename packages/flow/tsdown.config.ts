@@ -9,7 +9,7 @@ export default defineConfig({
   tsconfig: 'tsconfig.build.json',
   sourcemap: true,
   clean: true,
-  external: [/^react/, /^react-aria-components/, /^lucide-react/, /^@fakhir\//, /^@dagrejs\//],
+  external: [/^react/, /^react-aria-components/, /^lucide-react/, /^@datatechsolutions\//, /^@dagrejs\//],
   outExtensions: () => ({ js: '.js', dts: '.d.ts' }),
   // Canvas components hold state and effects: client modules for RSC hosts.
   banner: { js: '"use client";' },

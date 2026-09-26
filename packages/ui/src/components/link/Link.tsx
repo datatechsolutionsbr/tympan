@@ -36,7 +36,7 @@ export const Link = forwardRef<HTMLAnchorElement | HTMLButtonElement, LinkProps>
   const messages = useMessages()
   devWarning(!href && !onPress, 'Link: provide `href` or `onPress`.')
 
-  const classes = cx('fk-link', className)
+  const classes = cx('ty-link', className)
   const data = {
     'data-emphasis': emphasis,
     'data-standalone': standalone || undefined,
@@ -78,8 +78,8 @@ export const Link = forwardRef<HTMLAnchorElement | HTMLButtonElement, LinkProps>
       {children}
       {isExternal ? (
         <>
-          <ExternalLink className="fk-icon fk-mirror-rtl fk-link__external" aria-hidden="true" focusable="false" />
-          <span className="fk-visually-hidden"> {messages.link.opensInNewTab}</span>
+          <ExternalLink className="ty-icon ty-mirror-rtl ty-link__external" aria-hidden="true" focusable="false" />
+          <span className="ty-visually-hidden"> {messages.link.opensInNewTab}</span>
         </>
       ) : null}
     </AriaLink>

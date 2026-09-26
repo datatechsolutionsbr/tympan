@@ -61,7 +61,7 @@ describe('AppNavigation', () => {
   it('shows icons only when collapsed, named by label, with a tooltip on focus', async () => {
     render(<AppNavigation entries={entries} pathname="/" collapsed onCollapsedChange={() => {}} />)
     const link = screen.getByRole('link', { name: 'Sources' })
-    expect(link.querySelector('.fk-app-nav__label')).toBeNull()
+    expect(link.querySelector('.ty-app-nav__label')).toBeNull()
     await userEvent.tab()
     await userEvent.tab()
     expect(link).toHaveFocus()
@@ -123,7 +123,7 @@ describe('AppNavigation in right-to-left (ar)', () => {
     const { container } = renderRtl(<AppNavigation entries={[{ id: 'o', label: 'نظرة عامة', href: '/o', icon: <span /> }, { id: 'v', label: 'التحقق', href: '/v', count: 12, icon: <span /> }]} pathname="/o" />, { navigate: () => {} })
     expect(rtlDom.screen.getByRole('link', { name: 'نظرة عامة' })).toHaveAttribute('aria-current', 'page')
     // The drawer sits at the inline start and slides in from the right in right-to-left.
-    expect(cssOfRtl('components/app-navigation/AppNavigation.css')).toMatch(/animation-name:\s*fk-app-nav-slide-rtl/)
+    expect(cssOfRtl('components/app-navigation/AppNavigation.css')).toMatch(/animation-name:\s*ty-app-nav-slide-rtl/)
     await axeRtl(container)
   })
 })

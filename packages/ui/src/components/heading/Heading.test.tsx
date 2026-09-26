@@ -69,7 +69,7 @@ describe('Heading', () => {
 
   it('shrinks the h1 step below 640 px and uses CanvasText in forced colours', () => {
     const css = cssOf('components/heading/Heading.css')
-    expect(mediaBlock(css, /\(max-width:\s*639\.98px\)/)).toMatch(/--fk-font-size-h1-narrow/)
+    expect(mediaBlock(css, /\(max-width:\s*639\.98px\)/)).toMatch(/--ty-font-size-h1-narrow/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/CanvasText/)
   })
 

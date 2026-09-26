@@ -2,7 +2,7 @@
 // (spec: wave-4/region-theme-registry.md). The registry holds no country data;
 // modules register at start-up.
 import { createContext, createElement, useContext, type ReactNode } from 'react'
-import { values } from '@fakhir/tokens/values'
+import { values } from '@datatechsolutions/tympan-tokens/values'
 import { toneNames, type ToneName } from '../tone-tint/toneTint'
 import { validateRegionThemeEntry, type LonLat, type RegionThemeEntry, type SubdivisionKind, type SubdivisionRecord } from './format'
 
@@ -42,7 +42,7 @@ const DARK_TEXT = '#0f172a'
 const CATEGORY_COLOURS: ReadonlyArray<[ToneName, string]> = toneNames
   .filter((t) => t.startsWith('categorical-'))
   .flatMap((t) => {
-    const hex = values.themes.fakhir.light?.[`--fk-${t}` as `--fk-categorical-1`]
+    const hex = values.themes.tympan.light?.[`--ty-${t}` as `--ty-categorical-1`]
     return hex && /^#[0-9a-f]{6}$/i.test(hex) ? [[t, hex] as [ToneName, string]] : []
   })
 

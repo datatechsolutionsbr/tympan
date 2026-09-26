@@ -35,20 +35,20 @@ describe('StageStrip', () => {
     render(<StageStrip stages={stages} label="Stages" />)
     const attention = screen.getAllByRole('listitem')[2]!
     expect(attention).toHaveTextContent('needs attention')
-    expect(attention.querySelector('.fk-stage-strip__status svg')).toHaveAttribute('aria-hidden', 'true')
+    expect(attention.querySelector('.ty-stage-strip__status svg')).toHaveAttribute('aria-hidden', 'true')
   })
 
   it('links each stage name and hides the arrows', () => {
     render(<StageStrip stages={stages} label="Stages" />)
     expect(screen.getAllByRole('link')).toHaveLength(5)
-    expect(document.querySelectorAll('.fk-stage-strip__arrow')).toHaveLength(4)
-    for (const arrow of document.querySelectorAll('.fk-stage-strip__arrow')) expect(arrow).toHaveAttribute('aria-hidden', 'true')
+    expect(document.querySelectorAll('.ty-stage-strip__arrow')).toHaveLength(4)
+    for (const arrow of document.querySelectorAll('.ty-stage-strip__arrow')) expect(arrow).toHaveAttribute('aria-hidden', 'true')
   })
 
   it('is a row from 1024 px, keeps 44 px link targets and a system border when forced', () => {
     const css = cssOf('components/stage-strip/StageStrip.css')
     expect(mediaBlock(css, /\(min-width:\s*1024px\)/)).toMatch(/flex-direction:\s*row/)
-    expect(css).toMatch(/max\(100%, var\(--fk-control-target\)\)/)
+    expect(css).toMatch(/max\(100%, var\(--ty-control-target\)\)/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/2px solid Highlight/)
   })
 
@@ -76,7 +76,7 @@ describe('StageStrip in right-to-left', () => {
         </div>
       </I18nProvider>,
     )
-    expect(container.querySelector('.fk-stage-strip__arrow')).toHaveClass('fk-mirror-rtl')
+    expect(container.querySelector('.ty-stage-strip__arrow')).toHaveClass('ty-mirror-rtl')
     await expectNoAxeViolations(container)
   })
 })

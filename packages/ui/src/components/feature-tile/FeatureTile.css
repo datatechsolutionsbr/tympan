@@ -1,110 +1,110 @@
 /* FeatureTile and FeatureTileGrid (spec: wave-4/feature-tile.md; design direction §2.2, §2.3, §2.7, §2.8). */
-@layer fakhir.components {
-  .fk-feature-tile-grid {
+@layer tympan.components {
+  .ty-feature-tile-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--fk-space-6) var(--fk-space-5);
+    gap: var(--ty-space-6) var(--ty-space-5);
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  .fk-feature-tile {
+  .ty-feature-tile {
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-2);
-    color: var(--fk-ink-2);
+    gap: var(--ty-space-2);
+    color: var(--ty-ink-2);
   }
-  .fk-feature-tile[data-surface='raised'] {
-    padding: var(--fk-space-5);
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-card);
-    background: var(--fk-surface-raised);
-    box-shadow: var(--fk-shadow-raised);
+  .ty-feature-tile[data-surface='raised'] {
+    padding: var(--ty-space-5);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-card);
+    background: var(--ty-surface-raised);
+    box-shadow: var(--ty-shadow-raised);
   }
-  .fk-feature-tile:has(.fk-feature-tile__link[data-focus-visible]) {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-feature-tile:has(.ty-feature-tile__link[data-focus-visible]) {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 4px;
-    border-radius: var(--fk-radius-control);
+    border-radius: var(--ty-radius-control);
   }
 
   /* Same badge for every tile: accent on accent-soft (§2.3). */
-  .fk-feature-tile__badge {
+  .ty-feature-tile__badge {
     display: inline-grid;
     place-items: center;
-    inline-size: var(--fk-control-height);
-    block-size: var(--fk-control-height);
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-accent-soft);
-    color: var(--fk-accent);
+    inline-size: var(--ty-control-height);
+    block-size: var(--ty-control-height);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-accent-soft);
+    color: var(--ty-accent);
   }
-  .fk-feature-tile__badge .fk-icon {
+  .ty-feature-tile__badge .ty-icon {
     inline-size: 20px;
     block-size: 20px;
   }
 
-  .fk-feature-tile__title {
+  .ty-feature-tile__title {
     margin: 0;
-    color: var(--fk-ink);
-    font-family: var(--fk-font-serif);
-    font-size: var(--fk-font-size-h3);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-h3);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-serif);
+    font-size: var(--ty-font-size-h3);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-h3);
   }
-  .fk-feature-tile__link {
+  .ty-feature-tile__link {
     color: inherit;
     text-decoration: none;
     outline: none;
   }
-  .fk-feature-tile__link::after {
+  .ty-feature-tile__link::after {
     content: '';
     position: absolute;
     inset: 0;
   }
-  .fk-feature-tile__link[data-hovered] {
+  .ty-feature-tile__link[data-hovered] {
     text-decoration: underline;
     text-underline-offset: 3px;
   }
-  .fk-feature-tile__link[data-pressed] {
-    color: var(--fk-accent-strong);
+  .ty-feature-tile__link[data-pressed] {
+    color: var(--ty-accent-strong);
   }
-  .fk-feature-tile__description {
-    max-inline-size: calc(var(--fk-measure-prose) * 1ch);
-    font-size: var(--fk-font-size-body);
-    line-height: var(--fk-font-line-height-body);
+  .ty-feature-tile__description {
+    max-inline-size: calc(var(--ty-measure-prose) * 1ch);
+    font-size: var(--ty-font-size-body);
+    line-height: var(--ty-font-line-height-body);
   }
-  .fk-feature-tile__description > p {
+  .ty-feature-tile__description > p {
     margin: 0;
   }
 
   @media (min-width: 640px) {
-    .fk-feature-tile-grid {
+    .ty-feature-tile-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
   @media (min-width: 1024px) {
-    .fk-feature-tile-grid {
+    .ty-feature-tile-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 
   @media (prefers-reduced-transparency: reduce) {
-    .fk-feature-tile[data-surface='raised'] {
-      background: var(--fk-surface-raised-solid);
+    .ty-feature-tile[data-surface='raised'] {
+      background: var(--ty-surface-raised-solid);
     }
   }
 
   @media (forced-colors: active) {
-    .fk-feature-tile__badge {
+    .ty-feature-tile__badge {
       border: 1px solid CanvasText;
       color: CanvasText;
     }
-    .fk-feature-tile[data-surface='raised'] {
+    .ty-feature-tile[data-surface='raised'] {
       border-color: CanvasText;
       box-shadow: none;
     }
-    .fk-feature-tile:has(.fk-feature-tile__link[data-focus-visible]) {
+    .ty-feature-tile:has(.ty-feature-tile__link[data-focus-visible]) {
       outline-color: Highlight;
     }
   }

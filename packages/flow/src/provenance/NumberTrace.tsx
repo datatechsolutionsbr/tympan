@@ -6,7 +6,7 @@
 
 import { useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
 import { Check, Hourglass, RotateCcw, Share2 } from 'lucide-react'
-import { Button } from '@fakhir/ui'
+import { Button } from '@datatechsolutions/tympan'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { NumberTraceStep, TracedNumber, TracedPassage } from './proofTypes'
 
@@ -109,14 +109,14 @@ export function NumberTrace({ passage, source, after, defaultOpenId, onOpenStep,
   }
 
   return (
-    <div className={['fk-numtrace', className].filter(Boolean).join(' ')} data-open={open ? 'true' : undefined} role="group" aria-label={l.passage}>
-      <article className="fk-numtrace__article">
+    <div className={['ty-numtrace', className].filter(Boolean).join(' ')} data-open={open ? 'true' : undefined} role="group" aria-label={l.passage}>
+      <article className="ty-numtrace__article">
         {source ? (
-          <p className="fk-numtrace__source" dir="ltr">
+          <p className="ty-numtrace__source" dir="ltr">
             {source}
           </p>
         ) : null}
-        <p className="fk-numtrace__text" dir="auto">
+        <p className="ty-numtrace__text" dir="auto">
           {passage.map((part, i) =>
             typeof part === 'string' ? (
               <span key={i}>{part}</span>
@@ -124,7 +124,7 @@ export function NumberTrace({ passage, source, after, defaultOpenId, onOpenStep,
               <button
                 key={part.id}
                 type="button"
-                className="fk-numtrace__number"
+                className="ty-numtrace__number"
                 aria-label={fill(l.number, { value: part.text }, locale)}
                 aria-expanded={open?.id === part.id}
                 data-active={open?.id === part.id || undefined}
@@ -139,56 +139,56 @@ export function NumberTrace({ passage, source, after, defaultOpenId, onOpenStep,
             ),
           )}
         </p>
-        {after ? <div className="fk-numtrace__after">{after}</div> : null}
+        {after ? <div className="ty-numtrace__after">{after}</div> : null}
       </article>
       {open ? (
-        <section className="fk-numtrace__panel" role="region" aria-labelledby="fk-numtrace-heading" onKeyDown={onPanelKey}>
-          <h3 id="fk-numtrace-heading" ref={headingRef} tabIndex={-1} className="fk-numtrace__eyebrow">
+        <section className="ty-numtrace__panel" role="region" aria-labelledby="ty-numtrace-heading" onKeyDown={onPanelKey}>
+          <h3 id="ty-numtrace-heading" ref={headingRef} tabIndex={-1} className="ty-numtrace__eyebrow">
             <span aria-hidden="true">{l.selected}</span>
-            <span className="fk-visually-hidden">{fill(l.panel, { value: open.text }, locale)}</span>
+            <span className="ty-visually-hidden">{fill(l.panel, { value: open.text }, locale)}</span>
           </h3>
-          <p className="fk-numtrace__value" aria-hidden="true">
+          <p className="ty-numtrace__value" aria-hidden="true">
             {open.text}
           </p>
-          {open.caption ? <p className="fk-numtrace__caption">{open.caption}</p> : null}
-          <ol className="fk-numtrace__chain" aria-label={l.chain}>
+          {open.caption ? <p className="ty-numtrace__caption">{open.caption}</p> : null}
+          <ol className="ty-numtrace__chain" aria-label={l.chain}>
             {open.chain.map((step, i) => {
               const Icon = STATUS_ICON[step.status]
               const body = (
                 <>
-                  <span className="fk-visually-hidden">{l.kinds[step.kind] ?? step.kind}: </span>
-                  <span className="fk-numtrace__step-title" dir="auto">
+                  <span className="ty-visually-hidden">{l.kinds[step.kind] ?? step.kind}: </span>
+                  <span className="ty-numtrace__step-title" dir="auto">
                     {step.title}
                   </span>
                   {step.meta ? (
-                    <code className="fk-numtrace__meta" dir="ltr">
+                    <code className="ty-numtrace__meta" dir="ltr">
                       {step.meta}
                     </code>
                   ) : null}
                 </>
               )
               return (
-                <li key={step.id} className="fk-numtrace__step" data-status={step.status}>
-                  <span className="fk-numtrace__index" aria-hidden="true">
+                <li key={step.id} className="ty-numtrace__step" data-status={step.status}>
+                  <span className="ty-numtrace__index" aria-hidden="true">
                     {num(i + 1)}
                   </span>
                   {onOpenStep ? (
-                    <button type="button" className="fk-numtrace__open" aria-label={fill(l.open, { title: step.title }, locale)} onClick={() => onOpenStep(step)}>
+                    <button type="button" className="ty-numtrace__open" aria-label={fill(l.open, { title: step.title }, locale)} onClick={() => onOpenStep(step)}>
                       {body}
                     </button>
                   ) : (
-                    <span className="fk-numtrace__body">{body}</span>
+                    <span className="ty-numtrace__body">{body}</span>
                   )}
-                  <span className="fk-numtrace__status">
+                  <span className="ty-numtrace__status">
                     <Icon aria-hidden="true" focusable="false" />
-                    <span className="fk-visually-hidden">{l.status[step.status]}</span>
+                    <span className="ty-visually-hidden">{l.status[step.status]}</span>
                   </span>
                 </li>
               )
             })}
           </ol>
           {onOpenInGraph || onRerun ? (
-            <div className="fk-numtrace__actions">
+            <div className="ty-numtrace__actions">
               {onOpenInGraph ? (
                 <Button variant="secondary" leadingIcon={<Share2 />} onPress={() => onOpenInGraph(open)}>
                   {l.openInGraph}

@@ -1,79 +1,79 @@
 /* GroupedDisclosureList (spec: wave-2/grouped-disclosure-list.md; design direction §2.5, §2.7). */
-@layer fakhir.components {
-  .fk-grouped-list__group + .fk-grouped-list__group {
-    border-block-start: 1px solid var(--fk-line);
+@layer tympan.components {
+  .ty-grouped-list__group + .ty-grouped-list__group {
+    border-block-start: 1px solid var(--ty-line);
   }
-  .fk-grouped-list__heading {
+  .ty-grouped-list__heading {
     margin: 0;
-    font-size: var(--fk-font-size-label);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-label);
+    font-size: var(--ty-font-size-label);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-label);
   }
-  .fk-grouped-list__trigger {
+  .ty-grouped-list__trigger {
     display: flex;
     align-items: center;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
     box-sizing: border-box;
     inline-size: 100%;
-    min-block-size: var(--fk-control-target);
-    padding: var(--fk-space-2);
+    min-block-size: var(--ty-control-target);
+    padding: var(--ty-space-2);
     border: 0;
-    border-radius: var(--fk-radius-control);
+    border-radius: var(--ty-radius-control);
     background: none;
-    color: var(--fk-ink);
+    color: var(--ty-ink);
     font: inherit;
     text-align: start;
     cursor: pointer;
     outline: none;
   }
-  .fk-grouped-list__trigger[data-hovered] {
-    background: var(--fk-surface-sunken);
+  .ty-grouped-list__trigger[data-hovered] {
+    background: var(--ty-surface-sunken);
   }
-  .fk-grouped-list__trigger[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-grouped-list__trigger[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: -2px;
   }
-  .fk-grouped-list__header {
+  .ty-grouped-list__header {
     display: flex;
     flex: 1;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
     min-inline-size: 0;
   }
-  .fk-grouped-list__chevron {
-    color: var(--fk-ink-3);
-    transition: rotate var(--fk-dur-quick) var(--fk-ease);
+  .ty-grouped-list__chevron {
+    color: var(--ty-ink-3);
+    transition: rotate var(--ty-dur-quick) var(--ty-ease);
   }
-  .fk-grouped-list__group:not([data-expanded]) .fk-grouped-list__chevron {
+  .ty-grouped-list__group:not([data-expanded]) .ty-grouped-list__chevron {
     rotate: -90deg;
   }
-  .fk-grouped-list__body[hidden] {
+  .ty-grouped-list__body[hidden] {
     display: none;
   }
-  .fk-grouped-list__items {
+  .ty-grouped-list__items {
     margin: 0;
-    padding: 0 0 var(--fk-space-3);
+    padding: 0 0 var(--ty-space-3);
     list-style: none;
   }
-  .fk-grouped-list__item {
-    padding: var(--fk-space-2);
+  .ty-grouped-list__item {
+    padding: var(--ty-space-2);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-grouped-list__chevron {
+    .ty-grouped-list__chevron {
       transition: none;
     }
   }
 
   @media (forced-colors: active) {
-    .fk-grouped-list__group + .fk-grouped-list__group {
+    .ty-grouped-list__group + .ty-grouped-list__group {
       border-block-start-color: CanvasText;
     }
-    .fk-grouped-list__trigger {
+    .ty-grouped-list__trigger {
       border: 1px solid CanvasText;
     }
-    .fk-grouped-list__chevron {
+    .ty-grouped-list__chevron {
       color: CanvasText;
     }
   }

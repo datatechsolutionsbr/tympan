@@ -37,7 +37,7 @@ export function PlatformShowcase({ scope }: { scope: string }) {
   const [replay, setReplay] = useState(0)
 
   return (
-    <div className="fk-gallery-showcase">
+    <div className="ty-gallery-showcase">
       <Section id={id('swipe-row')} title="SwipeRow">
         <Text size="meta" tone="muted">
           Swipe a row on a touch screen, or use its actions button.
@@ -50,7 +50,7 @@ export function PlatformShowcase({ scope }: { scope: string }) {
               leadingActions={[presets.favourite(() => toast.info(`${name}: favourite`))]}
               trailingActions={[presets.archive(() => toast.info(`${name}: archived`)), presets.delete(() => toast.info(`${name}: deleted`), { undoable: true })]}
             >
-              <div className="fk-gallery-row">
+              <div className="ty-gallery-row">
                 <Text>{name}</Text>
               </div>
             </SwipeRow>
@@ -59,7 +59,7 @@ export function PlatformShowcase({ scope }: { scope: string }) {
       </Section>
 
       <Section id={id('pull-to-refresh')} title="PullToRefresh">
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <Button onPress={() => void pull.current?.refresh()}>Refresh</Button>
           <Text size="meta" tone="muted">
             Refreshed {refreshed} times
@@ -114,10 +114,10 @@ export function PlatformShowcase({ scope }: { scope: string }) {
             cascade
             role="list"
             aria-label={`Modules (${scope})`}
-            style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 'var(--fk-space-3)' }}
+            style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 'var(--ty-space-3)' }}
           >
             {['Sources', 'Instruments', 'Base', 'Atlas', 'Analyses', 'Editions'].map((w) => (
-              <div key={w} role="listitem" className="fk-gallery-section">
+              <div key={w} role="listitem" className="ty-gallery-section">
                 <Text>{w}</Text>
               </div>
             ))}
@@ -126,7 +126,7 @@ export function PlatformShowcase({ scope }: { scope: string }) {
       </Section>
 
       <Section id={id('formatters')} title="Formatters, MotionFoundation">
-        <div className="fk-gallery-stack">
+        <div className="ty-gallery-stack">
           <Text>formatMoney: {formatMoney(1234.5, 'BRL', locale)}</Text>
           <Text>formatPercent: {formatPercent(12.5, locale)}</Text>
           <Text>

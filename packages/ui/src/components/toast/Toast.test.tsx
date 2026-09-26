@@ -74,7 +74,7 @@ describe('Toast', () => {
     act(() => {
       api().info('Hover me')
     })
-    const region = document.querySelector('.fk-toast-region')!
+    const region = document.querySelector('.ty-toast-region')!
     act(() => {
       vi.advanceTimersByTime(3000)
     })
@@ -194,7 +194,7 @@ describe('Toast', () => {
 
   it('fades only under reduced motion and keeps a border in forced colours', () => {
     const css = cssOf('components/toast/Toast.css')
-    expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/animation-name:\s*fk-toast-fade/)
+    expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/animation-name:\s*ty-toast-fade/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/CanvasText/)
   })
 

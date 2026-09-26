@@ -68,11 +68,11 @@ export function ModelMark({ modelId, provider, labels }: { modelId: string; prov
   return (
     <TooltipTrigger delay={300}>
       <Focusable>
-        <span className="fk-model-mark" role="img" aria-label={fill(l.model, { model: modelId })} tabIndex={0} data-fk-above="" data-fk-no-drag="">
+        <span className="ty-model-mark" role="img" aria-label={fill(l.model, { model: modelId })} tabIndex={0} data-ty-above="" data-ty-no-drag="">
           {modelFamily(modelId, provider)}
         </span>
       </Focusable>
-      <Tooltip className="fk-model-mark__tooltip" offset={6}>
+      <Tooltip className="ty-model-mark__tooltip" offset={6}>
         {modelId}
       </Tooltip>
     </TooltipTrigger>
@@ -83,16 +83,16 @@ export function ModelMark({ modelId, provider, labels }: { modelId: string; prov
 export function AgentCardBody({ agent, density = 'detailed', actions, labels }: { agent: AgentSummary; density?: CardDensity; actions?: ReactNode; labels?: Partial<AgentNodeLabels> }) {
   const l = useLabels(agentNodeLabels, labels)
   return (
-    <div className="fk-agent-body" data-density={density}>
+    <div className="ty-agent-body" data-density={density}>
       <AgentMark name={agent.name} image={agent.avatar ?? null} fallback="generated" />
-      <div className="fk-agent-body__text">
-        <span className="fk-agent-body__line">
-          <span className="fk-agent-body__kind">{l.agentWord}</span>
+      <div className="ty-agent-body__text">
+        <span className="ty-agent-body__line">
+          <span className="ty-agent-body__kind">{l.agentWord}</span>
           {agent.modelId ? <ModelMark modelId={agent.modelId} {...(agent.provider ? { provider: agent.provider } : {})} labels={labels} /> : null}
         </span>
-        {density === 'detailed' && agent.role ? <span className="fk-agent-body__role">{agent.role}</span> : null}
+        {density === 'detailed' && agent.role ? <span className="ty-agent-body__role">{agent.role}</span> : null}
       </div>
-      {actions ? <div className="fk-agent-body__actions">{actions}</div> : null}
+      {actions ? <div className="ty-agent-body__actions">{actions}</div> : null}
     </div>
   )
 }
@@ -143,7 +143,7 @@ export function AgentNode(props: AgentNodeProps) {
       labels={{ remove: l.remove }}
       headerActions={actions}
       meta={agent ? <AgentCardBody agent={agent} density={density} labels={props.labels} /> : undefined}
-      className="fk-flow-node"
+      className="ty-flow-node"
     >
       <ConnectionPorts nodeId={id} nodeLabel={title} inputs={k.inputs} outputs={k.outputs} tone={k.tone} preview={preview} />
       <NodeRunIndicator nodeId={id} kind="agent" nodeLabel={title} />

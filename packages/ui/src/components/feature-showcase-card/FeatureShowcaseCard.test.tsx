@@ -28,7 +28,7 @@ describe('FeatureShowcaseCard', () => {
     expect(screen.getByRole('button', { name: 'after' })).toHaveFocus()
     await userEvent.click(link)
     expect(navigate).toHaveBeenCalledWith('/evidence', undefined)
-    expect(css()).toMatch(/\.fk-feature-showcase-card__link::after\s*\{[^}]*inset:\s*0/)
+    expect(css()).toMatch(/\.ty-feature-showcase-card__link::after\s*\{[^}]*inset:\s*0/)
   })
 
   it('without href is an article labelled by its title, with no tab stop', async () => {
@@ -48,13 +48,13 @@ describe('FeatureShowcaseCard', () => {
     expect(screen.getByRole('img', { name: 'Evidence panel capture' })).toBeInTheDocument()
     rerender(<FeatureShowcaseCard {...base} />)
     expect(screen.queryByRole('img')).toBeNull()
-    expect(container.querySelector('.fk-feature-showcase-card__frame')).toHaveAttribute('aria-hidden', 'true')
+    expect(container.querySelector('.ty-feature-showcase-card__frame')).toHaveAttribute('aria-hidden', 'true')
   })
 
   it('draws edge fades, removed in forced colours', () => {
     const { container } = render(<FeatureShowcaseCard {...base} fade={['top', 'bottom']} />)
-    expect(container.querySelectorAll('.fk-feature-showcase-card__fade')).toHaveLength(2)
-    expect(mediaBlock(css(), /\(forced-colors:\s*active\)/)).toMatch(/\.fk-feature-showcase-card__fade\s*\{[^}]*display:\s*none/)
+    expect(container.querySelectorAll('.ty-feature-showcase-card__fade')).toHaveLength(2)
+    expect(mediaBlock(css(), /\(forced-colors:\s*active\)/)).toMatch(/\.ty-feature-showcase-card__fade\s*\{[^}]*display:\s*none/)
   })
 
   it('stacks full width below 1024 px; wide spans two of three columns above', () => {
@@ -65,14 +65,14 @@ describe('FeatureShowcaseCard', () => {
       </FeatureShowcaseMosaic>,
     )
     expect(container.querySelectorAll('[data-span="wide"]')).toHaveLength(2)
-    expect(css()).toMatch(/\.fk-feature-mosaic\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/)
+    expect(css()).toMatch(/\.ty-feature-mosaic\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/)
     const wide = mediaBlock(css(), /\(min-width:\s*1024px\)/)
     expect(wide).toMatch(/repeat\(3,/)
     expect(wide).toMatch(/\[data-span='wide'\]\s*\{[^}]*grid-column:\s*span 2/)
   })
 
   it('never lifts, scales or animates on hover and never uses the CTA gradient', () => {
-    expect(css()).not.toMatch(/(?<!text-)transform|scale\(|translate|animation|--fk-cta/)
+    expect(css()).not.toMatch(/(?<!text-)transform|scale\(|translate|animation|--ty-cta/)
   })
 
   it('has no axe violations in light and dark', async () => {

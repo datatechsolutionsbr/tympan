@@ -148,12 +148,12 @@ export function ReportView({ spec, locale, currency, headingLevel = 3, defaultCh
   const S = `h${Math.min(5, headingLevel + 1)}` as HeadingTag
   const fmt = (v: unknown, f?: ValueFormat) => formatValue(v, f, loc, currency)
   return (
-    <div className={['fk-flow-report', className].filter(Boolean).join(' ')}>
-      {spec.title ? <H className="fk-flow-report__title">{spec.title}</H> : null}
-      {spec.subtitle ? <p className="fk-flow-report__subtitle">{spec.subtitle}</p> : null}
+    <div className={['ty-flow-report', className].filter(Boolean).join(' ')}>
+      {spec.title ? <H className="ty-flow-report__title">{spec.title}</H> : null}
+      {spec.subtitle ? <p className="ty-flow-report__subtitle">{spec.subtitle}</p> : null}
       {spec.sections.map((section, i) => (
-        <section key={i} className="fk-flow-report__section" data-type={section.type}>
-          {section.title && !isChart(section) ? <S className="fk-flow-report__section-title">{section.title}</S> : null}
+        <section key={i} className="ty-flow-report__section" data-type={section.type}>
+          {section.title && !isChart(section) ? <S className="ty-flow-report__section-title">{section.title}</S> : null}
           {renderSection(section, { fmt, l, S, defaultChartView, locale: loc })}
         </section>
       ))}
@@ -178,11 +178,11 @@ function renderSection(section: ReportSection, ctx: Ctx): ReactNode {
   switch (section.type) {
     case 'figures':
       return (
-        <dl className="fk-flow-report__figures">
+        <dl className="ty-flow-report__figures">
           {section.data.items.map((f, i) => (
-            <div key={i} className="fk-flow-report__figure">
-              <dt className="fk-flow-report__figure-label">{f.label}</dt>
-              <dd className="fk-flow-report__figure-value">{fmt(f.value, f.format)}</dd>
+            <div key={i} className="ty-flow-report__figure">
+              <dt className="ty-flow-report__figure-label">{f.label}</dt>
+              <dd className="ty-flow-report__figure-value">{fmt(f.value, f.format)}</dd>
             </div>
           ))}
         </dl>
@@ -231,7 +231,7 @@ function renderSection(section: ReportSection, ctx: Ctx): ReactNode {
             {section.data.items.map((it) => (
               <tr key={it.region}>
                 <th scope="row">
-                  {it.label} <span className="fk-flow-report__code">{it.region}</span>
+                  {it.label} <span className="ty-flow-report__code">{it.region}</span>
                 </th>
                 <td data-numeric="true">{fmt(it.value, section.data.format)}</td>
               </tr>
@@ -240,14 +240,14 @@ function renderSection(section: ReportSection, ctx: Ctx): ReactNode {
         </ScrollTable>
       )
     default:
-      return <p className="fk-flow-report__note">{l.noContent}</p>
+      return <p className="ty-flow-report__note">{l.noContent}</p>
   }
 }
 
 function ScrollTable({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="fk-flow-report__table-wrap" tabIndex={0} role="region" aria-label={label}>
-      <table className="fk-flow-report__table">{children}</table>
+    <div className="ty-flow-report__table-wrap" tabIndex={0} role="region" aria-label={label}>
+      <table className="ty-flow-report__table">{children}</table>
     </div>
   )
 }
@@ -282,42 +282,42 @@ function ChartBlock({ section, ctx }: { section: Extract<ReportSection, { type: 
       rows.forEach((r, i) => {
         const v = val(r)
         const top = Math.min(yOf(v), baseline)
-        marks.push(<rect key={`${key}-${i}`} className="fk-flow-report__mark" data-series={s % 8} x={PAD.left + band * i + band * 0.15 + barW * s} y={top} width={barW} height={Math.max(1, Math.abs(yOf(v) - baseline))} />)
+        marks.push(<rect key={`${key}-${i}`} className="ty-flow-report__mark" data-series={s % 8} x={PAD.left + band * i + band * 0.15 + barW * s} y={top} width={barW} height={Math.max(1, Math.abs(yOf(v) - baseline))} />)
       })
     } else {
       const pts = rows.map((r, i) => `${PAD.left + band * i + band / 2},${yOf(val(r))}`)
       if (section.type === 'area' && rows.length) {
         const first = PAD.left + band / 2
         const last = PAD.left + band * (rows.length - 1) + band / 2
-        marks.push(<polygon key={`${key}-fill`} className="fk-flow-report__area" data-series={s % 8} points={`${first},${baseline} ${pts.join(' ')} ${last},${baseline}`} />)
+        marks.push(<polygon key={`${key}-fill`} className="ty-flow-report__area" data-series={s % 8} points={`${first},${baseline} ${pts.join(' ')} ${last},${baseline}`} />)
       }
-      marks.push(<polyline key={key} className="fk-flow-report__line" data-series={s % 8} points={pts.join(' ')} />)
-      rows.forEach((r, i) => marks.push(<circle key={`${key}-p${i}`} className="fk-flow-report__point" data-series={s % 8} data-shape={s % 3} cx={PAD.left + band * i + band / 2} cy={yOf(val(r))} r={3.5} />))
+      marks.push(<polyline key={key} className="ty-flow-report__line" data-series={s % 8} points={pts.join(' ')} />)
+      rows.forEach((r, i) => marks.push(<circle key={`${key}-p${i}`} className="ty-flow-report__point" data-series={s % 8} data-shape={s % 3} cx={PAD.left + band * i + band / 2} cy={yOf(val(r))} r={3.5} />))
     }
   })
 
   return (
-    <figure className="fk-flow-report__chart" aria-labelledby={captionId}>
-      <figcaption id={captionId} className="fk-flow-report__caption">
-        {section.title ? <S className="fk-flow-report__section-title">{section.title}</S> : null}
-        <span className="fk-flow-report__summary">{summary}</span>
+    <figure className="ty-flow-report__chart" aria-labelledby={captionId}>
+      <figcaption id={captionId} className="ty-flow-report__caption">
+        {section.title ? <S className="ty-flow-report__section-title">{section.title}</S> : null}
+        <span className="ty-flow-report__summary">{summary}</span>
       </figcaption>
       {view === 'chart' ? (
         <>
-          <svg className="fk-flow-report__svg" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={summary} preserveAspectRatio="none">
-            <line className="fk-flow-report__axis" x1={PAD.left} x2={W - PAD.right} y1={baseline} y2={baseline} />
+          <svg className="ty-flow-report__svg" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={summary} preserveAspectRatio="none">
+            <line className="ty-flow-report__axis" x1={PAD.left} x2={W - PAD.right} y1={baseline} y2={baseline} />
             {marks}
             {rows.map((r, i) => (
-              <text key={i} className="fk-flow-report__tick" x={PAD.left + band * i + band / 2} y={H - 8} textAnchor="middle">
+              <text key={i} className="ty-flow-report__tick" x={PAD.left + band * i + band / 2} y={H - 8} textAnchor="middle">
                 {String(r[x] ?? '')}
               </text>
             ))}
           </svg>
           {y.length > 1 ? (
-            <ul className="fk-flow-report__legend">
+            <ul className="ty-flow-report__legend">
               {y.map((k, s) => (
-                <li key={k} className="fk-flow-report__legend-item" data-series={s % 8} data-shape={s % 3}>
-                  <span className="fk-flow-report__swatch" aria-hidden="true" />
+                <li key={k} className="ty-flow-report__legend-item" data-series={s % 8} data-shape={s % 3}>
+                  <span className="ty-flow-report__swatch" aria-hidden="true" />
                   {k}
                 </li>
               ))}
@@ -325,7 +325,7 @@ function ChartBlock({ section, ctx }: { section: Extract<ReportSection, { type: 
           ) : null}
         </>
       ) : null}
-      <button type="button" className="fk-flow-report__toggle" aria-expanded={view === 'table'} aria-controls={tableId} onClick={() => setView((v) => (v === 'chart' ? 'table' : 'chart'))}>
+      <button type="button" className="ty-flow-report__toggle" aria-expanded={view === 'table'} aria-controls={tableId} onClick={() => setView((v) => (v === 'chart' ? 'table' : 'chart'))}>
         {view === 'chart' ? l.showTable : l.showChart}
       </button>
       <div id={tableId} hidden={view !== 'table'}>

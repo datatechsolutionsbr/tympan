@@ -1,4 +1,4 @@
-// @fakhir/flow: provenance group barrel (W3C PROV graph viewer).
+// @datatechsolutions/tympan-flow: provenance group barrel (W3C PROV graph viewer).
 export * from './model'
 export * from './labels'
 export * from './ProvenanceNode'

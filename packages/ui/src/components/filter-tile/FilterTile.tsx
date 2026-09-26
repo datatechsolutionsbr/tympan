@@ -27,7 +27,7 @@ export function FilterTile(props: FilterTileProps) {
   const surface = props.iconSurface ?? 'tinted'
   return (
     <ToggleButton
-      className={cx('fk-filter-tile', props.className)}
+      className={cx('ty-filter-tile', props.className)}
       isSelected={props.selected}
       isDisabled={props.disabled}
       onChange={() => props.onToggle()}
@@ -35,18 +35,18 @@ export function FilterTile(props: FilterTileProps) {
       aria-describedby={props.detail ? detailId : undefined}
     >
       <span
-        className="fk-filter-tile__well"
+        className="ty-filter-tile__well"
         data-surface={surface}
         data-toned={props.tone ? true : undefined}
-        style={categoricalVar('--fk-filter-tile-tone', props.tone)}
+        style={categoricalVar('--ty-filter-tile-tone', props.tone)}
         aria-hidden="true"
       >
         {props.icon}
       </span>
-      <span className="fk-filter-tile__text">
-        <span id={labelId} className="fk-filter-tile__label">{props.label}</span>
+      <span className="ty-filter-tile__text">
+        <span id={labelId} className="ty-filter-tile__label">{props.label}</span>
         {props.detail ? (
-          <span id={detailId} className="fk-filter-tile__detail">
+          <span id={detailId} className="ty-filter-tile__detail">
             {props.detail}
           </span>
         ) : null}
@@ -66,11 +66,11 @@ export interface FilterTileGroupHeadingProps {
 /** Small heading introducing a group of tiles. */
 export function FilterTileGroupHeading({ label, icon, level = 3, className }: FilterTileGroupHeadingProps) {
   return (
-    <div className={cx('fk-filter-tile-heading', className)}>
-      <span className="fk-filter-tile-heading__well" aria-hidden="true">
+    <div className={cx('ty-filter-tile-heading', className)}>
+      <span className="ty-filter-tile-heading__well" aria-hidden="true">
         {icon}
       </span>
-      <Heading level={level} className="fk-filter-tile-heading__text">
+      <Heading level={level} className="ty-filter-tile-heading__text">
         {label}
       </Heading>
     </div>
@@ -80,7 +80,7 @@ export function FilterTileGroupHeading({ label, icon, level = 3, className }: Fi
 /** Responsive grid for tiles: two columns on phones, more above 640. */
 export function FilterTileGrid({ label, children, className }: { label: string; children: ReactNode; className?: string }) {
   return (
-    <div role="group" aria-label={label} className={cx('fk-filter-tile-grid', className)}>
+    <div role="group" aria-label={label} className={cx('ty-filter-tile-grid', className)}>
       {children}
     </div>
   )

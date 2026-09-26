@@ -17,7 +17,7 @@ function step(phase: Phase, signal: Signal): Phase {
   return NEXT[phase][signal] ?? phase
 }
 
-/** How long the completing bar lingers (matches --fk-dur-base). */
+/** How long the completing bar lingers (matches --ty-dur-base). */
 const FINISH_MS = 240
 
 export interface RouteProgressProps {
@@ -53,9 +53,9 @@ export function RouteProgress({ pending, delay = 200, label, className }: RouteP
 
   const visible = phase === 'shown' || phase === 'finishing'
   return (
-    <div className={className ? `fk-route-progress ${className}` : 'fk-route-progress'}>
-      {visible ? <div className="fk-route-progress__bar" data-phase={phase} aria-hidden="true" /> : null}
-      <span className="fk-visually-hidden" role="status" aria-live="polite">
+    <div className={className ? `ty-route-progress ${className}` : 'ty-route-progress'}>
+      {visible ? <div className="ty-route-progress__bar" data-phase={phase} aria-hidden="true" /> : null}
+      <span className="ty-visually-hidden" role="status" aria-live="polite">
         {phase === 'shown' ? text : ''}
       </span>
     </div>

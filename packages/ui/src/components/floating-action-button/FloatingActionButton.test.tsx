@@ -16,7 +16,7 @@ describe('FloatingActionButton', () => {
     setViewportWidth(1280)
     render(<FloatingActionButton label="New session" icon={<Plus />} onPress={() => {}} />)
     expect(screen.getAllByRole('button', { name: 'New session' })).toHaveLength(1)
-    expect(document.querySelector('.fk-fab-dock')).toBeNull()
+    expect(document.querySelector('.ty-fab-dock')).toBeNull()
     expect(screen.getByRole('button')).toHaveTextContent('New session')
   })
 
@@ -30,10 +30,10 @@ describe('FloatingActionButton', () => {
     )
     const buttons = screen.getAllByRole('button', { name: 'New session' })
     expect(buttons).toHaveLength(1)
-    const dock = buttons[0]!.closest('.fk-fab-dock')!
+    const dock = buttons[0]!.closest('.ty-fab-dock')!
     expect(dock).not.toBeNull()
     expect(screen.getByText('Last row').compareDocumentPosition(dock) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-    expect(document.body).toHaveAttribute('data-fk-fab-reserve')
+    expect(document.body).toHaveAttribute('data-ty-fab-reserve')
     expect(cssOf('components/floating-action-button/FloatingActionButton.css')).toMatch(/safe-area-inset-bottom/)
   })
 
@@ -56,7 +56,7 @@ describe('FloatingActionButton', () => {
 
   it('does not scale in under reduced motion', () => {
     const reduced = mediaBlock(cssOf('components/floating-action-button/FloatingActionButton.css'), /\(prefers-reduced-motion:\s*reduce\)/)
-    expect(reduced).toMatch(/\.fk-fab-dock\s*\{[^}]*animation:\s*none/)
+    expect(reduced).toMatch(/\.ty-fab-dock\s*\{[^}]*animation:\s*none/)
   })
 
   it('has no axe violations in each state, light and dark', async () => {

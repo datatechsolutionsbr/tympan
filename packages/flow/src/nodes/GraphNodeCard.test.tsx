@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Quote } from 'lucide-react'
 import { describe, expect, it, vi } from 'vitest'
-import { ActorChip, ProofBadge } from '@fakhir/ui'
+import { ActorChip, ProofBadge } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import { cssOf, mediaBlock } from '../../test/css'
 import { GraphNodeCard } from './GraphNodeCard'
@@ -64,8 +64,8 @@ describe('GraphNodeCard', () => {
   it('explains a problem with an icon and text', () => {
     const { container } = render(<GraphNodeCard kind="agent" title="Gone" problem="Agent not found" />)
     expect(screen.getByText('Agent not found')).toBeInTheDocument()
-    expect(container.querySelector('.fk-node-card__problem svg')).not.toBeNull()
-    expect(container.querySelector('.fk-node-card')).toHaveAttribute('data-problem', 'true')
+    expect(container.querySelector('.ty-node-card__problem svg')).not.toBeNull()
+    expect(container.querySelector('.ty-node-card')).toHaveAttribute('data-problem', 'true')
   })
 
   it('renders a proof badge in the meta row unchanged (provenance composition)', async () => {
@@ -86,8 +86,8 @@ describe('GraphNodeCard', () => {
         }
       />,
     )
-    expect(container.querySelector('.fk-node-card__meta .fk-proof-badge')).toHaveAttribute('data-state', 'proved')
-    expect(container.querySelector('.fk-node-card')).toHaveAttribute('data-proof-state', 'proved')
+    expect(container.querySelector('.ty-node-card__meta .ty-proof-badge')).toHaveAttribute('data-state', 'proved')
+    expect(container.querySelector('.ty-node-card')).toHaveAttribute('data-proof-state', 'proved')
     await expectNoAxeViolations(container)
   })
 
@@ -98,7 +98,7 @@ describe('GraphNodeCard', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Remove Sum' }))
     expect(onDelete).toHaveBeenCalled()
     expect(onActivate).not.toHaveBeenCalled()
-    expect(screen.getByRole('button', { name: 'Remove Sum' }).closest('.fk-node-card__activator')).toBeNull()
+    expect(screen.getByRole('button', { name: 'Remove Sum' }).closest('.ty-node-card__activator')).toBeNull()
     await expectNoAxeViolations(container)
   })
 

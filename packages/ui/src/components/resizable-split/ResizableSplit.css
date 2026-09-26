@@ -1,54 +1,54 @@
 /* ResizableSplit (spec: wave-4/resizable-split.md; APG Window Splitter; design direction §2.6). */
-@layer fakhir.components {
-  .fk-split {
+@layer tympan.components {
+  .ty-split {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto var(--fk-split-size);
+    grid-template-columns: minmax(0, 1fr) auto var(--ty-split-size);
     min-block-size: 0;
   }
-  .fk-split[data-side='start'] {
-    grid-template-columns: var(--fk-split-size) auto minmax(0, 1fr);
+  .ty-split[data-side='start'] {
+    grid-template-columns: var(--ty-split-size) auto minmax(0, 1fr);
   }
-  .fk-split[data-stacked] {
+  .ty-split[data-stacked] {
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--fk-space-5);
+    gap: var(--ty-space-5);
   }
-  .fk-split__pane {
+  .ty-split__pane {
     min-inline-size: 0;
     min-block-size: 0;
   }
 
   /* A 1 px line with a 44 px invisible hit area. */
-  .fk-split__handle {
+  .ty-split__handle {
     position: relative;
     inline-size: 1px;
-    margin-inline: var(--fk-space-3);
-    background: var(--fk-line);
+    margin-inline: var(--ty-space-3);
+    background: var(--ty-line);
     cursor: col-resize;
     touch-action: none;
     outline: none;
   }
-  .fk-split__handle::before {
+  .ty-split__handle::before {
     content: '';
     position: absolute;
     inset-block: 0;
     inset-inline-start: 50%;
-    inline-size: var(--fk-control-target);
-    translate: calc(-50% * var(--fk-inline-sign)) 0;
+    inline-size: var(--ty-control-target);
+    translate: calc(-50% * var(--ty-inline-sign)) 0;
   }
-  .fk-split__handle:hover {
-    background: var(--fk-line-strong);
+  .ty-split__handle:hover {
+    background: var(--ty-line-strong);
   }
-  .fk-split__handle:focus-visible {
-    background: var(--fk-accent);
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-split__handle:focus-visible {
+    background: var(--ty-accent);
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
 
   @media (forced-colors: active) {
-    .fk-split__handle {
+    .ty-split__handle {
       background: CanvasText;
     }
-    .fk-split__handle:focus-visible {
+    .ty-split__handle:focus-visible {
       background: Highlight;
       outline-color: Highlight;
     }

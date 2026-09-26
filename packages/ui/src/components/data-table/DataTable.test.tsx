@@ -116,7 +116,7 @@ describe('DataTable', () => {
     expect(container.querySelectorAll('[data-loading="true"]')).toHaveLength(4)
     expect(screen.queryByText('TAMM')).toBeNull()
     expect(screen.getByRole('status')).toHaveTextContent('Loading the list')
-    expect(container.querySelector('.fk-table-wrap')).toHaveAttribute('data-density', 'compact')
+    expect(container.querySelector('.ty-table-wrap')).toHaveAttribute('data-density', 'compact')
   })
 
   it('loading in grid mode is aria-busy too', () => {
@@ -170,19 +170,19 @@ describe('DataTable', () => {
 
   it('declares density row heights: compact 36 px, standard 44 px, comfortable 52 px', () => {
     const css = cssOf('components/data-table/DataTable.css')
-    expect(css).toMatch(/--fk-table-row-compact:\s*36px/)
-    expect(css).toMatch(/--fk-table-row-standard:\s*44px/)
-    expect(css).toMatch(/--fk-table-row-comfortable:\s*52px/)
-    expect(css).toMatch(/\[data-density='compact'\]\s*\{[^}]*--fk-table-row:\s*var\(--fk-table-row-compact\)/)
-    expect(css).toMatch(/\[data-density='comfortable'\]\s*\{[^}]*--fk-table-row:\s*var\(--fk-table-row-comfortable\)/)
-    expect(css).toMatch(/\.fk-table__cell\s*\{[^}]*block-size:\s*var\(--fk-table-row\)/)
+    expect(css).toMatch(/--ty-table-row-compact:\s*36px/)
+    expect(css).toMatch(/--ty-table-row-standard:\s*44px/)
+    expect(css).toMatch(/--ty-table-row-comfortable:\s*52px/)
+    expect(css).toMatch(/\[data-density='compact'\]\s*\{[^}]*--ty-table-row:\s*var\(--ty-table-row-compact\)/)
+    expect(css).toMatch(/\[data-density='comfortable'\]\s*\{[^}]*--ty-table-row:\s*var\(--ty-table-row-comfortable\)/)
+    expect(css).toMatch(/\.ty-table__cell\s*\{[^}]*block-size:\s*var\(--ty-table-row\)/)
   })
 
   it('keeps the first column visible while scrolling horizontally', () => {
     const { container } = render(<DataTable caption="Cases" columns={columns} rows={rows} />)
-    expect(container.querySelector('.fk-table-wrap')).toHaveAttribute('data-sticky-first', 'true')
+    expect(container.querySelector('.ty-table-wrap')).toHaveAttribute('data-sticky-first', 'true')
     expect(cssOf('components/data-table/DataTable.css')).toMatch(
-      /\[data-sticky-first\] \.fk-table__row > :first-child\s*\{[^}]*position:\s*sticky[^}]*inset-inline-start:\s*0/,
+      /\[data-sticky-first\] \.ty-table__row > :first-child\s*\{[^}]*position:\s*sticky[^}]*inset-inline-start:\s*0/,
     )
   })
 

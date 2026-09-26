@@ -13,9 +13,9 @@ describe('StatusPill', () => {
   it('shows the word and success-tone icon for active', () => {
     const { container } = render(<StatusPill status="active" />)
     expect(screen.getByText('Active')).toBeInTheDocument()
-    const pill = container.querySelector('.fk-status')!
+    const pill = container.querySelector('.ty-status')!
     expect(pill).toHaveAttribute('data-tone', 'success')
-    expect(pill.querySelector('.fk-status__icon svg')).not.toBeNull()
+    expect(pill.querySelector('.ty-status__icon svg')).not.toBeNull()
   })
 
   it('uses a custom map entry', () => {
@@ -24,14 +24,14 @@ describe('StatusPill', () => {
     )
     expect(screen.getByText('Launched')).toBeInTheDocument()
     expect(screen.getByTestId('rocket')).toBeInTheDocument()
-    expect(container.querySelector('.fk-status')).toHaveAttribute('data-tone', 'info')
+    expect(container.querySelector('.ty-status')).toHaveAttribute('data-tone', 'info')
   })
 
   it('falls back to a neutral pill with the key as text for unknown statuses', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     const { container } = render(<StatusPill status="archived" />)
     expect(screen.getByText('archived')).toBeInTheDocument()
-    expect(container.querySelector('.fk-status')).toHaveAttribute('data-tone', 'neutral')
+    expect(container.querySelector('.ty-status')).toHaveAttribute('data-tone', 'neutral')
     expect(warn).toHaveBeenCalled()
     warn.mockRestore()
   })
@@ -64,7 +64,7 @@ describe('StatusPill', () => {
 
   it('does not rotate the busy icon under reduced motion', () => {
     const { container } = render(<StatusPill status="processing" />)
-    expect(container.querySelector('.fk-status')).toHaveAttribute('data-busy', 'true')
+    expect(container.querySelector('.ty-status')).toHaveAttribute('data-busy', 'true')
     const reduced = mediaBlock(cssOf('components/status-pill/StatusPill.css'), /\(prefers-reduced-motion:\s*reduce\)/)
     expect(reduced).toMatch(/animation:\s*none/)
   })

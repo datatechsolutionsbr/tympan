@@ -56,10 +56,10 @@ export function FormsBShowcase({ scope }: { scope: string }) {
   const [locale, setLocale] = useState('pt-BR')
 
   return (
-    <div className="fk-gallery-showcase">
+    <div className="ty-gallery-showcase">
       <Section id={id('category')} title="CategoryTabs, CategoryLabel">
         <CategoryTabs label={`Country (${scope})`} items={categories} selected={category} onSelect={setCategory} allowNone />
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <CategoryLabel code="BR" name="Brasil" marker={1} />
           <CategoryLabel code="EE" name="Estonia" marker={3} size="small" />
         </div>
@@ -101,14 +101,14 @@ export function FormsBShowcase({ scope }: { scope: string }) {
             <TimeField label="Freeze time" value={null} onChange={() => {}} disabled />
           </FieldGridItem>
         </FieldGrid>
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <MonthField label="Reporting period" value={month} onChange={setMonth} availableMonths={months} />
           <MonthField label="Empty period" value="" onChange={() => {}} availableMonths={months} />
         </div>
       </Section>
 
       <Section id={id('wheel')} title="WheelPicker, WheelPickerGroup">
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <WheelPicker label="Hour" options={hours} value={hour} onChange={setHour} showLabel />
           <WheelPickerGroup
             label="Freeze date"
@@ -121,14 +121,14 @@ export function FormsBShowcase({ scope }: { scope: string }) {
       </Section>
 
       <Section id={id('locale')} title="LocalePicker">
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <LocalePicker locales={locales} value={locale} onChange={setLocale} />
           <LocalePicker locales={locales} value={locale} onChange={setLocale} presentation="dialog" title="Idioma" />
         </div>
       </Section>
 
       <Section id={id('image')} title="ImagePicker">
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <ImagePicker fallbackText="NM" label="Change profile picture" upload={async () => ({ ok: true, key: 'k1' })} hint="JPEG, PNG or WebP up to 5 MiB." />
           <ImagePicker fallbackText="EA" shape="rounded" size="md" label="Change organisation logo" upload={async () => ({ ok: false, error: 'Upload refused' })} droppable />
           <ImagePicker fallbackText="AG" size="md" label="Change agent picture" upload={async () => ({ ok: true })} disabled />

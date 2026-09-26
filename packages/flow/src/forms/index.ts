@@ -1,4 +1,4 @@
-// @fakhir/flow: forms group barrel (node configuration forms).
+// @datatechsolutions/tympan-flow: forms group barrel (node configuration forms).
 export * from './NodeFormFooter'
 export * from './SchemaConfigForm'
 export * from './VariableListEditor'

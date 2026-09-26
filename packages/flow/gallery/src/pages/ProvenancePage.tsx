@@ -5,7 +5,7 @@
 
 import { useMemo, useState } from 'react'
 import { Check, ChevronDown, FileDown, FileText, Lock } from 'lucide-react'
-import { Button, FakhirProvider, Tag } from '@fakhir/ui'
+import { Button, TympanProvider, Tag } from '@datatechsolutions/tympan'
 import { NumberTrace, ProvenanceGraph, ProvenanceQuestion, ProvenanceViewSwitch, type ProvenanceViewMode } from '../../../src'
 import { setHashParam, useHashParams } from '../shell/params'
 import { ResearchShell, useDockTools } from '../shell/ResearchShell'
@@ -31,19 +31,19 @@ export function ProvenancePage() {
   const view: PageView = rawView && VIEWS.includes(rawView) ? rawView : 'graph'
   const rtl = lang === 'ar'
   return (
-    <FakhirProvider locale={lang}>
-      <div className="fk-prov-page" data-view={view} dir={rtl ? 'rtl' : 'ltr'} lang={lang}>
+    <TympanProvider locale={lang}>
+      <div className="ty-prov-page" data-view={view} dir={rtl ? 'rtl' : 'ltr'} lang={lang}>
         {view === 'number' ? <NumberPage lang={lang} /> : <ViewPage key={`${view}-${lang}`} lang={lang} view={view} />}
       </div>
-    </FakhirProvider>
+    </TympanProvider>
   )
 }
 
 function EditionButton({ lang }: { lang: Lang }) {
   const w = WORDS[lang]
   return (
-    <Button variant="secondary" leadingIcon={<Lock />} trailingIcon={<ChevronDown />} className="fk-prov-page__edition">
-      {w.edition} <span className="fk-prov-page__mono">2026-09-20</span> · {w.frozen}
+    <Button variant="secondary" leadingIcon={<Lock />} trailingIcon={<ChevronDown />} className="ty-prov-page__edition">
+      {w.edition} <span className="ty-prov-page__mono">2026-09-20</span> · {w.frozen}
     </Button>
   )
 }
@@ -97,7 +97,7 @@ function ViewPage({ lang, view }: { lang: Lang; view: ProvenanceViewMode }) {
         ? {}
         : {
             subheader: (
-              <div className="fk-prov-page__query">
+              <div className="ty-prov-page__query">
                 {question}
                 {switcher}
               </div>

@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react'
 import type { ReactNode } from 'react'
 import { describe, expect, it } from 'vitest'
-import { FakhirProvider } from '../../internal/provider'
+import { TympanProvider } from '../../internal/provider'
 import { createFormatter, createI18nValue, I18nAdapterProvider, useFormatter, useLocale, useTranslations } from './I18nAdapter'
 import { formatMessage } from './icu'
 
@@ -58,12 +58,12 @@ describe('I18nAdapter', () => {
     expect(phrase).toMatch(/hour/)
   })
 
-  it('reads the locale from the adapter, else from FakhirProvider', () => {
+  it('reads the locale from the adapter, else from TympanProvider', () => {
     expect(renderHook(() => useLocale(), { wrapper: withValue('pt-BR') }).result.current).toBe('pt-BR')
-    const viaFakhir = renderHook(() => useLocale(), {
-      wrapper: ({ children }) => <FakhirProvider locale="de-DE">{children}</FakhirProvider>,
+    const viaProvider = renderHook(() => useLocale(), {
+      wrapper: ({ children }) => <TympanProvider locale="de-DE">{children}</TympanProvider>,
     })
-    expect(viaFakhir.result.current).toBe('de-DE')
+    expect(viaProvider.result.current).toBe('de-DE')
     const f = renderHook(() => useFormatter(), { wrapper: withValue('pt-BR') }).result.current
     expect(f.number(1234.5)).toBe('1.234,5')
   })

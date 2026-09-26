@@ -1,5 +1,17 @@
 # Provenance
 
+> **Rename note (2026-09-26).** The repository is now Tympan, an
+> Astrlabe-family component published by Datatech. `packages/ui` is
+> `@datatechsolutions/tympan` (called `@fakhir/ui` in this record, before
+> that `@fakhir/design-system`), `packages/flow` is
+> `@datatechsolutions/tympan-flow` (here `@fakhir/flow`, before that
+> `@fakhir/flow-canvas`) and `packages/tokens` is
+> `@datatechsolutions/tympan-tokens` (here `@fakhir/tokens`). The `fk-` class
+> and `--fk-` custom-property prefix and the `data-fk-*` attributes named here
+> are now `ty-`, `--ty-` and `data-ty-*`; `FakhirProvider` is `TympanProvider`;
+> the Fakhir look is the `fakhir` theme preset. This record is otherwise kept
+> as written.
+
 Per component: the spec it implements, the sources used, and the decisions
 taken where the spec left room. "DD" is the design direction
 (`docs/infra/design-direction-fakhir.md`); specs live in

@@ -1,81 +1,81 @@
 /* VariableListEditor: tone marks the leading marker only (decorative). */
-@layer fakhir.components {
-  .fk-var-list {
+@layer tympan.components {
+  .ty-var-list {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
-  .fk-var-list__label {
-    color: var(--fk-ink);
-    font-size: var(--fk-font-size-label);
-    line-height: var(--fk-font-line-height-label);
-    font-weight: var(--fk-font-weight-semibold);
+  .ty-var-list__label {
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-label);
+    line-height: var(--ty-font-line-height-label);
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-var-list__rows {
+  .ty-var-list__rows {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
     margin: 0;
     padding: 0;
     list-style: none;
   }
-  .fk-var-list__row {
+  .ty-var-list__row {
     display: flex;
     align-items: center;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
     min-block-size: 44px;
-    padding-inline: var(--fk-space-2);
+    padding-inline: var(--ty-space-2);
     border: 1px solid transparent;
-    border-radius: var(--fk-radius-control);
+    border-radius: var(--ty-radius-control);
   }
-  .fk-var-list__row:focus-within {
-    border-color: var(--fk-line-strong);
-    background: var(--fk-surface-sunken);
+  .ty-var-list__row:focus-within {
+    border-color: var(--ty-line-strong);
+    background: var(--ty-surface-sunken);
   }
-  .fk-var-list__marker {
+  .ty-var-list__marker {
     flex: none;
     display: inline-grid;
     place-items: center;
     inline-size: 8px;
     block-size: 8px;
-    border-radius: var(--fk-radius-pill);
-    background: var(--fk-flow-tone, var(--fk-ink-3));
+    border-radius: var(--ty-radius-pill);
+    background: var(--ty-flow-tone, var(--ty-ink-3));
   }
-  .fk-var-list__marker[data-numbered] {
+  .ty-var-list__marker[data-numbered] {
     inline-size: auto;
     min-inline-size: 20px;
     block-size: 20px;
     padding-inline: 4px;
-    background: var(--fk-flow-tone-soft, var(--fk-surface-sunken));
-    color: var(--fk-flow-tone-text, var(--fk-ink-2));
-    font-size: var(--fk-font-size-meta);
+    background: var(--ty-flow-tone-soft, var(--ty-surface-sunken));
+    color: var(--ty-flow-tone-text, var(--ty-ink-2));
+    font-size: var(--ty-font-size-meta);
     font-variant-numeric: tabular-nums;
   }
-  .fk-var-list__name,
-  .fk-var-list__name-field {
+  .ty-var-list__name,
+  .ty-var-list__name-field {
     flex: 1 1 auto;
     min-inline-size: 0;
     overflow-wrap: anywhere;
   }
-  .fk-var-list__add {
+  .ty-var-list__add {
     display: flex;
     align-items: flex-start;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
-  .fk-var-list__add > :first-child {
+  .ty-var-list__add > :first-child {
     flex: 1 1 auto;
   }
-  .fk-var-list__empty {
+  .ty-var-list__empty {
     margin: 0;
-    color: var(--fk-ink-3);
+    color: var(--ty-ink-3);
   }
   @media (forced-colors: active) {
-    .fk-var-list__marker {
+    .ty-var-list__marker {
       border: 1px solid CanvasText;
       background: Canvas;
       color: CanvasText;
     }
-    .fk-var-list__row:focus-within {
+    .ty-var-list__row:focus-within {
       border-color: Highlight;
     }
   }

@@ -71,23 +71,23 @@ export function EmptyState({
 
   const H = `h${headingLevel}` as 'h2' | 'h3' | 'h4'
   const titleNode = (
-    <H id={titleId} className="fk-empty__title">
+    <H id={titleId} className="ty-empty__title">
       {heading}
     </H>
   )
 
   return (
     <div
-      className={cx('fk-empty', className)}
+      className={cx('ty-empty', className)}
       data-framing={framing}
       role={framing === 'page' ? 'region' : undefined}
       aria-labelledby={framing === 'page' ? titleId : undefined}
     >
-      <Icon className="fk-empty__icon" aria-hidden="true" focusable="false" />
+      <Icon className="ty-empty__icon" aria-hidden="true" focusable="false" />
       {announce ? <div role="status">{titleNode}</div> : titleNode}
-      {text ? <p className="fk-empty__description">{text}</p> : null}
+      {text ? <p className="ty-empty__description">{text}</p> : null}
       {action || secondary ? (
-        <div className="fk-empty__actions">
+        <div className="ty-empty__actions">
           {action ? (
             <Button variant={action.variant ?? 'primary'} onPress={() => action.onPress()}>
               {action.label}

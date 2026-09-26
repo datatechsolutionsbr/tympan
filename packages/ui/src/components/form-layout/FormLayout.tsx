@@ -26,7 +26,7 @@ export interface FormContainerProps {
 /** A real form with the vertical rhythm between fields (spec: wave-2/form-layout.md). */
 export function FormContainer({ children, className, onSubmit, ...aria }: FormContainerProps) {
   return (
-    <Form {...aria} className={cx('fk-form-layout', className)} data-part="container" onSubmit={withoutReload(onSubmit)}>
+    <Form {...aria} className={cx('ty-form-layout', className)} data-part="container" onSubmit={withoutReload(onSubmit)}>
       {children}
     </Form>
   )
@@ -42,7 +42,7 @@ export interface FieldGridProps {
 /** Two columns from 640 px, one below; children may span both with FieldGridItem. */
 export function FieldGrid({ columns = 2, children, className }: FieldGridProps) {
   return (
-    <div className={cx('fk-form-layout', className)} data-part="grid" data-columns={columns}>
+    <div className={cx('ty-form-layout', className)} data-part="grid" data-columns={columns}>
       {children}
     </div>
   )
@@ -51,7 +51,7 @@ export function FieldGrid({ columns = 2, children, className }: FieldGridProps) 
 /** A cell of FieldGrid; `full` spans both columns. */
 export function FieldGridItem({ span = 'half', children }: { span?: 'full' | 'half'; children: ReactNode }) {
   return (
-    <div className="fk-form-layout__cell" data-span={span}>
+    <div className="ty-form-layout__cell" data-span={span}>
       {children}
     </div>
   )
@@ -60,7 +60,7 @@ export function FieldGridItem({ span = 'half', children }: { span?: 'full' | 'ha
 /** Fields and a button on one line; wraps on narrow screens. */
 export function InlineRow({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <div className={cx('fk-form-layout', className)} data-part="inline">
+    <div className={cx('ty-form-layout', className)} data-part="inline">
       {children}
     </div>
   )
@@ -81,11 +81,11 @@ function SectionHead({ level, id, title, description }: { level: HeadingLevel; i
   return (
     <>
       {title != null ? (
-        <Tag id={id} className="fk-form-layout__title">
+        <Tag id={id} className="ty-form-layout__title">
           {title}
         </Tag>
       ) : null}
-      {description != null ? <p className="fk-form-layout__description">{description}</p> : null}
+      {description != null ? <p className="ty-form-layout__description">{description}</p> : null}
     </>
   )
 }
@@ -95,17 +95,17 @@ export function FormSection({ title, description, headingLevel = 3, asFieldset =
   const titleId = useId()
   if (asFieldset) {
     return (
-      <fieldset className={cx('fk-form-layout', className)} data-part="section">
-        {title != null ? <legend className="fk-form-layout__title">{title}</legend> : null}
-        {description != null ? <p className="fk-form-layout__description">{description}</p> : null}
-        <div className="fk-form-layout__body">{children}</div>
+      <fieldset className={cx('ty-form-layout', className)} data-part="section">
+        {title != null ? <legend className="ty-form-layout__title">{title}</legend> : null}
+        {description != null ? <p className="ty-form-layout__description">{description}</p> : null}
+        <div className="ty-form-layout__body">{children}</div>
       </fieldset>
     )
   }
   return (
-    <div role="group" aria-labelledby={title != null ? titleId : undefined} className={cx('fk-form-layout', className)} data-part="section">
+    <div role="group" aria-labelledby={title != null ? titleId : undefined} className={cx('ty-form-layout', className)} data-part="section">
       <SectionHead level={headingLevel} id={titleId} title={title} description={description} />
-      <div className="fk-form-layout__body">{children}</div>
+      <div className="ty-form-layout__body">{children}</div>
     </div>
   )
 }
@@ -134,35 +134,35 @@ export function FramedForm(props: FramedFormProps) {
   const cancelShown = props.cancelLabel != null && props.onCancel != null
   return (
     <Form
-      className={cx('fk-form-layout', props.className)}
+      className={cx('ty-form-layout', props.className)}
       data-part="framed"
       aria-labelledby={props.title ? titleId : undefined}
       aria-busy={props.busy || undefined}
       onSubmit={withoutReload(props.onSubmit)}
     >
       {headerShown ? (
-        <div className="fk-form-layout__header">
+        <div className="ty-form-layout__header">
           {props.icon ? (
-            <span className="fk-form-layout__icon" aria-hidden="true">
+            <span className="ty-form-layout__icon" aria-hidden="true">
               {props.icon}
             </span>
           ) : null}
           <div>
-            <h2 id={titleId} className="fk-form-layout__framed-title">
+            <h2 id={titleId} className="ty-form-layout__framed-title">
               {props.title}
             </h2>
-            {props.subtitle ? <p className="fk-form-layout__description">{props.subtitle}</p> : null}
+            {props.subtitle ? <p className="ty-form-layout__description">{props.subtitle}</p> : null}
           </div>
         </div>
       ) : props.title ? (
-        <span id={titleId} className="fk-visually-hidden">
+        <span id={titleId} className="ty-visually-hidden">
           {props.title}
         </span>
       ) : null}
-      <div className="fk-form-layout__framed-body">{props.children}</div>
+      <div className="ty-form-layout__framed-body">{props.children}</div>
       {props.showFooter === false ? null : (
-        <div className="fk-form-layout__footer">
-          {props.footerExtra ? <div className="fk-form-layout__extra">{props.footerExtra}</div> : null}
+        <div className="ty-form-layout__footer">
+          {props.footerExtra ? <div className="ty-form-layout__extra">{props.footerExtra}</div> : null}
           <FormActions
             saveLabel={props.submitLabel}
             cancelLabel={cancelShown ? props.cancelLabel : undefined}

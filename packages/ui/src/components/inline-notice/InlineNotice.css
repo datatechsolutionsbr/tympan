@@ -1,100 +1,100 @@
 /* InlineNotice (spec: wave-1/inline-notice.md; design direction §2.2, §2.3). */
-@layer fakhir.components {
-  .fk-notice {
-    --fk-notice-ink: var(--fk-info);
-    --fk-notice-fill: var(--fk-info-soft);
-    --fk-notice-text: var(--fk-on-info-soft);
+@layer tympan.components {
+  .ty-notice {
+    --ty-notice-ink: var(--ty-info);
+    --ty-notice-fill: var(--ty-info-soft);
+    --ty-notice-text: var(--ty-on-info-soft);
     display: flex;
     align-items: flex-start;
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
     box-sizing: border-box;
     inline-size: 100%;
-    padding: var(--fk-space-3) var(--fk-space-4);
-    border: 1px solid color-mix(in srgb, var(--fk-notice-ink) 35%, transparent);
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-notice-fill);
-    color: var(--fk-notice-text);
+    padding: var(--ty-space-3) var(--ty-space-4);
+    border: 1px solid color-mix(in srgb, var(--ty-notice-ink) 35%, transparent);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-notice-fill);
+    color: var(--ty-notice-text);
   }
-  .fk-notice[data-tone='danger'] {
-    --fk-notice-ink: var(--fk-danger);
-    --fk-notice-fill: var(--fk-danger-soft);
-    --fk-notice-text: var(--fk-on-danger-soft);
+  .ty-notice[data-tone='danger'] {
+    --ty-notice-ink: var(--ty-danger);
+    --ty-notice-fill: var(--ty-danger-soft);
+    --ty-notice-text: var(--ty-on-danger-soft);
   }
-  .fk-notice[data-tone='warning'] {
-    --fk-notice-ink: var(--fk-warning);
-    --fk-notice-fill: var(--fk-warning-soft);
-    --fk-notice-text: var(--fk-on-warning-soft);
+  .ty-notice[data-tone='warning'] {
+    --ty-notice-ink: var(--ty-warning);
+    --ty-notice-fill: var(--ty-warning-soft);
+    --ty-notice-text: var(--ty-on-warning-soft);
   }
-  .fk-notice[data-tone='success'] {
-    --fk-notice-ink: var(--fk-success);
-    --fk-notice-fill: var(--fk-success-soft);
-    --fk-notice-text: var(--fk-on-success-soft);
+  .ty-notice[data-tone='success'] {
+    --ty-notice-ink: var(--ty-success);
+    --ty-notice-fill: var(--ty-success-soft);
+    --ty-notice-text: var(--ty-on-success-soft);
   }
-  .fk-notice[data-align='centre'] {
+  .ty-notice[data-align='centre'] {
     justify-content: center;
     text-align: center;
   }
 
-  .fk-notice__icon {
+  .ty-notice__icon {
     display: inline-flex;
     flex: none;
     padding-block-start: 2px;
-    color: var(--fk-notice-ink);
+    color: var(--ty-notice-ink);
   }
-  .fk-notice__icon > svg {
+  .ty-notice__icon > svg {
     inline-size: 1.15em;
     block-size: 1.15em;
   }
 
-  .fk-notice__body {
+  .ty-notice__body {
     display: flex;
     flex: 1;
     flex-direction: column;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
     min-inline-size: 0;
-    max-inline-size: calc(var(--fk-measure-prose) * 1ch);
+    max-inline-size: calc(var(--ty-measure-prose) * 1ch);
   }
-  .fk-notice__title {
+  .ty-notice__title {
     margin: 0;
     color: inherit;
-    font-family: var(--fk-font-sans);
-    font-size: var(--fk-font-size-body);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-body);
+    font-family: var(--ty-font-sans);
+    font-size: var(--ty-font-size-body);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-body);
   }
-  .fk-notice__message {
-    font-size: var(--fk-font-size-body);
-    line-height: var(--fk-font-line-height-body);
+  .ty-notice__message {
+    font-size: var(--ty-font-size-body);
+    line-height: var(--ty-font-line-height-body);
   }
-  .fk-notice__actions {
+  .ty-notice__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--fk-space-2);
-    margin-block-start: var(--fk-space-1);
+    gap: var(--ty-space-2);
+    margin-block-start: var(--ty-space-1);
   }
-  .fk-notice__dismiss {
+  .ty-notice__dismiss {
     flex: none;
-    margin-block: calc(var(--fk-space-1) * -1);
+    margin-block: calc(var(--ty-space-1) * -1);
   }
 
   @media (prefers-reduced-transparency: reduce) {
-    .fk-notice {
-      background: color-mix(in srgb, var(--fk-notice-ink) 10%, var(--fk-surface-solid));
+    .ty-notice {
+      background: color-mix(in srgb, var(--ty-notice-ink) 10%, var(--ty-surface-solid));
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-notice {
+    .ty-notice {
       animation: none;
       transition: none;
     }
   }
 
   @media (forced-colors: active) {
-    .fk-notice {
+    .ty-notice {
       border: 1px solid CanvasText;
     }
-    .fk-notice__icon {
+    .ty-notice__icon {
       color: CanvasText;
     }
   }

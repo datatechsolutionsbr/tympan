@@ -29,12 +29,12 @@ export interface HistoryListProps {
 
 function HeaderText({ entry }: { entry: HistoryEntry }) {
   return (
-    <span className="fk-history-list__header-text">
-      <span className="fk-history-list__line">
-        <span className="fk-history-list__start">{entry.start}</span>
-        {entry.end ? <span className="fk-history-list__end">{entry.end}</span> : null}
+    <span className="ty-history-list__header-text">
+      <span className="ty-history-list__line">
+        <span className="ty-history-list__start">{entry.start}</span>
+        {entry.end ? <span className="ty-history-list__end">{entry.end}</span> : null}
       </span>
-      {entry.summary ? <span className="fk-history-list__summary">{entry.summary}</span> : null}
+      {entry.summary ? <span className="ty-history-list__summary">{entry.summary}</span> : null}
     </span>
   )
 }
@@ -42,12 +42,12 @@ function HeaderText({ entry }: { entry: HistoryEntry }) {
 /** An entry with details: a disclosure whose header is the trigger. */
 function OpenableEntry({ entry }: { entry: HistoryEntry }) {
   return (
-    <Disclosure id={entry.id} className="fk-history-list__entry" data-openable="">
-      <Button slot="trigger" className="fk-history-list__header">
-        <ChevronRight className="fk-icon fk-mirror-rtl fk-history-list__chevron" aria-hidden="true" focusable="false" />
+    <Disclosure id={entry.id} className="ty-history-list__entry" data-openable="">
+      <Button slot="trigger" className="ty-history-list__header">
+        <ChevronRight className="ty-icon ty-mirror-rtl ty-history-list__chevron" aria-hidden="true" focusable="false" />
         <HeaderText entry={entry} />
       </Button>
-      <DisclosurePanel className="fk-history-list__details">{entry.details}</DisclosurePanel>
+      <DisclosurePanel className="ty-history-list__details">{entry.details}</DisclosurePanel>
     </Disclosure>
   )
 }
@@ -55,8 +55,8 @@ function OpenableEntry({ entry }: { entry: HistoryEntry }) {
 /** An entry without details: a static header, no button, no chevron. */
 function StaticEntry({ entry }: { entry: HistoryEntry }) {
   return (
-    <div className="fk-history-list__entry">
-      <div className="fk-history-list__header" data-static="">
+    <div className="ty-history-list__entry">
+      <div className="ty-history-list__header" data-static="">
         <HeaderText entry={entry} />
       </div>
     </div>
@@ -71,12 +71,12 @@ export function HistoryList(props: HistoryListProps) {
 
   if (loading) {
     return (
-      <div className={cx('fk-history-list', props.className)} aria-busy="true" data-state="loading">
-        <span role="status" className="fk-visually-hidden">
+      <div className={cx('ty-history-list', props.className)} aria-busy="true" data-state="loading">
+        <span role="status" className="ty-visually-hidden">
           {props.loadingLabel}
         </span>
         {Array.from({ length: skeletonRows }, (_, i) => (
-          <div className="fk-history-list__ghost" key={i} aria-hidden="true">
+          <div className="ty-history-list__ghost" key={i} aria-hidden="true">
             <Skeleton width="medium" />
             <Skeleton width="short" />
           </div>
@@ -87,7 +87,7 @@ export function HistoryList(props: HistoryListProps) {
 
   if (items.length === 0) {
     return (
-      <p className={cx('fk-history-list', 'fk-history-list__empty', props.className)} data-state="empty">
+      <p className={cx('ty-history-list', 'ty-history-list__empty', props.className)} data-state="empty">
         {props.emptyLabel}
       </p>
     )
@@ -98,14 +98,14 @@ export function HistoryList(props: HistoryListProps) {
 
   return (
     <DisclosureGroup
-      className={cx('fk-history-list', props.className)}
+      className={cx('ty-history-list', props.className)}
       allowsMultipleExpanded={expansion === 'multiple'}
       onExpandedChange={(keys) => props.onExpandedChange?.(toIds(keys))}
       {...selection}
     >
-      <ol className="fk-history-list__items">
+      <ol className="ty-history-list__items">
         {items.map((entry) => (
-          <li key={entry.id} className="fk-history-list__item">
+          <li key={entry.id} className="ty-history-list__item">
             {entry.details == null ? <StaticEntry entry={entry} /> : <OpenableEntry entry={entry} />}
           </li>
         ))}

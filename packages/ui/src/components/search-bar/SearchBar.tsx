@@ -60,10 +60,10 @@ function FiltersPanel({ dialog, narrow }: { dialog: SearchBarFilterDialog; narro
     </>
   )
   const context = dialog.context ? (
-    <p className="fk-search-bar__context">
+    <p className="ty-search-bar__context">
       {dialog.context.icon ? <span aria-hidden="true">{dialog.context.icon}</span> : null}
-      <span className="fk-search-bar__context-label">{dialog.context.label}</span>
-      {dialog.context.countText ? <span className="fk-search-bar__context-count">{dialog.context.countText}</span> : null}
+      <span className="ty-search-bar__context-label">{dialog.context.label}</span>
+      {dialog.context.countText ? <span className="ty-search-bar__context-count">{dialog.context.countText}</span> : null}
     </p>
   ) : null
   const title = dialog.title ?? copy.filtersTitle
@@ -72,7 +72,7 @@ function FiltersPanel({ dialog, narrow }: { dialog: SearchBarFilterDialog; narro
       <Drawer open={dialog.open} onOpenChange={dialog.onOpenChange} title={title} placement="bottom">
         {context}
         {dialog.content}
-        <div className="fk-search-bar__drawer-actions">{footer}</div>
+        <div className="ty-search-bar__drawer-actions">{footer}</div>
       </Drawer>
     )
   }
@@ -108,7 +108,7 @@ export function SearchBar(props: SearchBarProps) {
     trailing.push(
       <AriaButton
         key="cancel"
-        className="fk-search-bar__text-action"
+        className="ty-search-bar__text-action"
         onPress={() => {
           props.onQueryChange('')
           props.onCancel?.()
@@ -120,7 +120,7 @@ export function SearchBar(props: SearchBarProps) {
     )
   } else if (dirty && props.onClearAll) {
     trailing.push(
-      <AriaButton key="clear" className="fk-search-bar__text-action" onPress={props.onClearAll}>
+      <AriaButton key="clear" className="ty-search-bar__text-action" onPress={props.onClearAll}>
         {copy.clearAll}
       </AriaButton>,
     )
@@ -133,15 +133,15 @@ export function SearchBar(props: SearchBarProps) {
         aria-haspopup="dialog"
         aria-expanded={props.filterDialog.open}
         onPress={() => props.filterDialog!.onOpenChange(true)}
-        className="fk-search-bar__filters"
+        className="ty-search-bar__filters"
       >
         <span aria-hidden="true">{copy.filters}</span>
         {count > 0 ? (
-          <span className="fk-search-bar__count" aria-hidden="true">
+          <span className="ty-search-bar__count" aria-hidden="true">
             {new Intl.NumberFormat(locale).format(count)}
           </span>
         ) : null}
-        <span className="fk-visually-hidden">{count > 0 ? copy.filtersActive(count) : copy.filters}</span>
+        <span className="ty-visually-hidden">{count > 0 ? copy.filtersActive(count) : copy.filters}</span>
       </Button>,
     )
   }
@@ -151,14 +151,14 @@ export function SearchBar(props: SearchBarProps) {
       ref={bar}
       role="search"
       aria-label={props.label ?? placeholder}
-      className={cx('fk-search-bar', props.className)}
+      className={cx('ty-search-bar', props.className)}
       data-bordered={props.bordered === false ? undefined : true}
       onFocusCapture={() => setFocusInside(true)}
       onBlurCapture={onBlurCapture}
     >
-      <div className="fk-search-bar__main">
+      <div className="ty-search-bar__main">
         <SearchInput
-          className="fk-search-input fk-search-bar__field"
+          className="ty-search-input ty-search-bar__field"
           value={props.query}
           onChange={props.onQueryChange}
           ariaLabel={placeholder}
@@ -168,8 +168,8 @@ export function SearchBar(props: SearchBarProps) {
         />
         {trailing}
       </div>
-      {hasFilters ? <FilterChips filters={filters} onRemove={props.onRemoveFilter} kindIcons={props.kindIcons} className="fk-search-bar__chips" /> : null}
-      {props.actions ? <div className="fk-search-bar__actions">{props.actions}</div> : null}
+      {hasFilters ? <FilterChips filters={filters} onRemove={props.onRemoveFilter} kindIcons={props.kindIcons} className="ty-search-bar__chips" /> : null}
+      {props.actions ? <div className="ty-search-bar__actions">{props.actions}</div> : null}
       {props.filterDialog ? <FiltersPanel dialog={props.filterDialog} narrow={narrow} /> : null}
     </div>
   )

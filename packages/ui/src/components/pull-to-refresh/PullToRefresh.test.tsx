@@ -26,7 +26,7 @@ function deferred() {
   return { promise, resolve, reject }
 }
 
-const region = (c: HTMLElement) => c.querySelector<HTMLElement>('.fk-pull')!
+const region = (c: HTMLElement) => c.querySelector<HTMLElement>('.ty-pull')!
 
 describe('PullToRefresh', () => {
   it('refreshes once past the threshold and stays busy until it resolves', async () => {
@@ -46,7 +46,7 @@ describe('PullToRefresh', () => {
     const { container } = render(<PullToRefresh onRefresh={onRefresh}>List</PullToRefresh>)
     act(() => pull(region(container), 30))
     expect(onRefresh).not.toHaveBeenCalled()
-    expect(container.querySelector('.fk-pull__indicator')).not.toHaveAttribute('data-visible')
+    expect(container.querySelector('.ty-pull__indicator')).not.toHaveAttribute('data-visible')
   })
 
   it('does not start when the container is scrolled down', () => {
@@ -110,7 +110,7 @@ describe('PullToRefresh', () => {
         ))}
       </>,
     )
-    act(() => pull(container.querySelector<HTMLElement>('.fk-pull')!, 200))
+    act(() => pull(container.querySelector<HTMLElement>('.ty-pull')!, 200))
     await expectNoAxeViolations(container)
     await act(async () => d.resolve())
   })

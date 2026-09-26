@@ -8,20 +8,20 @@ import { brand, BrandLogo, BrandMark } from './BrandMark'
 
 describe('BrandMark', () => {
   it('icon-only: the badge is an image named by the label', () => {
-    render(<BrandMark showWordmark={false} label="Fakhir home" />)
-    expect(screen.getByRole('img', { name: 'Fakhir home' })).toBeInTheDocument()
+    render(<BrandMark showWordmark={false} label="Tympan home" />)
+    expect(screen.getByRole('img', { name: 'Tympan home' })).toBeInTheDocument()
   })
 
   it('with the wordmark the product name is read once', () => {
     const { container } = render(<BrandMark />)
-    expect(container.textContent).toBe('Fakhir')
+    expect(container.textContent).toBe('Tympan')
     expect(screen.queryByRole('img')).toBeNull()
-    expect(container.querySelector('.fk-brand-mark__badge')).toHaveAttribute('aria-hidden', 'true')
+    expect(container.querySelector('.ty-brand-mark__badge')).toHaveAttribute('aria-hidden', 'true')
   })
 
   it('image form picks the dark logo file on dark themes', () => {
     const { rerender } = render(<BrandLogo mode="dark" />)
-    expect(screen.getByRole('img', { name: 'Fakhir' })).toHaveAttribute('src', brand.logoFiles.logoDark)
+    expect(screen.getByRole('img', { name: 'Tympan' })).toHaveAttribute('src', brand.logoFiles.logoDark)
     rerender(<BrandLogo mode="light" />)
     expect(screen.getByRole('img')).toHaveAttribute('src', brand.logoFiles.logo)
     rerender(<BrandLogo />)
@@ -32,9 +32,9 @@ describe('BrandMark', () => {
   it('scales badge and text together per size, with plain ink wordmark', () => {
     const css = cssOf('components/brand-mark/BrandMark.css')
     for (const size of ['small', 'large']) {
-      expect(css).toMatch(new RegExp(`\\[data-size='${size}'\\]\\s*\\{[^}]*--fk-brand-mark-unit[^}]*--fk-brand-mark-type`))
+      expect(css).toMatch(new RegExp(`\\[data-size='${size}'\\]\\s*\\{[^}]*--ty-brand-mark-unit[^}]*--ty-brand-mark-type`))
     }
-    expect(css).toMatch(/\.fk-brand-mark__word\s*\{[^}]*color:\s*var\(--fk-ink\)/)
+    expect(css).toMatch(/\.ty-brand-mark__word\s*\{[^}]*color:\s*var\(--ty-ink\)/)
     const { container } = render(<BrandMark size="small" />)
     expect(container.firstElementChild).toHaveAttribute('data-size', 'small')
   })

@@ -1,52 +1,52 @@
 /* Shared layout of the node configuration forms. Logical properties only, so
    every form mirrors in right-to-left locales. */
-@layer fakhir.components {
-  .fk-node-form {
+@layer tympan.components {
+  .ty-node-form {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-5);
+    gap: var(--ty-space-5);
     min-inline-size: 0;
-    font-family: var(--fk-font-sans);
-    color: var(--fk-ink-2);
+    font-family: var(--ty-font-sans);
+    color: var(--ty-ink-2);
     text-align: start;
   }
-  .fk-node-form__fields {
+  .ty-node-form__fields {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-5);
+    gap: var(--ty-space-5);
   }
-  .fk-node-form__empty {
+  .ty-node-form__empty {
     margin: 0;
-    color: var(--fk-ink-3);
+    color: var(--ty-ink-3);
   }
-  .fk-node-form-footer {
+  .ty-node-form-footer {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
-    gap: var(--fk-space-2);
-    padding-block-start: var(--fk-space-4);
-    border-block-start: 1px solid var(--fk-line);
+    gap: var(--ty-space-2);
+    padding-block-start: var(--ty-space-4);
+    border-block-start: 1px solid var(--ty-line);
   }
-  .fk-node-form-footer__save {
+  .ty-node-form-footer__save {
     display: inline-flex;
   }
-  .fk-mono {
-    font-family: var(--fk-font-mono);
+  .ty-mono {
+    font-family: var(--ty-font-mono);
   }
   /* Identifiers, commands and structured text stay left-to-right inside RTL
      pages and never reorder the surrounding text. */
-  .fk-ltr-text:is(span, code, input, textarea),
-  .fk-ltr-text input,
-  .fk-ltr-text textarea {
+  .ty-ltr-text:is(span, code, input, textarea),
+  .ty-ltr-text input,
+  .ty-ltr-text textarea {
     direction: ltr;
     unicode-bidi: isolate;
   }
-  .fk-ltr-text input,
-  .fk-ltr-text textarea {
+  .ty-ltr-text input,
+  .ty-ltr-text textarea {
     text-align: start;
   }
   @media (forced-colors: active) {
-    .fk-node-form-footer {
+    .ty-node-form-footer {
       border-block-start-color: CanvasText;
     }
   }

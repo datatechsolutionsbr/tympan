@@ -1,6 +1,6 @@
 /* ShowcaseBackdrop and AccentBand (spec: wave-4/showcase-backdrop.md; design direction §2.3, §2.5). */
-@layer fakhir.components {
-  .fk-showcase-backdrop {
+@layer tympan.components {
+  .ty-showcase-backdrop {
     position: absolute;
     inset: 0;
     z-index: 0;
@@ -8,70 +8,70 @@
     border-radius: inherit;
     pointer-events: none;
   }
-  .fk-showcase-backdrop__glow {
-    --fk-glow-x: 85%;
-    --fk-glow-y: 0%;
+  .ty-showcase-backdrop__glow {
+    --ty-glow-x: 85%;
+    --ty-glow-y: 0%;
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse 55% 60% at var(--fk-glow-x) var(--fk-glow-y), var(--fk-glow-hue), transparent 70%);
+    background: radial-gradient(ellipse 55% 60% at var(--ty-glow-x) var(--ty-glow-y), var(--ty-glow-hue), transparent 70%);
   }
-  .fk-showcase-backdrop__glow[data-hue='1'] {
-    --fk-glow-hue: var(--fk-ambient-1);
+  .ty-showcase-backdrop__glow[data-hue='1'] {
+    --ty-glow-hue: var(--ty-ambient-1);
   }
-  .fk-showcase-backdrop__glow[data-hue='2'] {
-    --fk-glow-hue: var(--fk-ambient-2);
-    --fk-glow-x: 15%;
-    --fk-glow-y: 100%;
+  .ty-showcase-backdrop__glow[data-hue='2'] {
+    --ty-glow-hue: var(--ty-ambient-2);
+    --ty-glow-x: 15%;
+    --ty-glow-y: 100%;
   }
-  .fk-showcase-backdrop[data-placement='top'] .fk-showcase-backdrop__glow[data-hue='1'] {
-    --fk-glow-x: 30%;
+  .ty-showcase-backdrop[data-placement='top'] .ty-showcase-backdrop__glow[data-hue='1'] {
+    --ty-glow-x: 30%;
   }
-  .fk-showcase-backdrop[data-placement='top'] .fk-showcase-backdrop__glow[data-hue='2'] {
-    --fk-glow-x: 70%;
-    --fk-glow-y: 0%;
+  .ty-showcase-backdrop[data-placement='top'] .ty-showcase-backdrop__glow[data-hue='2'] {
+    --ty-glow-x: 70%;
+    --ty-glow-y: 0%;
   }
-  .fk-showcase-backdrop[data-placement='bottom'] .fk-showcase-backdrop__glow[data-hue='1'] {
-    --fk-glow-x: 70%;
-    --fk-glow-y: 100%;
+  .ty-showcase-backdrop[data-placement='bottom'] .ty-showcase-backdrop__glow[data-hue='1'] {
+    --ty-glow-x: 70%;
+    --ty-glow-y: 100%;
   }
-  .fk-showcase-backdrop[data-intensity='faint'] {
+  .ty-showcase-backdrop[data-intensity='faint'] {
     opacity: 0.5;
   }
 
-  .fk-accent-band {
+  .ty-accent-band {
     position: absolute;
     inset-inline: 0;
     inset-block-start: 0;
     z-index: 1;
-    block-size: var(--fk-space-1);
-    background: linear-gradient(to right, var(--fk-accent), var(--fk-accent-soft));
+    block-size: var(--ty-space-1);
+    background: linear-gradient(to right, var(--ty-accent), var(--ty-accent-soft));
     pointer-events: none;
   }
-  .fk-accent-band[data-edge='bottom'] {
+  .ty-accent-band[data-edge='bottom'] {
     inset-block: auto 0;
   }
 
   /* Fixed, never animated (§2.5). Opaque surfaces: no glow; the band turns solid. */
   @media (prefers-reduced-transparency: reduce) {
-    .fk-showcase-backdrop {
+    .ty-showcase-backdrop {
       display: none;
     }
-    .fk-accent-band {
-      background: var(--fk-accent);
+    .ty-accent-band {
+      background: var(--ty-accent);
     }
   }
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .fk-showcase-backdrop {
+    .ty-showcase-backdrop {
       display: none;
     }
-    .fk-accent-band {
-      background: var(--fk-accent);
+    .ty-accent-band {
+      background: var(--ty-accent);
     }
   }
 
   @media (forced-colors: active) {
-    .fk-showcase-backdrop,
-    .fk-accent-band {
+    .ty-showcase-backdrop,
+    .ty-accent-band {
       display: none;
     }
   }

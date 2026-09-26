@@ -5,7 +5,7 @@
 
 import { useMemo, useState, type ReactNode } from 'react'
 import { Button as AriaButton } from 'react-aria-components'
-import { SegmentedControl, TextField } from '@fakhir/ui'
+import { SegmentedControl, TextField } from '@datatechsolutions/tympan'
 import { fill } from '../internal/labels'
 import { EXPRESSION_FAMILIES, pickerEntries, prettyJson, seedOperation, type ExpressionCatalog, type OperationNode } from './model'
 
@@ -41,7 +41,7 @@ interface PickGroup {
 }
 
 const asCode = (text: string) => (
-  <code className="fk-compute__ref" dir="ltr">
+  <code className="ty-compute__ref" dir="ltr">
     {text}
   </code>
 )
@@ -83,7 +83,7 @@ export function ComputeInsertPanel(props: { catalog: ExpressionCatalog | undefin
   const titledAsSection = source === 'operations'
 
   return (
-    <div className="fk-expr-form__panel">
+    <div className="ty-expr-form__panel">
       <SegmentedControl
         label={words.referencePanel}
         size="compact"
@@ -93,16 +93,16 @@ export function ComputeInsertPanel(props: { catalog: ExpressionCatalog | undefin
       />
       {source === 'operations' ? <TextField mode="search" label={words.searchOperations} value={query} onChange={setQuery} /> : null}
       {source === 'operations' && groups.length === 0 ? (
-        <p className="fk-expr__hint" role="status">
+        <p className="ty-expr__hint" role="status">
           {words.noOperations}
         </p>
       ) : null}
       {groups.map((group) => {
         const list = (
-          <ul className="fk-expr-form__insert-list" {...(titledAsSection ? {} : { 'aria-label': group.title })}>
+          <ul className="ty-expr-form__insert-list" {...(titledAsSection ? {} : { 'aria-label': group.title })}>
             {group.picks.map((pick) => (
               <li key={pick.key}>
-                <AriaButton className="fk-expr-form__insert" onPress={() => onPick(pick.fragment)}>
+                <AriaButton className="ty-expr-form__insert" onPress={() => onPick(pick.fragment)}>
                   {pick.face}
                 </AriaButton>
               </li>
@@ -110,8 +110,8 @@ export function ComputeInsertPanel(props: { catalog: ExpressionCatalog | undefin
           </ul>
         )
         return titledAsSection ? (
-          <section key={group.key} className="fk-expr-form__family" aria-label={group.title}>
-            <h4 className="fk-expr-form__family-title">{group.title}</h4>
+          <section key={group.key} className="ty-expr-form__family" aria-label={group.title}>
+            <h4 className="ty-expr-form__family-title">{group.title}</h4>
             {list}
           </section>
         ) : (

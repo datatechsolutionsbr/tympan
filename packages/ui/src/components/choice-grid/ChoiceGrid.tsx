@@ -29,21 +29,21 @@ const tileBody =
   (option: ChoiceGridOption) =>
   (state: RadioRenderProps): ReactNode => [
     option.symbol ? (
-      <span key="s" className="fk-choice-grid__symbol" aria-hidden="true">
+      <span key="s" className="ty-choice-grid__symbol" aria-hidden="true">
         {option.symbol}
       </span>
     ) : null,
-    <span key="l" className="fk-choice-grid__label">
+    <span key="l" className="ty-choice-grid__label">
       {option.label}
     </span>,
-    state.isSelected ? <Check key="c" className="fk-choice-grid__check" aria-hidden="true" focusable="false" /> : null,
+    state.isSelected ? <Check key="c" className="ty-choice-grid__check" aria-hidden="true" focusable="false" /> : null,
   ]
 
 function Heading({ id, title, Icon }: { id: string; title: string; Icon?: IconComponent }) {
   return (
-    <div className="fk-choice-grid__header">
-      {Icon && <Icon className="fk-choice-grid__icon" aria-hidden="true" focusable="false" />}
-      <span id={id} className="fk-choice-grid__title">
+    <div className="ty-choice-grid__header">
+      {Icon && <Icon className="ty-choice-grid__icon" aria-hidden="true" focusable="false" />}
+      <span id={id} className="ty-choice-grid__title">
         {title}
       </span>
     </div>
@@ -58,12 +58,12 @@ export function ChoiceGrid(props: ChoiceGridProps) {
   useDomAttributes(host, { 'aria-busy': locked ? 'true' : undefined })
   // Only real changes reach the host, and none while busy.
   const pick = (next: string) => void (!locked && next !== props.value && props.onChange(next))
-  const layout = { '--fk-choice-grid-columns': String(props.columns ?? 2) } as CSSProperties
+  const layout = { '--ty-choice-grid-columns': String(props.columns ?? 2) } as CSSProperties
 
   return (
     <RadioGroup
       ref={host}
-      className={cx('fk-choice-grid', props.className)}
+      className={cx('ty-choice-grid', props.className)}
       aria-labelledby={headingId}
       orientation="horizontal"
       value={props.value}
@@ -73,9 +73,9 @@ export function ChoiceGrid(props: ChoiceGridProps) {
       style={layout}
     >
       <Heading id={headingId} title={props.title} Icon={props.icon} />
-      <div className="fk-choice-grid__cells">
+      <div className="ty-choice-grid__cells">
         {props.options.map((option) => (
-          <Radio key={option.value} value={option.value} className="fk-choice-grid__cell">
+          <Radio key={option.value} value={option.value} className="ty-choice-grid__cell">
             {tileBody(option)}
           </Radio>
         ))}

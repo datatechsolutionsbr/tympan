@@ -5,7 +5,7 @@
 
 import { useMemo, useState } from 'react'
 import { ArrowDown, ArrowUp, Crosshair, Link2, Pencil, Trash2, Unlink } from 'lucide-react'
-import { ActionMenu, Button, NativeSelect } from '@fakhir/ui'
+import { ActionMenu, Button, NativeSelect } from '@datatechsolutions/tympan'
 import { useRenderCatalog } from '../catalog/RenderCatalog'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { FlowConnector, FlowNode } from '../model/types'
@@ -120,31 +120,31 @@ export function FlowOutline(props: FlowOutlineProps) {
   const edit = !locked
 
   return (
-    <section className={['fk-flow-outline', props.className].filter(Boolean).join(' ')} aria-label={l.outline}>
+    <section className={['ty-flow-outline', props.className].filter(Boolean).join(' ')} aria-label={l.outline}>
       {edit && props.onAdd && addableKinds.length ? (
-        <div className="fk-flow-outline__add">
+        <div className="ty-flow-outline__add">
           <NativeSelect label={l.addKind} options={addableKinds.map((k) => ({ value: k.kind, label: k.label }))} value={kindToAdd} onChange={setKindToAdd} />
           <Button variant="secondary" onPress={() => kindToAdd && props.onAdd?.(kindToAdd)}>
             {l.add}
           </Button>
         </div>
       ) : null}
-      <h3 className="fk-flow-outline__title">
-        {l.steps} <span className="fk-flow-outline__count">{fill(l.count, { count: ordered.length }, locale)}</span>
+      <h3 className="ty-flow-outline__title">
+        {l.steps} <span className="ty-flow-outline__count">{fill(l.count, { count: ordered.length }, locale)}</span>
       </h3>
-      {ordered.length === 0 ? <p className="fk-flow-outline__empty">{l.empty}</p> : null}
-      <ol className="fk-flow-outline__list">
+      {ordered.length === 0 ? <p className="ty-flow-outline__empty">{l.empty}</p> : null}
+      <ol className="ty-flow-outline__list">
         {ordered.map((n, i) => {
           const name = nodeName(n, catalog)
           const title = nodeTitle(n, catalog)
           const out = connectors.filter((c) => c.source === n.id)
           const targets = edit ? ordered.filter((t) => t.id !== n.id && !out.some((c) => c.target === t.id) && canConnect(n, t)) : []
           return (
-            <li key={n.id} className="fk-flow-outline__item" data-kind={n.kind}>
-              <div className="fk-flow-outline__row">
-                <span className="fk-flow-outline__bubble" data-tone={catalog.tone(n.kind)} aria-hidden="true" />
-                <span className="fk-flow-outline__name">{name}</span>
-                <div className="fk-flow-outline__actions">
+            <li key={n.id} className="ty-flow-outline__item" data-kind={n.kind}>
+              <div className="ty-flow-outline__row">
+                <span className="ty-flow-outline__bubble" data-tone={catalog.tone(n.kind)} aria-hidden="true" />
+                <span className="ty-flow-outline__name">{name}</span>
+                <div className="ty-flow-outline__actions">
                   {props.onShow ? <Button variant="quiet" size="compact" iconOnly accessibleLabel={fill(l.show, { name: title }, locale)} leadingIcon={<Crosshair />} onPress={() => props.onShow!(n.id)} /> : null}
                   {edit && props.onConfigure ? <Button variant="quiet" size="compact" iconOnly accessibleLabel={fill(l.configure, { name: title }, locale)} leadingIcon={<Pencil />} onPress={() => props.onConfigure!(n.id)} /> : null}
                   {edit && props.onConnect && n.kind !== 'note' ? (
@@ -167,17 +167,17 @@ export function FlowOutline(props: FlowOutlineProps) {
                 </div>
               </div>
               {out.length ? (
-                <ul className="fk-flow-outline__links" aria-label={`${l.leadsTo}: ${title}`}>
+                <ul className="ty-flow-outline__links" aria-label={`${l.leadsTo}: ${title}`}>
                   {out.map((c) => {
                     const t = byId.get(c.target)
                     if (!t) return null
                     const tTitle = nodeTitle(t, catalog)
                     const branch = c.label ?? c.sourcePort
                     return (
-                      <li key={c.id} className="fk-flow-outline__link">
+                      <li key={c.id} className="ty-flow-outline__link">
                         <span>
                           {l.leadsTo} {nodeName(t, catalog)}
-                          {branch && branch !== 'out' ? <span className="fk-flow-outline__branch"> · {fill(l.branch, { branch }, locale)}</span> : null}
+                          {branch && branch !== 'out' ? <span className="ty-flow-outline__branch"> · {fill(l.branch, { branch }, locale)}</span> : null}
                         </span>
                         {edit && props.onDisconnect ? (
                           <Button variant="quiet" size="compact" iconOnly accessibleLabel={fill(l.disconnect, { source: title, target: tTitle }, locale)} leadingIcon={<Unlink />} onPress={() => props.onDisconnect!(c.id)} />

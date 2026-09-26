@@ -37,8 +37,8 @@ describe('InlineNotice', () => {
         Not yet published.
       </InlineNotice>,
     )
-    const title = container.querySelector('.fk-notice__title')!
-    const message = container.querySelector('.fk-notice__message')!
+    const title = container.querySelector('.ty-notice__title')!
+    const message = container.querySelector('.ty-notice__message')!
     expect(title.compareDocumentPosition(message) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     expect(screen.queryByRole('heading')).toBeNull()
   })
@@ -90,13 +90,13 @@ describe('InlineNotice', () => {
         Message
       </InlineNotice>,
     )
-    expect(container.querySelector('.fk-notice')?.textContent?.startsWith(word)).toBe(true)
+    expect(container.querySelector('.ty-notice')?.textContent?.startsWith(word)).toBe(true)
   })
 
   it('keeps boundary and icon visible in forced colours', () => {
     const forced = mediaBlock(cssOf('components/inline-notice/InlineNotice.css'), /\(forced-colors:\s*active\)/)
-    expect(forced).toMatch(/\.fk-notice\s*\{[^}]*border:\s*1px solid CanvasText/)
-    expect(forced).toMatch(/\.fk-notice__icon\s*\{[^}]*CanvasText/)
+    expect(forced).toMatch(/\.ty-notice\s*\{[^}]*border:\s*1px solid CanvasText/)
+    expect(forced).toMatch(/\.ty-notice__icon\s*\{[^}]*CanvasText/)
   })
 
   it('has no axe violations', async () => {

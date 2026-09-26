@@ -1,6 +1,6 @@
 // MotionFoundation (spec: wave-2/motion-foundation.md; design direction §2.7).
-// The token values mirror the --fk-dur-* and --fk-ease* custom properties of
-// @fakhir/tokens; a test keeps both in step. There are deliberately no spring
+// The token values mirror the --ty-dur-* and --ty-ease* custom properties of
+// @datatechsolutions/tympan-tokens; a test keeps both in step. There are deliberately no spring
 // and no stagger tokens.
 import { createContext, useContext, type ReactNode } from 'react'
 import { prefersReducedMotion as queryReducedMotion } from '../../internal/media'
@@ -19,14 +19,14 @@ const bezierCss = (b: Bezier) => `cubic-bezier(${b.join(', ')})`
 export const duration = {
   ms: MS,
   s: { instant: MS.instant / 1000, quick: MS.quick / 1000, base: MS.base / 1000 },
-  cssVar: { instant: 'var(--fk-dur-instant)', quick: 'var(--fk-dur-quick)', base: 'var(--fk-dur-base)' },
+  cssVar: { instant: 'var(--ty-dur-instant)', quick: 'var(--ty-dur-quick)', base: 'var(--ty-dur-base)' },
 } as const
 
 /** Easing curves of §2.7 as control points, CSS strings and custom properties. */
 export const ease = {
   points: CURVES,
   css: { enter: bezierCss(CURVES.enter), exit: bezierCss(CURVES.exit) },
-  cssVar: { enter: 'var(--fk-ease)', exit: 'var(--fk-ease-out)' },
+  cssVar: { enter: 'var(--ty-ease)', exit: 'var(--ty-ease-out)' },
 } as const
 
 /** Transition description understood by the presets and `resolveTransition`. */
@@ -69,7 +69,7 @@ const opacityOnly = (p: MotionPreset): MotionPreset => ({
 
 const fadeIn = preset({ opacity: 0 }, 'quick')
 const slideFromBottom = preset({ opacity: 0, translate: '0 16px' }, 'base')
-const slideFromEnd = preset({ opacity: 0, translate: 'var(--fk-motion-end-offset, 16px) 0' }, 'base')
+const slideFromEnd = preset({ opacity: 0, translate: 'var(--ty-motion-end-offset, 16px) 0' }, 'base')
 const press: MotionPreset = { from: { opacity: 1 }, to: { opacity: 0.85 }, transition: { durationMs: MS.instant, ease: CURVES.enter } }
 
 /** Named presets; each `reduced` twin is opacity-only and instant. */

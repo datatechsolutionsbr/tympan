@@ -65,31 +65,31 @@ describe('AppFrame', () => {
 
   it('caps the content width per mode', () => {
     const { container, rerender } = render(<Frame width="data" />)
-    expect(container.querySelector('.fk-app-frame')).toHaveAttribute('data-width', 'data')
+    expect(container.querySelector('.ty-app-frame')).toHaveAttribute('data-width', 'data')
     rerender(<Frame width="reading" />)
-    expect(container.querySelector('.fk-app-frame')).toHaveAttribute('data-width', 'reading')
+    expect(container.querySelector('.ty-app-frame')).toHaveAttribute('data-width', 'reading')
     const css = cssOf('components/app-frame/AppFrame.css')
-    expect(css).toMatch(/\.fk-app-frame__content\s*\{[^}]*max-inline-size:\s*var\(--fk-layout-reading\)/)
-    expect(css).toMatch(/\[data-width='data'\] \.fk-app-frame__content\s*\{[^}]*max-inline-size:\s*var\(--fk-layout-data\)/)
+    expect(css).toMatch(/\.ty-app-frame__content\s*\{[^}]*max-inline-size:\s*var\(--ty-layout-reading\)/)
+    expect(css).toMatch(/\[data-width='data'\] \.ty-app-frame__content\s*\{[^}]*max-inline-size:\s*var\(--ty-layout-data\)/)
   })
 
   it('places the aside as a column at 1440 px, an overlay at 1100 px and a bottom sheet at 800 px', () => {
     const aside = <p>Evidence body</p>
     const { container, unmount } = render(<Frame aside={aside} asideLabel="Evidence" asideOpen />)
     expect(screen.getByRole('complementary', { name: 'Evidence' })).toBeInTheDocument()
-    expect(container.querySelector('.fk-app-frame')).toHaveAttribute('data-aside', 'column')
+    expect(container.querySelector('.ty-app-frame')).toHaveAttribute('data-aside', 'column')
     unmount()
 
     setViewportWidth(1100)
     const second = render(<Frame aside={aside} asideLabel="Evidence" asideOpen />)
     expect(screen.getByRole('dialog', { name: 'Evidence' })).toBeInTheDocument()
-    expect(document.querySelector('.fk-app-frame__aside-modal')).toHaveAttribute('data-placement', 'end')
+    expect(document.querySelector('.ty-app-frame__aside-modal')).toHaveAttribute('data-placement', 'end')
     second.unmount()
 
     setViewportWidth(800)
     render(<Frame aside={aside} asideLabel="Evidence" asideOpen />)
     expect(screen.getByRole('dialog', { name: 'Evidence' })).toBeInTheDocument()
-    expect(document.querySelector('.fk-app-frame__aside-modal')).toHaveAttribute('data-placement', 'bottom')
+    expect(document.querySelector('.ty-app-frame__aside-modal')).toHaveAttribute('data-placement', 'bottom')
   })
 
   it('shows the loading fallback with loadingLabel while a lazy route loads', async () => {
@@ -111,7 +111,7 @@ describe('AppFrame', () => {
     expect(within(nav).getByRole('link', { name: 'Overview' })).toBeInTheDocument()
     expect(within(nav).getByRole('link', { name: 'Sources' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Expand navigation' })).toHaveAttribute('aria-expanded', 'false')
-    expect(document.querySelector('.fk-app-frame')).toHaveAttribute('data-nav', 'rail')
+    expect(document.querySelector('.ty-app-frame')).toHaveAttribute('data-nav', 'rail')
   })
 
   it('declares reduced motion and forced colours rules', () => {

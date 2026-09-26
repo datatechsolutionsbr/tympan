@@ -29,12 +29,12 @@ describe('Avatar', () => {
 
   it('draws an agent as a rounded square with a bot icon and no initials', () => {
     const { container } = render(<Avatar actorKind="agent" name="stage-counter" fallbackText="SC" />)
-    const frame = container.querySelector('.fk-avatar')!
+    const frame = container.querySelector('.ty-avatar')!
     expect(frame).toHaveAttribute('data-kind', 'agent')
     expect(frame.querySelector('svg')).not.toBeNull()
     expect(screen.queryByText('SC')).toBeNull()
     const css = cssOf('components/avatar/Avatar.css')
-    expect(css).toMatch(/\[data-kind='agent'\]\s*\{[^}]*border-radius:\s*var\(--fk-radius-agent\)[^}]*dashed/)
+    expect(css).toMatch(/\[data-kind='agent'\]\s*\{[^}]*border-radius:\s*var\(--ty-radius-agent\)[^}]*dashed/)
   })
 
   it('is hidden from assistive tech when decorative', () => {
@@ -54,8 +54,8 @@ describe('Avatar', () => {
 
   it('keeps a 44 x 44 hit area when xsmall and pressable', () => {
     render(<Avatar size="xsmall" name="N" onPress={() => {}} />)
-    expect(screen.getByRole('button')).toHaveClass('fk-avatar-control')
-    expect(cssOf('components/avatar/Avatar.css')).toMatch(/\.fk-avatar-control::before\s*\{[^}]*inline-size:\s*max\(100%,\s*var\(--fk-control-target\)\)[^}]*block-size:\s*max\(100%,\s*var\(--fk-control-target\)\)/)
+    expect(screen.getByRole('button')).toHaveClass('ty-avatar-control')
+    expect(cssOf('components/avatar/Avatar.css')).toMatch(/\.ty-avatar-control::before\s*\{[^}]*inline-size:\s*max\(100%,\s*var\(--ty-control-target\)\)[^}]*block-size:\s*max\(100%,\s*var\(--ty-control-target\)\)/)
   })
 
   it('has no axe violations', async () => {
@@ -74,7 +74,7 @@ describe('Avatar', () => {
 describe('Avatar in right-to-left (ar)', () => {
   it('renders mirrored where directional and passes axe', async () => {
     const { container } = renderRtl(<><Avatar name="نور الهدى" fallbackText="نه" /><Avatar name="Núria" fallbackText={'Nu\u0301r'} /></>)
-    const initials = container.querySelectorAll('.fk-avatar__initials')
+    const initials = container.querySelectorAll('.ty-avatar__initials')
     expect(initials[0]).toHaveTextContent('نه')
     // Two grapheme clusters: the combining accent stays with its letter.
     expect(initials[1]!.textContent).toBe('Nu\u0301')

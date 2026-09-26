@@ -2,7 +2,7 @@ import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
 import { describe, expect, it, vi } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import { OutputSchemaBuilder, type OutputSchema } from './OutputSchemaBuilder'
 
@@ -72,11 +72,11 @@ describe('OutputSchemaBuilder', () => {
 
   it('shows the unsupported state for a non-object top level, also in RTL', () => {
     render(
-      <FakhirProvider locale="ar">
+      <TympanProvider locale="ar">
         <div dir="rtl">
           <OutputSchemaBuilder value={{ type: 'array' }} onChange={() => {}} />
         </div>
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(screen.getByRole('button', { name: 'Reset to object' })).toBeInTheDocument()
   })

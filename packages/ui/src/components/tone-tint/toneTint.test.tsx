@@ -8,10 +8,10 @@ import { checkToneUsage, isToneName, resolveTint, tintStyle, toneNames } from '.
 const css = cssOf('components/tone-tint/ToneTint.css')
 
 describe('ToneTint resolver', () => {
-  it('references only --fk-tint-success-* properties and no literal colour', () => {
+  it('references only --ty-tint-success-* properties and no literal colour', () => {
     const t = resolveTint('success')
     for (const value of Object.values(t)) {
-      expect(value).toMatch(/^var\(--fk-tint-success-(rgb|soft|ring)\)$/)
+      expect(value).toMatch(/^var\(--ty-tint-success-(rgb|soft|ring)\)$/)
       expect(value).not.toMatch(/#|rgb\(|oklch\(|hsl\(/)
     }
   })
@@ -19,7 +19,7 @@ describe('ToneTint resolver', () => {
   it('returns the neutral set for an unknown tone, or the fallback when given', () => {
     expect(resolveTint('violet')).toEqual(resolveTint('neutral'))
     expect(resolveTint(undefined)).toEqual(resolveTint('neutral'))
-    expect(resolveTint('nope', 'accent').soft).toBe('var(--fk-tint-accent-soft)')
+    expect(resolveTint('nope', 'accent').soft).toBe('var(--ty-tint-accent-soft)')
   })
 
   it('validates host input with isToneName', () => {
@@ -30,11 +30,11 @@ describe('ToneTint resolver', () => {
   })
 
   it('defines all three tokens for every tone, on the themed selectors (both themes)', () => {
-    const tokenBlock = css.slice(css.indexOf('@layer fakhir.tokens'), css.indexOf('@layer fakhir.components'))
-    expect(tokenBlock).toMatch(/\[data-fk-mode\]/)
-    expect(tokenBlock).toMatch(/\[data-fk-theme\]/)
+    const tokenBlock = css.slice(css.indexOf('@layer tympan.tokens'), css.indexOf('@layer tympan.components'))
+    expect(tokenBlock).toMatch(/\[data-ty-mode\]/)
+    expect(tokenBlock).toMatch(/\[data-ty-theme\]/)
     for (const tone of toneNames) {
-      for (const part of ['rgb', 'soft', 'ring']) expect(tokenBlock).toContain(`--fk-tint-${tone}-${part}:`)
+      for (const part of ['rgb', 'soft', 'ring']) expect(tokenBlock).toContain(`--ty-tint-${tone}-${part}:`)
     }
     expect(tokenBlock).not.toMatch(/#[0-9a-f]{3,8}\b/i)
   })
@@ -50,7 +50,7 @@ describe('ToneTint resolver', () => {
 
   it('uses the opaque surface under reduced transparency and ignores the tint in forced colours', () => {
     const reduced = mediaBlock(css, /\(prefers-reduced-transparency:\s*reduce\)/)
-    expect(reduced).toMatch(/background-color:\s*var\(--fk-surface-solid\)/)
+    expect(reduced).toMatch(/background-color:\s*var\(--ty-surface-solid\)/)
     expect(reduced).toMatch(/background-image:\s*none/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/background-image:\s*none/)
   })
@@ -60,15 +60,15 @@ describe('ToneTint resolver', () => {
       <>
         {(['light', 'dark'] as const).map((s) => (
           <ThemeScope key={s} scheme={s}>
-            <div data-fk-tinted="" style={tintStyle('pending')}>
+            <div data-ty-tinted="" style={tintStyle('pending')}>
               <p>Pending review, 3 claims</p>
             </div>
           </ThemeScope>
         ))}
       </>,
     )
-    const el = container.querySelector('[data-fk-tinted]') as HTMLElement
-    expect(el.style.getPropertyValue('--fk-surface-tint')).toBe('var(--fk-tint-pending-soft)')
+    const el = container.querySelector('[data-ty-tinted]') as HTMLElement
+    expect(el.style.getPropertyValue('--ty-surface-tint')).toBe('var(--ty-tint-pending-soft)')
     await expectNoAxeViolations(container)
   })
 })

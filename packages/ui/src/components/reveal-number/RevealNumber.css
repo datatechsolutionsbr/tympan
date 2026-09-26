@@ -1,17 +1,17 @@
 /* RevealNumber (spec: wave-4/reveal-number.md; design direction §2.2, §2.7). */
-@layer fakhir.components {
-  .fk-reveal-number {
+@layer tympan.components {
+  .ty-reveal-number {
     display: inline-grid;
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
   }
   /* Ghost and visible run share one cell: the ghost fixes the width. */
-  .fk-reveal-number__ghost,
-  .fk-reveal-number__run {
+  .ty-reveal-number__ghost,
+  .ty-reveal-number__run {
     grid-area: 1 / 1;
     text-align: end;
   }
-  .fk-reveal-number__ghost {
+  .ty-reveal-number__ghost {
     visibility: hidden;
   }
 }

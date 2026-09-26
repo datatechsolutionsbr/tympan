@@ -22,12 +22,12 @@ describe('PhaseBar', () => {
   it('computes shares by value', () => {
     expect(shares([3, 1])).toEqual([75, 25])
     const { container } = render(<PhaseBar segments={[{ id: 'a', label: 'a', value: 3, tone: 'accent' }, { id: 'b', label: 'b', value: 1, tone: 'neutral' }]} label="Split" />)
-    expect((container.querySelector('.fk-phase-bar__segment') as HTMLElement).style.getPropertyValue('--fk-phase-share')).toBe('75%')
+    expect((container.querySelector('.ty-phase-bar__segment') as HTMLElement).style.getPropertyValue('--ty-phase-share')).toBe('75%')
   })
 
   it('renders an empty track with zero total and still lists zeros', () => {
     const { container } = render(<PhaseBar segments={[{ id: 'a', label: 'proved', value: 0, tone: 'proved' }]} label="Empty" locale="en" />)
-    expect(container.querySelectorAll('.fk-phase-bar__segment')).toHaveLength(0)
+    expect(container.querySelectorAll('.ty-phase-bar__segment')).toHaveLength(0)
     expect(screen.getByText('0')).toBeInTheDocument()
   })
 

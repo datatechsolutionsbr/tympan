@@ -1,140 +1,140 @@
 /* ChoiceCard and ChoiceCardGroup (spec: wave-2/choice-card.md; design direction §2.3, §2.4, §2.7). */
-@layer fakhir.components {
-  .fk-choice-card-group {
+@layer tympan.components {
+  .ty-choice-card-group {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
-  .fk-choice-card-group__label {
-    color: var(--fk-ink);
-    font-size: var(--fk-font-size-label);
-    font-weight: var(--fk-font-weight-semibold);
+  .ty-choice-card-group__label {
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-label);
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-choice-card-group__cards {
+  .ty-choice-card-group__cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
   }
-  .fk-choice-card-group[data-arrangement='inline'] .fk-choice-card-group__cards {
+  .ty-choice-card-group[data-arrangement='inline'] .ty-choice-card-group__cards {
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   }
 
-  .fk-choice-card {
+  .ty-choice-card {
     position: relative;
     box-sizing: border-box;
     display: flex;
     align-items: flex-start;
-    gap: var(--fk-space-3);
-    min-block-size: var(--fk-control-target);
-    padding: var(--fk-space-4);
-    border: 1px solid var(--fk-line-strong);
-    border-radius: var(--fk-radius-card);
-    background: var(--fk-surface-raised);
-    color: var(--fk-ink-2);
+    gap: var(--ty-space-3);
+    min-block-size: var(--ty-control-target);
+    padding: var(--ty-space-4);
+    border: 1px solid var(--ty-line-strong);
+    border-radius: var(--ty-radius-card);
+    background: var(--ty-surface-raised);
+    color: var(--ty-ink-2);
     font: inherit;
     text-align: start;
     cursor: pointer;
     outline: none;
-    transition: background-color var(--fk-dur-instant) var(--fk-ease), border-color var(--fk-dur-instant) var(--fk-ease);
+    transition: background-color var(--ty-dur-instant) var(--ty-ease), border-color var(--ty-dur-instant) var(--ty-ease);
   }
-  .fk-choice-card[data-arrangement='stacked'] {
+  .ty-choice-card[data-arrangement='stacked'] {
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
-  .fk-choice-card[data-arrangement='stacked'] .fk-selected-mark {
+  .ty-choice-card[data-arrangement='stacked'] .ty-selected-mark {
     position: absolute;
-    inset-block-start: var(--fk-space-2);
-    inset-inline-end: var(--fk-space-2);
+    inset-block-start: var(--ty-space-2);
+    inset-inline-end: var(--ty-space-2);
   }
-  .fk-choice-card[data-hovered]:not([data-disabled], [data-unavailable]) {
-    border-color: var(--fk-ink-3);
+  .ty-choice-card[data-hovered]:not([data-disabled], [data-unavailable]) {
+    border-color: var(--ty-ink-3);
   }
-  .fk-choice-card[data-selected] {
-    border-color: var(--fk-accent);
-    background: var(--fk-accent-soft);
-    box-shadow: inset 0 0 0 1px var(--fk-accent);
+  .ty-choice-card[data-selected] {
+    border-color: var(--ty-accent);
+    background: var(--ty-accent-soft);
+    box-shadow: inset 0 0 0 1px var(--ty-accent);
   }
-  .fk-choice-card[data-pressed] {
+  .ty-choice-card[data-pressed] {
     opacity: 0.85;
   }
-  .fk-choice-card[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-choice-card[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
-  .fk-choice-card[data-unavailable] {
+  .ty-choice-card[data-unavailable] {
     border-style: dashed;
     cursor: not-allowed;
     opacity: 0.7;
   }
-  .fk-choice-card__well {
+  .ty-choice-card__well {
     display: inline-grid;
     flex: none;
     place-items: center;
     inline-size: 40px;
     block-size: 40px;
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-surface-sunken);
-    color: var(--fk-ink-2);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-surface-sunken);
+    color: var(--ty-ink-2);
   }
-  .fk-choice-card[data-selected] .fk-choice-card__well {
-    background: var(--fk-accent);
-    color: var(--fk-accent-ink);
+  .ty-choice-card[data-selected] .ty-choice-card__well {
+    background: var(--ty-accent);
+    color: var(--ty-accent-ink);
   }
-  .fk-choice-card__well > svg {
+  .ty-choice-card__well > svg {
     inline-size: 20px;
     block-size: 20px;
   }
-  .fk-choice-card__body {
+  .ty-choice-card__body {
     display: flex;
     flex: 1;
     flex-direction: column;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
     min-inline-size: 0;
   }
-  .fk-choice-card__title {
+  .ty-choice-card__title {
     display: inline-flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: inherit;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
-  .fk-choice-card__name {
-    color: var(--fk-ink);
-    font-size: var(--fk-font-size-body);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-body);
+  .ty-choice-card__name {
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-body);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-body);
   }
-  .fk-choice-card__description {
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+  .ty-choice-card__description {
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
 
   @media (max-width: 639.98px) {
-    .fk-choice-card[data-arrangement='inline'] {
+    .ty-choice-card[data-arrangement='inline'] {
       inline-size: 100%;
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .fk-choice-card {
+    .ty-choice-card {
       transition: none;
     }
   }
   @media (prefers-reduced-transparency: reduce) {
-    .fk-choice-card {
-      background: var(--fk-surface-raised-solid);
+    .ty-choice-card {
+      background: var(--ty-surface-raised-solid);
     }
   }
   @media (forced-colors: active) {
-    .fk-choice-card {
+    .ty-choice-card {
       border-color: ButtonText;
     }
-    .fk-choice-card[data-selected] {
+    .ty-choice-card[data-selected] {
       border: 3px solid Highlight;
       box-shadow: none;
     }
-    .fk-choice-card[data-focus-visible] {
+    .ty-choice-card[data-focus-visible] {
       outline-color: Highlight;
     }
   }

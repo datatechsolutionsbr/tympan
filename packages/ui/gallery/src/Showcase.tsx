@@ -74,7 +74,7 @@ export function Showcase({ scope }: { scope: string }) {
   ])
 
   return (
-    <div className="fk-gallery-showcase">
+    <div className="ty-gallery-showcase">
       <Section id={id('typography')} title="Text, Heading">
         <Heading eyebrow="Census of government AI">Catalogue</Heading>
         <Subheading>Sources and trail</Subheading>
@@ -92,7 +92,7 @@ export function Showcase({ scope }: { scope: string }) {
       </Section>
 
       <Section id={id('buttons')} title="Button">
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <Button variant="primary" leadingIcon={<Plus />}>
             New session
           </Button>
@@ -119,7 +119,7 @@ export function Showcase({ scope }: { scope: string }) {
           Read the <Link href="#/protocol">research protocol</Link> or the{' '}
           <Link href="https://www.w3.org/WAI/ARIA/apg/">APG patterns</Link>.
         </Text>
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <Link href="#/sources" emphasis="subtle" standalone>
             Subtle standalone link
           </Link>
@@ -136,7 +136,7 @@ export function Showcase({ scope }: { scope: string }) {
           <TextField label="Key" successMessage="Key verified." defaultValue="ed25519:9f2c" />
           <TextArea label="Quoted evidence" rows={3} showCounter maxLength={280} defaultValue="…completes services on a platform of more than 900 services." />
           <Field label="Launch year" hint="Four digits." required controlId={id('launch-year')}>
-            <input id={id('launch-year')} className="fk-gallery-native-input" defaultValue="2024" />
+            <input id={id('launch-year')} className="ty-gallery-native-input" defaultValue="2024" />
           </Field>
           <NativeSelect label="Stage" options={['1', '2', '3', '4']} defaultValue="4" />
           <ListboxSelect
@@ -181,7 +181,7 @@ export function Showcase({ scope }: { scope: string }) {
       </Section>
 
       <Section id={id('display')} title="Tag, StatusPill, Avatar, ProofBadge, ActorChip">
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <Tag>Neutral</Tag>
           <Tag tone="accent">Accent</Tag>
           <Tag tone="category" categoryIndex={3}>
@@ -193,18 +193,18 @@ export function Showcase({ scope }: { scope: string }) {
           </Tag>
         </div>
         <TagList label="Active filters" items={tags} onRemove={(tid) => setTags((t) => t.filter((x) => x.id !== tid))} />
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           {['active', 'pending', 'rejected', 'processing', 'inactive', 'error'].map((s) => (
             <StatusPill key={s} status={s} />
           ))}
         </div>
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <Avatar name="Natália Mesquita" fallbackText="NM" />
           <Avatar name="Natalia Mesquita" fallbackText="NM" size="large" tint="neutral" />
           <Avatar name="stage-counter" actorKind="agent" />
           <Avatar name="Natália Mesquita" fallbackText="NM" size="xsmall" onPress={() => toast.info('Profile')} />
         </div>
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           {(['proved', 'pending', 'refuted', 'not_disclosed', null] as const).map((s) => (
             <ProofBadge key={String(s)} state={s} />
           ))}
@@ -213,7 +213,7 @@ export function Showcase({ scope }: { scope: string }) {
           ))}
         </div>
         <ProofBadge state="proved" size="block" provedBy={<ActorChip kind="person" name="Avaliador" compact />} at="23 Sep 2026" rule="compile@1" />
-        <div className="fk-gallery-stack">
+        <div className="ty-gallery-stack">
           <ActorChip kind="person" name="Natália Mesquita" email="natalia@example.org" />
           <ActorChip kind="agent" name="stage-counter" agentKey="agk_7f3a" model="model-large" />
           <ActorChip kind="system" name="freeze-edition@2" />
@@ -236,7 +236,7 @@ export function Showcase({ scope }: { scope: string }) {
         <ProgressBar label="Upload" value={40} />
         <ProgressBar label="Verification" value={3} maxValue={8} valueLabel="3 of 8 steps" tone="success" size="thin" />
         <ProgressBar label="Re-running analysis" indeterminate />
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <Spinner label="Saving" showLabel />
           <Spinner label="Loading" shape="dots" size="small" />
         </div>
@@ -247,7 +247,7 @@ export function Showcase({ scope }: { scope: string }) {
       <Section id={id('states')} title="EmptyState, ErrorState">
         <EmptyState reason="no-results" onClearFilters={() => toast.info('Filters cleared')} />
         <EmptyState reason="no-data" title="No sources yet" description="The trail starts when someone opens a research session." action={{ label: 'New session', onPress: () => {} }} framing="section" />
-        <ErrorState kind="conflict" statusCode={409} problemType="https://fakhir.app/problems/stale-version" details="If-Match did not match the current ETag." onRetry={() => new Promise((r) => setTimeout(r, 1200))} scope="block" />
+        <ErrorState kind="conflict" statusCode={409} problemType="https://example.org/problems/stale-version" details="If-Match did not match the current ETag." onRetry={() => new Promise((r) => setTimeout(r, 1200))} scope="block" />
       </Section>
 
       <Section id={id('navigation')} title="Breadcrumbs, Tabs, Pagination, SkipLink">
@@ -304,7 +304,7 @@ export function Showcase({ scope }: { scope: string }) {
       </Section>
 
       <Section id={id('overlays')} title="ActionMenu, Popover, ModalDialog, Drawer, Toast">
-        <div className="fk-gallery-row">
+        <div className="ty-gallery-row">
           <ActionMenu
             label="Record actions"
             trigger={<Button iconOnly accessibleLabel="More actions" leadingIcon={<FileText />} />}

@@ -1,8 +1,8 @@
 // I18nAdapter (spec: wave-2/i18n-adapter.md). One context for translated
 // strings, locale and locale-aware formatting, independent of the host's i18n
-// library. It sits next to FakhirProvider: the provider also feeds React
+// library. It sits next to TympanProvider: the provider also feeds React
 // Aria's I18nProvider, and `useLocale()` falls back to the locale React Aria
-// already knows (for example FakhirProvider's `locale`).
+// already knows (for example TympanProvider's `locale`).
 import { createContext, useContext, useMemo, type ReactNode } from 'react'
 import { I18nProvider, useLocale as useAriaLocale } from 'react-aria-components'
 import { formatMessage, substitute, type MessageParams } from './icu'
@@ -92,7 +92,7 @@ export function useTranslations(namespace?: string): TranslateFn {
   return useMemo(() => (value ? value.translate(namespace) : detachedTranslator(namespace)), [value, namespace])
 }
 
-/** The BCP 47 locale: the adapter's, else React Aria's (FakhirProvider or the browser). */
+/** The BCP 47 locale: the adapter's, else React Aria's (TympanProvider or the browser). */
 export function useLocale(): string {
   const value = useContext(AdapterContext)
   const aria = useAriaLocale().locale

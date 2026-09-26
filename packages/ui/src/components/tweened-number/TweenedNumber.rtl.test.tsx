@@ -7,7 +7,7 @@ import { TweenedNumber } from './TweenedNumber'
 describe('TweenedNumber in right-to-left locales', () => {
   it('formats with the locale digits (Arabic-Indic in ar-EG) and passes axe', async () => {
     const { container } = inRtl(<TweenedNumber value={1234} durationMs={0} />, 'ar-EG')
-    expect(container.querySelector('.fk-tweened-number')!.textContent).toBe(new Intl.NumberFormat('ar-EG').format(1234))
+    expect(container.querySelector('.ty-tweened-number')!.textContent).toBe(new Intl.NumberFormat('ar-EG').format(1234))
     expect(container.textContent).toMatch(/[٠-٩]/)
     await expectNoAxeViolations(container)
   })

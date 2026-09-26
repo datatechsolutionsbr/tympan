@@ -33,10 +33,10 @@ function lineBudget(truncate: TextProps['truncate']): number {
 function presentation(props: TextProps) {
   const lines = lineBudget(props.truncate)
   const plain = ['string', 'number'].includes(typeof props.children) ? String(props.children) : undefined
-  const style: CSSProperties | undefined = lines < 2 ? props.style : { ...props.style, ['--fk-text-lines' as string]: `${lines}` }
+  const style: CSSProperties | undefined = lines < 2 ? props.style : { ...props.style, ['--ty-text-lines' as string]: `${lines}` }
   const truncation = lines === 0 ? undefined : lines === 1 ? 'line' : 'clamp'
   return {
-    className: cx('fk-text', props.className),
+    className: cx('ty-text', props.className),
     style,
     title: props.title ?? (truncation ? plain : undefined),
     'data-size': props.size ?? 'body',
@@ -65,7 +65,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(function Text(props, ref)
 
 /** Inline emphasis with semantic importance. */
 export function Strong(props: { children: ReactNode; className?: string }) {
-  return <strong className={cx('fk-strong', props.className)}>{props.children}</strong>
+  return <strong className={cx('ty-strong', props.className)}>{props.children}</strong>
 }
 
 export interface CodeProps {
@@ -80,5 +80,5 @@ export interface CodeProps {
 
 /** Inline monospace fragment for identifiers, keys and hashes. */
 export function Code(props: CodeProps) {
-  return <code className={cx('fk-code', props.className)}>{props.children}</code>
+  return <code className={cx('ty-code', props.className)}>{props.children}</code>
 }

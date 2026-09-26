@@ -118,7 +118,7 @@ describe('OneTimeCodeField', () => {
     render(<Harness />)
     expect(box(1)).toHaveAttribute('autocomplete', 'one-time-code')
     const css = cssOf('components/one-time-code-field/OneTimeCodeField.css')
-    expect(css).toMatch(/min-inline-size:\s*var\(--fk-control-target\)/)
+    expect(css).toMatch(/min-inline-size:\s*var\(--ty-control-target\)/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/Mark/)
   })
 

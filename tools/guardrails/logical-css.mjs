@@ -1,4 +1,4 @@
-// check:logical-css — Fakhir supports right-to-left scripts, so layout CSS in
+// check:logical-css — Tympan supports right-to-left scripts, so layout CSS in
 // packages/tokens, packages/ui and packages/flow uses logical properties only.
 // Fails on physical left/right properties and values:
 //  - margin-left/right, padding-left/right, border-left/right(-*),

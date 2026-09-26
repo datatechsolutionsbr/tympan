@@ -71,7 +71,7 @@ describe('LocalePicker', () => {
   it('uses system highlight for the selected option', () => {
     const css = cssOf('components/locale-picker/LocalePicker.css')
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/Highlight/)
-    expect(css).toMatch(/min-block-size:\s*var\(--fk-control-target\)/)
+    expect(css).toMatch(/min-block-size:\s*var\(--ty-control-target\)/)
   })
 
   it('has no axe violations, light and dark, open', async () => {

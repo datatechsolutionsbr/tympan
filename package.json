@@ -1,10 +1,14 @@
 {
-  "name": "@fakhir/ui-workspace",
+  "name": "@datatechsolutions/tympan-workspace",
   "private": true,
   "version": "0.0.0",
-  "description": "Fakhir UI: design tokens (@fakhir/tokens), React components (@fakhir/ui) and the flow and provenance canvas (@fakhir/flow).",
+  "description": "Tympan, an Astrlabe-family component published by Datatech: design tokens (@datatechsolutions/tympan-tokens), accessible React components (@datatechsolutions/tympan) and the flow and provenance canvas (@datatechsolutions/tympan-flow).",
   "license": "FSL-1.1-ALv2",
   "author": "Natalia Mesquita",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/datatechsolutionsbr/tympan.git"
+  },
   "type": "module",
   "workspaces": [
     "packages/*"
@@ -13,11 +17,11 @@
     "node": ">=24"
   },
   "scripts": {
-    "build": "npm run build -w @fakhir/tokens && npm run build -w @fakhir/ui && npm run build -w @fakhir/flow",
+    "build": "npm run build -w @datatechsolutions/tympan-tokens && npm run build -w @datatechsolutions/tympan && npm run build -w @datatechsolutions/tympan-flow",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
-    "lint": "npm run check:no-tailwind && npm run check:logical-css && npm run check:provenance",
-    "check:no-tailwind": "node tools/guardrails/no-tailwind.mjs",
+    "lint": "npm run check:no-utility-css && npm run check:logical-css && npm run check:provenance",
+    "check:no-utility-css": "node tools/guardrails/no-utility-css.mjs",
     "check:logical-css": "node tools/guardrails/logical-css.mjs",
     "check:provenance": "node tools/guardrails/provenance.mjs",
     "check": "npm run lint && npm run build && npm run typecheck && npm test"

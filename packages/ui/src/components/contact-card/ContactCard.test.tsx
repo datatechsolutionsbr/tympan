@@ -35,8 +35,8 @@ describe('ContactCard', () => {
 
   it('keeps 44 px link targets, one column below 640 px and underlined links in forced colours', () => {
     const css = cssOf('components/contact-card/ContactCard.css')
-    expect(css).toMatch(/\.fk-contact-card__link\s*\{[^}]*min-block-size:\s*var\(--fk-control-target\)/)
-    expect(css).toMatch(/\.fk-contact-section__grid\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\)/)
+    expect(css).toMatch(/\.ty-contact-card__link\s*\{[^}]*min-block-size:\s*var\(--ty-control-target\)/)
+    expect(css).toMatch(/\.ty-contact-section__grid\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\)/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/text-decoration:\s*underline/)
   })
 

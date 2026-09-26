@@ -88,7 +88,7 @@ describe('ListPanel', () => {
 
   it('keeps activatable rows 44 px tall and drops the transition under reduced motion', () => {
     const css = cssOf('components/list-panel/ListPanel.css')
-    expect(css).toMatch(/\.fk-list-panel__row\s*\{[^}]*min-block-size:\s*var\(--fk-control-target\)/)
+    expect(css).toMatch(/\.ty-list-panel__row\s*\{[^}]*min-block-size:\s*var\(--ty-control-target\)/)
     expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/transition:\s*none/)
     expect(css).not.toMatch(/scale\(/)
   })
@@ -122,7 +122,7 @@ describe('ListPanel in right-to-left (ar)', () => {
   it('renders mirrored where directional and passes axe', async () => {
     const { container } = renderRtl(<ListPanel label="إعدادات المشروع"><ListPanelRow onAction={() => {}}>عام</ListPanelRow></ListPanel>)
     // Row chevrons point towards the inline end.
-    for (const svg of container.querySelectorAll('.fk-list-panel__chevron')) expect(svg).toHaveClass('fk-mirror-rtl')
+    for (const svg of container.querySelectorAll('.ty-list-panel__chevron')) expect(svg).toHaveClass('ty-mirror-rtl')
     await axeRtl(container)
   })
 })

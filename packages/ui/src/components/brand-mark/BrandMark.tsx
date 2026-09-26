@@ -2,14 +2,18 @@ import { useMediaQuery } from '../../internal/media'
 import { useMessages } from '../../internal/provider'
 import type { ReactNode } from 'react'
 
-/** Read-only brand constants. Hosts serve the logo files from their public folder. */
+/**
+ * Read-only default brand constants. Hosts serve the logo files from their
+ * public folder and set their product name through the `brand.productName`
+ * message.
+ */
 export const brand = Object.freeze({
-  productId: 'fakhir',
-  productName: 'Fakhir',
+  productId: 'tympan',
+  productName: 'Tympan',
   logoFiles: Object.freeze({
-    icon: '/brand/fakhir-icon.svg',
-    logo: '/brand/fakhir-logo.svg',
-    logoDark: '/brand/fakhir-logo-dark.svg',
+    icon: '/brand/tympan-icon.svg',
+    logo: '/brand/tympan-logo.svg',
+    logoDark: '/brand/tympan-logo-dark.svg',
   }),
 })
 
@@ -21,7 +25,7 @@ export type BrandMarkSize = 'small' | 'medium' | 'large'
  */
 function OpenBookArt() {
   return (
-    <svg className="fk-brand-mark__art" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+    <svg className="ty-brand-mark__art" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
       <path d="M12 7.2C10.1 5.7 7.4 5.2 4.5 5.6v11.6c2.9-.4 5.6.1 7.5 1.6" />
       <path d="M12 7.2c1.9-1.5 4.6-2 7.5-1.6v11.6c-2.9-.4-5.6.1-7.5 1.6" />
       <path d="M12 7.2v11.6" />
@@ -39,17 +43,17 @@ export interface BrandMarkProps {
   className?: string
 }
 
-/** Fakhir badge plus wordmark (spec: wave-2/brand-mark.md). */
+/** Product badge plus wordmark (spec: wave-2/brand-mark.md). */
 export function BrandMark({ size = 'medium', showWordmark = true, wordmark, label, className }: BrandMarkProps) {
   const productName = useMessages().brand.productName
   const iconOnly = !showWordmark
   const badgeA11y = iconOnly ? { role: 'img', 'aria-label': label ?? productName } : { 'aria-hidden': true as const }
   return (
-    <span className={className ? `fk-brand-mark ${className}` : 'fk-brand-mark'} data-size={size}>
-      <span className="fk-brand-mark__badge" {...badgeA11y}>
+    <span className={className ? `ty-brand-mark ${className}` : 'ty-brand-mark'} data-size={size}>
+      <span className="ty-brand-mark__badge" {...badgeA11y}>
         <OpenBookArt />
       </span>
-      {iconOnly ? null : <span className="fk-brand-mark__word">{wordmark ?? productName}</span>}
+      {iconOnly ? null : <span className="ty-brand-mark__word">{wordmark ?? productName}</span>}
     </span>
   )
 }
@@ -68,5 +72,5 @@ export function BrandLogo({ mode, files = brand.logoFiles, label, className }: B
   const productName = useMessages().brand.productName
   const osDark = useMediaQuery('(prefers-color-scheme: dark)')
   const dark = (mode ?? (osDark ? 'dark' : 'light')) === 'dark'
-  return <img className={className ? `fk-brand-logo ${className}` : 'fk-brand-logo'} src={dark ? files.logoDark : files.logo} alt={label ?? productName} data-mode={dark ? 'dark' : 'light'} />
+  return <img className={className ? `ty-brand-logo ${className}` : 'ty-brand-logo'} src={dark ? files.logoDark : files.logo} alt={label ?? productName} data-mode={dark ? 'dark' : 'light'} />
 }

@@ -1,103 +1,103 @@
 /* ToolbarTrigger (spec: wave-2/toolbar-trigger.md; design direction §2.3, §2.6, §2.10). */
-@layer fakhir.components {
-  .fk-toolbar-trigger {
-    --fk-tt-fill: transparent;
+@layer tympan.components {
+  .ty-toolbar-trigger {
+    --ty-tt-fill: transparent;
     position: relative;
     box-sizing: border-box;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--fk-space-1);
-    min-inline-size: var(--fk-control-height);
-    block-size: var(--fk-control-height);
-    padding-inline: var(--fk-space-2);
+    gap: var(--ty-space-1);
+    min-inline-size: var(--ty-control-height);
+    block-size: var(--ty-control-height);
+    padding-inline: var(--ty-space-2);
     border: 1px solid transparent;
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-tt-fill);
-    color: var(--fk-ink-2);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-tt-fill);
+    color: var(--ty-ink-2);
     font: inherit;
-    font-size: var(--fk-font-size-label);
-    font-weight: var(--fk-font-weight-semibold);
+    font-size: var(--ty-font-size-label);
+    font-weight: var(--ty-font-weight-semibold);
     cursor: pointer;
     outline: none;
-    transition: background-color var(--fk-dur-instant) var(--fk-ease);
+    transition: background-color var(--ty-dur-instant) var(--ty-ease);
   }
-  .fk-toolbar-trigger::after {
+  .ty-toolbar-trigger::after {
     content: '';
     position: absolute;
     inset-block-start: 50%;
     /* physical: centring with translate(-50%) is the same in both directions */
     left: 50%;
-    inline-size: max(100%, var(--fk-control-target));
-    block-size: max(100%, var(--fk-control-target));
+    inline-size: max(100%, var(--ty-control-target));
+    block-size: max(100%, var(--ty-control-target));
     transform: translate(-50%, -50%);
   }
-  .fk-toolbar-trigger__glyph {
+  .ty-toolbar-trigger__glyph {
     display: inline-flex;
   }
-  .fk-toolbar-trigger__glyph > svg {
+  .ty-toolbar-trigger__glyph > svg {
     inline-size: 1.25rem;
     block-size: 1.25rem;
   }
-  .fk-toolbar-trigger__caption {
-    font-family: var(--fk-font-sans);
+  .ty-toolbar-trigger__caption {
+    font-family: var(--ty-font-sans);
   }
   /* Hover uses a neutral tint: accent-soft is reserved for the active item (§2.3). */
-  .fk-toolbar-trigger[data-hovered],
-  .fk-toolbar-trigger[data-expanded-state] {
-    --fk-tt-fill: var(--fk-surface-sunken);
+  .ty-toolbar-trigger[data-hovered],
+  .ty-toolbar-trigger[data-expanded-state] {
+    --ty-tt-fill: var(--ty-surface-sunken);
   }
-  .fk-toolbar-trigger[data-toggled] {
-    --fk-tt-fill: var(--fk-surface-sunken);
-    border-color: var(--fk-line-strong);
-    color: var(--fk-ink);
+  .ty-toolbar-trigger[data-toggled] {
+    --ty-tt-fill: var(--ty-surface-sunken);
+    border-color: var(--ty-line-strong);
+    color: var(--ty-ink);
   }
-  .fk-toolbar-trigger[data-pressed] {
+  .ty-toolbar-trigger[data-pressed] {
     opacity: 0.85;
   }
-  .fk-toolbar-trigger[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-toolbar-trigger[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
-  .fk-toolbar-trigger[data-disabled] {
+  .ty-toolbar-trigger[data-disabled] {
     cursor: not-allowed;
     opacity: 0.55;
   }
-  .fk-toolbar-trigger__tip {
-    padding: var(--fk-space-1) var(--fk-space-2);
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-surface-raised-solid);
-    color: var(--fk-ink);
-    box-shadow: var(--fk-shadow-floating);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
-    z-index: var(--fk-z-popover);
+  .ty-toolbar-trigger__tip {
+    padding: var(--ty-space-1) var(--ty-space-2);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-surface-raised-solid);
+    color: var(--ty-ink);
+    box-shadow: var(--ty-shadow-floating);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
+    z-index: var(--ty-z-popover);
   }
   @media (max-width: 1023.98px) {
-    .fk-toolbar-trigger {
-      min-inline-size: var(--fk-control-height-touch);
-      block-size: var(--fk-control-height-touch);
+    .ty-toolbar-trigger {
+      min-inline-size: var(--ty-control-height-touch);
+      block-size: var(--ty-control-height-touch);
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .fk-toolbar-trigger {
+    .ty-toolbar-trigger {
       transition: none;
     }
   }
   @media (forced-colors: active) {
-    .fk-toolbar-trigger {
+    .ty-toolbar-trigger {
       color: ButtonText;
       forced-color-adjust: none;
     }
-    .fk-toolbar-trigger[data-toggled],
-    .fk-toolbar-trigger[data-expanded-state] {
+    .ty-toolbar-trigger[data-toggled],
+    .ty-toolbar-trigger[data-expanded-state] {
       border-color: Highlight;
     }
-    .fk-toolbar-trigger[data-focus-visible] {
+    .ty-toolbar-trigger[data-focus-visible] {
       outline: 2px solid Highlight;
     }
-    .fk-toolbar-trigger__tip {
+    .ty-toolbar-trigger__tip {
       border-color: CanvasText;
     }
   }

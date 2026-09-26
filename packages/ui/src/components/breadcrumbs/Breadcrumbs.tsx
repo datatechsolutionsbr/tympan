@@ -52,26 +52,26 @@ export function Breadcrumbs(props: BreadcrumbsProps) {
   if (compact) {
     const parent = items.length > 1 ? items[items.length - 2] : rootHref ? { href: rootHref, label: rootLabel ?? '' } : undefined
     return (
-      <nav aria-label={navLabel} className={cx('fk-breadcrumbs', className)} data-mode="compact">
-        <div className="fk-breadcrumbs__bar">
-          <div className="fk-breadcrumbs__back">
+      <nav aria-label={navLabel} className={cx('ty-breadcrumbs', className)} data-mode="compact">
+        <div className="ty-breadcrumbs__bar">
+          <div className="ty-breadcrumbs__back">
             {parent ? (
               <Link href={parent.href} emphasis="subtle" standalone aria-label={messages.breadcrumbs.backTo(parent.label)}>
-                <ArrowLeft className="fk-icon fk-mirror-rtl" aria-hidden="true" focusable="false" />
-                <span className="fk-breadcrumbs__back-label">{parent.label}</span>
+                <ArrowLeft className="ty-icon ty-mirror-rtl" aria-hidden="true" focusable="false" />
+                <span className="ty-breadcrumbs__back-label">{parent.label}</span>
               </Link>
             ) : null}
           </div>
           {centerContent !== undefined || actions ? (
-            <div className="fk-breadcrumbs__center">
+            <div className="ty-breadcrumbs__center">
               {centerContent ?? (
-                <span className="fk-breadcrumbs__title" aria-current="page">
+                <span className="ty-breadcrumbs__title" aria-current="page">
                   {current?.label}
                 </span>
               )}
             </div>
           ) : null}
-          {actions ? <div className="fk-breadcrumbs__actions">{actions}</div> : null}
+          {actions ? <div className="ty-breadcrumbs__actions">{actions}</div> : null}
         </div>
       </nav>
     )
@@ -79,14 +79,14 @@ export function Breadcrumbs(props: BreadcrumbsProps) {
 
   const entries = visibleEntries(items, maxVisible)
   return (
-    <nav aria-label={navLabel} className={cx('fk-breadcrumbs', className)} data-mode="trail">
-      <ol className="fk-breadcrumbs__list">
+    <nav aria-label={navLabel} className={cx('ty-breadcrumbs', className)} data-mode="trail">
+      <ol className="ty-breadcrumbs__list">
         {entries.map((entry, i) => {
           const isLast = i === entries.length - 1
-          const separator = isLast ? null : <ChevronRight className="fk-icon fk-mirror-rtl fk-breadcrumbs__separator" aria-hidden="true" focusable="false" />
+          const separator = isLast ? null : <ChevronRight className="ty-icon ty-mirror-rtl ty-breadcrumbs__separator" aria-hidden="true" focusable="false" />
           if (entry.kind === 'overflow') {
             return (
-              <li key="overflow" className="fk-breadcrumbs__item">
+              <li key="overflow" className="ty-breadcrumbs__item">
                 <ActionMenu
                   label={messages.breadcrumbs.overflow}
                   items={entry.items.map((it, n) => ({ id: `${n}:${it.href}`, label: it.label, href: it.href }))}
@@ -108,14 +108,14 @@ export function Breadcrumbs(props: BreadcrumbsProps) {
           const { item } = entry
           const isCurrent = entry.index === items.length - 1
           return (
-            <li key={`${entry.index}:${item.href}`} className="fk-breadcrumbs__item">
+            <li key={`${entry.index}:${item.href}`} className="ty-breadcrumbs__item">
               {isCurrent ? (
-                <span className="fk-breadcrumbs__current" aria-current="page" title={item.label}>
+                <span className="ty-breadcrumbs__current" aria-current="page" title={item.label}>
                   {item.label}
                 </span>
               ) : (
-                <Link href={item.href} emphasis="subtle" className="fk-breadcrumbs__link">
-                  <span className="fk-breadcrumbs__label" title={item.label}>
+                <Link href={item.href} emphasis="subtle" className="ty-breadcrumbs__link">
+                  <span className="ty-breadcrumbs__label" title={item.label}>
                     {item.label}
                   </span>
                 </Link>

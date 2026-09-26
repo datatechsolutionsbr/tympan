@@ -4,7 +4,7 @@
 
 import type { ReactNode } from 'react'
 import { X } from 'lucide-react'
-import { Button, Drawer } from '@fakhir/ui'
+import { Button, Drawer } from '@datatechsolutions/tympan'
 import { FlowPreview } from '../editor/FlowPreview'
 import { fill } from '../internal/labels'
 import type { FlowConnector, FlowNode } from '../model/types'
@@ -27,7 +27,7 @@ export interface LiveCanvasPanelProps {
 }
 
 export function LiveCanvasPanel({ artifact, docked, labels: l, locale, render, onClose }: LiveCanvasPanelProps) {
-  const body = <div className="fk-convo-canvas__body">{render ? render(artifact) : <FlowPreview graph={previewGraph(artifact.graph)} />}</div>
+  const body = <div className="ty-convo-canvas__body">{render ? render(artifact) : <FlowPreview graph={previewGraph(artifact.graph)} />}</div>
   if (!docked) {
     return (
       <Drawer open onOpenChange={(open) => (open ? undefined : onClose())} title={l.liveCanvas} placement="bottom" maxHeight="100dvh">
@@ -36,11 +36,11 @@ export function LiveCanvasPanel({ artifact, docked, labels: l, locale, render, o
     )
   }
   return (
-    <aside className="fk-convo-canvas" aria-label={l.liveCanvas}>
-      <header className="fk-convo-canvas__header">
-        <h2 className="fk-convo-canvas__title">{l.liveCanvas}</h2>
+    <aside className="ty-convo-canvas" aria-label={l.liveCanvas}>
+      <header className="ty-convo-canvas__header">
+        <h2 className="ty-convo-canvas__title">{l.liveCanvas}</h2>
         {artifact.flowId ? (
-          <code className="fk-convo-canvas__id" title={artifact.flowId}>
+          <code className="ty-convo-canvas__id" title={artifact.flowId}>
             {fill(l.flowId, { id: artifact.flowId.slice(0, 8) }, locale)}
           </code>
         ) : null}

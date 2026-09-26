@@ -1,145 +1,145 @@
 /* Tag and TagList (spec: wave-1/tag.md; design direction §2.2, §2.3, §2.4). */
-@layer fakhir.components {
-  .fk-tag {
-    --fk-tag-fill: var(--fk-surface-sunken);
-    --fk-tag-ink: var(--fk-ink-2);
-    --fk-tag-border: var(--fk-line);
+@layer tympan.components {
+  .ty-tag {
+    --ty-tag-fill: var(--ty-surface-sunken);
+    --ty-tag-ink: var(--ty-ink-2);
+    --ty-tag-border: var(--ty-line);
     position: relative;
     box-sizing: border-box;
     display: inline-flex;
     align-items: center;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
     max-inline-size: 100%;
-    min-block-size: calc(var(--fk-space-5) + 2px);
-    padding-inline: var(--fk-space-2);
-    border: 1px solid var(--fk-tag-border);
-    border-radius: var(--fk-radius-pill);
-    background: var(--fk-tag-fill);
-    color: var(--fk-tag-ink);
+    min-block-size: calc(var(--ty-space-5) + 2px);
+    padding-inline: var(--ty-space-2);
+    border: 1px solid var(--ty-tag-border);
+    border-radius: var(--ty-radius-pill);
+    background: var(--ty-tag-fill);
+    color: var(--ty-tag-ink);
     font: inherit;
-    font-size: var(--fk-font-size-label);
-    line-height: var(--fk-font-line-height-label);
+    font-size: var(--ty-font-size-label);
+    line-height: var(--ty-font-line-height-label);
     text-decoration: none;
     vertical-align: middle;
     outline: none;
-    transition: border-color var(--fk-dur-instant) var(--fk-ease);
+    transition: border-color var(--ty-dur-instant) var(--ty-ease);
   }
-  .fk-tag[data-size='small'] {
-    min-block-size: var(--fk-space-5);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+  .ty-tag[data-size='small'] {
+    min-block-size: var(--ty-space-5);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
-  .fk-tag[data-size='large'] {
-    min-block-size: var(--fk-space-6);
-    padding-inline: var(--fk-space-3);
-    font-size: var(--fk-font-size-body);
-    line-height: var(--fk-font-line-height-body);
+  .ty-tag[data-size='large'] {
+    min-block-size: var(--ty-space-6);
+    padding-inline: var(--ty-space-3);
+    font-size: var(--ty-font-size-body);
+    line-height: var(--ty-font-line-height-body);
   }
-  .fk-tag[data-tone='accent'] {
-    --fk-tag-fill: var(--fk-accent-soft);
-    --fk-tag-ink: var(--fk-on-accent-soft);
-    --fk-tag-border: transparent;
+  .ty-tag[data-tone='accent'] {
+    --ty-tag-fill: var(--ty-accent-soft);
+    --ty-tag-ink: var(--ty-on-accent-soft);
+    --ty-tag-border: transparent;
   }
 
-  .fk-tag__text {
+  .ty-tag__text {
     overflow: hidden;
     min-inline-size: 0;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .fk-tag__icon {
+  .ty-tag__icon {
     display: inline-flex;
     flex: none;
   }
-  .fk-tag__icon > svg {
+  .ty-tag__icon > svg {
     inline-size: 14px;
     block-size: 14px;
   }
-  .fk-tag__swatch {
+  .ty-tag__swatch {
     flex: none;
-    inline-size: var(--fk-space-2);
-    block-size: var(--fk-space-2);
-    border: 1px solid color-mix(in srgb, var(--fk-ink) 25%, transparent);
+    inline-size: var(--ty-space-2);
+    block-size: var(--ty-space-2);
+    border: 1px solid color-mix(in srgb, var(--ty-ink) 25%, transparent);
     border-radius: 2px;
-    background: var(--fk-tag-category, var(--fk-ink-3));
+    background: var(--ty-tag-category, var(--ty-ink-3));
   }
 
   /* Interactive tags and the remove button keep a 44 x 44 px hit area. */
-  .fk-tag[data-interactive] {
+  .ty-tag[data-interactive] {
     cursor: pointer;
   }
-  .fk-tag[data-interactive]::before,
-  .fk-tag__remove::before {
+  .ty-tag[data-interactive]::before,
+  .ty-tag__remove::before {
     content: '';
     position: absolute;
     inset-block-start: 50%;
     /* physical: centring with translate(-50%) is the same in both directions */
     left: 50%;
-    inline-size: max(100%, var(--fk-control-target));
-    block-size: max(100%, var(--fk-control-target));
+    inline-size: max(100%, var(--ty-control-target));
+    block-size: max(100%, var(--ty-control-target));
     transform: translate(-50%, -50%);
   }
-  .fk-tag[data-interactive][data-hovered] {
-    --fk-tag-border: var(--fk-line-strong);
+  .ty-tag[data-interactive][data-hovered] {
+    --ty-tag-border: var(--ty-line-strong);
   }
-  .fk-tag[data-focus-visible],
-  .fk-tag__remove[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-tag[data-focus-visible],
+  .ty-tag__remove[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
 
-  .fk-tag__remove {
+  .ty-tag__remove {
     position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     inline-size: 18px;
     block-size: 18px;
-    margin-inline-end: calc(var(--fk-space-1) * -1);
+    margin-inline-end: calc(var(--ty-space-1) * -1);
     padding: 0;
     border: 0;
-    border-radius: var(--fk-radius-pill);
+    border-radius: var(--ty-radius-pill);
     background: transparent;
     color: inherit;
     cursor: pointer;
     outline: none;
   }
-  .fk-tag__remove[data-hovered] {
-    background: var(--fk-line);
+  .ty-tag__remove[data-hovered] {
+    background: var(--ty-line);
   }
-  .fk-tag__remove > svg {
+  .ty-tag__remove > svg {
     inline-size: 12px;
     block-size: 12px;
   }
 
-  .fk-tag-list__items {
+  .ty-tag-list__items {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-tag {
+    .ty-tag {
       transition: none;
     }
   }
 
   @media (prefers-reduced-transparency: reduce) {
-    .fk-tag[data-tone='accent'] {
-      background: color-mix(in srgb, var(--fk-accent) 12%, var(--fk-surface-solid));
+    .ty-tag[data-tone='accent'] {
+      background: color-mix(in srgb, var(--ty-accent) 12%, var(--ty-surface-solid));
     }
   }
 
   @media (forced-colors: active) {
-    .fk-tag {
+    .ty-tag {
       border: 1px solid CanvasText;
     }
-    .fk-tag__swatch {
+    .ty-tag__swatch {
       border-color: CanvasText;
       forced-color-adjust: none;
     }
-    .fk-tag[data-focus-visible],
-    .fk-tag__remove[data-focus-visible] {
+    .ty-tag[data-focus-visible],
+    .ty-tag__remove[data-focus-visible] {
       outline-color: Highlight;
     }
   }

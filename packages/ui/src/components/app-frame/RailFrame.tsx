@@ -19,7 +19,7 @@ import { FrameContext, type FrameState } from './frameContext'
 type Region = 'rail' | 'stage' | 'aside'
 
 /** Root property the dock publishes (FloatingActionBar); the sheet pads its end by it. */
-export const RAIL_DOCK_INSET_PROPERTY = '--fk-action-bar-inset-bottom'
+export const RAIL_DOCK_INSET_PROPERTY = '--ty-action-bar-inset-bottom'
 
 /** The rail's stacked parts, in visual and DOM order. */
 function railParts(props: AppFrameProps, navigationLabel: string): Array<[string, ReactNode]> {
@@ -28,7 +28,7 @@ function railParts(props: AppFrameProps, navigationLabel: string): Array<[string
     ['context', props.context],
     [
       'nav',
-      <nav key="nav" className="fk-app-frame__rail-nav" aria-label={navigationLabel}>
+      <nav key="nav" className="ty-app-frame__rail-nav" aria-label={navigationLabel}>
         {props.navigation}
       </nav>,
     ],
@@ -38,12 +38,12 @@ function railParts(props: AppFrameProps, navigationLabel: string): Array<[string
 
 function RailColumn({ parts }: { parts: Array<[string, ReactNode]> }) {
   return (
-    <div className="fk-app-frame__rail" data-region={'rail' satisfies Region}>
+    <div className="ty-app-frame__rail" data-region={'rail' satisfies Region}>
       {parts.map(([slot, node]) =>
         node == null || node === false ? null : slot === 'nav' ? (
           node
         ) : (
-          <div key={slot} className="fk-app-frame__rail-slot" data-slot={slot}>
+          <div key={slot} className="ty-app-frame__rail-slot" data-slot={slot}>
             {node}
           </div>
         ),
@@ -56,7 +56,7 @@ export function RailFrame(props: AppFrameProps) {
   const m = useMessages()
   const wide = useMinWidth(breakpoints.md)
   const mainId = props.mainId ?? 'main-content'
-  const dockId = props.dockId ?? 'fk-action-bar'
+  const dockId = props.dockId ?? 'ty-action-bar'
   const setOpen = (open: boolean) => props.onNavOpenChange?.(open)
   const parts = railParts(props, m.rail.label)
 
@@ -72,10 +72,10 @@ export function RailFrame(props: AppFrameProps) {
   )
 
   const drawer = (
-    <ModalOverlay className="fk-app-frame__overlay" isOpen={!!props.navOpen} onOpenChange={setOpen} isDismissable>
-      <Modal className="fk-app-frame__drawer" data-placement="start">
-        <Dialog className="fk-app-frame__drawer-dialog" aria-label={m.rail.label}>
-          <div className="fk-app-frame__drawer-head">
+    <ModalOverlay className="ty-app-frame__overlay" isOpen={!!props.navOpen} onOpenChange={setOpen} isDismissable>
+      <Modal className="ty-app-frame__drawer" data-placement="start">
+        <Dialog className="ty-app-frame__drawer-dialog" aria-label={m.rail.label}>
+          <div className="ty-app-frame__drawer-head">
             <Button variant="quiet" iconOnly accessibleLabel={m.rail.closeNavigation} leadingIcon={<X />} onPress={() => setOpen(false)} />
           </div>
           <RailColumn parts={parts} />
@@ -89,7 +89,7 @@ export function RailFrame(props: AppFrameProps) {
       {props.sessionGuard}
       {props.initializers}
       <div
-        className={cx('fk-app-frame', props.className)}
+        className={cx('ty-app-frame', props.className)}
         data-layout="rail"
         data-nav={wide ? 'column' : 'drawer'}
         data-width={props.width ?? 'reading'}
@@ -98,25 +98,25 @@ export function RailFrame(props: AppFrameProps) {
         <SkipLink targetId={mainId} />
         {props.dock ? <SkipLink targetId={dockId} label={m.actionBar.skipTo} /> : null}
         {props.ambient ? (
-          <div className="fk-app-frame__ambient" aria-hidden="true">
-            <span className="fk-app-frame__orb fk-app-frame__orb--top" />
-            <span className="fk-app-frame__orb fk-app-frame__orb--bottom" />
+          <div className="ty-app-frame__ambient" aria-hidden="true">
+            <span className="ty-app-frame__orb ty-app-frame__orb--top" />
+            <span className="ty-app-frame__orb ty-app-frame__orb--bottom" />
           </div>
         ) : null}
-        {props.progress ? <div className="fk-app-frame__progress">{props.progress}</div> : null}
+        {props.progress ? <div className="ty-app-frame__progress">{props.progress}</div> : null}
 
         {wide ? <RailColumn parts={parts} /> : drawer}
 
-        <div className="fk-app-frame__stage" data-region={'stage' satisfies Region}>
-          <main id={mainId} tabIndex={-1} className="fk-app-frame__sheet" aria-busy={props.busy || undefined}>
-            <div className="fk-app-frame__content">
+        <div className="ty-app-frame__stage" data-region={'stage' satisfies Region}>
+          <main id={mainId} tabIndex={-1} className="ty-app-frame__sheet" aria-busy={props.busy || undefined}>
+            <div className="ty-app-frame__content">
               <Suspense fallback={<PageLoadingState label={props.loadingLabel ?? m.frame.loadingPage} />}>{props.children}</Suspense>
             </div>
           </main>
           {props.dock}
           {!wide && !props.dock ? (
             <Button
-              className="fk-app-frame__rail-opener"
+              className="ty-app-frame__rail-opener"
               variant="secondary"
               shape="circle"
               iconOnly
@@ -129,7 +129,7 @@ export function RailFrame(props: AppFrameProps) {
         </div>
 
         {props.aside ? (
-          <div className="fk-app-frame__aside-slot" data-region={'aside' satisfies Region}>
+          <div className="ty-app-frame__aside-slot" data-region={'aside' satisfies Region}>
             {props.aside}
           </div>
         ) : null}

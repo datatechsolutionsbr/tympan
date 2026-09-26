@@ -2,7 +2,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useRef } from 'react'
 import { describe, expect, it, vi } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import { cssOf, mediaBlock } from '../../test/css'
 import { setViewportWidth } from '../../test/media'
@@ -24,7 +24,7 @@ function draw(c: FlowConnector, o: Partial<ConditionalConnectorOptions> = {}) {
 describe('ConditionalConnector', () => {
   it('labels a connector from a true output with icon and word', () => {
     const { container } = draw({ id: 'c', source: 'a', target: 'b', sourcePort: 'true' })
-    const label = container.querySelector('.fk-connector-controls__label')!
+    const label = container.querySelector('.ty-connector-controls__label')!
     expect(label).toHaveTextContent('true')
     expect(label.querySelector('svg')).not.toBeNull()
     expect(screen.getByRole('button', { name: 'from Check stock to Ship, branch true' })).toBeInTheDocument()
@@ -34,10 +34,10 @@ describe('ConditionalConnector', () => {
   it('keeps the control pill visible while the pointer moves from the line to the pill', () => {
     vi.useFakeTimers()
     const { container } = draw({ id: 'c', source: 'a', target: 'b' })
-    const controls = container.querySelector('.fk-connector-controls')!
-    fireEvent.pointerEnter(container.querySelector('.fk-connector__hit')!)
+    const controls = container.querySelector('.ty-connector-controls')!
+    fireEvent.pointerEnter(container.querySelector('.ty-connector__hit')!)
     expect(controls).toHaveAttribute('data-visible', 'true')
-    fireEvent.pointerLeave(container.querySelector('.fk-connector__hit')!)
+    fireEvent.pointerLeave(container.querySelector('.ty-connector__hit')!)
     act(() => vi.advanceTimersByTime(50))
     fireEvent.pointerEnter(controls)
     act(() => vi.advanceTimersByTime(500))
@@ -73,7 +73,7 @@ describe('ConditionalConnector', () => {
 
   it('shows no controls when locked', () => {
     const { container } = draw({ id: 'c', source: 'a', target: 'b' }, { locked: true })
-    fireEvent.pointerEnter(container.querySelector('.fk-connector__hit')!)
+    fireEvent.pointerEnter(container.querySelector('.ty-connector__hit')!)
     expect(screen.queryByRole('button', { name: /Insert step|Delete connection/ })).toBeNull()
   })
 
@@ -83,22 +83,22 @@ describe('ConditionalConnector', () => {
     screen.getByRole('button', { name: /branch false/ }).focus()
     await userEvent.keyboard('{Delete}')
     expect(onDelete).toHaveBeenCalledWith('c')
-    expect(container.querySelector('.fk-connector')).toHaveAttribute('data-branch', 'false')
+    expect(container.querySelector('.ty-connector')).toHaveAttribute('data-branch', 'false')
     await expectNoAxeViolations(container)
   })
 
   it('draws false dashed and labelled, stops the flow animation under reduced motion, CanvasText in forced colours', () => {
     const css = cssOf('connectors/ConditionalConnector.css')
-    expect(css).toMatch(/data-branch='false'\] \.fk-connector__path\s*\{[^}]*stroke-dasharray/)
+    expect(css).toMatch(/data-branch='false'\] \.ty-connector__path\s*\{[^}]*stroke-dasharray/)
     expect(mediaBlock(css, /\(prefers-reduced-motion: reduce\)/)).toMatch(/animation:\s*none/)
     expect(mediaBlock(css, /\(forced-colors: active\)/)).toMatch(/CanvasText/)
   })
 
   it('reads branch words in the locale (pt-BR)', () => {
     render(
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <ConditionalConnector connector={{ id: 'c', source: 'a', target: 'b', sourcePort: 'true' }} shape={shape} sourceName="A" targetName="B" />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(screen.getByRole('button', { name: 'de A para B, ramo verdadeiro' })).toBeInTheDocument()
   })
@@ -164,7 +164,7 @@ describe('ConnectorInsertMenu', () => {
   it('opens as a bottom drawer on narrow screens', () => {
     setViewportWidth(375)
     render(<Harness />)
-    expect(document.querySelector('.fk-drawer')).not.toBeNull()
+    expect(document.querySelector('.ty-drawer')).not.toBeNull()
   })
 })
 
@@ -193,7 +193,7 @@ describe('DecisionNode (B-002)', () => {
 
   it('lists every option probability as text, highest first, and names the chosen value', async () => {
     const { container } = render(<DecisionNode id="d" config={config} result={result} onConfigure={() => {}} />)
-    const items = [...container.querySelectorAll('.fk-decision-node__option-text')].map((e) => e.textContent)
+    const items = [...container.querySelectorAll('.ty-decision-node__option-text')].map((e) => e.textContent)
     expect(items).toEqual(['Confirmed, primary: 82%', 'Confirmed, secondary: 13%', 'Not confirmed: 5%'])
     expect(container.querySelector('[data-chosen="true"]')).toHaveTextContent('Confirmed, primary')
     expect(document.body).toHaveTextContent(/chosen: Confirmed, primary/)
@@ -204,14 +204,14 @@ describe('DecisionNode (B-002)', () => {
     const { rerender, container } = render(<DecisionNode id="d" config={config} result={{ ...result, needsReview: true }} />)
     expect(screen.getAllByText(/Needs review/).length).toBeGreaterThan(0)
     rerender(<DecisionNode id="d" config={{ ...config, options: [] }} />)
-    expect(container.querySelector('.fk-node-card')).toHaveAttribute('data-problem', 'true')
+    expect(container.querySelector('.ty-node-card')).toHaveAttribute('data-problem', 'true')
   })
 
   it('formats percentages in the locale (ar)', () => {
     render(
-      <FakhirProvider locale="ar-EG">
+      <TympanProvider locale="ar-EG">
         <DecisionNode id="d" config={config} result={result} />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(document.body.textContent).toMatch(/٨٢/)
   })

@@ -73,7 +73,7 @@ describe('RecordCard', () => {
       <>
         {(['light', 'dark'] as const).map((s) => (
           <ThemeScope key={s} scheme={s}>
-            <ul className="fk-list">
+            <ul className="ty-list">
               <RecordCard title="stage-counter" secondary="ak_91" leading={<Bot />} state accent={3}>
                 Model nova-lite
               </RecordCard>
@@ -93,7 +93,7 @@ describe('RecordCard', () => {
     render(<RecordCard standalone title={long} />)
     expect(screen.getByRole('article', { name: long })).toBeInTheDocument()
     expect(screen.getByText(long)).toHaveAttribute('title', long)
-    expect(cssOf('components/record-card/RecordCard.css')).toMatch(/\.fk-record-card__title\s*\{[^}]*text-overflow:\s*ellipsis/)
+    expect(cssOf('components/record-card/RecordCard.css')).toMatch(/\.ty-record-card__title\s*\{[^}]*text-overflow:\s*ellipsis/)
   })
 
   it('hides the decorative strip in forced colours and has no transition under reduced motion', () => {

@@ -1,7 +1,7 @@
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import { cssOf, mediaBlock } from '../../test/css'
 import { EditionCompare } from './EditionCompare'
@@ -25,7 +25,7 @@ const certificate: ProofCertificate = {
   claimId: 'as1',
   claim: 'governance.operator_regulatory_position = confirmed_primary',
   verdict: 'proved',
-  verifier: 'fakhir-verify 0.7.2',
+  verifier: 'proof-verify 0.7.2',
   ranAt: '2026-09-20T14:02:00Z',
   inputEdition: '2026-09-20',
   hash: 'sha256:5d1e…a0c4',
@@ -97,11 +97,11 @@ describe('ProvenanceTimeline', () => {
 
   it('mirrors arrow keys in Arabic and uses Portuguese words in pt-BR', async () => {
     render(
-      <FakhirProvider locale="ar">
+      <TympanProvider locale="ar">
         <div dir="rtl">
           <ProvenanceTimeline items={items} />
         </div>
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     screen.getAllByRole('button')[0]!.focus()
     await userEvent.keyboard('{ArrowLeft}')
@@ -110,9 +110,9 @@ describe('ProvenanceTimeline', () => {
 
   it('passes axe and names lanes in Portuguese', async () => {
     const { container } = render(
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <ProvenanceTimeline items={items} />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(screen.getByRole('heading', { name: /coder, agente, 3 eventos/ })).toBeInTheDocument()
     await expectNoAxeViolations(container)
@@ -145,7 +145,7 @@ describe('ProvenanceCertificate', () => {
     const onDownload = vi.fn()
     const { container } = render(<ProvenanceCertificate certificate={certificate} onRerun={onRerun} onDownload={onDownload} />)
     const side = screen.getByRole('complementary', { name: 'Certificate details' })
-    expect(within(side).getByText('fakhir-verify 0.7.2')).toBeInTheDocument()
+    expect(within(side).getByText('proof-verify 0.7.2')).toBeInTheDocument()
     expect(within(side).getByText('sha256:5d1e…a0c4')).toBeInTheDocument()
     expect(within(side).getByText(/uses no language model/)).toBeInTheDocument()
     await userEvent.click(screen.getByRole('button', { name: 'Run again' }))
@@ -159,9 +159,9 @@ describe('ProvenanceCertificate', () => {
     const { rerender } = render(<ProvenanceCertificate certificate={null} />)
     expect(screen.getByText('No certificate for this item yet.')).toBeInTheDocument()
     rerender(
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <ProvenanceCertificate certificate={certificate} onRerun={() => {}} onDownload={() => {}} />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(screen.getByRole('button', { name: 'Rodar de novo' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Baixar certificado' })).toBeInTheDocument()
@@ -170,11 +170,11 @@ describe('ProvenanceCertificate', () => {
 
   it('keeps tree keys working right to left', async () => {
     render(
-      <FakhirProvider locale="ar">
+      <TympanProvider locale="ar">
         <div dir="rtl">
           <ProvenanceCertificate certificate={certificate} />
         </div>
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     const tree = screen.getByRole('treegrid')
     await userEvent.tab()
@@ -214,7 +214,7 @@ describe('EditionCompare', () => {
     screen.getByRole('button', { name: 'Stage' }).focus()
     await userEvent.keyboard('{Enter}')
     expect(onSelectItem).toHaveBeenCalledWith('ae-tamm-4-0.stage')
-    const cards = container.querySelectorAll('.fk-diff__card')
+    const cards = container.querySelectorAll('.ty-diff__card')
     expect(cards).toHaveLength(2)
     expect(cards[0]).toHaveTextContent('Before · 2026-08-15')
     expect(cards[1]).toHaveTextContent('After · 2026-09-20')
@@ -224,9 +224,9 @@ describe('EditionCompare', () => {
 
   it('uses Portuguese words and works right to left', async () => {
     render(
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <EditionCompare comparison={comparison} />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(screen.getByRole('button', { name: '1 alterado' })).toHaveTextContent('valores alterados')
     expect(screen.getAllByText('não consta')).toHaveLength(2)
@@ -235,11 +235,11 @@ describe('EditionCompare', () => {
   it('selects under Arabic too', async () => {
     const onSelectItem = vi.fn()
     render(
-      <FakhirProvider locale="ar">
+      <TympanProvider locale="ar">
         <div dir="rtl">
           <EditionCompare comparison={comparison} onSelectItem={onSelectItem} />
         </div>
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     await userEvent.click(screen.getByRole('button', { name: 'Old record' }))
     expect(onSelectItem).toHaveBeenCalledWith('ae-old-2-0')
@@ -267,7 +267,7 @@ describe('NumberTrace', () => {
   it('reports a chosen step and keeps the text direction automatic', async () => {
     const onOpenStep = vi.fn()
     const { container } = render(<NumberTrace passage={passage} onOpenStep={onOpenStep} />)
-    expect(container.querySelector('.fk-numtrace__text')).toHaveAttribute('dir', 'auto')
+    expect(container.querySelector('.ty-numtrace__text')).toHaveAttribute('dir', 'auto')
     await userEvent.click(screen.getByRole('button', { name: /number 37/ }))
     await userEvent.click(screen.getByRole('button', { name: 'Open Count by stage' }))
     expect(onOpenStep).toHaveBeenCalledWith(expect.objectContaining({ id: 'run' }))
@@ -275,19 +275,19 @@ describe('NumberTrace', () => {
 
   it('uses Portuguese words and works in an Arabic page', async () => {
     const { unmount } = render(
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <NumberTrace passage={passage} />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     await userEvent.click(screen.getByRole('button', { name: 'número 37, mostrar a origem' }))
     expect(screen.getByText('De onde vem 37')).toBeInTheDocument()
     unmount()
     render(
-      <FakhirProvider locale="ar">
+      <TympanProvider locale="ar">
         <div dir="rtl">
           <NumberTrace passage={['تجمع المرحلتان ', { id: 'n', text: '37', chain: [] }]} />
         </div>
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     await userEvent.click(screen.getByRole('button', { name: /37/ }))
     expect(screen.getByRole('region')).toBeInTheDocument()
@@ -298,8 +298,8 @@ describe('ProvenanceViews stylesheet', () => {
   it('uses logical properties, keeps 44 px targets and handles reduced motion, transparency and forced colours', () => {
     const css = cssOf('provenance/ProvenanceViews.css')
     expect(css).not.toMatch(/(^|[\s;{])(left|right|margin-left|margin-right|padding-left|padding-right)\s*:/m)
-    expect(css).toMatch(/\.fk-prov-timeline__event\s*\{[^}]*min-block-size:\s*44px/)
-    expect(css).toMatch(/\.fk-prov-timeline__lane\s*\{[^}]*min-block-size:\s*110px/)
+    expect(css).toMatch(/\.ty-prov-timeline__event\s*\{[^}]*min-block-size:\s*44px/)
+    expect(css).toMatch(/\.ty-prov-timeline__lane\s*\{[^}]*min-block-size:\s*110px/)
     expect(mediaBlock(css, /\(prefers-reduced-motion: reduce\)/)).toMatch(/animation:\s*none/)
     expect(mediaBlock(css, /\(prefers-reduced-transparency: reduce\)/)).toMatch(/solid/)
     expect(mediaBlock(css, /\(forced-colors: active\)/)).toMatch(/Highlight/)

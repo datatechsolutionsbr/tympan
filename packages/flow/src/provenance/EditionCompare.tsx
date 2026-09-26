@@ -4,7 +4,7 @@
 
 import { useMemo, useState } from 'react'
 import { Share2 } from 'lucide-react'
-import { Button } from '@fakhir/ui'
+import { Button } from '@datatechsolutions/tympan'
 import { ActorMark } from './ProvenanceNode'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { useControllable } from '../internal/useControllable'
@@ -164,62 +164,62 @@ export function EditionCompare({ comparison, filter, defaultFilter = 'all', onFi
 
   const value = (v: string | undefined) =>
     v === undefined ? (
-      <span className="fk-diff__absent">{l.notPresent}</span>
+      <span className="ty-diff__absent">{l.notPresent}</span>
     ) : (
-      <code className="fk-diff__value" dir="ltr">
+      <code className="ty-diff__value" dir="ltr">
         {v}
       </code>
     )
 
   const swatch = (k: EditionChange) => (
-    <span className="fk-diff__change" data-change={k}>
-      <span className="fk-diff__swatch" aria-hidden="true" />
+    <span className="ty-diff__change" data-change={k}>
+      <span className="ty-diff__swatch" aria-hidden="true" />
       <span>{l.changes[k]}</span>
     </span>
   )
   const num = (n: number) => new Intl.NumberFormat(locale).format(n)
 
   return (
-    <section className={['fk-diff', className].filter(Boolean).join(' ')} aria-label={l.title}>
-      <p className="fk-visually-hidden">{fill(l.summary, { a: a.label, b: b.label }, locale)}</p>
-      <div className="fk-diff__stats" role="group" aria-label={l.filter}>
+    <section className={['ty-diff', className].filter(Boolean).join(' ')} aria-label={l.title}>
+      <p className="ty-visually-hidden">{fill(l.summary, { a: a.label, b: b.label }, locale)}</p>
+      <div className="ty-diff__stats" role="group" aria-label={l.filter}>
         {KINDS.map((k) => (
           <button
             key={k}
             type="button"
-            className="fk-diff__stat"
+            className="ty-diff__stat"
             data-change={k}
             aria-pressed={shown === k}
             aria-label={fill(l.counts[k], { n: counts[k] }, locale)}
             onClick={() => setShown(shown === k ? 'all' : k)}
           >
-            <span className="fk-diff__stat-number" aria-hidden="true">
+            <span className="ty-diff__stat-number" aria-hidden="true">
               {num(counts[k])}
             </span>
-            <span className="fk-diff__stat-word" aria-hidden="true">
+            <span className="ty-diff__stat-word" aria-hidden="true">
               {l.stats[k]}
             </span>
           </button>
         ))}
         {comparison.divergentHashes !== undefined ? (
-          <div className="fk-diff__stat" data-static="true">
-            <span className="fk-diff__stat-number">{typeof comparison.divergentHashes === 'number' ? num(comparison.divergentHashes) : comparison.divergentHashes}</span>
-            <span className="fk-diff__stat-word">{l.stats.hashes}</span>
+          <div className="ty-diff__stat" data-static="true">
+            <span className="ty-diff__stat-number">{typeof comparison.divergentHashes === 'number' ? num(comparison.divergentHashes) : comparison.divergentHashes}</span>
+            <span className="ty-diff__stat-word">{l.stats.hashes}</span>
           </div>
         ) : null}
       </div>
       {rows.length ? (
-        <div className="fk-diff__scroll" role="region" aria-label={fill(l.summary, { a: a.label, b: b.label }, locale)} tabIndex={0}>
-          <table className="fk-diff__table">
+        <div className="ty-diff__scroll" role="region" aria-label={fill(l.summary, { a: a.label, b: b.label }, locale)} tabIndex={0}>
+          <table className="ty-diff__table">
             <thead>
               <tr>
                 <th scope="col">{l.item}</th>
                 <th scope="col">
-                  <span className="fk-visually-hidden">{fill(l.valueIn, { edition: a.label }, locale)}</span>
+                  <span className="ty-visually-hidden">{fill(l.valueIn, { edition: a.label }, locale)}</span>
                   <span aria-hidden="true">{a.label}</span>
                 </th>
                 <th scope="col">
-                  <span className="fk-visually-hidden">{fill(l.valueIn, { edition: b.label }, locale)}</span>
+                  <span className="ty-visually-hidden">{fill(l.valueIn, { edition: b.label }, locale)}</span>
                   <span aria-hidden="true">{b.label}</span>
                 </th>
                 <th scope="col">{l.change}</th>
@@ -229,10 +229,10 @@ export function EditionCompare({ comparison, filter, defaultFilter = 'all', onFi
             <tbody>
               {rows.map((r) => (
                 <tr key={r.itemId} data-change={r.change} data-selected={selectedId === r.itemId || undefined} onClick={() => select(r.itemId)}>
-                  <th scope="row" className="fk-diff__item">
+                  <th scope="row" className="ty-diff__item">
                     <button
                       type="button"
-                      className="fk-diff__pick"
+                      className="ty-diff__pick"
                       aria-pressed={selectedId === r.itemId}
                       onClick={(e) => {
                         e.stopPropagation()
@@ -245,29 +245,29 @@ export function EditionCompare({ comparison, filter, defaultFilter = 'all', onFi
                   <td>{value(r.a)}</td>
                   <td>{value(r.b)}</td>
                   <td>{swatch(r.change)}</td>
-                  <td>{r.who ? <ActorMark actor={r.who} /> : <span className="fk-diff__absent">{l.unknownActor}</span>}</td>
+                  <td>{r.who ? <ActorMark actor={r.who} /> : <span className="ty-diff__absent">{l.unknownActor}</span>}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       ) : (
-        <p className="fk-diff__empty">{l.noRows}</p>
+        <p className="ty-diff__empty">{l.noRows}</p>
       )}
-      <h3 className="fk-diff__eyebrow">{l.selected}</h3>
-      <div className="fk-diff__cards" aria-label={l.selected} role="group" aria-live="polite">
+      <h3 className="ty-diff__eyebrow">{l.selected}</h3>
+      <div className="ty-diff__cards" aria-label={l.selected} role="group" aria-live="polite">
         {current ? (
           (['a', 'b'] as const).map((side) => {
             const note = side === 'a' ? current.aNote : current.bNote
             return (
-              <article key={side} className="fk-diff__card" data-side={side} data-change={current.change}>
-                <p className="fk-diff__card-edition">{fill(side === 'a' ? l.before : l.after, { edition: side === 'a' ? a.label : b.label }, locale)}</p>
-                <p className="fk-diff__card-value">
-                  <span className="fk-diff__card-label">{current.label}</span> = {value(current[side])}
+              <article key={side} className="ty-diff__card" data-side={side} data-change={current.change}>
+                <p className="ty-diff__card-edition">{fill(side === 'a' ? l.before : l.after, { edition: side === 'a' ? a.label : b.label }, locale)}</p>
+                <p className="ty-diff__card-value">
+                  <span className="ty-diff__card-label">{current.label}</span> = {value(current[side])}
                 </p>
-                {note ? <p className="fk-diff__card-note">{note}</p> : null}
+                {note ? <p className="ty-diff__card-note">{note}</p> : null}
                 {side === 'b' && (onOpenInGraph || onRequestReview) ? (
-                  <div className="fk-diff__card-actions">
+                  <div className="ty-diff__card-actions">
                     {onOpenInGraph ? (
                       <Button variant="secondary" leadingIcon={<Share2 />} onPress={() => onOpenInGraph(current.itemId)}>
                         {l.openInGraph}
@@ -284,7 +284,7 @@ export function EditionCompare({ comparison, filter, defaultFilter = 'all', onFi
             )
           })
         ) : (
-          <p className="fk-diff__empty">{l.pickRow}</p>
+          <p className="ty-diff__empty">{l.pickRow}</p>
         )}
       </div>
     </section>

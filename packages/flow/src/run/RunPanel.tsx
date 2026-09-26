@@ -3,7 +3,7 @@
 
 import { useId } from 'react'
 import { Play, Square } from 'lucide-react'
-import { Button } from '@fakhir/ui'
+import { Button } from '@datatechsolutions/tympan'
 import { DockedPanel } from '../internal/DockedPanel'
 import { formatDuration } from '../internal/format'
 import { defineLabels, useFlowLocale, useLabels } from '../internal/labels'
@@ -98,31 +98,31 @@ function RunPanelBody({ onClose, onRun, onStop, labels, statusLabels }: Omit<Run
   )
 
   return (
-    <DockedPanel title={l.title} edge="bottom" onClose={onClose} closeLabel={l.close} actions={action} className="fk-run-panel" data={{ 'data-running': isRunning ? 'true' : undefined }}>
-      <div role="status" aria-live="polite" className={isRunning ? 'fk-run-panel__running' : 'fk-visually-hidden'}>
+    <DockedPanel title={l.title} edge="bottom" onClose={onClose} closeLabel={l.close} actions={action} className="ty-run-panel" data={{ 'data-running': isRunning ? 'true' : undefined }}>
+      <div role="status" aria-live="polite" className={isRunning ? 'ty-run-panel__running' : 'ty-visually-hidden'}>
         {isRunning ? <RunStatusMark status="running" labels={{ ...statusLabels, running: l.running }} /> : ''}
       </div>
       {blocker && !isRunning ? (
-        <p id={hintId} className="fk-run-panel__hint">
+        <p id={hintId} className="ty-run-panel__hint">
           {blocker}
         </p>
       ) : null}
       {rows.length === 0 ? (
-        <p className="fk-run-empty">{l.empty}</p>
+        <p className="ty-run-empty">{l.empty}</p>
       ) : (
-        <ul className="fk-run-rows" aria-label={l.title}>
+        <ul className="ty-run-rows" aria-label={l.title}>
           {rows.map((n) => {
             const r = results[n.id]
             const errorId = `${hintId}-${n.id}-error`
             const label = typeof n.data.label === 'string' && n.data.label ? n.data.label : n.id
             return (
-              <li key={n.id} className="fk-run-row" data-status={r?.status ?? 'idle'} aria-describedby={r?.error ? errorId : undefined}>
+              <li key={n.id} className="ty-run-row" data-status={r?.status ?? 'idle'} aria-describedby={r?.error ? errorId : undefined}>
                 <RunStatusMark status={r?.status ?? 'pending'} labels={statusLabels} />
-                <span className="fk-run-row__label">{label}</span>
-                <span className="fk-run-row__kind">{n.kind}</span>
-                {r?.durationMs !== undefined ? <span className="fk-run-row__duration">{formatDuration(r.durationMs, locale)}</span> : null}
+                <span className="ty-run-row__label">{label}</span>
+                <span className="ty-run-row__kind">{n.kind}</span>
+                {r?.durationMs !== undefined ? <span className="ty-run-row__duration">{formatDuration(r.durationMs, locale)}</span> : null}
                 {r?.error ? (
-                  <span id={errorId} className="fk-run-row__error">
+                  <span id={errorId} className="ty-run-row__error">
                     {r.error}
                   </span>
                 ) : null}

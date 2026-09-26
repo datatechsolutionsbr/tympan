@@ -27,8 +27,8 @@ type Side = { key: 'off' | 'on'; text: string; Icon: IconComponent }
 function SideLabel({ side, current, id }: { side: Side; current: boolean; id: string }): ReactNode {
   const { Icon } = side
   return (
-    <span id={id} className="fk-state-switch__side" data-side={side.key} data-current={current || undefined}>
-      <Icon className="fk-state-switch__side-icon" aria-hidden="true" focusable="false" />
+    <span id={id} className="ty-state-switch__side" data-side={side.key} data-current={current || undefined}>
+      <Icon className="ty-state-switch__side-icon" aria-hidden="true" focusable="false" />
       {side.text}
     </span>
   )
@@ -51,10 +51,10 @@ export function StateSwitch(props: StateSwitchProps) {
   useDomAttributes(inputRef, { 'aria-busy': props.pending ? 'true' : undefined })
 
   return (
-    <span className={cx('fk-state-switch', props.className)} onClick={contain} onKeyDown={contain} onPointerDown={contain}>
+    <span className={cx('ty-state-switch', props.className)} onClick={contain} onKeyDown={contain} onPointerDown={contain}>
       <AriaSwitch
         inputRef={inputRef}
-        className="fk-state-switch__control"
+        className="ty-state-switch__control"
         isSelected={props.checked}
         isDisabled={blocked}
         onChange={props.onCheckedChange}
@@ -63,8 +63,8 @@ export function StateSwitch(props: StateSwitchProps) {
         data-pending={props.pending || undefined}
       >
         <SideLabel side={sides[0]} current={!props.checked} id={`${base}-off`} />
-        <span className="fk-state-switch__track" aria-hidden="true">
-          <span className="fk-state-switch__thumb" />
+        <span className="ty-state-switch__track" aria-hidden="true">
+          <span className="ty-state-switch__thumb" />
         </span>
         <SideLabel side={sides[1]} current={props.checked} id={`${base}-on`} />
       </AriaSwitch>

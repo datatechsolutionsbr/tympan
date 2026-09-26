@@ -5,7 +5,7 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { RouteProgress } from './RouteProgress'
 
-const bar = (c: HTMLElement) => c.querySelector('.fk-route-progress__bar')
+const bar = (c: HTMLElement) => c.querySelector('.ty-route-progress__bar')
 
 describe('RouteProgress', () => {
   beforeEach(() => vi.useFakeTimers())

@@ -29,7 +29,7 @@ describe('Separator', () => {
     const { container } = render(<Separator caption="or" />)
     const caption = screen.getByText('or')
     expect(caption.closest('[aria-hidden="true"]')).toBeNull()
-    const lines = container.querySelectorAll('.fk-separator__line')
+    const lines = container.querySelectorAll('.ty-separator__line')
     expect(lines).toHaveLength(2)
     lines.forEach((l) => expect(l).toHaveAttribute('aria-hidden', 'true'))
   })
@@ -37,7 +37,7 @@ describe('Separator', () => {
   it('uses the fainter line token when soft', () => {
     const { container } = render(<Separator emphasis="soft" />)
     expect(container.firstElementChild).toHaveAttribute('data-emphasis', 'soft')
-    expect(cssOf('components/separator/Separator.css')).toMatch(/\[data-emphasis='soft'\]\s*\{[^}]*--fk-line-soft/)
+    expect(cssOf('components/separator/Separator.css')).toMatch(/\[data-emphasis='soft'\]\s*\{[^}]*--ty-line-soft/)
   })
 
   it('stays visible in forced colours', () => {

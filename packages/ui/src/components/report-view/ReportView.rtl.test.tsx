@@ -17,7 +17,7 @@ describe('ReportView in right-to-left locales', () => {
       'ar-EG',
     )
     expect(container.textContent).toContain(new Intl.NumberFormat('ar-EG').format(94))
-    expect(container.querySelector('.fk-report__kpi .fk-mirror-rtl')).not.toBeNull()
+    expect(container.querySelector('.ty-report__kpi .ty-mirror-rtl')).not.toBeNull()
     expect(screen.getByText('no value')).toBeInTheDocument()
     expect(container.textContent).not.toContain('–')
     await expectNoAxeViolations(container)

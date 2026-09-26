@@ -4,7 +4,7 @@
 
 import { useEffect, useId, useRef, useState } from 'react'
 import { ArrowLeft, ChevronRight, CircleAlert, Minimize2, Workflow } from 'lucide-react'
-import { Button, Spinner, TabPanel, Tabs } from '@fakhir/ui'
+import { Button, Spinner, TabPanel, Tabs } from '@datatechsolutions/tympan'
 import { DockedPanel } from '../internal/DockedPanel'
 import { formatDateTime, formatDuration, formatNumber } from '../internal/format'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
@@ -237,30 +237,30 @@ function DrawerBody(props: RunDrawerProps) {
       onClose={onClose}
       closeLabel={l.close}
       returnFocusTo={returnFocusTo ?? null}
-      className="fk-run-drawer"
+      className="ty-run-drawer"
       data={{ 'data-status': word }}
       actions={
         <>
-          <RunStatusMark status={word} labels={statusLabels} className="fk-run-drawer__status" />
-          {onCompact ? <Button variant="quiet" size="compact" shape="circle" iconOnly accessibleLabel={l.compact} leadingIcon={<Minimize2 />} onPress={onCompact} className="fk-run-switch" /> : null}
+          <RunStatusMark status={word} labels={statusLabels} className="ty-run-drawer__status" />
+          {onCompact ? <Button variant="quiet" size="compact" shape="circle" iconOnly accessibleLabel={l.compact} leadingIcon={<Minimize2 />} onPress={onCompact} className="ty-run-switch" /> : null}
         </>
       }
     >
-      <p className="fk-visually-hidden" role="status" aria-live="polite">
+      <p className="ty-visually-hidden" role="status" aria-live="polite">
         {announcement}
       </p>
       <Tabs label={l.tabs} tabs={[{ id: 'live', label: l.live }, { id: 'history', label: l.history }]} selectedKey={tab} onSelectionChange={(k) => setTab(k as RunDrawerTab)}>
         <TabPanel id="live">
           {liveRows.length === 0 && !isRunning ? (
-            <p className="fk-run-empty">{l.idleHint}</p>
+            <p className="ty-run-empty">{l.idleHint}</p>
           ) : (
             <RunDetail rows={liveRows} total={undefined} failed={word === 'failed'} labels={l} statusLabels={statusLabels} locale={locale} expanded={expandedNode} onExpanded={setExpandedNode} />
           )}
         </TabPanel>
         <TabPanel id="history">
           {selectedRun ? (
-            <div className="fk-run-drawer__run">
-              <Button variant="quiet" size="compact" leadingIcon={<ArrowLeft className="fk-run-mirror" />} onPress={back}>
+            <div className="ty-run-drawer__run">
+              <Button variant="quiet" size="compact" leadingIcon={<ArrowLeft className="ty-run-mirror" />} onPress={back}>
                 {l.back}
               </Button>
               <RunDetail
@@ -310,14 +310,14 @@ function HistoryList({
 }) {
   if (history.state === 'loading' || history.state === 'idle') {
     return (
-      <div aria-busy="true" role="status" className="fk-run-loading">
+      <div aria-busy="true" role="status" className="ty-run-loading">
         <Spinner size="small" label={l.loading} showLabel />
       </div>
     )
   }
   if (history.state === 'error') {
     return (
-      <div className="fk-run-load-error" role="alert">
+      <div className="ty-run-load-error" role="alert">
         <p>{fill(l.loadError, { message: history.error ?? '' }, locale)}</p>
         <Button size="compact" onPress={history.retry}>
           {l.retry}
@@ -325,14 +325,14 @@ function HistoryList({
       </div>
     )
   }
-  if (!history.runs.length) return <p className="fk-run-empty">{l.empty}</p>
+  if (!history.runs.length) return <p className="ty-run-empty">{l.empty}</p>
   return (
-    <ul className="fk-run-items">
+    <ul className="ty-run-items">
       {history.runs.map((run) => (
         <li key={run.id}>
           <button
             type="button"
-            className="fk-run-item"
+            className="ty-run-item"
             data-status={runWordOf(run.status)}
             ref={(el) => {
               if (el) rowRefs.set(run.id, el)
@@ -340,8 +340,8 @@ function HistoryList({
             onClick={() => onSelect(run)}
           >
             <RunStatusMark status={run.status} labels={statusLabels} />
-            <span className="fk-run-item__name">{fill(l.runRow, { time: formatDateTime(run.startedAt, locale) }, locale)}</span>
-            <span className="fk-run-item__meta">{run.durationMs === undefined ? l.notReported : formatDuration(run.durationMs, locale)}</span>
+            <span className="ty-run-item__name">{fill(l.runRow, { time: formatDateTime(run.startedAt, locale) }, locale)}</span>
+            <span className="ty-run-item__meta">{run.durationMs === undefined ? l.notReported : formatDuration(run.durationMs, locale)}</span>
           </button>
         </li>
       ))}
@@ -387,36 +387,36 @@ function RunDetail({
   const num = (v: number) => formatNumber(v, locale)
 
   return (
-    <div className="fk-run-detail" data-failed={failed || undefined}>
-      {failed ? <div className="fk-run-detail__band" aria-hidden="true" /> : null}
-      <dl className="fk-run-metrics">
-        <div className="fk-run-metric">
+    <div className="ty-run-detail" data-failed={failed || undefined}>
+      {failed ? <div className="ty-run-detail__band" aria-hidden="true" /> : null}
+      <dl className="ty-run-metrics">
+        <div className="ty-run-metric">
           <dt>{l.totalDuration}</dt>
           <dd>{formatDuration(totalMs, locale)}</dd>
         </div>
-        <div className="fk-run-metric">
+        <div className="ty-run-metric">
           <dt>{l.nodeCount}</dt>
           <dd>{num(rows.length)}</dd>
         </div>
-        <div className="fk-run-metric">
+        <div className="ty-run-metric">
           <dt>{l.succeeded}</dt>
           <dd>{num(succeeded)}</dd>
         </div>
-        <div className="fk-run-metric" data-tone={errorCount > 0 ? 'danger' : undefined}>
-          <dt className="fk-visually-hidden">{l.errorsTerm}</dt>
-          <dd className="fk-run-metric__errors">
+        <div className="ty-run-metric" data-tone={errorCount > 0 ? 'danger' : undefined}>
+          <dt className="ty-visually-hidden">{l.errorsTerm}</dt>
+          <dd className="ty-run-metric__errors">
             {errorCount > 0 ? <CircleAlert aria-hidden="true" focusable="false" /> : null}
             {fill(l.errors, { count: errorCount }, locale)}
           </dd>
         </div>
       </dl>
 
-      <section className="fk-run-section" aria-labelledby={`${baseId}-tokens`}>
-        <h3 id={`${baseId}-tokens`} className="fk-run-section__title">
+      <section className="ty-run-section" aria-labelledby={`${baseId}-tokens`}>
+        <h3 id={`${baseId}-tokens`} className="ty-run-section__title">
           {l.tokens}
         </h3>
         {tokens ? (
-          <dl className="fk-run-facts" data-testid="run-tokens">
+          <dl className="ty-run-facts" data-testid="run-tokens">
             <div>
               <dt>{l.tokensIn}</dt>
               <dd>{num(tokens.input)}</dd>
@@ -431,47 +431,47 @@ function RunDetail({
             </div>
           </dl>
         ) : (
-          <p className="fk-run-hint">{l.tokensNotReported}</p>
+          <p className="ty-run-hint">{l.tokensNotReported}</p>
         )}
       </section>
 
-      <section className="fk-run-section" aria-labelledby={`${baseId}-tools`}>
-        <h3 id={`${baseId}-tools`} className="fk-run-section__title">
+      <section className="ty-run-section" aria-labelledby={`${baseId}-tools`}>
+        <h3 id={`${baseId}-tools`} className="ty-run-section__title">
           {l.tools}
         </h3>
         {tools ? (
-          <ul className="fk-run-tools">
+          <ul className="ty-run-tools">
             {tools.map((t) => (
               <li key={t.name}>
-                <code className="fk-run-mono">{t.name}</code> <span>{fill(l.toolCalls, { count: t.count }, locale)}</span>
+                <code className="ty-run-mono">{t.name}</code> <span>{fill(l.toolCalls, { count: t.count }, locale)}</span>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="fk-run-hint">{l.toolsNotReported}</p>
+          <p className="ty-run-hint">{l.toolsNotReported}</p>
         )}
       </section>
 
-      <section className="fk-run-section" aria-labelledby={`${baseId}-nodes`}>
-        <h3 id={`${baseId}-nodes`} className="fk-run-section__title">
+      <section className="ty-run-section" aria-labelledby={`${baseId}-nodes`}>
+        <h3 id={`${baseId}-nodes`} className="ty-run-section__title">
           {l.nodes}
         </h3>
-        <ul className="fk-run-rows">
+        <ul className="ty-run-rows">
           {rows.map((r) => {
             const open = expanded === r.nodeId
             const panelId = `${baseId}-${r.nodeId}`
             return (
-              <li key={r.nodeId} className="fk-run-row" data-status={runWordOf(r.status)}>
-                <button type="button" className="fk-run-row__toggle" aria-expanded={open} aria-controls={panelId} onClick={() => onExpanded(open ? null : r.nodeId)}>
-                  <ChevronRight className="fk-run-row__chevron fk-run-mirror" aria-hidden="true" focusable="false" />
+              <li key={r.nodeId} className="ty-run-row" data-status={runWordOf(r.status)}>
+                <button type="button" className="ty-run-row__toggle" aria-expanded={open} aria-controls={panelId} onClick={() => onExpanded(open ? null : r.nodeId)}>
+                  <ChevronRight className="ty-run-row__chevron ty-run-mirror" aria-hidden="true" focusable="false" />
                   <RunStatusMark status={r.status} labels={statusLabels} />
-                  <span className="fk-run-row__label">{r.label ?? r.nodeId}</span>
-                  {r.kind ? <span className="fk-run-row__kind">{r.kind}</span> : null}
-                  <span className="fk-run-row__duration">{r.durationMs === undefined ? l.notReported : formatDuration(r.durationMs, locale)}</span>
+                  <span className="ty-run-row__label">{r.label ?? r.nodeId}</span>
+                  {r.kind ? <span className="ty-run-row__kind">{r.kind}</span> : null}
+                  <span className="ty-run-row__duration">{r.durationMs === undefined ? l.notReported : formatDuration(r.durationMs, locale)}</span>
                 </button>
-                {r.error ? <p className="fk-run-row__error">{r.error}</p> : null}
+                {r.error ? <p className="ty-run-row__error">{r.error}</p> : null}
                 {open ? (
-                  <pre id={panelId} className="fk-run-output" tabIndex={0} aria-label={fill(l.output, { node: r.label ?? r.nodeId }, locale)}>
+                  <pre id={panelId} className="ty-run-output" tabIndex={0} aria-label={fill(l.output, { node: r.label ?? r.nodeId }, locale)}>
                     {r.outputs === undefined ? l.notReported : prettyValue(r.outputs)}
                   </pre>
                 ) : null}

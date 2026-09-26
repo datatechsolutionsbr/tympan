@@ -3,7 +3,7 @@
 // answer for a subtree with <NodeKindCatalogProvider>.
 
 import { createContext, useContext, useMemo, useSyncExternalStore, type ReactNode } from 'react'
-import type { IconComponent } from '@fakhir/ui'
+import type { IconComponent } from '@datatechsolutions/tympan'
 import { FALLBACK_KIND_ICONS, resolveIcon } from './icons'
 import { nodeKindCatalog, type NodeKindCatalogStore, type PortTopology } from './kindCatalog'
 import { kindTone, type ToneName } from './palette'

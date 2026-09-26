@@ -7,7 +7,7 @@
 //  - background: pan (hand mode, touch, middle button, Space held) or
 //    marquee selection (select mode, primary mouse button);
 //  - node: drag (select mode, after a small threshold), never a press;
-//  - port ([data-fk-port]): draw a connection;
+//  - port ([data-ty-port]): draw a connection;
 //  - two touch points: pinch zoom around their midpoint;
 //  - wheel: pan, or zoom with Ctrl/⌘ (and trackpad pinch), or always zoom.
 
@@ -117,7 +117,7 @@ export function physicalSide(side: Side, rtl: boolean): Side {
   return side === 'start' ? 'end' : side === 'end' ? 'start' : side
 }
 const GRID_STEP = 24
-const NO_DRAG = 'input, textarea, select, [contenteditable="true"], [data-fk-no-drag], [data-fk-port]'
+const NO_DRAG = 'input, textarea, select, [contenteditable="true"], [data-ty-no-drag], [data-ty-port]'
 
 type Gesture =
   | { kind: 'pan'; pointerId: number; start: Point; origin: Viewport }
@@ -235,9 +235,9 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
   }, [])
 
   const focusNode = useCallback((id: string) => {
-    const wrapper = paneRef.current?.querySelector<HTMLElement>(`[data-fk-node-id="${CSS.escape(id)}"]`)
+    const wrapper = paneRef.current?.querySelector<HTMLElement>(`[data-ty-node-id="${CSS.escape(id)}"]`)
     if (!wrapper) return
-    const target = wrapper.querySelector<HTMLElement>('[data-fk-node-focus], button, [tabindex]:not([tabindex="-1"])') ?? wrapper
+    const target = wrapper.querySelector<HTMLElement>('[data-ty-node-focus], button, [tabindex]:not([tabindex="-1"])') ?? wrapper
     target.focus()
   }, [])
 
@@ -311,13 +311,13 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
   const resolveDrop = useCallback(
     (el: HTMLElement | null, from: PortRef): { ref: PortRef; valid: boolean } | null => {
       if (!el || !connect) return null
-      const port = el.closest<HTMLElement>('[data-fk-port]')
-      const nodeEl = el.closest<HTMLElement>('[data-fk-node-id]')
-      const nodeId = port?.dataset.fkPortNode ?? nodeEl?.dataset.fkNodeId
+      const port = el.closest<HTMLElement>('[data-ty-port]')
+      const nodeEl = el.closest<HTMLElement>('[data-ty-node-id]')
+      const nodeId = port?.dataset.tyPortNode ?? nodeEl?.dataset.tyNodeId
       if (!nodeId) return null
       const wanted: 'source' | 'target' = from.role === 'source' ? 'target' : 'source'
-      const portRole = port?.dataset.fkPortRole as 'source' | 'target' | undefined
-      const ref: PortRef = { nodeId, role: wanted, ...(port && portRole === wanted && port.dataset.fkPortId ? { portId: port.dataset.fkPortId } : {}) }
+      const portRole = port?.dataset.tyPortRole as 'source' | 'target' | undefined
+      const ref: PortRef = { nodeId, role: wanted, ...(port && portRole === wanted && port.dataset.tyPortId ? { portId: port.dataset.tyPortId } : {}) }
       const src = from.role === 'source' ? from : ref
       const tgt = from.role === 'source' ? ref : from
       return { ref, valid: nodeId !== from.nodeId && connect.canConnect(src, tgt) }
@@ -462,29 +462,29 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
         return
       }
     }
-    if (target.closest('[data-fk-surface-chrome]')) return
-    const port = target.closest<HTMLElement>('[data-fk-port]')
+    if (target.closest('[data-ty-surface-chrome]')) return
+    const port = target.closest<HTMLElement>('[data-ty-port]')
     if (port && connect && e.button === 0 && mode === 'select') {
-      const nodeId = port.dataset.fkPortNode
-      const role = port.dataset.fkPortRole as 'source' | 'target' | undefined
+      const nodeId = port.dataset.tyPortNode
+      const role = port.dataset.tyPortRole as 'source' | 'target' | undefined
       if (nodeId && role) {
         e.preventDefault()
         e.stopPropagation()
-        const from: PortRef = { nodeId, role, ...(port.dataset.fkPortId ? { portId: port.dataset.fkPortId } : {}) }
+        const from: PortRef = { nodeId, role, ...(port.dataset.tyPortId ? { portId: port.dataset.tyPortId } : {}) }
         const pointer = screenToCanvas(viewportRef.current, clientToLocal(here))
         gesture.current = { kind: 'connect', pointerId: e.pointerId, from, pointer }
         setConnecting({ from, pointer })
         return
       }
     }
-    const nodeEl = target.closest<HTMLElement>('[data-fk-node-id]')
+    const nodeEl = target.closest<HTMLElement>('[data-ty-node-id]')
     const wantsPan = mode === 'pan' || e.button === 1 || spaceHeld.current || (e.pointerType === 'touch' && !nodeEl)
     if (wantsPan && (e.button === 0 || e.button === 1)) {
       gesture.current = { kind: 'pan', pointerId: e.pointerId, start: here, origin: viewportRef.current }
       return
     }
     if (nodeEl && e.button === 0) {
-      const id = nodeEl.dataset.fkNodeId!
+      const id = nodeEl.dataset.tyNodeId!
       const self = nodes.find((n) => n.id === id)
       if (dragNodes && self?.draggable !== false && !target.closest(NO_DRAG)) {
         gesture.current = { kind: 'node', pointerId: e.pointerId, start: here, nodeId: id, ids: null, zoom: viewportRef.current.zoom }
@@ -584,9 +584,9 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
   const svgParts: ReactNode[] = []
   const htmlParts: ReactNode[] = []
   for (const { c, shape } of shapes) {
-    const parts: ConnectorParts = renderConnector ? renderConnector(c, shape) : { svg: <path className="fk-flow-surface__connector" d={shape.d} markerEnd="url(#fk-surface-arrow)" /> }
+    const parts: ConnectorParts = renderConnector ? renderConnector(c, shape) : { svg: <path className="ty-flow-surface__connector" d={shape.d} markerEnd="url(#ty-surface-arrow)" /> }
     if (parts.svg) svgParts.push(<g key={c.id}>{parts.svg}</g>)
-    if (parts.html) htmlParts.push(<div key={c.id} className="fk-flow-surface__connector-html">{parts.html}</div>)
+    if (parts.html) htmlParts.push(<div key={c.id} className="ty-flow-surface__connector-html">{parts.html}</div>)
   }
 
   const transform = `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`
@@ -596,7 +596,7 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
     <SurfaceContext.Provider value={ctx}>
       <div
         ref={paneRef}
-        className={['fk-flow-surface', className].filter(Boolean).join(' ')}
+        className={['ty-flow-surface', className].filter(Boolean).join(' ')}
         role="group"
         aria-label={label}
         aria-roledescription={roleDescription}
@@ -610,12 +610,12 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
         onKeyUp={onKeyUp}
         onContextMenu={(e) => {
           const target = e.target as HTMLElement
-          const nodeEl = target.closest<HTMLElement>('[data-fk-node-id]')
+          const nodeEl = target.closest<HTMLElement>('[data-ty-node-id]')
           const local = clientToLocal({ x: e.clientX, y: e.clientY })
           if (nodeEl && onNodeContextMenu) {
             e.preventDefault()
-            onNodeContextMenu(nodeEl.dataset.fkNodeId!, { x: e.clientX, y: e.clientY })
-          } else if (!nodeEl && !target.closest('[data-fk-surface-chrome]') && onBackgroundContextMenu) {
+            onNodeContextMenu(nodeEl.dataset.tyNodeId!, { x: e.clientX, y: e.clientY })
+          } else if (!nodeEl && !target.closest('[data-ty-surface-chrome]') && onBackgroundContextMenu) {
             e.preventDefault()
             onBackgroundContextMenu({ x: e.clientX, y: e.clientY }, screenToCanvas(viewportRef.current, local))
           }
@@ -623,20 +623,20 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
         {...data}
       >
         {grid ? (
-          <svg className="fk-flow-surface__grid" aria-hidden="true" focusable="false">
+          <svg className="ty-flow-surface__grid" aria-hidden="true" focusable="false">
             <defs>
-              <pattern id="fk-surface-grid" patternUnits="userSpaceOnUse" x={viewport.x % gridSize} y={viewport.y % gridSize} width={gridSize} height={gridSize}>
+              <pattern id="ty-surface-grid" patternUnits="userSpaceOnUse" x={viewport.x % gridSize} y={viewport.y % gridSize} width={gridSize} height={gridSize}>
                 <circle cx={gridSize / 2} cy={gridSize / 2} r={Math.max(0.6, 1 * viewport.zoom)} />
               </pattern>
             </defs>
-            <rect width="100%" height="100%" fill="url(#fk-surface-grid)" />
+            <rect width="100%" height="100%" fill="url(#ty-surface-grid)" />
           </svg>
         ) : null}
-        <div className="fk-flow-surface__plane" style={{ transform }}>
-          <svg className="fk-flow-surface__links" aria-hidden="true" focusable="false">
+        <div className="ty-flow-surface__plane" style={{ transform }}>
+          <svg className="ty-flow-surface__links" aria-hidden="true" focusable="false">
             <defs>
-              <marker id="fk-surface-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-                <path d="M0,0 L10,5 L0,10 z" className="fk-flow-surface__arrowhead" />
+              <marker id="ty-surface-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" className="ty-flow-surface__arrowhead" />
               </marker>
             </defs>
             {svgParts}
@@ -647,8 +647,8 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
             return (
               <div
                 key={n.id}
-                className="fk-flow-surface__node"
-                data-fk-node-id={n.id}
+                className="ty-flow-surface__node"
+                data-ty-node-id={n.id}
                 data-layer={n.layer ?? 1}
                 style={{ transform: `translate(${r.x}px, ${r.y}px)`, width: r.width, ...(n.fixedHeight ? { height: r.height } : { minHeight: r.height }) }}
                 onKeyDown={onNodeKeyDown ? (e) => onNodeKeyDown(n.id, e) : undefined}
@@ -661,10 +661,10 @@ export function CanvasSurface(props: CanvasSurfaceProps) {
           {overlay}
           {htmlParts}
         </div>
-        {marqueeBox ? <div className="fk-flow-surface__marquee" aria-hidden="true" style={{ left: marqueeBox.x, top: marqueeBox.y, width: marqueeBox.width, height: marqueeBox.height }} /> : null}
+        {marqueeBox ? <div className="ty-flow-surface__marquee" aria-hidden="true" style={{ left: marqueeBox.x, top: marqueeBox.y, width: marqueeBox.width, height: marqueeBox.height }} /> : null}
         {minimap ? <OverviewMap nodes={ordered} rects={placed} viewport={viewport} container={container} onCentre={(p) => setViewport({ ...viewportRef.current, x: container.width / 2 - p.x * viewportRef.current.zoom, y: container.height / 2 - p.y * viewportRef.current.zoom })} /> : null}
         {children}
-        <div className="fk-visually-hidden" role="status" aria-live="polite">
+        <div className="ty-visually-hidden" role="status" aria-live="polite">
           {connecting ? liveText : ''}
         </div>
       </div>

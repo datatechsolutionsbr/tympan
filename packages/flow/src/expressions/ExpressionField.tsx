@@ -4,7 +4,7 @@
 // condition builder.
 
 import { useId, useState } from 'react'
-import { SegmentedControl, TextArea } from '@fakhir/ui'
+import { SegmentedControl, TextArea } from '@datatechsolutions/tympan'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { ExpressionBuilder } from './ExpressionBuilder'
 import type { ExpressionBuilderLabels } from './labels'
@@ -102,11 +102,11 @@ export function ExpressionField(props: ExpressionFieldProps) {
   const message = error ? fill(l[error.key], error.key === 'unparseable' ? { detail: error.detail } : error.key === 'unknownOperation' ? { operation: error.operation } : {}, locale) : null
 
   return (
-    <div className="fk-expr-form__field-group" role="group" aria-labelledby={groupId}>
-      <span id={groupId} className="fk-expr-form__legend">
+    <div className="ty-expr-form__field-group" role="group" aria-labelledby={groupId}>
+      <span id={groupId} className="ty-expr-form__legend">
         {label}
       </span>
-      {hint ? <p className="fk-expr__hint">{hint}</p> : null}
+      {hint ? <p className="ty-expr__hint">{hint}</p> : null}
       <SegmentedControl
         label={`${label}: ${l.mode}`}
         size="compact"
@@ -129,7 +129,7 @@ export function ExpressionField(props: ExpressionFieldProps) {
       ) : (
         <>
           <TextArea
-            className="fk-expr-form__code"
+            className="ty-expr-form__code"
             label={label}
             monospace
             rows={6}
@@ -146,7 +146,7 @@ export function ExpressionField(props: ExpressionFieldProps) {
             {...(message ? { errorMessage: message } : {})}
           />
           {!error ? (
-            <p className="fk-expr-form__valid" role="status">
+            <p className="ty-expr-form__valid" role="status">
               {l.valid}
             </p>
           ) : null}

@@ -43,15 +43,15 @@ export function ProfileAvatar(props: ProfileAvatarProps) {
   const a11y = hidden ? { 'aria-hidden': true as const } : face.kind === 'picture' ? {} : { role: 'img', 'aria-label': label }
 
   return (
-    <span className={cx('fk-profile-avatar', props.className)} data-size={props.size ?? 'fill'} data-face={face.kind} {...a11y}>
+    <span className={cx('ty-profile-avatar', props.className)} data-size={props.size ?? 'fill'} data-face={face.kind} {...a11y}>
       {face.kind === 'picture' ? (
-        <img className="fk-profile-avatar__picture" src={face.url} alt={hidden ? '' : label} onError={() => setBroken(true)} />
+        <img className="ty-profile-avatar__picture" src={face.url} alt={hidden ? '' : label} onError={() => setBroken(true)} />
       ) : face.kind === 'letter' ? (
-        <span className="fk-profile-avatar__letter" aria-hidden="true">
+        <span className="ty-profile-avatar__letter" aria-hidden="true">
           {face.letter}
         </span>
       ) : (
-        <UserRound className="fk-profile-avatar__glyph" aria-hidden="true" focusable="false" />
+        <UserRound className="ty-profile-avatar__glyph" aria-hidden="true" focusable="false" />
       )}
     </span>
   )

@@ -36,7 +36,7 @@ export function ToolbarTrigger(props: ToolbarTriggerProps) {
   const control = (
     <AriaButton
       id={props.id}
-      className={cx('fk-toolbar-trigger', props.className)}
+      className={cx('ty-toolbar-trigger', props.className)}
       aria-label={name}
       aria-haspopup={popupFor[props.controls ?? 'none']}
       aria-expanded={props.expanded}
@@ -47,11 +47,11 @@ export function ToolbarTrigger(props: ToolbarTriggerProps) {
       data-expanded-state={props.expanded ? true : undefined}
       data-toggled={props.pressed ? true : undefined}
     >
-      <span className="fk-toolbar-trigger__glyph" aria-hidden="true">
+      <span className="ty-toolbar-trigger__glyph" aria-hidden="true">
         {props.icon}
       </span>
       {props.caption ? (
-        <span className="fk-toolbar-trigger__caption" aria-hidden="true">
+        <span className="ty-toolbar-trigger__caption" aria-hidden="true">
           {props.caption}
         </span>
       ) : null}
@@ -62,7 +62,7 @@ export function ToolbarTrigger(props: ToolbarTriggerProps) {
   return (
     <TooltipTrigger delay={400}>
       {control}
-      <Tooltip className="fk-toolbar-trigger__tip" offset={6}>
+      <Tooltip className="ty-toolbar-trigger__tip" offset={6}>
         {props.label}
       </Tooltip>
     </TooltipTrigger>

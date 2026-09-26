@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { ComputeNodeForm, defaultRule, ExpressionCatalogProvider, exampleExpressionCatalog, RuleEditor, RuleNodeForm, SimulationNodeForm, TraceTree, type RuleValue } from '../../../src'
 
 const noop = () => {}
@@ -22,7 +22,7 @@ export function ExpressionsSection() {
   const [ruleAr, setRuleAr] = useState<RuleValue>(defaultRule())
   return (
     <ExpressionCatalogProvider catalog={exampleExpressionCatalog}>
-      <section className="fk-gallery-section" aria-labelledby="expr-title">
+      <section className="ty-gallery-section" aria-labelledby="expr-title">
         <h2 id="expr-title">Expressions and rules</h2>
         <h3>Compute step</h3>
         <ComputeNodeForm value={{ kind: 'compute', expression: { operation: 'count', list: { ref: 'records' } } }} references={['records', 'assertions']} onSave={noop} onCancel={noop} onDryRun={() => Promise.resolve({ result: 37, trace })} />
@@ -35,11 +35,11 @@ export function ExpressionsSection() {
         <h3>Trace</h3>
         <TraceTree report={trace} />
         <h3>العربية (RTL)</h3>
-        <FakhirProvider locale="ar">
+        <TympanProvider locale="ar">
           <div dir="rtl" lang="ar">
             <RuleEditor value={ruleAr} onChange={setRuleAr} />
           </div>
-        </FakhirProvider>
+        </TympanProvider>
       </section>
     </ExpressionCatalogProvider>
   )

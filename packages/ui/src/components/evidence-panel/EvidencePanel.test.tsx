@@ -40,8 +40,8 @@ describe('EvidencePanel', () => {
     render(<Host />)
     const region = screen.getByRole('complementary', { name: 'Situation: in operation' })
     expect(screen.queryByRole('dialog')).toBeNull()
-    const body = region.querySelector('.fk-evidence__body')!
-    expect(body.firstElementChild).toHaveClass('fk-proof-badge')
+    const body = region.querySelector('.ty-evidence__body')!
+    expect(body.firstElementChild).toHaveClass('ty-proof-badge')
     expect(body.firstElementChild).toHaveAttribute('data-size', 'block')
   })
 
@@ -71,7 +71,7 @@ describe('EvidencePanel', () => {
     const onOpenChange = vi.fn()
     render(<Host onOpenChange={onOpenChange} />)
     const dialog = await screen.findByRole('dialog', { name: 'Situation: in operation' })
-    expect(dialog.closest('.fk-evidence-modal') ?? dialog.querySelector('.fk-evidence__body')).toBeTruthy()
+    expect(dialog.closest('.ty-evidence-modal') ?? dialog.querySelector('.ty-evidence__body')).toBeTruthy()
     await userEvent.keyboard('{Escape}')
     await waitFor(() => expect(onOpenChange).toHaveBeenCalledWith(false))
   })
@@ -90,7 +90,7 @@ describe('EvidencePanel', () => {
 
   it('enters in the base duration, instantly under reduced motion, opaque when transparency is reduced', () => {
     const css = cssOf('components/evidence-panel/EvidencePanel.css')
-    expect(css).toMatch(/animation:\s*fk-evidence-in var\(--fk-dur-base\)/)
+    expect(css).toMatch(/animation:\s*ty-evidence-in var\(--ty-dur-base\)/)
     expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/animation:\s*none/)
     expect(mediaBlock(css, /\(prefers-reduced-transparency:\s*reduce\)/)).toMatch(/backdrop-filter:\s*none/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/CanvasText/)

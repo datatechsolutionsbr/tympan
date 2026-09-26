@@ -98,7 +98,7 @@ describe('SearchBar', () => {
 
   it('keeps 44 px targets and stacks under 640', () => {
     const css = cssOf('components/search-bar/SearchBar.css')
-    expect(css).toMatch(/max\(100%,\s*var\(--fk-control-target\)\)/)
+    expect(css).toMatch(/max\(100%,\s*var\(--ty-control-target\)\)/)
     expect(mediaBlock(css, /\(max-width:\s*639\.98px\)/)).toMatch(/'actions'/)
     expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/transition:\s*none/)
   })

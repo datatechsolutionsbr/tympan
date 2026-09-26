@@ -85,13 +85,13 @@ describe('SectionPanel', () => {
     expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/__chevron\s*\{[^}]*transition:\s*none/)
     expect(mediaBlock(css, /\(prefers-reduced-transparency:\s*reduce\)/)).toMatch(/surface-solid/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/1px solid CanvasText/)
-    expect(css).toMatch(/__trigger\s*\{[^}]*min-block-size:\s*var\(--fk-control-target\)/)
+    expect(css).toMatch(/__trigger\s*\{[^}]*min-block-size:\s*var\(--ty-control-target\)/)
   })
 
   it('hides the stripe and icon from assistive technology', () => {
     const { container } = render(<SectionPanel title="Sources" accentStripe icon={<FileText />} />)
-    expect(container.querySelector('.fk-section-panel__stripe')).toHaveAttribute('aria-hidden', 'true')
-    expect(container.querySelector('.fk-section-panel__icon')).toHaveAttribute('aria-hidden', 'true')
+    expect(container.querySelector('.ty-section-panel__stripe')).toHaveAttribute('aria-hidden', 'true')
+    expect(container.querySelector('.ty-section-panel__icon')).toHaveAttribute('aria-hidden', 'true')
   })
 
   it('has no axe violations, light and dark, static and collapsible', async () => {

@@ -31,9 +31,9 @@ describe('ErrorState', () => {
   })
 
   it('shows status code and problem type as metadata', () => {
-    render(<ErrorState kind="conflict" statusCode={409} problemType="https://fakhir.app/problems/stale-version" />)
+    render(<ErrorState kind="conflict" statusCode={409} problemType="https://example.org/problems/stale-version" />)
     expect(screen.getByText('Status 409')).toBeInTheDocument()
-    expect(screen.getByText('https://fakhir.app/problems/stale-version').tagName).toBe('CODE')
+    expect(screen.getByText('https://example.org/problems/stale-version').tagName).toBe('CODE')
   })
 
   it('expands details with a disclosure', async () => {

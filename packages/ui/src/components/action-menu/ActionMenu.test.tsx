@@ -82,7 +82,7 @@ describe('ActionMenu', () => {
     } as DOMRect)
     render(<ActionMenu mode="context" label="Row actions" items={items} onAction={() => {}} open position={{ x: 1010, y: 760 }} trigger={<span>Row</span>} />)
     const menu = await screen.findByRole('menu')
-    const popover = menu.closest('.fk-action-menu') as HTMLElement
+    const popover = menu.closest('.ty-action-menu') as HTMLElement
     await waitFor(() => {
       const left = parseFloat(popover.style.left)
       const top = parseFloat(popover.style.top)
@@ -165,7 +165,7 @@ describe('ActionMenu', () => {
 
   it('has 44 px rows on touch, reduced motion and forced colours rules', () => {
     const css = cssOf('components/action-menu/ActionMenu.css')
-    expect(mediaBlock(css, /\(max-width:\s*1023\.98px\)/)).toMatch(/min-block-size:\s*var\(--fk-control-target\)/)
+    expect(mediaBlock(css, /\(max-width:\s*1023\.98px\)/)).toMatch(/min-block-size:\s*var\(--ty-control-target\)/)
     expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/animation:\s*none/)
     const forced = mediaBlock(css, /\(forced-colors:\s*active\)/)
     expect(forced).toMatch(/Highlight/)

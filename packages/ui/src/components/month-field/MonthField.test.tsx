@@ -25,7 +25,7 @@ describe('MonthField', () => {
   it('opens on the newest data year with months without data disabled', async () => {
     render(<MonthField label="Period" value="" onChange={() => {}} availableMonths={months} locale="en-US" />)
     await userEvent.click(screen.getByRole('button', { name: /Period/ }))
-    expect(screen.getByText('2026', { selector: '.fk-fb-stepper__heading' })).toBeInTheDocument()
+    expect(screen.getByText('2026', { selector: '.ty-fb-stepper__heading' })).toBeInTheDocument()
     expect(screen.getByRole('row', { name: /April 2026/ })).toHaveAttribute('aria-disabled', 'true')
     expect(screen.getByRole('row', { name: /February 2026/ })).not.toHaveAttribute('aria-disabled')
   })
@@ -72,7 +72,7 @@ describe('MonthField', () => {
 
   it('uses system highlight for the selection and GrayText for unavailable months', () => {
     const forced = mediaBlock(cssOf('internal/forms-b/forms-b.css'), /\(forced-colors:\s*active\)/)
-    expect(forced).toMatch(/\.fk-fb-months__cell\[data-selected\][^{]*\{[^}]*Highlight/)
+    expect(forced).toMatch(/\.ty-fb-months__cell\[data-selected\][^{]*\{[^}]*Highlight/)
     expect(forced).toMatch(/GrayText/)
   })
 

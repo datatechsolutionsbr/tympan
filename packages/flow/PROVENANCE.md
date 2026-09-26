@@ -1,5 +1,17 @@
 # Provenance
 
+> **Rename note (2026-09-26).** The repository is now Tympan, an
+> Astrlabe-family component published by Datatech. `packages/ui` is
+> `@datatechsolutions/tympan` (called `@fakhir/ui` in this record, before
+> that `@fakhir/design-system`), `packages/flow` is
+> `@datatechsolutions/tympan-flow` (here `@fakhir/flow`, before that
+> `@fakhir/flow-canvas`) and `packages/tokens` is
+> `@datatechsolutions/tympan-tokens` (here `@fakhir/tokens`). The `fk-` class
+> and `--fk-` custom-property prefix and the `data-fk-*` attributes named here
+> are now `ty-`, `--ty-` and `data-ty-*`; `FakhirProvider` is `TympanProvider`;
+> the Fakhir look is the `fakhir` theme preset. This record is otherwise kept
+> as written.
+
 Author: Natalia Mesquita. Per component: the spec it implements, the sources
 used, and the decisions taken where the spec left room. Specs live in
 `docs/clean-room/specs/`; "DD" is the design direction
@@ -60,8 +72,14 @@ kept.
 
 ## Ambiguities resolved (summary)
 
-- **Canvas library.** Own pointer-event surface instead of @xyflow/react (see
-  `THIRD_PARTY_NOTICES.md`).
+- **Canvas library.** Own pointer-event surface instead of @xyflow/react,
+  which the brief allowed and which was not used: the canvas needs its node
+  boxes in reading order in the DOM (Tab order and the list/tree alternative
+  follow the picture), deterministic geometry that jsdom can test without
+  layout, logical (RTL-aware) port sides, and an internal structure of its
+  own. A small pointer-event surface (`src/surface/`) covers pan, zoom, pinch,
+  marquee, node drag and connection drawing. (Moved here from
+  `THIRD_PARTY_NOTICES.md` on 2026-09-26.)
 - **Right to left.** Canvas geometry keeps a physical origin; logical port
   sides and the horizontal rank direction mirror; everything else uses
   logical CSS. Identifiers, hashes and code stay left to right.

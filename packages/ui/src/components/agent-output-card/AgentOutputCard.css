@@ -1,30 +1,30 @@
 /* AgentOutputCard (spec: wave-2/agent-output-card.md; design direction §2.2, §2.3, §2.11). */
-@layer fakhir.components {
-  .fk-agent-output {
+@layer tympan.components {
+  .ty-agent-output {
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
     min-inline-size: 0;
-    padding: var(--fk-space-4);
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-card);
-    background: var(--fk-surface-raised);
-    box-shadow: var(--fk-shadow-raised);
-    color: var(--fk-ink-2);
-    font-size: var(--fk-font-size-body);
-    line-height: var(--fk-font-line-height-body);
+    padding: var(--ty-space-4);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-card);
+    background: var(--ty-surface-raised);
+    box-shadow: var(--ty-shadow-raised);
+    color: var(--ty-ink-2);
+    font-size: var(--ty-font-size-body);
+    line-height: var(--ty-font-line-height-body);
   }
-  .fk-agent-output__head {
+  .ty-agent-output__head {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: var(--fk-space-2) var(--fk-space-3);
+    gap: var(--ty-space-2) var(--ty-space-3);
   }
-  .fk-agent-output__open {
+  .ty-agent-output__open {
     display: inline-flex;
-    min-block-size: var(--fk-control-target);
+    min-block-size: var(--ty-control-target);
     margin: 0;
     padding: 0;
     border: 0;
@@ -36,69 +36,69 @@
     outline: none;
   }
   /* One tab stop; the whole card is its pointer target. */
-  .fk-agent-output__open::after {
+  .ty-agent-output__open::after {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: inherit;
   }
-  .fk-agent-output:has(.fk-agent-output__open[data-focus-visible]) {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-agent-output:has(.ty-agent-output__open[data-focus-visible]) {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
-  .fk-agent-output:has(.fk-agent-output__open[data-hovered]) {
-    border-color: var(--fk-line-strong);
+  .ty-agent-output:has(.ty-agent-output__open[data-hovered]) {
+    border-color: var(--ty-line-strong);
   }
-  .fk-agent-output__meta {
+  .ty-agent-output__meta {
     display: inline-flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--fk-space-3);
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    gap: var(--ty-space-3);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
-  .fk-agent-output__outcome {
+  .ty-agent-output__outcome {
     display: inline-flex;
     align-items: center;
-    gap: var(--fk-space-1);
-    font-weight: var(--fk-font-weight-semibold);
+    gap: var(--ty-space-1);
+    font-weight: var(--ty-font-weight-semibold);
   }
-  .fk-agent-output__outcome > svg {
+  .ty-agent-output__outcome > svg {
     inline-size: 14px;
     block-size: 14px;
   }
-  .fk-agent-output__outcome[data-outcome='completed'] {
-    color: var(--fk-on-success-soft);
+  .ty-agent-output__outcome[data-outcome='completed'] {
+    color: var(--ty-on-success-soft);
   }
-  .fk-agent-output__outcome[data-outcome='failed'] {
-    color: var(--fk-on-danger-soft);
+  .ty-agent-output__outcome[data-outcome='failed'] {
+    color: var(--ty-on-danger-soft);
   }
-  .fk-agent-output__outcome[data-outcome='pending'] {
-    color: var(--fk-on-warning-soft);
+  .ty-agent-output__outcome[data-outcome='pending'] {
+    color: var(--ty-on-warning-soft);
   }
-  .fk-agent-output__excerpt {
+  .ty-agent-output__excerpt {
     display: -webkit-box;
     margin: 0;
     overflow: hidden;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: var(--fk-agent-output-lines, 4);
-    line-clamp: var(--fk-agent-output-lines, 4);
+    -webkit-line-clamp: var(--ty-agent-output-lines, 4);
+    line-clamp: var(--ty-agent-output-lines, 4);
     overflow-wrap: anywhere;
   }
 
   @media (prefers-reduced-transparency: reduce) {
-    .fk-agent-output {
-      background: var(--fk-surface-raised-solid);
+    .ty-agent-output {
+      background: var(--ty-surface-raised-solid);
     }
   }
 
   @media (forced-colors: active) {
-    .fk-agent-output {
+    .ty-agent-output {
       border: 1px solid CanvasText;
       box-shadow: none;
     }
-    .fk-agent-output:has(.fk-agent-output__open[data-focus-visible]) {
+    .ty-agent-output:has(.ty-agent-output__open[data-focus-visible]) {
       outline: 2px solid Highlight;
     }
   }

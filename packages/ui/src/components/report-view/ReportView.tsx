@@ -59,15 +59,15 @@ function DefaultKpi({ kpi, fmt }: { kpi: ReportKpi; fmt: Formatters }) {
   const Trend = d === undefined || d === 0 ? ArrowRight : d > 0 ? ArrowUpRight : ArrowDownRight
   // Sideways parts of the trend arrow follow the reading direction (up stays up).
   return (
-    <div className="fk-report__kpi" data-tone={kpi.tone ?? 'neutral'}>
-      <span className="fk-report__kpi-label">{kpi.label}</span>
-      <span className="fk-report__kpi-value">
+    <div className="ty-report__kpi" data-tone={kpi.tone ?? 'neutral'}>
+      <span className="ty-report__kpi-label">{kpi.label}</span>
+      <span className="ty-report__kpi-value">
         {value}
-        {kpi.unit ? <span className="fk-report__kpi-unit"> {kpi.unit}</span> : null}
+        {kpi.unit ? <span className="ty-report__kpi-unit"> {kpi.unit}</span> : null}
       </span>
       {d !== undefined ? (
-        <span className="fk-report__kpi-delta">
-          <Trend className="fk-icon fk-mirror-rtl" aria-hidden="true" focusable="false" />
+        <span className="ty-report__kpi-delta">
+          <Trend className="ty-icon ty-mirror-rtl" aria-hidden="true" focusable="false" />
           {`${d > 0 ? '+' : ''}${fmt.number(d)}${kpi.deltaUnit ?? ''}`}
         </span>
       ) : null}
@@ -80,7 +80,7 @@ function TableBlock({ table, fmt, noValue, fallbackCaption }: { table: ReportTab
     if (raw === null || raw === undefined || raw === '') {
       return (
         // §2.13: no dash as decoration; the empty-value word is shown in the muted tone.
-        <span className="fk-report__no-value">{noValue}</span>
+        <span className="ty-report__no-value">{noValue}</span>
       )
     }
     if (typeof raw !== 'number') return String(raw)
@@ -132,20 +132,20 @@ export function ReportView(props: ReportViewProps) {
   const footer = metaPairs(report.meta)
 
   return (
-    <section className={cx('fk-report', props.className)} aria-labelledby={titleId} data-layout={report.layout ?? 'grid'}>
-      <header className="fk-report__header">
-        <h2 id={titleId} className="fk-report__title">
+    <section className={cx('ty-report', props.className)} aria-labelledby={titleId} data-layout={report.layout ?? 'grid'}>
+      <header className="ty-report__header">
+        <h2 id={titleId} className="ty-report__title">
           {report.title}
         </h2>
-        {report.subtitle ? <p className="fk-report__subtitle">{report.subtitle}</p> : null}
+        {report.subtitle ? <p className="ty-report__subtitle">{report.subtitle}</p> : null}
       </header>
 
       {isEmpty ? <EmptyState reason="custom" framing="section" title={copy.empty} description={copy.emptyHint} headingLevel={3} /> : null}
 
       {kpis.length ? (
-        <div className="fk-report__kpis">
+        <div className="ty-report__kpis">
           {kpis.map((k, i) => (
-            <div key={`${k.label}-${i}`} className="fk-report__kpi-cell">
+            <div key={`${k.label}-${i}`} className="ty-report__kpi-cell">
               {props.renderKpi ? props.renderKpi(k, i) : <DefaultKpi kpi={k} fmt={fmt} />}
             </div>
           ))}
@@ -153,7 +153,7 @@ export function ReportView(props: ReportViewProps) {
       ) : null}
 
       {charts.length ? (
-        <div className="fk-report__charts">
+        <div className="ty-report__charts">
           {charts.map((c, i) =>
             Array.isArray(c.layers) && c.layers.length ? <Chart key={`${c.heading}-${i}`} figure={c} /> : null,
           )}
@@ -165,11 +165,11 @@ export function ReportView(props: ReportViewProps) {
       ) : null}
 
       {report.recommendation && report.recommendation.trim() ? (
-        <div className="fk-report__recommendation" role="note" aria-label={copy.recommendation}>
-          <Lightbulb className="fk-icon" aria-hidden="true" focusable="false" />
+        <div className="ty-report__recommendation" role="note" aria-label={copy.recommendation}>
+          <Lightbulb className="ty-icon" aria-hidden="true" focusable="false" />
           <div>
-            <p className="fk-report__recommendation-label">{copy.recommendation}</p>
-            <p className="fk-report__prose">{report.recommendation}</p>
+            <p className="ty-report__recommendation-label">{copy.recommendation}</p>
+            <p className="ty-report__prose">{report.recommendation}</p>
           </div>
         </div>
       ) : null}
@@ -177,18 +177,18 @@ export function ReportView(props: ReportViewProps) {
       {sections.map((s, i) => {
         const render = rendererFor(s?.kind)
         return (
-          <article key={s.id ?? i} className="fk-report__section" data-kind={String(s?.kind)}>
-            {s.title ? <h3 className="fk-report__section-title">{s.title}</h3> : null}
+          <article key={s.id ?? i} className="ty-report__section" data-kind={String(s?.kind)}>
+            {s.title ? <h3 className="ty-report__section-title">{s.title}</h3> : null}
             {render(s, ctx)}
           </article>
         )
       })}
 
       {footer.length ? (
-        <footer className="fk-report__footer">
-          <dl className="fk-report__pairs">
+        <footer className="ty-report__footer">
+          <dl className="ty-report__pairs">
             {footer.map((p) => (
-              <div key={p.label} className="fk-report__pair">
+              <div key={p.label} className="ty-report__pair">
                 <dt>{p.label}</dt>
                 <dd>{p.value}</dd>
               </div>

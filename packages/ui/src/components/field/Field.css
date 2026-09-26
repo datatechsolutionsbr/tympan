@@ -1,97 +1,97 @@
 /* Field, Fieldset, FieldStack (spec: wave-1/field.md; design direction §2.1, §2.2, §2.10). */
-@layer fakhir.components {
-  .fk-field {
+@layer tympan.components {
+  .ty-field {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
     min-inline-size: 0;
   }
 
   /* Label always above the control (§2.10). */
-  .fk-field__label {
-    color: var(--fk-ink);
-    font-family: var(--fk-font-sans);
-    font-size: var(--fk-font-size-label);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-label);
+  .ty-field__label {
+    color: var(--ty-ink);
+    font-family: var(--ty-font-sans);
+    font-size: var(--ty-font-size-label);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-label);
   }
 
-  .fk-field__required {
-    color: var(--fk-ink-3);
-    font-weight: var(--fk-font-weight-regular);
+  .ty-field__required {
+    color: var(--ty-ink-3);
+    font-weight: var(--ty-font-weight-regular);
   }
 
-  .fk-field__hint {
+  .ty-field__hint {
     margin: 0;
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
-    max-inline-size: calc(var(--fk-measure-prose) * 1ch);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
+    max-inline-size: calc(var(--ty-measure-prose) * 1ch);
   }
 
-  .fk-field__error {
+  .ty-field__error {
     display: flex;
     align-items: flex-start;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
     margin: 0;
-    color: var(--fk-danger);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    color: var(--ty-danger);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
 
-  .fk-field__error-icon {
+  .ty-field__error-icon {
     margin-block-start: 1px;
   }
 
-  .fk-field[data-disabled] .fk-field__label {
-    color: var(--fk-ink-3);
+  .ty-field[data-disabled] .ty-field__label {
+    color: var(--ty-ink-3);
   }
 
-  .fk-fieldset {
+  .ty-fieldset {
     min-inline-size: 0;
     margin: 0;
     padding: 0;
     border: 0;
   }
 
-  .fk-fieldset__legend {
+  .ty-fieldset__legend {
     padding: 0;
-    margin-block-end: var(--fk-space-2);
-    color: var(--fk-ink);
-    font-family: var(--fk-font-sans);
-    font-size: var(--fk-font-size-body);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-body);
+    margin-block-end: var(--ty-space-2);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-sans);
+    font-size: var(--ty-font-size-body);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-body);
   }
 
-  .fk-fieldset__description {
-    margin: 0 0 var(--fk-space-3);
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+  .ty-fieldset__description {
+    margin: 0 0 var(--ty-space-3);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
 
-  .fk-fieldset__body,
-  .fk-field-stack {
+  .ty-fieldset__body,
+  .ty-field-stack {
     display: flex;
     flex-direction: column;
-    gap: calc(var(--fk-space-4) + var(--fk-space-1));
+    gap: calc(var(--ty-space-4) + var(--ty-space-1));
   }
 
   @media (max-width: 767.98px) {
-    .fk-fieldset__body,
-    .fk-field-stack {
-      gap: var(--fk-space-4);
+    .ty-fieldset__body,
+    .ty-field-stack {
+      gap: var(--ty-space-4);
     }
   }
 
   @media (forced-colors: active) {
-    .fk-field__label,
-    .fk-fieldset__legend {
+    .ty-field__label,
+    .ty-fieldset__legend {
       color: CanvasText;
     }
-    .fk-field__error,
-    .fk-field__error-icon {
+    .ty-field__error,
+    .ty-field__error-icon {
       color: CanvasText;
       forced-color-adjust: auto;
     }

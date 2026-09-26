@@ -100,9 +100,9 @@ const REACH = 100_000
 export function AlignmentGuidesOverlay({ guides }: { guides: GuidePositions }) {
   if (guides.horizontal === null && guides.vertical === null) return null
   return (
-    <svg className="fk-alignment-guides" aria-hidden="true" focusable="false">
-      {guides.vertical !== null ? <line className="fk-alignment-guides__line" data-axis="vertical" x1={guides.vertical} x2={guides.vertical} y1={-REACH} y2={REACH} /> : null}
-      {guides.horizontal !== null ? <line className="fk-alignment-guides__line" data-axis="horizontal" x1={-REACH} x2={REACH} y1={guides.horizontal} y2={guides.horizontal} /> : null}
+    <svg className="ty-alignment-guides" aria-hidden="true" focusable="false">
+      {guides.vertical !== null ? <line className="ty-alignment-guides__line" data-axis="vertical" x1={guides.vertical} x2={guides.vertical} y1={-REACH} y2={REACH} /> : null}
+      {guides.horizontal !== null ? <line className="ty-alignment-guides__line" data-axis="horizontal" x1={-REACH} x2={REACH} y1={guides.horizontal} y2={guides.horizontal} /> : null}
     </svg>
   )
 }

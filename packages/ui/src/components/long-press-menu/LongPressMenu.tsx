@@ -51,7 +51,7 @@ export function LongPressMenu(props: LongPressMenuProps) {
   }
 
   const triggerCommon = {
-    className: 'fk-long-press-menu__trigger',
+    className: 'ty-long-press-menu__trigger',
     'aria-label': props.label,
     'aria-describedby': hintId,
     'aria-haspopup': 'menu' as const,
@@ -73,16 +73,16 @@ export function LongPressMenu(props: LongPressMenuProps) {
   }
 
   return (
-    <span className={cx('fk-long-press-menu', props.className)} {...request.props}>
+    <span className={cx('ty-long-press-menu', props.className)} {...request.props}>
       {/* Presses reach the menu trigger too; only closing (or tapOpensMenu) is accepted from it. */}
       <MenuTrigger isOpen={open} onOpenChange={(next) => (!next || props.tapOpensMenu ? setOpen(next) : undefined)}>
         {trigger}
-        <Popover className="fk-long-press-menu__popover" placement="bottom start" offset={6}>
-          <Menu className="fk-long-press-menu__menu" aria-label={props.label} autoFocus="first" onAction={run}>
+        <Popover className="ty-long-press-menu__popover" placement="bottom start" offset={6}>
+          <Menu className="ty-long-press-menu__menu" aria-label={props.label} autoFocus="first" onAction={run}>
             {props.items.map((item, i) => (
-              <MenuItem key={i} id={String(i)} href={item.href} textValue={item.label} className="fk-long-press-menu__item" data-tone={item.tone ?? 'neutral'}>
+              <MenuItem key={i} id={String(i)} href={item.href} textValue={item.label} className="ty-long-press-menu__item" data-tone={item.tone ?? 'neutral'}>
                 {item.icon ? (
-                  <span className="fk-long-press-menu__icon" aria-hidden="true">
+                  <span className="ty-long-press-menu__icon" aria-hidden="true">
                     {item.icon}
                   </span>
                 ) : null}
@@ -92,7 +92,7 @@ export function LongPressMenu(props: LongPressMenuProps) {
           </Menu>
         </Popover>
       </MenuTrigger>
-      <span id={hintId} className="fk-visually-hidden">
+      <span id={hintId} className="ty-visually-hidden">
         {hint}
       </span>
     </span>

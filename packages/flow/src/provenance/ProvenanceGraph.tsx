@@ -27,7 +27,7 @@
 import { useCallback, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
 import { ComboBox, Input, Label, ListBox, ListBoxItem, Popover as AriaPopover, Button as AriaButton, Radio, RadioGroup, Switch as AriaSwitch, Text } from 'react-aria-components'
 import { ArrowDown, ArrowUp, Check, ChevronDown, FileDown, GitCompareArrows, Hourglass, ListTree } from 'lucide-react'
-import { Button, EmptyState, InlineNotice, useMediaQuery } from '@fakhir/ui'
+import { Button, EmptyState, InlineNotice, useMediaQuery } from '@datatechsolutions/tympan'
 import { kindTone } from '../catalog/palette'
 import { fill, useFlowLocale, useLabels } from '../internal/labels'
 import { useControllable } from '../internal/useControllable'
@@ -171,7 +171,7 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
   const pendingFocus = useRef<string | null>(null)
   const rootRef = useRef<HTMLDivElement>(null)
   const [geometry, setGeometry] = useState<BandGeometry>(DEFAULT_BANDS)
-  // Band sizes come from the --fk-flow-* tokens, so a theme or density can change them.
+  // Band sizes come from the --ty-flow-* tokens, so a theme or density can change them.
   useLayoutEffect(() => {
     const g = bandGeometryFrom(rootRef.current)
     setGeometry((prev) => (JSON.stringify(prev) === JSON.stringify(g) ? prev : g))
@@ -280,7 +280,7 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
       // so it never covers a card between two close bands.
       return {
         svg: (
-          <path className="fk-prov-link" data-relation={link.relation} data-on-path={onPathLink ? 'true' : undefined} data-dimmed={dim ? 'true' : undefined} d={shape.d} markerEnd="url(#fk-surface-arrow)">
+          <path className="ty-prov-link" data-relation={link.relation} data-on-path={onPathLink ? 'true' : undefined} data-dimmed={dim ? 'true' : undefined} d={shape.d} markerEnd="url(#ty-surface-arrow)">
             <title>{l.relations[link.relation]}</title>
           </path>
         ),
@@ -315,11 +315,11 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
 
   // Band backgrounds and labels, drawn under the nodes in canvas units.
   const bandOverlay = (
-    <div className="fk-prov-bands" aria-hidden="true">
+    <div className="ty-prov-bands" aria-hidden="true">
       {bands.bands.map((b) => (
         <div
           key={b.key}
-          className="fk-prov-band"
+          className="ty-prov-band"
           data-parity={b.row % 2 ? 'odd' : 'even'}
           style={{ transform: `translate(${-4000}px, ${b.row * geometry.band}px)`, width: bands.width + 8000, height: geometry.band }}
         />
@@ -327,11 +327,11 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
       {bands.bands.map((b) => (
         <span
           key={`label-${b.key}`}
-          className="fk-prov-band__label"
+          className="ty-prov-band__label"
           style={{ transform: `translate(${bands.labelX}px, ${b.row * geometry.band}px)`, width: geometry.label, height: geometry.band }}
         >
-          <span className="fk-prov-band__number">{new Intl.NumberFormat(locale).format(b.row + 1)}</span>
-          <span className="fk-prov-band__name">{l.lanes[b.key]}</span>
+          <span className="ty-prov-band__number">{new Intl.NumberFormat(locale).format(b.row + 1)}</span>
+          <span className="ty-prov-band__name">{l.lanes[b.key]}</span>
         </span>
       ))}
     </div>
@@ -395,11 +395,11 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
   void viewNames
   const question =
     props.showQuestionBar === false ? null : (
-      <div className="fk-prov__bar" role="group" aria-label={l.queryBar} ref={barRef}>
+      <div className="ty-prov__bar" role="group" aria-label={l.queryBar} ref={barRef}>
         {props.title ? (
-          <div className="fk-prov__heading">
-            {props.breadcrumb ? <p className="fk-prov__crumb">{props.breadcrumb}</p> : null}
-            <h1 className="fk-prov__title">{props.title}</h1>
+          <div className="ty-prov__heading">
+            {props.breadcrumb ? <p className="ty-prov__crumb">{props.breadcrumb}</p> : null}
+            <h1 className="ty-prov__title">{props.title}</h1>
           </div>
         ) : null}
         <ProvenanceQuestion
@@ -416,7 +416,7 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
     )
 
   const shell = (state: string, body: ReactNode) => (
-    <div className={['fk-prov', className].filter(Boolean).join(' ')} data-state={state} {...(state === 'loading' ? { 'aria-busy': true } : {})}>
+    <div className={['ty-prov', className].filter(Boolean).join(' ')} data-state={state} {...(state === 'loading' ? { 'aria-busy': true } : {})}>
       {body}
     </div>
   )
@@ -424,13 +424,13 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
     return shell(
       'loading',
       <>
-        <p className="fk-prov__status" role="status">
+        <p className="ty-prov__status" role="status">
           {l.loading}
         </p>
-        <div className="fk-prov__ghosts" aria-hidden="true">
-          <span className="fk-prov__ghost" />
-          <span className="fk-prov__ghost" />
-          <span className="fk-prov__ghost" />
+        <div className="ty-prov__ghosts" aria-hidden="true">
+          <span className="ty-prov__ghost" />
+          <span className="ty-prov__ghost" />
+          <span className="ty-prov__ghost" />
         </div>
       </>,
     )
@@ -469,11 +469,11 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
   const presentRelations = PROV_RELATIONS_ORDER.filter((r) => provView.links.some((lk) => lk.relation === r))
   void presentProof
   const graphRow = (
-    <div className="fk-prov__tools" data-fk-canvas-exit="">
+    <div className="ty-prov__tools" data-ty-canvas-exit="">
       <FilterChips value={filters} onChange={setFilters} labels={l} locale={locale} canShowActors={actors.some((a) => !!a.id)} />
-      <span className="fk-prov-chip fk-prov-hops" role="group" aria-label={l.hops} data-disabled={focusId ? undefined : 'true'}>
-        <ArrowUp className="fk-prov-hops__arrow" aria-hidden="true" focusable="false" />
-        <select className="fk-prov-hops__select" aria-label={l.hopsBack} value={String(back)} onChange={(e) => setBack(Number(e.target.value))} disabled={!focusId}>
+      <span className="ty-prov-chip ty-prov-hops" role="group" aria-label={l.hops} data-disabled={focusId ? undefined : 'true'}>
+        <ArrowUp className="ty-prov-hops__arrow" aria-hidden="true" focusable="false" />
+        <select className="ty-prov-hops__select" aria-label={l.hopsBack} value={String(back)} onChange={(e) => setBack(Number(e.target.value))} disabled={!focusId}>
           {hopOptions.map((o) => (
             <option key={o} value={o}>
               {o}
@@ -481,35 +481,35 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
           ))}
         </select>
         <span aria-hidden="true">·</span>
-        <ArrowDown className="fk-prov-hops__arrow" aria-hidden="true" focusable="false" />
-        <select className="fk-prov-hops__select" aria-label={l.hopsForward} value={String(forward)} onChange={(e) => setForward(Number(e.target.value))} disabled={!focusId}>
+        <ArrowDown className="ty-prov-hops__arrow" aria-hidden="true" focusable="false" />
+        <select className="ty-prov-hops__select" aria-label={l.hopsForward} value={String(forward)} onChange={(e) => setForward(Number(e.target.value))} disabled={!focusId}>
           {hopOptions.map((o) => (
             <option key={o} value={o}>
               {o}
             </option>
           ))}
         </select>
-        <span className="fk-prov-hops__word">{l.hopsWord}</span>
+        <span className="ty-prov-hops__word">{l.hopsWord}</span>
       </span>
-      <AriaSwitch className="fk-prov-chip fk-prov-only-path" isSelected={onlyPath} onChange={setOnlyPath} isDisabled={!hasPath}>
+      <AriaSwitch className="ty-prov-chip ty-prov-only-path" isSelected={onlyPath} onChange={setOnlyPath} isDisabled={!hasPath}>
         {l.onlyPath}
       </AriaSwitch>
-      <span className="fk-prov__spacer" />
-      <p className="fk-visually-hidden" role="status">
+      <span className="ty-prov__spacer" />
+      <p className="ty-visually-hidden" role="status">
         {fill(l.count, { count: provView.vertices.length }, locale)}
       </p>
       <ProvenanceLegend labels={l} states={[]} relations={presentRelations.length ? presentRelations : undefined} variant="inline" />
       {props.toolRowEnd}
     </div>
   )
-  const dock = props.renderTools ? props.renderTools(tools) : <CanvasToolbar className="fk-prov-dock" items={tools} label={l.graphName} placement="dock" exitTarget={false} />
+  const dock = props.renderTools ? props.renderTools(tools) : <CanvasToolbar className="ty-prov-dock" items={tools} label={l.graphName} placement="dock" exitTarget={false} />
 
   const certificateFor = (focusId && props.certificates?.[focusId]) || (selectedId && props.certificates?.[selectedId]) || null
 
   let main: ReactNode
   if (view === 'graph') {
     main = (
-      <div className="fk-prov__main" ref={canvasRef}>
+      <div className="ty-prov__main" ref={canvasRef}>
         {graphRow}
         <CanvasSurface
           label={l.graphName}
@@ -535,7 +535,7 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
           onLeave={leaveCanvas}
           direction={mirror ? 'rtl' : 'ltr'}
           apiRef={bindApi}
-          className="fk-prov__canvas"
+          className="ty-prov__canvas"
           data={{ 'data-path': hasPath ? 'true' : undefined }}
         >
           <CanvasNodeSearch
@@ -557,15 +557,15 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
     )
   } else if (view === 'tree') {
     main = (
-      <div className="fk-prov__main">
-        <div className="fk-prov__tree-only">
+      <div className="ty-prov__main">
+        <div className="ty-prov__tree-only">
           <ProvenanceTree view={fullView} focusId={focusId} selectedId={selectedId} onSelect={(id) => setSelectedId(id)} onOpenInGraph={openInGraph} labels={l} locale={locale} />
         </div>
       </div>
     )
   } else if (view === 'timeline') {
     main = (
-      <div className="fk-prov__main">
+      <div className="ty-prov__main">
         <ProvenanceTimeline
           items={provView.vertices.flatMap((v) => (v.type === 'item' ? [v.item] : []))}
           selectedId={selectedId}
@@ -577,7 +577,7 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
     )
   } else if (view === 'certificate') {
     main = (
-      <div className="fk-prov__main">
+      <div className="ty-prov__main">
         <ProvenanceCertificate
           certificate={certificateFor}
           {...(certificateFor && props.onRerunCertificate ? { onRerun: () => props.onRerunCertificate!(certificateFor.claimId) } : {})}
@@ -588,7 +588,7 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
     )
   } else {
     main = (
-      <div className="fk-prov__main">
+      <div className="ty-prov__main">
         {props.comparison ? (
           <EditionCompare
             comparison={props.comparison}
@@ -603,14 +603,14 @@ export function ProvenanceGraph(props: ProvenanceGraphProps) {
 
   const showInspector = view === 'graph' || view === 'tree'
   return (
-    <div ref={rootRef} className={['fk-prov', className].filter(Boolean).join(' ')} data-view={view} data-inspector-open={showInspector && inspector ? 'true' : 'false'} data-wide={wide ? 'true' : 'false'}>
+    <div ref={rootRef} className={['ty-prov', className].filter(Boolean).join(' ')} data-view={view} data-inspector-open={showInspector && inspector ? 'true' : 'false'} data-wide={wide ? 'true' : 'false'}>
       {question}
       {notices.map((n) => (
-        <InlineNotice key={n.key} tone={n.tone} urgency="polite" className="fk-prov__notice">
+        <InlineNotice key={n.key} tone={n.tone} urgency="polite" className="ty-prov__notice">
           {n.text}
         </InlineNotice>
       ))}
-      <div className="fk-prov__body">
+      <div className="ty-prov__body">
         {main}
         {showInspector ? inspector : null}
       </div>
@@ -646,13 +646,13 @@ export function ProvenanceViewSwitch({ value, onChange, labels, views = VIEWS, c
   const l = useLabels(provenanceLabels, labels)
   const names: Record<ProvenanceViewMode, string> = { graph: l.viewGraph, tree: l.viewTree, timeline: l.viewTimeline, certificate: l.viewCertificate, compare: l.viewCompare }
   return (
-    <RadioGroup className={['fk-prov-views', className].filter(Boolean).join(' ')} aria-label={l.view} orientation="horizontal" value={value} onChange={(v) => onChange(v as ProvenanceViewMode)}>
+    <RadioGroup className={['ty-prov-views', className].filter(Boolean).join(' ')} aria-label={l.view} orientation="horizontal" value={value} onChange={(v) => onChange(v as ProvenanceViewMode)}>
       {views.map((v) => {
         const Icon = VIEW_ICON[v]
         return (
-          <Radio key={v} value={v} className="fk-prov-views__option">
-            <Icon className="fk-prov-views__icon" aria-hidden="true" />
-            <span className="fk-prov-views__word">{names[v]}</span>
+          <Radio key={v} value={v} className="ty-prov-views__option">
+            <Icon className="ty-prov-views__icon" aria-hidden="true" />
+            <span className="ty-prov-views__word">{names[v]}</span>
           </Radio>
         )
       })}
@@ -680,7 +680,7 @@ export function ProvenanceQuestion({ items, value, onChange, labels, hint = fals
   const options = needle ? items.filter((i) => searchableText(i).toLocaleLowerCase().includes(needle) || l.kinds[i.kind].toLocaleLowerCase().includes(needle)) : items
   return (
     <ComboBox
-      className={['fk-prov-question', className].filter(Boolean).join(' ')}
+      className={['ty-prov-question', className].filter(Boolean).join(' ')}
       items={options}
       selectedKey={value}
       inputValue={shown}
@@ -692,27 +692,27 @@ export function ProvenanceQuestion({ items, value, onChange, labels, hint = fals
       menuTrigger="focus"
       allowsEmptyCollection
     >
-      <div className="fk-prov-question__field">
-        <Label className="fk-prov-question__label">{l.question}</Label>
-        <Input className="fk-prov-question__input" placeholder={l.questionHint} dir="auto" onBlur={() => setInput(null)} />
+      <div className="ty-prov-question__field">
+        <Label className="ty-prov-question__label">{l.question}</Label>
+        <Input className="ty-prov-question__input" placeholder={l.questionHint} dir="auto" onBlur={() => setInput(null)} />
         {hint ? (
-          <span className="fk-prov-question__hint" aria-hidden="true">
+          <span className="ty-prov-question__hint" aria-hidden="true">
             {l.questionField}
           </span>
         ) : null}
-        <AriaButton className="fk-prov-question__button">
+        <AriaButton className="ty-prov-question__button">
           <ChevronDown aria-hidden="true" focusable="false" />
         </AriaButton>
       </div>
-      <AriaPopover className="fk-prov-question__popover" placement="bottom start">
-        <ListBox className="fk-prov-question__list" renderEmptyState={() => <p className="fk-prov-question__empty">{l.questionEmpty}</p>}>
+      <AriaPopover className="ty-prov-question__popover" placement="bottom start">
+        <ListBox className="ty-prov-question__list" renderEmptyState={() => <p className="ty-prov-question__empty">{l.questionEmpty}</p>}>
           {(item: ProvItem) => (
-            <ListBoxItem id={item.id} textValue={`${l.kinds[item.kind]}: ${item.title}`} className="fk-prov-question__option">
-              <Text slot="label" className="fk-prov-question__option-title">
-                <span className="fk-prov-question__option-kind">{l.kinds[item.kind]}</span> {item.title}
+            <ListBoxItem id={item.id} textValue={`${l.kinds[item.kind]}: ${item.title}`} className="ty-prov-question__option">
+              <Text slot="label" className="ty-prov-question__option-title">
+                <span className="ty-prov-question__option-kind">{l.kinds[item.kind]}</span> {item.title}
               </Text>
               {item.meta?.[0] ? (
-                <Text slot="description" className="fk-prov-question__option-meta">
+                <Text slot="description" className="ty-prov-question__option-meta">
                   <code dir="ltr">{item.meta[0]}</code>
                 </Text>
               ) : null}

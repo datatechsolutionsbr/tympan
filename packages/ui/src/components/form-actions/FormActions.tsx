@@ -51,7 +51,7 @@ function usePresetSlots(p: FormActionsProps): PresetSlots | null {
           busyLabel={m.formActions.saving}
           leadingIcon={destructive ? <TriangleAlert /> : undefined}
           onPress={p.onSave ? () => p.onSave?.() : undefined}
-          className="fk-form-actions__primary"
+          className="ty-form-actions__primary"
         >
           {p.saveLabel}
         </Button>
@@ -66,7 +66,7 @@ export function FormActions(props: FormActionsProps) {
     <div
       role="group"
       aria-label={props.label}
-      className={cx('fk-form-actions', props.className)}
+      className={cx('ty-form-actions', props.className)}
       data-align={props.align ?? 'end'}
       data-emphasis={props.emphasis ?? 'default'}
     >

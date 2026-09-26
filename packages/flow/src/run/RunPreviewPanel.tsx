@@ -3,7 +3,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Maximize2, X } from 'lucide-react'
-import { Button, Spinner } from '@fakhir/ui'
+import { Button, Spinner } from '@datatechsolutions/tympan'
 import { DockedPanel } from '../internal/DockedPanel'
 import { formatDateTime, formatDuration } from '../internal/format'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
@@ -156,7 +156,7 @@ function PreviewBody(props: RunPreviewPanelProps) {
     <li key={r.nodeId}>
       <button
         type="button"
-        className="fk-run-item"
+        className="ty-run-item"
         ref={(el) => {
           if (el) rowRefs.current.set(`${scope}:${r.nodeId}`, el)
         }}
@@ -164,8 +164,8 @@ function PreviewBody(props: RunPreviewPanelProps) {
         onClick={() => setNodeId(r.nodeId)}
       >
         <RunStatusMark status={r.status} labels={statusLabels} />
-        <span className="fk-run-item__name">{r.label ?? r.nodeId}</span>
-        <span className="fk-run-item__meta">{dur(r.durationMs)}</span>
+        <span className="ty-run-item__name">{r.label ?? r.nodeId}</span>
+        <span className="ty-run-item__meta">{dur(r.durationMs)}</span>
       </button>
     </li>
   )
@@ -177,72 +177,72 @@ function PreviewBody(props: RunPreviewPanelProps) {
       onClose={onClose}
       closeLabel={l.close}
       returnFocusTo={returnFocusTo ?? null}
-      className="fk-run-preview"
+      className="ty-run-preview"
       actions={
         onExpand ? (
-          <Button variant="quiet" size="compact" shape="circle" iconOnly accessibleLabel={l.expand} leadingIcon={<Maximize2 />} onPress={onExpand} className="fk-run-switch" />
+          <Button variant="quiet" size="compact" shape="circle" iconOnly accessibleLabel={l.expand} leadingIcon={<Maximize2 />} onPress={onExpand} className="ty-run-switch" />
         ) : null
       }
     >
       {isRunning ? (
-        <section className="fk-run-section" aria-label={l.live}>
-          <h3 className="fk-run-section__title">{l.live}</h3>
-          <p className="fk-visually-hidden" role="status" aria-live="polite">
+        <section className="ty-run-section" aria-label={l.live}>
+          <h3 className="ty-run-section__title">{l.live}</h3>
+          <p className="ty-visually-hidden" role="status" aria-live="polite">
             {fill(l.liveSummary, { done: doneCount, total: nodes.filter((n) => !NON_EXECUTABLE_KINDS.includes(n.kind)).length }, locale)}
           </p>
-          <ul className="fk-run-items">{live.map((r) => nodeRow('live', r))}</ul>
+          <ul className="ty-run-items">{live.map((r) => nodeRow('live', r))}</ul>
         </section>
       ) : null}
 
       {detail ? (
-        <section className="fk-run-detail" aria-labelledby="fk-run-preview-detail">
-          <div className="fk-run-detail__head">
-            <h3 id="fk-run-preview-detail" ref={detailHeading} tabIndex={-1} className="fk-run-section__title">
+        <section className="ty-run-detail" aria-labelledby="ty-run-preview-detail">
+          <div className="ty-run-detail__head">
+            <h3 id="ty-run-preview-detail" ref={detailHeading} tabIndex={-1} className="ty-run-section__title">
               {fill(l.nodeDetail, { node: detail.label ?? detail.nodeId })}
             </h3>
             <Button variant="quiet" size="compact" shape="circle" iconOnly accessibleLabel={l.closeDetail} leadingIcon={<X />} onPress={closeDetail} />
           </div>
-          <dl className="fk-run-facts">
+          <dl className="ty-run-facts">
             <div>
               <dt>{l.duration}</dt>
               <dd>{dur(detail.durationMs)}</dd>
             </div>
           </dl>
           <RunStatusMark status={detail.status} labels={statusLabels} />
-          {detail.error ? <p className="fk-run-error">{detail.error}</p> : null}
-          <h4 className="fk-run-subtitle">{l.outputs}</h4>
-          <pre className="fk-run-output" tabIndex={0} aria-label={l.outputs}>
+          {detail.error ? <p className="ty-run-error">{detail.error}</p> : null}
+          <h4 className="ty-run-subtitle">{l.outputs}</h4>
+          <pre className="ty-run-output" tabIndex={0} aria-label={l.outputs}>
             {detail.outputs === undefined ? l.notReported : prettyValue(detail.outputs)}
           </pre>
         </section>
       ) : null}
 
-      <section className="fk-run-section" aria-label={l.history} aria-busy={history.state === 'loading' || undefined}>
-        <h3 className="fk-run-section__title">{l.history}</h3>
+      <section className="ty-run-section" aria-label={l.history} aria-busy={history.state === 'loading' || undefined}>
+        <h3 className="ty-run-section__title">{l.history}</h3>
         {history.state === 'loading' ? (
-          <p role="status" className="fk-run-loading">
+          <p role="status" className="ty-run-loading">
             <Spinner size="small" label={l.loading} showLabel />
           </p>
         ) : history.state === 'error' ? (
-          <div className="fk-run-load-error" role="alert">
+          <div className="ty-run-load-error" role="alert">
             <p>{fill(l.error, { message: history.error ?? '' })}</p>
             <Button size="compact" onPress={history.retry}>
               {l.retry}
             </Button>
           </div>
         ) : history.runs.length === 0 && history.state === 'ready' ? (
-          <p className="fk-run-empty">{l.empty}</p>
+          <p className="ty-run-empty">{l.empty}</p>
         ) : (
-          <ul className="fk-run-items">
+          <ul className="ty-run-items">
             {history.runs.map((run) => {
               const expanded = runId === run.id
               return (
-                <li key={run.id} className="fk-run-history-item">
+                <li key={run.id} className="ty-run-history-item">
                   <button
                     type="button"
-                    className="fk-run-item"
+                    className="ty-run-item"
                     aria-expanded={expanded}
-                    aria-controls={`fk-run-${run.id}`}
+                    aria-controls={`ty-run-${run.id}`}
                     data-status={runWordOf(run.status)}
                     onClick={() => {
                       setRunId(expanded ? null : run.id)
@@ -250,11 +250,11 @@ function PreviewBody(props: RunPreviewPanelProps) {
                     }}
                   >
                     <RunStatusMark status={run.status} labels={statusLabels} />
-                    <span className="fk-run-item__name">{fill(l.runRow, { time: formatDateTime(run.startedAt, locale) })}</span>
-                    <span className="fk-run-item__meta">{dur(run.durationMs)}</span>
+                    <span className="ty-run-item__name">{fill(l.runRow, { time: formatDateTime(run.startedAt, locale) })}</span>
+                    <span className="ty-run-item__meta">{dur(run.durationMs)}</span>
                   </button>
                   {expanded ? (
-                    <ul id={`fk-run-${run.id}`} className="fk-run-items fk-run-items--nested">
+                    <ul id={`ty-run-${run.id}`} className="ty-run-items ty-run-items--nested">
                       {(run.nodeResults ?? []).map((r) => nodeRow(run.id, r))}
                     </ul>
                   ) : null}

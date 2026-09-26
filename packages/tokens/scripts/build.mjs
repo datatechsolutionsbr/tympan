@@ -1,4 +1,4 @@
-// Builds the Fakhir design tokens.
+// Builds the Tympan design tokens.
 //
 //   node scripts/build.mjs          -> dist/tokens.css, dist/tokens.json, dist/values.js(+.d.ts),
 //                                      dist/dtcg/*.tokens.json, dist/contrast-report.md
@@ -9,8 +9,8 @@
 //   2. The generator (src/theme.ts) resolves every preset in light and dark,
 //      default and high contrast, and emits DTCG trees (src/dtcg.ts).
 //   3. Style Dictionary v5 reads all DTCG trees and transforms them to
-//      --fk-* custom properties (transforms below).
-//   3b. Component tokens (src/flow.ts, --fk-flow-*) are DTCG aliases into the
+//      --ty-* custom properties (transforms below).
+//   3b. Component tokens (src/flow.ts, --ty-flow-*) are DTCG aliases into the
 //       theme tree; Style Dictionary resolves each alias to the referenced
 //       token and emits it as a var() reference, so themes keep following.
 //   4. src/stylesheet.ts assembles the selectors and preference media blocks.
@@ -112,7 +112,7 @@ if (checkOnly) {
 // ---------------------------------------------------------------------------
 
 /** Fallback names for the static base sources. */
-function fkName(path) {
+function tyName(path) {
   const [group, ...rest] = path
   switch (group) {
     case 'duration':
@@ -132,26 +132,26 @@ const dim = (v) => (typeof v === 'object' ? `${v.value}${v.unit}` : String(v))
 
 const hooks = {
   transforms: {
-    'fk/name': {
+    'ty/name': {
       type: 'name',
-      transform: (token) => (token.$extensions?.['app.fakhir']?.cssName ?? `--fk-${fkName(token.path)}`).replace(/^--/, ''),
+      transform: (token) => (token.$extensions?.['br.com.datatechsolutions.tympan']?.cssName ?? `--ty-${tyName(token.path)}`).replace(/^--/, ''),
     },
-    'fk/color': { type: 'value', filter: (t) => typeOf(t) === 'color', transform: (t) => toCss(fromDtcgColor(valueOf(t))) },
-    'fk/dimension': {
+    'ty/color': { type: 'value', filter: (t) => typeOf(t) === 'color', transform: (t) => toCss(fromDtcgColor(valueOf(t))) },
+    'ty/dimension': {
       type: 'value',
       filter: (t) => typeOf(t) === 'dimension',
       // Letter spacing is authored in rem (DTCG allows px|rem) and emitted in em.
       transform: (t) => (t.path[0] === 'font' && t.path[1] === 'tracking' ? `${valueOf(t).value}em` : dim(valueOf(t))),
     },
-    'fk/duration': { type: 'value', filter: (t) => typeOf(t) === 'duration', transform: (t) => dim(valueOf(t)) },
-    'fk/number': { type: 'value', filter: (t) => ['number', 'fontWeight'].includes(typeOf(t)), transform: (t) => String(valueOf(t)) },
-    'fk/font-family': {
+    'ty/duration': { type: 'value', filter: (t) => typeOf(t) === 'duration', transform: (t) => dim(valueOf(t)) },
+    'ty/number': { type: 'value', filter: (t) => ['number', 'fontWeight'].includes(typeOf(t)), transform: (t) => String(valueOf(t)) },
+    'ty/font-family': {
       type: 'value',
       filter: (t) => typeOf(t) === 'fontFamily',
       transform: (t) => [].concat(valueOf(t)).map((f) => (/[\s\d]/.test(f) && !/^[\w-]+$/.test(f) ? `'${f}'` : f)).join(', '),
     },
-    'fk/cubic-bezier': { type: 'value', filter: (t) => typeOf(t) === 'cubicBezier', transform: (t) => `cubic-bezier(${valueOf(t).join(', ')})` },
-    'fk/shadow': {
+    'ty/cubic-bezier': { type: 'value', filter: (t) => typeOf(t) === 'cubicBezier', transform: (t) => `cubic-bezier(${valueOf(t).join(', ')})` },
+    'ty/shadow': {
       type: 'value',
       filter: (t) => typeOf(t) === 'shadow',
       transform: (t) =>
@@ -159,17 +159,17 @@ const hooks = {
           valueOf(t).map((l) => ({ x: l.offsetX.value, y: l.offsetY.value, blur: l.blur.value, spread: l.spread.value, inset: !!l.inset, color: fromDtcgColor(l.color) })),
         ),
     },
-    'fk/gradient': {
+    'ty/gradient': {
       type: 'value',
       filter: (t) => typeOf(t) === 'gradient',
-      transform: (t) => gradientToCss(t.$extensions?.['app.fakhir']?.angle ?? 180, valueOf(t).map((s) => fromDtcgColor(s.color))),
+      transform: (t) => gradientToCss(t.$extensions?.['br.com.datatechsolutions.tympan']?.angle ?? 180, valueOf(t).map((s) => fromDtcgColor(s.color))),
     },
   },
   formats: {
-    'fk/list': ({ dictionary }) => JSON.stringify(dictionary.allTokens.map((t) => [`--${t.name}`, String(t.$value ?? t.value)])),
+    'ty/list': ({ dictionary }) => JSON.stringify(dictionary.allTokens.map((t) => [`--${t.name}`, String(t.$value ?? t.value)])),
     // Component tokens only: an alias becomes var(--referenced-name), wrapped in
     // color-mix when the token carries a mix extension.
-    'fk/ref-list': ({ dictionary }) =>
+    'ty/ref-list': ({ dictionary }) =>
       JSON.stringify(
         dictionary.allTokens
           .filter((t) => t.path[0] === 'flow')
@@ -178,15 +178,15 @@ const hooks = {
             if (typeof original !== 'string' || !usesReferences(original)) return [`--${t.name}`, String(t.$value ?? t.value)]
             const [target] = getReferences(original, dictionary.tokens, { usesDtcg: true })
             const ref = `var(--${target.name})`
-            const mix = t.$extensions?.['app.fakhir']?.mix
+            const mix = t.$extensions?.['br.com.datatechsolutions.tympan']?.mix
             return [`--${t.name}`, mix ? `color-mix(in ${mix.space}, ${ref} ${Math.round(mix.amount * 10000) / 100}%, ${mix.with})` : ref]
           }),
       ),
   },
 }
-const TRANSFORMS = ['fk/name', 'fk/color', 'fk/dimension', 'fk/duration', 'fk/number', 'fk/font-family', 'fk/cubic-bezier', 'fk/shadow', 'fk/gradient']
+const TRANSFORMS = ['ty/name', 'ty/color', 'ty/dimension', 'ty/duration', 'ty/number', 'ty/font-family', 'ty/cubic-bezier', 'ty/shadow', 'ty/gradient']
 
-async function sdVariables(tokens, format = 'fk/list') {
+async function sdVariables(tokens, format = 'ty/list') {
   const sd = new StyleDictionary({
     usesDtcg: true,
     tokens,
@@ -251,7 +251,7 @@ for (const d of DENSITY_NAMES) {
 const flowTree = flowToDtcg()
 writeFileSync(join(dist, 'dtcg', 'flow.tokens.json'), JSON.stringify(flowTree, null, 2) + '\n')
 const flowDirect = flowVariables()
-const flowVars = orderLike(await sdVariables({ ...themeToDtcg(generated[DEFAULT_THEME].light), ...flowTree }, 'fk/ref-list'), flowDirect)
+const flowVars = orderLike(await sdVariables({ ...themeToDtcg(generated[DEFAULT_THEME].light), ...flowTree }, 'ty/ref-list'), flowDirect)
 assertParity('flow', flowVars, flowDirect)
 json.components = Object.fromEntries(flowVars)
 
@@ -266,7 +266,7 @@ const css = buildStylesheet({
   densities,
   components: flowVars,
   componentRules: `/* flow tones: [data-tone] selects the four tone parts */\n${flowToneRules()}`,
-  banner: '/* @fakhir/tokens (FSL-1.1-ALv2): generated by scripts/build.mjs from src/base/*.tokens.json, src/presets.ts and src/flow.ts. Do not edit. */',
+  banner: '/* @datatechsolutions/tympan-tokens (FSL-1.1-ALv2): generated by scripts/build.mjs from src/base/*.tokens.json, src/presets.ts and src/flow.ts. Do not edit. */',
 })
 writeFileSync(join(dist, 'tokens.css'), css)
 writeFileSync(join(dist, 'tokens.json'), JSON.stringify(json, null, 2) + '\n')
@@ -276,12 +276,12 @@ const union = (xs) => (xs.length ? xs.map((x) => JSON.stringify(x)).join(' | ') 
 const themeNames = names(json.themes[DEFAULT_THEME].light)
 writeFileSync(
   join(dist, 'values.js'),
-  `// Generated by @fakhir/tokens scripts/build.mjs. Do not edit. FSL-1.1-ALv2 licence.\nexport const values = ${JSON.stringify(json, null, 2)};\n` +
+  `// Generated by @datatechsolutions/tympan-tokens scripts/build.mjs. Do not edit. FSL-1.1-ALv2 licence.\nexport const values = ${JSON.stringify(json, null, 2)};\n` +
     `export function cssVar(name, fallback) {\n  const n = name.startsWith('--') ? name : \`--\${name}\`;\n  return fallback === undefined ? \`var(\${n})\` : \`var(\${n}, \${fallback})\`;\n}\n`,
 )
 writeFileSync(
   join(dist, 'values.d.ts'),
-  `// Generated by @fakhir/tokens scripts/build.mjs. Do not edit. FSL-1.1-ALv2 licence.\n` +
+  `// Generated by @datatechsolutions/tympan-tokens scripts/build.mjs. Do not edit. FSL-1.1-ALv2 licence.\n` +
     `export type BaseTokenName = ${union(names(json.base))};\n` +
     `export type ThemeTokenName = ${union(themeNames)};\n` +
     `export type DensityTokenName = ${union(names(json.density.default))};\n` +

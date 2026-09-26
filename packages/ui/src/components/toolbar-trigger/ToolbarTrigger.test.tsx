@@ -45,7 +45,7 @@ describe('ToolbarTrigger', () => {
 
   it('keeps a 44 px hit area and drops transitions under reduced motion', () => {
     const css = cssOf('components/toolbar-trigger/ToolbarTrigger.css')
-    expect(css).toMatch(/::after\s*\{[^}]*inline-size:\s*max\(100%,\s*var\(--fk-control-target\)\)/)
+    expect(css).toMatch(/::after\s*\{[^}]*inline-size:\s*max\(100%,\s*var\(--ty-control-target\)\)/)
     expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/transition:\s*none/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/Highlight/)
   })

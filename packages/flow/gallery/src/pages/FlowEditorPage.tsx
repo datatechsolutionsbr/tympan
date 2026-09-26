@@ -6,7 +6,7 @@
 
 import { useEffect, useMemo } from 'react'
 import { ArrowRight, Check } from 'lucide-react'
-import { Button, FakhirProvider, Tag, messagesPtBR } from '@fakhir/ui'
+import { Button, TympanProvider, Tag, messagesPtBR } from '@datatechsolutions/tympan'
 import { FlowEditor } from '../../../src/editor/FlowEditor'
 import { autoLayout } from '../../../src/layout/autoLayout'
 import type { FlowConnector, FlowNode } from '../../../src/model/types'
@@ -59,12 +59,12 @@ function useStoryState(state: string, key: string) {
     const later = (fn: () => void, ms = 350) => window.setTimeout(fn, ms)
     const timers: number[] = []
     if (state === 'picker') {
-      timers.push(later(() => document.querySelector<HTMLElement>('[data-fk-add-after="group"]')?.click(), 600))
+      timers.push(later(() => document.querySelector<HTMLElement>('[data-ty-add-after="group"]')?.click(), 600))
     }
     if (state === 'search') {
       timers.push(
         later(() => {
-          const input = document.querySelector<HTMLInputElement>('.fk-step-palette__input')
+          const input = document.querySelector<HTMLInputElement>('.ty-step-palette__input')
           if (!input) return
           Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(input, 'conf')
           input.dispatchEvent(new Event('input', { bubbles: true }))
@@ -74,7 +74,7 @@ function useStoryState(state: string, key: string) {
     if (state === 'drag') {
       timers.push(
         later(() => {
-          const canvas = document.querySelector<HTMLElement>('.fk-editor__canvas')
+          const canvas = document.querySelector<HTMLElement>('.ty-editor__canvas')
           if (!canvas) return
           const r = canvas.getBoundingClientRect()
           const data = new DataTransfer()
@@ -107,8 +107,8 @@ export function FlowEditorPage() {
 
   const description = state === 'drag' ? t.drag : state === 'list' ? t.list : undefined
   return (
-    <FakhirProvider locale={locale} {...(locale === 'pt-BR' ? { baseMessages: messagesPtBR } : {})}>
-      <div lang={locale} dir={rtl ? 'rtl' : 'ltr'} className="fk-gallery-story">
+    <TympanProvider locale={locale} {...(locale === 'pt-BR' ? { baseMessages: messagesPtBR } : {})}>
+      <div lang={locale} dir={rtl ? 'rtl' : 'ltr'} className="ty-gallery-story">
         <ResearchShell
           locale={locale}
           area="analyses"
@@ -118,7 +118,7 @@ export function FlowEditorPage() {
           actions={
             <>
               <Tag>{t.sample}</Tag>
-              <span className="fk-flow-saved">
+              <span className="ty-flow-saved">
                 <Check aria-hidden="true" />
                 {t.saved}
               </span>
@@ -149,6 +149,6 @@ export function FlowEditorPage() {
           />
         </ResearchShell>
       </div>
-    </FakhirProvider>
+    </TympanProvider>
   )
 }

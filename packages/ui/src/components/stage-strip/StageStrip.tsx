@@ -38,24 +38,24 @@ const LOOK: { [K in StageStatus]: { glyph: IconComponent; step?: 'step' } } = {
 function Title({ to, children }: { to?: string; children: string }) {
   // Content text keeps its own direction inside a frame of the other direction.
   return to ? (
-    <AriaLink className="fk-stage-strip__name" href={to} dir="auto">
+    <AriaLink className="ty-stage-strip__name" href={to} dir="auto">
       {children}
     </AriaLink>
   ) : (
-    <span className="fk-stage-strip__name" dir="auto">
+    <span className="ty-stage-strip__name" dir="auto">
       {children}
     </span>
   )
 }
 
 function Connector() {
-  return <ArrowRight className="fk-icon fk-stage-strip__arrow fk-mirror-rtl" aria-hidden="true" focusable="false" />
+  return <ArrowRight className="ty-icon ty-stage-strip__arrow ty-mirror-rtl" aria-hidden="true" focusable="false" />
 }
 
 function Cell({ stage, word }: { stage: Stage; word: string }) {
   const Glyph = LOOK[stage.status].glyph
   const numbers: ReactNode = stage.figures?.length ? (
-    <span className="fk-stage-strip__figures">
+    <span className="ty-stage-strip__figures">
       {stage.figures.map((line, n) => (
         <span key={n} dir="auto">
           {line}
@@ -64,10 +64,10 @@ function Cell({ stage, word }: { stage: Stage; word: string }) {
     </span>
   ) : null
   return (
-    <div className="fk-stage-strip__card">
+    <div className="ty-stage-strip__card">
       <Title to={stage.href}>{stage.label}</Title>
-      <span className="fk-stage-strip__status">
-        <Glyph className="fk-icon" aria-hidden="true" focusable="false" />
+      <span className="ty-stage-strip__status">
+        <Glyph className="ty-icon" aria-hidden="true" focusable="false" />
         {word}
       </span>
       {numbers}
@@ -80,19 +80,19 @@ export function StageStrip(props: StageStripProps) {
   const statusWords = useMessages().stageStrip.status
   const count = props.stages.length
   const items = props.stages.map((stage, position) => (
-    <li key={stage.id} className="fk-stage-strip__stage" data-status={stage.status} aria-current={LOOK[stage.status].step}>
+    <li key={stage.id} className="ty-stage-strip__stage" data-status={stage.status} aria-current={LOOK[stage.status].step}>
       <Cell stage={stage} word={statusWords[stage.status]} />
       {position + 1 < count ? <Connector /> : null}
     </li>
   ))
   return (
-    <div className={cx('fk-stage-strip', props.className)}>
+    <div className={cx('ty-stage-strip', props.className)}>
       {props.title ? (
-        <p className="fk-stage-strip__title" dir="auto">
+        <p className="ty-stage-strip__title" dir="auto">
           {props.title}
         </p>
       ) : null}
-      <ol className="fk-stage-strip__list" aria-label={props.label}>
+      <ol className="ty-stage-strip__list" aria-label={props.label}>
         {items}
       </ol>
     </div>

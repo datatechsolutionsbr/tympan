@@ -1,52 +1,52 @@
 /* FloatingActionButton (spec: wave-2/floating-action-button.md; design direction §2.3, §2.6, §2.7, §2.8). */
-@layer fakhir.components {
-  .fk-fab-inline {
+@layer tympan.components {
+  .ty-fab-inline {
     display: inline-flex;
   }
-  .fk-fab-dock {
-    --fk-fab-size: 56px;
-    --fk-fab-offset: var(--fk-space-4);
+  .ty-fab-dock {
+    --ty-fab-size: 56px;
+    --ty-fab-offset: var(--ty-space-4);
     position: fixed;
-    z-index: var(--fk-z-sticky);
-    inset-block-end: calc(env(safe-area-inset-bottom, 0px) + var(--fk-fab-offset));
-    animation: fk-fab-in var(--fk-dur-base) var(--fk-ease);
+    z-index: var(--ty-z-sticky);
+    inset-block-end: calc(env(safe-area-inset-bottom, 0px) + var(--ty-fab-offset));
+    animation: ty-fab-in var(--ty-dur-base) var(--ty-ease);
   }
-  .fk-fab-dock[data-size='large'] {
-    --fk-fab-size: 64px;
+  .ty-fab-dock[data-size='large'] {
+    --ty-fab-size: 64px;
   }
-  .fk-fab-dock[data-placement='end-bottom'] {
-    inset-inline-end: calc(env(safe-area-inset-right, 0px) + var(--fk-fab-offset));
+  .ty-fab-dock[data-placement='end-bottom'] {
+    inset-inline-end: calc(env(safe-area-inset-right, 0px) + var(--ty-fab-offset));
   }
-  .fk-fab-dock[data-placement='start-bottom'] {
-    inset-inline-start: calc(env(safe-area-inset-left, 0px) + var(--fk-fab-offset));
+  .ty-fab-dock[data-placement='start-bottom'] {
+    inset-inline-start: calc(env(safe-area-inset-left, 0px) + var(--ty-fab-offset));
   }
-  .fk-fab-dock[data-placement='center-bottom'] {
+  .ty-fab-dock[data-placement='center-bottom'] {
     /* physical: centring with a -50% shift is the same in both directions */
     left: 50%;
     translate: -50% 0;
   }
-  .fk-fab-dock .fk-fab {
-    --fk-button-height: var(--fk-fab-size);
-    min-inline-size: var(--fk-fab-size);
-    box-shadow: var(--fk-shadow-floating);
+  .ty-fab-dock .ty-fab {
+    --ty-button-height: var(--ty-fab-size);
+    min-inline-size: var(--ty-fab-size);
+    box-shadow: var(--ty-shadow-floating);
   }
-  @keyframes fk-fab-in {
+  @keyframes ty-fab-in {
     from {
       opacity: 0;
       scale: 0.9;
     }
   }
   /* The page keeps its last row visible above the floating button. */
-  body[data-fk-fab-reserve] {
-    padding-block-end: calc(56px + var(--fk-space-4) * 2 + env(safe-area-inset-bottom, 0px));
+  body[data-ty-fab-reserve] {
+    padding-block-end: calc(56px + var(--ty-space-4) * 2 + env(safe-area-inset-bottom, 0px));
   }
   @media (prefers-reduced-motion: reduce) {
-    .fk-fab-dock {
+    .ty-fab-dock {
       animation: none;
     }
   }
   @media (forced-colors: active) {
-    .fk-fab-dock .fk-fab {
+    .ty-fab-dock .ty-fab {
       border: 2px solid ButtonText;
       color: ButtonText;
     }

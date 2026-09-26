@@ -88,7 +88,7 @@ describe('FilterChips', () => {
 
   it('keeps 44 px remove targets, opacity-only entry and forced-colour borders', () => {
     const css = cssOf('components/filter-chips/FilterChips.css')
-    expect(css).toMatch(/\.fk-filter-chips__remove::before[\s\S]*max\(100%,\s*var\(--fk-control-target\)\)/)
+    expect(css).toMatch(/\.ty-filter-chips__remove::before[\s\S]*max\(100%,\s*var\(--ty-control-target\)\)/)
     expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/animation:\s*none/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/ButtonText/)
   })

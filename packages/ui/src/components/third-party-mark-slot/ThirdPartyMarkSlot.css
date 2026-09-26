@@ -1,55 +1,55 @@
 /* ThirdPartyMarkSlot and ProviderMark (spec: wave-4/third-party-mark-slot.md; design direction §2.3). */
-@layer fakhir.components {
-  .fk-mark {
-    --fk-mark-box: 1.1em;
+@layer tympan.components {
+  .ty-mark {
+    --ty-mark-box: 1.1em;
     display: inline-flex;
     align-items: center;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
     min-inline-size: 0;
     color: inherit;
     vertical-align: middle;
   }
-  .fk-mark[data-size='bubble'] {
-    --fk-mark-box: var(--fk-space-5);
+  .ty-mark[data-size='bubble'] {
+    --ty-mark-box: var(--ty-space-5);
   }
-  .fk-mark__art {
+  .ty-mark__art {
     display: inline-grid;
     flex: none;
     place-items: center;
-    inline-size: var(--fk-mark-box);
-    block-size: var(--fk-mark-box);
+    inline-size: var(--ty-mark-box);
+    block-size: var(--ty-mark-box);
     color: currentColor;
   }
-  .fk-mark[data-size='bubble'] .fk-mark__art {
-    inline-size: calc(var(--fk-mark-box) + var(--fk-space-3));
-    block-size: calc(var(--fk-mark-box) + var(--fk-space-3));
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-surface-sunken);
+  .ty-mark[data-size='bubble'] .ty-mark__art {
+    inline-size: calc(var(--ty-mark-box) + var(--ty-space-3));
+    block-size: calc(var(--ty-mark-box) + var(--ty-space-3));
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-surface-sunken);
   }
-  .fk-mark__art > svg,
-  .fk-mark__image,
-  .fk-mark__glyph {
-    inline-size: var(--fk-mark-box);
-    block-size: var(--fk-mark-box);
+  .ty-mark__art > svg,
+  .ty-mark__image,
+  .ty-mark__glyph {
+    inline-size: var(--ty-mark-box);
+    block-size: var(--ty-mark-box);
     object-fit: contain;
   }
-  .fk-mark__glyph {
-    color: var(--fk-ink-3);
+  .ty-mark__glyph {
+    color: var(--ty-ink-3);
   }
-  .fk-mark__name {
+  .ty-mark__name {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   @media (forced-colors: active) {
-    .fk-mark__art,
-    .fk-mark__art * {
+    .ty-mark__art,
+    .ty-mark__art * {
       color: CanvasText;
       fill: currentColor;
     }
-    .fk-mark[data-size='bubble'] .fk-mark__art {
+    .ty-mark[data-size='bubble'] .ty-mark__art {
       border-color: CanvasText;
     }
   }

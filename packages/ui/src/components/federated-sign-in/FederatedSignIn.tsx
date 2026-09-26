@@ -41,7 +41,7 @@ export function FederatedSignIn(props: FederatedSignInProps) {
   return (
     <div
       role="group"
-      className={props.className ? `fk-federated ${props.className}` : 'fk-federated'}
+      className={props.className ? `ty-federated ${props.className}` : 'ty-federated'}
       data-arrangement={props.arrangement ?? 'stack'}
       aria-labelledby={labelledBy}
       aria-label={labelledBy ? undefined : (props['aria-label'] ?? copy.federatedSignIn.groupLabel)}
@@ -57,7 +57,7 @@ export function FederatedSignIn(props: FederatedSignInProps) {
             busy={mine}
             disabled={props.disabled || (inFlight !== null && !mine)}
             onPress={() => props.onSelect(p.id)}
-            className="fk-federated__button"
+            className="ty-federated__button"
           >
             {text(p.name)}
           </Button>

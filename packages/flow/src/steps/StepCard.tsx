@@ -53,24 +53,24 @@ export function StepCard({ node, locked, selected, preview, onConfigure }: FlowN
     return {
       'data-role': role,
       ...(target ? { 'data-target': target } : {}),
-      ...(preview || locked ? {} : { 'data-fk-port': '', 'data-fk-port-node': node.id, 'data-fk-port-id': id, 'data-fk-port-role': role }),
+      ...(preview || locked ? {} : { 'data-ty-port': '', 'data-ty-port-node': node.id, 'data-ty-port-id': id, 'data-ty-port-role': role }),
     }
   }
 
   return (
-    <div className="fk-step" data-selected={selected ? 'true' : undefined} data-issue={problems.length ? 'true' : undefined} data-run={run ?? undefined}>
+    <div className="ty-step" data-selected={selected ? 'true' : undefined} data-issue={problems.length ? 'true' : undefined} data-run={run ?? undefined}>
       {inputs.length ? (
-        <span className="fk-step__ports" data-edge="in">
+        <span className="ty-step__ports" data-edge="in">
           {inputs.map((accepts, i) => (
-            <span key={i} className="fk-step__port" {...port('target', inPort(i))}>
+            <span key={i} className="ty-step__port" {...port('target', inPort(i))}>
               <ShapeChip shapes={accepts as DataShape[]} words={rt.shapes} aria-hidden="true" />
             </span>
           ))}
         </span>
       ) : null}
       <AriaButton
-        className="fk-step__body"
-        data-fk-node-focus=""
+        className="ty-step__body"
+        data-ty-node-focus=""
         aria-label={`${kindWord}: ${title}`}
         aria-describedby={describedBy}
         onPress={() => {
@@ -78,34 +78,34 @@ export function StepCard({ node, locked, selected, preview, onConfigure }: FlowN
           onConfigure?.(node.id)
         }}
       >
-        <span className="fk-step__head">
-          <span className="fk-step__tile" aria-hidden="true">
+        <span className="ty-step__head">
+          <span className="ty-step__tile" aria-hidden="true">
             {Icon ? <Icon focusable="false" /> : null}
           </span>
-          <span className="fk-step__names">
-            <span className="fk-step__kind">{kindWord}</span>
-            <span className="fk-step__title" title={title} dir="auto">
+          <span className="ty-step__names">
+            <span className="ty-step__kind">{kindWord}</span>
+            <span className="ty-step__title" title={title} dir="auto">
               {title}
             </span>
           </span>
           {runWord ? (
-            <span className="fk-step__run" data-run={run} aria-hidden="true">
+            <span className="ty-step__run" data-run={run} aria-hidden="true">
               {run === 'ok' ? <Check focusable="false" /> : run === 'running' ? <LoaderCircle focusable="false" /> : <CircleAlert focusable="false" />}
               {runWord}
             </span>
           ) : null}
         </span>
         {problems.length ? (
-          <span className="fk-step__line" data-problem="true" aria-hidden="true">
+          <span className="ty-step__line" data-problem="true" aria-hidden="true">
             {problems[0]}
           </span>
         ) : (
-          <span className="fk-step__line" data-empty={line ? undefined : 'true'} dir="auto">
+          <span className="ty-step__line" data-empty={line ? undefined : 'true'} dir="auto">
             {line ?? w.notSet}
           </span>
         )}
       </AriaButton>
-      <span id={describedBy} className="fk-visually-hidden">
+      <span id={describedBy} className="ty-visually-hidden">
         {[
           inputs.length ? `${w.inputs}: ${inputs.map((a) => shapeList(a, rt.shapes)).join(', ')}` : null,
           output ? `${w.output}: ${rt.shapes[output]}` : null,
@@ -116,8 +116,8 @@ export function StepCard({ node, locked, selected, preview, onConfigure }: FlowN
           .join('. ')}
       </span>
       {output ? (
-        <span className="fk-step__ports" data-edge="out">
-          <span className="fk-step__port" {...port('source', OUT_PORT)}>
+        <span className="ty-step__ports" data-edge="out">
+          <span className="ty-step__port" {...port('source', OUT_PORT)}>
             <ShapeChip shapes={[output]} words={rt.shapes} aria-hidden="true" />
           </span>
         </span>
@@ -125,9 +125,9 @@ export function StepCard({ node, locked, selected, preview, onConfigure }: FlowN
       {editable && selected && output && rt.addAfter ? (
         <AriaButton
           ref={addRef}
-          className="fk-step__add"
-          data-fk-surface-chrome=""
-          data-fk-add-after={node.id}
+          className="ty-step__add"
+          data-ty-surface-chrome=""
+          data-ty-add-after={node.id}
           aria-label={fill(w.addAfter, { name: title }, locale)}
           onPress={() => addRef.current && rt.addAfter?.(node.id, addRef.current)}
         >

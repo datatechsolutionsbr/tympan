@@ -33,7 +33,7 @@ export interface HighlightStatProps {
 export function HighlightStat(props: HighlightStatProps) {
   const { locale } = useLocale()
   const stem = useId().replace(/:/g, '')
-  const ids = { label: `fk-hs-${stem}-l`, value: `fk-hs-${stem}-v`, source: `fk-hs-${stem}-s` }
+  const ids = { label: `ty-hs-${stem}-l`, value: `ty-hs-${stem}-v`, source: `ty-hs-${stem}-s` }
   const fmt = props.format ?? ((n: number) => new Intl.NumberFormat(locale).format(n))
   const numeric = typeof props.value === 'number'
 
@@ -47,17 +47,17 @@ export function HighlightStat(props: HighlightStatProps) {
       role="group"
       aria-labelledby={ids.label}
       aria-describedby={describedBy}
-      className={cx('fk-highlight-stat', props.className)}
+      className={cx('ty-highlight-stat', props.className)}
       data-surface={props.surface ?? 'none'}
     >
-      <p id={ids.value} className="fk-highlight-stat__value">
+      <p id={ids.value} className="ty-highlight-stat__value">
         {figure}
       </p>
-      <p id={ids.label} className="fk-highlight-stat__label">
+      <p id={ids.label} className="ty-highlight-stat__label">
         {props.label}
       </p>
       {props.source && (
-        <p id={ids.source} className="fk-highlight-stat__source">
+        <p id={ids.source} className="ty-highlight-stat__source">
           {props.source.href ? <Link href={props.source.href}>{props.source.text}</Link> : props.source.text}
         </p>
       )}

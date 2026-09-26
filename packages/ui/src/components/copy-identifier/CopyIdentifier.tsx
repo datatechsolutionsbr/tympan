@@ -63,25 +63,25 @@ export function CopyIdentifier({ value, copyValue, label, visibleLength = 8, onC
 
   return (
     // The wrapper keeps clicks from reaching a clickable parent row or card.
-    <span className={cx('fk-copy-identifier', className)} data-phase={phase} onClick={stop} onPointerDown={stop} onKeyDown={stop}>
+    <span className={cx('ty-copy-identifier', className)} data-phase={phase} onClick={stop} onPointerDown={stop} onKeyDown={stop}>
       <TooltipTrigger delay={300}>
-        <Button className="fk-copy-identifier__trigger" aria-label={`${label ?? copy.copy}: ${value}`} onPress={() => void run()}>
-          <Icon className="fk-icon" aria-hidden="true" focusable="false" />
+        <Button className="ty-copy-identifier__trigger" aria-label={`${label ?? copy.copy}: ${value}`} onPress={() => void run()}>
+          <Icon className="ty-icon" aria-hidden="true" focusable="false" />
           <span
-            className="fk-copy-identifier__text"
+            className="ty-copy-identifier__text"
             aria-hidden="true"
             dir={phase === 'copied' ? undefined : 'ltr'}
             data-elided={phase === 'copied' ? undefined : ''}
-            style={{ '--fk-copy-visible': visibleLength } as CSSProperties}
+            style={{ '--ty-copy-visible': visibleLength } as CSSProperties}
           >
             {phase === 'copied' ? copy.copied : value}
           </span>
         </Button>
-        <Tooltip className="fk-copy-identifier__tooltip" offset={6}>
+        <Tooltip className="ty-copy-identifier__tooltip" offset={6}>
           {value}
         </Tooltip>
       </TooltipTrigger>
-      <span className="fk-visually-hidden" role="status">
+      <span className="ty-visually-hidden" role="status">
         {status}
       </span>
     </span>

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, FakhirProvider } from '@fakhir/ui'
+import { Button, TympanProvider } from '@datatechsolutions/tympan'
 import { DataSourceNodeForm, DecisionNodeForm, OutputSchemaBuilder, ReportOutputNodeForm, StartNodeForm, type OutputSchema } from '../../../src'
 
 const noop = () => {}
@@ -20,7 +20,7 @@ export function FormsSection() {
   const [dsOpen, setDsOpen] = useState(false)
   const [schema, setSchema] = useState<OutputSchema | Record<string, unknown> | undefined>({ type: 'object', properties: { position: { type: 'string' }, confidence: { type: 'number' } }, required: ['position'] })
   return (
-    <section className="fk-gallery-section" aria-labelledby="forms-title">
+    <section className="ty-gallery-section" aria-labelledby="forms-title">
       <h2 id="forms-title">Node forms</h2>
       <h3>Decision step (B-002)</h3>
       <DecisionNodeForm
@@ -47,15 +47,15 @@ export function FormsSection() {
         onCancel={() => setDsOpen(false)}
       />
       <h3>Português</h3>
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <StartNodeForm config={{ inputVariables: ['edicao', 'grupo'], inputDefaults: { edicao: '[edição]' } }} onSave={noop} onCancel={noop} />
-      </FakhirProvider>
+      </TympanProvider>
       <h3>العربية (RTL)</h3>
-      <FakhirProvider locale="ar">
+      <TympanProvider locale="ar">
         <div dir="rtl" lang="ar">
           <DecisionNodeForm value={{ kind: 'decision', input: { ref: 'item.value' }, options: [{ value: 'option_a', label: 'الخيار أ' }, { value: 'option_b', label: 'الخيار ب' }] }} onSave={noop} onCancel={noop} />
         </div>
-      </FakhirProvider>
+      </TympanProvider>
     </section>
   )
 }

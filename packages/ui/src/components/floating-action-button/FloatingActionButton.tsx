@@ -26,7 +26,7 @@ export interface FloatingActionButtonProps {
 }
 
 /** Page attribute that reserves room under the last row while a button floats. */
-const RESERVE_ATTRIBUTE = 'data-fk-fab-reserve'
+const RESERVE_ATTRIBUTE = 'data-ty-fab-reserve'
 
 function useReserveBottom(active: boolean) {
   useEffect(() => {
@@ -62,7 +62,7 @@ export function FloatingActionButton(props: FloatingActionButtonProps) {
 
   const control = (
     <Button
-      className={cx('fk-fab', props.className)}
+      className={cx('ty-fab', props.className)}
       variant={props.emphasis === 'secondary' ? 'secondary' : 'primary'}
       size={props.size === 'large' ? 'large' : 'regular'}
       shape={floats ? (showsText ? 'pill' : 'circle') : 'rounded'}
@@ -77,9 +77,9 @@ export function FloatingActionButton(props: FloatingActionButtonProps) {
     </Button>
   )
 
-  if (!floats) return <span className="fk-fab-inline">{control}</span>
+  if (!floats) return <span className="ty-fab-inline">{control}</span>
   const floating = (
-    <div className="fk-fab-dock" data-placement={props.placement ?? 'end-bottom'} data-size={props.size ?? 'regular'}>
+    <div className="ty-fab-dock" data-placement={props.placement ?? 'end-bottom'} data-size={props.size ?? 'regular'}>
       {control}
     </div>
   )

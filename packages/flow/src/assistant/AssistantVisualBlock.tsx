@@ -4,7 +4,7 @@
 import { useId } from 'react'
 import { Workflow } from 'lucide-react'
 import { useLocale } from 'react-aria-components'
-import { Button } from '@fakhir/ui'
+import { Button } from '@datatechsolutions/tympan'
 import { defineLabels, fill, useLabels } from '../internal/labels'
 import { ReportView } from '../report/ReportView'
 import { envelopeToReport, type VisualEnvelope } from './visual'
@@ -40,16 +40,16 @@ export function AssistantVisualBlock({ envelope, onOpen, locale, currency, defau
   const provider = useLocale()
   const loc = locale ?? provider.locale
   const titleId = useId()
-  const cls = ['fk-visual-block', className].filter(Boolean).join(' ')
+  const cls = ['ty-visual-block', className].filter(Boolean).join(' ')
 
   if (envelope.type === 'flow') {
     return (
       <figure className={cls} data-type="flow" aria-labelledby={titleId}>
-        <figcaption className="fk-visual-block__flow">
-          <Workflow className="fk-visual-block__flow-icon" aria-hidden="true" focusable="false" />
-          <span className="fk-visual-block__flow-text">
-            <span className="fk-visual-block__flow-kind">{l.flow}</span>
-            <span id={titleId} className="fk-visual-block__title" dir="auto">
+        <figcaption className="ty-visual-block__flow">
+          <Workflow className="ty-visual-block__flow-icon" aria-hidden="true" focusable="false" />
+          <span className="ty-visual-block__flow-text">
+            <span className="ty-visual-block__flow-kind">{l.flow}</span>
+            <span id={titleId} className="ty-visual-block__title" dir="auto">
               {envelope.title}
             </span>
           </span>
@@ -66,7 +66,7 @@ export function AssistantVisualBlock({ envelope, onOpen, locale, currency, defau
   const spec = envelopeToReport(envelope, defaultCountry ? { defaultCountry } : {})
   return (
     <figure className={cls} data-type={envelope.type} aria-labelledby={titleId}>
-      <figcaption id={titleId} className="fk-visually-hidden">
+      <figcaption id={titleId} className="ty-visually-hidden">
         {envelope.title}
       </figcaption>
       <ReportView spec={spec} locale={loc} {...(currency ? { currency } : {})} headingLevel={3} />

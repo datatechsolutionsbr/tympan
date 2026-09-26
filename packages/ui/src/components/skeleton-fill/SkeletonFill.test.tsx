@@ -21,8 +21,8 @@ describe('SkeletonFill and SkeletonBlock', () => {
 
   it('on-accent uses the on-accent fill token derived from accent-ink', () => {
     const { container } = render(<SkeletonBlock variant="on-accent" shape="pill" />)
-    expect(container.firstElementChild).toHaveAttribute('data-fk-skeleton', 'on-accent')
-    expect(css).toMatch(/--fk-skeleton-fill-on-accent:\s*color-mix\(in oklab,\s*var\(--fk-accent-ink\)/)
+    expect(container.firstElementChild).toHaveAttribute('data-ty-skeleton', 'on-accent')
+    expect(css).toMatch(/--ty-skeleton-fill-on-accent:\s*color-mix\(in oklab,\s*var\(--ty-accent-ink\)/)
   })
 
   it('outlines the shape with GrayText under forced colours', () => {
@@ -33,16 +33,16 @@ describe('SkeletonFill and SkeletonBlock', () => {
     const a = skeletonFill()
     const b = skeletonFill('surface')
     expect(a).toEqual(b)
-    expect(css).toMatch(/\[data-fk-skeleton\]\s*\{[^}]*background:\s*var\(--fk-skeleton-fill\)[^}]*animation:\s*fk-skeleton-fill-pulse var\(--fk-dur-pulse\)/)
-    expect(skeletonFill('surface', false)).toHaveProperty('data-fk-skeleton-static')
+    expect(css).toMatch(/\[data-ty-skeleton\]\s*\{[^}]*background:\s*var\(--ty-skeleton-fill\)[^}]*animation:\s*ty-skeleton-fill-pulse var\(--ty-dur-pulse\)/)
+    expect(skeletonFill('surface', false)).toHaveProperty('data-ty-skeleton-static')
   })
 
   it('maps spacing steps and lengths to sizes', () => {
     const { container } = render(<SkeletonBlock shape="block" width="60%" height={7} animated={false} />)
     const el = container.firstElementChild as HTMLElement
-    expect(el.style.getPropertyValue('--fk-skeleton-w')).toBe('60%')
-    expect(el.style.getPropertyValue('--fk-skeleton-h')).toBe('var(--fk-space-7)')
-    expect(el).toHaveAttribute('data-fk-skeleton-static')
+    expect(el.style.getPropertyValue('--ty-skeleton-w')).toBe('60%')
+    expect(el.style.getPropertyValue('--ty-skeleton-h')).toBe('var(--ty-space-7)')
+    expect(el).toHaveAttribute('data-ty-skeleton-static')
   })
 
   it('has no axe violations, light and dark', async () => {

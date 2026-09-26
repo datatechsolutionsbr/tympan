@@ -20,9 +20,9 @@ describe('SwipeRow in right-to-left locales', () => {
         <span>بوتي، الأرجنتين</span>
       </SwipeRow>,
     )
-    const surface = container.querySelector<HTMLElement>('.fk-swipe-row__surface')!
+    const surface = container.querySelector<HTMLElement>('.ty-swipe-row__surface')!
     surface.getBoundingClientRect = () => ({ width: 400, height: 56, top: 0, left: 0, right: 400, bottom: 56 }) as DOMRect
-    expect(container.querySelector('.fk-swipe-row')).toHaveAttribute('data-dir', 'rtl')
+    expect(container.querySelector('.ty-swipe-row')).toHaveAttribute('data-dir', 'rtl')
     swipe(surface, -300)
     expect(lead).toHaveBeenCalledTimes(1)
     expect(trail).not.toHaveBeenCalled()

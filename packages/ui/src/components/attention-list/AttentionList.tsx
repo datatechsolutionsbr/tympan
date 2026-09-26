@@ -42,7 +42,7 @@ function RowAction({ action, title, suffix }: { action: AttentionAction; title: 
     </>
   )
   return (
-    <Button variant="quiet" size="compact" href={action.href} onPress={action.onPress} className="fk-attention__action">
+    <Button variant="quiet" size="compact" href={action.href} onPress={action.onPress} className="ty-attention__action">
       {label}
     </Button>
   )
@@ -54,18 +54,18 @@ export function AttentionList(props: AttentionListProps) {
   const rows = props.maxRows !== undefined ? props.items.slice(0, props.maxRows) : props.items
   const truncated = rows.length < props.items.length
   return (
-    <div className={cx('fk-attention', props.className)}>
-      {props.heading ? <div className="fk-attention__heading">{props.heading}</div> : null}
+    <div className={cx('ty-attention', props.className)}>
+      {props.heading ? <div className="ty-attention__heading">{props.heading}</div> : null}
       {rows.length === 0 ? (
-        <p className="fk-attention__empty">{props.emptyText ?? words.empty}</p>
+        <p className="ty-attention__empty">{props.emptyText ?? words.empty}</p>
       ) : (
-        <ul className="fk-attention__list" aria-label={props.label}>
+        <ul className="ty-attention__list" aria-label={props.label}>
           {rows.map((row) => (
-            <li key={row.id} className="fk-attention__row">
-              <ProofBadge state={row.proof === 'none' ? null : row.proof} className="fk-attention__proof" />
-              <div className="fk-attention__text">
-                <span className="fk-attention__title" dir="auto">{row.title}</span>
-                {row.detail ? <span className="fk-attention__detail" dir="auto">{row.detail}</span> : null}
+            <li key={row.id} className="ty-attention__row">
+              <ProofBadge state={row.proof === 'none' ? null : row.proof} className="ty-attention__proof" />
+              <div className="ty-attention__text">
+                <span className="ty-attention__title" dir="auto">{row.title}</span>
+                {row.detail ? <span className="ty-attention__detail" dir="auto">{row.detail}</span> : null}
               </div>
               {row.action ? <RowAction action={row.action} title={row.title} suffix={words.actionTarget} /> : null}
             </li>
@@ -73,7 +73,7 @@ export function AttentionList(props: AttentionListProps) {
         </ul>
       )}
       {props.seeAllHref && (truncated || props.maxRows === undefined) ? (
-        <AriaLink className="fk-attention__more" href={props.seeAllHref}>
+        <AriaLink className="ty-attention__more" href={props.seeAllHref}>
           {props.seeAllLabel ?? words.seeAll}
         </AriaLink>
       ) : null}

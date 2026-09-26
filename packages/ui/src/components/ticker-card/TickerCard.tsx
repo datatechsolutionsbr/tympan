@@ -46,25 +46,25 @@ interface RowWords {
 function RowCells({ entry, words }: { entry: TickerEntry; words: RowWords }) {
   return (
     <>
-      <span className="fk-ticker-card__who">
-        <span className="fk-ticker-card__name" title={entry.name}>
+      <span className="ty-ticker-card__who">
+        <span className="ty-ticker-card__name" title={entry.name}>
           {entry.name}
         </span>
         {entry.qualifier ? (
-          <span className="fk-ticker-card__qualifier">
-            <span className="fk-visually-hidden">, </span>
+          <span className="ty-ticker-card__qualifier">
+            <span className="ty-visually-hidden">, </span>
             {entry.qualifier}
           </span>
         ) : null}
       </span>
-      <span className="fk-ticker-card__figures">
-        <span className="fk-ticker-card__value">
-          <span className="fk-visually-hidden">{`, ${words.value} `}</span>
+      <span className="ty-ticker-card__figures">
+        <span className="ty-ticker-card__value">
+          <span className="ty-visually-hidden">{`, ${words.value} `}</span>
           {entry.value}
         </span>
         {entry.change ? (
-          <span className="fk-ticker-card__change">
-            <span className="fk-visually-hidden">{`, ${words.change} `}</span>
+          <span className="ty-ticker-card__change">
+            <span className="ty-visually-hidden">{`, ${words.change} `}</span>
             <DeltaMark trend={entry.change.direction} sentiment={entry.change.sentiment ?? 'neutral'} text={entry.change.value} />
           </span>
         ) : null}
@@ -76,7 +76,7 @@ function RowCells({ entry, words }: { entry: TickerEntry; words: RowWords }) {
 function Heading({ level, id, children }: { level: 2 | 3 | 4; id: string; children: ReactNode }) {
   const H = `h${level}` as 'h2' | 'h3' | 'h4'
   return (
-    <H id={id} className="fk-ticker-card__title">
+    <H id={id} className="ty-ticker-card__title">
       {children}
     </H>
   )
@@ -93,12 +93,12 @@ export function TickerCard(props: TickerCardProps) {
   let body: ReactNode
   if (props.loading) {
     body = (
-      <div className="fk-ticker-card__loading" aria-busy="true">
-        <span role="status" className="fk-visually-hidden">
+      <div className="ty-ticker-card__loading" aria-busy="true">
+        <span role="status" className="ty-visually-hidden">
           {props.labels?.loading ?? m.loading}
         </span>
         {Array.from({ length: props.loadingRows ?? 3 }, (_, i) => (
-          <div key={i} className="fk-ticker-card__ghost">
+          <div key={i} className="ty-ticker-card__ghost">
             <Skeleton width="medium" />
             <Skeleton width="short" />
           </div>
@@ -106,18 +106,18 @@ export function TickerCard(props: TickerCardProps) {
       </div>
     )
   } else if (shown.length === 0) {
-    body = <p className="fk-ticker-card__empty">{props.labels?.empty ?? m.empty}</p>
+    body = <p className="ty-ticker-card__empty">{props.labels?.empty ?? m.empty}</p>
   } else {
     body = (
-      <ul className="fk-ticker-card__rows" aria-labelledby={titleId}>
+      <ul className="ty-ticker-card__rows" aria-labelledby={titleId}>
         {shown.map((entry) => (
-          <li key={entry.id} className="fk-ticker-card__row-item" data-sentiment={entry.change?.sentiment}>
+          <li key={entry.id} className="ty-ticker-card__row-item" data-sentiment={entry.change?.sentiment}>
             {props.onEntryPress ? (
-              <AriaButton className="fk-ticker-card__row" onPress={() => props.onEntryPress?.(entry.id)}>
+              <AriaButton className="ty-ticker-card__row" onPress={() => props.onEntryPress?.(entry.id)}>
                 <RowCells entry={entry} words={words} />
               </AriaButton>
             ) : (
-              <div className="fk-ticker-card__row">
+              <div className="ty-ticker-card__row">
                 <RowCells entry={entry} words={words} />
               </div>
             )}
@@ -128,17 +128,17 @@ export function TickerCard(props: TickerCardProps) {
   }
 
   return (
-    <section className={cx('fk-ticker-card', props.className)} aria-labelledby={titleId} data-interactive={props.onEntryPress ? '' : undefined}>
-      <div className="fk-ticker-card__head">
-        {Icon ? <Icon className="fk-ticker-card__icon" aria-hidden="true" focusable="false" /> : null}
+    <section className={cx('ty-ticker-card', props.className)} aria-labelledby={titleId} data-interactive={props.onEntryPress ? '' : undefined}>
+      <div className="ty-ticker-card__head">
+        {Icon ? <Icon className="ty-ticker-card__icon" aria-hidden="true" focusable="false" /> : null}
         <Heading level={props.headingLevel ?? 3} id={titleId}>
           {props.title}
         </Heading>
       </div>
       {body}
       {props.asOf || props.seeAll ? (
-        <div className="fk-ticker-card__foot">
-          {props.asOf ? <span className="fk-ticker-card__asof">{props.asOf}</span> : null}
+        <div className="ty-ticker-card__foot">
+          {props.asOf ? <span className="ty-ticker-card__asof">{props.asOf}</span> : null}
           {props.seeAll ? (
             <Link href={props.seeAll.href} standalone>
               {props.seeAll.label}

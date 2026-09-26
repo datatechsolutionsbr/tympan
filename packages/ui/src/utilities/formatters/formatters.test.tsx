@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
 import { renderWithProvider } from '../../../test/render'
 import { messagesPtBR } from '../../internal/messages'
-import { FakhirProvider } from '../../internal/provider'
+import { TympanProvider } from '../../internal/provider'
 import {
   formatAddress,
   formatDateTime,
@@ -74,9 +74,9 @@ describe('Formatters', () => {
   it('binds locale and the catalogue placeholder in the hook', () => {
     const { result } = renderHook(() => useFormatters(), {
       wrapper: ({ children }) => (
-        <FakhirProvider baseMessages={messagesPtBR} locale="pt-BR">
+        <TympanProvider baseMessages={messagesPtBR} locale="pt-BR">
           {children}
-        </FakhirProvider>
+        </TympanProvider>
       ),
     })
     expect(result.current.money(null, 'BRL')).toBe('não informado')

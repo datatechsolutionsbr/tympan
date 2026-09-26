@@ -32,7 +32,7 @@ describe('SkipLink', () => {
     await userEvent.tab()
     const link = screen.getByRole('link', { name: 'Skip to main content' })
     expect(link).toHaveFocus()
-    expect(cssOf('components/skip-link/SkipLink.css')).toMatch(/\.fk-skip-link:focus[^{]*\{[^}]*clip-path:\s*none/)
+    expect(cssOf('components/skip-link/SkipLink.css')).toMatch(/\.ty-skip-link:focus[^{]*\{[^}]*clip-path:\s*none/)
   })
 
   it('moves focus to the target on Enter and continues from there', async () => {
@@ -52,7 +52,7 @@ describe('SkipLink', () => {
     expect(link).toBeInTheDocument()
     const css = cssOf('components/skip-link/SkipLink.css')
     expect(css).not.toMatch(/display:\s*none/)
-    expect(css).toMatch(/\.fk-skip-link\s*\{[^}]*clip-path:\s*inset\(50%\)/)
+    expect(css).toMatch(/\.ty-skip-link\s*\{[^}]*clip-path:\s*inset\(50%\)/)
   })
 
   it('scrolls the target clear of the sticky top bar', async () => {
@@ -61,7 +61,7 @@ describe('SkipLink', () => {
     render(<Page />)
     await userEvent.click(screen.getByRole('link', { name: 'Skip to main content' }))
     expect(scroll).toHaveBeenCalledWith({ block: 'start' })
-    expect(cssOf('base.css')).toMatch(/scroll-padding-top:\s*var\(--fk-layout-scroll-padding\)/)
+    expect(cssOf('base.css')).toMatch(/scroll-padding-top:\s*var\(--ty-layout-scroll-padding\)/)
   })
 
   it('uses the given label', () => {
@@ -71,7 +71,7 @@ describe('SkipLink', () => {
 
   it('has a 44 px focused height and forced-colours rules', () => {
     const css = cssOf('components/skip-link/SkipLink.css')
-    expect(css).toMatch(/min-block-size:\s*var\(--fk-control-target\)/)
+    expect(css).toMatch(/min-block-size:\s*var\(--ty-control-target\)/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/LinkText/)
   })
 

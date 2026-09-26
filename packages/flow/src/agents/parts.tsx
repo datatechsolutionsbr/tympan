@@ -1,11 +1,11 @@
 // Small pieces the agent editors share while the design system's wave 2 is
 // pending (its StepList, ChoiceTile and TagField intents). Not exported as
-// @fakhir/ui components.
+// @datatechsolutions/tympan components.
 
 import { useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode, type RefObject } from 'react'
 import { Button as AriaButton, Label, Radio, RadioGroup } from 'react-aria-components'
 import { Bot, Check, X } from 'lucide-react'
-import { TextField } from '@fakhir/ui'
+import { TextField } from '@datatechsolutions/tympan'
 import { fill } from '../internal/labels'
 
 const SAFE_IMAGE = /^(https?:|data:|blob:|\/)/
@@ -16,7 +16,7 @@ export function AgentMark({ image, size = 'md' }: { image?: string | null; size?
   const usable = !broken && !!image && SAFE_IMAGE.test(image)
   const face = usable ? <img src={image!} alt="" onError={() => setBroken(true)} /> : <Bot focusable="false" />
   return (
-    <span className="fk-agent-mark" data-size={size} aria-hidden="true">
+    <span className="ty-agent-mark" data-size={size} aria-hidden="true">
       {face}
     </span>
   )
@@ -42,27 +42,27 @@ const stepState = (n: number, current: number, reached: number): StepState => (n
 export function StepList({ steps, current, reached, label, completedWord, onJump, locale }: StepListProps) {
   const numeral = new Intl.NumberFormat(locale)
   return (
-    <ol className="fk-flow-step-list" aria-label={label}>
+    <ol className="ty-flow-step-list" aria-label={label}>
       {steps.map((title, index) => {
         const n = index + 1
         const state = stepState(n, current, reached)
         const face = (
           <>
-            <span className="fk-flow-step-list__marker" aria-hidden="true">
+            <span className="ty-flow-step-list__marker" aria-hidden="true">
               {state === 'done' ? <Check focusable="false" /> : numeral.format(n)}
             </span>
-            <span className="fk-flow-step-list__name">{title}</span>
+            <span className="ty-flow-step-list__name">{title}</span>
           </>
         )
         return (
-          <li key={title} className="fk-flow-step-list__item" data-state={state} aria-current={state === 'current' ? 'step' : undefined}>
+          <li key={title} className="ty-flow-step-list__item" data-state={state} aria-current={state === 'current' ? 'step' : undefined}>
             {state === 'done' ? (
-              <AriaButton className="fk-flow-step-list__jump" onPress={() => onJump(n)}>
+              <AriaButton className="ty-flow-step-list__jump" onPress={() => onJump(n)}>
                 {face}
-                <span className="fk-visually-hidden">, {completedWord}</span>
+                <span className="ty-visually-hidden">, {completedWord}</span>
               </AriaButton>
             ) : (
-              <span className="fk-flow-step-list__static">{face}</span>
+              <span className="ty-flow-step-list__static">{face}</span>
             )}
           </li>
         )
@@ -82,15 +82,15 @@ function TileFace({ tile, chosen }: { tile: ChoiceTile; chosen: boolean }) {
   return (
     <>
       {tile.icon ? (
-        <span className="fk-flow-choice-tile__icon" aria-hidden="true">
+        <span className="ty-flow-choice-tile__icon" aria-hidden="true">
           {tile.icon}
         </span>
       ) : null}
-      <span className="fk-flow-choice-tile__text">
-        <span className="fk-flow-choice-tile__title">{tile.title}</span>
-        {tile.detail ? <span className="fk-flow-choice-tile__detail">{tile.detail}</span> : null}
+      <span className="ty-flow-choice-tile__text">
+        <span className="ty-flow-choice-tile__title">{tile.title}</span>
+        {tile.detail ? <span className="ty-flow-choice-tile__detail">{tile.detail}</span> : null}
       </span>
-      <span className="fk-flow-choice-tile__check" aria-hidden="true">
+      <span className="ty-flow-choice-tile__check" aria-hidden="true">
         {chosen ? <Check focusable="false" /> : null}
       </span>
     </>
@@ -101,11 +101,11 @@ function TileFace({ tile, chosen }: { tile: ChoiceTile; chosen: boolean }) {
 export function ChoiceTiles({ label, tiles, value, onChange, hideLabel = false }: { label: string; tiles: ChoiceTile[]; value: string | null; onChange: (v: string) => void; hideLabel?: boolean }) {
   const naming = hideLabel ? { 'aria-label': label } : {}
   return (
-    <RadioGroup className="fk-choice-tiles" value={value} onChange={onChange} {...naming}>
-      {!hideLabel && <Label className="fk-choice-tiles__label">{label}</Label>}
-      <div className="fk-choice-tiles__grid">
+    <RadioGroup className="ty-choice-tiles" value={value} onChange={onChange} {...naming}>
+      {!hideLabel && <Label className="ty-choice-tiles__label">{label}</Label>}
+      <div className="ty-choice-tiles__grid">
         {tiles.map((tile) => (
-          <Radio key={tile.value} value={tile.value} className="fk-flow-choice-tile" aria-label={[tile.title, tile.detail].filter(Boolean).join(', ')}>
+          <Radio key={tile.value} value={tile.value} className="ty-flow-choice-tile" aria-label={[tile.title, tile.detail].filter(Boolean).join(', ')}>
             {({ isSelected }) => <TileFace tile={tile} chosen={isSelected} />}
           </Radio>
         ))}
@@ -140,16 +140,16 @@ export function TagInput({ label, value, onChange, placeholder, removeLabel }: {
     settle()
   }
   return (
-    <div className="fk-tag-input">
+    <div className="ty-tag-input">
       <div onKeyDown={onKey}>
         <TextField label={label} value={typed} onChange={setTyped} {...(placeholder ? { placeholder } : {})} onBlur={settle} />
       </div>
       {value.length > 0 && (
-        <ul className="fk-tag-input__list" aria-label={label}>
+        <ul className="ty-tag-input__list" aria-label={label}>
           {value.map((tag) => (
-            <li key={tag} className="fk-tag-input__tag">
+            <li key={tag} className="ty-tag-input__tag">
               <span>{tag}</span>
-              <AriaButton className="fk-tag-input__remove" aria-label={fill(removeLabel, { tag })} onPress={() => onChange(value.filter((t) => t !== tag))}>
+              <AriaButton className="ty-tag-input__remove" aria-label={fill(removeLabel, { tag })} onPress={() => onChange(value.filter((t) => t !== tag))}>
                 <X focusable="false" aria-hidden="true" />
               </AriaButton>
             </li>

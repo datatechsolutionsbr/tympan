@@ -1,17 +1,17 @@
 /* Provenance gallery page: the sheet body fills with the viewer; the graph
    view uses the compact header of the storyboard (crumbs and title, then the
    question and the view switch in the same row). */
-.fk-prov-page {
+.ty-prov-page {
   display: contents;
 }
-.fk-prov-page__query {
+.ty-prov-page__query {
   display: flex;
   align-items: center;
   gap: 12px;
 }
-.fk-prov-page__mono {
-  font-family: var(--fk-font-mono);
+.ty-prov-page__mono {
+  font-family: var(--ty-font-mono);
 }
-.fk-prov-page__edition {
+.ty-prov-page__edition {
   font-weight: 500;
 }

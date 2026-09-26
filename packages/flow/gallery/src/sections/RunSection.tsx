@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, FakhirProvider } from '@fakhir/ui'
+import { Button, TympanProvider } from '@datatechsolutions/tympan'
 import { createFlowEditorStore, ExecutionTimeline, FlowEditorStateProvider, RunReplayDialog, RunRewindDialog, RunViews, VersionHistoryPanel, type RunSummary, type TimelineEntry } from '../../../src'
 
 const runs: RunSummary[] = [
@@ -23,7 +23,7 @@ export function RunSection() {
   const [rewind, setRewind] = useState(false)
   const [versions, setVersions] = useState(false)
   return (
-    <section className="fk-gallery-section" aria-labelledby="run-title">
+    <section className="ty-gallery-section" aria-labelledby="run-title">
       <h2 id="run-title">Runs, trace and replay</h2>
       <FlowEditorStateProvider store={store}>
         <RunViews flowId="sample-analysis" loadRuns={() => Promise.resolve(runs)} defaultRunView={{ mode: 'panel', open: true }} />
@@ -47,14 +47,14 @@ export function RunSection() {
       <RunReplayDialog open={replay} onClose={() => setReplay(false)} runId={runs[0]!.id} flowId="sample-analysis" originalInputs={{ edition: '[edição]', minValue: 3, strict: true }} onReplay={() => Promise.resolve(setReplay(false))} />
       <RunRewindDialog open={rewind} onClose={() => setRewind(false)} runId={runs[0]!.id} nodes={entries.map((e) => ({ nodeId: e.nodeId, nodeKind: e.nodeKind, status: e.status }))} onRewind={() => Promise.resolve(setRewind(false))} />
       <h3>العربية (RTL) · 日本語</h3>
-      <FakhirProvider locale="ar">
+      <TympanProvider locale="ar">
         <div dir="rtl" lang="ar">
           <ExecutionTimeline entries={entries} />
         </div>
-      </FakhirProvider>
-      <FakhirProvider locale="ja">
+      </TympanProvider>
+      <TympanProvider locale="ja">
         <ExecutionTimeline entries={entries.map((e) => ({ ...e, nodeId: `${e.nodeId}・政府AI調査` }))} />
-      </FakhirProvider>
+      </TympanProvider>
     </section>
   )
 }

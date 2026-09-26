@@ -184,13 +184,13 @@ export function ProvenanceTimeline({ items, selectedId: selectedProp, defaultSel
 
   const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
     const target = e.target as HTMLElement
-    if (target.dataset.fkProvTimelineEvent === undefined) return
+    if (target.dataset.tyProvTimelineEvent === undefined) return
     const root = rootRef.current
     if (!root) return
-    const lanesEls = [...root.querySelectorAll<HTMLElement>('[data-fk-prov-timeline-lane]')]
-    const laneEl = target.closest<HTMLElement>('[data-fk-prov-timeline-lane]')
+    const lanesEls = [...root.querySelectorAll<HTMLElement>('[data-ty-prov-timeline-lane]')]
+    const laneEl = target.closest<HTMLElement>('[data-ty-prov-timeline-lane]')
     const laneIdx = laneEl ? lanesEls.indexOf(laneEl) : -1
-    const inLane = laneEl ? [...laneEl.querySelectorAll<HTMLElement>('[data-fk-prov-timeline-event]')] : []
+    const inLane = laneEl ? [...laneEl.querySelectorAll<HTMLElement>('[data-ty-prov-timeline-event]')] : []
     const idx = inLane.indexOf(target)
     const forwardKey = rtl ? 'ArrowLeft' : 'ArrowRight'
     const backKey = rtl ? 'ArrowRight' : 'ArrowLeft'
@@ -203,12 +203,12 @@ export function ProvenanceTimeline({ items, selectedId: selectedProp, defaultSel
       const other = lanesEls[laneIdx + (e.key === 'ArrowDown' ? 1 : -1)]
       if (other) {
         // Nearest event in time on the other lane.
-        const t = Number(target.dataset.fkTime ?? NaN)
-        const candidates = [...other.querySelectorAll<HTMLElement>('[data-fk-prov-timeline-event]')]
+        const t = Number(target.dataset.tyTime ?? NaN)
+        const candidates = [...other.querySelectorAll<HTMLElement>('[data-ty-prov-timeline-event]')]
         next = candidates.reduce<HTMLElement | undefined>((best, c) => {
           if (!best) return c
-          const d = Math.abs(Number(c.dataset.fkTime ?? NaN) - t)
-          const bd = Math.abs(Number(best.dataset.fkTime ?? NaN) - t)
+          const d = Math.abs(Number(c.dataset.tyTime ?? NaN) - t)
+          const bd = Math.abs(Number(best.dataset.tyTime ?? NaN) - t)
           return Number.isFinite(d) && (!Number.isFinite(bd) || d < bd) ? c : best
         }, undefined)
       }
@@ -221,20 +221,20 @@ export function ProvenanceTimeline({ items, selectedId: selectedProp, defaultSel
     const proofKey = item.proofState ?? 'none'
     const name = fill(l.event, { kind: kindWord(item.kind), title: item.title, proof: l.proof[proofKey], time: time === null ? l.undated : detailWord(time) }, locale)
     return (
-      <li key={item.id} className="fk-prov-timeline__slot" data-row={row} style={time === null ? undefined : { insetInlineStart: `${at(time)}%`, insetBlockStart: `${8 + row * ROW_HEIGHT}px` }}>
+      <li key={item.id} className="ty-prov-timeline__slot" data-row={row} style={time === null ? undefined : { insetInlineStart: `${at(time)}%`, insetBlockStart: `${8 + row * ROW_HEIGHT}px` }}>
         <button
           type="button"
-          className="fk-prov-timeline__event"
-          data-fk-prov-timeline-event=""
-          data-fk-time={time ?? ''}
+          className="ty-prov-timeline__event"
+          data-ty-prov-timeline-event=""
+          data-ty-time={time ?? ''}
           data-selected={selectedId === item.id || undefined}
           aria-pressed={selectedId === item.id}
           aria-label={name}
           title={item.title}
           onClick={() => setSelected(item.id)}
         >
-          <span className="fk-prov-timeline__dot" aria-hidden="true" />
-          <span className="fk-prov-timeline__title" aria-hidden="true" dir="auto">
+          <span className="ty-prov-timeline__dot" aria-hidden="true" />
+          <span className="ty-prov-timeline__title" aria-hidden="true" dir="auto">
             {item.title}
           </span>
         </button>
@@ -244,21 +244,21 @@ export function ProvenanceTimeline({ items, selectedId: selectedProp, defaultSel
 
   if (!items.length) {
     return (
-      <section className={['fk-prov-timeline', className].filter(Boolean).join(' ')} aria-label={l.title}>
-        <p className="fk-prov-timeline__empty">{l.noItems}</p>
+      <section className={['ty-prov-timeline', className].filter(Boolean).join(' ')} aria-label={l.title}>
+        <p className="ty-prov-timeline__empty">{l.noItems}</p>
       </section>
     )
   }
 
   return (
-    <section ref={rootRef} className={['fk-prov-timeline', className].filter(Boolean).join(' ')} aria-label={l.title} onKeyDown={onKeyDown}>
-      <div className="fk-prov-timeline__lanes">
+    <section ref={rootRef} className={['ty-prov-timeline', className].filter(Boolean).join(' ')} aria-label={l.title} onKeyDown={onKeyDown}>
+      <div className="ty-prov-timeline__lanes">
       {ticks.length ? (
-        <div className="fk-prov-timeline__axis" aria-label={l.axis} role="group">
-          <span className="fk-prov-timeline__axis-gutter" aria-hidden="true" />
-          <ol className="fk-prov-timeline__ticks">
+        <div className="ty-prov-timeline__axis" aria-label={l.axis} role="group">
+          <span className="ty-prov-timeline__axis-gutter" aria-hidden="true" />
+          <ol className="ty-prov-timeline__ticks">
             {ticks.map((t, i) => (
-              <li key={i} className="fk-prov-timeline__tick" style={{ insetInlineStart: `${at(t)}%` }}>
+              <li key={i} className="ty-prov-timeline__tick" style={{ insetInlineStart: `${at(t)}%` }}>
                 <time dateTime={new Date(t).toISOString()}>{tickWord(t)}</time>
               </li>
             ))}
@@ -266,40 +266,40 @@ export function ProvenanceTimeline({ items, selectedId: selectedProp, defaultSel
         </div>
       ) : null}
       {lanes.map((lane) => {
-        const headingId = `fk-prov-timeline-${lane.key.replace(/[^\w-]/g, '_')}`
+        const headingId = `ty-prov-timeline-${lane.key.replace(/[^\w-]/g, '_')}`
         const rows = rowsOf(lane.dated)
         const rowCount = Math.max(1, ...rows.map((r) => r + 1))
         const count = lane.dated.length + lane.undated.length
         return (
-          <div key={lane.key} className="fk-prov-timeline__lane" data-fk-prov-timeline-lane="" data-actor-kind={lane.actor?.kind ?? 'system'}>
-            <h3 className="fk-prov-timeline__lane-head" id={headingId}>
-              <span className="fk-visually-hidden">{fill(l.laneName, { name: lane.actor?.name ?? l.systemWord, kind: actorWord(lane.actor), count }, locale)}</span>
-              <span aria-hidden="true" className="fk-prov-timeline__actor">
+          <div key={lane.key} className="ty-prov-timeline__lane" data-ty-prov-timeline-lane="" data-actor-kind={lane.actor?.kind ?? 'system'}>
+            <h3 className="ty-prov-timeline__lane-head" id={headingId}>
+              <span className="ty-visually-hidden">{fill(l.laneName, { name: lane.actor?.name ?? l.systemWord, kind: actorWord(lane.actor), count }, locale)}</span>
+              <span aria-hidden="true" className="ty-prov-timeline__actor">
                 <ActorMark actor={lane.actor ?? { kind: 'system', name: l.systemWord }} />
               </span>
             </h3>
-            <ol className="fk-prov-timeline__track" aria-labelledby={headingId} style={{ minBlockSize: `${Math.max(112, 28 + rowCount * ROW_HEIGHT)}px` }}>
+            <ol className="ty-prov-timeline__track" aria-labelledby={headingId} style={{ minBlockSize: `${Math.max(112, 28 + rowCount * ROW_HEIGHT)}px` }}>
               {lane.dated.map(({ item, time }, i) => eventButton(item, time, rows[i]))}
             </ol>
             {lane.undated.length ? (
-              <div className="fk-prov-timeline__undated">
-                <p className="fk-prov-timeline__undated-title">{l.undated}</p>
-                <ul className="fk-prov-timeline__undated-list">{lane.undated.map((item) => eventButton(item, null))}</ul>
+              <div className="ty-prov-timeline__undated">
+                <p className="ty-prov-timeline__undated-title">{l.undated}</p>
+                <ul className="ty-prov-timeline__undated-list">{lane.undated.map((item) => eventButton(item, null))}</ul>
               </div>
             ) : null}
           </div>
         )
       })}
       </div>
-      <aside className="fk-prov-timeline__detail" aria-label={l.detail} aria-live="polite">
-        <span className="fk-prov-timeline__eyebrow">{l.detail}</span>
+      <aside className="ty-prov-timeline__detail" aria-label={l.detail} aria-live="polite">
+        <span className="ty-prov-timeline__eyebrow">{l.detail}</span>
         {selected ? (
           <>
-            <h3 className="fk-prov-timeline__detail-title" dir="auto">
+            <h3 className="ty-prov-timeline__detail-title" dir="auto">
               {selected.title}
             </h3>
             {selected.actor ? <ActorMark actor={selected.actor} /> : null}
-            <dl className="fk-prov-timeline__facts">
+            <dl className="ty-prov-timeline__facts">
               <div>
                 <dt>{l.when}</dt>
                 <dd data-mono="true">{selected.at && Number.isFinite(Date.parse(selected.at)) ? <time dateTime={selected.at}>{detailWord(Date.parse(selected.at))}</time> : l.undated}</dd>
@@ -331,10 +331,10 @@ export function ProvenanceTimeline({ items, selectedId: selectedProp, defaultSel
                 </div>
               ))}
             </dl>
-            {renderDetailActions ? <div className="fk-prov-timeline__actions">{renderDetailActions(selected)}</div> : null}
+            {renderDetailActions ? <div className="ty-prov-timeline__actions">{renderDetailActions(selected)}</div> : null}
           </>
         ) : (
-          <p className="fk-prov-timeline__detail-empty">{l.noSelection}</p>
+          <p className="ty-prov-timeline__detail-empty">{l.noSelection}</p>
         )}
       </aside>
     </section>

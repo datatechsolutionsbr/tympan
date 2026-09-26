@@ -121,31 +121,31 @@ export function DecisionNode(props: DecisionNodeProps) {
   ].filter((w): w is string => !!w)
 
   const meta = configured ? (
-    <div className="fk-decision-node__meta">
-      <span className="fk-decision-node__input">{fill(l.input, { ref: config!.input.ref }, locale)}</span>
+    <div className="ty-decision-node__meta">
+      <span className="ty-decision-node__input">{fill(l.input, { ref: config!.input.ref }, locale)}</span>
       <span>{fill(l.options, { count: config!.options.length }, locale)}</span>
       {who || version ? (
-        <span className="fk-decision-node__model">
-          <span className="fk-visually-hidden">{l.decidedBy} </span>
+        <span className="ty-decision-node__model">
+          <span className="ty-visually-hidden">{l.decidedBy} </span>
           {who ? <code>{who}</code> : null}
           {version ? <code>{fill(l.version, { version }, locale)}</code> : null}
         </span>
       ) : null}
       {result ? (
-        <div className="fk-decision-node__result">
-          <p className="fk-decision-node__chosen">{fill(l.chosen, { value: optionLabel(result.value) }, locale)}</p>
+        <div className="ty-decision-node__result">
+          <p className="ty-decision-node__chosen">{fill(l.chosen, { value: optionLabel(result.value) }, locale)}</p>
           {result.needsReview ? (
-            <p className="fk-decision-node__review">
+            <p className="ty-decision-node__review">
               <TriangleAlert aria-hidden="true" focusable="false" />
               {l.needsReview}
             </p>
           ) : null}
-          <ul className="fk-decision-node__probabilities" aria-label={l.probabilities} id={listId}>
+          <ul className="ty-decision-node__probabilities" aria-label={l.probabilities} id={listId}>
             {rankedOptions(result, config!.options).map((o) => (
-              <li key={o.value} className="fk-decision-node__option" data-chosen={o.value === result.value ? 'true' : undefined}>
-                <span className="fk-decision-node__option-text">{fill(l.probability, { label: o.label, percent: o.probability === null ? '?' : pct(o.probability) }, locale)}</span>
-                <span className="fk-decision-node__bar" aria-hidden="true">
-                  <span className="fk-decision-node__bar-fill" style={{ inlineSize: `${Math.round((o.probability ?? 0) * 100)}%` }} />
+              <li key={o.value} className="ty-decision-node__option" data-chosen={o.value === result.value ? 'true' : undefined}>
+                <span className="ty-decision-node__option-text">{fill(l.probability, { label: o.label, percent: o.probability === null ? '?' : pct(o.probability) }, locale)}</span>
+                <span className="ty-decision-node__bar" aria-hidden="true">
+                  <span className="ty-decision-node__bar-fill" style={{ inlineSize: `${Math.round((o.probability ?? 0) * 100)}%` }} />
                 </span>
               </li>
             ))}
@@ -173,7 +173,7 @@ export function DecisionNode(props: DecisionNodeProps) {
       {...(onRemove && canEdit ? { onDelete: () => onRemove(id) } : {})}
       labels={{ remove: l.remove }}
       meta={meta}
-      className="fk-flow-node fk-decision-node"
+      className="ty-flow-node ty-decision-node"
     >
       <ConnectionPorts nodeId={id} nodeLabel={title} inputs={k.inputs} outputs={k.outputs} tone={k.tone} preview={preview} />
       <NodeRunIndicator nodeId={id} kind="decision" nodeLabel={title} />

@@ -28,13 +28,13 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(function Hea
   ref,
 ) {
   const generated = useId()
-  const headingId = id ?? `fk-heading-${generated.replace(/:/g, '')}`
+  const headingId = id ?? `ty-heading-${generated.replace(/:/g, '')}`
   const heading = (
     <AriaHeading
       ref={ref}
       level={level}
       id={headingId}
-      className={cx('fk-heading', !eyebrow && className)}
+      className={cx('ty-heading', !eyebrow && className)}
       data-appearance={appearance ?? appearanceFor(level)}
     >
       {children}
@@ -42,8 +42,8 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(function Hea
   )
   if (!eyebrow) return heading
   return (
-    <div className={cx('fk-heading-group', className)}>
-      <p className="fk-heading__eyebrow">{eyebrow}</p>
+    <div className={cx('ty-heading-group', className)}>
+      <p className="ty-heading__eyebrow">{eyebrow}</p>
       {heading}
     </div>
   )

@@ -134,7 +134,7 @@ describe('NotificationCenter in right-to-left (ar)', () => {
   it('renders mirrored where directional and passes axe', async () => {
     const { container } = renderRtl(<ToastProvider><NotificationCenterProvider><NotificationCenter /></NotificationCenterProvider></ToastProvider>)
     expect(rtlDom.screen.getByRole('button')).toBeInTheDocument()
-    expect(cssOfRtl('components/notification-center/NotificationCenter.css')).toMatch(/animation-name:\s*fk-notification-center-in-rtl/)
+    expect(cssOfRtl('components/notification-center/NotificationCenter.css')).toMatch(/animation-name:\s*ty-notification-center-in-rtl/)
     await axeRtl(container)
   })
 })

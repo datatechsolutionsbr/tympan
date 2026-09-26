@@ -28,7 +28,7 @@ export interface GalleryLocale {
 export const GalleryLocaleContext = createContext<GalleryLocale>({ locale: 'en', setLocale: () => {}, pseudo: false, setPseudo: () => {} })
 export const useGalleryLocale = () => useContext(GalleryLocaleContext)
 
-const KEY = 'fk-gallery-locale'
+const KEY = 'ty-gallery-locale'
 
 export function useGalleryLocaleState(): GalleryLocale {
   const [state, setState] = useState(() => {

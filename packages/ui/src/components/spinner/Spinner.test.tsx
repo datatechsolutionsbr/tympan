@@ -27,8 +27,8 @@ describe('Spinner', () => {
     render(<Spinner label="Saving" />)
     expect(screen.getByText('Saving')).toBeInTheDocument()
     const reduced = mediaBlock(cssOf('components/spinner/Spinner.css'), /\(prefers-reduced-motion:\s*reduce\)/)
-    expect(reduced).toMatch(/\.fk-spinner__ring[^{]*\{[^}]*animation:\s*none/)
-    expect(reduced).toMatch(/\.fk-spinner__dot[^{]*\{[^}]*animation:\s*none/)
+    expect(reduced).toMatch(/\.ty-spinner__ring[^{]*\{[^}]*animation:\s*none/)
+    expect(reduced).toMatch(/\.ty-spinner__dot[^{]*\{[^}]*animation:\s*none/)
   })
 
   it('in a submitting button: aria-busy, name kept, spinner not announced separately', () => {
@@ -44,9 +44,9 @@ describe('Spinner', () => {
         <button type="button">Inside</button>
       </Spinner>,
     )
-    const region = container.querySelector('.fk-spinner-region')
+    const region = container.querySelector('.ty-spinner-region')
     expect(region).toHaveAttribute('aria-busy', 'true')
-    expect(container.querySelector('.fk-spinner-region__content')).toHaveAttribute('inert')
+    expect(container.querySelector('.ty-spinner-region__content')).toHaveAttribute('inert')
     expect(screen.getByRole('status')).toHaveTextContent('Saving')
     // jsdom does not implement `inert` focus blocking; browsers do. Assert the attribute contract.
     expect(screen.getByRole('button', { name: 'Inside', hidden: true }).closest('[inert]')).not.toBeNull()
@@ -58,9 +58,9 @@ describe('Spinner', () => {
         <p>content</p>
       </Spinner>,
     )
-    expect(container.querySelector('.fk-spinner-overlay')).toBeNull()
+    expect(container.querySelector('.ty-spinner-overlay')).toBeNull()
     expect(screen.queryByRole('status')).toBeNull()
-    expect(container.querySelector('.fk-spinner-region')).not.toHaveAttribute('aria-busy')
+    expect(container.querySelector('.ty-spinner-region')).not.toHaveAttribute('aria-busy')
   })
 
   it('inherits the current text colour by default', () => {
@@ -69,8 +69,8 @@ describe('Spinner', () => {
         <Spinner label="Loading" />
       </p>,
     )
-    expect(container.querySelector('.fk-spinner')).toHaveAttribute('data-tone', 'inherit')
-    expect(cssOf('components/spinner/Spinner.css')).toMatch(/\.fk-spinner\s*\{[^}]*color:\s*inherit/)
+    expect(container.querySelector('.ty-spinner')).toHaveAttribute('data-tone', 'inherit')
+    expect(cssOf('components/spinner/Spinner.css')).toMatch(/\.ty-spinner\s*\{[^}]*color:\s*inherit/)
   })
 
   it('uses system colours in forced-colors mode', () => {

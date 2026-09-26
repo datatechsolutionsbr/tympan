@@ -70,7 +70,7 @@ export const toastDurations: Record<ToastTone, number | 'persistent'> = {
 const ToastContext = createContext<ToastApi | null>(null)
 
 let counter = 0
-const newId = () => `fk-toast-${++counter}`
+const newId = () => `ty-toast-${++counter}`
 
 interface TimerEntry {
   handle?: ReturnType<typeof setTimeout>
@@ -235,10 +235,10 @@ function ToastRegion({ toasts, placement, onDismiss, onPause, onResume }: Region
       const region = regionRef.current
       if (region.contains(document.activeElement)) {
         returnFocus.current?.focus()
-      } else if (region.querySelector('.fk-toast')) {
+      } else if (region.querySelector('.ty-toast')) {
         e.preventDefault()
         returnFocus.current = document.activeElement as HTMLElement | null
-        region.querySelector<HTMLElement>('.fk-toast')?.focus()
+        region.querySelector<HTMLElement>('.ty-toast')?.focus()
       }
     }
     document.addEventListener('keydown', onKey)
@@ -262,7 +262,7 @@ function ToastRegion({ toasts, placement, onDismiss, onPause, onResume }: Region
   return (
     <section
       ref={regionRef}
-      className="fk-toast-region"
+      className="ty-toast-region"
       data-placement={placement}
       aria-label={messages.toast.region}
       onPointerEnter={() => onPause('hover')}
@@ -277,12 +277,12 @@ function ToastRegion({ toasts, placement, onDismiss, onPause, onResume }: Region
         if (!e.currentTarget.contains(e.relatedTarget as Node | null)) onResume('focus')
       }}
     >
-      <div className="fk-toast-region__list" role="alert" aria-live="assertive" aria-atomic="false">
+      <div className="ty-toast-region__list" role="alert" aria-live="assertive" aria-atomic="false">
         {assertive.map((t) => (
           <ToastItem key={t.id} toast={t} onDismiss={handleDismiss} />
         ))}
       </div>
-      <div className="fk-toast-region__list" role="status" aria-live="polite" aria-atomic="false">
+      <div className="ty-toast-region__list" role="status" aria-live="polite" aria-atomic="false">
         {polite.map((t) => (
           <ToastItem key={t.id} toast={t} onDismiss={handleDismiss} />
         ))}
@@ -318,7 +318,7 @@ function ToastItem({ toast, onDismiss }: { toast: ToastRecord; onDismiss: (id: s
 
   return (
     <div
-      className="fk-toast"
+      className="ty-toast"
       data-tone={toast.tone}
       tabIndex={0}
       aria-labelledby={`${toast.id}-title`}
@@ -331,18 +331,18 @@ function ToastItem({ toast, onDismiss }: { toast: ToastRecord; onDismiss: (id: s
       onPointerCancel={onPointerUp}
       style={offset ? { transform: `translateX(${offset}px)` } : undefined}
     >
-      <Icon className="fk-toast__icon" aria-hidden="true" focusable="false" />
-      <div className="fk-toast__body">
-        <p className="fk-toast__title" id={`${toast.id}-title`}>
+      <Icon className="ty-toast__icon" aria-hidden="true" focusable="false" />
+      <div className="ty-toast__body">
+        <p className="ty-toast__title" id={`${toast.id}-title`}>
           {toast.title}
         </p>
         {toast.message ? (
-          <p className="fk-toast__message" id={`${toast.id}-message`}>
+          <p className="ty-toast__message" id={`${toast.id}-message`}>
             {toast.message}
           </p>
         ) : null}
         {toast.action ? (
-          <div className="fk-toast__actions">
+          <div className="ty-toast__actions">
             <Button
               size="compact"
               variant="secondary"
@@ -357,7 +357,7 @@ function ToastItem({ toast, onDismiss }: { toast: ToastRecord; onDismiss: (id: s
         ) : null}
       </div>
       <Button
-        className={cx('fk-toast__dismiss')}
+        className={cx('ty-toast__dismiss')}
         variant="quiet"
         size="compact"
         iconOnly

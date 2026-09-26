@@ -4,7 +4,7 @@
 
 import { useMemo, useState, type RefObject } from 'react'
 import { Autocomplete, Dialog, Input, Label, ListBox, ListBoxItem, Popover, SearchField, Text, useFilter } from 'react-aria-components'
-import { Drawer, useMediaQuery } from '@fakhir/ui'
+import { Drawer, useMediaQuery } from '@datatechsolutions/tympan'
 import { useRenderCatalog } from '../catalog/RenderCatalog'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 
@@ -47,17 +47,17 @@ function KindList({ options, onSelect, onClose, l }: { options: readonly InsertO
   const all = useMemo(() => options.map((o) => ({ ...o, id: o.kind, text: catalog.entry(o.kind)?.label ?? o.label })), [options, catalog])
   const shown = useMemo(() => (query ? all.filter((o) => contains(o.text, query)) : all), [all, query, contains])
   return (
-    <div className="fk-insert-menu__body">
+    <div className="ty-insert-menu__body">
       <Autocomplete inputValue={query} onInputChange={setQuery}>
-        <SearchField className="fk-insert-menu__field" autoFocus aria-label={l.search}>
-          <Label className="fk-insert-menu__label">{l.search}</Label>
-          <Input className="fk-insert-menu__input" placeholder={l.placeholder} />
+        <SearchField className="ty-insert-menu__field" autoFocus aria-label={l.search}>
+          <Label className="ty-insert-menu__label">{l.search}</Label>
+          <Input className="ty-insert-menu__input" placeholder={l.placeholder} />
         </SearchField>
         <ListBox
-          className="fk-insert-menu__list"
+          className="ty-insert-menu__list"
           aria-label={l.title}
           items={shown}
-          renderEmptyState={() => <p className="fk-insert-menu__empty">{l.empty}</p>}
+          renderEmptyState={() => <p className="ty-insert-menu__empty">{l.empty}</p>}
           onAction={(key) => {
             onSelect(String(key))
             onClose()
@@ -66,8 +66,8 @@ function KindList({ options, onSelect, onClose, l }: { options: readonly InsertO
           {(item) => {
             const Icon = catalog.icon(item.kind)
             return (
-              <ListBoxItem id={item.id} textValue={item.text} className="fk-insert-menu__option">
-                <span className="fk-insert-menu__bubble" data-tone={catalog.tone(item.kind)} aria-hidden="true">
+              <ListBoxItem id={item.id} textValue={item.text} className="ty-insert-menu__option">
+                <span className="ty-insert-menu__bubble" data-tone={catalog.tone(item.kind)} aria-hidden="true">
                   <Icon focusable="false" />
                 </span>
                 <Text slot="label">{item.text}</Text>
@@ -76,7 +76,7 @@ function KindList({ options, onSelect, onClose, l }: { options: readonly InsertO
           }}
         </ListBox>
       </Autocomplete>
-      <p className="fk-visually-hidden" role="status">
+      <p className="ty-visually-hidden" role="status">
         {fill(l.results, { count: shown.length }, locale)}
       </p>
     </div>
@@ -94,8 +94,8 @@ export function ConnectorInsertMenu({ triggerRef, options, onSelect, onClose, la
     )
   }
   return (
-    <Popover isOpen onOpenChange={(open) => !open && onClose()} triggerRef={triggerRef} placement="bottom" offset={8} className="fk-insert-menu">
-      <Dialog aria-label={l.title} className="fk-insert-menu__dialog">
+    <Popover isOpen onOpenChange={(open) => !open && onClose()} triggerRef={triggerRef} placement="bottom" offset={8} className="ty-insert-menu">
+      <Dialog aria-label={l.title} className="ty-insert-menu__dialog">
         <KindList options={options} onSelect={onSelect} onClose={onClose} l={l} />
       </Dialog>
     </Popover>

@@ -32,26 +32,26 @@ export function MetricTile(props: MetricTileProps) {
     <div
       role="group"
       aria-labelledby={titleId}
-      className={cx('fk-metric-tile', props.className)}
+      className={cx('ty-metric-tile', props.className)}
       data-tone={props.tone ?? 'neutral'}
       data-surface={props.surface ?? 'raised'}
     >
-      <div className="fk-metric-tile__head">
-        <span id={titleId} className="fk-metric-tile__title">
+      <div className="ty-metric-tile__head">
+        <span id={titleId} className="ty-metric-tile__title">
           {props.title}
         </span>
         {props.icon ? (
-          <span className="fk-metric-tile__badge" aria-hidden="true">
+          <span className="ty-metric-tile__badge" aria-hidden="true">
             {props.icon}
           </span>
         ) : null}
       </div>
-      <div className="fk-metric-tile__value">{props.value}</div>
-      {props.subtitle ? <p className="fk-metric-tile__subtitle">{props.subtitle}</p> : null}
+      <div className="ty-metric-tile__value">{props.value}</div>
+      {props.subtitle ? <p className="ty-metric-tile__subtitle">{props.subtitle}</p> : null}
       {trend ? (
-        <p className="fk-metric-tile__trend">
+        <p className="ty-metric-tile__trend">
           <DeltaIndicator value={trend.value} unit="percent" format={trend.format ? (n) => trend.format!(n) : undefined} />
-          {trend.label ? <span className="fk-metric-tile__trend-label">{trend.label}</span> : null}
+          {trend.label ? <span className="ty-metric-tile__trend-label">{trend.label}</span> : null}
         </p>
       ) : null}
     </div>

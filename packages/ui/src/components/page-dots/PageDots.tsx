@@ -35,7 +35,7 @@ export function PageDots(props: PageDotsProps) {
   const groupName = props.label ?? copy.label
   const nameOf = props.dotLabel ?? copy.dot
   const shell = {
-    className: cx('fk-page-dots', props.className),
+    className: cx('ty-page-dots', props.className),
     'data-appearance': props.appearance ?? 'dot',
     'data-size': props.size ?? 'medium',
     'data-contrast': props.contrast ?? 'onSurface',
@@ -45,7 +45,7 @@ export function PageDots(props: PageDotsProps) {
   if (total > (props.maxDots ?? 9)) {
     return (
       <p {...shell} data-mode="counter" aria-label={groupName}>
-        <span className="fk-page-dots__counter">{copy.counter(current + 1, total)}</span>
+        <span className="ty-page-dots__counter">{copy.counter(current + 1, total)}</span>
       </p>
     )
   }
@@ -55,9 +55,9 @@ export function PageDots(props: PageDotsProps) {
   if (!onSelect) {
     return (
       <div {...shell} data-mode="static">
-        <span className="fk-visually-hidden">{nameOf(current + 1, total)}</span>
+        <span className="ty-visually-hidden">{nameOf(current + 1, total)}</span>
         {pips.map((i) => (
-          <span key={i} className="fk-page-dots__pip" data-on={i === current || undefined} aria-hidden="true" />
+          <span key={i} className="ty-page-dots__pip" data-on={i === current || undefined} aria-hidden="true" />
         ))}
       </div>
     )
@@ -81,13 +81,13 @@ export function PageDots(props: PageDotsProps) {
       {pips.map((i) => (
         <AriaButton
           key={i}
-          className="fk-page-dots__hit"
+          className="ty-page-dots__hit"
           aria-label={nameOf(i + 1, total)}
           aria-current={i === current ? 'true' : undefined}
           excludeFromTabOrder={i !== current}
           onPress={() => onSelect(i)}
         >
-          <span className="fk-page-dots__pip" data-on={i === current || undefined} aria-hidden="true" />
+          <span className="ty-page-dots__pip" data-on={i === current || undefined} aria-hidden="true" />
         </AriaButton>
       ))}
     </div>

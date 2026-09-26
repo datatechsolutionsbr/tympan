@@ -4,7 +4,7 @@
 
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react'
 import { ListBox, ListBoxItem } from 'react-aria-components'
-import { ActorChip, Button, Tag, useMediaQuery } from '@fakhir/ui'
+import { ActorChip, Button, Tag, useMediaQuery } from '@datatechsolutions/tympan'
 import { formatDateTime, formatDuration, formatNumber } from '../internal/format'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { useControllable } from '../internal/useControllable'
@@ -269,7 +269,7 @@ export function ExecutionTimeline({ entries, selectedNodeId, onSelect, inspector
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [entry?.nodeId])
 
-  if (!entries.length) return <p className="fk-run-empty fk-timeline__empty">{l.empty}</p>
+  if (!entries.length) return <p className="ty-run-empty ty-timeline__empty">{l.empty}</p>
 
   const dur = (ms?: number | null) => (ms === null || ms === undefined ? l.notReported : formatDuration(ms, locale))
   const when = (iso?: string | null) => (iso ? formatDateTime(iso, locale, { timeStyle: 'medium' }) : l.notReported)
@@ -277,11 +277,11 @@ export function ExecutionTimeline({ entries, selectedNodeId, onSelect, inspector
   const money = (n?: number, currency?: string) => (n === undefined ? l.notReported : currency ? formatNumber(n, locale, { style: 'currency', currency, maximumFractionDigits: 4 }) : formatNumber(n, locale, { maximumFractionDigits: 6 }))
 
   return (
-    <div className="fk-timeline" data-layout={wide ? 'columns' : 'stacked'}>
-      <div className="fk-timeline__steps" ref={listRef}>
+    <div className="ty-timeline" data-layout={wide ? 'columns' : 'stacked'}>
+      <div className="ty-timeline__steps" ref={listRef}>
         <ListBox
           aria-label={l.steps}
-          className="fk-timeline__list"
+          className="ty-timeline__list"
           selectionMode="single"
           disallowEmptySelection
           selectedKeys={entry ? [entry.nodeId] : []}
@@ -292,16 +292,16 @@ export function ExecutionTimeline({ entries, selectedNodeId, onSelect, inspector
           items={entries.map((e, i) => ({ ...e, id: e.nodeId, ordinal: i + 1 }))}
         >
           {(e) => (
-            <ListBoxItem id={e.nodeId} textValue={fill(l.stepName, { ordinal: e.ordinal, node: e.nodeId, kind: e.nodeKind }, locale)} className="fk-timeline__step" data-status={e.status}>
-              <span className="fk-timeline__ordinal" aria-hidden="true">
+            <ListBoxItem id={e.nodeId} textValue={fill(l.stepName, { ordinal: e.ordinal, node: e.nodeId, kind: e.nodeKind }, locale)} className="ty-timeline__step" data-status={e.status}>
+              <span className="ty-timeline__ordinal" aria-hidden="true">
                 {formatNumber(e.ordinal, locale)}
               </span>
-              <span className="fk-timeline__step-main">
-                <span className="fk-timeline__node">
-                  <code className="fk-run-mono">{e.nodeId}</code>
-                  <span className="fk-run-row__kind">{e.nodeKind}</span>
+              <span className="ty-timeline__step-main">
+                <span className="ty-timeline__node">
+                  <code className="ty-run-mono">{e.nodeId}</code>
+                  <span className="ty-run-row__kind">{e.nodeKind}</span>
                 </span>
-                <span className="fk-timeline__step-meta">
+                <span className="ty-timeline__step-meta">
                   <RunStatusMark status={e.status} labels={statusLabels} />
                   <span>{dur(e.durationMs)}</span>
                   {e.startedAt ? <time dateTime={e.startedAt}>{when(e.startedAt)}</time> : null}
@@ -312,32 +312,32 @@ export function ExecutionTimeline({ entries, selectedNodeId, onSelect, inspector
         </ListBox>
       </div>
       {entry ? (
-        <section id={inspectorId} className="fk-timeline__inspector" aria-label={fill(l.details, { node: entry.nodeId }, locale)}>
+        <section id={inspectorId} className="ty-timeline__inspector" aria-label={fill(l.details, { node: entry.nodeId }, locale)}>
           {!wide ? (
             <Button
               variant="quiet"
               size="compact"
               onPress={() => listRef.current?.querySelector<HTMLElement>('[role="option"][aria-selected="true"]')?.focus()}
-              className="fk-timeline__back"
+              className="ty-timeline__back"
             >
               {l.backToSteps}
             </Button>
           ) : null}
-          <header className="fk-timeline__head">
-            <h3 className="fk-run-section__title">
-              <code className="fk-run-mono">{entry.nodeId}</code>
+          <header className="ty-timeline__head">
+            <h3 className="ty-run-section__title">
+              <code className="ty-run-mono">{entry.nodeId}</code>
             </h3>
             {entry.restored && showRestored ? <Tag size="small">{l.restored}</Tag> : null}
             <RunStatusMark status={entry.status} labels={statusLabels} />
             {entry.actor ? <ActorChip kind={entry.actor.kind} name={entry.actor.name} {...(entry.actor.agentKey ? { agentKey: entry.actor.agentKey } : {})} {...(entry.actor.model ? { model: entry.actor.model } : {})} compact /> : null}
             {entry.startedAt ? (
-              <time className="fk-timeline__time" dateTime={entry.startedAt}>
+              <time className="ty-timeline__time" dateTime={entry.startedAt}>
                 {when(entry.startedAt)}
               </time>
             ) : null}
-            {inspectorActions ? <div className="fk-timeline__actions">{inspectorActions(entry)}</div> : null}
+            {inspectorActions ? <div className="ty-timeline__actions">{inspectorActions(entry)}</div> : null}
           </header>
-          <dl className="fk-run-facts">
+          <dl className="ty-run-facts">
             <div>
               <dt>{l.started}</dt>
               <dd>{when(entry.startedAt)}</dd>
@@ -358,13 +358,13 @@ export function ExecutionTimeline({ entries, selectedNodeId, onSelect, inspector
             </div>
           </dl>
           {entry.metrics ? (
-            <section className="fk-run-section">
-              <h4 className="fk-run-subtitle">{l.metrics}</h4>
-              <dl className="fk-run-facts">
+            <section className="ty-run-section">
+              <h4 className="ty-run-subtitle">{l.metrics}</h4>
+              <dl className="ty-run-facts">
                 <div>
                   <dt>{l.model}</dt>
                   <dd>
-                    <code className="fk-run-mono">{[entry.metrics.provider, entry.metrics.model].filter(Boolean).join(' · ') || l.notReported}</code>
+                    <code className="ty-run-mono">{[entry.metrics.provider, entry.metrics.model].filter(Boolean).join(' · ') || l.notReported}</code>
                   </dd>
                 </div>
                 <div>
@@ -379,17 +379,17 @@ export function ExecutionTimeline({ entries, selectedNodeId, onSelect, inspector
             </section>
           ) : null}
           {entry.error ? (
-            <section className="fk-run-section">
-              <h4 className="fk-run-subtitle">{l.error}</h4>
-              <p className="fk-run-error">{entry.error}</p>
+            <section className="ty-run-section">
+              <h4 className="ty-run-subtitle">{l.error}</h4>
+              <p className="ty-run-error">{entry.error}</p>
             </section>
           ) : null}
           {entry.modelCalls?.length ? (
-            <section className="fk-run-section">
-              <h4 className="fk-run-subtitle">{l.modelCalls}</h4>
+            <section className="ty-run-section">
+              <h4 className="ty-run-subtitle">{l.modelCalls}</h4>
               {entry.modelCalls.map((c, i) => (
-                <details key={i} className="fk-timeline__call">
-                  <summary className="fk-timeline__call-summary">
+                <details key={i} className="ty-timeline__call">
+                  <summary className="ty-timeline__call-summary">
                     {[
                       fill(l.modelCallSummary, { turn: c.turn }, locale),
                       c.agent,
@@ -403,39 +403,39 @@ export function ExecutionTimeline({ entries, selectedNodeId, onSelect, inspector
                       .filter(Boolean)
                       .join(' · ')}
                   </summary>
-                  <h5 className="fk-run-subtitle">{l.modelInput}</h5>
+                  <h5 className="ty-run-subtitle">{l.modelInput}</h5>
                   <Transcript value={c.input} />
-                  <h5 className="fk-run-subtitle">{l.modelOutput}</h5>
+                  <h5 className="ty-run-subtitle">{l.modelOutput}</h5>
                   <Transcript value={c.output} />
                 </details>
               ))}
             </section>
           ) : null}
           {entry.toolCalls?.length ? (
-            <section className="fk-run-section">
-              <h4 className="fk-run-subtitle">{l.toolCalls}</h4>
-              <ul className="fk-run-rows">
+            <section className="ty-run-section">
+              <h4 className="ty-run-subtitle">{l.toolCalls}</h4>
+              <ul className="ty-run-rows">
                 {entry.toolCalls.map((t, i) => (
-                  <li key={i} className="fk-run-row">
+                  <li key={i} className="ty-run-row">
                     <RunStatusMark status={t.status} labels={statusLabels} />
                     <span>{fill(l.toolCallSummary, { tool: t.tool, turn: t.turn ?? '' }, locale)}</span>
-                    <span className="fk-run-row__duration">{dur(t.durationMs)}</span>
+                    <span className="ty-run-row__duration">{dur(t.durationMs)}</span>
                   </li>
                 ))}
               </ul>
             </section>
           ) : null}
-          <section className="fk-run-section">
-            <h4 className="fk-run-subtitle">{l.inputs}</h4>
-            <pre className="fk-run-output" tabIndex={0} aria-label={l.inputs}>
+          <section className="ty-run-section">
+            <h4 className="ty-run-subtitle">{l.inputs}</h4>
+            <pre className="ty-run-output" tabIndex={0} aria-label={l.inputs}>
               {entry.inputs === undefined ? l.notReported : prettyValue(entry.inputs)}
             </pre>
-            <h4 className="fk-run-subtitle">{l.outputs}</h4>
-            <pre className="fk-run-output" tabIndex={0} aria-label={l.outputs}>
+            <h4 className="ty-run-subtitle">{l.outputs}</h4>
+            <pre className="ty-run-output" tabIndex={0} aria-label={l.outputs}>
               {entry.outputs === undefined ? l.notReported : prettyValue(entry.outputs)}
             </pre>
           </section>
-          <p className="fk-visually-hidden" role="status" aria-live="polite">
+          <p className="ty-visually-hidden" role="status" aria-live="polite">
             {announce}
           </p>
         </section>
@@ -447,10 +447,10 @@ export function ExecutionTimeline({ entries, selectedNodeId, onSelect, inspector
 /** Model transcript: text blocks as readable text, other blocks as structured text. */
 function Transcript({ value }: { value: unknown }) {
   if (value === undefined || value === null) return null
-  if (typeof value === 'string') return <p className="fk-timeline__text">{value}</p>
+  if (typeof value === 'string') return <p className="ty-timeline__text">{value}</p>
   if (Array.isArray(value)) {
     return (
-      <div className="fk-timeline__transcript">
+      <div className="ty-timeline__transcript">
         {value.map((item, i) => (
           <TranscriptBlock key={i} block={item} />
         ))}
@@ -461,18 +461,18 @@ function Transcript({ value }: { value: unknown }) {
 }
 
 function TranscriptBlock({ block }: { block: unknown }) {
-  if (typeof block === 'string') return <p className="fk-timeline__text">{block}</p>
+  if (typeof block === 'string') return <p className="ty-timeline__text">{block}</p>
   if (block && typeof block === 'object') {
     const b = block as Record<string, unknown>
-    if (b.type === 'text' && typeof b.text === 'string') return <p className="fk-timeline__text">{b.text}</p>
+    if (b.type === 'text' && typeof b.text === 'string') return <p className="ty-timeline__text">{b.text}</p>
     if ('content' in b && typeof b.role === 'string') {
       return (
-        <div className="fk-timeline__message" data-role={b.role}>
-          <span className="fk-timeline__role">{b.role}</span>
+        <div className="ty-timeline__message" data-role={b.role}>
+          <span className="ty-timeline__role">{b.role}</span>
           <Transcript value={b.content} />
         </div>
       )
     }
   }
-  return <pre className="fk-run-output">{prettyValue(block)}</pre>
+  return <pre className="ty-run-output">{prettyValue(block)}</pre>
 }

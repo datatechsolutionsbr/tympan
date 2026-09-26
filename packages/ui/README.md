@@ -1,62 +1,62 @@
-# @fakhir/ui
+# @datatechsolutions/tympan
 
-Accessible React components for Fakhir (React 18.3 or 19), built on
+Tympan: accessible React components (React 18.3 or 19), built on
 [React Aria Components](https://react-spectrum.adobe.com/react-aria/) and
-styled with plain CSS custom properties (`--fk-*`) in `@layer fakhir`. No
-Tailwind. Licence: FSL-1.1-ALv2 (Functional Source License, Version 1.1,
+styled with plain CSS custom properties (`--ty-*`) in `@layer tympan`.
+Tympan is an Astrlabe-family component published by Datatech. Licence: FSL-1.1-ALv2 (Functional Source License, Version 1.1,
 Apache 2.0 Future License); see `LICENSE`.
 
 ```sh
-npm run build -w @fakhir/ui          # dist/index.js, index.d.ts, styles.css (builds @fakhir/tokens first)
-npm run typecheck -w @fakhir/ui
-npm test -w @fakhir/ui               # vitest + Testing Library + axe-core
-npm run gallery -w @fakhir/ui        # http://localhost:3310 (components, theme customizer)
-npm run gallery:build -w @fakhir/ui  # static gallery in dist-gallery/
+npm run build -w @datatechsolutions/tympan          # dist/index.js, index.d.ts, styles.css (builds @datatechsolutions/tympan-tokens first)
+npm run typecheck -w @datatechsolutions/tympan
+npm test -w @datatechsolutions/tympan               # vitest + Testing Library + axe-core
+npm run gallery -w @datatechsolutions/tympan        # http://localhost:3310 (components, theme customizer)
+npm run gallery:build -w @datatechsolutions/tympan  # static gallery in dist-gallery/
 ```
 
 ## Ready-made components and a ready theme system
 
 Install (workspace or package registry), then import one stylesheet. It
-already contains the `@fakhir/tokens` stylesheet (every `--fk-*` custom
-property for the `fakhir`, `neutral` and `high-contrast` presets, light and
+already contains the `@datatechsolutions/tympan-tokens` stylesheet (every `--ty-*` custom
+property for the `tympan`, `fakhir`, `neutral` and `high-contrast` presets, light and
 dark), so no other CSS is needed:
 
 ```sh
-npm install @fakhir/ui @fakhir/tokens react react-dom
+npm install @datatechsolutions/tympan @datatechsolutions/tympan-tokens react react-dom
 ```
 
 ```tsx
-import '@fakhir/ui/styles.css' // components + tokens, in @layer fakhir.*
+import '@datatechsolutions/tympan/styles.css' // components + tokens, in @layer tympan.*
 ```
 
-For a tailored theme, generate its CSS with `@fakhir/tokens`
+For a tailored theme, generate its CSS with `@datatechsolutions/tympan-tokens`
 (`generateThemeCss(resolveTheme(config))`, see its README or the gallery's
 theme customizer, which exports DTCG and CSS) and load it after the
 stylesheet; then select it with `ThemeProvider theme="<name>"`. Hosts that use
-the tokens without components can import `@fakhir/tokens/tokens.css` alone.
+the tokens without components can import `@datatechsolutions/tympan-tokens/tokens.css` alone.
 
 ### The research shell (no top bar)
 
 ```tsx
-import '@fakhir/ui/styles.css'
+import '@datatechsolutions/tympan/styles.css'
 import {
-  AppFrame, FakhirProvider, FloatingActionBar, PageHeader, RailContextButton,
+  AppFrame, TympanProvider, FloatingActionBar, PageHeader, RailContextButton,
   RailNavItem, RailNavSection, StatStrip, ThemeProvider, ToastProvider, messagesPtBR,
-} from '@fakhir/ui'
+} from '@datatechsolutions/tympan'
 import { CheckSquare, FileStack, Home } from 'lucide-react'
 
 export function App() {
   const [navOpen, setNavOpen] = useState(false)
   return (
-    <FakhirProvider baseMessages={messagesPtBR} locale="pt-BR" navigate={router.navigate} useHref={useHref}>
-      <ThemeProvider storageKey="fk-theme">
+    <TympanProvider baseMessages={messagesPtBR} locale="pt-BR" navigate={router.navigate} useHref={useHref}>
+      <ThemeProvider storageKey="ty-theme">
         <ToastProvider>
           <AppFrame
             layout="rail"
             ambient
             navOpen={navOpen}
             onNavOpenChange={setNavOpen}
-            brand="Fakhir"
+            brand="Acme Research"
             context={<RailContextButton scope="EACH/USP" name="Censo IA gov" />}
             navigation={
               <>
@@ -86,7 +86,7 @@ export function App() {
           </AppFrame>
         </ToastProvider>
       </ThemeProvider>
-    </FakhirProvider>
+    </TympanProvider>
   )
 }
 ```
@@ -102,7 +102,7 @@ export function App() {
   menus (Down Arrow, Shift+F10, right click, long press), overflow into
   "more", tooltips, counts, auto-hide, and a focus chord (`Alt+Shift+D` by
   default, `focusShortcut` to change or `null` to disable). It publishes
-  `--fk-action-bar-inset-<edge>` so the sheet never hides content under it.
+  `--ty-action-bar-inset-<edge>` so the sheet never hides content under it.
 - **Research pieces**: `PageHeader variant="editorial"` (mono trail, serif
   title, 68ch lead, actions, divider), `StatStrip`, `StageStrip`,
   `AttentionList`, `PhaseBar`, `ActivityFeed`, `EvidencePanel` (docked 340–420
@@ -110,18 +110,18 @@ export function App() {
 
 ### Providers
 
-- **`FakhirProvider`**: copy (`messages` overrides on top of `baseMessages`,
+- **`TympanProvider`**: copy (`messages` overrides on top of `baseMessages`,
   English by default, `messagesPtBR` included) and the router adapter
   (`navigate`, `useHref`) used by every link-like component. Components hold no
   hard-coded copy. `I18nAdapterProvider` and `RoutingProvider` (wave 2)
-  plug a host i18n library or router in without FakhirProvider.
-- **`ThemeProvider` / `useTheme`**: sets `data-fk-theme` (`fakhir`, `neutral`,
-  `high-contrast` or a generated theme), `data-fk-mode` (`system`, `light`,
-  `dark`) and `data-fk-density` (`compact`, `default`, `comfortable`) on
+  plug a host i18n library or router in without TympanProvider.
+- **`ThemeProvider` / `useTheme`**: sets `data-ty-theme` (`tympan` by default,
+  `fakhir`, `neutral`, `high-contrast` or a generated theme), `data-ty-mode` (`system`, `light`,
+  `dark`) and `data-ty-density` (`compact`, `default`, `comfortable`) on
   `<html>` (or on a wrapper with `target="scope"`). Persistence belongs to the
   host: pass controlled values and callbacks, or `storageKey` for localStorage.
 - **No flash of the wrong theme (SPA)**: put the output of
-  `themeInitScript('fk-theme')` in an inline `<script>` in `<head>`, before the
+  `themeInitScript('ty-theme')` in an inline `<script>` in `<head>`, before the
   stylesheet; it sets the three attributes from storage before first paint.
   The gallery's `vite.config.ts` shows it with a `transformIndexHtml` hook.
 - **`ThemeScope`**: applies a theme/mode/density to a subtree (previews).
@@ -183,9 +183,9 @@ separate package.
 
 ## Styling rules
 
-- Class names are `fk-` prefixed (BEM-ish); state comes from React Aria data
+- Class names are `ty-` prefixed (BEM-ish); state comes from React Aria data
   attributes (`[data-hovered]`, `[data-focus-visible]`, …) or `data-*` variants.
-- Layers: `fakhir.tokens`, `fakhir.base`, `fakhir.components`. Host styles
+- Layers: `tympan.tokens`, `tympan.base`, `tympan.components`. Host styles
   outside the layers win without `!important`.
 - Every interactive control keeps a 44 × 44 px hit area; visible controls are
   40 px on desktop and 44 px below 1024 px.

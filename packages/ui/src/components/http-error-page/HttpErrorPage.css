@@ -1,69 +1,69 @@
 /* HttpErrorPage (spec: wave-2/http-error-page.md; design direction §2.2, §2.3, §2.12). Neutral ink only. */
-@layer fakhir.components {
-  .fk-http-error {
+@layer tympan.components {
+  .ty-http-error {
     display: grid;
     place-items: center;
     min-block-size: 100dvh;
-    padding: var(--fk-space-6) var(--fk-space-4);
-    background: var(--fk-bg);
-    color: var(--fk-ink-2);
+    padding: var(--ty-space-6) var(--ty-space-4);
+    background: var(--ty-bg);
+    color: var(--ty-ink-2);
     text-align: center;
   }
-  .fk-http-error__column {
+  .ty-http-error__column {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--fk-space-3);
-    max-inline-size: var(--fk-measure-summary);
+    gap: var(--ty-space-3);
+    max-inline-size: var(--ty-measure-summary);
   }
-  .fk-http-error__icon {
-    inline-size: var(--fk-space-5);
-    block-size: var(--fk-space-5);
-    color: var(--fk-ink-3);
+  .ty-http-error__icon {
+    inline-size: var(--ty-space-5);
+    block-size: var(--ty-space-5);
+    color: var(--ty-ink-3);
   }
-  .fk-http-error__code {
+  .ty-http-error__code {
     margin: 0;
-    color: var(--fk-ink-3);
-    font-family: var(--fk-font-serif);
-    font-size: var(--fk-font-size-display);
-    line-height: var(--fk-font-line-height-display);
+    color: var(--ty-ink-3);
+    font-family: var(--ty-font-serif);
+    font-size: var(--ty-font-size-display);
+    line-height: var(--ty-font-line-height-display);
     font-variant-numeric: tabular-nums;
   }
-  .fk-http-error__title {
+  .ty-http-error__title {
     margin: 0;
-    color: var(--fk-ink);
-    font-family: var(--fk-font-serif);
-    font-size: var(--fk-font-size-h1);
-    font-weight: var(--fk-font-weight-bold);
-    line-height: var(--fk-font-line-height-h1);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-serif);
+    font-size: var(--ty-font-size-h1);
+    font-weight: var(--ty-font-weight-bold);
+    line-height: var(--ty-font-line-height-h1);
     outline: none;
   }
-  .fk-http-error__title:focus-visible {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-http-error__title:focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
-  .fk-http-error__message {
+  .ty-http-error__message {
     margin: 0;
-    font-size: var(--fk-font-size-body-lg);
-    line-height: var(--fk-font-line-height-body-lg);
+    font-size: var(--ty-font-size-body-lg);
+    line-height: var(--ty-font-line-height-body-lg);
   }
-  .fk-http-error__problem {
+  .ty-http-error__problem {
     margin: 0;
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
   }
-  .fk-http-error__problem code {
-    font-family: var(--fk-font-mono);
+  .ty-http-error__problem code {
+    font-family: var(--ty-font-mono);
   }
-  .fk-http-error__actions {
+  .ty-http-error__actions {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: var(--fk-space-3);
-    margin-block-start: var(--fk-space-3);
+    gap: var(--ty-space-3);
+    margin-block-start: var(--ty-space-3);
   }
   @media (forced-colors: active) {
-    .fk-http-error__icon {
+    .ty-http-error__icon {
       color: CanvasText;
     }
   }

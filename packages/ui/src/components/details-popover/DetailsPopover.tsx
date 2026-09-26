@@ -39,23 +39,23 @@ function ChangeCard({ p, titleId, withHeading }: { p: DetailsPopoverProps; title
   const tone = p.tone ?? 'neutral'
   const Glyph = tone === 'neutral' ? null : toneGlyph[tone]
   return (
-    <div className="fk-details-popover__card-body" data-tone={tone}>
+    <div className="ty-details-popover__card-body" data-tone={tone}>
       {withHeading ? (
-        <div className="fk-details-popover__head">
+        <div className="ty-details-popover__head">
           {p.headerIcon ? <span aria-hidden="true">{p.headerIcon}</span> : null}
-          <h2 id={titleId} className="fk-details-popover__title">
+          <h2 id={titleId} className="ty-details-popover__title">
             {p.title}
           </h2>
         </div>
       ) : null}
       {Glyph ? (
-        <p className="fk-details-popover__tone">
+        <p className="ty-details-popover__tone">
           <Glyph aria-hidden="true" focusable="false" />
           {words[tone as Exclude<DetailsTone, 'neutral'>]}
         </p>
       ) : null}
       {p.actor ? (
-        <div className="fk-details-popover__row">
+        <div className="ty-details-popover__row">
           <ActorChip
             kind={p.actor.kind}
             name={p.actor.name}
@@ -65,27 +65,27 @@ function ChangeCard({ p, titleId, withHeading }: { p: DetailsPopoverProps; title
         </div>
       ) : null}
       {p.timestamp !== undefined ? (
-        <p className="fk-details-popover__when">
+        <p className="ty-details-popover__when">
           <Clock aria-hidden="true" focusable="false" />
           <time dateTime={p.timestamp instanceof Date ? p.timestamp.toISOString() : p.timestamp}>{formatWhen(p.timestamp, locale)}</time>
         </p>
       ) : null}
       {p.comparison ? (
-        <p className="fk-details-popover__change">
-          <span className="fk-details-popover__label">{p.comparison.label}:</span>{' '}
-          <span className="fk-details-popover__side">
+        <p className="ty-details-popover__change">
+          <span className="ty-details-popover__label">{p.comparison.label}:</span>{' '}
+          <span className="ty-details-popover__side">
             {p.comparison.fromLabel} <strong>{p.comparison.fromValue}</strong>
           </span>{' '}
-          <ArrowRight className="fk-mirror-rtl fk-details-popover__arrow" aria-hidden="true" focusable="false" />{' '}
-          <span className="fk-details-popover__side">
+          <ArrowRight className="ty-mirror-rtl ty-details-popover__arrow" aria-hidden="true" focusable="false" />{' '}
+          <span className="ty-details-popover__side">
             {p.comparison.toLabel} <strong>{p.comparison.toValue}</strong>
           </span>
         </p>
       ) : null}
       {p.note ? (
-        <div className="fk-details-popover__note">
-          <p className="fk-details-popover__label">{p.note.label}</p>
-          <p className="fk-details-popover__note-text">{p.note.value}</p>
+        <div className="ty-details-popover__note">
+          <p className="ty-details-popover__label">{p.note.label}</p>
+          <p className="ty-details-popover__note-text">{p.note.value}</p>
         </div>
       ) : null}
     </div>
@@ -99,7 +99,7 @@ export function DetailsPopover(props: DetailsPopoverProps) {
   const [open, setOpen] = useHeldOrOwn(props.open, false, props.onOpenChange)
 
   const trigger = (
-    <AriaButton className="fk-details-popover__trigger" aria-label={props.triggerLabel} aria-haspopup="dialog" aria-expanded={open}>
+    <AriaButton className="ty-details-popover__trigger" aria-label={props.triggerLabel} aria-haspopup="dialog" aria-expanded={open}>
       <Info aria-hidden="true" focusable="false" />
     </AriaButton>
   )
@@ -108,7 +108,7 @@ export function DetailsPopover(props: DetailsPopoverProps) {
     return (
       <span className={props.className}>
         <AriaButton
-          className="fk-details-popover__trigger"
+          className="ty-details-popover__trigger"
           aria-label={props.triggerLabel}
           aria-haspopup="dialog"
           aria-expanded={open}
@@ -126,13 +126,13 @@ export function DetailsPopover(props: DetailsPopoverProps) {
   return (
     <DialogTrigger isOpen={open} onOpenChange={setOpen}>
       {trigger}
-      <Popover className="fk-details-popover" placement={props.placement ?? 'top'} offset={10}>
-        <OverlayArrow className="fk-details-popover__arrow-tip">
+      <Popover className="ty-details-popover" placement={props.placement ?? 'top'} offset={10}>
+        <OverlayArrow className="ty-details-popover__arrow-tip">
           <svg width={12} height={12} viewBox="0 0 12 12" aria-hidden="true">
             <path d="M0 0 L6 6 L12 0" />
           </svg>
         </OverlayArrow>
-        <Dialog className="fk-details-popover__dialog" aria-labelledby={titleId}>
+        <Dialog className="ty-details-popover__dialog" aria-labelledby={titleId}>
           <ChangeCard p={props} titleId={titleId} withHeading />
         </Dialog>
       </Popover>

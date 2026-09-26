@@ -1,68 +1,68 @@
 /* TimeField (spec: wave-2/time-field.md; design direction §2.2, §2.6, §2.10). */
-@layer fakhir.components {
-  .fk-time-field {
+@layer tympan.components {
+  .ty-time-field {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
     min-inline-size: 0;
   }
-  .fk-time-field__editor {
+  .ty-time-field__editor {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
     min-inline-size: 14rem;
   }
-  .fk-time-field__title {
+  .ty-time-field__title {
     margin: 0;
-    color: var(--fk-ink);
-    font-size: var(--fk-font-size-label);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-label);
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-label);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-label);
   }
-  .fk-time-field__segments {
+  .ty-time-field__segments {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
-  .fk-time-field__segment {
+  .ty-time-field__segment {
     box-sizing: border-box;
-    inline-size: calc(var(--fk-control-target) + var(--fk-space-5));
-    min-block-size: var(--fk-control-target);
-    border: 1px solid var(--fk-input);
-    border-radius: var(--fk-radius-control);
-    background: var(--fk-surface-solid);
-    color: var(--fk-ink);
+    inline-size: calc(var(--ty-control-target) + var(--ty-space-5));
+    min-block-size: var(--ty-control-target);
+    border: 1px solid var(--ty-input);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-surface-solid);
+    color: var(--ty-ink);
     font: inherit;
-    font-size: var(--fk-font-size-h2);
+    font-size: var(--ty-font-size-h2);
     font-variant-numeric: tabular-nums;
     text-align: center;
     outline: none;
   }
-  .fk-time-field__segment:focus-visible {
-    border-color: var(--fk-accent);
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-time-field__segment:focus-visible {
+    border-color: var(--ty-accent);
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
-  .fk-time-field__colon {
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-h2);
+  .ty-time-field__colon {
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-h2);
   }
-  .fk-time-field__message {
+  .ty-time-field__message {
     margin: 0;
-    color: var(--fk-warning);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    color: var(--ty-warning);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
-  .fk-time-field__message:empty {
+  .ty-time-field__message:empty {
     display: none;
   }
 
   @media (forced-colors: active) {
-    .fk-time-field__segment {
+    .ty-time-field__segment {
       border: 1px solid FieldText;
     }
-    .fk-time-field__segment:focus-visible {
+    .ty-time-field__segment:focus-visible {
       outline: 2px solid Highlight;
     }
   }

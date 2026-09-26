@@ -45,25 +45,25 @@ export function HttpErrorPage(props: HttpErrorPageProps) {
   useArrivalFocus(titleRef, props.focusHeading ?? true)
 
   return (
-    <main className={cx('fk-http-error', props.className)} data-kind={props.kind}>
-      <div className="fk-http-error__column">
-        <Glyph className="fk-http-error__icon" aria-hidden="true" focusable="false" />
+    <main className={cx('ty-http-error', props.className)} data-kind={props.kind}>
+      <div className="ty-http-error__column">
+        <Glyph className="ty-http-error__icon" aria-hidden="true" focusable="false" />
         {/* The big number is decoration; the heading says it in words. */}
-        <p aria-hidden="true" className="fk-http-error__code">
+        <p aria-hidden="true" className="ty-http-error__code">
           {status}
         </p>
-        <h1 ref={titleRef} className="fk-http-error__title" tabIndex={-1}>
-          <span className="fk-visually-hidden">{`${words.codeLabel(status)}: `}</span>
+        <h1 ref={titleRef} className="ty-http-error__title" tabIndex={-1}>
+          <span className="ty-visually-hidden">{`${words.codeLabel(status)}: `}</span>
           {props.title ?? fallback.title}
         </h1>
-        <p className="fk-http-error__message">{props.message ?? fallback.message}</p>
+        <p className="ty-http-error__message">{props.message ?? fallback.message}</p>
         {props.problemType && (
-          <p className="fk-http-error__problem">
-            <span className="fk-visually-hidden">{`${words.problemType}: `}</span>
+          <p className="ty-http-error__problem">
+            <span className="ty-visually-hidden">{`${words.problemType}: `}</span>
             <code>{props.problemType}</code>
           </p>
         )}
-        {props.action && <div className="fk-http-error__actions">{props.action}</div>}
+        {props.action && <div className="ty-http-error__actions">{props.action}</div>}
       </div>
     </main>
   )

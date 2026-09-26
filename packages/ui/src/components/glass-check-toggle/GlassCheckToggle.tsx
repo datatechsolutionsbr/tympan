@@ -10,7 +10,7 @@ import { useMediaQuery } from '../../internal/media'
 import { useMessages } from '../../internal/provider'
 
 /** Root attribute read by the stylesheet while the check is on. */
-export const GLASS_CHECK_MARKER = 'data-fk-glass-check'
+export const GLASS_CHECK_MARKER = 'data-ty-glass-check'
 
 export interface GlassCheckToggleProps {
   /** Host development flag. False: nothing is rendered and the document is untouched. */
@@ -40,7 +40,7 @@ function Toggle({ defaultOn = false, onChange, label }: Omit<GlassCheckTogglePro
 
   const button = (
     <ToggleButton
-      className="fk-glass-check"
+      className="ty-glass-check"
       isSelected={on}
       data-moot={moot || undefined}
       onChange={(next) => {
@@ -48,8 +48,8 @@ function Toggle({ defaultOn = false, onChange, label }: Omit<GlassCheckTogglePro
         onChange?.(next)
       }}
     >
-      <Layers className="fk-glass-check__icon" aria-hidden="true" focusable="false" />
-      <span className="fk-glass-check__word">{label ?? copy.label}</span>
+      <Layers className="ty-glass-check__icon" aria-hidden="true" focusable="false" />
+      <span className="ty-glass-check__word">{label ?? copy.label}</span>
     </ToggleButton>
   )
 
@@ -59,7 +59,7 @@ function Toggle({ defaultOn = false, onChange, label }: Omit<GlassCheckTogglePro
       {moot ? (
         <TooltipTrigger delay={300}>
           {button}
-          <Tooltip className="fk-glass-check__tip" offset={6}>
+          <Tooltip className="ty-glass-check__tip" offset={6}>
             {copy.notApplicable}
           </Tooltip>
         </TooltipTrigger>

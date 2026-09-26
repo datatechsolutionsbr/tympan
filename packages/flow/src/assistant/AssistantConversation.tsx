@@ -6,7 +6,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type FormEvent, type KeyboardEvent, type ReactNode, type Ref } from 'react'
 import { CircleCheck, CircleX, LoaderCircle, PanelRight, RotateCcw, SendHorizontal, Square } from 'lucide-react'
 import { Label, TextArea, TextField } from 'react-aria-components'
-import { Button, Skeleton } from '@fakhir/ui'
+import { Button, Skeleton } from '@datatechsolutions/tympan'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { AssistantVisualBlock } from './AssistantVisualBlock'
 import { MarkdownView } from './MarkdownView'
@@ -247,27 +247,27 @@ export function AssistantConversation(props: AssistantConversationProps) {
   const empty = !session.loadingHistory && session.utterances.length === 0
 
   return (
-    <section className={['fk-chat', className].filter(Boolean).join(' ')} data-variant={variant} aria-label={l.log}>
+    <section className={['ty-chat', className].filter(Boolean).join(' ')} data-variant={variant} aria-label={l.log}>
       {session.loadingHistory ? (
-        <div className="fk-chat__loading" role="status" aria-busy="true">
-          <span className="fk-visually-hidden">{l.loading}</span>
+        <div className="ty-chat__loading" role="status" aria-busy="true">
+          <span className="ty-visually-hidden">{l.loading}</span>
           {[0, 1, 2].map((i) => (
-            <div key={i} className="fk-chat__ghost" data-align={i % 2 ? 'end' : 'start'} aria-hidden="true">
+            <div key={i} className="ty-chat__ghost" data-align={i % 2 ? 'end' : 'start'} aria-hidden="true">
               <Skeleton shape="rect" width={i % 2 ? 'medium' : 'long'} />
             </div>
           ))}
         </div>
       ) : empty ? (
-        <div className="fk-chat__empty">
+        <div className="ty-chat__empty">
           {appMark ? (
-            <div className="fk-chat__mark" aria-hidden="true">
+            <div className="ty-chat__mark" aria-hidden="true">
               {appMark}
             </div>
           ) : null}
-          <h2 className="fk-chat__empty-title">{l.emptyTitle}</h2>
-          <p className="fk-chat__empty-hint">{l.emptyHint}</p>
+          <h2 className="ty-chat__empty-title">{l.emptyTitle}</h2>
+          <p className="ty-chat__empty-hint">{l.emptyHint}</p>
           {suggestions.length ? (
-            <ul className="fk-chat__suggestions" aria-label={l.suggestions}>
+            <ul className="ty-chat__suggestions" aria-label={l.suggestions}>
               {suggestions.map((s) => (
                 <li key={s}>
                   <Button variant="secondary" size="compact" shape="pill" onPress={() => session.ask(s)}>
@@ -281,7 +281,7 @@ export function AssistantConversation(props: AssistantConversationProps) {
       ) : null}
       <div
         ref={logRef}
-        className="fk-chat__log"
+        className="ty-chat__log"
         role="log"
         aria-live="polite"
         aria-label={l.log}
@@ -294,17 +294,17 @@ export function AssistantConversation(props: AssistantConversationProps) {
           <Bubble key={m.key} utterance={m} l={l} loc={loc} currency={currency} isLast={i === session.utterances.length - 1} session={session} onOpenCanvas={onOpenCanvas} />
         ))}
       </div>
-      <div className="fk-visually-hidden" role="alert">
+      <div className="ty-visually-hidden" role="alert">
         {alert}
       </div>
-      <form className="fk-chat__composer" onSubmit={submit}>
-        <TextField className="fk-chat__field" value={session.draft} onChange={session.setDraft}>
-          <Label className="fk-visually-hidden">
+      <form className="ty-chat__composer" onSubmit={submit}>
+        <TextField className="ty-chat__field" value={session.draft} onChange={session.setDraft}>
+          <Label className="ty-visually-hidden">
             {l.composer}
           </Label>
-          <TextArea ref={composerRef} className="fk-chat__input" rows={2} placeholder={l.placeholder} dir="auto" data-fk-composer="" onKeyDown={onComposerKey} />
+          <TextArea ref={composerRef} className="ty-chat__input" rows={2} placeholder={l.placeholder} dir="auto" data-ty-composer="" onKeyDown={onComposerKey} />
         </TextField>
-        <div className="fk-chat__actions">
+        <div className="ty-chat__actions">
           {canOpenCanvas && onOpenCanvas ? (
             <Button variant="quiet" size="compact" leadingIcon={<PanelRight />} onPress={onOpenCanvas}>
               {l.openCanvas}
@@ -313,7 +313,7 @@ export function AssistantConversation(props: AssistantConversationProps) {
           {session.working ? (
             <Button variant="secondary" iconOnly accessibleLabel={l.stop} leadingIcon={<Square />} onPress={session.halt} />
           ) : (
-            <Button className="fk-chat__send" variant="primary" iconOnly accessibleLabel={l.send} leadingIcon={<SendHorizontal />} type="submit" disabled={!session.draft.trim()} />
+            <Button className="ty-chat__send" variant="primary" iconOnly accessibleLabel={l.send} leadingIcon={<SendHorizontal />} type="submit" disabled={!session.draft.trim()} />
           )}
         </div>
       </form>
@@ -324,13 +324,13 @@ export function AssistantConversation(props: AssistantConversationProps) {
 function Bubble({ utterance, l, loc, currency, isLast, session, onOpenCanvas }: { utterance: Utterance; l: AssistantLabels; loc: string; currency: string | undefined; isLast: boolean; session: AssistantSession; onOpenCanvas: (() => void) | undefined }) {
   const user = utterance.speaker === 'person'
   return (
-    <div className="fk-chat__message" data-speaker={utterance.speaker} data-align={user ? 'end' : 'start'} data-phase={utterance.phase}>
-      <span className="fk-visually-hidden">{user ? l.you : l.assistant}</span>
-      <div className="fk-chat__bubble" dir="auto">
+    <div className="ty-chat__message" data-speaker={utterance.speaker} data-align={user ? 'end' : 'start'} data-phase={utterance.phase}>
+      <span className="ty-visually-hidden">{user ? l.you : l.assistant}</span>
+      <div className="ty-chat__bubble" dir="auto">
         {utterance.phase === 'waiting' && !utterance.blocks.length ? (
-          <p className="fk-chat__thinking">
+          <p className="ty-chat__thinking">
             {l.thinking}
-            <span className="fk-chat__dots" aria-hidden="true">
+            <span className="ty-chat__dots" aria-hidden="true">
               <span />
               <span />
               <span />
@@ -341,8 +341,8 @@ function Bubble({ utterance, l, loc, currency, isLast, session, onOpenCanvas }: 
           <BlockView key={i} block={p} user={user} l={l} loc={loc} currency={currency} onOpenCanvas={onOpenCanvas} />
         ))}
         {utterance.phase === 'broken' ? (
-          <div className="fk-chat__failure">
-            <p className="fk-chat__error">
+          <div className="ty-chat__failure">
+            <p className="ty-chat__error">
               <CircleX aria-hidden="true" focusable="false" />
               <span>{utterance.problem}</span>
             </p>
@@ -367,10 +367,10 @@ const TOOL_LOOK = {
 
 function BlockView({ block, user, l, loc, currency, onOpenCanvas }: { block: Block; user: boolean; l: AssistantLabels; loc: string; currency: string | undefined; onOpenCanvas: (() => void) | undefined }) {
   const kind = block.kind
-  if (kind === 'prose') return user ? <p className="fk-chat__plain">{block.body}</p> : <MarkdownView source={block.body} />
+  if (kind === 'prose') return user ? <p className="ty-chat__plain">{block.body}</p> : <MarkdownView source={block.body} />
   if (kind === 'thinking')
     return (
-      <details className="fk-chat__reasoning">
+      <details className="ty-chat__reasoning">
         <summary>{l.reasoning}</summary>
         <p>{block.body}</p>
       </details>
@@ -379,10 +379,10 @@ function BlockView({ block, user, l, loc, currency, onOpenCanvas }: { block: Blo
   const look = TOOL_LOOK[block.phase]
   const Icon = look.icon
   return (
-    <p className="fk-chat__tool" data-state={look.state}>
-      <Icon className="fk-chat__tool-icon" aria-hidden="true" focusable="false" />
-      <span className="fk-chat__tool-name">{fill(l[look.label], { tool: block.tool }, loc)}</span>
-      {block.note ? <span className="fk-chat__tool-summary">{block.note}</span> : null}
+    <p className="ty-chat__tool" data-state={look.state}>
+      <Icon className="ty-chat__tool-icon" aria-hidden="true" focusable="false" />
+      <span className="ty-chat__tool-name">{fill(l[look.label], { tool: block.tool }, loc)}</span>
+      {block.note ? <span className="ty-chat__tool-summary">{block.note}</span> : null}
     </p>
   )
 }

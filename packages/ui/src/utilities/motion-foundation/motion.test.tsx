@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import { values } from '@fakhir/tokens/values'
+import { values } from '@datatechsolutions/tympan-tokens/values'
 import { describe, expect, it } from 'vitest'
 import { setMedia } from '../../../test/media'
 import * as motion from './motion'
@@ -24,12 +24,12 @@ describe('MotionFoundation', () => {
 
   it('keeps every JS token equal to its CSS counterpart', () => {
     const base = values.base
-    expect(`${motion.duration.ms.instant}ms`).toBe(base['--fk-dur-instant'])
-    expect(`${motion.duration.ms.quick}ms`).toBe(base['--fk-dur-quick'])
-    expect(`${motion.duration.ms.base}ms`).toBe(base['--fk-dur-base'])
+    expect(`${motion.duration.ms.instant}ms`).toBe(base['--ty-dur-instant'])
+    expect(`${motion.duration.ms.quick}ms`).toBe(base['--ty-dur-quick'])
+    expect(`${motion.duration.ms.base}ms`).toBe(base['--ty-dur-base'])
     const norm = (s: string) => s.replace(/\s+/g, '')
-    expect(norm(motion.ease.css.enter)).toBe(norm(base['--fk-ease']))
-    expect(norm(motion.ease.css.exit)).toBe(norm(base['--fk-ease-out']))
+    expect(norm(motion.ease.css.enter)).toBe(norm(base['--ty-ease']))
+    expect(norm(motion.ease.css.exit)).toBe(norm(base['--ty-ease-out']))
     expect(motion.duration.s.base).toBe(0.24)
   })
 
@@ -69,8 +69,8 @@ describe('motion presets in right-to-left pages', () => {
     const { getPreset } = await import('./motion')
     const ltr = getPreset('slideFromEnd', false, 'ltr')
     const rtl = getPreset('slideFromEnd', false, 'rtl')
-    expect(ltr.from.translate).toBe('var(--fk-motion-end-offset, 16px) 0')
-    expect(rtl.from.translate).toBe('calc(-1 * var(--fk-motion-end-offset, 16px)) 0')
+    expect(ltr.from.translate).toBe('var(--ty-motion-end-offset, 16px) 0')
+    expect(rtl.from.translate).toBe('calc(-1 * var(--ty-motion-end-offset, 16px)) 0')
     expect(getPreset('slideFromBottom', false, 'rtl').from.translate).toBe('0 16px')
   })
 })

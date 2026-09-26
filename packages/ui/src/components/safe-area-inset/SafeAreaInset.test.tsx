@@ -42,7 +42,7 @@ describe('SafeAreaInset', () => {
     )
     const box = screen.getByTestId('screen')
     for (const s of ['top', 'bottom', 'left', 'right']) expect(box).toHaveAttribute(`data-pad-${s}`)
-    expect(container.querySelector('.fk-safe-area-spacer')).toHaveAttribute('aria-hidden', 'true')
+    expect(container.querySelector('.ty-safe-area-spacer')).toHaveAttribute('aria-hidden', 'true')
     expect(css).toMatch(/spacer\[data-position='bottom'\]\s*\{[^}]*env\(safe-area-inset-bottom/)
   })
 
@@ -69,8 +69,8 @@ describe('SafeAreaInset', () => {
     input.getBoundingClientRect = () => ({ top: 710, bottom: 750 }) as DOMRect
     await userEvent.click(input)
     expect(scrollBy).toHaveBeenCalledWith(expect.objectContaining({ top: 58 }))
-    expect(document.documentElement.style.getPropertyValue('--fk-safe-bottom-bar-size')).toMatch(/px$/)
-    expect(css).toMatch(/scroll-padding-block-end:\s*calc\(var\(--fk-safe-bottom-bar-size/)
+    expect(document.documentElement.style.getPropertyValue('--ty-safe-bottom-bar-size')).toMatch(/px$/)
+    expect(css).toMatch(/scroll-padding-block-end:\s*calc\(var\(--ty-safe-bottom-bar-size/)
   })
 
   it('is opaque under reduced transparency and bordered in forced colours', () => {

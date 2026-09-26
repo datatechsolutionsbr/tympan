@@ -2,9 +2,9 @@
 export function AmbientBackdrop({ className }: { className?: string }) {
   const glows = ['upper', 'lower'] as const
   return (
-    <div className={className ? `fk-ambient ${className}` : 'fk-ambient'} aria-hidden="true">
+    <div className={className ? `ty-ambient ${className}` : 'ty-ambient'} aria-hidden="true">
       {glows.map((where) => (
-        <span key={where} className="fk-ambient__glow" data-glow={where} />
+        <span key={where} className="ty-ambient__glow" data-glow={where} />
       ))}
     </div>
   )

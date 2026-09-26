@@ -1,7 +1,7 @@
-// @fakhir/ui (FSL-1.1-ALv2). Import the stylesheet once: import '@fakhir/ui/styles.css'
+// @datatechsolutions/tympan (FSL-1.1-ALv2). Import the stylesheet once: import '@datatechsolutions/tympan/styles.css'
 
 // Foundations
-export { FakhirProvider, useMessages, type FakhirProviderProps, type RouterNavigateOptions } from './internal/provider'
+export { TympanProvider, useMessages, type TympanProviderProps, type RouterNavigateOptions } from './internal/provider'
 export { catalogueForLocale, defaultMessages, messagesEs, messagesPtBR, mergeMessages, shippedCatalogues, type Messages, type MessageOverrides, type ProofStateKey } from './internal/messages'
 export { compileIcuMessages, pseudoLocalize, pseudoString, type IcuCatalogue } from './internal/icuCatalogue'
 export { ThemeProvider, useTheme, themeInitScript, type ThemeProviderProps, type ThemeState, type ThemeMode, type ThemeDensity } from './internal/theme'

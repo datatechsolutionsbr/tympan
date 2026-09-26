@@ -63,9 +63,9 @@ describe('FilterField', () => {
 
   it('gives the clear control a 44 x 44 hit area; forced colours keep the border', () => {
     const css = cssOf('internal/forms-a/SearchInput.css')
-    expect(css).toMatch(/\.fk-search-input__clear::before\s*\{[^}]*inline-size:\s*max\(100%,\s*var\(--fk-control-target\)\)/)
+    expect(css).toMatch(/\.ty-search-input__clear::before\s*\{[^}]*inline-size:\s*max\(100%,\s*var\(--ty-control-target\)\)/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/FieldText/)
-    expect(mediaBlock(css, /\(prefers-reduced-transparency:\s*reduce\)/)).toMatch(/--fk-surface-solid/)
+    expect(mediaBlock(css, /\(prefers-reduced-transparency:\s*reduce\)/)).toMatch(/--ty-surface-solid/)
   })
 
   it('has no axe violations, light and dark', async () => {

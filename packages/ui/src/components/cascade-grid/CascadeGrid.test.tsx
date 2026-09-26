@@ -20,7 +20,7 @@ describe('CascadeGrid', () => {
       </CascadeGrid>,
     )
     const plain = render(
-      <div className="fk-cascade-grid" role="list" aria-label="Features">
+      <div className="ty-cascade-grid" role="list" aria-label="Features">
         {items(3)}
       </div>,
     )
@@ -34,9 +34,9 @@ describe('CascadeGrid', () => {
         <CascadeGrid cascade>{items(4)}</CascadeGrid>
       </DecorativeMotion>,
     )
-    const cells = [...container.querySelectorAll<HTMLElement>('.fk-cascade-grid__cell')]
+    const cells = [...container.querySelectorAll<HTMLElement>('.ty-cascade-grid__cell')]
     expect(cells.every((c) => c.hasAttribute('data-entering'))).toBe(true)
-    const delays = cells.map((c) => parseFloat(c.style.getPropertyValue('--fk-cascade-delay')))
+    const delays = cells.map((c) => parseFloat(c.style.getPropertyValue('--ty-cascade-delay')))
     expect(delays).toEqual([...delays].sort((a, b) => a - b))
     expect(delays[0]).toBe(0)
     expect(delays[3]).toBeGreaterThan(delays[1]!)
@@ -51,8 +51,8 @@ describe('CascadeGrid', () => {
         </CascadeGrid>
       </DecorativeMotion>,
     )
-    const last = [...container.querySelectorAll<HTMLElement>('.fk-cascade-grid__cell')].at(-1)!
-    expect(parseFloat(last.style.getPropertyValue('--fk-cascade-delay'))).toBeLessThanOrEqual(240)
+    const last = [...container.querySelectorAll<HTMLElement>('.ty-cascade-grid__cell')].at(-1)!
+    expect(parseFloat(last.style.getPropertyValue('--ty-cascade-delay'))).toBeLessThanOrEqual(240)
   })
 
   it('runs no animation under reduced motion', () => {
@@ -77,7 +77,7 @@ describe('CascadeGrid', () => {
         <CascadeGrid cascade>{items(3)}</CascadeGrid>
       </DecorativeMotion>,
     )
-    const cells = container.querySelectorAll('.fk-cascade-grid__cell')
+    const cells = container.querySelectorAll('.ty-cascade-grid__cell')
     expect(cells).toHaveLength(3)
     expect(cells[2]).not.toHaveAttribute('data-entering')
   })

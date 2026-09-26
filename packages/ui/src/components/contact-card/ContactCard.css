@@ -1,103 +1,103 @@
 /* ContactCard, ContactOfficeCard, ContactSection (spec: wave-2/contact-card.md; design direction §2.2, §2.3, §2.6). */
-@layer fakhir.components {
-  .fk-contact-section {
+@layer tympan.components {
+  .ty-contact-section {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
   }
-  .fk-contact-section__title {
+  .ty-contact-section__title {
     margin: 0;
-    color: var(--fk-ink);
-    font-family: var(--fk-font-serif);
-    font-size: var(--fk-font-size-h2);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-h2);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-serif);
+    font-size: var(--ty-font-size-h2);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-h2);
   }
-  .fk-contact-section__lead {
+  .ty-contact-section__lead {
     margin: 0;
-    max-inline-size: var(--fk-measure-summary);
-    color: var(--fk-ink-2);
-    font-size: var(--fk-font-size-body-lg);
-    line-height: var(--fk-font-line-height-body-lg);
+    max-inline-size: var(--ty-measure-summary);
+    color: var(--ty-ink-2);
+    font-size: var(--ty-font-size-body-lg);
+    line-height: var(--ty-font-line-height-body-lg);
   }
-  .fk-contact-section__grid {
+  .ty-contact-section__grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--fk-space-5);
-    margin-block-start: var(--fk-space-3);
+    gap: var(--ty-space-5);
+    margin-block-start: var(--ty-space-3);
   }
   @media (min-width: 640px) {
-    .fk-contact-section__grid {
+    .ty-contact-section__grid {
       grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
     }
   }
 
-  .fk-contact-card {
+  .ty-contact-card {
     display: flex;
     flex-direction: column;
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
     min-inline-size: 0;
-    padding: var(--fk-space-5);
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-card);
-    background: var(--fk-surface-raised);
-    color: var(--fk-ink-2);
+    padding: var(--ty-space-5);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-card);
+    background: var(--ty-surface-raised);
+    color: var(--ty-ink-2);
   }
-  .fk-contact-card__title {
+  .ty-contact-card__title {
     margin: 0;
-    color: var(--fk-ink);
-    font-family: var(--fk-font-serif);
-    font-size: var(--fk-font-size-h3);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-h3);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-serif);
+    font-size: var(--ty-font-size-h3);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-h3);
   }
-  .fk-contact-card__pairs {
+  .ty-contact-card__pairs {
     display: grid;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
     margin: 0;
   }
-  .fk-contact-card__pair dt {
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+  .ty-contact-card__pair dt {
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
-  .fk-contact-card__pair dd {
+  .ty-contact-card__pair dd {
     margin: 0;
   }
-  .fk-contact-card__link {
+  .ty-contact-card__link {
     display: inline-flex;
     align-items: center;
-    min-block-size: var(--fk-control-target);
-    color: var(--fk-accent);
+    min-block-size: var(--ty-control-target);
+    color: var(--ty-accent);
     text-decoration: underline;
     text-underline-offset: 3px;
     overflow-wrap: anywhere;
   }
-  .fk-contact-card__link:hover {
-    color: var(--fk-accent-strong);
+  .ty-contact-card__link:hover {
+    color: var(--ty-accent-strong);
   }
-  .fk-contact-card__link:focus-visible {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-contact-card__link:focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
     border-radius: 2px;
   }
-  .fk-contact-card__address {
+  .ty-contact-card__address {
     display: flex;
     flex-direction: column;
     font-style: normal;
   }
 
   @media (prefers-reduced-transparency: reduce) {
-    .fk-contact-card {
-      background: var(--fk-surface-raised-solid);
+    .ty-contact-card {
+      background: var(--ty-surface-raised-solid);
     }
   }
 
   @media (forced-colors: active) {
-    .fk-contact-card {
+    .ty-contact-card {
       border: 1px solid CanvasText;
     }
-    .fk-contact-card__link {
+    .ty-contact-card__link {
       color: LinkText;
       text-decoration: underline;
     }

@@ -63,7 +63,7 @@ export function ExpressionBuilder(props: ExpressionBuilderProps) {
     )
   return (
     <BuilderEnvProvider value={env}>
-      <div className="fk-expr" data-depth={depth} role="group" aria-label={label ?? groupName(words, words.operation, depth)}>
+      <div className="ty-expr" data-depth={depth} role="group" aria-label={label ?? groupName(words, words.operation, depth)}>
         {body}
       </div>
     </BuilderEnvProvider>

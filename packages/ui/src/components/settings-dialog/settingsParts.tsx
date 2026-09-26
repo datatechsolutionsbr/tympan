@@ -36,7 +36,7 @@ function Copier({ caption, text }: { caption: string; text: string }) {
   return (
     <>
       <Button size="compact" iconOnly leadingIcon={<Copy />} accessibleLabel={words.copy(caption)} onPress={() => void run()} />
-      <span role="status" className="fk-visually-hidden">
+      <span role="status" className="ty-visually-hidden">
         {said}
       </span>
     </>
@@ -46,8 +46,8 @@ function Copier({ caption, text }: { caption: string; text: string }) {
 function Entry({ item }: { item: EntryItem }) {
   const draw = BY_FORMAT[item.format ?? 'plain']
   return (
-    <div className="fk-settings-dialog__field" data-copyable={item.copy ? '' : undefined}>
-      <div className="fk-settings-dialog__field-control">
+    <div className="ty-settings-dialog__field" data-copyable={item.copy ? '' : undefined}>
+      <div className="ty-settings-dialog__field-control">
         {draw({ label: item.caption, hint: item.help, value: item.text, onChange: item.onText, readOnly: item.locked, placeholder: item.example, name: item.id })}
       </div>
       {item.copy ? <Copier caption={item.caption} text={item.text} /> : null}
@@ -86,7 +86,7 @@ function Passphrase({ item }: { item: PassphraseItem }) {
     item.onSave(draft.old, draft.fresh, draft.again)
   }
   return (
-    <form noValidate className="fk-settings-dialog__password" onSubmit={send}>
+    <form noValidate className="ty-settings-dialog__password" onSubmit={send}>
       {box('old', 'current-password')}
       {box('fresh', 'new-password')}
       {box('again', 'new-password')}
@@ -99,16 +99,16 @@ function Passphrase({ item }: { item: PassphraseItem }) {
 
 function Pick({ item }: { item: PickItem }) {
   return (
-    <RadioGroup className="fk-settings-dialog__choices" data-cards={item.look === 'cards' ? '' : undefined} value={item.chosen} onChange={item.onPick}>
-      <Label className="fk-settings-dialog__legend">{item.caption}</Label>
-      <div className="fk-settings-dialog__choice-grid">
+    <RadioGroup className="ty-settings-dialog__choices" data-cards={item.look === 'cards' ? '' : undefined} value={item.chosen} onChange={item.onPick}>
+      <Label className="ty-settings-dialog__legend">{item.caption}</Label>
+      <div className="ty-settings-dialog__choice-grid">
         {item.answers.map((answer) => (
-          <Radio key={answer.id} value={answer.id} className="fk-settings-dialog__choice">
-            <span aria-hidden="true" className="fk-settings-dialog__choice-mark" />
-            <span className="fk-settings-dialog__choice-text">
-              <span className="fk-settings-dialog__choice-label">{answer.caption}</span>
+          <Radio key={answer.id} value={answer.id} className="ty-settings-dialog__choice">
+            <span aria-hidden="true" className="ty-settings-dialog__choice-mark" />
+            <span className="ty-settings-dialog__choice-text">
+              <span className="ty-settings-dialog__choice-label">{answer.caption}</span>
               {answer.help ? (
-                <Text slot="description" className="fk-settings-dialog__choice-hint">
+                <Text slot="description" className="ty-settings-dialog__choice-hint">
                   {answer.help}
                 </Text>
               ) : null}
@@ -123,7 +123,7 @@ function Pick({ item }: { item: PickItem }) {
 function Portrait({ src, initials, onReplace }: { src?: string; initials: string; onReplace?: () => void }) {
   const words = useMessages().settingsDialog
   return (
-    <div className="fk-settings-dialog__picture">
+    <div className="ty-settings-dialog__picture">
       <Avatar decorative size="large" src={src} fallbackText={initials} />
       {onReplace ? <Button onPress={onReplace}>{words.changePicture}</Button> : null}
     </div>

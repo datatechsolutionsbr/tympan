@@ -19,7 +19,7 @@ function drawInline(nodes: Inline[]): ReactNode[] {
         return node.value
       case 'code':
         return (
-          <code key={i} className="fk-markdown__code-span">
+          <code key={i} className="ty-markdown__code-span">
             {node.value}
           </code>
         )
@@ -47,13 +47,13 @@ function CodeBlock({ language, value }: { language?: string; value: string }) {
     if (pre) setOverflows(pre.scrollWidth > pre.clientWidth)
   }, [value])
   return (
-    <div className="fk-markdown__code-block">
+    <div className="ty-markdown__code-block">
       {language ? (
-        <span className="fk-markdown__language" aria-hidden="true">
+        <span className="ty-markdown__language" aria-hidden="true">
           {language}
         </span>
       ) : null}
-      <pre ref={preRef} dir="ltr" className="fk-markdown__pre" data-language={language} {...(overflows ? { tabIndex: 0, role: 'region', 'aria-label': label } : {})}>
+      <pre ref={preRef} dir="ltr" className="ty-markdown__pre" data-language={language} {...(overflows ? { tabIndex: 0, role: 'region', 'aria-label': label } : {})}>
         <code>{value}</code>
       </pre>
     </div>
@@ -63,12 +63,12 @@ function CodeBlock({ language, value }: { language?: string; value: string }) {
 function drawBlock(block: Block, key: number, base: number): ReactNode {
   if (block.kind === 'heading') {
     const level = Math.min(6, base + block.depth - 1)
-    return createElement(`h${level}`, { key, className: 'fk-markdown__heading', 'data-depth': block.depth, dir: 'auto' }, drawInline(block.content))
+    return createElement(`h${level}`, { key, className: 'ty-markdown__heading', 'data-depth': block.depth, dir: 'auto' }, drawInline(block.content))
   }
   if (block.kind === 'list') {
     return createElement(
       block.ordered ? 'ol' : 'ul',
-      { key, className: 'fk-markdown__list' },
+      { key, className: 'ty-markdown__list' },
       block.items.map((item, i) => (
         <li key={i} dir="auto">
           {drawInline(item)}
@@ -78,7 +78,7 @@ function drawBlock(block: Block, key: number, base: number): ReactNode {
   }
   if (block.kind === 'code') return <CodeBlock key={key} language={block.language} value={block.value} />
   return (
-    <p key={key} className="fk-markdown__paragraph" dir="auto">
+    <p key={key} className="ty-markdown__paragraph" dir="auto">
       {drawInline(block.content)}
     </p>
   )
@@ -89,7 +89,7 @@ export function MarkdownView({ text, headingBase = 3, density = 'regular', class
   const blocks = useMemo(() => readBlocks(text), [text])
   if (blocks.length === 0) return null
   return (
-    <div className={cx('fk-markdown', className)} data-density={density}>
+    <div className={cx('ty-markdown', className)} data-density={density}>
       {blocks.map((block, i) => drawBlock(block, i, headingBase))}
     </div>
   )

@@ -5,7 +5,7 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { Button as AriaButton, Tree, TreeItem, TreeItemContent, type Key } from 'react-aria-components'
 import { ChevronRight } from 'lucide-react'
-import { InlineNotice, Tag } from '@fakhir/ui'
+import { InlineNotice, Tag } from '@datatechsolutions/tympan'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { TraceReport, TraceSpan } from './trace'
 
@@ -139,51 +139,51 @@ export function TraceTree({ report, defaultExpandDepth = 2, labels, className }:
     const present = 'result' in span
     const preview = previewResult(span.result, l, locale, present)
     const open = details.has(row.id)
-    const detailId = `fk-trace-${row.id}`
+    const detailId = `ty-trace-${row.id}`
     return (
       <TreeItem
         key={row.id}
         id={row.id}
         textValue={span.label}
         aria-label={fill(l.rowName, { label: span.label, preview }, locale)}
-        className="fk-trace__row"
-        style={{ ['--fk-trace-level' as string]: row.depth + 1 }}
+        className="ty-trace__row"
+        style={{ ['--ty-trace-level' as string]: row.depth + 1 }}
         onAction={() => toggleDetail(row.id)}
       >
         <TreeItemContent>
           {({ hasChildItems, isExpanded }) => (
             <>
-              <div className="fk-trace__line">
+              <div className="ty-trace__line">
                 {hasChildItems ? (
-                  <AriaButton slot="chevron" className="fk-trace__chevron" aria-label={fill(isExpanded ? l.collapse : l.expand, { label: span.label }, locale)}>
-                    <ChevronRight className="fk-trace__chevron-icon" aria-hidden="true" focusable="false" />
+                  <AriaButton slot="chevron" className="ty-trace__chevron" aria-label={fill(isExpanded ? l.collapse : l.expand, { label: span.label }, locale)}>
+                    <ChevronRight className="ty-trace__chevron-icon" aria-hidden="true" focusable="false" />
                   </AriaButton>
                 ) : (
-                  <span className="fk-trace__spacer" aria-hidden="true" />
+                  <span className="ty-trace__spacer" aria-hidden="true" />
                 )}
                 {span.kind === 'operation' ? (
-                  <code className="fk-trace__op" dir="ltr">
+                  <code className="ty-trace__op" dir="ltr">
                     {span.label}
                   </code>
                 ) : (
                   <>
                     <Tag size="small">{span.kind === 'ref' ? l.reference : l.value}</Tag>
-                    <code className="fk-trace__op" dir="ltr">
+                    <code className="ty-trace__op" dir="ltr">
                       {span.label}
                     </code>
                   </>
                 )}
                 {span.args ? (
-                  <span className="fk-trace__args" dir="ltr">
+                  <span className="ty-trace__args" dir="ltr">
                     {argSummary(span.args)}
                   </span>
                 ) : null}
-                <AriaButton className="fk-trace__preview" aria-expanded={open} aria-controls={open ? detailId : undefined} aria-label={fill(l.viewResult, { label: span.label, preview }, locale)} onPress={() => toggleDetail(row.id)}>
+                <AriaButton className="ty-trace__preview" aria-expanded={open} aria-controls={open ? detailId : undefined} aria-label={fill(l.viewResult, { label: span.label, preview }, locale)} onPress={() => toggleDetail(row.id)}>
                   {preview}
                 </AriaButton>
               </div>
               {open ? (
-                <pre id={detailId} className="fk-trace__detail" role="region" aria-label={fill(l.resultOf, { label: span.label }, locale)} dir="ltr" tabIndex={0}>
+                <pre id={detailId} className="ty-trace__detail" role="region" aria-label={fill(l.resultOf, { label: span.label }, locale)} dir="ltr" tabIndex={0}>
                   {present ? JSON.stringify(span.result, null, 2) : l.absent}
                 </pre>
               ) : null}
@@ -196,13 +196,13 @@ export function TraceTree({ report, defaultExpandDepth = 2, labels, className }:
   }
 
   return (
-    <div className={['fk-trace', className].filter(Boolean).join(' ')}>
+    <div className={['ty-trace', className].filter(Boolean).join(' ')}>
       {report.truncated ? (
         <InlineNotice tone="warning" urgency="none">
           {fill(l.truncated, { frames: report.frameCount, limit: report.frameLimit }, locale)}
         </InlineNotice>
       ) : null}
-      <Tree aria-label={l.tree} className="fk-trace__tree" expandedKeys={expanded} onExpandedChange={(keys) => setExpanded(new Set(keys))}>
+      <Tree aria-label={l.tree} className="ty-trace__tree" expandedKeys={expanded} onExpandedChange={(keys) => setExpanded(new Set(keys))}>
         {render(root)}
       </Tree>
     </div>

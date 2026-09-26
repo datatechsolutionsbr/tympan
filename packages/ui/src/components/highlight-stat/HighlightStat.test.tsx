@@ -24,7 +24,7 @@ describe('HighlightStat', () => {
   it('shows the final value at once with reveal under reduced motion', () => {
     setMedia({ reducedMotion: true })
     const { container } = render(<HighlightStat value={94} label="cases" reveal />)
-    expect(container.querySelector('.fk-reveal-number__run')).toHaveTextContent('94')
+    expect(container.querySelector('.ty-reveal-number__run')).toHaveTextContent('94')
   })
 
   it('has the source link as its only tab stop', async () => {
@@ -48,12 +48,12 @@ describe('HighlightStat', () => {
         <HighlightStat value={3} label="editions" surface="raised" />
       </>,
     )
-    const [plain, raised] = container.querySelectorAll('.fk-highlight-stat')
+    const [plain, raised] = container.querySelectorAll('.ty-highlight-stat')
     expect(plain).toHaveAttribute('data-surface', 'none')
     expect(raised).toHaveAttribute('data-surface', 'raised')
     const css = cssOf('components/highlight-stat/HighlightStat.css')
-    expect(css).not.toMatch(/\.fk-highlight-stat\s*\{[^}]*(border|box-shadow)/)
-    expect(css).not.toMatch(/--fk-cta|animation|transition|transform/)
+    expect(css).not.toMatch(/\.ty-highlight-stat\s*\{[^}]*(border|box-shadow)/)
+    expect(css).not.toMatch(/--ty-cta|animation|transition|transform/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/CanvasText/)
   })
 

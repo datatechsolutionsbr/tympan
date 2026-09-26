@@ -5,7 +5,7 @@
 import { Fragment, useEffect, useId, useMemo, useState } from 'react'
 import { ChevronRight, Plus, Trash2 } from 'lucide-react'
 import { Button as AriaButton, Disclosure, DisclosurePanel, Group, Heading, Input, Label, NumberField } from 'react-aria-components'
-import { Button, InlineNotice, NativeSelect, Switch, Tag, TagList, TextArea, TextField } from '@fakhir/ui'
+import { Button, InlineNotice, NativeSelect, Switch, Tag, TagList, TextArea, TextField } from '@datatechsolutions/tympan'
 import { createId } from '../internal/ids'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { useControllable } from '../internal/useControllable'
@@ -298,7 +298,7 @@ export const defaultRuleEditorLabels: RuleEditorLabels = ruleEditorLabels.bundle
 function NumberInput({ label, value, onChange, min, max, step, integer }: { label: string; value: number | null; onChange: (v: number | null) => void; min?: number; max?: number; step?: number; integer?: boolean }) {
   return (
     <NumberField
-      className="fk-rule-editor__number"
+      className="ty-rule-editor__number"
       value={value ?? NaN}
       onChange={(v) => onChange(Number.isNaN(v) ? null : v)}
       {...(min !== undefined ? { minValue: min } : {})}
@@ -306,9 +306,9 @@ function NumberInput({ label, value, onChange, min, max, step, integer }: { labe
       {...(step !== undefined ? { step } : {})}
       formatOptions={integer ? { maximumFractionDigits: 0 } : {}}
     >
-      <Label className="fk-rule-editor__label">{label}</Label>
+      <Label className="ty-rule-editor__label">{label}</Label>
       <Group>
-        <Input className="fk-rule-editor__number-input" />
+        <Input className="ty-rule-editor__number-input" />
       </Group>
     </NumberField>
   )
@@ -334,13 +334,13 @@ function DateTimeField({ label, value, onChange, errorText }: { label: string; v
   const [text, setText] = useState(() => instantToLocal(value))
   const [bad, setBad] = useState(false)
   return (
-    <div className="fk-rule-editor__number">
-      <label className="fk-rule-editor__label" htmlFor={id}>
+    <div className="ty-rule-editor__number">
+      <label className="ty-rule-editor__label" htmlFor={id}>
         {label}
       </label>
       <input
         id={id}
-        className="fk-rule-editor__number-input"
+        className="ty-rule-editor__number-input"
         type="datetime-local"
         value={text}
         aria-invalid={bad || undefined}
@@ -354,7 +354,7 @@ function DateTimeField({ label, value, onChange, errorText }: { label: string; v
         }}
       />
       {bad ? (
-        <p id={`${id}-error`} className="fk-rule-editor__error">
+        <p id={`${id}-error`} className="ty-rule-editor__error">
           {errorText}
         </p>
       ) : null}
@@ -441,12 +441,12 @@ export function RuleActionBuilder(props: RuleActionBuilderProps) {
 
   if (!kind) {
     return (
-      <div className="fk-rule-editor__panel">
+      <div className="ty-rule-editor__panel">
         {picker}
         <InlineNotice tone="warning" urgency="none">
           {l.unavailable}
         </InlineNotice>
-        <dl className="fk-rule-editor__readonly">
+        <dl className="ty-rule-editor__readonly">
           {Object.entries(params).map(([k, v]) => (
             <Fragment key={k}>
               <dt dir="ltr">{k}</dt>
@@ -458,7 +458,7 @@ export function RuleActionBuilder(props: RuleActionBuilderProps) {
     )
   }
 
-  if (kind.kind === CUSTOM_ACTION) return <div className="fk-rule-editor__panel">{picker}<CustomParams params={params} onChange={(p) => onChange({ ...value, params: p })} l={l} /></div>
+  if (kind.kind === CUSTOM_ACTION) return <div className="ty-rule-editor__panel">{picker}<CustomParams params={params} onChange={(p) => onChange({ ...value, params: p })} l={l} /></div>
 
   const errorFor = (p: ParamSpec) => {
     const e = errors.find((x) => x.key === p.key)
@@ -467,9 +467,9 @@ export function RuleActionBuilder(props: RuleActionBuilderProps) {
   }
 
   return (
-    <div className="fk-rule-editor__panel">
+    <div className="ty-rule-editor__panel">
       {picker}
-      <div className="fk-rule-editor__params">
+      <div className="ty-rule-editor__params">
         {kind.params.map((p) => {
           const name = say(p.labelKey)
           const current = params[p.key]
@@ -489,8 +489,8 @@ export function RuleActionBuilder(props: RuleActionBuilderProps) {
           if (p.type === 'duration') {
             const d = (current && typeof current === 'object' ? current : {}) as { amount?: number; unit?: string }
             return (
-              <fieldset key={p.key} className="fk-rule-editor__duration">
-                <legend className="fk-rule-editor__label">{name}</legend>
+              <fieldset key={p.key} className="ty-rule-editor__duration">
+                <legend className="ty-rule-editor__label">{name}</legend>
                 <NumberInput label={name} integer min={0} value={typeof d.amount === 'number' ? d.amount : null} onChange={(amount) => setParam(p.key, amount === null ? undefined : { amount, unit: d.unit ?? 'days' })} />
                 <NativeSelect label={l.durationUnit} options={DURATION_UNITS.map((u) => ({ value: u, label: l.units[u] }))} value={d.unit ?? 'days'} onChange={(unit) => setParam(p.key, { amount: d.amount ?? 0, unit })} />
               </fieldset>
@@ -523,11 +523,11 @@ function CustomParams({ params, onChange, l }: { params: Record<string, unknown>
     onChange(out)
   }
   return (
-    <div className="fk-rule-editor__params">
+    <div className="ty-rule-editor__params">
       {rows.map((r, i) => (
-        <fieldset key={r.id} className="fk-rule-editor__row">
-          <legend className="fk-visually-hidden">{fill(l.customLegend, { n: i + 1 }, locale)}</legend>
-          <TextField className="fk-ltr-text" label={l.customKey} value={r.key} onChange={(key) => emit(rows.map((x) => (x.id === r.id ? { ...x, key } : x)))} />
+        <fieldset key={r.id} className="ty-rule-editor__row">
+          <legend className="ty-visually-hidden">{fill(l.customLegend, { n: i + 1 }, locale)}</legend>
+          <TextField className="ty-ltr-text" label={l.customKey} value={r.key} onChange={(key) => emit(rows.map((x) => (x.id === r.id ? { ...x, key } : x)))} />
           <TextField label={l.customValue} value={r.text} onChange={(text) => emit(rows.map((x) => (x.id === r.id ? { ...x, text } : x)))} />
           <Button variant="quiet" size="compact" shape="circle" iconOnly accessibleLabel={fill(l.customRemove, { key: r.key || String(i + 1) }, locale)} leadingIcon={<Trash2 />} onPress={() => emit(rows.filter((x) => x.id !== r.id))} />
         </fieldset>
@@ -569,8 +569,8 @@ export function RuleEditor(props: RuleEditorProps) {
   const [tagDraft, setTagDraft] = useState('')
 
   return (
-    <div className="fk-node-form fk-rule-editor">
-      <div className="fk-rule-editor__basics">
+    <div className="ty-node-form ty-rule-editor">
+      <div className="ty-rule-editor__basics">
         <TextField
           label={l.name}
           required
@@ -584,15 +584,15 @@ export function RuleEditor(props: RuleEditorProps) {
         <TextArea label={l.description} rows={2} value={rule.description ?? ''} onChange={(d) => edit(d ? { description: d } : { description: undefined })} />
       </div>
 
-      <section className="fk-expr-form__section" aria-labelledby={`${rule.id ?? 'rule'}-condition`}>
-        <h3 id={`${rule.id ?? 'rule'}-condition`} className="fk-expr-form__section-title">
+      <section className="ty-expr-form__section" aria-labelledby={`${rule.id ?? 'rule'}-condition`}>
+        <h3 id={`${rule.id ?? 'rule'}-condition`} className="ty-expr-form__section-title">
           {l.conditionHeading} <Tag size="small">{rootWord}</Tag>
         </h3>
         <RuleConditionBuilder value={condition} onChange={(c) => edit({ condition: c })} references={references} labels={props.labels} {...(catalog ? { catalog } : {})} />
       </section>
 
-      <section className="fk-expr-form__section" aria-labelledby={`${rule.id ?? 'rule'}-action`}>
-        <h3 id={`${rule.id ?? 'rule'}-action`} className="fk-expr-form__section-title">
+      <section className="ty-expr-form__section" aria-labelledby={`${rule.id ?? 'rule'}-action`}>
+        <h3 id={`${rule.id ?? 'rule'}-action`} className="ty-expr-form__section-title">
           {l.actionHeading} <Tag size="small">{kind ? (l.actions[kind.labelKey] ?? kind.labelKey) : rule.action.kind}</Tag>
         </h3>
         <RuleActionBuilder
@@ -608,20 +608,20 @@ export function RuleEditor(props: RuleEditorProps) {
         />
       </section>
 
-      <Disclosure className="fk-rule-editor__disclosure" defaultExpanded={hasAdvanced}>
-        <Heading level={3} className="fk-expr-form__section-title">
-          <AriaButton slot="trigger" className="fk-rule-editor__disclosure-trigger">
-            <ChevronRight className="fk-rule-editor__chevron" aria-hidden="true" focusable="false" />
+      <Disclosure className="ty-rule-editor__disclosure" defaultExpanded={hasAdvanced}>
+        <Heading level={3} className="ty-expr-form__section-title">
+          <AriaButton slot="trigger" className="ty-rule-editor__disclosure-trigger">
+            <ChevronRight className="ty-rule-editor__chevron" aria-hidden="true" focusable="false" />
             {l.advanced}
           </AriaButton>
         </Heading>
-        <DisclosurePanel className="fk-rule-editor__panel">
-          <div className="fk-rule-editor__basics">
+        <DisclosurePanel className="ty-rule-editor__panel">
+          <div className="ty-rule-editor__basics">
             <DateTimeField label={l.validFrom} value={rule.validFrom} errorText={l.invalidDate} onChange={(validFrom) => edit({ validFrom })} />
             <DateTimeField label={l.validUntil} value={rule.validUntil} errorText={l.invalidDate} onChange={(validUntil) => edit({ validUntil })} />
             <NativeSelect label={l.status} options={statuses.map((s) => ({ value: s, label: l.statusNames[s] ?? s }))} value={rule.status ?? 'active'} onChange={(status) => edit({ status })} />
           </div>
-          <div className="fk-rule-editor__tags">
+          <div className="ty-rule-editor__tags">
             {rule.tags?.length ? <TagList label={l.tags} items={rule.tags.map((t) => ({ id: t, label: t }))} onRemove={(id) => edit({ tags: (rule.tags ?? []).filter((t) => t !== id) })} /> : null}
             <TextField label={l.newTag} value={tagDraft} onChange={setTagDraft} />
             <Button

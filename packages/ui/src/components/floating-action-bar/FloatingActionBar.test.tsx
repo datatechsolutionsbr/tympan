@@ -189,9 +189,9 @@ describe('FloatingActionBar', () => {
     setViewportWidth(900)
     const { unmount } = render(<FloatingActionBar destinations={five} edge="start" />)
     expect(screen.getByRole('navigation')).toHaveAttribute('data-edge', 'bottom')
-    expect(document.documentElement.style.getPropertyValue('--fk-action-bar-inset-bottom')).toMatch(/^\d+px$/)
+    expect(document.documentElement.style.getPropertyValue('--ty-action-bar-inset-bottom')).toMatch(/^\d+px$/)
     unmount()
-    expect(document.documentElement.style.getPropertyValue('--fk-action-bar-inset-bottom')).toBe('')
+    expect(document.documentElement.style.getPropertyValue('--ty-action-bar-inset-bottom')).toBe('')
   })
 
   it('becomes a tab bar below 768 px when asked, with captions', () => {
@@ -210,7 +210,7 @@ describe('FloatingActionBar', () => {
     const nav = screen.getByRole('navigation')
     expect(nav).toHaveAttribute('aria-busy', 'true')
     expect(screen.getByRole('status')).toHaveTextContent('Loading actions')
-    expect(nav.querySelector('.fk-action-bar__ghosts')).toHaveAttribute('aria-hidden', 'true')
+    expect(nav.querySelector('.ty-action-bar__ghosts')).toHaveAttribute('aria-hidden', 'true')
   })
 
   it('exposes contextual toggles with aria-pressed and divides contextual groups', () => {
@@ -226,7 +226,7 @@ describe('FloatingActionBar', () => {
     expect(screen.getByRole('button', { name: 'Fit' })).not.toHaveAttribute('aria-pressed')
     expect(screen.getByRole('button', { name: 'Select' })).not.toHaveAttribute('aria-current')
     // One separator before the contextual run, then one per group change (mode | view | find).
-    expect(container.querySelectorAll('.fk-action-bar__separator')).toHaveLength(3)
+    expect(container.querySelectorAll('.ty-action-bar__separator')).toHaveLength(3)
   })
 
   it('exposes item shortcuts with aria-keyshortcuts', () => {
@@ -236,7 +236,7 @@ describe('FloatingActionBar', () => {
 
   it('keeps 44 px items, instant transitions under reduced motion and system colours when forced', () => {
     const css = cssOf('components/floating-action-bar/FloatingActionBar.css')
-    expect(css).toMatch(/--fk-bar-item:\s*var\(--fk-control-target\)/)
+    expect(css).toMatch(/--ty-bar-item:\s*var\(--ty-control-target\)/)
     expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/transition:\s*none/)
     expect(mediaBlock(css, /\(prefers-reduced-transparency:\s*reduce\)/)).toMatch(/backdrop-filter:\s*none/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/Highlight/)
@@ -294,7 +294,7 @@ describe('FloatingActionBar in right-to-left', () => {
     expect(screen.getByRole('link', { name: 'Sources' })).toHaveFocus()
     await userEvent.keyboard('{ArrowRight}')
     expect(screen.getByRole('link', { name: 'Overview' })).toHaveFocus()
-    expect(cssOf('components/floating-action-bar/FloatingActionBar.css')).toMatch(/translate:\s*calc\(-50% \* var\(--fk-inline-sign\)\) 0/)
+    expect(cssOf('components/floating-action-bar/FloatingActionBar.css')).toMatch(/translate:\s*calc\(-50% \* var\(--ty-inline-sign\)\) 0/)
     await expectNoAxeViolations(container)
   })
 

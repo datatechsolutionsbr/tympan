@@ -31,10 +31,10 @@ describe('BrandLoader', () => {
     expect(css).not.toMatch(/\[data-layout='inline'\]\s*\{[^}]*position:\s*fixed/)
   })
 
-  it('without a provider shows the Fakhir mark and the accent tone', () => {
+  it('without a provider shows the Tympan mark and the accent tone', () => {
     const { container } = render(<BrandLoader />)
     expect(container.firstElementChild).toHaveAttribute('data-tone', 'accent')
-    expect(container.querySelector('.fk-brand-mark')).not.toBeNull()
+    expect(container.querySelector('.ty-brand-mark')).not.toBeNull()
   })
 
   it('uses a registered preset, and explicit properties win', () => {

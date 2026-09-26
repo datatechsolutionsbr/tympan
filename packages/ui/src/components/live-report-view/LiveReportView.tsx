@@ -39,16 +39,16 @@ const STEP_ICON: Record<RunStepState, ReactNode> = {
 function StepStrip({ steps, label, words }: { steps: RunStep[]; label: string; words: Record<RunStepState, string> }) {
   if (!steps.length) return null
   return (
-    <ol className="fk-live-report__steps" aria-label={label}>
+    <ol className="ty-live-report__steps" aria-label={label}>
       {steps.map((step) => (
-        <li key={step.id} className="fk-live-report__step" data-state={step.state} title={step.error}>
-          <span className="fk-live-report__step-mark" aria-hidden="true">
+        <li key={step.id} className="ty-live-report__step" data-state={step.state} title={step.error}>
+          <span className="ty-live-report__step-mark" aria-hidden="true">
             {STEP_ICON[step.state] ?? <CircleDashed />}
           </span>
-          <span className="fk-live-report__step-id">{step.id}</span>
-          {step.kind ? <span className="fk-live-report__step-kind">{step.kind}</span> : null}
-          <span className="fk-live-report__step-state">{words[step.state]}</span>
-          {step.error ? <span className="fk-live-report__step-error">{step.error}</span> : null}
+          <span className="ty-live-report__step-id">{step.id}</span>
+          {step.kind ? <span className="ty-live-report__step-kind">{step.kind}</span> : null}
+          <span className="ty-live-report__step-state">{words[step.state]}</span>
+          {step.error ? <span className="ty-live-report__step-error">{step.error}</span> : null}
         </li>
       ))}
     </ol>
@@ -90,16 +90,16 @@ export function LiveReportView(props: LiveReportViewProps) {
     const open = interactive && !!submitInput && view.phase === 'paused' && stepId === view.pausedStep && answered !== stepId
     if (!open) {
       return (
-        <div className="fk-live-report__request">
-          <p className="fk-live-report__prompt">{String(data.prompt ?? '')}</p>
+        <div className="ty-live-report__request">
+          <p className="ty-live-report__prompt">{String(data.prompt ?? '')}</p>
         </div>
       )
     }
     if (props.renderInputRequest) return props.renderInputRequest(data, (decision) => send(stepId, decision))
     return (
-      <div className="fk-live-report__request">
-        <p className="fk-live-report__prompt">{String(data.prompt ?? '')}</p>
-        <div className="fk-live-report__actions">
+      <div className="ty-live-report__request">
+        <p className="ty-live-report__prompt">{String(data.prompt ?? '')}</p>
+        <div className="ty-live-report__actions">
           <Button variant="primary" onPress={() => void send(stepId, { approved: true })}>
             {copy.approve}
           </Button>
@@ -113,9 +113,9 @@ export function LiveReportView(props: LiveReportViewProps) {
   const failure = view.error ?? streamError
 
   return (
-    <div className={cx('fk-live-report', props.className)} data-phase={phase}>
-      <div className="fk-live-report__head">
-        <div role="status" aria-live="polite" aria-atomic="true" className="fk-live-report__phase">
+    <div className={cx('ty-live-report', props.className)} data-phase={phase}>
+      <div className="ty-live-report__head">
+        <div role="status" aria-live="polite" aria-atomic="true" className="ty-live-report__phase">
           <StatusPill status={phase} statusMap={phaseMap} />
         </div>
         <StepStrip steps={view.steps} label={copy.steps} words={copy.step} />
@@ -128,7 +128,7 @@ export function LiveReportView(props: LiveReportViewProps) {
       {view.report ? (
         <ReportView report={view.report} renderInputRequest={renderRequest} />
       ) : failure === null ? (
-        <p className="fk-live-report__waiting">{phase === 'paused' ? copy.pausedWaiting : copy.waiting}</p>
+        <p className="ty-live-report__waiting">{phase === 'paused' ? copy.pausedWaiting : copy.waiting}</p>
       ) : null}
     </div>
   )

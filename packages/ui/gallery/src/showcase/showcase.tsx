@@ -20,7 +20,7 @@ import { Section } from '../Section'
 
 function Capture({ label }: { label: string }) {
   return (
-    <svg viewBox="0 0 320 160" role="presentation" style={{ display: "block", inlineSize: "100%", blockSize: "auto", color: "var(--fk-ink-3)" }}>
+    <svg viewBox="0 0 320 160" role="presentation" style={{ display: "block", inlineSize: "100%", blockSize: "auto", color: "var(--ty-ink-3)" }}>
       <rect x="16" y="16" width="288" height="128" rx="12" fill="none" stroke="currentColor" strokeOpacity="0.3" />
       <rect x="32" y="36" width="120" height="10" rx="5" fill="currentColor" fillOpacity="0.35" />
       <rect x="32" y="58" width="200" height="8" rx="4" fill="currentColor" fillOpacity="0.2" />
@@ -35,9 +35,9 @@ function Capture({ label }: { label: string }) {
 export function ShowcaseShowcase({ scope }: { scope: string }) {
   const id = (s: string) => `${scope}-${s}`
   return (
-    <div className="fk-gallery-showcase">
+    <div className="ty-gallery-showcase">
       <Section id={id('showcase-heading')} title="ShowcaseHeading, Kicker, Lead, ShowcaseBackdrop, AccentBand">
-        <div style={{ position: 'relative', padding: 'var(--fk-space-6)', borderRadius: 'var(--fk-radius-card)', overflow: 'hidden' }}>
+        <div style={{ position: 'relative', padding: 'var(--ty-space-6)', borderRadius: 'var(--ty-radius-card)', overflow: 'hidden' }}>
           <ShowcaseBackdrop />
           <AccentBand />
           <div style={{ position: 'relative' }}>

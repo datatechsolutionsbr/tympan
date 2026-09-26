@@ -79,12 +79,12 @@ export function NoteNode(props: NoteNodeProps) {
   return (
     <div
       ref={rootRef}
-      className="fk-note-node"
+      className="ty-note-node"
       role="group"
       aria-label={name}
       aria-describedby={descId}
       tabIndex={0}
-      data-fk-node-focus=""
+      data-ty-node-focus=""
       data-tone={safeTone}
       data-selected={selected ? 'true' : 'false'}
       data-locked={locked ? 'true' : 'false'}
@@ -97,15 +97,15 @@ export function NoteNode(props: NoteNodeProps) {
         if (e.pointerType === 'touch' && selected && !editing) start()
       }}
     >
-      <span id={descId} className="fk-visually-hidden">
+      <span id={descId} className="ty-visually-hidden">
         {l.annotation}
       </span>
-      <StickyNote className="fk-note-node__icon" aria-hidden="true" focusable="false" />
+      <StickyNote className="ty-note-node__icon" aria-hidden="true" focusable="false" />
       {editing ? (
-        <TextField className="fk-note-node__field" value={draft} onChange={setDraft} aria-label={l.editor} autoFocus>
+        <TextField className="ty-note-node__field" value={draft} onChange={setDraft} aria-label={l.editor} autoFocus>
           <TextArea
-            className="fk-note-node__editor"
-            data-fk-no-drag=""
+            className="ty-note-node__editor"
+            data-ty-no-drag=""
             onBlur={finish}
             onKeyDown={(e) => {
               // Typing in a note never reaches canvas shortcuts.
@@ -118,9 +118,9 @@ export function NoteNode(props: NoteNodeProps) {
           />
         </TextField>
       ) : text.trim() ? (
-        <p className="fk-note-node__text">{text}</p>
+        <p className="ty-note-node__text">{text}</p>
       ) : (
-        <p className="fk-note-node__text" data-empty="true">
+        <p className="ty-note-node__text" data-empty="true">
           {placeholder}
         </p>
       )}

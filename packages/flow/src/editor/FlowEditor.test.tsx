@@ -2,7 +2,7 @@ import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import { cssOf, mediaBlock } from '../../test/css'
 import { setViewportWidth } from '../../test/media'
@@ -35,8 +35,8 @@ const pe = (type: string, x: number, y: number) => {
 describe('FlowEditor', () => {
   it('shows every node and connector of the initial graph and fits it', async () => {
     const { container } = render(<FlowEditor initialGraph={graph()} palette={false} />)
-    expect(container.querySelectorAll('[data-fk-node-id]')).toHaveLength(3)
-    expect(container.querySelectorAll('.fk-connector__path')).toHaveLength(1)
+    expect(container.querySelectorAll('[data-ty-node-id]')).toHaveLength(3)
+    expect(container.querySelectorAll('.ty-connector__path')).toHaveLength(1)
     expect(screen.getByRole('group', { name: 'Flow canvas' })).toHaveAttribute('aria-roledescription', 'canvas')
     await expectNoAxeViolations(container, ['nested-interactive'])
   })
@@ -64,9 +64,9 @@ describe('FlowEditor', () => {
   it('refuses a connection dragged onto a note', () => {
     const store = createFlowEditorStore({ initial: { nodes: graph().nodes, connectors: [] } })
     render(<FlowEditor store={store} palette={false} />)
-    const out = document.querySelector('[data-fk-port-node="start"][data-fk-port-role="source"]')!
+    const out = document.querySelector('[data-ty-port-node="start"][data-ty-port-role="source"]')!
     fireEvent(out, pe('pointerdown', 1, 1))
-    const note = document.querySelector('[data-fk-node-id="note"] .fk-note-node')!
+    const note = document.querySelector('[data-ty-node-id="note"] .ty-note-node')!
     fireEvent(note, pe('pointermove', 2, 2))
     fireEvent(note, pe('pointerup', 2, 2))
     expect(store.getState().connectors).toHaveLength(0)
@@ -83,15 +83,15 @@ describe('FlowEditor', () => {
 
   it('shows no edit, duplicate or delete tools while locked', () => {
     render(<FlowEditor initialGraph={graph()} palette={false} locked />)
-    fireEvent.pointerOver(document.querySelector('[data-fk-node-id="sum"]')!)
+    fireEvent.pointerOver(document.querySelector('[data-ty-node-id="sum"]')!)
     expect(screen.queryByRole('button', { name: /Duplicate Sum|Remove Sum|Delete Sum/i })).toBeNull()
-    expect(document.querySelector('.fk-editor')).toHaveAttribute('data-locked', 'true')
+    expect(document.querySelector('.ty-editor')).toHaveAttribute('data-locked', 'true')
   })
 
   it('adds a node where a palette item is dropped, and one undo removes it', () => {
     const store = createFlowEditorStore({ initial: { nodes: graph().nodes.slice(0, 2), connectors: [] } })
     render(<FlowEditor store={store} palette={false} />)
-    const canvas = document.querySelector('.fk-editor__canvas')!
+    const canvas = document.querySelector('.ty-editor__canvas')!
     const data = new Map<string, string>([[PALETTE_MEDIA_TYPE, JSON.stringify({ kind: 'code', label: 'Count' })]])
     const dataTransfer = { types: [...data.keys()], getData: (t: string) => data.get(t) ?? '', dropEffect: 'none' }
     fireEvent.dragOver(canvas, { dataTransfer })
@@ -134,9 +134,9 @@ describe('FlowEditor', () => {
   it('lays a horizontal flow out right to left in Arabic unless asked to keep LTR', async () => {
     const store = createFlowEditorStore({ initial: { nodes: graph().nodes.slice(0, 2), connectors: graph().connectors, layoutDirection: 'right' } })
     render(
-      <FakhirProvider locale="ar">
+      <TympanProvider locale="ar">
         <FlowEditor store={store} palette={false} />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     const layoutTool = document.querySelector('[data-tool="auto-layout"]') as HTMLElement
     await userEvent.click(layoutTool)
@@ -146,9 +146,9 @@ describe('FlowEditor', () => {
 
   it('names the canvas in Portuguese', () => {
     render(
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <FlowEditor initialGraph={graph()} palette={false} />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(screen.getByRole('group', { name: 'Canvas do fluxo' })).toBeInTheDocument()
   })
@@ -165,14 +165,14 @@ describe('FlowEditor on narrow screens', () => {
   it('opens the palette as a bottom drawer and places a step by tap', async () => {
     setViewportWidth(375)
     const { container } = render(<FlowEditor initialGraph={graph()} />)
-    expect(container.querySelector('.fk-editor__palette')).toBeNull()
-    await userEvent.click(container.querySelector('.fk-editor__palette-open') as HTMLElement)
+    expect(container.querySelector('.ty-editor__palette')).toBeNull()
+    await userEvent.click(container.querySelector('.ty-editor__palette-open') as HTMLElement)
     const drawer = await screen.findByRole('dialog', { name: 'Steps to add' })
-    const before = container.querySelectorAll('[data-fk-node-id]').length
+    const before = container.querySelectorAll('[data-ty-node-id]').length
     const item = within(drawer).getByRole('row', { name: 'Frozen edition' })
     item.focus()
     await userEvent.keyboard('{Enter}')
-    expect(container.querySelectorAll('[data-fk-node-id]').length).toBe(before + 1)
+    expect(container.querySelectorAll('[data-ty-node-id]').length).toBe(before + 1)
   })
 })
 
@@ -188,19 +188,19 @@ describe('FlowEditor keyboard', () => {
       },
     })
     render(<FlowEditor store={store} palette={false} />)
-    act(() => (document.querySelector('[data-fk-node-id="b"] [data-fk-node-focus]') as HTMLElement).focus())
+    act(() => (document.querySelector('[data-ty-node-id="b"] [data-ty-node-focus]') as HTMLElement).focus())
     await userEvent.keyboard('{ArrowLeft}')
     expect(store.getState().nodes.find((n) => n.id === 'b')!.position.x).toBe(0)
-    expect(document.querySelector('[data-fk-announcer="polite"]')).toHaveTextContent(/aligned with A/i)
+    expect(document.querySelector('[data-ty-announcer="polite"]')).toHaveTextContent(/aligned with A/i)
     act(() => store.actions.undo())
     expect(store.getState().nodes.find((n) => n.id === 'b')!.position.x).toBe(8)
   })
 
   it('clears the selection on Escape from a focused node, then leaves to the tool bar', async () => {
     render(<FlowEditor initialGraph={graph()} palette={false} />)
-    act(() => (document.querySelector('[data-fk-node-id="sum"] [data-fk-node-focus]') as HTMLElement).focus())
+    act(() => (document.querySelector('[data-ty-node-id="sum"] [data-ty-node-focus]') as HTMLElement).focus())
     await userEvent.keyboard('{Escape}')
-    expect(document.querySelector('[data-fk-node-id="sum"] .fk-node-card')).toHaveAttribute('data-selected', 'false')
+    expect(document.querySelector('[data-ty-node-id="sum"] .ty-node-card')).toHaveAttribute('data-selected', 'false')
     await userEvent.keyboard('{Escape}')
     expect(screen.getByRole('toolbar', { name: 'Canvas tools' })).toContainElement(document.activeElement as HTMLElement)
   })
@@ -271,10 +271,10 @@ describe('AutosaveController', () => {
       )
     }
     render(<Host />)
-    const canvasBefore = document.querySelector('.fk-flow-surface')
+    const canvasBefore = document.querySelector('.ty-flow-surface')
     act(() => store.actions.select(['sum']))
     act(() => screen.getByText('swap').click())
-    expect(document.querySelector('.fk-flow-surface')).toBe(canvasBefore)
+    expect(document.querySelector('.ty-flow-surface')).toBe(canvasBefore)
     act(() => store.actions.setNodes((ns) => ns.slice(0, 2)))
     expect(first).not.toHaveBeenCalled()
     expect(second).toHaveBeenCalledTimes(1)

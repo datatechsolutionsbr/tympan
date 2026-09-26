@@ -4,12 +4,12 @@
 export function ShortId({ id, label, visible = 8 }: { id: string; label?: string; visible?: number }) {
   const short = id.length > visible ? id.slice(0, visible) : id
   return (
-    <span className="fk-run-shortid" title={id}>
-      {label ? <span className="fk-run-shortid__label">{label} </span> : null}
-      <code className="fk-run-mono" aria-hidden="true">
+    <span className="ty-run-shortid" title={id}>
+      {label ? <span className="ty-run-shortid__label">{label} </span> : null}
+      <code className="ty-run-mono" aria-hidden="true">
         {short}
       </code>
-      <span className="fk-visually-hidden">{id}</span>
+      <span className="ty-visually-hidden">{id}</span>
     </span>
   )
 }

@@ -1,6 +1,6 @@
 # Third-party notices
 
-`@fakhir/flow` is licensed under FSL-1.1-ALv2 (Copyright 2026 Natalia Mesquita).
+`@datatechsolutions/tympan-flow` is licensed under FSL-1.1-ALv2 (Copyright 2026 Natalia Mesquita).
 It depends on, but does not copy, the packages below. Versions are those
 resolved on 2026-09-26.
 
@@ -12,7 +12,7 @@ resolved on 2026-09-26.
 | @dagrejs/graphlib (dependency of dagre) | 4.0.5 | MIT | graph structure used by dagre |
 | react-aria-components (with react-aria, react-stately, @internationalized/*) | 1.21.1 | Apache-2.0 | accessible primitives (Button, ToggleButton, Toolbar, Tree, ListBox, GridList, Autocomplete, SearchField, ComboBox, Popover, Dialog, Tabs, Disclosure, RadioGroup, Slider, NumberField, DropZone, FileTrigger, I18nProvider/useLocale) |
 | lucide-react | 1.48.0 | ISC | icons (design direction §4.4) |
-| @fakhir/ui, @fakhir/tokens | 0.1.0 | FSL-1.1-ALv2 | components and `--fk-*` tokens of the same project |
+| @datatechsolutions/tympan, @datatechsolutions/tympan-tokens | 0.1.0 | FSL-1.1-ALv2 | components and `--ty-*` tokens of the same project |
 | react, react-dom (peer) | 19.x | MIT | rendering |
 
 MIT licence (dagre, graphlib): Copyright (c) 2012-2014 Chris Pettitt and the
@@ -31,12 +31,6 @@ bundled into `dist/`.
 
 ## Considered and not used
 
-- **@xyflow/react (MIT).** Allowed by the brief. Not used: the canvas needs
-  its node boxes in reading order in the DOM (Tab order and the list/tree
-  alternative follow the picture), deterministic geometry that jsdom can test
-  without layout, logical (RTL-aware) port sides, and an internal structure of
-  its own. A small pointer-event surface (`src/surface/`) covers pan, zoom,
-  pinch, marquee, node drag and connection drawing.
 - **elkjs.** Its licence is EPL-2.0 (or GPL-3.0), not MIT, and its layout runs
   asynchronously (worker); dagre is MIT, synchronous (so `autoLayout` stays a
   pure function) and deterministic.

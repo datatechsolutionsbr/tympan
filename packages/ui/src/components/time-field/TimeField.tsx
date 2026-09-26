@@ -78,7 +78,7 @@ function Segment(props: {
   return (
     <input
       ref={props.inputRef}
-      className="fk-time-field__segment"
+      className="ty-time-field__segment"
       role="spinbutton"
       aria-label={props.label}
       aria-valuemin={0}
@@ -117,18 +117,18 @@ function Editor(props: { initial: TimeOfDay; title: string; blocked: (t: TimeOfD
     if (!props.blocked(draft)) props.onConfirm(draft)
   }
   return (
-    <div className="fk-time-field__editor" role="group" aria-labelledby={titleId}>
-      <Heading slot="title" id={titleId} className="fk-time-field__title">
+    <div className="ty-time-field__editor" role="group" aria-labelledby={titleId}>
+      <Heading slot="title" id={titleId} className="ty-time-field__title">
         {props.title}
       </Heading>
-      <div className="fk-time-field__segments">
+      <div className="ty-time-field__segments">
         <Segment name="hours" label={t.hours} value={draft.hours} step={1} inputRef={hoursRef} onValue={(hours) => setDraft((d) => ({ ...d, hours }))} onConfirm={confirm} />
-        <span className="fk-time-field__colon" aria-hidden="true">
+        <span className="ty-time-field__colon" aria-hidden="true">
           :
         </span>
         <Segment name="minutes" label={t.minutes} value={draft.minutes} step={props.step} onValue={(minutes) => setDraft((d) => ({ ...d, minutes }))} onConfirm={confirm} />
       </div>
-      <p id={messageId} className="fk-time-field__message" aria-live="polite">
+      <p id={messageId} className="ty-time-field__message" aria-live="polite">
         {isBlocked ? t.future : null}
       </p>
       <Button variant="primary" disabled={isBlocked} focusableWhenDisabled aria-describedby={isBlocked ? messageId : undefined} onPress={confirm}>
@@ -158,7 +158,7 @@ export function TimeField(props: TimeFieldProps) {
   }
 
   return (
-    <div className={cx('fk-time-field', props.className)} data-invalid={invalid || undefined}>
+    <div className={cx('ty-time-field', props.className)} data-invalid={invalid || undefined}>
       <FieldLine kind="label" id={labelId}>
         {props.label}
       </FieldLine>
@@ -169,16 +169,16 @@ export function TimeField(props: TimeFieldProps) {
       ) : null}
       <DialogTrigger isOpen={open} onOpenChange={setOpen}>
         <AriaButton
-          className="fk-fb-trigger"
+          className="ty-fb-trigger"
           isDisabled={props.disabled}
           aria-labelledby={`${labelId} ${textId}`}
           aria-describedby={joinIds(hintId, errorId)}
           data-invalid={invalid || undefined}
         >
-          <span className="fk-fb-trigger__glyph" aria-hidden="true">
+          <span className="ty-fb-trigger__glyph" aria-hidden="true">
             <Clock />
           </span>
-          <span id={textId} className="fk-fb-trigger__text" data-placeholder={props.value ? undefined : true}>
+          <span id={textId} className="ty-fb-trigger__text" data-placeholder={props.value ? undefined : true}>
             {props.value ? formatTimeOfDay(props.value, locale) : (props.placeholder ?? t.placeholder)}
           </span>
         </AriaButton>

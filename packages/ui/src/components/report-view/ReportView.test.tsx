@@ -87,7 +87,7 @@ describe('ReportView', () => {
   it('shows empty cells with the visible empty-value word, never a dash (§2.13)', () => {
     render(<ReportView report={full} currency="BRL" />)
     const table = screen.getByRole('table', { name: 'Budget by country' })
-    expect(within(table).getByText('no value')).toHaveClass('fk-report__no-value')
+    expect(within(table).getByText('no value')).toHaveClass('ty-report__no-value')
     expect(table.textContent).not.toContain('–')
   })
 
@@ -122,7 +122,7 @@ describe('ReportView', () => {
 
   it('reflows the KPI row and draws section borders in forced colours', () => {
     const css = cssOf('components/report-view/ReportView.css')
-    expect(mediaBlock(css, /\(max-width:\s*639\.98px\)/)).toMatch(/\.fk-report__kpis[^}]*minmax\(0, 1fr\)/)
+    expect(mediaBlock(css, /\(max-width:\s*639\.98px\)/)).toMatch(/\.ty-report__kpis[^}]*minmax\(0, 1fr\)/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/CanvasText/)
   })
 

@@ -101,7 +101,7 @@ describe('ChipGroup', () => {
 
   it('keeps 44 px targets and a forced-colours selection border', () => {
     const css = cssOf('components/chip-group/ChipGroup.css')
-    expect(css).toMatch(/\.fk-chip-group__remove::before[\s\S]*max\(100%,\s*var\(--fk-control-target\)\)/)
+    expect(css).toMatch(/\.ty-chip-group__remove::before[\s\S]*max\(100%,\s*var\(--ty-control-target\)\)/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/Highlight/)
   })
 

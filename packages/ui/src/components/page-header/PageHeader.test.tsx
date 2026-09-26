@@ -23,7 +23,7 @@ describe('PageHeader', () => {
   it('uses the requested level with the section scale', () => {
     const { container } = render(<PageHeader title="Members" headingLevel={2} scale="section" />)
     expect(screen.getByRole('heading', { level: 2, name: 'Members' })).toBeInTheDocument()
-    expect(container.querySelector('.fk-page-header')).toHaveAttribute('data-scale', 'section')
+    expect(container.querySelector('.ty-page-header')).toHaveAttribute('data-scale', 'section')
   })
 
   it('renders eyebrow, title, summary and meta in that order', () => {
@@ -38,11 +38,11 @@ describe('PageHeader', () => {
         ]}
       />,
     )
-    const text = container.querySelector('.fk-page-header__text')!
+    const text = container.querySelector('.ty-page-header__text')!
     const order = [...text.children].map((c) => c.className.split(' ')[0])
-    expect(order).toEqual(['fk-page-header__eyebrow', 'fk-page-header__title', 'fk-page-header__summary', 'fk-page-header__meta'])
+    expect(order).toEqual(['ty-page-header__eyebrow', 'ty-page-header__title', 'ty-page-header__summary', 'ty-page-header__meta'])
     expect(screen.getByText('94 records')).toBeInTheDocument()
-    expect(container.querySelector('.fk-page-header__meta svg')).toHaveAttribute('aria-hidden', 'true')
+    expect(container.querySelector('.ty-page-header__meta svg')).toHaveAttribute('aria-hidden', 'true')
   })
 
   it('places the breadcrumb navigation before the title in DOM order', () => {
@@ -93,13 +93,13 @@ describe('PageHeader', () => {
     const { container } = render(
       <PageHeader title="Sources" summary="Where the evidence comes from." actions={<Button variant="primary">New session</Button>} />,
     )
-    expect(container.querySelector('.fk-page-header')).toHaveAttribute('data-layout', 'stacked')
+    expect(container.querySelector('.ty-page-header')).toHaveAttribute('data-layout', 'stacked')
     const summary = screen.getByText('Where the evidence comes from.')
     const action = screen.getByRole('button', { name: 'New session' })
     expect(summary.compareDocumentPosition(action) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     const narrow = mediaBlock(cssOf('components/page-header/PageHeader.css'), /\(max-width:\s*639\.98px\)/)
-    expect(narrow).toMatch(/\.fk-page-header__actions\s*\{[^}]*flex-basis:\s*100%/)
-    expect(narrow).toMatch(/min-block-size:\s*var\(--fk-control-target\)/)
+    expect(narrow).toMatch(/\.ty-page-header__actions\s*\{[^}]*flex-basis:\s*100%/)
+    expect(narrow).toMatch(/min-block-size:\s*var\(--ty-control-target\)/)
   })
 
   it('has no axe violations', async () => {
@@ -135,22 +135,22 @@ describe('PageHeader', () => {
       expect(nav.compareDocumentPosition(heading) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
       expect(within(nav).getAllByRole('link')).toHaveLength(2)
       expect(within(nav).getByText('Overview')).toHaveAttribute('aria-current', 'page')
-      expect(container.querySelector('.fk-page-header')).toHaveAttribute('data-divider')
-      expect(cssOf('components/page-header/PageHeader.css')).toMatch(/\.fk-page-header__trail-list\s*\{[^}]*font-family:\s*var\(--fk-font-mono\)/)
+      expect(container.querySelector('.ty-page-header')).toHaveAttribute('data-divider')
+      expect(cssOf('components/page-header/PageHeader.css')).toMatch(/\.ty-page-header__trail-list\s*\{[^}]*font-family:\s*var\(--ty-font-mono\)/)
     })
 
     it('renders the lead after the title, limited to 68ch', () => {
       render(<PageHeader variant="editorial" title="Overview" lead="Where the research stands and what is left to prove." />)
       const lead = screen.getByText('Where the research stands and what is left to prove.')
       expect(screen.getByRole('heading', { level: 1 }).compareDocumentPosition(lead) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-      expect(cssOf('components/page-header/PageHeader.css')).toMatch(/\.fk-page-header__lead\s*\{[^}]*max-inline-size:\s*68ch/)
+      expect(cssOf('components/page-header/PageHeader.css')).toMatch(/\.ty-page-header__lead\s*\{[^}]*max-inline-size:\s*68ch/)
     })
 
     it('puts actions after the title and can drop the divider', () => {
       const { container } = render(<PageHeader variant="editorial" title="Overview" divider={false} actions={<Button variant="primary">Verify 12</Button>} />)
       const action = screen.getByRole('button', { name: 'Verify 12' })
       expect(screen.getByRole('heading', { level: 1 }).compareDocumentPosition(action) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-      expect(container.querySelector('.fk-page-header')).not.toHaveAttribute('data-divider')
+      expect(container.querySelector('.ty-page-header')).not.toHaveAttribute('data-divider')
     })
 
     it('has no axe violations, light and dark', async () => {

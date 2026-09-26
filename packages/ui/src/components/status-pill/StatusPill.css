@@ -1,84 +1,84 @@
 /* StatusPill (spec: wave-1/status-pill.md; design direction §2.2, §2.3, §2.4). */
-@layer fakhir.components {
-  .fk-status {
-    --fk-status-ink: var(--fk-neutral);
-    --fk-status-fill: var(--fk-neutral-soft);
-    --fk-status-text: var(--fk-on-neutral-soft);
+@layer tympan.components {
+  .ty-status {
+    --ty-status-ink: var(--ty-neutral);
+    --ty-status-fill: var(--ty-neutral-soft);
+    --ty-status-text: var(--ty-on-neutral-soft);
     display: inline-flex;
     align-items: center;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
     box-sizing: border-box;
-    min-block-size: calc(var(--fk-space-5) - 2px);
-    padding-inline: var(--fk-space-2);
-    border: 1px solid color-mix(in srgb, var(--fk-status-ink) 30%, transparent);
-    border-radius: var(--fk-radius-pill);
-    background: var(--fk-status-fill);
-    color: var(--fk-status-text);
-    font-size: var(--fk-font-size-label);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-label);
+    min-block-size: calc(var(--ty-space-5) - 2px);
+    padding-inline: var(--ty-space-2);
+    border: 1px solid color-mix(in srgb, var(--ty-status-ink) 30%, transparent);
+    border-radius: var(--ty-radius-pill);
+    background: var(--ty-status-fill);
+    color: var(--ty-status-text);
+    font-size: var(--ty-font-size-label);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-label);
     white-space: nowrap;
   }
-  .fk-status[data-size='small'] {
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+  .ty-status[data-size='small'] {
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
-  .fk-status[data-tone='success'] {
-    --fk-status-ink: var(--fk-success);
-    --fk-status-fill: var(--fk-success-soft);
-    --fk-status-text: var(--fk-on-success-soft);
+  .ty-status[data-tone='success'] {
+    --ty-status-ink: var(--ty-success);
+    --ty-status-fill: var(--ty-success-soft);
+    --ty-status-text: var(--ty-on-success-soft);
   }
-  .fk-status[data-tone='warning'] {
-    --fk-status-ink: var(--fk-warning);
-    --fk-status-fill: var(--fk-warning-soft);
-    --fk-status-text: var(--fk-on-warning-soft);
+  .ty-status[data-tone='warning'] {
+    --ty-status-ink: var(--ty-warning);
+    --ty-status-fill: var(--ty-warning-soft);
+    --ty-status-text: var(--ty-on-warning-soft);
   }
-  .fk-status[data-tone='danger'] {
-    --fk-status-ink: var(--fk-danger);
-    --fk-status-fill: var(--fk-danger-soft);
-    --fk-status-text: var(--fk-on-danger-soft);
+  .ty-status[data-tone='danger'] {
+    --ty-status-ink: var(--ty-danger);
+    --ty-status-fill: var(--ty-danger-soft);
+    --ty-status-text: var(--ty-on-danger-soft);
   }
-  .fk-status[data-tone='info'] {
-    --fk-status-ink: var(--fk-info);
-    --fk-status-fill: var(--fk-info-soft);
-    --fk-status-text: var(--fk-on-info-soft);
+  .ty-status[data-tone='info'] {
+    --ty-status-ink: var(--ty-info);
+    --ty-status-fill: var(--ty-info-soft);
+    --ty-status-text: var(--ty-on-info-soft);
   }
 
-  .fk-status__icon {
+  .ty-status__icon {
     display: inline-flex;
-    color: var(--fk-status-ink);
+    color: var(--ty-status-ink);
   }
-  .fk-status__icon > svg {
+  .ty-status__icon > svg {
     inline-size: 14px;
     block-size: 14px;
   }
-  .fk-status[data-busy] .fk-status__icon > svg {
-    animation: fk-status-spin 1200ms linear infinite;
+  .ty-status[data-busy] .ty-status__icon > svg {
+    animation: ty-status-spin 1200ms linear infinite;
   }
 
-  @keyframes fk-status-spin {
+  @keyframes ty-status-spin {
     to {
       transform: rotate(1turn);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-status[data-busy] .fk-status__icon > svg {
+    .ty-status[data-busy] .ty-status__icon > svg {
       animation: none;
     }
   }
 
   @media (prefers-reduced-transparency: reduce) {
-    .fk-status {
-      background: color-mix(in srgb, var(--fk-status-ink) 12%, var(--fk-surface-solid));
+    .ty-status {
+      background: color-mix(in srgb, var(--ty-status-ink) 12%, var(--ty-surface-solid));
     }
   }
 
   @media (forced-colors: active) {
-    .fk-status {
+    .ty-status {
       border-color: CanvasText;
     }
-    .fk-status__icon {
+    .ty-status__icon {
       color: CanvasText;
     }
   }

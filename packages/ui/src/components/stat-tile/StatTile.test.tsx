@@ -24,7 +24,7 @@ describe('StatTile', () => {
   it('shows a non-colour indicator when selected', () => {
     const { container } = render(<StatTile value={12} label="Pending" selected onPress={() => {}} />)
     expect(screen.getByRole('button')).toHaveAttribute('aria-pressed', 'true')
-    expect(container.querySelector('.fk-stat-tile__check')).not.toBeNull()
+    expect(container.querySelector('.ty-stat-tile__check')).not.toBeNull()
   })
 
   it('opens the explanation beside the tile and Esc returns focus', async () => {

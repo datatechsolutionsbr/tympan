@@ -76,13 +76,13 @@ const neutralGlyphs = { model: Cpu, datasource: Database, service: Boxes } satis
 
 function NeutralGlyph({ category }: { category: MarkCategory }) {
   const Glyph = neutralGlyphs[category]
-  return <Glyph className="fk-mark__glyph" data-fallback="" aria-hidden="true" focusable="false" />
+  return <Glyph className="ty-mark__glyph" data-fallback="" aria-hidden="true" focusable="false" />
 }
 
 function AssetMark({ url, fallback }: { url: string; fallback: ReactNode }) {
   const [broken, setBroken] = useState(false)
   if (broken) return <>{fallback}</>
-  return <img className="fk-mark__image" src={url} alt="" draggable={false} onError={() => setBroken(true)} />
+  return <img className="ty-mark__image" src={url} alt="" draggable={false} onError={() => setBroken(true)} />
 }
 
 /**
@@ -101,7 +101,7 @@ export function ThirdPartyMarkGlyph({ markKey, category = 'service' }: { markKey
     else if (env.adapter) drawn = env.adapter(source, { brandColour: env.useBrandColours ? entry.brandColour : undefined })
   }
   return (
-    <span className="fk-mark__art" aria-hidden="true" data-registered={entry ? '' : undefined}>
+    <span className="ty-mark__art" aria-hidden="true" data-registered={entry ? '' : undefined}>
       {drawn}
     </span>
   )
@@ -120,9 +120,9 @@ export interface ThirdPartyMarkSlotProps {
 
 /** A third-party product's mark (host-registered) beside its name (spec: wave-4/third-party-mark-slot.md). */
 export function ThirdPartyMarkSlot(props: ThirdPartyMarkSlotProps) {
-  const nameClass = props.showName === false ? 'fk-visually-hidden' : 'fk-mark__name'
+  const nameClass = props.showName === false ? 'ty-visually-hidden' : 'ty-mark__name'
   return (
-    <span className={props.className ? `fk-mark ${props.className}` : 'fk-mark'} data-size={props.size ?? 'inline'}>
+    <span className={props.className ? `ty-mark ${props.className}` : 'ty-mark'} data-size={props.size ?? 'inline'}>
       <ThirdPartyMarkGlyph markKey={props.markKey} category={props.category} />
       <span className={nameClass}>{props.name}</span>
     </span>

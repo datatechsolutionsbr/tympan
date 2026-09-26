@@ -35,7 +35,7 @@ describe('ProgressBar', () => {
 
   it('runs no transition under reduced motion', () => {
     const reduced = mediaBlock(cssOf('components/progress-bar/ProgressBar.css'), /\(prefers-reduced-motion:\s*reduce\)/)
-    expect(reduced).toMatch(/\.fk-progress__fill\s*\{[^}]*transition:\s*none/)
+    expect(reduced).toMatch(/\.ty-progress__fill\s*\{[^}]*transition:\s*none/)
     expect(reduced).toMatch(/animation:\s*none/)
   })
 
@@ -62,7 +62,7 @@ describe('ProgressBar in right-to-left (ar)', () => {
     const { container } = renderRtl(<ProgressBar label="إعادة التشغيل" indeterminate />)
     expect(rtlDom.screen.getByRole('progressbar', { name: 'إعادة التشغيل' })).toBeInTheDocument()
     // The indeterminate sweep runs from the inline start (right) in right-to-left.
-    expect(cssOf('components/progress-bar/ProgressBar.css')).toMatch(/animation-name:\s*fk-progress-slide-rtl/)
+    expect(cssOf('components/progress-bar/ProgressBar.css')).toMatch(/animation-name:\s*ty-progress-slide-rtl/)
     await axeRtl(container)
   })
 })

@@ -3,7 +3,7 @@
 // always, and every other field only when it changed.
 
 import { useEffect, useId, useState, type KeyboardEvent } from 'react'
-import { Button, Fieldset, Switch, TextArea, TextField } from '@fakhir/ui'
+import { Button, Fieldset, Switch, TextArea, TextField } from '@datatechsolutions/tympan'
 import { SectionedModal } from '../internal/SectionedModal'
 import { defineLabels, useFlowLocale, useLabels } from '../internal/labels'
 import { useActiveDialog, useDialogStack, type FlowSettingsPayload } from '../state/dialogStack'
@@ -187,7 +187,7 @@ export function FlowSettingsDialog({ onSave, labels }: FlowSettingsDialogProps) 
       subtitle={l.subtitle}
       width="regular"
       busy={saving}
-      className="fk-flow-settings"
+      className="ty-flow-settings"
       footer={
         <>
           <Button variant="secondary" onPress={() => stack.close()} disabled={saving}>
@@ -200,7 +200,7 @@ export function FlowSettingsDialog({ onSave, labels }: FlowSettingsDialogProps) 
       }
     >
       <div
-        className="fk-flow-settings__fields"
+        className="ty-flow-settings__fields"
         dir={direction}
         onKeyDown={(e) => {
           if (!savesOnEnter(e)) return
@@ -224,7 +224,7 @@ export function FlowSettingsDialog({ onSave, labels }: FlowSettingsDialogProps) 
         {switches.length > 0 && (
           <Fieldset legend={l.lifecycle}>
             {switches.map((s) => (
-              <div key={s.key} className="fk-flow-settings__switch">
+              <div key={s.key} className="ty-flow-settings__switch">
                 <Switch
                   label={s.label}
                   isSelected={sheet[s.key]!}

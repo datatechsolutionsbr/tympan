@@ -41,7 +41,7 @@ function focusableAfter(node: Element): HTMLElement | null {
 
 function Marker({ tone }: { tone: FilterChipTone | undefined }) {
   if (typeof tone !== 'number') return null
-  return <span className="fk-filter-chips__marker" aria-hidden="true" style={categoricalVar('--fk-filter-chip-marker', tone)} />
+  return <span className="ty-filter-chips__marker" aria-hidden="true" style={categoricalVar('--ty-filter-chip-marker', tone)} />
 }
 
 /** Removable chips of the filters in force (spec: wave-2/filter-chips.md). */
@@ -82,37 +82,37 @@ export function FilterChips({ filters, onRemove, onClearAll, kindIcons, removeLa
   })
 
   const live = (
-    <span ref={anchor} className="fk-visually-hidden" role="status" aria-live="polite">
+    <span ref={anchor} className="ty-visually-hidden" role="status" aria-live="polite">
       {said}
     </span>
   )
   if (filters.length === 0) return said ? live : null
 
   return (
-    <div ref={root} className={cx('fk-filter-chips', className)}>
-      <TagGroup aria-label={groupLabel ?? copy.group} onRemove={onRemove ? remove : undefined} className="fk-filter-chips__group">
-        <TagList className="fk-filter-chips__list">
+    <div ref={root} className={cx('ty-filter-chips', className)}>
+      <TagGroup aria-label={groupLabel ?? copy.group} onRemove={onRemove ? remove : undefined} className="ty-filter-chips__group">
+        <TagList className="ty-filter-chips__list">
           {filters.map((f) => {
             const Icon = kindIcons?.[f.kind] ?? kindIcons?.default ?? ListFilter
             const k = keyOf(f)
             return (
-              <Tag key={k} id={k} data-key={k} textValue={f.label} className="fk-filter-chips__chip" data-tone={typeof f.tone === 'number' ? 'category' : (f.tone ?? 'neutral')}>
+              <Tag key={k} id={k} data-key={k} textValue={f.label} className="ty-filter-chips__chip" data-tone={typeof f.tone === 'number' ? 'category' : (f.tone ?? 'neutral')}>
                 {f.icon ? (
-                  <span className="fk-filter-chips__icon" aria-hidden="true">
+                  <span className="ty-filter-chips__icon" aria-hidden="true">
                     {f.icon}
                   </span>
                 ) : (
-                  <Icon className="fk-filter-chips__icon" data-kind-icon={kindIcons?.[f.kind] ? f.kind : 'default'} aria-hidden="true" focusable="false" />
+                  <Icon className="ty-filter-chips__icon" data-kind-icon={kindIcons?.[f.kind] ? f.kind : 'default'} aria-hidden="true" focusable="false" />
                 )}
                 <Marker tone={f.tone} />
-                <span className="fk-filter-chips__text">{f.label}</span>
+                <span className="ty-filter-chips__text">{f.label}</span>
                 {onRemove ? (
                   <AriaButton
                     slot="remove"
                     id={`${uid}-x-${k}`}
                     // Self-reference: the name is exactly the remove label, not joined with the row's.
                     aria-labelledby={`${uid}-x-${k}`}
-                    className="fk-filter-chips__remove"
+                    className="ty-filter-chips__remove"
                     aria-label={nameRemove(f.label)}
                   >
                     <X aria-hidden="true" focusable="false" />
@@ -124,7 +124,7 @@ export function FilterChips({ filters, onRemove, onClearAll, kindIcons, removeLa
         </TagList>
       </TagGroup>
       {onClearAll && filters.length >= 2 ? (
-        <AriaButton className="fk-filter-chips__clear-all" onPress={onClearAll}>
+        <AriaButton className="ty-filter-chips__clear-all" onPress={onClearAll}>
           {copy.clearAll}
         </AriaButton>
       ) : null}

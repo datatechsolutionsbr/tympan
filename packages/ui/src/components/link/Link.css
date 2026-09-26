@@ -1,12 +1,12 @@
 /* Link (spec: wave-1/link.md; design direction §2.3, §2.6). */
-@layer fakhir.components {
-  .fk-link {
+@layer tympan.components {
+  .ty-link {
     position: relative;
     display: inline;
     padding: 0;
     border: 0;
     background: none;
-    color: var(--fk-accent);
+    color: var(--ty-accent);
     font: inherit;
     text-decoration-line: underline;
     text-decoration-thickness: 1px;
@@ -16,26 +16,26 @@
     border-radius: 2px;
   }
 
-  .fk-link[data-emphasis='subtle'] {
+  .ty-link[data-emphasis='subtle'] {
     text-decoration-line: none;
   }
 
-  .fk-link[data-hovered] {
-    color: var(--fk-accent-strong);
+  .ty-link[data-hovered] {
+    color: var(--ty-accent-strong);
     text-decoration-line: underline;
   }
 
-  .fk-link[data-focus-visible] {
+  .ty-link[data-focus-visible] {
     text-decoration-line: underline;
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
 
-  .fk-link[data-current] {
-    font-weight: var(--fk-font-weight-semibold);
+  .ty-link[data-current] {
+    font-weight: var(--ty-font-weight-semibold);
   }
 
-  .fk-link__external {
+  .ty-link__external {
     display: inline-block;
     inline-size: 0.9em;
     block-size: 0.9em;
@@ -44,32 +44,32 @@
   }
 
   /* Standalone links get a 44 px hit height; inline prose links are exempt (WCAG 2.5.8). */
-  .fk-link[data-standalone] {
+  .ty-link[data-standalone] {
     display: inline-flex;
     align-items: center;
-    min-block-size: var(--fk-control-target);
+    min-block-size: var(--ty-control-target);
   }
-  .fk-link[data-standalone]::before {
+  .ty-link[data-standalone]::before {
     content: '';
     position: absolute;
     inset-inline: 0;
     inset-block-start: 50%;
-    block-size: max(100%, var(--fk-control-target));
+    block-size: max(100%, var(--ty-control-target));
     transform: translateY(-50%);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-link {
+    .ty-link {
       transition: none;
     }
   }
 
   @media (forced-colors: active) {
-    .fk-link {
+    .ty-link {
       color: LinkText;
       text-decoration-line: underline;
     }
-    .fk-link[data-focus-visible] {
+    .ty-link[data-focus-visible] {
       outline: 2px solid Highlight;
     }
   }

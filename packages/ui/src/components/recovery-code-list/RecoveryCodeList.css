@@ -1,65 +1,65 @@
 /* RecoveryCodeList (spec: wave-2/recovery-code-list.md; design direction §2.2, §2.3, §2.10). */
-@layer fakhir.components {
-  .fk-recovery-codes {
+@layer tympan.components {
+  .ty-recovery-codes {
     display: grid;
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
   }
-  .fk-recovery-codes__hidden {
+  .ty-recovery-codes__hidden {
     margin: 0;
-    color: var(--fk-ink-3);
+    color: var(--ty-ink-3);
   }
-  .fk-recovery-codes__list {
+  .ty-recovery-codes__list {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--fk-space-2) var(--fk-space-6);
+    gap: var(--ty-space-2) var(--ty-space-6);
     margin: 0;
-    padding: var(--fk-space-4) var(--fk-space-4) var(--fk-space-4) var(--fk-space-7);
-    border: 1px solid var(--fk-line);
-    border-radius: var(--fk-radius-card);
-    background: var(--fk-surface-sunken);
+    padding: var(--ty-space-4) var(--ty-space-4) var(--ty-space-4) var(--ty-space-7);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-card);
+    background: var(--ty-surface-sunken);
   }
-  .fk-recovery-codes__code {
-    color: var(--fk-ink);
-    font-family: var(--fk-font-mono);
-    font-size: var(--fk-font-size-body);
+  .ty-recovery-codes__code {
+    color: var(--ty-ink);
+    font-family: var(--ty-font-mono);
+    font-size: var(--ty-font-size-body);
     font-variant-numeric: tabular-nums;
-    letter-spacing: var(--fk-font-tracking-eyebrow);
+    letter-spacing: var(--ty-font-tracking-eyebrow);
     user-select: all;
   }
-  .fk-recovery-codes__code::marker {
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
+  .ty-recovery-codes__code::marker {
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
   }
-  .fk-recovery-codes__actions {
+  .ty-recovery-codes__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--fk-space-2);
+    gap: var(--ty-space-2);
   }
-  .fk-recovery-codes__status {
-    min-block-size: var(--fk-font-line-height-meta);
+  .ty-recovery-codes__status {
+    min-block-size: var(--ty-font-line-height-meta);
     margin: 0;
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
 
   @media (min-width: 640px) {
-    .fk-recovery-codes__list {
+    .ty-recovery-codes__list {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
   @media (prefers-reduced-transparency: reduce) {
-    .fk-recovery-codes__list {
-      background: var(--fk-surface-solid);
+    .ty-recovery-codes__list {
+      background: var(--ty-surface-solid);
     }
   }
 
   @media (forced-colors: active) {
-    .fk-recovery-codes__list {
+    .ty-recovery-codes__list {
       border-color: CanvasText;
     }
-    .fk-recovery-codes__code {
+    .ty-recovery-codes__code {
       color: CanvasText;
     }
   }

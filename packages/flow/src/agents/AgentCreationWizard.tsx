@@ -5,7 +5,7 @@
 
 import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
 import { ArrowLeft, ArrowRight, Bot, ChartColumn, FileSearch, Quote, Scale, Sparkles } from 'lucide-react'
-import { Button, InlineNotice, NativeSelect, TextArea, TextField } from '@fakhir/ui'
+import { Button, InlineNotice, NativeSelect, TextArea, TextField } from '@datatechsolutions/tympan'
 import { useConfirm, type ConfirmFn } from '../internal/confirm'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { AgentMark, ChoiceTiles, StepList, TagInput } from './parts'
@@ -490,21 +490,21 @@ export function AgentCreationWizard(props: AgentCreationWizardProps) {
   const shown = (v: string | undefined) => (v && v.trim() ? v : l.notSet)
 
   return (
-    <div className="fk-agent-wizard" onKeyDown={onKeyDown}>
-      <header className="fk-agent-wizard__header">
-        <p className="fk-agent-wizard__counter">{fill(l.stepCounter, { n: step, total: TOTAL }, locale)}</p>
-        <h1 ref={headingRef} tabIndex={-1} className="fk-agent-wizard__title">
+    <div className="ty-agent-wizard" onKeyDown={onKeyDown}>
+      <header className="ty-agent-wizard__header">
+        <p className="ty-agent-wizard__counter">{fill(l.stepCounter, { n: step, total: TOTAL }, locale)}</p>
+        <h1 ref={headingRef} tabIndex={-1} className="ty-agent-wizard__title">
           {l.titles[key]}
         </h1>
-        <p className="fk-agent-wizard__subtitle">{l.subtitles[key]}</p>
+        <p className="ty-agent-wizard__subtitle">{l.subtitles[key]}</p>
         <StepList steps={stepNames} current={step} reached={reached} label={l.steps} completedWord={l.completed} onJump={(n) => (n < step || n <= reached ? go(n) : undefined)} locale={locale} />
       </header>
 
-      <div className="fk-agent-wizard__surface">
+      <div className="ty-agent-wizard__surface">
         {key === 'start' ? <ChoiceTiles label={l.presets} tiles={presetTiles} value={d.preset} onChange={choosePreset} /> : null}
 
         {key === 'identity' ? (
-          <div className="fk-agent-wizard__fields">
+          <div className="ty-agent-wizard__fields">
             <ChoiceTiles
               label={l.avatar}
               value={d.avatar}
@@ -518,7 +518,7 @@ export function AgentCreationWizard(props: AgentCreationWizardProps) {
         ) : null}
 
         {key === 'model' ? (
-          <div className="fk-agent-wizard__fields">
+          <div className="ty-agent-wizard__fields">
             {connections.length ? (
               <NativeSelect label={l.connection} value={d.connectionId} onChange={(v) => edit('connectionId', v)} options={connections.map((c) => ({ value: c.id, label: c.provider ? `${c.name} · ${c.provider}` : c.name }))} />
             ) : (
@@ -538,10 +538,10 @@ export function AgentCreationWizard(props: AgentCreationWizardProps) {
         ) : null}
 
         {key === 'behaviour' ? (
-          <div className="fk-agent-wizard__fields">
+          <div className="ty-agent-wizard__fields">
             <TextArea label={l.systemPrompt} value={d.systemPrompt} onChange={(v) => edit('systemPrompt', v)} rows={4} />
             <TextArea label={l.userPrompt} value={d.userPrompt} onChange={(v) => edit('userPrompt', v)} rows={3} />
-            <div className="fk-agent-wizard__numbers">
+            <div className="ty-agent-wizard__numbers">
               <TextField label={l.temperature} inputType="number" value={d.temperature} onChange={(v) => edit('temperature', v)} />
               <TextField label={l.topP} inputType="number" value={d.topP} onChange={(v) => edit('topP', v)} />
               <TextField label={l.topK} inputType="number" value={d.topK} onChange={(v) => edit('topK', v)} />
@@ -553,9 +553,9 @@ export function AgentCreationWizard(props: AgentCreationWizardProps) {
         ) : null}
 
         {key === 'review' ? (
-          <div className="fk-agent-wizard__review">
+          <div className="ty-agent-wizard__review">
             <ReviewGroup title={l.titles.identity} editLabel={fill(l.editGroup, { group: l.titles.identity }, locale)} onEdit={() => go(2)} editWord={l.edit}>
-              <div className="fk-agent-wizard__review-mark">
+              <div className="ty-agent-wizard__review-mark">
                 <AgentMark />
                 <span>{shown(d.name || presets.find((p) => p.id === d.preset)?.name)}</span>
               </div>
@@ -582,18 +582,18 @@ export function AgentCreationWizard(props: AgentCreationWizardProps) {
         ) : null}
       </div>
 
-      <footer className="fk-agent-wizard__footer">
+      <footer className="ty-agent-wizard__footer">
         <Button variant="quiet" onPress={() => void cancel()}>
           {l.cancel}
         </Button>
-        <span className="fk-agent-wizard__spacer" />
+        <span className="ty-agent-wizard__spacer" />
         {step > 1 ? (
-          <Button variant="secondary" leadingIcon={<ArrowLeft className="fk-agent-wizard__arrow" />} onPress={() => go(step - 1)}>
+          <Button variant="secondary" leadingIcon={<ArrowLeft className="ty-agent-wizard__arrow" />} onPress={() => go(step - 1)}>
             {l.back}
           </Button>
         ) : null}
         {step < TOTAL ? (
-          <Button variant="secondary" trailingIcon={<ArrowRight className="fk-agent-wizard__arrow" />} onPress={next}>
+          <Button variant="secondary" trailingIcon={<ArrowRight className="ty-agent-wizard__arrow" />} onPress={next}>
             {l.next}
           </Button>
         ) : (
@@ -608,22 +608,22 @@ export function AgentCreationWizard(props: AgentCreationWizardProps) {
 
 function ReviewGroup({ title, editLabel, editWord, onEdit, children }: { title: string; editLabel: string; editWord: string; onEdit: () => void; children: ReactNode }) {
   return (
-    <section className="fk-agent-wizard__group">
-      <div className="fk-agent-wizard__group-head">
-        <h2 className="fk-agent-wizard__group-title">{title}</h2>
+    <section className="ty-agent-wizard__group">
+      <div className="ty-agent-wizard__group-head">
+        <h2 className="ty-agent-wizard__group-title">{title}</h2>
         <Button variant="quiet" size="compact" onPress={onEdit}>
           <span aria-hidden="true">{editWord}</span>
-          <span className="fk-visually-hidden">{editLabel}</span>
+          <span className="ty-visually-hidden">{editLabel}</span>
         </Button>
       </div>
-      <dl className="fk-agent-wizard__rows">{children}</dl>
+      <dl className="ty-agent-wizard__rows">{children}</dl>
     </section>
   )
 }
 
 function Row({ term, value, mono = false }: { term: string; value: string; mono?: boolean }) {
   return (
-    <div className="fk-agent-wizard__row">
+    <div className="ty-agent-wizard__row">
       <dt>{term}</dt>
       <dd data-mono={mono || undefined} {...(mono ? { dir: 'ltr' } : {})}>
         {value}

@@ -42,14 +42,14 @@ describe('PageDots', () => {
   it('shows a counter when the pages exceed maxDots', () => {
     const { container } = render(<PageDots count={12} currentIndex={0} maxDots={9} onSelect={() => {}} />)
     expect(container).toHaveTextContent('1 of 12')
-    expect(container.querySelectorAll('.fk-page-dots__pip')).toHaveLength(0)
+    expect(container.querySelectorAll('.ty-page-dots__pip')).toHaveLength(0)
   })
 
   it('keeps a 44 px hit area at the small size on touch', () => {
     const { container } = render(<PageDots count={3} currentIndex={0} size="small" onSelect={() => {}} />)
     expect(container.firstElementChild).toHaveAttribute('data-size', 'small')
     const css = cssOf('components/page-dots/PageDots.css')
-    expect(css).toMatch(/\.fk-page-dots__hit\s*\{[^}]*min-inline-size:\s*var\(--fk-control-target\)/)
+    expect(css).toMatch(/\.ty-page-dots__hit\s*\{[^}]*min-inline-size:\s*var\(--ty-control-target\)/)
     expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/transition:\s*none/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/Highlight/)
   })

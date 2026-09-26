@@ -31,11 +31,11 @@ export interface CompactConfirmProps {
 function ToneTile({ tone, icon, word }: { tone: ConfirmTone; icon?: ReactNode; word: string }) {
   const glyph = icon ?? (tone === 'danger' ? <TriangleAlert /> : <CircleHelp />)
   return (
-    <div className="fk-compact-confirm__tone">
-      <span className="fk-compact-confirm__tile" aria-hidden="true">
+    <div className="ty-compact-confirm__tone">
+      <span className="ty-compact-confirm__tile" aria-hidden="true">
         {glyph}
       </span>
-      {tone === 'danger' ? <span className="fk-compact-confirm__word">{word}</span> : null}
+      {tone === 'danger' ? <span className="ty-compact-confirm__word">{word}</span> : null}
     </div>
   )
 }
@@ -60,23 +60,23 @@ export function CompactConfirm(props: CompactConfirmProps) {
       onOpenChange={(next) => {
         if (!next) props.onCancel()
       }}
-      className="fk-compact-confirm__scrim"
+      className="ty-compact-confirm__scrim"
     >
-      <Modal className={cx('fk-compact-confirm', props.className)} data-tone={tone}>
-        <Dialog role="alertdialog" aria-labelledby={titleId} aria-describedby={props.message ? messageId : undefined} className="fk-compact-confirm__card">
+      <Modal className={cx('ty-compact-confirm', props.className)} data-tone={tone}>
+        <Dialog role="alertdialog" aria-labelledby={titleId} aria-describedby={props.message ? messageId : undefined} className="ty-compact-confirm__card">
           <ToneTile tone={tone} icon={props.icon} word={copy.caution} />
-          <div className="fk-compact-confirm__text">
-            {props.sourceLabel ? <p className="fk-compact-confirm__source">{props.sourceLabel}</p> : null}
-            <Heading id={titleId} level={2} className="fk-compact-confirm__question">
+          <div className="ty-compact-confirm__text">
+            {props.sourceLabel ? <p className="ty-compact-confirm__source">{props.sourceLabel}</p> : null}
+            <Heading id={titleId} level={2} className="ty-compact-confirm__question">
               {props.title}
             </Heading>
             {props.message ? (
-              <p id={messageId} className="fk-compact-confirm__message">
+              <p id={messageId} className="ty-compact-confirm__message">
                 {props.message}
               </p>
             ) : null}
           </div>
-          <div className="fk-compact-confirm__actions">
+          <div className="ty-compact-confirm__actions">
             <Button autoFocus={tone === 'danger'} onPress={props.onCancel}>
               {props.cancelLabel ?? copy.cancel}
             </Button>

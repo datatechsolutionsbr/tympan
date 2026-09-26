@@ -46,7 +46,7 @@ export function SourceMarkSlot({ dialect }: { dialect?: string }) {
   const mark = sourceMarkFor(dialect)
   const [failed, setFailed] = useState<string | null>(null)
   if (mark && failed !== mark.src) {
-    return <img className="fk-source-mark" src={mark.src} alt="" aria-hidden="true" data-mark="registered" onError={() => setFailed(mark.src)} />
+    return <img className="ty-source-mark" src={mark.src} alt="" aria-hidden="true" data-mark="registered" onError={() => setFailed(mark.src)} />
   }
-  return <Database className="fk-source-mark" aria-hidden="true" focusable="false" data-mark="fallback" />
+  return <Database className="ty-source-mark" aria-hidden="true" focusable="false" data-mark="fallback" />
 }

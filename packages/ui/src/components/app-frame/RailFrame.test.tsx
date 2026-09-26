@@ -42,7 +42,7 @@ function Shell(props: Partial<AppFrameProps>) {
   const [navOpen, setNavOpen] = useState(false)
   return (
     <AppFrame
-      brand={<span>Fakhir</span>}
+      brand={<span>Tympan</span>}
       context={<RailContextButton scope="EACH/USP" name="Census of government AI" />}
       account={<span>Natalia</span>}
       navigation={<Navigation />}
@@ -58,7 +58,7 @@ function Shell(props: Partial<AppFrameProps>) {
 describe('AppFrame rail layout', () => {
   it('is the default without a top bar: a navigation landmark, one main, no banner', () => {
     const { container } = render(<Shell />)
-    expect(container.querySelector('.fk-app-frame')).toHaveAttribute('data-layout', 'rail')
+    expect(container.querySelector('.ty-app-frame')).toHaveAttribute('data-layout', 'rail')
     expect(screen.getByRole('navigation', { name: 'Main' })).toBeInTheDocument()
     expect(screen.getAllByRole('main')).toHaveLength(1)
     expect(screen.queryByRole('banner')).toBeNull()
@@ -82,19 +82,19 @@ describe('AppFrame rail layout', () => {
 
   it('draws the active item with accent-soft fill and a 3 px inset bar', () => {
     const css = cssOf('components/app-frame/AppFrameRail.css')
-    expect(css).toMatch(/\.fk-rail-item\[data-current\]\s*\{[^}]*background:\s*var\(--fk-accent-soft\)/)
-    expect(css).toMatch(/\.fk-rail-item\[data-current\]::before\s*\{[^}]*inline-size:\s*3px/)
-    expect(css).toMatch(/--fk-rail-width:\s*248px/)
+    expect(css).toMatch(/\.ty-rail-item\[data-current\]\s*\{[^}]*background:\s*var\(--ty-accent-soft\)/)
+    expect(css).toMatch(/\.ty-rail-item\[data-current\]::before\s*\{[^}]*inline-size:\s*3px/)
+    expect(css).toMatch(/--ty-rail-width:\s*248px/)
   })
 
   it('reserves bottom space for the dock and adds a skip link to it', () => {
     render(<Shell dock={dock} />)
-    expect(screen.getByRole('link', { name: 'Skip to the action bar' })).toHaveAttribute('href', '#fk-action-bar')
-    expect(screen.getByRole('navigation', { name: 'Actions' })).toHaveAttribute('id', 'fk-action-bar')
+    expect(screen.getByRole('link', { name: 'Skip to the action bar' })).toHaveAttribute('href', '#ty-action-bar')
+    expect(screen.getByRole('navigation', { name: 'Actions' })).toHaveAttribute('id', 'ty-action-bar')
     const css = cssOf('components/app-frame/AppFrameRail.css')
-    expect(css).toMatch(/\.fk-app-frame__sheet\s*\{[^}]*padding-block-end:\s*calc\(var\(--fk-sheet-pad\) \+ var\(--fk-action-bar-inset-bottom, 0px\)\)/)
-    expect(css).toMatch(/\.fk-app-frame__sheet\s*\{[^}]*border-radius:\s*var\(--fk-radius-sheet\)/)
-    expect(css).toMatch(/\.fk-app-frame__sheet\s*\{[^}]*overflow-y:\s*auto/)
+    expect(css).toMatch(/\.ty-app-frame__sheet\s*\{[^}]*padding-block-end:\s*calc\(var\(--ty-sheet-pad\) \+ var\(--ty-action-bar-inset-bottom, 0px\)\)/)
+    expect(css).toMatch(/\.ty-app-frame__sheet\s*\{[^}]*border-radius:\s*var\(--ty-radius-sheet\)/)
+    expect(css).toMatch(/\.ty-app-frame__sheet\s*\{[^}]*overflow-y:\s*auto/)
   })
 
   it('below 768 px hides the rail until the tab bar opens it in a modal drawer', async () => {
@@ -153,7 +153,7 @@ describe('AppFrame rail layout in right-to-left', () => {
       </I18nProvider>,
     )
     expect(screen.getByRole('navigation', { name: 'Main' })).toBeInTheDocument()
-    expect(cssOf('components/app-frame/AppFrameRail.css')).toMatch(/\.fk-rail-item\[data-current\]::before\s*\{[^}]*inset-inline-start:\s*0/)
+    expect(cssOf('components/app-frame/AppFrameRail.css')).toMatch(/\.ty-rail-item\[data-current\]::before\s*\{[^}]*inset-inline-start:\s*0/)
     await expectNoAxeViolations(container)
   })
 })

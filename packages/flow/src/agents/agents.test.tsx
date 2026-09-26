@@ -2,7 +2,7 @@ import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
 import { describe, expect, it, vi } from 'vitest'
-import { FakhirProvider } from '@fakhir/ui'
+import { TympanProvider } from '@datatechsolutions/tympan'
 import { expectNoAxeViolations } from '../../test/axe'
 import { cssOf, mediaBlock } from '../../test/css'
 import { createDialogStack, DialogStackProvider } from '../state/dialogStack'
@@ -85,13 +85,13 @@ describe('AgentEditorDialog', () => {
   it('is a named dialog without axe violations, and uses the agent language (square mark, word agent)', async () => {
     openEditor()
     const dialog = await screen.findByRole('dialog')
-    expect(dialog.querySelector('.fk-agent-mark')).not.toBeNull()
+    expect(dialog.querySelector('.ty-agent-mark')).not.toBeNull()
     expect(dialog).toHaveTextContent('agent')
     await expectNoAxeViolations(dialog)
   })
 
   it('works under an Arabic provider (rail tabs by keyboard) and picks Portuguese strings under pt-BR', async () => {
-    openEditor(undefined, undefined, (ui) => <FakhirProvider locale="ar">{ui}</FakhirProvider>)
+    openEditor(undefined, undefined, (ui) => <TympanProvider locale="ar">{ui}</TympanProvider>)
     const first = await screen.findAllByRole('tab')
     first[0]!.focus()
     await userEvent.keyboard('{ArrowDown}{Enter}')
@@ -102,7 +102,7 @@ describe('AgentEditorDialog', () => {
     const css = cssOf('agents/agents.css')
     expect(mediaBlock(css, /\(prefers-reduced-motion: reduce\)/)).toMatch(/animation:\s*none/)
     expect(mediaBlock(css, /\(forced-colors: active\)/)).toMatch(/Highlight/)
-    expect(css).toMatch(/\.fk-agent-autonomy__level\s*\{[^}]*min-block-size:\s*44px/)
+    expect(css).toMatch(/\.ty-agent-autonomy__level\s*\{[^}]*min-block-size:\s*44px/)
   })
 })
 
@@ -185,11 +185,11 @@ describe('AgentCreationWizard', () => {
     function Host() {
       const [step, setStep] = useState(1)
       return (
-        <FakhirProvider locale="ar">
+        <TympanProvider locale="ar">
           <div dir="rtl">
             <Wizard initialStep={step} onStepChange={setStep} />
           </div>
-        </FakhirProvider>
+        </TympanProvider>
       )
     }
     const { unmount } = render(<Host />)
@@ -198,9 +198,9 @@ describe('AgentCreationWizard', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Identity')
     unmount()
     render(
-      <FakhirProvider locale="pt-BR">
+      <TympanProvider locale="pt-BR">
         <Wizard />
-      </FakhirProvider>,
+      </TympanProvider>,
     )
     expect(screen.getByRole('button', { name: 'Avançar' })).toBeInTheDocument()
   })

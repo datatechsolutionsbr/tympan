@@ -12,8 +12,8 @@ that none of these concepts is exported from `src/index.ts`.
 | Older concept | Use instead |
 |---|---|
 | an "instant" duration alias | no transition at all |
-| a "fast" alias | `duration.ms.quick`, `--fk-dur-quick` |
-| a "normal" alias | `duration.ms.base`, `--fk-dur-base` |
+| a "fast" alias | `duration.ms.quick`, `--ty-dur-quick` |
+| a "normal" alias | `duration.ms.base`, `--ty-dur-base` |
 | a "slow" alias | `base` (the design direction has no longer step) |
 | a "very slow" alias | removed; a long period such as the skeleton pulse is a constant of that component |
 | a separate reduced-motion duration set | MotionFoundation: the tokens collapse to zero under reduced motion |
@@ -22,9 +22,9 @@ that none of these concepts is exported from `src/index.ts`.
 
 | Older concept | Use instead |
 |---|---|
-| default, in-out or platform-named curves | `ease.css.enter`, `--fk-ease` |
+| default, in-out or platform-named curves | `ease.css.enter`, `--ty-ease` |
 | deceleration ("out") | `enter` |
-| acceleration ("in") | `exit`, `--fk-ease-out` |
+| acceleration ("in") | `exit`, `--ty-ease-out` |
 
 ## Presets
 
@@ -46,7 +46,7 @@ that none of these concepts is exported from `src/index.ts`.
 | Older concept | Use instead |
 |---|---|
 | swipe threshold and drag limits in pixels | SwipeRow `fullSwipeFraction` and `revealFraction` (fractions of the row width) |
-| page-indicator dot variant | PageDots: active dot `--fk-accent`, inactive `--fk-line-strong`, shape change in `quick` |
+| page-indicator dot variant | PageDots: active dot `--ty-accent`, inactive `--ty-line-strong`, shape change in `quick` |
 
 ## Mobile-OS system colours
 
@@ -54,12 +54,12 @@ Not carried over. Map by meaning:
 
 | Meaning | Token |
 |---|---|
-| interactive blue | `--fk-accent` (the only interactive colour) |
-| green | success semantic colour (`--fk-success`) |
-| red | error semantic colour (`--fk-danger`) |
-| orange, yellow | pending semantic colour (`--fk-warning`) |
-| gray ramp | `--fk-ink-3`, `--fk-line`, `--fk-line-strong`, `--fk-surface-sunken` by role |
-| purple, pink, teal, indigo, mint, cyan, brown | `--fk-categorical-*`, only in maps, charts, legends and graph nodes |
+| interactive blue | `--ty-accent` (the only interactive colour) |
+| green | success semantic colour (`--ty-success`) |
+| red | error semantic colour (`--ty-danger`) |
+| orange, yellow | pending semantic colour (`--ty-warning`) |
+| gray ramp | `--ty-ink-3`, `--ty-line`, `--ty-line-strong`, `--ty-surface-sunken` by role |
+| purple, pink, teal, indigo, mint, cyan, brown | `--ty-categorical-*`, only in maps, charts, legends and graph nodes |
 
 The only addition arising from wave 4 is MotionFoundation's `decorativeMotion`
 flag (default false), read by CascadeGrid.

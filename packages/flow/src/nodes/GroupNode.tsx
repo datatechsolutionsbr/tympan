@@ -5,7 +5,7 @@
 import { useId, useRef, type KeyboardEvent, type PointerEvent as ReactPointerEvent } from 'react'
 import { ChevronDown, ChevronRight, Focus, Group, Trash2 } from 'lucide-react'
 import { Button as AriaButton } from 'react-aria-components'
-import { Button } from '@fakhir/ui'
+import { Button } from '@datatechsolutions/tympan'
 import { isToneName } from '../catalog/palette'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { FlowNode, LayoutDirection, Size } from '../model/types'
@@ -108,8 +108,8 @@ export function GroupNode(props: GroupNodeProps) {
   const members = fill(l.members, { count: memberCount }, locale)
 
   const toggle = (
-    <AriaButton className="fk-group-node__toggle" aria-label={fill(expanded ? l.collapse : l.expand, { name })} aria-expanded={expanded} onPress={() => onToggleExpanded(id)} data-fk-no-drag="">
-      {expanded ? <ChevronDown aria-hidden="true" focusable="false" /> : <ChevronRight className="fk-group-node__chevron" aria-hidden="true" focusable="false" />}
+    <AriaButton className="ty-group-node__toggle" aria-label={fill(expanded ? l.collapse : l.expand, { name })} aria-expanded={expanded} onPress={() => onToggleExpanded(id)} data-ty-no-drag="">
+      {expanded ? <ChevronDown aria-hidden="true" focusable="false" /> : <ChevronRight className="ty-group-node__chevron" aria-hidden="true" focusable="false" />}
     </AriaButton>
   )
   const controls = (
@@ -136,12 +136,12 @@ export function GroupNode(props: GroupNodeProps) {
         {...(onConfigure && (canEdit || preview) ? { onActivate: () => onConfigure(id) } : {})}
         badges={<NodeBadge>{l.group}</NodeBadge>}
         headerActions={
-          <span className="fk-group-node__controls" data-fk-above="">
+          <span className="ty-group-node__controls" data-ty-above="">
             {toggle}
             {controls}
           </span>
         }
-        className="fk-flow-node fk-group-node__card"
+        className="ty-flow-node ty-group-node__card"
       >
         <ConnectionPorts nodeId={id} nodeLabel={name} inputs={k.inputs} outputs={k.outputs} tone={safeTone} preview={preview} />
         <NodeRunIndicator nodeId={id} kind="group" nodeLabel={name} />
@@ -191,12 +191,12 @@ export function GroupNode(props: GroupNodeProps) {
   return (
     <div
       ref={frameRef}
-      className="fk-group-node"
+      className="ty-group-node"
       role="group"
       aria-label={name}
       aria-describedby={countId}
       tabIndex={0}
-      data-fk-node-focus=""
+      data-ty-node-focus=""
       data-tone={safeTone}
       data-selected={selected ? 'true' : 'false'}
       data-locked={locked ? 'true' : 'false'}
@@ -204,28 +204,28 @@ export function GroupNode(props: GroupNodeProps) {
       style={{ inlineSize: size.width, blockSize: size.height }}
       onKeyDown={onKeyDown}
     >
-      <span id={countId} className="fk-visually-hidden">
+      <span id={countId} className="ty-visually-hidden">
         {[members, run.words].filter(Boolean).join(', ')}
       </span>
-      <header className="fk-group-node__header" onDoubleClick={onConfigure && canEdit ? () => onConfigure(id) : undefined}>
-        <span className="fk-group-node__icon" aria-hidden="true">
+      <header className="ty-group-node__header" onDoubleClick={onConfigure && canEdit ? () => onConfigure(id) : undefined}>
+        <span className="ty-group-node__icon" aria-hidden="true">
           <Group focusable="false" />
         </span>
-        <span className="fk-group-node__titles">
-          <span className="fk-group-node__name" title={name}>
+        <span className="ty-group-node__titles">
+          <span className="ty-group-node__name" title={name}>
             {name}
           </span>
-          {description ? <span className="fk-group-node__description">{description}</span> : null}
+          {description ? <span className="ty-group-node__description">{description}</span> : null}
         </span>
-        <span className="fk-group-node__controls">
+        <span className="ty-group-node__controls">
           {toggle}
           {controls}
         </span>
       </header>
-      <div className="fk-group-node__members" aria-hidden="true" />
+      <div className="ty-group-node__members" aria-hidden="true" />
       <ConnectionPorts nodeId={id} nodeLabel={name} inputs={k.inputs} outputs={k.outputs} tone={safeTone} preview={preview} />
       <NodeRunIndicator nodeId={id} kind="group" nodeLabel={name} />
-      {selected && canEdit && onResize ? <span className="fk-group-node__resize" data-fk-no-drag="" aria-hidden="true" title={fill(l.resize, { name })} onPointerDown={onHandleDown} /> : null}
+      {selected && canEdit && onResize ? <span className="ty-group-node__resize" data-ty-no-drag="" aria-hidden="true" title={fill(l.resize, { name })} onPointerDown={onHandleDown} /> : null}
     </div>
   )
 }

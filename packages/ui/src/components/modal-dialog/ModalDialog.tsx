@@ -69,23 +69,23 @@ export function ModalDialog(props: ModalDialogProps) {
       onOpenChange={handleOpenChange}
       isDismissable={dismissOnBackdrop && !busy}
       isKeyboardDismissDisabled={busy}
-      className="fk-modal-dialog__backdrop"
+      className="ty-modal-dialog__backdrop"
     >
-      <Modal className={cx('fk-modal-dialog', className)} data-width={width}>
+      <Modal className={cx('ty-modal-dialog', className)} data-width={width}>
         <Dialog
           role={role}
-          className="fk-modal-dialog__panel"
+          className="ty-modal-dialog__panel"
           aria-describedby={description ? descriptionId : undefined}
           data-busy={busy || undefined}
         >
-          <div className="fk-modal-dialog__inner" aria-busy={busy || undefined}>
-            <header className="fk-modal-dialog__header">
-              <Heading slot="title" level={2} className="fk-modal-dialog__title" ref={titleRef} tabIndex={-1}>
+          <div className="ty-modal-dialog__inner" aria-busy={busy || undefined}>
+            <header className="ty-modal-dialog__header">
+              <Heading slot="title" level={2} className="ty-modal-dialog__title" ref={titleRef} tabIndex={-1}>
                 {title}
               </Heading>
               {showCloseButton ? (
                 <Button
-                  className="fk-modal-dialog__close"
+                  className="ty-modal-dialog__close"
                   variant="quiet"
                   size="compact"
                   shape="circle"
@@ -98,12 +98,12 @@ export function ModalDialog(props: ModalDialogProps) {
               ) : null}
             </header>
             {description ? (
-              <p id={descriptionId} className="fk-modal-dialog__description">
+              <p id={descriptionId} className="ty-modal-dialog__description">
                 {description}
               </p>
             ) : null}
-            {children ? <div className="fk-modal-dialog__body">{children}</div> : null}
-            {actions ? <footer className="fk-modal-dialog__actions">{actions}</footer> : null}
+            {children ? <div className="ty-modal-dialog__body">{children}</div> : null}
+            {actions ? <footer className="ty-modal-dialog__actions">{actions}</footer> : null}
           </div>
         </Dialog>
       </Modal>

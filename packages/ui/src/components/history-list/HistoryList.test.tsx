@@ -61,7 +61,7 @@ describe('HistoryList', () => {
 
   it('keeps 44 px headers and no transition under reduced motion', () => {
     const css = cssOf('components/history-list/HistoryList.css')
-    expect(css).toMatch(/__header\s*\{[^}]*min-block-size:\s*var\(--fk-control-target\)/)
+    expect(css).toMatch(/__header\s*\{[^}]*min-block-size:\s*var\(--ty-control-target\)/)
     expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/transition:\s*none/)
   })
 
@@ -82,7 +82,7 @@ describe('HistoryList', () => {
 describe('HistoryList in right-to-left (ar)', () => {
   it('renders mirrored where directional and passes axe', async () => {
     const { container } = renderRtl(<HistoryList loadingLabel="تحميل" emptyLabel="لا يوجد سجل" items={[{ id: 'h', start: <span>مراجع</span>, summary: 'تحقق من سنة الإطلاق.', details: <p>تفاصيل</p> }]} />)
-    for (const svg of container.querySelectorAll('.fk-history-list__chevron')) expect(svg).toHaveClass('fk-mirror-rtl')
+    for (const svg of container.querySelectorAll('.ty-history-list__chevron')) expect(svg).toHaveClass('ty-mirror-rtl')
     await axeRtl(container)
   })
 })

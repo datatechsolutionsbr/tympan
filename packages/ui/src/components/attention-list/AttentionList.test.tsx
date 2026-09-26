@@ -48,7 +48,7 @@ describe('AttentionList', () => {
 
   it('stacks the action on phones and keeps rows as dividers', () => {
     const css = cssOf('components/attention-list/AttentionList.css')
-    expect(css).toMatch(/\.fk-attention__row\s*\{[^}]*border-block-end:\s*1px solid var\(--fk-line\)/)
+    expect(css).toMatch(/\.ty-attention__row\s*\{[^}]*border-block-end:\s*1px solid var\(--ty-line\)/)
     expect(mediaBlock(css, /\(max-width:\s*639\.98px\)/)).toMatch(/grid-template-columns:\s*minmax\(0, 1fr\)/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/CanvasText/)
   })

@@ -159,7 +159,7 @@ describe('RegionMap', () => {
   it('uses system colours in forced colours and has 44 px zoom buttons', () => {
     const css = cssOf('components/region-map/RegionMap.css')
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/Highlight/)
-    expect(css).toMatch(/\.fk-region-map__zoom \.fk-button\s*\{[^}]*var\(--fk-control-target\)/)
+    expect(css).toMatch(/\.ty-region-map__zoom \.ty-button\s*\{[^}]*var\(--ty-control-target\)/)
   })
 
   it('has no axe violations, light and dark', async () => {
@@ -173,7 +173,7 @@ describe('RegionMap', () => {
         ))}
       </>,
     )
-    await waitFor(() => expect(container.querySelectorAll('.fk-region-map__marker')).toHaveLength(4))
+    await waitFor(() => expect(container.querySelectorAll('.ty-region-map__marker')).toHaveLength(4))
     await expectNoAxeViolations(container)
   })
 })
@@ -194,7 +194,7 @@ describe('RegionMap in right-to-left locales', () => {
     expect(markers()[1]).toHaveFocus()
     await userEvent.keyboard('{ArrowRight}')
     expect(markers()[0]).toHaveFocus()
-    expect(container.querySelector('.fk-region-map__legend-count')!.textContent).toMatch(/[٠-٩]/)
+    expect(container.querySelector('.ty-region-map__legend-count')!.textContent).toMatch(/[٠-٩]/)
     await expectNoAxeViolations(container)
   })
 })

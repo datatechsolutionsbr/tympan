@@ -5,7 +5,7 @@ import { seedFromColor, type Seed, type SeedName, type ThemeConfig } from './the
 // the proof-state greens sit about 30 degrees away from the brand teal (§2.3).
 const brand = seedFromColor('#166e5a', 0.13)
 
-const fakhirSeeds: Record<SeedName, Seed> = {
+const baseSeeds: Record<SeedName, Seed> = {
   brand,
   neutral: { hue: brand.hue, chroma: 0.012 },
   danger: { hue: 12, chroma: 0.2 },
@@ -18,10 +18,10 @@ const fakhirSeeds: Record<SeedName, Seed> = {
  * Default theme. Generated from seeds, with the exact colours of design
  * direction §2.3 pinned so the product matches the approved direction.
  */
-export const fakhirPreset: ThemeConfig = {
-  name: 'fakhir',
-  label: 'Fakhir',
-  seeds: fakhirSeeds,
+export const tympanPreset: ThemeConfig = {
+  name: 'tympan',
+  label: 'Tympan',
+  seeds: baseSeeds,
   radius: 10,
   contrast: 'default',
   glass: true,
@@ -96,16 +96,27 @@ export const neutralPreset: ThemeConfig = {
   cta: 'solid',
 }
 
-/** Fakhir hues with high contrast, opaque surfaces and a thicker focus ring. */
+/**
+ * The Fakhir research platform's look, selected by name
+ * (`data-ty-theme="fakhir"`). Today it carries the default theme's values; it
+ * is a separate preset so that app keeps its look if the default changes.
+ */
+export const fakhirPreset: ThemeConfig = {
+  ...tympanPreset,
+  name: 'fakhir',
+  label: 'Fakhir',
+}
+
+/** Default hues with high contrast, opaque surfaces and a thicker focus ring. */
 export const highContrastPreset: ThemeConfig = {
   name: 'high-contrast',
   label: 'High contrast',
-  seeds: fakhirSeeds,
+  seeds: baseSeeds,
   radius: 10,
   contrast: 'high',
   glass: false,
   cta: 'solid',
 }
 
-export const presets: readonly ThemeConfig[] = [fakhirPreset, neutralPreset, highContrastPreset]
-export const DEFAULT_THEME = 'fakhir'
+export const presets: readonly ThemeConfig[] = [tympanPreset, fakhirPreset, neutralPreset, highContrastPreset]
+export const DEFAULT_THEME = 'tympan'

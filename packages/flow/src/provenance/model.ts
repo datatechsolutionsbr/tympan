@@ -268,7 +268,7 @@ export interface BandGeometry {
 
 export const DEFAULT_BANDS: Readonly<BandGeometry> = Object.freeze({ label: 130, band: 96, card: { width: 236, height: 72 }, column: 56, inset: 12 })
 
-/** Reads the band tokens (--fk-flow-band, --fk-flow-band-label, --fk-flow-node-h, --fk-flow-node-w, --fk-flow-col-gap) from an element, falling back to the defaults. */
+/** Reads the band tokens (--ty-flow-band, --ty-flow-band-label, --ty-flow-node-h, --ty-flow-node-w, --ty-flow-col-gap) from an element, falling back to the defaults. */
 export function bandGeometryFrom(el: Element | null): BandGeometry {
   if (!el || typeof getComputedStyle !== 'function') return DEFAULT_BANDS
   const cs = getComputedStyle(el)
@@ -276,13 +276,13 @@ export function bandGeometryFrom(el: Element | null): BandGeometry {
     const v = parseFloat(cs.getPropertyValue(name))
     return Number.isFinite(v) && v > 0 ? v : fallback
   }
-  const band = px('--fk-flow-band', DEFAULT_BANDS.band)
-  const height = px('--fk-flow-node-h', DEFAULT_BANDS.card.height)
+  const band = px('--ty-flow-band', DEFAULT_BANDS.band)
+  const height = px('--ty-flow-node-h', DEFAULT_BANDS.card.height)
   return {
     band,
-    label: px('--fk-flow-band-label', DEFAULT_BANDS.label),
-    card: { width: px('--fk-flow-node-w', DEFAULT_BANDS.card.width), height },
-    column: px('--fk-flow-col-gap', DEFAULT_BANDS.column),
+    label: px('--ty-flow-band-label', DEFAULT_BANDS.label),
+    card: { width: px('--ty-flow-node-w', DEFAULT_BANDS.card.width), height },
+    column: px('--ty-flow-col-gap', DEFAULT_BANDS.column),
     inset: Math.min(DEFAULT_BANDS.inset ?? 12, Math.max(0, (band - height) / 2)),
   }
 }

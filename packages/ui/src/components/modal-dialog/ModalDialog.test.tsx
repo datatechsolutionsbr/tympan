@@ -80,7 +80,7 @@ describe('ModalDialog', () => {
     render(<Harness role="alertdialog" onChange={onChange} />)
     await userEvent.click(screen.getByRole('button', { name: 'Open' }))
     const dialog = await screen.findByRole('alertdialog')
-    await userEvent.click(dialog.closest('.fk-modal-dialog__backdrop') as HTMLElement)
+    await userEvent.click(dialog.closest('.ty-modal-dialog__backdrop') as HTMLElement)
     expect(onChange).not.toHaveBeenCalled()
     expect(screen.getByRole('alertdialog')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Close' })).not.toBeInTheDocument()
@@ -91,7 +91,7 @@ describe('ModalDialog', () => {
     render(<Harness onChange={onChange} />)
     await userEvent.click(screen.getByRole('button', { name: 'Open' }))
     const dialog = await screen.findByRole('dialog')
-    await userEvent.click(dialog.closest('.fk-modal-dialog__backdrop') as HTMLElement)
+    await userEvent.click(dialog.closest('.ty-modal-dialog__backdrop') as HTMLElement)
     expect(onChange).toHaveBeenCalledWith(false)
   })
 
@@ -122,11 +122,11 @@ describe('ModalDialog', () => {
     )
     await userEvent.click(screen.getByRole('button', { name: 'Open' }))
     const dialog = await screen.findByRole('dialog')
-    const body = dialog.querySelector('.fk-modal-dialog__body') as HTMLElement
+    const body = dialog.querySelector('.ty-modal-dialog__body') as HTMLElement
     expect(body).toHaveTextContent('Long body')
     expect(body.contains(screen.getByRole('heading', { name: 'Delete source' }))).toBe(false)
     expect(body.contains(screen.getByRole('button', { name: 'Delete' }))).toBe(false)
-    expect(cssOf('components/modal-dialog/ModalDialog.css')).toMatch(/\.fk-modal-dialog__body\s*\{[^}]*overflow:\s*auto/)
+    expect(cssOf('components/modal-dialog/ModalDialog.css')).toMatch(/\.ty-modal-dialog__body\s*\{[^}]*overflow:\s*auto/)
   })
 
   it('can focus the title on open', async () => {
@@ -137,7 +137,7 @@ describe('ModalDialog', () => {
 
   it('fades only under reduced motion and draws a border in forced colours', () => {
     const css = cssOf('components/modal-dialog/ModalDialog.css')
-    expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/fk-modal-fade/)
+    expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/ty-modal-fade/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/CanvasText/)
   })
 

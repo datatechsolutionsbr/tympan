@@ -81,8 +81,8 @@ describe('ChoiceTile', () => {
 
   it('keeps a 44 x 44 hit area for every shape; forced colours outline the selection', () => {
     const css = cssOf('components/choice-tile/ChoiceTile.css')
-    expect(css).toMatch(/\.fk-choice-tile::before\s*\{[^}]*inline-size:\s*max\(100%,\s*var\(--fk-control-target\)\)/)
-    expect(css).toMatch(/\.fk-choice-tile::before\s*\{[^}]*block-size:\s*max\(100%,\s*var\(--fk-control-target\)\)/)
+    expect(css).toMatch(/\.ty-choice-tile::before\s*\{[^}]*inline-size:\s*max\(100%,\s*var\(--ty-control-target\)\)/)
+    expect(css).toMatch(/\.ty-choice-tile::before\s*\{[^}]*block-size:\s*max\(100%,\s*var\(--ty-control-target\)\)/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/\[data-selected\][^}]*Highlight/)
     expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/transition:\s*none/)
   })

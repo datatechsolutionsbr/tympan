@@ -40,7 +40,7 @@ export function ChoiceTile({ selected, onPress, label, disabled, shape = 'contro
   return (
     <ToggleButton
       id={id}
-      className={cx('fk-choice-tile', className)}
+      className={cx('ty-choice-tile', className)}
       isSelected={selected}
       isDisabled={disabled}
       aria-label={label}

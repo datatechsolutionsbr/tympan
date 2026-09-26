@@ -25,7 +25,7 @@ describe('Breadcrumbs', () => {
     expect(current).toHaveAttribute('aria-current', 'page')
     expect(current.closest('a')).toBeNull()
     expect(nav.querySelector('ol')).not.toBeNull()
-    nav.querySelectorAll('.fk-breadcrumbs__separator').forEach((s) => expect(s).toHaveAttribute('aria-hidden', 'true'))
+    nav.querySelectorAll('.ty-breadcrumbs__separator').forEach((s) => expect(s).toHaveAttribute('aria-hidden', 'true'))
   })
 
   it('shows only a back link below 640 px in auto mode', () => {
@@ -81,7 +81,7 @@ describe('Breadcrumbs', () => {
     renderWithProvider(<Breadcrumbs items={three} />, { navigate: vi.fn() })
     expect(screen.getByText('Project')).toHaveAttribute('title', 'Project')
     const css = cssOf('components/breadcrumbs/Breadcrumbs.css')
-    expect(mediaBlock(css, /\(max-width:\s*1023\.98px\)/)).toMatch(/var\(--fk-control-target\)/)
+    expect(mediaBlock(css, /\(max-width:\s*1023\.98px\)/)).toMatch(/var\(--ty-control-target\)/)
     const forced = mediaBlock(css, /\(forced-colors:\s*active\)/)
     expect(forced).toMatch(/LinkText/)
     expect(forced).toMatch(/CanvasText/)
@@ -96,9 +96,9 @@ describe('Breadcrumbs', () => {
 describe('Breadcrumbs in right-to-left (ar)', () => {
   it('renders mirrored where directional and passes axe', async () => {
     const { container } = renderRtl(<Breadcrumbs mode="trail" items={[{ label: 'الجامعة', href: '/org' }, { label: 'التعداد', href: '/org/c' }, { label: 'القاعدة', href: '/org/c/b' }]} />, { navigate: () => {} })
-    const separators = container.querySelectorAll('.fk-breadcrumbs__separator')
+    const separators = container.querySelectorAll('.ty-breadcrumbs__separator')
     expect(separators.length).toBeGreaterThan(0)
-    for (const s of separators) expect(s).toHaveClass('fk-mirror-rtl')
+    for (const s of separators) expect(s).toHaveClass('ty-mirror-rtl')
     await axeRtl(container)
   })
 })

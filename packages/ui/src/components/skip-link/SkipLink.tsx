@@ -35,7 +35,7 @@ export function SkipLink({ targetId = 'main-content', label, className }: SkipLi
     }
   }
   return (
-    <a href={`#${targetId}`} className={cx('fk-skip-link', className)} onClick={onClick}>
+    <a href={`#${targetId}`} className={cx('ty-skip-link', className)} onClick={onClick}>
       {label ?? messages.skipLink}
     </a>
   )

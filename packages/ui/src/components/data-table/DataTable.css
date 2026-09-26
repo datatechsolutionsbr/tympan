@@ -1,103 +1,103 @@
 /* DataTable (spec: wave-1/data-table.md; design direction §2.2, §2.3, §2.6, §2.9). */
-@layer fakhir.components {
-  .fk-table-wrap {
+@layer tympan.components {
+  .ty-table-wrap {
     /* Densities (§2.9): row height, cell padding (block x inline), text size / line height. */
-    --fk-table-row-comfortable: 52px;
-    --fk-table-pad-block-comfortable: 14px;
-    --fk-table-pad-inline-comfortable: 16px;
-    --fk-table-font-comfortable: 14px;
-    --fk-table-leading-comfortable: 22px;
+    --ty-table-row-comfortable: 52px;
+    --ty-table-pad-block-comfortable: 14px;
+    --ty-table-pad-inline-comfortable: 16px;
+    --ty-table-font-comfortable: 14px;
+    --ty-table-leading-comfortable: 22px;
 
-    --fk-table-row-standard: 44px;
-    --fk-table-pad-block-standard: 10px;
-    --fk-table-pad-inline-standard: 14px;
-    --fk-table-font-standard: 14px;
-    --fk-table-leading-standard: 20px;
+    --ty-table-row-standard: 44px;
+    --ty-table-pad-block-standard: 10px;
+    --ty-table-pad-inline-standard: 14px;
+    --ty-table-font-standard: 14px;
+    --ty-table-leading-standard: 20px;
 
-    --fk-table-row-compact: 36px;
-    --fk-table-pad-block-compact: 6px;
-    --fk-table-pad-inline-compact: 12px;
-    --fk-table-font-compact: 13px;
-    --fk-table-leading-compact: 18px;
+    --ty-table-row-compact: 36px;
+    --ty-table-pad-block-compact: 6px;
+    --ty-table-pad-inline-compact: 12px;
+    --ty-table-font-compact: 13px;
+    --ty-table-leading-compact: 18px;
 
-    --fk-table-row: var(--fk-table-row-standard);
-    --fk-table-pad-block: var(--fk-table-pad-block-standard);
-    --fk-table-pad-inline: var(--fk-table-pad-inline-standard);
-    --fk-table-font: var(--fk-table-font-standard);
-    --fk-table-leading: var(--fk-table-leading-standard);
-    --fk-table-select-width: var(--fk-control-target);
+    --ty-table-row: var(--ty-table-row-standard);
+    --ty-table-pad-block: var(--ty-table-pad-block-standard);
+    --ty-table-pad-inline: var(--ty-table-pad-inline-standard);
+    --ty-table-font: var(--ty-table-font-standard);
+    --ty-table-leading: var(--ty-table-leading-standard);
+    --ty-table-select-width: var(--ty-control-target);
 
     position: relative;
     inline-size: 100%;
   }
-  .fk-table-wrap[data-density='comfortable'] {
-    --fk-table-row: var(--fk-table-row-comfortable);
-    --fk-table-pad-block: var(--fk-table-pad-block-comfortable);
-    --fk-table-pad-inline: var(--fk-table-pad-inline-comfortable);
-    --fk-table-font: var(--fk-table-font-comfortable);
-    --fk-table-leading: var(--fk-table-leading-comfortable);
+  .ty-table-wrap[data-density='comfortable'] {
+    --ty-table-row: var(--ty-table-row-comfortable);
+    --ty-table-pad-block: var(--ty-table-pad-block-comfortable);
+    --ty-table-pad-inline: var(--ty-table-pad-inline-comfortable);
+    --ty-table-font: var(--ty-table-font-comfortable);
+    --ty-table-leading: var(--ty-table-leading-comfortable);
   }
-  .fk-table-wrap[data-density='compact'] {
-    --fk-table-row: var(--fk-table-row-compact);
-    --fk-table-pad-block: var(--fk-table-pad-block-compact);
-    --fk-table-pad-inline: var(--fk-table-pad-inline-compact);
-    --fk-table-font: var(--fk-table-font-compact);
-    --fk-table-leading: var(--fk-table-leading-compact);
-  }
-
-  .fk-table__caption {
-    margin-block-end: var(--fk-space-3);
-    color: var(--fk-ink);
-    font-size: var(--fk-font-size-label);
-    font-weight: var(--fk-font-weight-semibold);
+  .ty-table-wrap[data-density='compact'] {
+    --ty-table-row: var(--ty-table-row-compact);
+    --ty-table-pad-block: var(--ty-table-pad-block-compact);
+    --ty-table-pad-inline: var(--ty-table-pad-inline-compact);
+    --ty-table-font: var(--ty-table-font-compact);
+    --ty-table-leading: var(--ty-table-leading-compact);
   }
 
-  .fk-table-scroll {
+  .ty-table__caption {
+    margin-block-end: var(--ty-space-3);
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-label);
+    font-weight: var(--ty-font-weight-semibold);
+  }
+
+  .ty-table-scroll {
     overflow: auto;
     inline-size: 100%;
   }
 
-  .fk-table {
+  .ty-table {
     inline-size: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    color: var(--fk-ink-2);
-    font-size: var(--fk-table-font);
-    line-height: var(--fk-table-leading);
+    color: var(--ty-ink-2);
+    font-size: var(--ty-table-font);
+    line-height: var(--ty-table-leading);
     outline: none;
   }
 
   /* Header: label style, sunken fill, fixed while scrolling (§2.9). */
-  .fk-table__column {
+  .ty-table__column {
     position: sticky;
     z-index: 2;
     inset-block-start: 0;
-    block-size: var(--fk-table-row);
-    padding: var(--fk-table-pad-block) var(--fk-table-pad-inline);
-    border-block-end: 1px solid var(--fk-line-strong);
-    background: var(--fk-surface-sunken);
-    color: var(--fk-ink);
-    font-size: var(--fk-font-size-label);
-    font-weight: var(--fk-font-weight-semibold);
-    line-height: var(--fk-font-line-height-label);
+    block-size: var(--ty-table-row);
+    padding: var(--ty-table-pad-block) var(--ty-table-pad-inline);
+    border-block-end: 1px solid var(--ty-line-strong);
+    background: var(--ty-surface-sunken);
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-label);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: var(--ty-font-line-height-label);
     text-align: start;
     white-space: nowrap;
     outline: none;
   }
-  .fk-table__column[data-align='end'],
-  .fk-table__cell[data-align='end'] {
+  .ty-table__column[data-align='end'],
+  .ty-table__cell[data-align='end'] {
     text-align: end;
   }
-  .fk-table__column[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-table__column[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: -2px;
   }
 
-  .fk-table__sort {
+  .ty-table__sort {
     position: relative;
     display: inline-flex;
     align-items: center;
-    gap: var(--fk-space-1);
+    gap: var(--ty-space-1);
     padding: 0;
     border: 0;
     background: none;
@@ -105,61 +105,61 @@
     font: inherit;
     cursor: pointer;
   }
-  button.fk-table__sort::before {
+  button.ty-table__sort::before {
     content: '';
     position: absolute;
     inset-block-start: 50%;
     /* physical: centring with translate(-50%) is the same in both directions */
     left: 50%;
-    inline-size: max(100%, var(--fk-control-target));
-    block-size: max(100%, var(--fk-control-target));
+    inline-size: max(100%, var(--ty-control-target));
+    block-size: max(100%, var(--ty-control-target));
     transform: translate(-50%, -50%);
   }
-  button.fk-table__sort:focus-visible {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  button.ty-table__sort:focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
-  .fk-table__column[data-allows-sorting] {
+  .ty-table__column[data-allows-sorting] {
     cursor: pointer;
   }
-  .fk-table__sort-icon {
+  .ty-table__sort-icon {
     inline-size: 14px;
     block-size: 14px;
-    color: var(--fk-ink-3);
+    color: var(--ty-ink-3);
   }
-  .fk-table__column[data-sort-direction] .fk-table__sort-icon,
-  .fk-table__column[aria-sort='ascending'] .fk-table__sort-icon,
-  .fk-table__column[aria-sort='descending'] .fk-table__sort-icon {
-    color: var(--fk-accent);
+  .ty-table__column[data-sort-direction] .ty-table__sort-icon,
+  .ty-table__column[aria-sort='ascending'] .ty-table__sort-icon,
+  .ty-table__column[aria-sort='descending'] .ty-table__sort-icon {
+    color: var(--ty-accent);
   }
 
   /* Rows: dividers, never zebra stripes (§2.9). */
-  .fk-table__row {
+  .ty-table__row {
     outline: none;
   }
-  .fk-table__cell {
+  .ty-table__cell {
     box-sizing: border-box;
-    block-size: var(--fk-table-row);
-    padding: var(--fk-table-pad-block) var(--fk-table-pad-inline);
-    border-block-end: 1px solid var(--fk-line);
-    background: var(--fk-surface-solid);
-    font-weight: var(--fk-font-weight-regular);
+    block-size: var(--ty-table-row);
+    padding: var(--ty-table-pad-block) var(--ty-table-pad-inline);
+    border-block-end: 1px solid var(--ty-line);
+    background: var(--ty-surface-solid);
+    font-weight: var(--ty-font-weight-regular);
     text-align: start;
     vertical-align: middle;
   }
-  .fk-table__cell--row-header {
-    color: var(--fk-ink);
+  .ty-table__cell--row-header {
+    color: var(--ty-ink);
   }
-  .fk-table__cell[data-numeric] {
+  .ty-table__cell[data-numeric] {
     font-variant-numeric: tabular-nums;
   }
-  .fk-table-wrap[data-column-lines] .fk-table__cell + .fk-table__cell,
-  .fk-table-wrap[data-column-lines] .fk-table__column + .fk-table__column {
-    border-inline-start: 1px solid var(--fk-line);
+  .ty-table-wrap[data-column-lines] .ty-table__cell + .ty-table__cell,
+  .ty-table-wrap[data-column-lines] .ty-table__column + .ty-table__column {
+    border-inline-start: 1px solid var(--ty-line);
   }
 
   /* A cell never wraps beyond two lines; the full value stays available. */
-  .fk-table__clamp {
+  .ty-table__clamp {
     display: -webkit-box;
     overflow: hidden;
     -webkit-box-orient: vertical;
@@ -168,143 +168,143 @@
     text-wrap: balance;
   }
 
-  .fk-table__row[data-actionable] {
+  .ty-table__row[data-actionable] {
     cursor: pointer;
   }
-  .fk-table__row[data-hovered] .fk-table__cell {
-    background: color-mix(in srgb, var(--fk-surface-sunken) 60%, var(--fk-surface-solid));
+  .ty-table__row[data-hovered] .ty-table__cell {
+    background: color-mix(in srgb, var(--ty-surface-sunken) 60%, var(--ty-surface-solid));
   }
-  .fk-table__row[data-selected] .fk-table__cell {
-    background: color-mix(in srgb, var(--fk-accent) 10%, var(--fk-surface-solid));
+  .ty-table__row[data-selected] .ty-table__cell {
+    background: color-mix(in srgb, var(--ty-accent) 10%, var(--ty-surface-solid));
   }
-  .fk-table__row[data-pressed] .fk-table__cell {
-    background: var(--fk-surface-sunken);
+  .ty-table__row[data-pressed] .ty-table__cell {
+    background: var(--ty-surface-sunken);
   }
   /* Focused rows use an inset ring (§2.6). */
-  .fk-table__row[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-table__row[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: -2px;
   }
-  .fk-table__cell[data-focus-visible] {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-table__cell[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: -2px;
   }
 
   /* Sticky first column while scrolling horizontally. */
-  .fk-table-wrap[data-sticky-first] .fk-table__row > :first-child {
+  .ty-table-wrap[data-sticky-first] .ty-table__row > :first-child {
     position: sticky;
     z-index: 1;
     inset-inline-start: 0;
   }
-  .fk-table-wrap[data-sticky-first] .fk-table__head .fk-table__row > :first-child,
-  .fk-table-wrap[data-sticky-first] thead tr > :first-child {
+  .ty-table-wrap[data-sticky-first] .ty-table__head .ty-table__row > :first-child,
+  .ty-table-wrap[data-sticky-first] thead tr > :first-child {
     z-index: 3;
   }
-  .fk-table-wrap[data-sticky-first][data-selectable] .fk-table__row > :nth-child(2),
-  .fk-table-wrap[data-sticky-first][data-selectable] thead tr > :nth-child(2) {
+  .ty-table-wrap[data-sticky-first][data-selectable] .ty-table__row > :nth-child(2),
+  .ty-table-wrap[data-sticky-first][data-selectable] thead tr > :nth-child(2) {
     position: sticky;
     z-index: 1;
-    inset-inline-start: var(--fk-table-select-width);
+    inset-inline-start: var(--ty-table-select-width);
   }
-  .fk-table-wrap[data-sticky-first][data-selectable] thead tr > :nth-child(2) {
+  .ty-table-wrap[data-sticky-first][data-selectable] thead tr > :nth-child(2) {
     z-index: 3;
   }
 
   /* Selection column and checkboxes (44 px hit area). */
-  .fk-table__column--select,
-  .fk-table__cell--select {
-    inline-size: var(--fk-table-select-width);
-    min-inline-size: var(--fk-table-select-width);
+  .ty-table__column--select,
+  .ty-table__cell--select {
+    inline-size: var(--ty-table-select-width);
+    min-inline-size: var(--ty-table-select-width);
     padding-block: 0;
-    padding-inline: var(--fk-space-3);
+    padding-inline: var(--ty-space-3);
   }
-  .fk-table__checkbox {
+  .ty-table__checkbox {
     position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
   }
-  .fk-table__checkbox::before {
+  .ty-table__checkbox::before {
     content: '';
     position: absolute;
     inset-block-start: 50%;
     /* physical: centring with translate(-50%) is the same in both directions */
     left: 50%;
-    inline-size: var(--fk-control-target);
-    block-size: var(--fk-control-target);
+    inline-size: var(--ty-control-target);
+    block-size: var(--ty-control-target);
     transform: translate(-50%, -50%);
   }
-  .fk-table__checkbox-box {
+  .ty-table__checkbox-box {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
     inline-size: 18px;
     block-size: 18px;
-    border: 1.5px solid var(--fk-input);
+    border: 1.5px solid var(--ty-input);
     border-radius: 5px;
-    background: var(--fk-surface-solid);
-    color: var(--fk-accent-ink);
+    background: var(--ty-surface-solid);
+    color: var(--ty-accent-ink);
   }
-  .fk-table__checkbox-box > svg {
+  .ty-table__checkbox-box > svg {
     inline-size: 14px;
     block-size: 14px;
   }
-  .fk-table__checkbox[data-selected] .fk-table__checkbox-box,
-  .fk-table__checkbox[data-indeterminate] .fk-table__checkbox-box {
-    border-color: var(--fk-accent);
-    background: var(--fk-accent);
+  .ty-table__checkbox[data-selected] .ty-table__checkbox-box,
+  .ty-table__checkbox[data-indeterminate] .ty-table__checkbox-box {
+    border-color: var(--ty-accent);
+    background: var(--ty-accent);
   }
-  .fk-table__checkbox[data-focus-visible] .fk-table__checkbox-box {
-    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+  .ty-table__checkbox[data-focus-visible] .ty-table__checkbox-box {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
-  .fk-table__checkbox[data-disabled] {
+  .ty-table__checkbox[data-disabled] {
     cursor: not-allowed;
     opacity: 0.55;
   }
 
-  .fk-table__row[data-loading] .fk-table__cell {
-    background: var(--fk-surface-solid);
+  .ty-table__row[data-loading] .ty-table__cell {
+    background: var(--ty-surface-solid);
   }
-  .fk-table__empty,
-  .fk-table__cell--empty {
-    padding: var(--fk-space-4);
+  .ty-table__empty,
+  .ty-table__cell--empty {
+    padding: var(--ty-space-4);
   }
 
   /* Touch layouts: compact density keeps 44 px targets through the hit areas above. */
   @media (max-width: 1023.98px) {
-    .fk-table-wrap[data-density='compact'] {
-      --fk-table-row: var(--fk-table-row-standard);
-      --fk-table-pad-block: var(--fk-table-pad-block-standard);
+    .ty-table-wrap[data-density='compact'] {
+      --ty-table-row: var(--ty-table-row-standard);
+      --ty-table-pad-block: var(--ty-table-pad-block-standard);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fk-table__row,
-    .fk-table__cell {
+    .ty-table__row,
+    .ty-table__cell {
       transition: none;
       animation: none;
     }
   }
 
   @media (forced-colors: active) {
-    .fk-table__column,
-    .fk-table__cell {
+    .ty-table__column,
+    .ty-table__cell {
       border-color: CanvasText;
     }
-    .fk-table__row[data-selected] .fk-table__cell {
+    .ty-table__row[data-selected] .ty-table__cell {
       background: Highlight;
       color: HighlightText;
       forced-color-adjust: none;
     }
-    .fk-table__row[data-focus-visible],
-    .fk-table__cell[data-focus-visible],
-    .fk-table__column[data-focus-visible] {
+    .ty-table__row[data-focus-visible],
+    .ty-table__cell[data-focus-visible],
+    .ty-table__column[data-focus-visible] {
       outline-color: Highlight;
     }
-    .fk-table__checkbox-box {
+    .ty-table__checkbox-box {
       border-color: CanvasText;
     }
   }

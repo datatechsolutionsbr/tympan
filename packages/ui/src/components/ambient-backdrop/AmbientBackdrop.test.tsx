@@ -18,10 +18,10 @@ describe('AmbientBackdrop', () => {
         <AmbientBackdrop />
       </div>,
     )
-    const root = container.querySelector('.fk-ambient')!
+    const root = container.querySelector('.ty-ambient')!
     expect(root).toHaveAttribute('aria-hidden', 'true')
     expect(root.querySelector('[tabindex],a,button')).toBeNull()
-    expect(css).toMatch(/\.fk-ambient\s*\{[^}]*pointer-events:\s*none/)
+    expect(css).toMatch(/\.ty-ambient\s*\{[^}]*pointer-events:\s*none/)
     await userEvent.click(root)
     expect(onClick).toHaveBeenCalledTimes(1) // the event reaches the page behind, nothing inside handles it
   })
@@ -29,18 +29,18 @@ describe('AmbientBackdrop', () => {
   it('is not displayed under reduced transparency, without backdrop blur, or in forced colours', () => {
     expect(mediaBlock(css, /\(prefers-reduced-transparency:\s*reduce\)/)).toMatch(/display:\s*none/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/display:\s*none/)
-    expect(css).toMatch(/@supports not[^{]*backdrop-filter[^{]*\{\s*\.fk-ambient\s*\{\s*display:\s*none/)
+    expect(css).toMatch(/@supports not[^{]*backdrop-filter[^{]*\{\s*\.ty-ambient\s*\{\s*display:\s*none/)
   })
 
   it('never causes horizontal overflow (fixed, clipped)', () => {
-    expect(css).toMatch(/\.fk-ambient\s*\{[^}]*position:\s*fixed[^}]*overflow:\s*hidden/)
+    expect(css).toMatch(/\.ty-ambient\s*\{[^}]*position:\s*fixed[^}]*overflow:\s*hidden/)
   })
 
   it('reads the per-mode ambient tokens (dark intensities differ)', () => {
-    expect(css).toMatch(/var\(--fk-ambient-1\)/)
-    expect(css).toMatch(/var\(--fk-ambient-2\)/)
-    const tokens = readFileSync(createRequire(import.meta.url).resolve('@fakhir/tokens/tokens.css'), 'utf8')
-    const values = [...tokens.matchAll(/--fk-ambient-1:\s*([^;]+);/g)].map((m) => m[1])
+    expect(css).toMatch(/var\(--ty-ambient-1\)/)
+    expect(css).toMatch(/var\(--ty-ambient-2\)/)
+    const tokens = readFileSync(createRequire(import.meta.url).resolve('@datatechsolutions/tympan-tokens/tokens.css'), 'utf8')
+    const values = [...tokens.matchAll(/--ty-ambient-1:\s*([^;]+);/g)].map((m) => m[1])
     expect(new Set(values).size).toBeGreaterThan(1)
   })
 

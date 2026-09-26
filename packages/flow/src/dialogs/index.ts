@@ -1,4 +1,4 @@
-// @fakhir/flow: dialogs group barrel (editor dialogs).
+// @datatechsolutions/tympan-flow: dialogs group barrel (editor dialogs).
 export * from './NodeConfigDialog'
 export * from './FlowSettingsDialog'
 export * from './DefinitionExportDialog'

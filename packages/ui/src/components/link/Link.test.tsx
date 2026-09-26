@@ -64,7 +64,7 @@ describe('Link', () => {
     await userEvent.tab()
     expect(screen.getByRole('link')).toHaveAttribute('data-focus-visible')
     const css = cssOf('components/link/Link.css')
-    expect(css).toMatch(/\.fk-link\[data-focus-visible\]\s*\{[^}]*text-decoration-line:\s*underline[^}]*outline:/)
+    expect(css).toMatch(/\.ty-link\[data-focus-visible\]\s*\{[^}]*text-decoration-line:\s*underline[^}]*outline:/)
   })
 
   it('preserves the browser default on modified clicks', () => {
@@ -80,7 +80,7 @@ describe('Link', () => {
   it('uses LinkText in forced colours and gives standalone links a 44 px hit height', () => {
     const css = cssOf('components/link/Link.css')
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/LinkText/)
-    expect(css).toMatch(/\.fk-link\[data-standalone\]::before\s*\{[^}]*max\(100%,\s*var\(--fk-control-target\)\)/)
+    expect(css).toMatch(/\.ty-link\[data-standalone\]::before\s*\{[^}]*max\(100%,\s*var\(--ty-control-target\)\)/)
   })
 
   it('has no axe violations', async () => {
@@ -97,7 +97,7 @@ describe('Link', () => {
 describe('Link in right-to-left (ar)', () => {
   it('renders mirrored where directional and passes axe', async () => {
     const { container } = renderRtl(<Link href="https://www.w3.org/WAI/">مرجع خارجي</Link>)
-    expect(container.querySelector('.fk-link__external')).toHaveClass('fk-mirror-rtl')
+    expect(container.querySelector('.ty-link__external')).toHaveClass('ty-mirror-rtl')
     await axeRtl(container)
   })
 })

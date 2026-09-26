@@ -14,7 +14,7 @@ export function focusAfter(container: Element | null): boolean {
 
 /** Focuses the canvas's exit target (the tool bar), else the next element after the canvas. */
 export function leaveCanvas(scope: Element | null): void {
-  const exit = scope?.querySelector<HTMLElement>('[data-fk-canvas-exit] button, [data-fk-canvas-exit] [tabindex]')
+  const exit = scope?.querySelector<HTMLElement>('[data-ty-canvas-exit] button, [data-ty-canvas-exit] [tabindex]')
   if (exit) {
     exit.focus()
     return

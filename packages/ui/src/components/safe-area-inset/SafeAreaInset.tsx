@@ -39,7 +39,7 @@ export interface SafeAreaInsetProps extends HTMLAttributes<HTMLDivElement> {
 export function SafeAreaInset({ edges = ['top', 'bottom'], layout = 'block', className, children, ...rest }: SafeAreaInsetProps) {
   const rtl = useIsRtl()
   return (
-    <div {...rest} className={cx('fk-safe-area', className)} data-layout={layout} {...padAttributes(physicalSides(edges, rtl))}>
+    <div {...rest} className={cx('ty-safe-area', className)} data-layout={layout} {...padAttributes(physicalSides(edges, rtl))}>
       {children}
     </div>
   )
@@ -52,7 +52,7 @@ export function SafeAreaScreen(props: Omit<SafeAreaInsetProps, 'edges'>) {
 
 /** Empty block as tall as the top or bottom inset. */
 export function SafeAreaSpacer({ position }: { position: 'top' | 'bottom' }) {
-  return <div className="fk-safe-area-spacer" data-position={position} aria-hidden="true" />
+  return <div className="ty-safe-area-spacer" data-position={position} aria-hidden="true" />
 }
 
 export interface SafeAreaBottomBarProps extends HTMLAttributes<HTMLDivElement> {
@@ -60,7 +60,7 @@ export interface SafeAreaBottomBarProps extends HTMLAttributes<HTMLDivElement> {
   children?: ReactNode
 }
 
-const BAR_SIZE = '--fk-safe-bottom-bar-size'
+const BAR_SIZE = '--ty-safe-bottom-bar-size'
 
 /**
  * Fixed bar at the bottom, padded by the bottom inset. While mounted it
@@ -94,7 +94,7 @@ export function SafeAreaBottomBar({ surface = 'glass', className, children, ...r
   }, [])
 
   return (
-    <div {...rest} ref={bar} className={cx('fk-safe-bottom-bar', className)} data-surface={surface}>
+    <div {...rest} ref={bar} className={cx('ty-safe-bottom-bar', className)} data-surface={surface}>
       {children}
     </div>
   )

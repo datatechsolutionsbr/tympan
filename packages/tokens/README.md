@@ -1,41 +1,42 @@
-# @fakhir/tokens
+# @datatechsolutions/tympan-tokens
 
-Design tokens and theme generator of the Fakhir design system. Licence:
+Design tokens and theme generator of Tympan, an Astrlabe-family component
+published by Datatech. Licence:
 FSL-1.1-ALv2 (Functional Source License, Version 1.1, Apache 2.0 Future
 License); see `LICENSE`.
 Visual source of truth: `docs/infra/design-direction-fakhir.md` (§2.1 to §2.13)
 in the thesis repository.
 
 ```sh
-npm run build -w @fakhir/tokens      # dist/tokens.css, tokens.json, values.js, dtcg/, contrast-report.md, index.js
-npm run typecheck -w @fakhir/tokens  # tsc + source validation + WCAG gate
-npm test -w @fakhir/tokens           # vitest: colour math, ramps, AA in every preset/mode, DTCG, stylesheet
+npm run build -w @datatechsolutions/tympan-tokens      # dist/tokens.css, tokens.json, values.js, dtcg/, contrast-report.md, index.js
+npm run typecheck -w @datatechsolutions/tympan-tokens  # tsc + source validation + WCAG gate
+npm test -w @datatechsolutions/tympan-tokens           # vitest: colour math, ramps, AA in every preset/mode, DTCG, stylesheet
 ```
 
 ## What is in the box
 
 | Output | Content |
 |---|---|
-| `@fakhir/tokens/tokens.css` | every `--fk-*` custom property, in `@layer fakhir.tokens` |
-| `@fakhir/tokens/tokens.json` | resolved values: base, density steps, each preset × mode (× high contrast) |
-| `@fakhir/tokens/dtcg/*.tokens.json` | W3C DTCG trees (2025.10 format) of every set, as fed to Style Dictionary |
-| `@fakhir/tokens/values` | the resolved values as a typed JS module (`values`, `cssVar()`) |
-| `@fakhir/tokens` | the generator: colour math, `resolveTheme`, presets, `generateThemeCss`, DTCG conversion |
+| `@datatechsolutions/tympan-tokens/tokens.css` | every `--ty-*` custom property, in `@layer tympan.tokens` |
+| `@datatechsolutions/tympan-tokens/tokens.json` | resolved values: base, density steps, each preset × mode (× high contrast) |
+| `@datatechsolutions/tympan-tokens/dtcg/*.tokens.json` | W3C DTCG trees (2025.10 format) of every set, as fed to Style Dictionary |
+| `@datatechsolutions/tympan-tokens/values` | the resolved values as a typed JS module (`values`, `cssVar()`) |
+| `@datatechsolutions/tympan-tokens` | the generator: colour math, `resolveTheme`, presets, `generateThemeCss`, DTCG conversion |
 | `dist/contrast-report.md` | WCAG ratio and APCA Lc of every declared pair, per preset and mode |
 
 ## Token model
 
 **Static (authored as DTCG in `src/base/`)**: spacing on a 4 px base
-(`--fk-space-1..9`, §2.1), layout sizes (`--fk-layout-*`, §2.8), the 44 px
-touch target (`--fk-control-target`), type families, sizes with paired line
+(`--ty-space-1..9`, §2.1), layout sizes (`--ty-layout-*`, §2.8), the 44 px
+touch target (`--ty-control-target`), type families, sizes with paired line
 heights, weights and tracking (§2.2), prose measures, durations and easings
-(`--fk-dur-*`, `--fk-ease`, `--fk-ease-out`, §2.7), stacking order (`--fk-z-*`).
+(`--ty-dur-*`, `--ty-ease`, `--ty-ease-out`, §2.7), stacking order (`--ty-z-*`).
 
 **Generated per theme and mode (`src/theme.ts`)**:
 
 - **Ramps**: 11 steps (`50 … 950`) per seed, computed in OKLCH:
-  `--fk-brand-*`, `--fk-neutral-*`, `--fk-danger-*`, `--fk-warning-*`,
-  `--fk-success-*`, `--fk-info-*`.
+  `--ty-brand-*`, `--ty-neutral-*`, `--ty-danger-*`, `--ty-warning-*`,
+  `--ty-success-*`, `--ty-info-*`.
 - **Paired roles** (X / on-X):
   `bg`/`on-bg`, `surface`/`on-surface`, `surface-raised`/`on-surface-raised`,
   `surface-sunken`/`on-surface-sunken`, `brand`/`on-brand`,
@@ -48,7 +49,7 @@ heights, weights and tracking (§2.2), prose measures, durations and easings
   (+ `-soft`), `actor-{person,agent,system}` (+ `-soft`).
 - **Charts**: `chart-1..8` (aliases `categorical-1..8`), each ≥ 3:1 on the sheet.
 - **Navigation**: `nav-bg`, `on-nav`, `nav-active`, `on-nav-active`, `nav-line`.
-- **Radius**: one base `--fk-radius`; `radius-control` = base, `radius-card` =
+- **Radius**: one base `--ty-radius`; `radius-control` = base, `radius-card` =
   1.6 × base, `radius-sheet` = 2.4 × base, `radius-pill`, `radius-agent` = 0.6 × base
   (base 10 gives 10 / 16 / 24 / 6, §2.4).
 - **Elevation and glass**: `shadow-{sheet,raised,floating,modal,sheet-inset}`
@@ -57,14 +58,14 @@ heights, weights and tracking (§2.2), prose measures, durations and easings
 - **Design-direction aliases**: `accent`, `accent-strong`, `accent-soft`,
   `accent-ink`, `on-accent`, `on-accent-soft` point at the brand roles.
 
-**Density** (`data-fk-density`): `compact | default | comfortable` sets
-`--fk-control-height`, `--fk-control-height-touch`, `--fk-control-height-compact`
-and `--fk-density`. The 44 px hit area never changes.
+**Density** (`data-ty-density`): `compact | default | comfortable` sets
+`--ty-control-height`, `--ty-control-height-touch`, `--ty-control-height-compact`
+and `--ty-density`. The 44 px hit area never changes.
 
-**Canvas component tokens (`src/flow.ts`, `--fk-flow-*`)**, used by
-`@fakhir/flow`: kind tones `tone-{categorical-1..8,neutral}` with
+**Canvas component tokens (`src/flow.ts`, `--ty-flow-*`)**, used by
+`@datatechsolutions/tympan-flow`: kind tones `tone-{categorical-1..8,neutral}` with
 `-ink`, `-soft` (a 14 % oklab mix) and `-text`, and the `[data-tone]` mapping
-that sets `--fk-flow-tone`, `-ink`, `-soft`, `-text` on any element;
+that sets `--ty-flow-tone`, `-ink`, `-soft`, `-text` on any element;
 connectors (`connector`, `-active`, `-true`, `-false`, `-rule`, `-width`,
 `-width-active`); node frame (`node-border`, `-border-hover`, `-surface`,
 `-radius`) and state rings (`ring-{selected,running,succeeded,failed}`);
@@ -72,19 +73,19 @@ canvas plane (`plane`, `grid-dot`, `guide`, `marquee`); provenance bands
 (`band` 96, `band-label` 130, `node-h` 72, `node-w` 236 px); research steps
 (`step-w` 250, `step-h` 86, `col-gap` 56 px) and data shapes
 (`shape-{records,table,number,chart,decision}`). Colours are DTCG aliases of
-theme roles (`dist/dtcg/flow.tokens.json`) emitted as `var(--fk-role)`, and are
+theme roles (`dist/dtcg/flow.tokens.json`) emitted as `var(--ty-role)`, and are
 declared on every theme and mode scope so a nested theme re-resolves them.
 
 ## Theming attributes
 
 ```html
-<html data-fk-theme="fakhir" data-fk-mode="system" data-fk-density="default">
+<html data-ty-theme="tympan" data-ty-mode="system" data-ty-density="default">
 ```
 
-- `data-fk-theme`: `fakhir` (default, also applied to `:root`), `neutral`,
-  `high-contrast`, or the name of a generated theme.
-- `data-fk-mode`: `light`, `dark`, or `system`/absent (follows `prefers-color-scheme`).
-- `data-fk-density`: see above.
+- `data-ty-theme`: `tympan` (default, also applied to `:root`), `fakhir`,
+  `neutral`, `high-contrast`, or the name of a generated theme.
+- `data-ty-mode`: `light`, `dark`, or `system`/absent (follows `prefers-color-scheme`).
+- `data-ty-density`: see above.
 
 The attributes may be on the same element or nested (a light preview inside a
 dark page works). User preferences are handled in the stylesheet:
@@ -94,7 +95,7 @@ dark page works). User preferences are handled in the stylesheet:
 | `prefers-color-scheme: dark` | dark values when the mode is `system` |
 | `prefers-contrast: more` | the high-contrast variant of the current theme |
 | `prefers-reduced-transparency: reduce` (and no `backdrop-filter` support) | opaque surfaces, no blur, no ambient |
-| `prefers-reduced-motion: reduce` | every `--fk-dur-*` becomes `0ms` |
+| `prefers-reduced-motion: reduce` | every `--ty-dur-*` becomes `0ms` |
 | `forced-colors: active` | roles map to system colours (`Canvas`, `CanvasText`, `Highlight`, …); shadows off |
 
 In the design system, `<ThemeProvider>` / `useTheme()` set these attributes and
@@ -104,11 +105,14 @@ In the design system, `<ThemeProvider>` / `useTheme()` set these attributes and
 
 | Preset | Seeds | Radius | Contrast | Glass | CTA |
 |---|---|---|---|---|---|
-| `fakhir` | brand teal from the §2.3 accent, neutral with a slight teal tint, semantic hues | 10 | default | on | gradient |
+| `tympan` (default) | brand teal from the §2.3 accent, neutral with a slight teal tint, semantic hues | 10 | default | on | gradient |
+| `fakhir` | the look of the Fakhir research platform; today the same values as `tympan` | 10 | default | on | gradient |
 | `neutral` | grey-blue brand, near-grey neutral | 8 | default | on | solid |
-| `high-contrast` | fakhir seeds | 10 | high | off | solid |
+| `high-contrast` | tympan seeds | 10 | high | off | solid |
 
-The `fakhir` preset **pins** the exact colours of design direction §2.3 (accent,
+The `tympan` preset (and `fakhir`, which an app selects by name with
+`data-ty-theme="fakhir"` or `ThemeProvider theme="fakhir"`) **pins** the exact
+colours of design direction §2.3 (accent,
 surfaces, ink, lines, semantic tones, the CTA gradient) on top of the generated
 roles, so the product keeps the approved look; every other role is generated.
 `neutral` and `high-contrast` are fully generated.
@@ -116,7 +120,7 @@ roles, so the product keeps the approved look; every other role is generated.
 ## Generator API
 
 ```ts
-import { resolveTheme, generateThemeCss, themeToDtcg, fakhirPreset, type ThemeConfig } from '@fakhir/tokens'
+import { resolveTheme, generateThemeCss, themeToDtcg, tympanPreset, type ThemeConfig } from '@datatechsolutions/tympan-tokens'
 
 const config: ThemeConfig = {
   name: 'lab',
@@ -128,7 +132,7 @@ const config: ThemeConfig = {
   radius: 12, contrast: 'default', glass: true, cta: 'gradient',
 }
 const light = resolveTheme(config, 'light')   // roles, ramps, shadows, radii, contrast report
-const css = generateThemeCss(config)           // [data-fk-theme="lab"] … blocks, all preference media
+const css = generateThemeCss(config)           // [data-ty-theme="lab"] … blocks, all preference media
 const dtcg = themeToDtcg(light)                // DTCG tree
 ```
 
@@ -162,26 +166,10 @@ Style Dictionary was chosen because:
   preference media) is assembled by `src/stylesheet.ts` anyway, which removes
   that advantage.
 
-## Ideas taken from public documentation (concepts only)
+## Sources
 
-The user asked for a theme system inspired by shadcn/ui and Tailwind CSS (the
-CSS framework). Only concepts from their public documentation
-pages were used; no source file, class string, CSS file or palette value was
-read or copied, and neither project is a dependency.
-
-| Concept | Where it came from | How it appears here |
-|---|---|---|
-| Semantic roles in background/foreground pairs (background, card, popover, primary, secondary, muted, accent, destructive, border, input, ring, chart, sidebar) | shadcn/ui theming docs | `X` / `on-X` roles under our own names (`surface`, `surface-raised`, `brand`, `secondary`, `surface-sunken`, `danger`, `line`, `input`, `focus-ring`, `chart-1..8`, `nav-*`) |
-| One radius base deriving the radius scale | shadcn/ui theming docs | `--fk-radius` with our own multipliers giving the §2.4 steps |
-| Themes and dark mode as a swap of custom properties under a selector | shadcn/ui theming docs | attribute selectors `data-fk-theme` / `data-fk-mode` |
-| 11-step colour scales named 50…950, defined in OKLCH | Tailwind CSS colours docs | `generateRamp()` with our own lightness and chroma curves; no Tailwind values |
-| Theme variable namespaces (spacing from one base unit, breakpoints, container widths, text sizes paired with line heights, shadows, easings) | Tailwind CSS theme docs | our DTCG groups (`space`, `layout`, `font.size` + `font.line-height`, `shadow`, `ease`) with values from the design direction |
-
-URLs consulted on 2026-09-26:
-
-- https://ui.shadcn.com/docs/theming
-- https://tailwindcss.com/docs/colors
-- https://tailwindcss.com/docs/theme
+The concepts taken from public documentation, with the URLs consulted, are
+recorded in `PROVENANCE.md`.
 
 Other references: W3C Design Tokens Community Group format (2025.10); WCAG 2.2
 (1.4.3, 1.4.11, 2.4.7, 2.4.13); Björn Ottosson, "A perceptual color space for

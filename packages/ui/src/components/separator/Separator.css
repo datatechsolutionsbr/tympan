@@ -1,59 +1,59 @@
 /* Separator (spec: wave-1/separator.md; design direction §2.1, §2.3). */
-@layer fakhir.components {
-  .fk-separator {
-    --fk-separator-color: var(--fk-line);
-    --fk-separator-gap: var(--fk-space-4);
+@layer tympan.components {
+  .ty-separator {
+    --ty-separator-color: var(--ty-line);
+    --ty-separator-gap: var(--ty-space-4);
     flex: none;
     border: 0;
-    background: var(--fk-separator-color);
+    background: var(--ty-separator-color);
     block-size: 1px;
     inline-size: 100%;
-    margin-block: var(--fk-separator-gap);
+    margin-block: var(--ty-separator-gap);
   }
 
-  .fk-separator[data-emphasis='soft'] {
-    --fk-separator-color: var(--fk-line-soft);
+  .ty-separator[data-emphasis='soft'] {
+    --ty-separator-color: var(--ty-line-soft);
   }
-  .fk-separator[data-spacing='none'] {
-    --fk-separator-gap: 0px;
+  .ty-separator[data-spacing='none'] {
+    --ty-separator-gap: 0px;
   }
-  .fk-separator[data-spacing='roomy'] {
-    --fk-separator-gap: var(--fk-space-5);
+  .ty-separator[data-spacing='roomy'] {
+    --ty-separator-gap: var(--ty-space-5);
   }
 
-  .fk-separator[data-orientation='vertical'] {
+  .ty-separator[data-orientation='vertical'] {
     inline-size: 1px;
     block-size: auto;
     align-self: stretch;
     margin-block: 0;
-    margin-inline: var(--fk-separator-gap);
+    margin-inline: var(--ty-separator-gap);
   }
 
-  .fk-separator--captioned {
+  .ty-separator--captioned {
     display: flex;
     align-items: center;
-    gap: var(--fk-space-3);
+    gap: var(--ty-space-3);
     block-size: auto;
     background: none;
   }
-  .fk-separator__line {
+  .ty-separator__line {
     flex: 1 1 0;
     block-size: 1px;
-    background: var(--fk-separator-color);
+    background: var(--ty-separator-color);
   }
-  .fk-separator__caption {
+  .ty-separator__caption {
     flex: none;
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-meta);
-    line-height: var(--fk-font-line-height-meta);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
   }
 
   @media (forced-colors: active) {
-    .fk-separator:not(.fk-separator--captioned),
-    .fk-separator__line {
+    .ty-separator:not(.ty-separator--captioned),
+    .ty-separator__line {
       background: CanvasText;
     }
-    .fk-separator__caption {
+    .ty-separator__caption {
       color: CanvasText;
     }
   }

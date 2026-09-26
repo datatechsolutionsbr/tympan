@@ -5,7 +5,7 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { DeltaIndicator } from './DeltaIndicator'
 
-const box = (c: HTMLElement) => c.querySelector('.fk-delta') as HTMLElement
+const box = (c: HTMLElement) => c.querySelector('.ty-delta') as HTMLElement
 
 describe('DeltaIndicator', () => {
   it('shows a signed percentage, an up glyph and the word "up"', () => {
@@ -48,8 +48,8 @@ describe('DeltaIndicator', () => {
 
   it('keeps a pill border in forced colours and never goes below 12 px', () => {
     const css = cssOf('components/delta-indicator/DeltaIndicator.css')
-    expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/\.fk-delta\[data-appearance='pill'\]\s*\{[^}]*border:\s*1px solid CanvasText/)
-    expect(css).toMatch(/font-size:\s*var\(--fk-font-size-meta\)/)
+    expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/\.ty-delta\[data-appearance='pill'\]\s*\{[^}]*border:\s*1px solid CanvasText/)
+    expect(css).toMatch(/font-size:\s*var\(--ty-font-size-meta\)/)
   })
 
   it('has no axe violations, light and dark', async () => {

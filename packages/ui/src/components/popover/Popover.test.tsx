@@ -70,10 +70,10 @@ describe('Popover', () => {
     const rect = (top: number, h: number, w = 100) =>
       ({ x: 100, y: top, top, left: 100, right: 100 + w, bottom: top + h, width: w, height: h, toJSON: () => ({}) }) as DOMRect
     const size = (el: HTMLElement) =>
-      el.classList.contains('fk-popover') ? { w: 200, h: 120 } : el.classList.contains('fk-button') ? { w: 32, h: 32 } : { w: 1024, h: 768 }
+      el.classList.contains('ty-popover') ? { w: 200, h: 120 } : el.classList.contains('ty-button') ? { w: 32, h: 32 } : { w: 1024, h: 768 }
     vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (this: HTMLElement) {
       const { w, h } = size(this)
-      return this.classList.contains('fk-button') ? rect(4, h, w) : rect(0, h, w)
+      return this.classList.contains('ty-button') ? rect(4, h, w) : rect(0, h, w)
     })
     vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockImplementation(function (this: HTMLElement) {
       return size(this).w
@@ -92,7 +92,7 @@ describe('Popover', () => {
       </Popover>,
     )
     const dialog = await screen.findByRole('dialog')
-    const panel = dialog.closest('.fk-popover') as HTMLElement
+    const panel = dialog.closest('.ty-popover') as HTMLElement
     await waitFor(() => expect(panel).toHaveAttribute('data-placement', 'bottom'))
   })
 
@@ -129,7 +129,7 @@ describe('Popover', () => {
     const css = cssOf('components/popover/Popover.css')
     expect(mediaBlock(css, /\(prefers-reduced-motion:\s*reduce\)/)).toMatch(/animation:\s*none/)
     expect(mediaBlock(css, /\(forced-colors:\s*active\)/)).toMatch(/CanvasText/)
-    expect(cssOf('components/button/Button.css')).toMatch(/max\(100%,\s*var\(--fk-control-target\)\)/)
+    expect(cssOf('components/button/Button.css')).toMatch(/max\(100%,\s*var\(--ty-control-target\)\)/)
   })
 
   it('has no axe violations when open', async () => {

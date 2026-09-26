@@ -31,16 +31,16 @@ export function StatStrip({ items, label, locale, className }: StatStripProps) {
   const lang = locale ?? fromAdapter
   const speech = useLocaleText()
   return (
-    <div role="group" aria-label={label} className={cx('fk-stat-strip', className)}>
-      <dl className="fk-stat-strip__list">
+    <div role="group" aria-label={label} className={cx('ty-stat-strip', className)}>
+      <dl className="ty-stat-strip__list">
         {items.map((stat) => {
           const text = shown(stat.value, lang, stat.format)
           return (
-            <div key={stat.id} className="fk-stat-strip__item" data-linked={stat.href ? '' : undefined}>
-              <dt className="fk-stat-strip__label" dir="auto">{stat.label}</dt>
-              <dd className="fk-stat-strip__value">
+            <div key={stat.id} className="ty-stat-strip__item" data-linked={stat.href ? '' : undefined}>
+              <dt className="ty-stat-strip__label" dir="auto">{stat.label}</dt>
+              <dd className="ty-stat-strip__value">
                 {stat.href ? (
-                  <AriaLink className="fk-stat-strip__link" href={stat.href} aria-label={speech.pair(text, stat.label)}>
+                  <AriaLink className="ty-stat-strip__link" href={stat.href} aria-label={speech.pair(text, stat.label)}>
                     {text}
                   </AriaLink>
                 ) : (
@@ -48,7 +48,7 @@ export function StatStrip({ items, label, locale, className }: StatStripProps) {
                 )}
               </dd>
               {stat.detail || stat.proof ? (
-                <dd className="fk-stat-strip__detail">
+                <dd className="ty-stat-strip__detail">
                   {stat.proof ? <ProofBadge state={stat.proof} /> : null}
                   {stat.detail ? <span dir="auto">{stat.detail}</span> : null}
                 </dd>

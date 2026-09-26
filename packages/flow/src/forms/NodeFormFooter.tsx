@@ -2,7 +2,7 @@
 // (secondary) and Save (primary) aligned to the end. Save is an explicit
 // button; Enter in a single-line field never submits by itself.
 
-import { Button } from '@fakhir/ui'
+import { Button } from '@datatechsolutions/tympan'
 import { defineLabels, useLabels } from '../internal/labels'
 
 export interface NodeFormFooterLabels {
@@ -30,11 +30,11 @@ export interface NodeFormFooterProps {
 export function NodeFormFooter({ onSave, onCancel, saveDisabled = false, disabledReasonId, labels }: NodeFormFooterProps) {
   const l = useLabels(nodeFormFooterLabels, labels)
   return (
-    <div className="fk-node-form-footer" data-fk-form-footer="">
+    <div className="ty-node-form-footer" data-ty-form-footer="">
       <Button variant="secondary" onPress={onCancel}>
         {l.cancel}
       </Button>
-      <span className="fk-node-form-footer__save" aria-describedby={saveDisabled ? disabledReasonId : undefined}>
+      <span className="ty-node-form-footer__save" aria-describedby={saveDisabled ? disabledReasonId : undefined}>
         <Button variant="primary" disabled={saveDisabled} onPress={onSave}>
           {l.save}
         </Button>

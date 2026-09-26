@@ -19,15 +19,15 @@ export interface AuthFrameProps {
 /** Frame of sign-in and recovery screens (spec: wave-2/auth-frame.md). */
 export function AuthFrame({ brandPanel, mark, mainLabel, width = 'regular', className, children }: AuthFrameProps) {
   const wide = useMinWidth(breakpoints.lg)
-  const brandSide = brandPanel && wide ? <BrandPanel {...brandPanel} className="fk-auth-frame__brand" /> : null
+  const brandSide = brandPanel && wide ? <BrandPanel {...brandPanel} className="ty-auth-frame__brand" /> : null
   return (
-    <div className={className ? `fk-auth-frame ${className}` : 'fk-auth-frame'} data-split={brandSide ? '' : undefined}>
+    <div className={className ? `ty-auth-frame ${className}` : 'ty-auth-frame'} data-split={brandSide ? '' : undefined}>
       <AmbientBackdrop />
       {brandSide}
-      <main className="fk-auth-frame__form-side" aria-label={mainLabel}>
-        <div className="fk-auth-frame__column" data-width={width}>
-          {mark ? <div className="fk-auth-frame__mark">{mark}</div> : null}
-          <div className="fk-auth-frame__sheet">{children}</div>
+      <main className="ty-auth-frame__form-side" aria-label={mainLabel}>
+        <div className="ty-auth-frame__column" data-width={width}>
+          {mark ? <div className="ty-auth-frame__mark">{mark}</div> : null}
+          <div className="ty-auth-frame__sheet">{children}</div>
         </div>
       </main>
     </div>

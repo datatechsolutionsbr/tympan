@@ -186,18 +186,18 @@ function GridLayer({ plot, frame }: LayerProps) {
   const shown = visibleLabelIndices(plot.stops.length, frame.x1 - frame.x0)
   const tickX = frame.rtl ? frame.x1 + 8 : frame.x0 - 8
   return (
-    <g className="fk-chart__axes" aria-hidden="true">
+    <g className="ty-chart__axes" aria-hidden="true">
       {frame.ticks.map((t) => (
         <g key={t}>
-          <line className="fk-chart__grid" x1={frame.x0} x2={frame.x1} y1={frame.valueY(t)} y2={frame.valueY(t)} />
-          <text className="fk-chart__tick" x={tickX} y={frame.valueY(t)} textAnchor="end" dominantBaseline="middle">
+          <line className="ty-chart__grid" x1={frame.x0} x2={frame.x1} y1={frame.valueY(t)} y2={frame.valueY(t)} />
+          <text className="ty-chart__tick" x={tickX} y={frame.valueY(t)} textAnchor="end" dominantBaseline="middle">
             {frame.tickLabel(t)}
           </text>
         </g>
       ))}
       {frame.unitCaption && plot.unit ? (
         <text
-          className="fk-chart__tick fk-chart__unit"
+          className="ty-chart__tick ty-chart__unit"
           x={frame.rtl ? CANVAS - GUTTER.farSide : GUTTER.farSide}
           y={GUTTER.head}
           textAnchor={frame.rtl ? 'end' : 'start'}
@@ -206,9 +206,9 @@ function GridLayer({ plot, frame }: LayerProps) {
           {plot.unit}
         </text>
       ) : null}
-      <line className="fk-chart__baseline" x1={frame.x0} x2={frame.x1} y1={frame.y1} y2={frame.y1} />
+      <line className="ty-chart__baseline" x1={frame.x0} x2={frame.x1} y1={frame.y1} y2={frame.y1} />
       {shown.map((slot) => (
-        <text key={slot} className="fk-chart__tick" x={frame.slotX(slot)} y={frame.y1 + 20} textAnchor="middle">
+        <text key={slot} className="ty-chart__tick" x={frame.slotX(slot)} y={frame.y1 + 20} textAnchor="middle">
           {plot.stops[slot]}
         </text>
       ))}
@@ -219,11 +219,11 @@ function GridLayer({ plot, frame }: LayerProps) {
 function PinLayer({ plot, frame }: LayerProps) {
   const nudge = frame.rtl ? -4 : 4
   return (
-    <g className="fk-chart__annotations">
+    <g className="ty-chart__annotations">
       {plot.pins.map((pin) => {
         const x = frame.slotX(pin.slot)
         return (
-          <g key={`${pin.slot}:${pin.text}`} className="fk-chart__annotation" data-category={plot.stops[pin.slot]}>
+          <g key={`${pin.slot}:${pin.text}`} className="ty-chart__annotation" data-category={plot.stops[pin.slot]}>
             <line x1={x} x2={x} y1={frame.y0} y2={frame.y1} />
             <text x={x + nudge} y={frame.y0 + 10}>
               {pin.text}
@@ -249,7 +249,7 @@ function blockTrack(track: Track, lane: number, { plot, frame, cursor }: LayerPr
     reading === null ? null : (
       <rect
         key={slot}
-        className="fk-chart__mark fk-chart__bar"
+        className="ty-chart__mark ty-chart__bar"
         data-active={(cursor?.slot === slot && cursor.lane === lane) || undefined}
         data-overlap={flush && lanes > 1 ? '' : undefined}
         x={leftOf(slot)}
@@ -270,15 +270,15 @@ function pathTrack(track: Track, lane: number, { plot, frame, cursor }: LayerPro
     <>
       {fill
         ? runs.map((run, k) => (
-            <path key={`fill${k}`} className="fk-chart__area" d={`M${run[0]!.x},${frame.floorY} ${trace(run).replace(/^M/, 'L')} L${run.at(-1)!.x},${frame.floorY} Z`} />
+            <path key={`fill${k}`} className="ty-chart__area" d={`M${run[0]!.x},${frame.floorY} ${trace(run).replace(/^M/, 'L')} L${run.at(-1)!.x},${frame.floorY} Z`} />
           ))
         : null}
       {runs.map((run, k) => (
-        <path key={`stroke${k}`} className="fk-chart__line" strokeDasharray={track.dash} d={trace(run)} />
+        <path key={`stroke${k}`} className="ty-chart__line" strokeDasharray={track.dash} d={trace(run)} />
       ))}
       {runs.flat().map((p) => {
         const lit = cursor?.slot === p.slot && cursor.lane === lane
-        return <g key={p.slot}>{draw(p.x, p.y, lit ? 5.6 : 3.5, { className: 'fk-chart__mark', 'data-active': lit || undefined })}</g>
+        return <g key={p.slot}>{draw(p.x, p.y, lit ? 5.6 : 3.5, { className: 'ty-chart__mark', 'data-active': lit || undefined })}</g>
       })}
     </>
   )
@@ -287,7 +287,7 @@ function pathTrack(track: Track, lane: number, { plot, frame, cursor }: LayerPro
 function TrackLayer(props: LayerProps) {
   const drawTrack = props.plot.stroke.mode === 'block' ? blockTrack : pathTrack
   return (
-    <g className="fk-chart__marks">
+    <g className="ty-chart__marks">
       {props.plot.tracks.map((track, lane) => (
         <g key={track.label} data-series={track.label} data-index={lane} data-kind={props.plot.kind} style={{ color: track.hue }}>
           {drawTrack(track, lane, props)}
@@ -302,13 +302,13 @@ const LAYERS = [GridLayer, PinLayer, TrackLayer]
 
 function Key({ plot, name }: { plot: Plot; name: string }) {
   return (
-    <ul className="fk-chart__legend" aria-label={name}>
+    <ul className="ty-chart__legend" aria-label={name}>
       {plot.tracks.map((track) => (
-        <li key={track.label} className="fk-chart__legend-item" style={{ color: track.hue }} data-dashed={track.dash ? '' : undefined}>
-          <svg className="fk-chart__swatch" viewBox="0 0 24 12" aria-hidden="true" focusable="false">
+        <li key={track.label} className="ty-chart__legend-item" style={{ color: track.hue }} data-dashed={track.dash ? '' : undefined}>
+          <svg className="ty-chart__swatch" viewBox="0 0 24 12" aria-hidden="true" focusable="false">
             <line x1="1" x2="23" y1="6" y2="6" strokeDasharray={track.dash ? '4 3' : undefined} />
           </svg>
-          <span className="fk-chart__legend-name">{track.label}</span>
+          <span className="ty-chart__legend-name">{track.label}</span>
         </li>
       ))}
     </ul>
@@ -330,7 +330,7 @@ function TableView({ plot, caption, say, copy }: { plot: Plot; caption: string; 
           ['stop', stop],
           ...plot.tracks.map((track, lane) => {
             const reading = track.readings[slot] ?? null
-            return [columnOf(lane), reading === null ? <span className="fk-chart__missing">{copy.missing}</span> : say(reading)]
+            return [columnOf(lane), reading === null ? <span className="ty-chart__missing">{copy.missing}</span> : say(reading)]
           }),
         ]) as Record<string, ReactNode>,
       }))}
@@ -407,7 +407,7 @@ export function Chart(props: ChartProps) {
     const drawing = (
       <svg
         ref={canvas}
-        className="fk-chart__svg"
+        className="ty-chart__svg"
         viewBox={`0 0 ${CANVAS} ${frame.tall}`}
         preserveAspectRatio="xMidYMid meet"
         direction={rtl ? 'rtl' : 'ltr'}
@@ -424,7 +424,7 @@ export function Chart(props: ChartProps) {
     )
     if (!live) {
       return (
-        <div className="fk-chart__plot" data-kind={plot.kind}>
+        <div className="ty-chart__plot" data-kind={plot.kind}>
           {drawing}
         </div>
       )
@@ -432,7 +432,7 @@ export function Chart(props: ChartProps) {
     const bubbleAt = cursor ? (rtl ? CANVAS - frame.slotX(cursor.slot) : frame.slotX(cursor.slot)) / CANVAS : 0
     return (
       <div
-        className="fk-chart__plot"
+        className="ty-chart__plot"
         role="group"
         tabIndex={0}
         aria-labelledby={ids.title}
@@ -445,7 +445,7 @@ export function Chart(props: ChartProps) {
         {drawing}
         {cursor && readoutText ? (
           <div
-            className="fk-chart__readout"
+            className="ty-chart__readout"
             aria-hidden="true"
             style={{ insetInlineStart: `${bubbleAt * 100}%` }}
             data-edge={cursor.slot > plot.stops.length / 2 ? 'end' : 'start'}
@@ -453,7 +453,7 @@ export function Chart(props: ChartProps) {
             {readoutText}
           </div>
         ) : null}
-        <span id={ids.hint} className="fk-visually-hidden">
+        <span id={ids.hint} className="ty-visually-hidden">
           {copy.plotHint(props.figure.heading)}
         </span>
       </div>
@@ -470,16 +470,16 @@ export function Chart(props: ChartProps) {
 
   const { heading: title, aside: subtitle, reading: finding } = props.figure
   return (
-    <figure className={cx('fk-chart', props.className)} aria-labelledby={ids.title} data-view={view} data-kind={plot.kind} data-direction={direction}>
-      <figcaption className="fk-chart__caption">
-        <span id={ids.title} className="fk-chart__title">
+    <figure className={cx('ty-chart', props.className)} aria-labelledby={ids.title} data-view={view} data-kind={plot.kind} data-direction={direction}>
+      <figcaption className="ty-chart__caption">
+        <span id={ids.title} className="ty-chart__title">
           {title}
         </span>
-        {subtitle ? <span className="fk-chart__subtitle">{subtitle}</span> : null}
-        {finding ? <span className="fk-chart__finding">{finding}</span> : null}
+        {subtitle ? <span className="ty-chart__subtitle">{subtitle}</span> : null}
+        {finding ? <span className="ty-chart__finding">{finding}</span> : null}
       </figcaption>
       {blank || props.hideViewSwitch ? null : (
-        <div className="fk-chart__tools">
+        <div className="ty-chart__tools">
           <SegmentedControl
             size="compact"
             label={copy.viewSwitch}
@@ -494,7 +494,7 @@ export function Chart(props: ChartProps) {
       )}
       {!blank && view === 'drawing' ? <Key plot={plot} name={copy.legend} /> : null}
       {body}
-      <div className="fk-visually-hidden" role="status" aria-live="polite" aria-atomic="true">
+      <div className="ty-visually-hidden" role="status" aria-live="polite" aria-atomic="true">
         {readoutText}
       </div>
     </figure>
