@@ -1,7 +1,9 @@
-// The conversation history side: a navigation landmark with "new
-// conversation", the favourites filter and the threads grouped by day. Each
-// row's actions are always visible (not hover-only) for keyboard and touch.
+// Past threads, as a navigation landmark: a start button, a "starred only"
+// toggle, then shelves of threads by calendar day. Every entry keeps its star
+// and remove controls visible (never hover-only) so keyboard and touch reach
+// them.
 
+import type { ReactNode } from 'react'
 import { MessageSquarePlus, Star, Trash2 } from 'lucide-react'
 import { ToggleButton } from 'react-aria-components'
 import { Button } from '@fakhir/design-system'
@@ -18,51 +20,56 @@ export interface ThreadSummary {
   flowName?: string
 }
 
-/** Host persistence for favourite threads. */
+/** Host persistence for starred threads. */
 export interface StarredThreads {
   ids: string[]
   onChange: (ids: string[]) => void
 }
 
-const STAR_STORE = 'fk-assistant-favourites'
+const PIN_KEY = 'fk-assistant-favourites'
 
-/** Favourites kept on this device when the host gives none; storage failures stay silent. */
+function readPins(): string[] {
+  const raw = window.localStorage.getItem(PIN_KEY)
+  const parsed: unknown = raw ? JSON.parse(raw) : []
+  return Array.isArray(parsed) ? parsed.filter((x): x is string => typeof x === 'string') : []
+}
+
+/** Stars kept in this browser when the host keeps none. Any storage error is swallowed. */
 export const deviceStarStore = {
-  load(): string[] {
+  load: (): string[] => {
     try {
-      const value: unknown = JSON.parse(window.localStorage.getItem(STAR_STORE) ?? '[]')
-      return Array.isArray(value) ? value.filter((v): v is string => typeof v === 'string') : []
+      return readPins()
     } catch {
       return []
     }
   },
-  save(ids: string[]): void {
+  save: (ids: string[]): void => {
     try {
-      window.localStorage.setItem(STAR_STORE, JSON.stringify(ids))
+      window.localStorage.setItem(PIN_KEY, JSON.stringify(ids))
     } catch {
-      // Private mode or quota: favourites last for this visit only.
+      /* stars then live only as long as the page */
     }
   },
 }
 
-const AGENTS_VISIBLE = 3
+const SHOWN_AGENTS = 3
 
-/** The metadata line of a thread: short id, up to three agents and "+n". */
+/** Short id, the first agents and a "+n" for the rest. */
 export function ThreadMetaLine({ id, agents = [], labels }: { id: string; agents?: string[]; labels?: Partial<AssistantLabels> }) {
-  const l = useLabels(assistantLabels, labels)
+  const words = useLabels(assistantLabels, labels)
   const { locale } = useFlowLocale()
-  const extra = agents.length - AGENTS_VISIBLE
+  const [visible, hidden] = [agents.slice(0, SHOWN_AGENTS), Math.max(0, agents.length - SHOWN_AGENTS)]
   return (
     <span className="fk-convo-meta">
       <code className="fk-convo-meta__id" title={id}>
         {id.slice(0, 8)}
       </code>
-      {agents.slice(0, AGENTS_VISIBLE).map((agent) => (
-        <span key={agent} className="fk-convo-meta__agent" dir="auto">
-          {agent}
+      {visible.map((name) => (
+        <span key={name} className="fk-convo-meta__agent" dir="auto">
+          {name}
         </span>
       ))}
-      {extra > 0 ? <span className="fk-convo-meta__more">{fill(l.moreAgents, { n: extra }, locale)}</span> : null}
+      {hidden ? <span className="fk-convo-meta__more">{fill(words.moreAgents, { n: hidden }, locale)}</span> : null}
     </span>
   )
 }
@@ -82,54 +89,68 @@ export interface ThreadHistoryProps {
   onStart: () => void
 }
 
-export function ThreadHistory(p: ThreadHistoryProps) {
-  const l = p.labels
-  const shown = p.starredOnly ? p.threads.filter((t) => p.starred.includes(t.id)) : p.threads
-  const heading: Record<DayBucket, string> = { today: l.today, yesterday: l.yesterday, lastWeek: l.lastWeek, older: l.older }
-  const note = !p.threads.length ? l.historyEmpty : !shown.length ? l.noResults : null
+type Shelf = readonly [key: DayBucket, caption: string, entries: readonly ThreadSummary[]]
+
+/** Shelves to draw, or the sentence to show instead of them. */
+function arrange(p: ThreadHistoryProps): Shelf[] | string {
+  if (!p.threads.length) return p.labels.historyEmpty
+  const kept = p.starredOnly ? p.threads.filter((t) => p.starred.includes(t.id)) : [...p.threads]
+  if (!kept.length) return p.labels.noResults
+  return groupThreadsByDay(kept, new Date(), p.zone).map(({ bucket, threads }) => [bucket, p.labels[bucket], threads] as const)
+}
+
+/** The three parts of an entry, drawn in this order. */
+const ENTRY_PARTS: ReadonlyArray<(t: ThreadSummary, p: ThreadHistoryProps) => ReactNode> = [
+  (t, p) => (
+    <button key="open" type="button" className="fk-convo-row__main" aria-current={t.id === p.currentId ? 'page' : undefined} title={t.title} onClick={() => p.onOpen(t.id)}>
+      <span className="fk-convo-row__title" dir="auto">
+        {t.title}
+      </span>
+      <ThreadMetaLine id={t.id} {...(t.agents ? { agents: t.agents } : {})} labels={p.labels} />
+    </button>
+  ),
+  (t, p) => (
+    <ToggleButton key="star" className="fk-convo-row__fav" aria-label={fill(p.labels.favourite, { title: t.title }, p.locale)} isSelected={p.starred.includes(t.id)} onChange={(on) => p.onStar(t.id, on)}>
+      <Star aria-hidden="true" focusable="false" />
+    </ToggleButton>
+  ),
+  (t, p) => <Button key="remove" variant="quiet" size="compact" shape="circle" iconOnly accessibleLabel={fill(p.labels.delete, { title: t.title }, p.locale)} leadingIcon={<Trash2 />} onPress={() => p.onRemove(t)} />,
+]
+
+function ShelfBlock({ shelf, p }: { shelf: Shelf; p: ThreadHistoryProps }) {
+  const [key, caption, entries] = shelf
+  const captionId = `fk-convo-group-${key}`
   return (
-    <nav className="fk-convo-history" aria-label={l.history}>
+    <section className="fk-convo-history__group" aria-labelledby={captionId}>
+      <h3 id={captionId} className="fk-convo-history__group-title">
+        {caption}
+      </h3>
+      <ul className="fk-convo-history__list">
+        {entries.map((t) => (
+          <li key={t.id} className="fk-convo-row" data-active={t.id === p.currentId || undefined}>
+            {ENTRY_PARTS.map((draw) => draw(t, p))}
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+export function ThreadHistory(props: ThreadHistoryProps) {
+  const words = props.labels
+  const layout = arrange(props)
+  return (
+    <nav className="fk-convo-history" aria-label={words.history}>
       <div className="fk-convo-history__tools">
-        <Button variant="secondary" size="compact" leadingIcon={<MessageSquarePlus />} onPress={p.onStart}>
-          {l.newConversation}
+        <Button variant="secondary" size="compact" leadingIcon={<MessageSquarePlus />} onPress={props.onStart}>
+          {words.newConversation}
         </Button>
-        <ToggleButton className="fk-convo-toggle" isSelected={p.starredOnly} onChange={p.onStarredOnly}>
+        <ToggleButton className="fk-convo-toggle" isSelected={props.starredOnly} onChange={props.onStarredOnly}>
           <Star aria-hidden="true" focusable="false" />
-          <span>{l.favouritesOnly}</span>
+          <span>{words.favouritesOnly}</span>
         </ToggleButton>
       </div>
-      {note ? <p className="fk-convo-history__empty">{note}</p> : null}
-      {note
-        ? null
-        : groupThreadsByDay(shown, new Date(), p.zone).map((group) => {
-            const headingId = `fk-convo-group-${group.bucket}`
-            return (
-              <section key={group.bucket} className="fk-convo-history__group" aria-labelledby={headingId}>
-                <h3 id={headingId} className="fk-convo-history__group-title">
-                  {heading[group.bucket]}
-                </h3>
-                <ul className="fk-convo-history__list">
-                  {group.threads.map((t) => {
-                    const current = t.id === p.currentId
-                    return (
-                      <li key={t.id} className="fk-convo-row" data-active={current || undefined}>
-                        <button type="button" className="fk-convo-row__main" aria-current={current ? 'page' : undefined} title={t.title} onClick={() => p.onOpen(t.id)}>
-                          <span className="fk-convo-row__title" dir="auto">
-                            {t.title}
-                          </span>
-                          <ThreadMetaLine id={t.id} {...(t.agents ? { agents: t.agents } : {})} labels={l} />
-                        </button>
-                        <ToggleButton className="fk-convo-row__fav" aria-label={fill(l.favourite, { title: t.title }, p.locale)} isSelected={p.starred.includes(t.id)} onChange={(on) => p.onStar(t.id, on)}>
-                          <Star aria-hidden="true" focusable="false" />
-                        </ToggleButton>
-                        <Button variant="quiet" size="compact" shape="circle" iconOnly accessibleLabel={fill(l.delete, { title: t.title }, p.locale)} leadingIcon={<Trash2 />} onPress={() => p.onRemove(t)} />
-                      </li>
-                    )
-                  })}
-                </ul>
-              </section>
-            )
-          })}
+      {typeof layout === 'string' ? <p className="fk-convo-history__empty">{layout}</p> : layout.map((shelf) => <ShelfBlock key={shelf[0]} shelf={shelf} p={props} />)}
     </nav>
   )
 }
