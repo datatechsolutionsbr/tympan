@@ -32,7 +32,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
-  --ty-print-minusculas: none;
 }
 [data-ty-print-style="dashboard"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Source Serif 4", Georgia, "Times New Roman", serif;
@@ -65,7 +64,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
-  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="dubois"] {
@@ -99,7 +97,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: small-caps;
   --ty-print-rotulo-espaco: 0.07em;
-  --ty-print-minusculas: none;
 }
 [data-ty-print-style="dubois"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Rubik Mono One", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -132,7 +129,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: small-caps;
   --ty-print-rotulo-espaco: 0.07em;
-  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="deardata"] {
@@ -166,7 +162,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
-  --ty-print-minusculas: none;
 }
 [data-ty-print-style="deardata"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Newsreader", Georgia, "Times New Roman", serif;
@@ -199,7 +194,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
-  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="caderno"] {
@@ -233,7 +227,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
-  --ty-print-minusculas: none;
 }
 [data-ty-print-style="caderno"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Source Serif 4", Georgia, "Times New Roman", serif;
@@ -266,7 +259,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
-  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="isotype"] {
@@ -300,7 +292,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
-  --ty-print-minusculas: none;
 }
 [data-ty-print-style="isotype"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Jost", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -333,7 +324,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
-  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="cordel"] {
@@ -367,7 +357,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: small-caps;
   --ty-print-rotulo-espaco: 0.07em;
-  --ty-print-minusculas: none;
 }
 [data-ty-print-style="cordel"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Alfa Slab One", Georgia, "Times New Roman", serif;
@@ -400,7 +389,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: small-caps;
   --ty-print-rotulo-espaco: 0.07em;
-  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="riso"] {
@@ -434,7 +422,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
-  --ty-print-minusculas: none;
 }
 [data-ty-print-style="riso"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Bricolage Grotesque", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -467,7 +454,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
-  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="jornal"] {
@@ -501,7 +487,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
-  --ty-print-minusculas: none;
 }
 [data-ty-print-style="jornal"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Newsreader", Georgia, "Times New Roman", serif;
@@ -534,7 +519,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
-  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="prancheta"] {
@@ -568,7 +552,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
-  --ty-print-minusculas: none;
 }
 [data-ty-print-style="prancheta"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Share Tech Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -601,7 +584,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
-  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="prancheta-clara"] {
@@ -635,7 +617,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
-  --ty-print-minusculas: none;
 }
 [data-ty-print-style="prancheta-clara"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Share Tech Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -668,7 +649,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
-  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="aquarela"] {
@@ -702,7 +682,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
-  --ty-print-minusculas: none;
 }
 [data-ty-print-style="aquarela"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Cormorant Garamond", Georgia, "Times New Roman", serif;
@@ -735,7 +714,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
-  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="tufte"] {
@@ -769,7 +747,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: small-caps;
   --ty-print-rotulo-espaco: 0.07em;
-  --ty-print-minusculas: none;
 }
 [data-ty-print-style="tufte"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "EB Garamond", Georgia, "Times New Roman", serif;
@@ -802,7 +779,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: small-caps;
   --ty-print-rotulo-espaco: 0.07em;
-  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="suico"] {
@@ -836,7 +812,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
-  --ty-print-minusculas: none;
 }
 [data-ty-print-style="suico"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -869,7 +844,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
-  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="concretismo"] {
@@ -898,12 +872,11 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-traco: 0.7mm;
   --ty-print-tremor: 0;
   --ty-print-raio: 0mm;
-  --ty-print-titulo-caixa: none;
+  --ty-print-titulo-caixa: lowercase;
   --ty-print-titulo-espaco: normal;
-  --ty-print-rotulo-caixa: none;
+  --ty-print-rotulo-caixa: lowercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
-  --ty-print-minusculas: lowercase;
 }
 [data-ty-print-style="concretismo"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Barlow", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -931,12 +904,11 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-traco: 0.7mm;
   --ty-print-tremor: 0;
   --ty-print-raio: 0mm;
-  --ty-print-titulo-caixa: none;
+  --ty-print-titulo-caixa: lowercase;
   --ty-print-titulo-espaco: normal;
-  --ty-print-rotulo-caixa: none;
+  --ty-print-rotulo-caixa: lowercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
-  --ty-print-minusculas: lowercase;
 }
 
 [data-ty-print-style="economist"] {
@@ -970,7 +942,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
-  --ty-print-minusculas: none;
 }
 [data-ty-print-style="economist"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Source Serif 4", Georgia, "Times New Roman", serif;
@@ -1003,7 +974,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
-  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="holmes"] {
@@ -1037,7 +1007,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
-  --ty-print-minusculas: none;
 }
 [data-ty-print-style="holmes"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Rubik", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -1070,7 +1039,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
-  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="bayer"] {
@@ -1099,12 +1067,11 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-traco: 0.4mm;
   --ty-print-tremor: 0;
   --ty-print-raio: 0mm;
-  --ty-print-titulo-caixa: none;
+  --ty-print-titulo-caixa: lowercase;
   --ty-print-titulo-espaco: normal;
-  --ty-print-rotulo-caixa: none;
+  --ty-print-rotulo-caixa: lowercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
-  --ty-print-minusculas: lowercase;
 }
 [data-ty-print-style="bayer"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "League Spartan", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -1132,12 +1099,11 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-traco: 0.4mm;
   --ty-print-tremor: 0;
   --ty-print-raio: 0mm;
-  --ty-print-titulo-caixa: none;
+  --ty-print-titulo-caixa: lowercase;
   --ty-print-titulo-espaco: normal;
-  --ty-print-rotulo-caixa: none;
+  --ty-print-rotulo-caixa: lowercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
-  --ty-print-minusculas: lowercase;
 }
 
 [data-ty-print-style="ft"] {
@@ -1171,7 +1137,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
-  --ty-print-minusculas: none;
 }
 [data-ty-print-style="ft"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "DM Serif Display", Georgia, "Times New Roman", serif;
@@ -1204,7 +1169,6 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
-  --ty-print-minusculas: none;
 }
 "
 `;

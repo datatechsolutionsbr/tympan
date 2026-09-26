@@ -70,8 +70,8 @@ export interface PrintEstrutura {
   rotuloCaixa: 'alta' | 'versalete' | 'normal'
   /** Annotations inside the flow, or as notes in the outer margin (Tufte). */
   notas: 'dentro' | 'margem'
-  /** Figure mark: none, a short bar and rule on top (The Economist). */
-  figura: 'simples' | 'barra-topo'
+  /** Figure mark: none; a short bar and rule on top (The Economist); range frame, no grid (Tufte). */
+  figura: 'simples' | 'barra-topo' | 'amplitude'
   /** Titles and labels in lower case (Bayer's universal alphabet, concrete design). */
   minusculas: boolean
 }
@@ -101,9 +101,10 @@ export interface PrintStyle {
   pb: PrintCoresParciais
   estrutura: PrintEstrutura
   /**
-   * Brand marks (lakebrasil, Datatech) in colour (default) or in their
-   * official one-ink version, for styles whose technique is one or two inks
-   * (woodcut, risograph, cyanotype). Never recoloured to the style's ink.
+   * Brand marks in colour (default) or in their official one-ink version,
+   * for styles whose technique is one or two inks (woodcut, risograph,
+   * cyanotype). The lakebrasil mark is never recoloured; the Datatech mark
+   * has approved variations (ink, duotone, per style), see LogoDatatech.
    */
   logo?: 'cor' | 'mono'
 }
@@ -669,7 +670,7 @@ const tufte: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: { destaque: '#111111' },
-  estrutura: { painel: 'nenhum', rotulo: 'letra', rotuloCaixa: 'versalete', notas: 'margem', figura: 'simples', minusculas: false },
+  estrutura: { painel: 'nenhum', rotulo: 'letra', rotuloCaixa: 'versalete', notas: 'margem', figura: 'amplitude', minusculas: false },
 }
 
 const suico: PrintStyle = {
@@ -1053,13 +1054,13 @@ export function printStyleVariables(style: PrintStyle): Array<[string, string]> 
   vars.push(['--ty-print-traco', `${num(style.traco.largura)}mm`])
   vars.push(['--ty-print-tremor', num(style.traco.tremor)])
   vars.push(['--ty-print-raio', `${num(style.raio)}mm`])
-  vars.push(['--ty-print-titulo-caixa', style.caixaAlta ? 'uppercase' : 'none'])
+  const minusculas = style.estrutura.minusculas
+  vars.push(['--ty-print-titulo-caixa', style.caixaAlta ? 'uppercase' : minusculas ? 'lowercase' : 'none'])
   vars.push(['--ty-print-titulo-espaco', style.caixaAlta ? '0.04em' : 'normal'])
   const rc = style.estrutura.rotuloCaixa
-  vars.push(['--ty-print-rotulo-caixa', rc === 'alta' ? 'uppercase' : 'none'])
+  vars.push(['--ty-print-rotulo-caixa', minusculas ? 'lowercase' : rc === 'alta' ? 'uppercase' : 'none'])
   vars.push(['--ty-print-rotulo-variante', rc === 'versalete' ? 'small-caps' : 'normal'])
   vars.push(['--ty-print-rotulo-espaco', rc === 'normal' ? 'normal' : '0.07em'])
-  vars.push(['--ty-print-minusculas', style.estrutura.minusculas ? 'lowercase' : 'none'])
   return vars
 }
 
