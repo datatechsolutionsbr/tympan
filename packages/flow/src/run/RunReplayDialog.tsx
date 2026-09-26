@@ -4,7 +4,7 @@
 
 import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import { RotateCcw } from 'lucide-react'
-import { Button, InlineNotice, SegmentedControl, Tag, TextArea, TextField } from '@fakhir/design-system'
+import { Button, InlineNotice, SegmentedControl, Tag, TextArea, TextField } from '@fakhir/ui'
 import { SectionedModal } from '../internal/SectionedModal'
 import { defineLabels, fill, useLabels } from '../internal/labels'
 import { NumberInput } from './NumberInput'

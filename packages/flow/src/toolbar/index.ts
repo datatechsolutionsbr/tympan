@@ -1,4 +1,4 @@
-// @fakhir/flow-canvas: toolbar group barrel (dock-ready canvas tools).
+// @fakhir/flow: toolbar group barrel (dock-ready canvas tools).
 export * from './canvasTools'
 export * from './CanvasToolbar'
 export * from './CanvasNodeSearch'

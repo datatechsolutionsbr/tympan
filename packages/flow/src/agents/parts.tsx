@@ -1,11 +1,11 @@
 // Small pieces the agent editors share while the design system's wave 2 is
 // pending (its StepList, ChoiceTile and TagField intents). Not exported as
-// design-system components.
+// @fakhir/ui components.
 
 import { useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode, type RefObject } from 'react'
 import { Button as AriaButton, Label, Radio, RadioGroup } from 'react-aria-components'
 import { Bot, Check, X } from 'lucide-react'
-import { TextField } from '@fakhir/design-system'
+import { TextField } from '@fakhir/ui'
 import { fill } from '../internal/labels'
 
 const SAFE_IMAGE = /^(https?:|data:|blob:|\/)/

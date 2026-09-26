@@ -3,7 +3,7 @@
 // dialog opens.
 
 import { useEffect, useId, useState, type FormEvent } from 'react'
-import { Button, ModalDialog, TextField } from '@fakhir/design-system'
+import { Button, ModalDialog, TextField } from '@fakhir/ui'
 import { defineLabels, useLabels } from '../internal/labels'
 import { createFlowEditorStore, useOptionalFlowEditorStore } from '../state/editorState'
 import { useStoreSelector } from '../state/store'

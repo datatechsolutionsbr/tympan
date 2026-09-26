@@ -4,7 +4,7 @@
 
 import { useMemo, useState, type RefObject } from 'react'
 import { Autocomplete, Dialog, Input, Label, ListBox, ListBoxItem, Popover, SearchField, Text, useFilter } from 'react-aria-components'
-import { Drawer, useMediaQuery } from '@fakhir/design-system'
+import { Drawer, useMediaQuery } from '@fakhir/ui'
 import { useRenderCatalog } from '../catalog/RenderCatalog'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 

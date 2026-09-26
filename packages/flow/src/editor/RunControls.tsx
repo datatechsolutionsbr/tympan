@@ -4,7 +4,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { History, LoaderCircle, Play, Square } from 'lucide-react'
 import { Tooltip, TooltipTrigger } from 'react-aria-components'
-import { Button } from '@fakhir/design-system'
+import { Button } from '@fakhir/ui'
 import { defineLabels, useLabels } from '../internal/labels'
 
 export interface RunControlsLabels {

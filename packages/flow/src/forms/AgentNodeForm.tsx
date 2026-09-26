@@ -2,7 +2,7 @@
 // per-run user prompt; every other agent setting lives on the saved agent.
 
 import { useEffect, useState } from 'react'
-import { ActorChip, InlineNotice, Link, ListboxSelect, Spinner, TextArea } from '@fakhir/design-system'
+import { ActorChip, InlineNotice, Link, ListboxSelect, Spinner, TextArea } from '@fakhir/ui'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { NodeFormFooter } from './NodeFormFooter'
 

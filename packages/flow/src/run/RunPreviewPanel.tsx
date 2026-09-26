@@ -3,7 +3,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Maximize2, X } from 'lucide-react'
-import { Button, Spinner } from '@fakhir/design-system'
+import { Button, Spinner } from '@fakhir/ui'
 import { DockedPanel } from '../internal/DockedPanel'
 import { formatDateTime, formatDuration } from '../internal/format'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'

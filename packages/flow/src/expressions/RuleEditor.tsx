@@ -5,7 +5,7 @@
 import { Fragment, useEffect, useId, useMemo, useState } from 'react'
 import { ChevronRight, Plus, Trash2 } from 'lucide-react'
 import { Button as AriaButton, Disclosure, DisclosurePanel, Group, Heading, Input, Label, NumberField } from 'react-aria-components'
-import { Button, InlineNotice, NativeSelect, Switch, Tag, TagList, TextArea, TextField } from '@fakhir/design-system'
+import { Button, InlineNotice, NativeSelect, Switch, Tag, TagList, TextArea, TextField } from '@fakhir/ui'
 import { createId } from '../internal/ids'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { useControllable } from '../internal/useControllable'

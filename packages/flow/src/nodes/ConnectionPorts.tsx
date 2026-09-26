@@ -5,7 +5,7 @@
 import { useMemo, useState, type CSSProperties } from 'react'
 import { Button as AriaButton, ComboBox, Input, Label, ListBox, ListBoxItem, Popover } from 'react-aria-components'
 import { Check, ChevronDown, Info, Minus, TriangleAlert, X } from 'lucide-react'
-import { Button, ModalDialog, NativeSelect } from '@fakhir/design-system'
+import { Button, ModalDialog, NativeSelect } from '@fakhir/ui'
 import type { BranchTone } from '../catalog/kindCatalog'
 import { defineLabels, fill, useLabels } from '../internal/labels'
 import type { LayoutDirection, Side } from '../model/types'

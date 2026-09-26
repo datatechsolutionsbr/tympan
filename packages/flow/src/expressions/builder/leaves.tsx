@@ -3,7 +3,7 @@
 
 import { useEffect, useReducer, useRef, useState } from 'react'
 import { ToggleButton } from 'react-aria-components'
-import { ListboxSelect, TextArea, TextField } from '@fakhir/design-system'
+import { ListboxSelect, TextArea, TextField } from '@fakhir/ui'
 import { fill } from '../../internal/labels'
 import { prettyJson, readLiteral, vocabularyOf, writeLiteral, type OperandSlotSpec } from '../model'
 import { useBuilderEnv } from './shared'

@@ -2,7 +2,7 @@
 // is chosen from the catalog entry's form kind; each form owns its footer.
 
 import { useEffect, useRef, useSyncExternalStore, type ComponentType, type ReactNode } from 'react'
-import { InlineNotice } from '@fakhir/design-system'
+import { InlineNotice } from '@fakhir/ui'
 import { nodeKindCatalog, type FormKind, type NodeKindCatalogStore } from '../catalog/kindCatalog'
 import { humaniseKey, useRenderCatalog } from '../catalog/RenderCatalog'
 import { SectionedModal } from '../internal/SectionedModal'

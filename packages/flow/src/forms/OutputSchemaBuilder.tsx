@@ -4,7 +4,7 @@
 
 import { useEffect, useId, useRef, useState } from 'react'
 import { Plus, Trash2 } from 'lucide-react'
-import { Button, Checkbox, NativeSelect, TextField } from '@fakhir/design-system'
+import { Button, Checkbox, NativeSelect, TextField } from '@fakhir/ui'
 import { createId } from '../internal/ids'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 

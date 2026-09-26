@@ -4,7 +4,7 @@
 
 import { ChevronDown, SlidersHorizontal } from 'lucide-react'
 import { Button as AriaButton, Dialog, DialogTrigger, Popover as AriaPopover } from 'react-aria-components'
-import { Button, Checkbox, CheckboxGroup, Popover, Switch, TextField } from '@fakhir/design-system'
+import { Button, Checkbox, CheckboxGroup, Popover, Switch, TextField } from '@fakhir/ui'
 import type { ReactNode } from 'react'
 import { fill } from '../internal/labels'
 import type { ProvenanceLabels } from './labels'

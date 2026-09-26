@@ -6,7 +6,7 @@
 
 import { ArrowRight, Check, Ellipsis } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
-import { ActionMenu, Button, ListboxSelect, Switch, TextArea, TextField } from '@fakhir/design-system'
+import { ActionMenu, Button, ListboxSelect, Switch, TextArea, TextField } from '@fakhir/ui'
 import { fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { FlowNode } from '../model/types'
 import { ShapeFlow } from './ShapeChip'

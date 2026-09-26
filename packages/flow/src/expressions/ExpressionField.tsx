@@ -4,7 +4,7 @@
 // condition builder.
 
 import { useId, useState } from 'react'
-import { SegmentedControl, TextArea } from '@fakhir/design-system'
+import { SegmentedControl, TextArea } from '@fakhir/ui'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { ExpressionBuilder } from './ExpressionBuilder'
 import type { ExpressionBuilderLabels } from './labels'

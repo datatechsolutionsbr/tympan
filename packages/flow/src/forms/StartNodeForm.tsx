@@ -3,7 +3,7 @@
 // defaults that still belong to a named variable and are not empty.
 
 import { useId, useReducer } from 'react'
-import { TextField } from '@fakhir/design-system'
+import { TextField } from '@fakhir/ui'
 import { defineLabels, useLabels } from '../internal/labels'
 import { NodeFormFooter } from './NodeFormFooter'
 import { VariableListEditor } from './VariableListEditor'

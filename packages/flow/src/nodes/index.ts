@@ -1,4 +1,4 @@
-// @fakhir/flow-canvas: nodes group barrel.
+// @fakhir/flow: nodes group barrel.
 export * from './GraphNodeCard'
 export * from './types'
 export * from './registry'

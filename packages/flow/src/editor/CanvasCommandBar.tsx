@@ -6,7 +6,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent as ReactPointerEvent } from 'react'
 import { GripVertical } from 'lucide-react'
 import { Dialog, Heading, Popover } from 'react-aria-components'
-import { ActionMenu, useMediaQuery } from '@fakhir/design-system'
+import { ActionMenu, useMediaQuery } from '@fakhir/ui'
 import { CanvasToolbar } from '../toolbar/CanvasToolbar'
 import type { CanvasToolItem } from '../toolbar/canvasTools'
 import { defineLabels, useFlowLocale, useLabels } from '../internal/labels'

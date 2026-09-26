@@ -6,7 +6,7 @@
 
 import { useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
 import { Check, Hourglass, RotateCcw, Share2 } from 'lucide-react'
-import { Button } from '@fakhir/design-system'
+import { Button } from '@fakhir/ui'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { NumberTraceStep, TracedNumber, TracedPassage } from './proofTypes'
 

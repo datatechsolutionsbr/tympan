@@ -1,4 +1,4 @@
-// @fakhir/flow-canvas: expressions group barrel.
+// @fakhir/flow: expressions group barrel.
 export * from './model'
 export * from './labels'
 export * from './catalogContext'

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, FakhirProvider } from '@fakhir/design-system'
+import { Button, FakhirProvider } from '@fakhir/ui'
 import { DataSourceNodeForm, DecisionNodeForm, OutputSchemaBuilder, ReportOutputNodeForm, StartNodeForm, type OutputSchema } from '../../../src'
 
 const noop = () => {}

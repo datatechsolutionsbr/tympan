@@ -6,7 +6,7 @@
 import type { ReactNode } from 'react'
 import { MessageSquarePlus, Star, Trash2 } from 'lucide-react'
 import { ToggleButton } from 'react-aria-components'
-import { Button } from '@fakhir/design-system'
+import { Button } from '@fakhir/ui'
 import { fill, useFlowLocale, useLabels } from '../internal/labels'
 import { assistantLabels, type AssistantLabels } from './AssistantConversation'
 import { groupThreadsByDay, type DayBucket } from './threadDays'

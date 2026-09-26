@@ -4,7 +4,7 @@
 
 import type { ReactNode } from 'react'
 import { History, RotateCw, type LucideIcon } from 'lucide-react'
-import { Button, InlineNotice, NativeSelect, TextField } from '@fakhir/design-system'
+import { Button, InlineNotice, NativeSelect, TextField } from '@fakhir/ui'
 import { SectionedModal } from '../internal/SectionedModal'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { useRewindPlan, type RewindNode } from './rewindPlan'

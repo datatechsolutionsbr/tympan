@@ -1,6 +1,6 @@
-// @fakhir/flow-canvas (MIT). Import the stylesheets once, design system first:
-//   import '@fakhir/design-system/styles.css'
-//   import '@fakhir/flow-canvas/styles.css'
+// @fakhir/flow (MIT). Import the stylesheets once, design system first:
+//   import '@fakhir/ui/styles.css'
+//   import '@fakhir/flow/styles.css'
 
 // Model and pure helpers
 export * from './model/types'

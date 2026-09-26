@@ -4,7 +4,7 @@
 // row ('inline') or in a canvas corner ('panel').
 
 import type { ReactNode } from 'react'
-import { ProofBadge } from '@fakhir/design-system'
+import { ProofBadge } from '@fakhir/ui'
 import type { ProvenanceLabels } from './labels'
 import { PROOF_KEYS, PROV_RELATIONS, type ProofKey, type ProvRelation } from './model'
 

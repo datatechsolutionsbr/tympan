@@ -5,7 +5,7 @@
 
 import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
 import { ArrowLeft, ArrowRight, Bot, ChartColumn, FileSearch, Quote, Scale, Sparkles } from 'lucide-react'
-import { Button, InlineNotice, NativeSelect, TextArea, TextField } from '@fakhir/design-system'
+import { Button, InlineNotice, NativeSelect, TextArea, TextField } from '@fakhir/ui'
 import { useConfirm, type ConfirmFn } from '../internal/confirm'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { AgentMark, ChoiceTiles, StepList, TagInput } from './parts'

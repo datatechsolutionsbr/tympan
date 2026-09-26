@@ -6,7 +6,7 @@
 import { isValidElement, useId, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
 import { Button as AriaButton, Input, TextField as AriaTextField, Label } from 'react-aria-components'
 import { TriangleAlert, Trash2 } from 'lucide-react'
-import { Button, type IconComponent } from '@fakhir/design-system'
+import { Button, type IconComponent } from '@fakhir/ui'
 import { nodeStateAttributes, type NodeProofState, type NodeRunState } from '../catalog/nodeState'
 import type { ToneName } from '../catalog/palette'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'

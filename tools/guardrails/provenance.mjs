@@ -1,7 +1,6 @@
 // check:provenance — hard-fail markers that would suggest material from the
 // forked component library or commercial templates leaked into the clean room.
-// Scans every file of packages/tokens, packages/design-system,
-// packages/flow-canvas and apps/platform except build
+// Scans every file of packages/tokens, packages/ui and packages/flow except build
 // output and node_modules. The similarity comparison against the fork runs
 // outside the clean room (see tools/provenance/README.md).
 import { lineOf, read, rel, report, walk } from './lib.mjs'
@@ -15,7 +14,7 @@ const RULES = [
   [/Headless\.(Field|Button|Dialog|Menu|Listbox|Switch)\b/g, 'Headless.* namespace'],
   [/BentoCard|PlusGrid|GradientBackground|AnimatedNumber|Radiant\w*/g, 'marketing template component name'],
   [/catalyst|tailwind\s*(ui|plus)/gi, 'commercial template name'],
-  [/(?:from\s+|import\s*\(\s*|require\s*\(\s*)['"](@fakhir\/ui|@fakhir\/workflow|astrlabe-ui|@datatech\/astrlabe-ui)(\/[^'"]*)?['"]/g, 'import of the forked packages'],
+  [/(?:from\s+|import\s*\(\s*|require\s*\(\s*)['"](@fakhir\/workflow|astrlabe-ui|@datatech\/astrlabe-ui)(\/[^'"]*)?['"]/g, 'import of the forked packages'],
   [/(?:from\s+|import\s*\(\s*|require\s*\(\s*)['"][^'"]*ui-components[^'"]*['"]/g, 'import from a ui-components folder'],
 ]
 const TEXT = /\.(tsx?|jsx?|mjs|cjs|css|json|md|html|svg|txt|ya?ml)$/

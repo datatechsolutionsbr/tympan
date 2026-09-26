@@ -5,7 +5,7 @@
 import { useMemo, useState, type RefObject } from 'react'
 import { Autocomplete, Dialog, Heading, Input, ListBox, ListBoxItem, Popover, SearchField, Text, useFilter } from 'react-aria-components'
 import { Search } from 'lucide-react'
-import { Drawer, useMediaQuery } from '@fakhir/design-system'
+import { Drawer, useMediaQuery } from '@fakhir/ui'
 import { fill, useFlowLocale } from '../internal/labels'
 import { ShapeChip } from './ShapeChip'
 import type { DataShape } from './shapes'

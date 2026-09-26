@@ -1,4 +1,4 @@
-// The research shell of the gallery pages, built from @fakhir/design-system:
+// The research shell of the gallery pages, built from @fakhir/ui:
 // AppFrame (layout="rail": rail, glass sheet, dock), the editorial PageHeader
 // and the FloatingActionBar as the dock. The canvas tools of a page become the
 // dock's items (dockItemsFromCanvasTools); pages without a canvas get the app
@@ -20,7 +20,7 @@ import {
   useTheme,
   type ActionBarItem,
   type IconComponent,
-} from '@fakhir/design-system'
+} from '@fakhir/ui'
 import type { CanvasToolItem } from '../../../src/toolbar/canvasTools'
 import { dockItemsFromCanvasTools } from '../../../src/toolbar/dockItems'
 import { nextLocale, setHashParam } from './params'

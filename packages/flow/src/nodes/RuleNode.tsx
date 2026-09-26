@@ -3,7 +3,7 @@
 // card's main control, so toggling never opens the editor.
 
 import { Scale } from 'lucide-react'
-import { Switch } from '@fakhir/design-system'
+import { Switch } from '@fakhir/ui'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { FlowNode, LayoutDirection } from '../model/types'
 import { ConnectionPorts } from './ConnectionPorts'

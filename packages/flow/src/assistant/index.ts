@@ -1,4 +1,4 @@
-// @fakhir/flow-canvas: assistant group barrel (session hook, conversation, visual answers, workspace).
+// @fakhir/flow: assistant group barrel (session hook, conversation, visual answers, workspace).
 export * from './MarkdownView'
 export * from './visual'
 export * from './useAssistantSession'

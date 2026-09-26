@@ -1,4 +1,4 @@
-// @fakhir/flow-canvas: run group barrel.
+// @fakhir/flow: run group barrel.
 export * from './types'
 export * from './lineage'
 export * from './execution'

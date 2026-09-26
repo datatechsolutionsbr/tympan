@@ -5,7 +5,7 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { Button as AriaButton, Tree, TreeItem, TreeItemContent, type Key } from 'react-aria-components'
 import { ChevronRight } from 'lucide-react'
-import { InlineNotice, Tag } from '@fakhir/design-system'
+import { InlineNotice, Tag } from '@fakhir/ui'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { TraceReport, TraceSpan } from './trace'
 

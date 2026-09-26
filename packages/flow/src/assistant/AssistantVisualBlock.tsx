@@ -4,7 +4,7 @@
 import { useId } from 'react'
 import { Workflow } from 'lucide-react'
 import { useLocale } from 'react-aria-components'
-import { Button } from '@fakhir/design-system'
+import { Button } from '@fakhir/ui'
 import { defineLabels, fill, useLabels } from '../internal/labels'
 import { ReportView } from '../report/ReportView'
 import { envelopeToReport, type VisualEnvelope } from './visual'

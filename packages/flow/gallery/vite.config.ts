@@ -1,6 +1,6 @@
 import react from '@vitejs/plugin-react'
 import { defaultClientConditions, defineConfig } from 'vite'
-import { themeInitScript } from '../../design-system/src/internal/theme.tsx'
+import { themeInitScript } from '../../ui/src/internal/theme.tsx'
 
 export const GALLERY_STORAGE_KEY = 'fk-flow-gallery-theme'
 

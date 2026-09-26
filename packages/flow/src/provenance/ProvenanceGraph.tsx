@@ -27,7 +27,7 @@
 import { useCallback, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
 import { ComboBox, Input, Label, ListBox, ListBoxItem, Popover as AriaPopover, Button as AriaButton, Radio, RadioGroup, Switch as AriaSwitch, Text } from 'react-aria-components'
 import { ArrowDown, ArrowUp, Check, ChevronDown, FileDown, GitCompareArrows, Hourglass, ListTree } from 'lucide-react'
-import { Button, EmptyState, InlineNotice, useMediaQuery } from '@fakhir/design-system'
+import { Button, EmptyState, InlineNotice, useMediaQuery } from '@fakhir/ui'
 import { kindTone } from '../catalog/palette'
 import { fill, useFlowLocale, useLabels } from '../internal/labels'
 import { useControllable } from '../internal/useControllable'

@@ -2,7 +2,7 @@
 // step is active; the rule itself is authored elsewhere (onManageRules).
 
 import { useEffect, useState } from 'react'
-import { Button, InlineNotice, NativeSelect, Spinner, Switch } from '@fakhir/design-system'
+import { Button, InlineNotice, NativeSelect, Spinner, Switch } from '@fakhir/ui'
 import { NodeFormFooter } from '../forms/NodeFormFooter'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { conditionSummary } from './ruleCondition'

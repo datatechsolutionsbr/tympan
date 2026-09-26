@@ -4,7 +4,7 @@
 
 import type { ReactNode } from 'react'
 import { X } from 'lucide-react'
-import { Button, Drawer } from '@fakhir/design-system'
+import { Button, Drawer } from '@fakhir/ui'
 import { FlowPreview } from '../editor/FlowPreview'
 import { fill } from '../internal/labels'
 import type { FlowConnector, FlowNode } from '../model/types'

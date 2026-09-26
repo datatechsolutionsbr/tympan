@@ -5,7 +5,7 @@
 import { useId, useRef, type KeyboardEvent, type PointerEvent as ReactPointerEvent } from 'react'
 import { ChevronDown, ChevronRight, Focus, Group, Trash2 } from 'lucide-react'
 import { Button as AriaButton } from 'react-aria-components'
-import { Button } from '@fakhir/design-system'
+import { Button } from '@fakhir/ui'
 import { isToneName } from '../catalog/palette'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { FlowNode, LayoutDirection, Size } from '../model/types'

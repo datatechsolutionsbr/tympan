@@ -1,4 +1,4 @@
-# @fakhir/design-system
+# @fakhir/ui
 
 Accessible React components for Fakhir (React 18.3 or 19), built on
 [React Aria Components](https://react-spectrum.adobe.com/react-aria/) and
@@ -6,11 +6,11 @@ styled with plain CSS custom properties (`--fk-*`) in `@layer fakhir`. No
 Tailwind. MIT licence.
 
 ```sh
-npm run build -w @fakhir/design-system          # dist/index.js, index.d.ts, styles.css (builds @fakhir/tokens first)
-npm run typecheck -w @fakhir/design-system
-npm test -w @fakhir/design-system               # vitest + Testing Library + axe-core
-npm run gallery -w @fakhir/design-system        # http://localhost:3310 (components, theme customizer)
-npm run gallery:build -w @fakhir/design-system  # static gallery in dist-gallery/
+npm run build -w @fakhir/ui          # dist/index.js, index.d.ts, styles.css (builds @fakhir/tokens first)
+npm run typecheck -w @fakhir/ui
+npm test -w @fakhir/ui               # vitest + Testing Library + axe-core
+npm run gallery -w @fakhir/ui        # http://localhost:3310 (components, theme customizer)
+npm run gallery:build -w @fakhir/ui  # static gallery in dist-gallery/
 ```
 
 ## Ready-made components and a ready theme system
@@ -21,11 +21,11 @@ property for the `fakhir`, `neutral` and `high-contrast` presets, light and
 dark), so no other CSS is needed:
 
 ```sh
-npm install @fakhir/design-system @fakhir/tokens react react-dom
+npm install @fakhir/ui @fakhir/tokens react react-dom
 ```
 
 ```tsx
-import '@fakhir/design-system/styles.css' // components + tokens, in @layer fakhir.*
+import '@fakhir/ui/styles.css' // components + tokens, in @layer fakhir.*
 ```
 
 For a tailored theme, generate its CSS with `@fakhir/tokens`
@@ -37,11 +37,11 @@ the tokens without components can import `@fakhir/tokens/tokens.css` alone.
 ### The research shell (no top bar)
 
 ```tsx
-import '@fakhir/design-system/styles.css'
+import '@fakhir/ui/styles.css'
 import {
   AppFrame, FakhirProvider, FloatingActionBar, PageHeader, RailContextButton,
   RailNavItem, RailNavSection, StatStrip, ThemeProvider, ToastProvider, messagesPtBR,
-} from '@fakhir/design-system'
+} from '@fakhir/ui'
 import { CheckSquare, FileStack, Home } from 'lucide-react'
 
 export function App() {

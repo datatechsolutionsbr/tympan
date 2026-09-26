@@ -4,7 +4,7 @@
 
 import { useMemo, useState } from 'react'
 import { Share2 } from 'lucide-react'
-import { Button } from '@fakhir/design-system'
+import { Button } from '@fakhir/ui'
 import { ActorMark } from './ProvenanceNode'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { useControllable } from '../internal/useControllable'

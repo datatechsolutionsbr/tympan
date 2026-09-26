@@ -1,6 +1,6 @@
 # Third-party notices
 
-`@fakhir/flow-canvas` is MIT-licensed (Copyright (c) 2026 Natalia Mesquita).
+`@fakhir/flow` is MIT-licensed (Copyright (c) 2026 Natalia Mesquita).
 It depends on, but does not copy, the packages below. Versions are those
 resolved on 2026-09-26.
 
@@ -12,7 +12,7 @@ resolved on 2026-09-26.
 | @dagrejs/graphlib (dependency of dagre) | 4.0.5 | MIT | graph structure used by dagre |
 | react-aria-components (with react-aria, react-stately, @internationalized/*) | 1.21.1 | Apache-2.0 | accessible primitives (Button, ToggleButton, Toolbar, Tree, ListBox, GridList, Autocomplete, SearchField, ComboBox, Popover, Dialog, Tabs, Disclosure, RadioGroup, Slider, NumberField, DropZone, FileTrigger, I18nProvider/useLocale) |
 | lucide-react | 1.48.0 | ISC | icons (design direction §4.4) |
-| @fakhir/design-system, @fakhir/tokens | 0.1.0 | MIT | components and `--fk-*` tokens of the same project |
+| @fakhir/ui, @fakhir/tokens | 0.1.0 | MIT | components and `--fk-*` tokens of the same project |
 | react, react-dom (peer) | 19.x | MIT | rendering |
 
 MIT licence (dagre, graphlib): Copyright (c) 2012-2014 Chris Pettitt and the

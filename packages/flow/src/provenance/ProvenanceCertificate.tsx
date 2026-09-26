@@ -5,7 +5,7 @@
 import { useMemo } from 'react'
 import { Button as AriaButton, Tree, TreeItem, TreeItemContent, type Key } from 'react-aria-components'
 import { Check, ChevronRight, CircleCheck, CircleX, FileDown, Hourglass, ShieldCheck } from 'lucide-react'
-import { Button } from '@fakhir/design-system'
+import { Button } from '@fakhir/ui'
 import { ProofPill } from './ProvenanceNode'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { ObligationStatus, ProofCertificate, ProofObligation } from './proofTypes'

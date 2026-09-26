@@ -6,7 +6,7 @@
 
 import { useEffect, useId, useRef, type KeyboardEvent, type ReactNode } from 'react'
 import { X } from 'lucide-react'
-import { Button, useMediaQuery, useMessages } from '@fakhir/design-system'
+import { Button, useMediaQuery, useMessages } from '@fakhir/ui'
 
 export interface DockedPanelProps {
   title: ReactNode

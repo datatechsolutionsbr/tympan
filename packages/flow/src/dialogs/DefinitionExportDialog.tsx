@@ -2,7 +2,7 @@
 // graph), copies the whole text or downloads it as a file.
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Button, InlineNotice } from '@fakhir/design-system'
+import { Button, InlineNotice } from '@fakhir/ui'
 import { SectionedModal } from '../internal/SectionedModal'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { FlowConnector, FlowNode, Viewport } from '../model/types'

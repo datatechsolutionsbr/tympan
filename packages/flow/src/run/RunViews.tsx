@@ -3,7 +3,7 @@
 // the drawer tab live here, so switching mode keeps them.
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { useMediaQuery } from '@fakhir/design-system'
+import { useMediaQuery } from '@fakhir/ui'
 import { defineLabels, useLabels } from '../internal/labels'
 import { useControllable } from '../internal/useControllable'
 import { useFlowEditorState } from '../state/editorState'

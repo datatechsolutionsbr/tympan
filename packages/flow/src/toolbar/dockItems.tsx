@@ -5,7 +5,7 @@
 // The zoom readout carries its percentage as text rather than a pictogram, and
 // the tool's `group` lets the dock draw dividers between clusters.
 
-import type { ActionBarItem } from '@fakhir/design-system'
+import type { ActionBarItem } from '@fakhir/ui'
 import type { CanvasToolItem } from './canvasTools'
 
 type Tool = CanvasToolItem

@@ -6,7 +6,7 @@
 
 import { useEffect, useMemo } from 'react'
 import { ArrowRight, Check } from 'lucide-react'
-import { Button, FakhirProvider, Tag, messagesPtBR } from '@fakhir/design-system'
+import { Button, FakhirProvider, Tag, messagesPtBR } from '@fakhir/ui'
 import { FlowEditor } from '../../../src/editor/FlowEditor'
 import { autoLayout } from '../../../src/layout/autoLayout'
 import type { FlowConnector, FlowNode } from '../../../src/model/types'

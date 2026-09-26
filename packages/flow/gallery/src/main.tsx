@@ -1,11 +1,11 @@
 import { StrictMode, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 // The design system's stylesheet from source (its package export points at dist/).
-import '../../../design-system/src/styles.css'
+import '../../../ui/src/styles.css'
 import '../../src/styles.css'
 import './gallery.css'
 import './shell/shell.css'
-import { FakhirProvider, SegmentedControl, ThemeProvider, ToastProvider, useTheme, type ThemeMode } from '@fakhir/design-system'
+import { FakhirProvider, SegmentedControl, ThemeProvider, ToastProvider, useTheme, type ThemeMode } from '@fakhir/ui'
 import { ComponentsPage } from './pages/ComponentsPage'
 import { FlowEditorPage } from './pages/FlowEditorPage'
 import { ProvenancePage } from './pages/ProvenancePage'

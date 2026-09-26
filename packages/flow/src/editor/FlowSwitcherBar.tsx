@@ -4,7 +4,7 @@
 
 import { useRef, type KeyboardEvent } from 'react'
 import { CircleCheck, PencilLine, Plus, Trash2 } from 'lucide-react'
-import { Button, NativeSelect, Skeleton, StatusPill, useMediaQuery } from '@fakhir/design-system'
+import { Button, NativeSelect, Skeleton, StatusPill, useMediaQuery } from '@fakhir/ui'
 import { formatRelative } from '../internal/format'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 

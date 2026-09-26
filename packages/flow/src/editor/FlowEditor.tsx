@@ -20,7 +20,7 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react'
-import { Button, Drawer, useMediaQuery } from '@fakhir/design-system'
+import { Button, Drawer, useMediaQuery } from '@fakhir/ui'
 import { Plus } from 'lucide-react'
 import { nodeKindCatalog } from '../catalog/kindCatalog'
 import { useRenderCatalog } from '../catalog/RenderCatalog'

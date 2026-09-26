@@ -4,7 +4,7 @@
 
 import { useId } from 'react'
 import { CircleCheck, CircleSlash } from 'lucide-react'
-import { Tag } from '@fakhir/design-system'
+import { Tag } from '@fakhir/ui'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { FlowNode, LayoutDirection } from '../model/types'
 import { ConnectionPorts } from './ConnectionPorts'

@@ -5,7 +5,7 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { Bot, ChevronRight, Database, GripVertical, Plus, Scale, Server } from 'lucide-react'
 import { Button as AriaButton, Disclosure, DisclosurePanel, GridList, GridListItem, Heading, useDragAndDrop } from 'react-aria-components'
-import { Button, TextField, type IconComponent } from '@fakhir/design-system'
+import { Button, TextField, type IconComponent } from '@fakhir/ui'
 import { useRenderCatalog } from '../catalog/RenderCatalog'
 import { nodeKindCatalog, PICKER_KINDS, type NodeKindCatalogStore, type NodeKindEntry } from '../catalog/kindCatalog'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'

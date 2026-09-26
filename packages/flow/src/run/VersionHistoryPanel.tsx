@@ -3,7 +3,7 @@
 // confirms). The live version is marked by a word and a border.
 
 import { useEffect, useState } from 'react'
-import { ActorChip, Button, InlineNotice, Skeleton } from '@fakhir/design-system'
+import { ActorChip, Button, InlineNotice, Skeleton } from '@fakhir/ui'
 import { DockedPanel } from '../internal/DockedPanel'
 import { formatDateTime } from '../internal/format'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'

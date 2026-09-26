@@ -34,7 +34,7 @@ import {
   Target,
   Workflow,
 } from 'lucide-react'
-import type { IconComponent } from '@fakhir/design-system'
+import type { IconComponent } from '@fakhir/ui'
 
 export const GENERIC_ICON: IconComponent = Box
 

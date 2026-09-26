@@ -5,7 +5,7 @@
 
 import { useMemo, useState, type ReactNode } from 'react'
 import { Button as AriaButton } from 'react-aria-components'
-import { SegmentedControl, TextField } from '@fakhir/design-system'
+import { SegmentedControl, TextField } from '@fakhir/ui'
 import { fill } from '../internal/labels'
 import { EXPRESSION_FAMILIES, pickerEntries, prettyJson, seedOperation, type ExpressionCatalog, type OperationNode } from './model'
 

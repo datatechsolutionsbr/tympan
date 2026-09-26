@@ -4,7 +4,7 @@
 
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react'
 import { ListBox, ListBoxItem } from 'react-aria-components'
-import { ActorChip, Button, Tag, useMediaQuery } from '@fakhir/design-system'
+import { ActorChip, Button, Tag, useMediaQuery } from '@fakhir/ui'
 import { formatDateTime, formatDuration, formatNumber } from '../internal/format'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { useControllable } from '../internal/useControllable'

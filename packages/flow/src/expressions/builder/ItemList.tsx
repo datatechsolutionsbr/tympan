@@ -4,7 +4,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Plus, Trash2 } from 'lucide-react'
-import { Button, Tag } from '@fakhir/design-system'
+import { Button, Tag } from '@fakhir/ui'
 import { fill } from '../../internal/labels'
 import { groupName, SlotHeading, useBuilderEnv } from './shared'
 

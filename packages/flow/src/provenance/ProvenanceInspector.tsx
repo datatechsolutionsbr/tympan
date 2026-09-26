@@ -4,7 +4,7 @@
 // both directions as buttons that move the selection along the trail.
 
 import { CircleCheck, CircleX, FileText, Hourglass, ShieldQuestion, X } from 'lucide-react'
-import { Button } from '@fakhir/design-system'
+import { Button } from '@fakhir/ui'
 import type { ObligationStatus, ProofObligation } from './proofTypes'
 import { ActorMark, HashCheck, ProofPill } from './ProvenanceNode'
 import { fill } from '../internal/labels'

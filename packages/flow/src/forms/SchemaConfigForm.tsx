@@ -4,7 +4,7 @@
 // incoming value, keeping keys the schema does not mention.
 
 import { useReducer, type ReactNode } from 'react'
-import { NativeSelect, Switch, TextArea, TextField } from '@fakhir/design-system'
+import { NativeSelect, Switch, TextArea, TextField } from '@fakhir/ui'
 import type { ConfigSchema, FieldSchema } from '../catalog/kindCatalog'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { NodeFormFooter } from './NodeFormFooter'

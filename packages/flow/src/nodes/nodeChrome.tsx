@@ -5,7 +5,7 @@
 import type { ReactNode } from 'react'
 import { Toolbar } from 'react-aria-components'
 import { CircleCheck, CircleDashed, CircleX, History, LoaderCircle, SkipForward, Undo2 } from 'lucide-react'
-import { Button, type IconComponent } from '@fakhir/design-system'
+import { Button, type IconComponent } from '@fakhir/ui'
 import { humaniseKey, useRenderCatalog, type RenderCatalog } from '../catalog/RenderCatalog'
 import type { ToneName } from '../catalog/palette'
 import { defineLabels, useLabels } from '../internal/labels'

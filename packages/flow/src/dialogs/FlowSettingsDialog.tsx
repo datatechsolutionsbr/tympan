@@ -3,7 +3,7 @@
 // always, and every other field only when it changed.
 
 import { useEffect, useId, useState, type KeyboardEvent } from 'react'
-import { Button, Fieldset, Switch, TextArea, TextField } from '@fakhir/design-system'
+import { Button, Fieldset, Switch, TextArea, TextField } from '@fakhir/ui'
 import { SectionedModal } from '../internal/SectionedModal'
 import { defineLabels, useFlowLocale, useLabels } from '../internal/labels'
 import { useActiveDialog, useDialogStack, type FlowSettingsPayload } from '../state/dialogStack'

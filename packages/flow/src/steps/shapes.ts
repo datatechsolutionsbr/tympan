@@ -2,7 +2,7 @@
 // glyph and a tone, so a port chip never relies on colour alone.
 
 import { ChartColumn, Hash, Rows3, Split, Table2 } from 'lucide-react'
-import type { IconComponent } from '@fakhir/design-system'
+import type { IconComponent } from '@fakhir/ui'
 import { defineLabels, fill } from '../internal/labels'
 
 export type DataShape = 'records' | 'table' | 'number' | 'chart' | 'decision'

@@ -1,5 +1,5 @@
 {
-  "name": "@fakhir/design-system",
+  "name": "@fakhir/ui",
   "version": "0.1.0",
   "description": "Fakhir design system: accessible React components (React 18.3 or 19) on React Aria Components, styled with --fk-* CSS custom properties in @layer fakhir. No Tailwind.",
   "license": "MIT",

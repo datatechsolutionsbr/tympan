@@ -22,7 +22,7 @@ import {
   StickyNote,
   Trash2,
 } from 'lucide-react'
-import { ActionMenu, type ActionMenuEntry } from '@fakhir/design-system'
+import { ActionMenu, type ActionMenuEntry } from '@fakhir/ui'
 import type { AlignEdge, DistributeAxis } from '../geometry/arrange'
 import { FALLBACK_NODE_SIZE } from '../geometry/rect'
 import { defineLabels, useLabels } from '../internal/labels'

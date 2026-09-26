@@ -4,7 +4,7 @@
 
 import { useEffect, useId, useRef, useState } from 'react'
 import { ArrowLeft, ChevronRight, CircleAlert, Minimize2, Workflow } from 'lucide-react'
-import { Button, Spinner, TabPanel, Tabs } from '@fakhir/design-system'
+import { Button, Spinner, TabPanel, Tabs } from '@fakhir/ui'
 import { DockedPanel } from '../internal/DockedPanel'
 import { formatDateTime, formatDuration, formatNumber } from '../internal/format'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'

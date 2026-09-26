@@ -6,7 +6,7 @@
 
 import { useMemo, useReducer, useRef, type ReactNode } from 'react'
 import { History } from 'lucide-react'
-import { Button, Drawer, useMediaQuery } from '@fakhir/design-system'
+import { Button, Drawer, useMediaQuery } from '@fakhir/ui'
 import { useConfirm, type ConfirmFn } from '../internal/confirm'
 import { fill, useFlowLocale, useLabels } from '../internal/labels'
 import { AssistantConversation, assistantLabels, type AssistantLabels } from './AssistantConversation'

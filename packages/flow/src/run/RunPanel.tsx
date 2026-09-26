@@ -3,7 +3,7 @@
 
 import { useId } from 'react'
 import { Play, Square } from 'lucide-react'
-import { Button } from '@fakhir/design-system'
+import { Button } from '@fakhir/ui'
 import { DockedPanel } from '../internal/DockedPanel'
 import { formatDuration } from '../internal/format'
 import { defineLabels, useFlowLocale, useLabels } from '../internal/labels'

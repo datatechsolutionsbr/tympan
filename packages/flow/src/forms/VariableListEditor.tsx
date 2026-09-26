@@ -5,7 +5,7 @@
 
 import { Fragment, useId, useReducer, useRef, type KeyboardEvent, type ReactNode, type Ref } from 'react'
 import { Plus, X } from 'lucide-react'
-import { Button, TextField } from '@fakhir/design-system'
+import { Button, TextField } from '@fakhir/ui'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { admit, EMPTY_ENTRY, focusTargetAfter, issueAt, nameListStep, replaceAt, withoutAt } from './nameListModel'
 

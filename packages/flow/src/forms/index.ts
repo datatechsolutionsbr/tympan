@@ -1,4 +1,4 @@
-// @fakhir/flow-canvas: forms group barrel (node configuration forms).
+// @fakhir/flow: forms group barrel (node configuration forms).
 export * from './NodeFormFooter'
 export * from './SchemaConfigForm'
 export * from './VariableListEditor'

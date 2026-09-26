@@ -5,7 +5,7 @@
 
 import { ArrowDown, ArrowUp, Ellipsis, Plus, Settings2, Trash2 } from 'lucide-react'
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
-import { ActionMenu, Button } from '@fakhir/design-system'
+import { ActionMenu, Button } from '@fakhir/ui'
 import { fill, useFlowLocale } from '../internal/labels'
 import type { FlowNode } from '../model/types'
 import { ShapeFlow } from './ShapeChip'

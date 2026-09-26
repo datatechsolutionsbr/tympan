@@ -4,7 +4,7 @@
 // wrapped in a "first non-empty value" operation with that single candidate.
 
 import { useState } from 'react'
-import { TextArea } from '@fakhir/design-system'
+import { TextArea } from '@fakhir/ui'
 import { NodeFormFooter } from '../forms/NodeFormFooter'
 import { defineLabels, useLabels } from '../internal/labels'
 import { ExpressionField, type ExpressionFieldLabels } from './ExpressionField'

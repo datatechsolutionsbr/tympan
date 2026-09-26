@@ -3,7 +3,7 @@
 // Operand kinds and slot kinds are both driven by descriptor tables.
 
 import { useMemo, useState, type ReactNode } from 'react'
-import { InlineNotice, ListboxSelect, SegmentedControl } from '@fakhir/design-system'
+import { InlineNotice, ListboxSelect, SegmentedControl } from '@fakhir/ui'
 import { fill } from '../../internal/labels'
 import type { ExpressionBuilderLabels } from '../labels'
 import { EXPRESSION_FAMILIES, entryIdOf, findOperation, inferSlots, isLiteral, isOperation, isReference, seedOperation, type ExpressionNode, type OperandSlotSpec, type OperationNode, type PickerEntry } from '../model'

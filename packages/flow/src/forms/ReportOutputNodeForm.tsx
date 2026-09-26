@@ -5,7 +5,7 @@
 import { useId, useMemo, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { Button as AriaButton, Radio, RadioGroup, Label } from 'react-aria-components'
-import { EmptyState, TextArea, TextField } from '@fakhir/design-system'
+import { EmptyState, TextArea, TextField } from '@fakhir/ui'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { ReportView, validateReport, type ReportIssue, type ReportSpec } from '../report/ReportView'
 import { NodeFormFooter } from './NodeFormFooter'

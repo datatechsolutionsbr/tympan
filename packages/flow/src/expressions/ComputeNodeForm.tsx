@@ -5,7 +5,7 @@
 // ComputeTrial.tsx (dry run on sample data). This file wires them together.
 
 import { useMemo, useState, type ReactNode } from 'react'
-import { SegmentedControl, TextArea } from '@fakhir/design-system'
+import { SegmentedControl, TextArea } from '@fakhir/ui'
 import { NodeFormFooter } from '../forms/NodeFormFooter'
 import { defineLabels, useFlowLocale, useLabels } from '../internal/labels'
 import { useExpressionCatalog } from './catalogContext'

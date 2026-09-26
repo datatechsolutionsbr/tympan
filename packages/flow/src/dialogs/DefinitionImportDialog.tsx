@@ -6,7 +6,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { DropZone, FileTrigger, type DropZoneProps } from 'react-aria-components'
 import { FileUp } from 'lucide-react'
-import { Button, InlineNotice, useMediaQuery } from '@fakhir/design-system'
+import { Button, InlineNotice, useMediaQuery } from '@fakhir/ui'
 import { SectionedModal } from '../internal/SectionedModal'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { FlowConnector, FlowGraph, FlowNode } from '../model/types'

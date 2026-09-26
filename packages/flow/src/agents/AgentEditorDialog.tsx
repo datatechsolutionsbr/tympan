@@ -19,7 +19,7 @@ import {
   ToggleButtonGroup,
 } from 'react-aria-components'
 import { ChevronDown, CircleAlert, CircleCheck, Clock, Loader } from 'lucide-react'
-import { Button, InlineNotice, Link, NativeSelect, SegmentedControl, Switch, TextArea, TextField } from '@fakhir/design-system'
+import { Button, InlineNotice, Link, NativeSelect, SegmentedControl, Switch, TextArea, TextField } from '@fakhir/ui'
 import { useConfirm } from '../internal/confirm'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { SectionedModal } from '../internal/SectionedModal'

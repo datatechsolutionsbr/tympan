@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { FakhirProvider } from '@fakhir/design-system'
+import { FakhirProvider } from '@fakhir/ui'
 import { ComputeNodeForm, defaultRule, ExpressionCatalogProvider, exampleExpressionCatalog, RuleEditor, RuleNodeForm, SimulationNodeForm, TraceTree, type RuleValue } from '../../../src'
 
 const noop = () => {}

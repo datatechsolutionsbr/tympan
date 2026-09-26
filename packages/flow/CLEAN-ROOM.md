@@ -23,7 +23,7 @@ only from behaviour specifications and public documentation.
 
 The implementer did not open, search, run or copy the fork, did not change the
 sparse checkout, did not inspect other branches, other worktrees or the
-excluded paths with git, and did not modify `packages/design-system` or
+excluded paths with git, and did not modify `packages/ui` or
 `packages/tokens` (a separate session extends them). No spec question needed
 to go back to the spec writer; ambiguities were resolved from the design
 direction and recorded in `PROVENANCE.md`.

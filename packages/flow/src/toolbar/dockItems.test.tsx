@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import { FloatingActionBar } from '@fakhir/design-system'
+import { FloatingActionBar } from '@fakhir/ui'
 import { canvasToolItems } from './canvasTools'
 import { dockItemsFromCanvasTools } from './dockItems'
 

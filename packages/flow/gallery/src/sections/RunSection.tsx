@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, FakhirProvider } from '@fakhir/design-system'
+import { Button, FakhirProvider } from '@fakhir/ui'
 import { createFlowEditorStore, ExecutionTimeline, FlowEditorStateProvider, RunReplayDialog, RunRewindDialog, RunViews, VersionHistoryPanel, type RunSummary, type TimelineEntry } from '../../../src'
 
 const runs: RunSummary[] = [

@@ -3,7 +3,7 @@
 
 import { useReducer } from 'react'
 import { FlaskConical } from 'lucide-react'
-import { Button, InlineNotice, TextArea } from '@fakhir/design-system'
+import { Button, InlineNotice, TextArea } from '@fakhir/ui'
 import { fill } from '../internal/labels'
 import { sampleFromText } from './computeDraft'
 import type { TraceReport } from './trace'

@@ -5,7 +5,7 @@
 import { useId, useState, type KeyboardEvent } from 'react'
 import { Label, Radio, RadioGroup } from 'react-aria-components'
 import { Check } from 'lucide-react'
-import { TextArea, TextField } from '@fakhir/design-system'
+import { TextArea, TextField } from '@fakhir/ui'
 import { defineLabels, useLabels } from '../internal/labels'
 import { NodeFormFooter } from './NodeFormFooter'
 

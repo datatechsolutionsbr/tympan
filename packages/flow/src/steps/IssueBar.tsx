@@ -4,7 +4,7 @@
 // the same kind that takes what arrives, insert a bridging step, or unlink.
 
 import { TriangleAlert } from 'lucide-react'
-import { Button } from '@fakhir/design-system'
+import { Button } from '@fakhir/ui'
 import { fill, useFlowLocale } from '../internal/labels'
 import { ShapeChip } from './ShapeChip'
 import { useSteps } from './StepsContext'

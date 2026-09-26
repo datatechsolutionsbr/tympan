@@ -6,7 +6,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type FormEvent, type KeyboardEvent, type ReactNode, type Ref } from 'react'
 import { CircleCheck, CircleX, LoaderCircle, PanelRight, RotateCcw, SendHorizontal, Square } from 'lucide-react'
 import { Label, TextArea, TextField } from 'react-aria-components'
-import { Button, Skeleton } from '@fakhir/design-system'
+import { Button, Skeleton } from '@fakhir/ui'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { AssistantVisualBlock } from './AssistantVisualBlock'
 import { MarkdownView } from './MarkdownView'

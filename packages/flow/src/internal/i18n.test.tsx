@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { FakhirProvider } from '@fakhir/design-system'
+import { FakhirProvider } from '@fakhir/ui'
 import { autoLayout, rankDirectionOf } from '../layout/autoLayout'
 import { CanvasSurface, physicalSide } from '../surface/CanvasSurface'
 import { canvasToolItems } from '../toolbar/canvasTools'

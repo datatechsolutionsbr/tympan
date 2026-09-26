@@ -2,7 +2,7 @@
 // (secondary) and Save (primary) aligned to the end. Save is an explicit
 // button; Enter in a single-line field never submits by itself.
 
-import { Button } from '@fakhir/design-system'
+import { Button } from '@fakhir/ui'
 import { defineLabels, useLabels } from '../internal/labels'
 
 export interface NodeFormFooterLabels {

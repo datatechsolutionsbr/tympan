@@ -1,6 +1,6 @@
 # Third-party notices
 
-`@fakhir/design-system` and `@fakhir/tokens` are MIT-licensed (Copyright (c)
+`@fakhir/ui` and `@fakhir/tokens` are MIT-licensed (Copyright (c)
 2026 Natalia Mesquita). They depend on, but do not copy, the packages
 below. Versions are those resolved on 2026-09-26.
 

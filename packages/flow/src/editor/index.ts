@@ -1,4 +1,4 @@
-// @fakhir/flow-canvas: editor group barrel.
+// @fakhir/flow: editor group barrel.
 export * from './FlowEditor'
 export * from './AutosaveController'
 export * from './keyMap'

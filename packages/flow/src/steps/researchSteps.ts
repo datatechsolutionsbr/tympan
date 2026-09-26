@@ -4,7 +4,7 @@
 // primitives (start, end, branch) stay reachable on a collapsed shelf.
 
 import { Bot, ChartColumn, CornerDownRight, FileText, Filter, Flag, GitBranch, Hash, Lock, Play, Scale, Shapes, Sigma, Split, SunMedium, Table2, UserCheck } from 'lucide-react'
-import type { IconComponent } from '@fakhir/design-system'
+import type { IconComponent } from '@fakhir/ui'
 import { resolveIcon } from '../catalog/icons'
 import { defineLabels, fill } from '../internal/labels'
 import type { FlowNode } from '../model/types'

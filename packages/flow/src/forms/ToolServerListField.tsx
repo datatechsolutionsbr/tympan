@@ -4,7 +4,7 @@
 
 import { useEffect, useId, useRef, useState } from 'react'
 import { Plus, Trash2 } from 'lucide-react'
-import { Button, Fieldset, TextField } from '@fakhir/design-system'
+import { Button, Fieldset, TextField } from '@fakhir/ui'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 
 export interface ToolServer {

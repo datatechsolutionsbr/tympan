@@ -8,7 +8,7 @@
 //   4. English.
 // Templates use an ICU MessageFormat subset (see messageFormat.ts); `fill`
 // formats them with the provider locale. Locale and direction come from React
-// Aria's I18nProvider, which @fakhir/design-system's FakhirProvider sets.
+// Aria's I18nProvider, which @fakhir/ui's FakhirProvider sets.
 
 import { createContext, createElement, useContext, useMemo, type ReactNode } from 'react'
 import { useLocale } from 'react-aria-components'

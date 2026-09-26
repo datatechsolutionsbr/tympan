@@ -4,7 +4,7 @@
 
 import { useId, useRef, useState } from 'react'
 import { Plus, Trash2 } from 'lucide-react'
-import { Button, InlineNotice, NativeSelect, TextArea, TextField } from '@fakhir/design-system'
+import { Button, InlineNotice, NativeSelect, TextArea, TextField } from '@fakhir/ui'
 import type { DecisionConfig, DecisionOption } from '../decision/types'
 import { createId } from '../internal/ids'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'

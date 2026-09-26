@@ -2,7 +2,7 @@ import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
 import { describe, expect, it, vi } from 'vitest'
-import { FakhirProvider } from '@fakhir/design-system'
+import { FakhirProvider } from '@fakhir/ui'
 import { expectNoAxeViolations } from '../../test/axe'
 import { OutputSchemaBuilder, type OutputSchema } from './OutputSchemaBuilder'
 

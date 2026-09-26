@@ -1,28 +1,28 @@
-# @fakhir/flow-canvas
+# @fakhir/flow
 
 Accessible React 19 canvases for Fakhir, the research platform: a **W3C PROV
 provenance graph viewer** with a synced keyboard list, a **DAG workflow
 editor** for analyses (including a generic decision step), run inspection
 (panel and drawer, timeline, trace, replay and rewind), and the forms and
-dialogs around them. Built on `@fakhir/design-system` and React Aria
+dialogs around them. Built on `@fakhir/ui` and React Aria
 Components, styled with plain CSS in `@layer fakhir.components`. No Tailwind.
 MIT licence, Copyright (c) 2026 Natalia Mesquita.
 
 ```sh
-npm run build -w @fakhir/flow-canvas          # dist/index.js, index.d.ts, styles.css
-npm run typecheck -w @fakhir/flow-canvas
-npm test -w @fakhir/flow-canvas               # vitest + Testing Library + axe-core
-npm run gallery -w @fakhir/flow-canvas        # http://localhost:3320 (provenance, DAG editor, components)
-npm run gallery:build -w @fakhir/flow-canvas  # static gallery in dist-gallery/
+npm run build -w @fakhir/flow          # dist/index.js, index.d.ts, styles.css
+npm run typecheck -w @fakhir/flow
+npm test -w @fakhir/flow               # vitest + Testing Library + axe-core
+npm run gallery -w @fakhir/flow        # http://localhost:3320 (provenance, DAG editor, components)
+npm run gallery:build -w @fakhir/flow  # static gallery in dist-gallery/
 ```
 
 ## Usage
 
 ```tsx
-import '@fakhir/design-system/styles.css'
-import '@fakhir/flow-canvas/styles.css'
-import { FakhirProvider } from '@fakhir/design-system'
-import { ProvenanceGraph, FlowEditor } from '@fakhir/flow-canvas'
+import '@fakhir/ui/styles.css'
+import '@fakhir/flow/styles.css'
+import { FakhirProvider } from '@fakhir/ui'
+import { ProvenanceGraph, FlowEditor } from '@fakhir/flow'
 
 <FakhirProvider locale="pt-BR">
   <ProvenanceGraph items={items} statements={statements} defaultFocusId="as-reg-position" defaultHops={3} />

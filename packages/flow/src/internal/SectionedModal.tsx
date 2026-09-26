@@ -1,10 +1,10 @@
-// Stand-in for the wave-2 SectionedModal (not yet in @fakhir/design-system):
+// Stand-in for the wave-2 SectionedModal (not yet in @fakhir/ui):
 // ModalDialog with an eyebrow, a kind icon, an optional section rail and
-// Ctrl/Cmd+Enter to submit. Replace with the design-system component when it
+// Ctrl/Cmd+Enter to submit. Replace with the @fakhir/ui component when it
 // lands; the props mirror its spec.
 
 import { useMemo, type KeyboardEvent, type ReactNode } from 'react'
-import { ModalDialog, Tabs, TabPanel, useMediaQuery, type ModalDialogWidth } from '@fakhir/design-system'
+import { ModalDialog, Tabs, TabPanel, useMediaQuery, type ModalDialogWidth } from '@fakhir/ui'
 
 export interface ModalSection {
   id: string

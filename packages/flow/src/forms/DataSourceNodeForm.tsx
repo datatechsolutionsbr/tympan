@@ -6,7 +6,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Check, Database, Plus, Trash2 } from 'lucide-react'
 import { ListBox, ListBoxItem, Radio, RadioGroup } from 'react-aria-components'
-import { Button, Checkbox, CheckboxGroup, InlineNotice, NativeSelect, Skeleton, TextField } from '@fakhir/design-system'
+import { Button, Checkbox, CheckboxGroup, InlineNotice, NativeSelect, Skeleton, TextField } from '@fakhir/ui'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { SectionedModal } from '../internal/SectionedModal'
 import { NodeFormFooter } from './NodeFormFooter'

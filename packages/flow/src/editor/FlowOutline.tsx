@@ -5,7 +5,7 @@
 
 import { useMemo, useState } from 'react'
 import { ArrowDown, ArrowUp, Crosshair, Link2, Pencil, Trash2, Unlink } from 'lucide-react'
-import { ActionMenu, Button, NativeSelect } from '@fakhir/design-system'
+import { ActionMenu, Button, NativeSelect } from '@fakhir/ui'
 import { useRenderCatalog } from '../catalog/RenderCatalog'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { FlowConnector, FlowNode } from '../model/types'

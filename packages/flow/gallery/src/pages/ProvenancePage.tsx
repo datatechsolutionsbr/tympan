@@ -5,7 +5,7 @@
 
 import { useMemo, useState } from 'react'
 import { Check, ChevronDown, FileDown, FileText, Lock } from 'lucide-react'
-import { Button, FakhirProvider, Tag } from '@fakhir/design-system'
+import { Button, FakhirProvider, Tag } from '@fakhir/ui'
 import { NumberTrace, ProvenanceGraph, ProvenanceQuestion, ProvenanceViewSwitch, type ProvenanceViewMode } from '../../../src'
 import { setHashParam, useHashParams } from '../shell/params'
 import { ResearchShell, useDockTools } from '../shell/ResearchShell'
