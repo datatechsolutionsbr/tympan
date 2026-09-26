@@ -1,0 +1,66 @@
+{
+  "name": "@datatechsolutions/tympan-print",
+  "version": "0.1.0",
+  "description": "Tympan print: static React components for data books (spreads, panels, method charts, proof-state marks, number trace, lakebrasil seal) in 18 book styles, SSR-safe and deterministic for PDF and EPUB. Plain CSS in @layer tympan-print.",
+  "license": "FSL-1.1-ALv2",
+  "author": "Natalia Mesquita",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/datatechsolutionsbr/tympan.git",
+    "directory": "packages/print"
+  },
+  "keywords": [
+    "react",
+    "print",
+    "book",
+    "pdf",
+    "epub",
+    "data-visualization",
+    "ssr",
+    "css-custom-properties"
+  ],
+  "private": true,
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "tympan-source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "scripts": {
+    "prebuild": "npm run build -w @datatechsolutions/tympan-tokens",
+    "build": "node scripts/build-css.mjs && tsdown",
+    "typecheck": "node scripts/build-css.mjs --check && tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "gallery": "vite --config gallery/vite.config.ts",
+    "gallery:build": "vite build --config gallery/vite.config.ts",
+    "gallery:shots": "node scripts/gallery-shots.mjs"
+  },
+  "peerDependencies": {
+    "react": "^18.3.0 || ^19.0.0",
+    "react-dom": "^18.3.0 || ^19.0.0"
+  },
+  "dependencies": {
+    "@datatechsolutions/tympan-tokens": "0.1.0",
+    "roughjs": "4.6.6"
+  },
+  "devDependencies": {
+    "axe-core": "^4.13.0",
+    "puppeteer-core": "^25.12.0"
+  }
+}

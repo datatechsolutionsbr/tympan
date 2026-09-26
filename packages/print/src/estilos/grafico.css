@@ -1,0 +1,179 @@
+/* Method charts. SVG user units are millimetres, so font sizes below are in mm (px in user space). */
+@layer tympan-print {
+  .ty-print-figura {
+    display: flex;
+    flex-direction: column;
+    gap: 1mm;
+    min-inline-size: 0;
+  }
+
+  .ty-print-figura-cabeca {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4mm;
+  }
+
+  .ty-print-figura-titulo {
+    font: 700 7.6pt/1.25 var(--ty-print-fonte-rotulo);
+    color: var(--ty-print-tinta);
+  }
+
+  .ty-print-figura-subtitulo {
+    font: 400 6.8pt/1.3 var(--ty-print-fonte-rotulo);
+    color: var(--ty-print-tinta-2);
+  }
+
+  .ty-print-selo-local {
+    margin-block-start: 0.8mm;
+  }
+
+  /* The Economist: short bar and rule over each figure. */
+  .ty-print-livro[data-ty-print-figura='barra-topo'] .ty-print-figura {
+    position: relative;
+    padding-block-start: 2.6mm;
+    border-block-start: 0.25mm solid var(--ty-print-prova-refutada);
+  }
+
+  .ty-print-livro[data-ty-print-figura='barra-topo'] .ty-print-figura::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    inline-size: 7mm;
+    block-size: 1.4mm;
+    background: var(--ty-print-prova-refutada);
+  }
+
+  .ty-print-livro[data-ty-print-figura='barra-topo'] .ty-print-figura-titulo {
+    font-size: 8.4pt;
+  }
+
+  .ty-print-grafico {
+    display: block;
+    max-inline-size: 100%;
+    block-size: auto;
+    overflow: visible;
+  }
+
+  .ty-print-grafico text {
+    font-family: var(--ty-print-fonte-rotulo);
+    font-size: 2.45px;
+    fill: var(--ty-print-tinta);
+  }
+
+  .ty-print-g-rotulo {
+    font-weight: 600;
+    font-size: 2.55px;
+  }
+
+  .ty-print-grafico .ty-print-g-nota {
+    font-size: 2.05px;
+    fill: var(--ty-print-tinta-3);
+  }
+
+  .ty-print-grafico .ty-print-g-valor,
+  .ty-print-grafico .ty-print-g-valor-a {
+    font-family: var(--ty-print-fonte-numero);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ty-print-grafico .ty-print-g-valor-a {
+    font-weight: 400;
+    fill: var(--ty-print-tinta-2);
+  }
+
+  .ty-print-grafico [data-cor='destaque'] {
+    fill: var(--ty-print-destaque);
+  }
+
+  .ty-print-grafico .ty-print-g-eixo-texto,
+  .ty-print-grafico .ty-print-g-unidade,
+  .ty-print-grafico .ty-print-g-chave {
+    font-size: 2.05px;
+    fill: var(--ty-print-tinta-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ty-print-grafico .ty-print-g-aviso {
+    font-family: var(--ty-print-fonte-mono);
+    font-size: 1.9px;
+    fill: var(--ty-print-tinta-3);
+  }
+
+  .ty-print-grafico .ty-print-g-legenda text {
+    font-size: 2.2px;
+    fill: var(--ty-print-tinta-2);
+  }
+
+  .ty-print-g-chamada circle {
+    fill: var(--ty-print-papel);
+    stroke: var(--ty-print-tinta);
+    stroke-width: 0.2;
+  }
+
+  .ty-print-grafico .ty-print-g-chamada text {
+    font-family: var(--ty-print-fonte-numero);
+    font-weight: 700;
+    font-size: 2px;
+  }
+
+  .ty-print-grafico .ty-print-g-anotacao text,
+  .ty-print-grafico .ty-print-g-anotacao-texto {
+    font-family: var(--ty-print-fonte-anotacao);
+    font-style: italic;
+    font-size: 2.55px;
+    fill: var(--ty-print-tinta-2);
+  }
+
+  .ty-print-grafico .ty-print-g-anotacao:first-of-type text {
+    fill: var(--ty-print-destaque);
+  }
+
+  .ty-print-grafico .ty-print-g-referencia text,
+  .ty-print-grafico .ty-print-g-evento text,
+  .ty-print-grafico .ty-print-g-faixa text {
+    font-size: 2.05px;
+    fill: var(--ty-print-tinta-2);
+  }
+
+  .ty-print-grafico .ty-print-g-evento text:first-of-type {
+    fill: var(--ty-print-destaque);
+    font-weight: 700;
+  }
+
+  .ty-print-ladrilho {
+    stroke: var(--ty-print-linha);
+    stroke-width: 0.25;
+  }
+
+  .ty-print-grafico .ty-print-ladrilho-uf,
+  .ty-print-mapa svg text {
+    font-family: var(--ty-print-fonte-rotulo);
+    font-size: 2.6px;
+    font-weight: 600;
+    fill: var(--ty-print-tinta);
+    paint-order: stroke;
+    stroke: var(--ty-print-papel);
+    stroke-width: 0.5;
+  }
+
+  /* The range frame is only for figure 'amplitude' (Tufte): no grid, the axis spans the data. */
+  .ty-print-eixo-amplitude {
+    display: none;
+  }
+
+  .ty-print-livro[data-ty-print-figura='amplitude'] :is(.ty-print-grade, .ty-print-eixo-cheio) {
+    display: none;
+  }
+
+  .ty-print-livro[data-ty-print-figura='amplitude'] .ty-print-eixo-amplitude {
+    display: inline;
+  }
+
+  /* Hand-lettered styles: chart labels in the hand font, a touch larger. */
+  .ty-print-livro[data-ty-print-tremor] .ty-print-grafico :is(.ty-print-g-rotulo, .ty-print-g-anotacao text, .ty-print-g-anotacao-texto) {
+    font-family: var(--ty-print-fonte-anotacao);
+    font-style: normal;
+  }
+}

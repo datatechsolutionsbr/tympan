@@ -1,0 +1,365 @@
+/* Cover, part opening, reading guide, timeline and schematic map. */
+@layer tympan-print {
+  /* ------------------------------------------------------------ Capa */
+  .ty-print-capa {
+    display: flex;
+    flex-direction: column;
+    gap: 3mm;
+    block-size: 100%;
+    color: var(--ty-print-papel);
+  }
+
+  .ty-print-capa-eyebrow {
+    font: 700 7.4pt/1.2 var(--ty-print-fonte-rotulo);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+
+  .ty-print-capa-titulo {
+    font: 700 30pt/1.02 var(--ty-print-fonte-titulo);
+    text-transform: var(--ty-print-titulo-caixa);
+    letter-spacing: var(--ty-print-titulo-espaco);
+    text-wrap: balance;
+    margin-block-start: 8mm;
+  }
+
+  .ty-print-capa-subtitulo {
+    font: 400 12pt/1.25 var(--ty-print-fonte-titulo);
+    opacity: 0.9;
+  }
+
+  .ty-print-capa-chamada {
+    font: 700 16pt/1.15 var(--ty-print-fonte-titulo);
+    text-wrap: balance;
+  }
+
+  .ty-print-capa-texto {
+    font-size: 9pt;
+    line-height: 1.45;
+  }
+
+  .ty-print-capa-destaque {
+    padding: 3mm 3.4mm;
+    border: 0.3mm solid currentColor;
+  }
+
+  .ty-print-capa-destaque .ty-print-sobretitulo {
+    color: inherit;
+    opacity: 0.8;
+  }
+
+  .ty-print-capa-destaque-texto {
+    font: 600 11pt/1.25 var(--ty-print-fonte-titulo);
+  }
+
+  .ty-print-capa-destaque-fonte {
+    margin-block-start: 1.4mm;
+    font: 400 6.4pt/1.35 var(--ty-print-fonte-rotulo);
+    opacity: 0.8;
+  }
+
+  .ty-print-capa-autora {
+    font: 600 10pt/1.2 var(--ty-print-fonte-rotulo);
+    letter-spacing: 0.06em;
+  }
+
+  .ty-print-capa-selo {
+    display: grid;
+    gap: 0.6mm;
+    font: 400 7pt/1.3 var(--ty-print-fonte-rotulo);
+  }
+
+  .ty-print-capa-pe {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 4mm;
+    margin-block-start: auto;
+  }
+
+  .ty-print-capa-isbn {
+    font: 400 6.6pt var(--ty-print-fonte-mono);
+  }
+
+  .ty-print-grafismo {
+    margin-block-start: auto;
+  }
+
+  .ty-print-grafismo svg {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+  }
+
+  .ty-print-grafismo-linha {
+    stroke: currentColor;
+    stroke-width: 0.35;
+  }
+
+  .ty-print-grafismo-linha:first-child {
+    stroke-width: 0.9;
+  }
+
+  .ty-print-grafismo-rotulo {
+    font-family: var(--ty-print-fonte-numero);
+    font-size: 2.6px;
+    fill: currentColor;
+  }
+
+  .ty-print-grafismo figcaption {
+    margin-block-start: 1.4mm;
+    font: 400 6.6pt/1.35 var(--ty-print-fonte-rotulo);
+    opacity: 0.85;
+  }
+
+  /* Mancha of a cover: logos sit after the cover block. */
+  .ty-print-pagina[data-variante='capa'] .ty-print-mancha > .ty-print-logo {
+    justify-self: end;
+    align-self: end;
+  }
+
+  /* ------------------------------------------------------------ Part opening */
+  .ty-print-abertura {
+    display: flex;
+    flex-direction: column;
+    gap: 3mm;
+    padding-block-start: 30mm;
+  }
+
+  .ty-print-abertura-numero {
+    font: 700 9pt/1 var(--ty-print-fonte-rotulo);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ty-print-destaque);
+  }
+
+  .ty-print-abertura-titulo {
+    font: 700 34pt/1 var(--ty-print-fonte-titulo);
+    text-transform: var(--ty-print-titulo-caixa);
+    letter-spacing: var(--ty-print-titulo-espaco);
+  }
+
+  .ty-print-abertura-pergunta {
+    max-inline-size: 110mm;
+    font: italic 400 13pt/1.3 var(--ty-print-fonte-titulo);
+    color: var(--ty-print-tinta-2);
+  }
+
+  .ty-print-abertura-partes {
+    display: flex;
+    gap: 5mm;
+    margin-block-start: 8mm;
+    padding-block-start: 2mm;
+    border-block-start: 0.3mm solid var(--ty-print-tinta);
+    font: 400 7pt/1.3 var(--ty-print-fonte-rotulo);
+    color: var(--ty-print-tinta-3);
+  }
+
+  .ty-print-abertura-partes li[data-atual] {
+    font-weight: 700;
+    color: var(--ty-print-tinta);
+  }
+
+  .ty-print-abertura-romano {
+    font-weight: 700;
+  }
+
+  .ty-print-abertura-capitulos ol {
+    display: grid;
+    gap: 1mm;
+    font-size: 8.4pt;
+  }
+
+  .ty-print-abertura-cap {
+    display: inline-block;
+    min-inline-size: 12mm;
+    font: 700 6.6pt var(--ty-print-fonte-rotulo);
+    color: var(--ty-print-tinta-3);
+  }
+
+  .ty-print-abertura-volta {
+    font-size: 7.4pt;
+    color: var(--ty-print-tinta-2);
+  }
+
+  /* ------------------------------------------------------------ Reading guide */
+  .ty-print-como-ler-letras,
+  .ty-print-como-ler-estados {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.4mm 5mm;
+  }
+
+  .ty-print-como-ler-letras dt {
+    display: flex;
+    align-items: center;
+    gap: 1.4mm;
+    font: 700 7.6pt/1.2 var(--ty-print-fonte-titulo);
+  }
+
+  .ty-print-como-ler-letras dd,
+  .ty-print-como-ler-estados dd {
+    font-size: 7.6pt;
+    line-height: 1.35;
+  }
+
+  .ty-print-miniatura {
+    display: block;
+    margin-block-start: 0.6mm;
+    font: italic 400 6.4pt/1.3 var(--ty-print-fonte-rotulo);
+    color: var(--ty-print-tinta-3);
+  }
+
+  .ty-print-como-ler-estados > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1mm;
+  }
+
+  .ty-print-chamadas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2mm 5mm;
+  }
+
+  .ty-print-chamadas li {
+    display: flex;
+    gap: 2mm;
+    font-size: 7.8pt;
+    line-height: 1.36;
+  }
+
+  .ty-print-regra {
+    margin-block-start: 2mm;
+    font: italic 400 9pt/1.3 var(--ty-print-fonte-titulo);
+  }
+
+  /* ------------------------------------------------------------ Timeline */
+  .ty-print-linha-tempo-volumes {
+    display: flex;
+    gap: 1mm;
+    margin-block-end: 2.4mm;
+    font: 400 6.2pt/1.25 var(--ty-print-fonte-rotulo);
+  }
+
+  .ty-print-linha-tempo-volumes li {
+    flex-basis: 0;
+    padding: 1mm 1.4mm;
+    border-block-start: 0.8mm solid var(--ty-print-tinta);
+    background: color-mix(in srgb, var(--ty-print-tinta) 5%, var(--ty-print-papel));
+  }
+
+  .ty-print-linha-tempo-volumes li:nth-child(even) {
+    border-block-start-color: var(--ty-print-contexto);
+  }
+
+  .ty-print-linha-tempo-vol {
+    font-weight: 700;
+  }
+
+  .ty-print-linha-tempo-anos {
+    color: var(--ty-print-tinta-3);
+  }
+
+  .ty-print-linha-tempo-anos-lista > li {
+    display: grid;
+    grid-template-columns: 11mm 1fr;
+    gap: 2mm;
+    padding-block: 0.9mm;
+    border-block-start: 0.15mm solid var(--ty-print-linha);
+  }
+
+  .ty-print-linha-tempo-ano {
+    font: 700 8pt/1.3 var(--ty-print-fonte-numero);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ty-print-linha-tempo-anos-lista ul {
+    display: grid;
+    gap: 0.6mm;
+  }
+
+  .ty-print-linha-tempo-anos-lista ul li {
+    display: grid;
+    grid-template-columns: 2.6mm 1fr;
+    column-gap: 1.4mm;
+    font-size: 7.2pt;
+    line-height: 1.3;
+  }
+
+  .ty-print-linha-tempo-onde {
+    grid-column: 2;
+    font: 400 6.2pt/1.3 var(--ty-print-fonte-rotulo);
+    color: var(--ty-print-tinta-3);
+  }
+
+  .ty-print-status {
+    inline-size: 2.4mm;
+    block-size: 2.4mm;
+    margin-block-start: 0.5mm;
+    color: var(--ty-print-tinta);
+  }
+
+  [data-status='medida-neste-volume'] > .ty-print-status {
+    color: var(--ty-print-destaque);
+  }
+
+  .ty-print-linha-tempo-legenda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1mm 3mm;
+    margin-block-start: 2mm;
+    font: 400 6.2pt/1.3 var(--ty-print-fonte-rotulo);
+    color: var(--ty-print-tinta-2);
+  }
+
+  .ty-print-linha-tempo-legenda li {
+    display: inline-flex;
+    gap: 1mm;
+    align-items: center;
+  }
+
+  .ty-print-linha-tempo-nota {
+    margin-block-start: 1.4mm;
+    font: 400 6.4pt/1.35 var(--ty-print-fonte-rotulo);
+    color: var(--ty-print-tinta-3);
+  }
+
+  /* ------------------------------------------------------------ Map */
+  .ty-print-mapa {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6mm;
+  }
+
+  .ty-print-mapa > svg {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+  }
+
+  .ty-print-mapa-legenda {
+    display: grid;
+    gap: 0.6mm;
+    font: 400 6.4pt/1.3 var(--ty-print-fonte-rotulo);
+  }
+
+  .ty-print-mapa-legenda li {
+    display: flex;
+    gap: 1.4mm;
+    align-items: center;
+  }
+
+  .ty-print-mapa-legenda svg {
+    inline-size: 3mm;
+    block-size: 3mm;
+    flex: none;
+  }
+
+  .ty-print-mapa-nota {
+    font: 400 6.6pt/1.35 var(--ty-print-fonte-rotulo);
+    color: var(--ty-print-tinta-2);
+  }
+}

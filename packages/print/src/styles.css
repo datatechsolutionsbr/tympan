@@ -1,0 +1,11 @@
+/* @datatechsolutions/tympan-print stylesheet (FSL-1.1-ALv2). Everything lives in
+   @layer tympan-print and reads the --ty-print-* custom properties written by
+   printStyleToCss (from @datatechsolutions/tympan-tokens). Measures in mm and
+   pt; logical properties only (the inner margin of a spread mirrors in RTL). */
+@layer tympan-print;
+
+@import './estilos/base.css';
+@import './estilos/paineis.css';
+@import './estilos/prova.css';
+@import './estilos/grafico.css';
+@import './estilos/aberturas.css';

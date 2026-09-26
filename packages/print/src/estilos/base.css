@@ -1,0 +1,215 @@
+/* Book, spread, page and type area. */
+@layer tympan-print {
+  @page {
+    size: 170mm 240mm;
+    margin: 0;
+  }
+
+  .ty-print-livro {
+    --ty-print-mesa: color-mix(in srgb, var(--ty-print-papel) 82%, var(--ty-print-tinta));
+    --ty-print-sombra: color-mix(in srgb, var(--ty-print-tinta) 16%, transparent);
+    color: var(--ty-print-tinta);
+    font: 400 8.4pt/1.42 var(--ty-print-fonte-corpo);
+    font-kerning: normal;
+    font-variant-numeric: lining-nums;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    text-rendering: geometricPrecision;
+  }
+
+  .ty-print-livro *,
+  .ty-print-livro *::before,
+  .ty-print-livro *::after {
+    box-sizing: border-box;
+  }
+
+  .ty-print-livro :where(h1, h2, h3, h4, p, ul, ol, dl, dd, figure, blockquote, table, pre) {
+    margin: 0;
+  }
+
+  .ty-print-livro :where(ul, ol) {
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Spread: two pages side by side on screen. */
+  .ty-print-dupla {
+    display: flex;
+    inline-size: 340mm;
+    block-size: 240mm;
+    margin-block: 0 12mm;
+    margin-inline: auto;
+    box-shadow: 0 1mm 4mm var(--ty-print-sombra);
+  }
+
+  .ty-print-pagina {
+    position: relative;
+    flex: none;
+    inline-size: 170mm;
+    block-size: 240mm;
+    overflow: hidden;
+    background: var(--ty-print-papel);
+    color: var(--ty-print-tinta);
+  }
+
+  /* The gutter shade: light on the inner edge of each page. */
+  .ty-print-pagina::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inline-size: 9mm;
+    pointer-events: none;
+  }
+
+  .ty-print-pagina[data-lado='par']::after {
+    inset-inline-end: 0;
+    background: linear-gradient(to left, color-mix(in srgb, var(--ty-print-tinta) 7%, transparent), transparent);
+  }
+
+  .ty-print-pagina[data-lado='impar']::after {
+    inset-inline-start: 0;
+    background: linear-gradient(to right, color-mix(in srgb, var(--ty-print-tinta) 7%, transparent), transparent);
+  }
+
+  [dir='rtl'] .ty-print-pagina[data-lado='par']::after {
+    background: linear-gradient(to right, color-mix(in srgb, var(--ty-print-tinta) 7%, transparent), transparent);
+  }
+
+  [dir='rtl'] .ty-print-pagina[data-lado='impar']::after {
+    background: linear-gradient(to left, color-mix(in srgb, var(--ty-print-tinta) 7%, transparent), transparent);
+  }
+
+  .ty-print-textura {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    pointer-events: none;
+  }
+
+  /* Type area: six columns; inner margin 18 mm, outer 14 mm. */
+  .ty-print-mancha {
+    position: absolute;
+    inset-block: 17mm 15mm;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-auto-flow: row dense;
+    align-content: start;
+    column-gap: 5mm;
+    row-gap: 3mm;
+  }
+
+  .ty-print-pagina[data-lado='par'] .ty-print-mancha {
+    inset-inline: 14mm 18mm;
+  }
+
+  .ty-print-pagina[data-lado='impar'] .ty-print-mancha {
+    inset-inline: 18mm 14mm;
+  }
+
+  .ty-print-mancha > * {
+    grid-column: 1 / -1;
+    min-inline-size: 0;
+  }
+
+  .ty-print-pagina[data-variante='prancha'] .ty-print-mancha {
+    inset-block: 12mm 12mm;
+  }
+
+  .ty-print-pagina[data-variante='capa'] {
+    background: var(--ty-print-tinta);
+    color: var(--ty-print-papel);
+  }
+
+  .ty-print-pagina[data-variante='capa'] .ty-print-mancha {
+    inset-block: 16mm 14mm;
+    inset-inline: 16mm;
+    grid-template-rows: 1fr auto;
+  }
+
+  .ty-print-mancha:has(> .ty-print-fonte[data-rodape]) {
+    padding-block-end: 12mm;
+  }
+
+  .ty-print-mancha > .ty-print-fonte[data-rodape] {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+  }
+
+  .ty-print-cabeco,
+  .ty-print-folio {
+    position: absolute;
+    z-index: 1;
+    font: 500 6.8pt/1 var(--ty-print-fonte-rotulo);
+    letter-spacing: 0.03em;
+    text-transform: var(--ty-print-cabeco-caixa, none);
+    font-variant-caps: var(--ty-print-rotulo-variante);
+    color: var(--ty-print-tinta-3);
+  }
+
+  .ty-print-cabeco {
+    inset-block-start: 8.5mm;
+  }
+
+  .ty-print-folio {
+    inset-block-end: 7mm;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ty-print-pagina[data-lado='par'] :is(.ty-print-cabeco, .ty-print-folio) {
+    inset-inline-start: 14mm;
+  }
+
+  .ty-print-pagina[data-lado='impar'] :is(.ty-print-cabeco, .ty-print-folio) {
+    inset-inline-end: 14mm;
+  }
+
+  .ty-print-sr {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .ty-print-mono {
+    font-family: var(--ty-print-fonte-mono);
+  }
+
+  .ty-print-pendente {
+    font-family: var(--ty-print-fonte-mono);
+    font-size: 0.86em;
+    color: var(--ty-print-tinta-3);
+  }
+
+  .ty-print-logo {
+    display: inline-flex;
+    line-height: 0;
+  }
+
+  .ty-print-logo svg {
+    display: block;
+  }
+
+  @media print {
+    .ty-print-dupla {
+      display: contents;
+    }
+
+    .ty-print-pagina {
+      break-after: page;
+      break-inside: avoid;
+    }
+
+    .ty-print-pagina::after {
+      display: none;
+    }
+
+    /* A chapter opens on an even page (the left page of a spread). */
+    .ty-print-dupla[data-abre-capitulo] > .ty-print-pagina:first-child {
+      break-before: left;
+    }
+  }
+}

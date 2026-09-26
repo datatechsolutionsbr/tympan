@@ -1,0 +1,77 @@
+// @datatechsolutions/tympan-print: static React components for data books (FSL-1.1-ALv2).
+export { LivroPrint, type LivroPrintProps } from './livro/LivroPrint.tsx'
+export { Dupla, type DuplaProps } from './livro/Dupla.tsx'
+export { Pagina, type PaginaProps } from './livro/Pagina.tsx'
+export { Textura } from './livro/Textura.tsx'
+export { Painel, type PainelProps, type VariantePainel } from './paineis/Painel.tsx'
+export { Texto, Margem, Anotacao, type TextoProps, type MargemProps, type AnotacaoProps, type VarianteTexto } from './paineis/Texto.tsx'
+export {
+  Promessa,
+  Numeros,
+  TabelaDados,
+  Veredito,
+  Testes,
+  NaoDaParaAfirmar,
+  QuandoODadoChegar,
+  Rastro,
+  Fonte,
+  Ficha,
+  DesenhoPublicado,
+  NaSuaCidade,
+  ManchetaIlustrativa,
+  ProximoCapitulo,
+  type PromessaProps,
+  type NumerosProps,
+  type NumeroItem,
+  type TabelaDadosProps,
+  type ColunaTabela,
+  type VereditoProps,
+  type VereditoItem,
+  type TestesProps,
+  type NaoDaParaAfirmarProps,
+  type QuandoODadoChegarProps,
+  type RastroProps,
+  type FonteProps,
+  type FichaProps,
+  type Termo,
+  type DesenhoPublicadoProps,
+  type NaSuaCidadeProps,
+  type ManchetaIlustrativaProps,
+  type ProximoCapituloProps,
+} from './paineis/Metodo.tsx'
+export { MarcaProva, type MarcaProvaProps } from './paineis/MarcaProva.tsx'
+export {
+  Capa,
+  AberturaParte,
+  ComoLer,
+  LinhaDoTempo,
+  Mapa,
+  type CapaProps,
+  type AberturaParteProps,
+  type ComoLerProps,
+  type LinhaDoTempoProps,
+  type StatusLei,
+  type MapaProps,
+} from './paineis/Aberturas.tsx'
+export { LogoLakebrasil, SeloLakebrasil, type LogoLakebrasilProps, type SeloLakebrasilProps, type VarianteLogo } from './marca/LogoLakebrasil.tsx'
+export { LogoDatatech, type LogoDatatechProps, type VarianteDatatech } from './marca/LogoDatatech.tsx'
+export { GraficoMetodo, type GraficoMetodoProps } from './grafico/GraficoMetodo.tsx'
+export type { GraficoSpec, SpecHalteres, SpecBarras, SpecSerie, SpecContagem, SpecEsquema, LinhaPar, AnotacaoGrafico } from './grafico/tipos.ts'
+export { layoutHalteres, layoutBarras, layoutContagem, layoutSerie, escalaLinear, marcasEixo } from './grafico/geometria.ts'
+export { PINCEIS, unidadeIsotype, gradePontos, type Pincel } from './grafico/pinceis.tsx'
+export { usePrint, type PrintContexto } from './contexto.tsx'
+export {
+  COMPONENTES,
+  NoConteudo,
+  PaginaConteudo,
+  CapituloConteudo,
+  LivroConteudo,
+  propsDesconhecidas,
+  type NoJson,
+  type PaginaJson,
+  type DuplaJson,
+  type CapituloJson,
+  type LivroJson,
+  type LivroConteudoProps,
+} from './conteudo.tsx'
+export { PRINT_CSS } from './estilos.generated.ts'
