@@ -1,4 +1,4 @@
-// @fakhir/flow (MIT). Import the stylesheets once, design system first:
+// @fakhir/flow (FSL-1.1-ALv2). Import the stylesheets once, design system first:
 //   import '@fakhir/ui/styles.css'
 //   import '@fakhir/flow/styles.css'
 

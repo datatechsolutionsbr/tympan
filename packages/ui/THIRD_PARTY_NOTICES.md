@@ -1,7 +1,7 @@
 # Third-party notices
 
-`@fakhir/ui` and `@fakhir/tokens` are MIT-licensed (Copyright (c)
-2026 Natalia Mesquita). They depend on, but do not copy, the packages
+`@fakhir/ui` and `@fakhir/tokens` are licensed under FSL-1.1-ALv2
+(Copyright 2026 Natalia Mesquita). They depend on, but do not copy, the packages
 below. Versions are those resolved on 2026-09-26.
 
 ## Runtime dependencies

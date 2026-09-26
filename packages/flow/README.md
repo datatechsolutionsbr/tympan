@@ -6,7 +6,8 @@ editor** for analyses (including a generic decision step), run inspection
 (panel and drawer, timeline, trace, replay and rewind), and the forms and
 dialogs around them. Built on `@fakhir/ui` and React Aria
 Components, styled with plain CSS in `@layer fakhir.components`. No Tailwind.
-MIT licence, Copyright (c) 2026 Natalia Mesquita.
+Licence: FSL-1.1-ALv2 (Functional Source License, Version 1.1, Apache 2.0
+Future License), Copyright 2026 Natalia Mesquita; see `LICENSE`.
 
 ```sh
 npm run build -w @fakhir/flow          # dist/index.js, index.d.ts, styles.css

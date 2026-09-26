@@ -1,5 +1,17 @@
 # Clean-room record
 
+> **Licence note (2026-09-26).** This record was written when the packages
+> were planned as MIT. They are published under FSL-1.1-ALv2 (see `LICENSE`
+> at the repository root); the clean-room process below is unchanged.
+
+> **Naming note.** In this repository `packages/ui` / `@fakhir/ui` is the
+> clean-room library (formerly `packages/design-system` /
+> `@fakhir/design-system`) and `packages/flow` / `@fakhir/flow` is the canvas
+> (formerly `packages/flow-canvas` / `@fakhir/flow-canvas`). Where this record
+> names `packages/ui`, `@fakhir/ui`, `packages/workflow` or `@fakhir/workflow`
+> as the fork, it means the deleted fork of the Fakhir monorepo, whose code is
+> not in this repository or its history.
+
 Date: 2026-09-26. Branch: `ds/clean-room` (worktree `~/datatech/fakhir-ds`,
 sparse checkout without `packages/ui`, `packages/workflow`, `apps/platform`).
 

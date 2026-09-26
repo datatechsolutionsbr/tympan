@@ -1,4 +1,4 @@
-// @fakhir/tokens: design tokens and the theme generator (MIT).
+// @fakhir/tokens: design tokens and the theme generator (FSL-1.1-ALv2).
 export * from './color.ts'
 export * from './theme.ts'
 export * from './presets.ts'

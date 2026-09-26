@@ -2,7 +2,7 @@
   "name": "@fakhir/flow",
   "version": "0.1.0",
   "description": "Fakhir flow and provenance canvas: accessible React 19 graph viewer and DAG editor (W3C PROV provenance graph with a synced tree, workflow editor, run inspection), on @fakhir/ui. Pure CSS in @layer fakhir.components. No Tailwind.",
-  "license": "MIT",
+  "license": "FSL-1.1-ALv2",
   "author": "Natalia Mesquita",
   "private": true,
   "type": "module",

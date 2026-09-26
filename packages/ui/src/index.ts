@@ -1,4 +1,4 @@
-// @fakhir/ui (MIT). Import the stylesheet once: import '@fakhir/ui/styles.css'
+// @fakhir/ui (FSL-1.1-ALv2). Import the stylesheet once: import '@fakhir/ui/styles.css'
 
 // Foundations
 export { FakhirProvider, useMessages, type FakhirProviderProps, type RouterNavigateOptions } from './internal/provider'

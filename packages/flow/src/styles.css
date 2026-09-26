@@ -1,4 +1,4 @@
-/* @fakhir/flow stylesheet entry (MIT). Import after
+/* @fakhir/flow stylesheet entry (FSL-1.1-ALv2). Import after
    '@fakhir/ui/styles.css'; everything lives in @layer fakhir.*.
    The canvas tokens (--fk-flow-*) and the [data-tone] mapping come from
    @fakhir/tokens (src/flow.ts), loaded by the @fakhir/ui stylesheet. */

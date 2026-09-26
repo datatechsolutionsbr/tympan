@@ -3,7 +3,8 @@
 Accessible React components for Fakhir (React 18.3 or 19), built on
 [React Aria Components](https://react-spectrum.adobe.com/react-aria/) and
 styled with plain CSS custom properties (`--fk-*`) in `@layer fakhir`. No
-Tailwind. MIT licence.
+Tailwind. Licence: FSL-1.1-ALv2 (Functional Source License, Version 1.1,
+Apache 2.0 Future License); see `LICENSE`.
 
 ```sh
 npm run build -w @fakhir/ui          # dist/index.js, index.d.ts, styles.css (builds @fakhir/tokens first)

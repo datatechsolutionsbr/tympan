@@ -1,6 +1,8 @@
 # @fakhir/tokens
 
-Design tokens and theme generator of the Fakhir design system. MIT licence.
+Design tokens and theme generator of the Fakhir design system. Licence:
+FSL-1.1-ALv2 (Functional Source License, Version 1.1, Apache 2.0 Future
+License); see `LICENSE`.
 Visual source of truth: `docs/infra/design-direction-fakhir.md` (§2.1 to §2.13)
 in the thesis repository.
 
@@ -163,7 +165,7 @@ Style Dictionary was chosen because:
 ## Ideas taken from public documentation (concepts only)
 
 The user asked for a theme system inspired by shadcn/ui and Tailwind CSS (the
-open-source framework, MIT). Only concepts from their public documentation
+CSS framework). Only concepts from their public documentation
 pages were used; no source file, class string, CSS file or palette value was
 read or copied, and neither project is a dependency.
 

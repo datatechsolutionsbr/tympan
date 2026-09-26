@@ -2,7 +2,7 @@
   "name": "@fakhir/tokens",
   "version": "0.1.0",
   "description": "Fakhir design tokens: W3C DTCG source (colour, space, radius, type, elevation and glass, motion, z) with neutral and fakhir themes in light and dark, built to --fk-* CSS custom properties and a TypeScript export.",
-  "license": "MIT",
+  "license": "FSL-1.1-ALv2",
   "private": true,
   "type": "module",
   "sideEffects": [

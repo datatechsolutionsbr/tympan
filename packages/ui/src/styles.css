@@ -1,4 +1,4 @@
-/* @fakhir/ui stylesheet entry (MIT). Everything lives in @layer fakhir.*. */
+/* @fakhir/ui stylesheet entry (FSL-1.1-ALv2). Everything lives in @layer fakhir.*. */
 @layer fakhir.tokens, fakhir.base, fakhir.components;
 
 @import '@fakhir/tokens/tokens.css';

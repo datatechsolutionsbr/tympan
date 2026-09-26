@@ -1,5 +1,9 @@
 # Clean-room record
 
+> **Licence note (2026-09-26).** This record was written when the packages
+> were planned as MIT. They are published under FSL-1.1-ALv2 (see `LICENSE`
+> at the repository root); the clean-room process below is unchanged.
+
 Date: 2026-09-26. Author: Natalia Mesquita. Branch: `ds/wave-3` (from
 `ds/clean-room`), worktree `~/datatech/fakhir-ds-canvas`, a sparse checkout
 without the forked packages and the old platform app.

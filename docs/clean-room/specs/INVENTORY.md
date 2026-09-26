@@ -1,5 +1,13 @@
 # Inventory: fork exports → clean-room names
 
+> **Naming note.** In this repository `packages/ui` / `@fakhir/ui` is the
+> clean-room library (formerly `packages/design-system` /
+> `@fakhir/design-system`) and `packages/flow` / `@fakhir/flow` is the canvas
+> (formerly `packages/flow-canvas` / `@fakhir/flow-canvas`). Where this record
+> names `packages/ui`, `@fakhir/ui`, `packages/workflow` or `@fakhir/workflow`
+> as the fork, it means the deleted fork of the Fakhir monorepo, whose code is
+> not in this repository or its history.
+
 > History note: the fork (`packages/ui`, `packages/workflow`) was deleted on
 > branch `ui/platform-ds`; this inventory records its exports at the time.
 
