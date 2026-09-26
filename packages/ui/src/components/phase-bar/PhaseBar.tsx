@@ -55,12 +55,12 @@ export function PhaseBar({ segments, label, caption, locale, className }: PhaseB
         {segments.map((segment) => (
           <li key={segment.id} className="fk-phase-bar__key" data-tone={segment.tone}>
             <span className="fk-phase-bar__swatch" aria-hidden="true" />
-            <span className="fk-phase-bar__word">{segment.label}</span>
+            <span className="fk-phase-bar__word" dir="auto">{segment.label}</span>
             <span className="fk-phase-bar__count">{fmt.format(segment.value)}</span>
           </li>
         ))}
       </ul>
-      {caption ? <figcaption className="fk-phase-bar__caption">{caption}</figcaption> : null}
+      {caption ? <figcaption className="fk-phase-bar__caption" dir="auto">{caption}</figcaption> : null}
     </figure>
   )
 }

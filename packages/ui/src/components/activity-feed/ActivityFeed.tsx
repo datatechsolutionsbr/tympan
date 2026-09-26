@@ -67,7 +67,7 @@ export function ActivityFeed(props: ActivityFeedProps) {
           <li key={entry.id} className="fk-activity__entry">
             <ActorChip compact kind={entry.actor.kind} name={entry.actor.name} agentKey={entry.actor.agentKey} model={entry.actor.model} />
             <div className="fk-activity__body">
-              <p className="fk-activity__text">{entry.text}</p>
+              <p className="fk-activity__text" dir="auto">{entry.text}</p>
               <p className="fk-activity__meta">
                 <Stamp at={typeof entry.at === 'string' ? new Date(entry.at) : entry.at} now={now} locale={locale} />
                 {entry.meta ? <code className="fk-activity__code">{entry.meta}</code> : null}

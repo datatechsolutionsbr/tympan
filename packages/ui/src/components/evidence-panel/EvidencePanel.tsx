@@ -82,7 +82,7 @@ export function EvidencePanel(props: EvidencePanelProps) {
         maxHeight={placement === 'sheet' ? '80dvh' : undefined}
         className={cx('fk-evidence-modal', props.className)}
       >
-        {props.subtitle ? <p className="fk-evidence__subtitle">{props.subtitle}</p> : null}
+        {props.subtitle ? <p className="fk-evidence__subtitle" dir="auto">{props.subtitle}</p> : null}
         <Contents proof={props.proof} footer={props.footer}>
           {props.children}
         </Contents>
@@ -105,10 +105,10 @@ export function EvidencePanel(props: EvidencePanelProps) {
       {props.onWidthChange ? <div {...splitter} aria-label={words.resize} className="fk-evidence__handle" /> : null}
       <header className="fk-evidence__head">
         <div className="fk-evidence__titles">
-          <h2 id={titleId} className="fk-evidence__title">
+          <h2 id={titleId} className="fk-evidence__title" dir="auto">
             {props.title}
           </h2>
-          {props.subtitle ? <p className="fk-evidence__subtitle">{props.subtitle}</p> : null}
+          {props.subtitle ? <p className="fk-evidence__subtitle" dir="auto">{props.subtitle}</p> : null}
         </div>
         <Button variant="quiet" iconOnly accessibleLabel={words.close} leadingIcon={<X />} onPress={close} />
       </header>

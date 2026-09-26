@@ -64,8 +64,8 @@ export function AttentionList(props: AttentionListProps) {
             <li key={row.id} className="fk-attention__row">
               <ProofBadge state={row.proof === 'none' ? null : row.proof} className="fk-attention__proof" />
               <div className="fk-attention__text">
-                <span className="fk-attention__title">{row.title}</span>
-                {row.detail ? <span className="fk-attention__detail">{row.detail}</span> : null}
+                <span className="fk-attention__title" dir="auto">{row.title}</span>
+                {row.detail ? <span className="fk-attention__detail" dir="auto">{row.detail}</span> : null}
               </div>
               {row.action ? <RowAction action={row.action} title={row.title} suffix={words.actionTarget} /> : null}
             </li>

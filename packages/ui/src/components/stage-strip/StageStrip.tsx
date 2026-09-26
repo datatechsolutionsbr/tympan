@@ -1,4 +1,5 @@
 import { ArrowRight, CircleCheck, CircleDot, Circle, TriangleAlert } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { Link as AriaLink } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 import type { StageStatus } from '../../internal/messages/shell'
@@ -7,6 +8,7 @@ import type { IconComponent } from '../../internal/types'
 
 export type { StageStatus } from '../../internal/messages/shell'
 
+/** One step of the research pipeline (spec: wave-4/stage-strip.md). */
 export interface Stage {
   id: string
   label: string
@@ -25,50 +27,73 @@ export interface StageStripProps {
   className?: string
 }
 
-const GLYPH: Record<StageStatus, IconComponent> = {
-  done: CircleCheck,
-  current: CircleDot,
-  upcoming: Circle,
-  attention: TriangleAlert,
+/** How each status looks and what it means for assistive technology. */
+const LOOK: { [K in StageStatus]: { glyph: IconComponent; step?: 'step' } } = {
+  done: { glyph: CircleCheck },
+  current: { glyph: CircleDot, step: 'step' },
+  upcoming: { glyph: Circle },
+  attention: { glyph: TriangleAlert },
 }
 
-/** Research pipeline from search to manuscript (spec: wave-4/stage-strip.md). */
-export function StageStrip({ stages, label, title, className }: StageStripProps) {
-  const words = useMessages().stageStrip.status
-  const last = stages.length - 1
+function Title({ to, children }: { to?: string; children: string }) {
+  // Content text keeps its own direction inside a frame of the other direction.
+  return to ? (
+    <AriaLink className="fk-stage-strip__name" href={to} dir="auto">
+      {children}
+    </AriaLink>
+  ) : (
+    <span className="fk-stage-strip__name" dir="auto">
+      {children}
+    </span>
+  )
+}
+
+function Connector() {
+  return <ArrowRight className="fk-icon fk-stage-strip__arrow fk-mirror-rtl" aria-hidden="true" focusable="false" />
+}
+
+function Cell({ stage, word }: { stage: Stage; word: string }) {
+  const Glyph = LOOK[stage.status].glyph
+  const numbers: ReactNode = stage.figures?.length ? (
+    <span className="fk-stage-strip__figures">
+      {stage.figures.map((line, n) => (
+        <span key={n} dir="auto">
+          {line}
+        </span>
+      ))}
+    </span>
+  ) : null
   return (
-    <div className={cx('fk-stage-strip', className)}>
-      {title ? <p className="fk-stage-strip__title">{title}</p> : null}
-      <ol className="fk-stage-strip__list" aria-label={label}>
-        {stages.map((stage, index) => {
-          const Glyph = GLYPH[stage.status]
-          const name = stage.href ? (
-            <AriaLink className="fk-stage-strip__name" href={stage.href}>
-              {stage.label}
-            </AriaLink>
-          ) : (
-            <span className="fk-stage-strip__name">{stage.label}</span>
-          )
-          return (
-            <li key={stage.id} className="fk-stage-strip__stage" data-status={stage.status} aria-current={stage.status === 'current' ? 'step' : undefined}>
-              <div className="fk-stage-strip__card">
-                {name}
-                <span className="fk-stage-strip__status">
-                  <Glyph className="fk-icon" aria-hidden="true" focusable="false" />
-                  {words[stage.status]}
-                </span>
-                {stage.figures?.length ? (
-                  <span className="fk-stage-strip__figures">
-                    {stage.figures.map((figure) => (
-                      <span key={figure}>{figure}</span>
-                    ))}
-                  </span>
-                ) : null}
-              </div>
-              {index < last ? <ArrowRight className="fk-icon fk-stage-strip__arrow fk-mirror-rtl" aria-hidden="true" focusable="false" /> : null}
-            </li>
-          )
-        })}
+    <div className="fk-stage-strip__card">
+      <Title to={stage.href}>{stage.label}</Title>
+      <span className="fk-stage-strip__status">
+        <Glyph className="fk-icon" aria-hidden="true" focusable="false" />
+        {word}
+      </span>
+      {numbers}
+    </div>
+  )
+}
+
+/** Research pipeline from search to manuscript, joined by arrows. */
+export function StageStrip(props: StageStripProps) {
+  const statusWords = useMessages().stageStrip.status
+  const count = props.stages.length
+  const items = props.stages.map((stage, position) => (
+    <li key={stage.id} className="fk-stage-strip__stage" data-status={stage.status} aria-current={LOOK[stage.status].step}>
+      <Cell stage={stage} word={statusWords[stage.status]} />
+      {position + 1 < count ? <Connector /> : null}
+    </li>
+  ))
+  return (
+    <div className={cx('fk-stage-strip', props.className)}>
+      {props.title ? (
+        <p className="fk-stage-strip__title" dir="auto">
+          {props.title}
+        </p>
+      ) : null}
+      <ol className="fk-stage-strip__list" aria-label={props.label}>
+        {items}
       </ol>
     </div>
   )

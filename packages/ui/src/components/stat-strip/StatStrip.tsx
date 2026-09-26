@@ -37,7 +37,7 @@ export function StatStrip({ items, label, locale, className }: StatStripProps) {
           const text = shown(stat.value, lang, stat.format)
           return (
             <div key={stat.id} className="fk-stat-strip__item" data-linked={stat.href ? '' : undefined}>
-              <dt className="fk-stat-strip__label">{stat.label}</dt>
+              <dt className="fk-stat-strip__label" dir="auto">{stat.label}</dt>
               <dd className="fk-stat-strip__value">
                 {stat.href ? (
                   <AriaLink className="fk-stat-strip__link" href={stat.href} aria-label={speech.pair(text, stat.label)}>
@@ -50,7 +50,7 @@ export function StatStrip({ items, label, locale, className }: StatStripProps) {
               {stat.detail || stat.proof ? (
                 <dd className="fk-stat-strip__detail">
                   {stat.proof ? <ProofBadge state={stat.proof} /> : null}
-                  {stat.detail ? <span>{stat.detail}</span> : null}
+                  {stat.detail ? <span dir="auto">{stat.detail}</span> : null}
                 </dd>
               ) : null}
             </div>

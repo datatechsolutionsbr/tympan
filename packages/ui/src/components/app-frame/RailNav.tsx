@@ -25,7 +25,7 @@ export function RailNavSection({ label, children, className }: RailNavSectionPro
   return (
     <div className={cx('fk-rail-section', className)}>
       {label ? (
-        <p className="fk-rail-section__label" id={labelId}>
+        <p className="fk-rail-section__label" id={labelId} dir="auto">
           {label}
         </p>
       ) : null}
@@ -53,7 +53,7 @@ function ItemBody({ icon: Glyph, label, count }: { icon?: IconComponent; label: 
   return (
     <>
       {Glyph ? <Glyph className="fk-icon fk-rail-item__icon" aria-hidden="true" focusable="false" /> : null}
-      <span className="fk-rail-item__label">{label}</span>
+      <span className="fk-rail-item__label" dir="auto">{label}</span>
       {count ? (
         <span className="fk-rail-item__count" aria-hidden="true">
           {count}
@@ -109,8 +109,8 @@ export const RailContextButton = forwardRef<HTMLButtonElement, RailContextButton
   return (
     <AriaButton ref={ref} className={cx('fk-rail-context', className)} onPress={onPress} aria-label={accessibleLabel ?? speech.join(scope, name)}>
       <span className="fk-rail-context__lines">
-        <span className="fk-rail-context__scope">{scope}</span>
-        <span className="fk-rail-context__name">{name}</span>
+        <span className="fk-rail-context__scope" dir="auto">{scope}</span>
+        <span className="fk-rail-context__name" dir="auto">{name}</span>
       </span>
       <ChevronsUpDown className="fk-icon fk-rail-context__glyph" aria-hidden="true" focusable="false" />
     </AriaButton>

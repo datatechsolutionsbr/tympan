@@ -75,9 +75,9 @@ function TrailLine({ levels, label }: { levels: PageHeaderTrailLevel[]; label: s
           return (
             <li key={`${index}:${level.label}`} className="fk-page-header__trail-level" data-here={isHere || undefined}>
               {isHere || !level.href ? (
-                <span aria-current={isHere ? 'page' : undefined}>{level.label}</span>
+                <span aria-current={isHere ? 'page' : undefined} dir="auto">{level.label}</span>
               ) : (
-                <AriaLink className="fk-page-header__trail-link" href={level.href}>
+                <AriaLink className="fk-page-header__trail-link" href={level.href} dir="auto">
                   {level.label}
                 </AriaLink>
               )}
@@ -97,7 +97,7 @@ function MetaRow({ items }: { items: PageHeaderMetaItem[] }) {
         return (
           <li key={position + entry.text} className="fk-page-header__meta-item">
             {Glyph ? <Glyph className="fk-icon" aria-hidden="true" focusable="false" /> : null}
-            <span>{entry.text}</span>
+            <span dir="auto">{entry.text}</span>
           </li>
         )
       })}
@@ -142,16 +142,16 @@ export function PageHeader(props: PageHeaderProps) {
   const title = props.editableTitle ? (
     <EditableTitle level={level} id={titleId} edit={props.editableTitle} />
   ) : (
-    <Heading level={level} id={titleId} className="fk-page-header__title">
+    <Heading level={level} id={titleId} className="fk-page-header__title" dir="auto">
       {props.title}
     </Heading>
   )
 
   const textParts = present([
-    ['eyebrow', props.eyebrow ? <p className="fk-page-header__eyebrow">{props.eyebrow}</p> : null],
+    ['eyebrow', props.eyebrow ? <p className="fk-page-header__eyebrow" dir="auto">{props.eyebrow}</p> : null],
     ['title', title],
-    ['summary', props.summary ? <p className="fk-page-header__summary">{props.summary}</p> : null],
-    ['lead', props.lead ? <div className="fk-page-header__lead">{props.lead}</div> : null],
+    ['summary', props.summary ? <p className="fk-page-header__summary" dir="auto">{props.summary}</p> : null],
+    ['lead', props.lead ? <div className="fk-page-header__lead" dir="auto">{props.lead}</div> : null],
     ['meta', props.meta?.length ? <MetaRow items={props.meta} /> : null],
   ])
 
