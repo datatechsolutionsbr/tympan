@@ -4,7 +4,7 @@ Static React components for data books (React 18.3 or 19): spreads of two
 170 × 240 mm pages, lettered dashboard panels, the method chart, proof-state
 marks, the number trace, the source line with the lakebrasil seal, the
 lakebrasil and Datatech marks, cover, part opening, reading guide, timeline and
-schematic map. Every component renders on the server
+schematic map, plus page ornaments (`Ornamento`) for the styles that have them. Every component renders on the server
 (`renderToStaticMarkup`) with no `window` or `document`, and the output is
 deterministic, so the same content gives the same PDF and EPUB bytes. Styles
 come from the book-style presets of `@datatechsolutions/tympan-tokens`

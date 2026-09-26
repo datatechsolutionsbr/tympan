@@ -3,6 +3,7 @@ export { LivroPrint, type LivroPrintProps } from './livro/LivroPrint.tsx'
 export { Dupla, type DuplaProps } from './livro/Dupla.tsx'
 export { Pagina, type PaginaProps } from './livro/Pagina.tsx'
 export { Textura } from './livro/Textura.tsx'
+export { Ornamento } from './livro/Ornamento.tsx'
 export { Painel, type PainelProps, type VariantePainel } from './paineis/Painel.tsx'
 export { Texto, Margem, Anotacao, type TextoProps, type MargemProps, type AnotacaoProps, type VarianteTexto } from './paineis/Texto.tsx'
 export {
@@ -57,7 +58,7 @@ export { LogoLakebrasil, SeloLakebrasil, type LogoLakebrasilProps, type SeloLake
 export { LogoDatatech, tintasDoEstilo, type LogoDatatechProps, type VarianteDatatech } from './marca/LogoDatatech.tsx'
 export { GraficoMetodo, type GraficoMetodoProps } from './grafico/GraficoMetodo.tsx'
 export type { GraficoSpec, SpecHalteres, SpecBarras, SpecSerie, SpecContagem, SpecEsquema, LinhaPar, AnotacaoGrafico } from './grafico/tipos.ts'
-export { layoutHalteres, layoutBarras, layoutContagem, layoutSerie, escalaLinear, marcasEixo } from './grafico/geometria.ts'
+export { layoutHalteres, layoutBarras, layoutColunas, layoutContagem, layoutSerie, escalaLinear, marcasEixo } from './grafico/geometria.ts'
 export { PINCEIS, unidadeIsotype, gradePontos, type Pincel } from './grafico/pinceis.tsx'
 export { usePrint, type PrintContexto } from './contexto.tsx'
 export {

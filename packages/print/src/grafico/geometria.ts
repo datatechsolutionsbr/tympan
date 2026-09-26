@@ -329,6 +329,119 @@ export function layoutBarras(spec: SpecBarras, largura: number): LayoutBarras {
 }
 
 // ---------------------------------------------------------------------------
+// Columns (vertical bars: one group per row, bars side by side)
+// ---------------------------------------------------------------------------
+
+export interface ColunaPosta {
+  serie: 'a' | 'b'
+  valor: number
+  /** Left edge and width of the column; `base` is the zero line, `h` the data length (upwards). */
+  x: number
+  w: number
+  base: number
+  h: number
+  rotulo: { x: number; y: number }
+}
+
+export interface GrupoColunas {
+  i: number
+  /** Centre of the group, where the row label sits. */
+  cx: number
+  rotulo: string
+  nota?: string
+  destaque: boolean
+  local: boolean
+  colunas: ColunaPosta[]
+  marca?: { texto: string; x: number; y: number }
+}
+
+export interface LayoutColunas {
+  largura: number
+  altura: number
+  y: Escala
+  mmPorUnidade: number
+  area: { x0: number; x1: number; y0: number; y1: number }
+  grupos: GrupoColunas[]
+  marcasY: Array<{ v: number; y: number; texto: string }>
+  legenda: { y: number; itens: Array<{ serie: 'a' | 'b'; x: number; y: number; texto: string }> } | null
+  anotacoes: AnotacaoPosta[]
+}
+
+export function layoutColunas(spec: SpecBarras, largura: number, alturaPlot = 32): LayoutColunas {
+  const linhasG = linhasDe(spec)
+  const pares = linhasG.some((l) => l.valores.length > 1)
+  const marcasYv = marcasEixo(spec.escala, 4)
+  const x0 = r3(Math.max(...marcasYv.map((v) => larguraTexto(numeroBr(v), TEXTO_PEQUENO))) + 2.4)
+  const x1 = r3(largura - 1)
+  // The key goes on one line when it fits, on two otherwise.
+  const xB = x0 + larguraTexto(spec.rotuloA ?? 'a') + 9
+  const empilha = pares && xB + larguraTexto(spec.rotuloB ?? 'b') + 5 > largura
+  const y0 = pares ? (empilha ? 11.5 : 8.5) : 5
+  const y1 = r3(y0 + alturaPlot)
+  const y = escalaLinear(spec.escala, [y1, y0])
+  const n = Math.max(1, linhasG.length)
+  const passo = (x1 - x0) / n
+  const nb = pares ? 2 : 1
+  const bw = r3(Math.min(7.5, (passo * 0.6) / nb))
+  const grupos: GrupoColunas[] = linhasG.map((l, i) => {
+    const cx = r3(x0 + passo * (i + 0.5))
+    const inicio = cx - (bw * l.valores.length + 0.8 * (l.valores.length - 1)) / 2
+    const colunas = l.valores.map((v, k) => {
+      const xs = r3(inicio + k * (bw + 0.8))
+      const topo = y(Math.max(0, v.valor))
+      const base = y(Math.min(0, v.valor))
+      const h = r3(Math.abs(base - topo))
+      return { serie: v.serie, valor: v.valor, x: xs, w: bw, base: r3(y(0)), h, rotulo: { x: r3(xs + bw / 2), y: r3(topo - 1.1) } }
+    })
+    const temNota = Boolean(l.nota || l.local)
+    return {
+      i,
+      cx,
+      rotulo: l.rotulo,
+      nota: l.nota,
+      destaque: Boolean(l.destaque),
+      local: Boolean(l.local),
+      colunas,
+      marca: l.marca ? { texto: l.marca, x: cx, y: r3(y1 + (temNota ? 9.2 : 6.6)) } : undefined,
+    }
+  })
+  const legenda = pares
+    ? {
+        y: 2.4,
+        itens: [
+          { serie: 'a' as const, x: x0, y: 2.4, texto: spec.rotuloA ?? 'a' },
+          { serie: 'b' as const, x: empilha ? x0 : r3(xB), y: empilha ? 5.6 : 2.4, texto: spec.rotuloB ?? 'b' },
+        ],
+      }
+    : null
+  const temMarca = grupos.some((g) => g.marca)
+  const baseTexto = y1 + (grupos.some((g) => g.nota || g.local) ? 6.8 : 4.2) + (temMarca ? 3.2 : 0)
+  const { postas, fim } = anotar(
+    spec.anotacoes,
+    (i) => {
+      const g = grupos[i]
+      const c = g?.colunas[g.colunas.length - 1]
+      return c ? { x: r3(c.x + c.w / 2), y: y1 } : null
+    },
+    largura,
+    x0,
+    baseTexto,
+  )
+  const mmPorUnidade = r3((y1 - y0) / Math.max(1e-9, spec.escala[1] - spec.escala[0]))
+  return {
+    largura,
+    altura: r3(Math.max(fim, baseTexto) + (spec.unidade ? 2.4 : 0) + 1.2),
+    y,
+    mmPorUnidade,
+    area: { x0, x1, y0, y1 },
+    grupos,
+    marcasY: marcasYv.map((v) => ({ v, y: y(v), texto: numeroBr(v) })),
+    legenda,
+    anotacoes: postas,
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Counting (Isotype)
 // ---------------------------------------------------------------------------
 

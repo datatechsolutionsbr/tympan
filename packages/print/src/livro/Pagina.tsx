@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { papelEscuro } from '@datatechsolutions/tympan-tokens'
 import { FundoEscuroProvider, useDupla, usePrint } from '../contexto.tsx'
 import { cx } from '../util.ts'
+import { Ornamento } from './Ornamento.tsx'
 import { Textura } from './Textura.tsx'
 
 export interface PaginaProps {
@@ -37,6 +38,7 @@ export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero
       aria-label={textoFolio ? `Página ${textoFolio}` : lado === 'par' ? 'Página par' : 'Página ímpar'}
     >
       <Textura lado={lado} />
+      {variante === 'normal' ? <Ornamento lado={lado} /> : null}
       {textoCabeco ? <p className="ty-print-cabeco">{textoCabeco}</p> : null}
       <div className="ty-print-mancha">
         {variante === 'capa' ? <FundoEscuroProvider value={!papelEscuro(estilo)}>{children}</FundoEscuroProvider> : children}

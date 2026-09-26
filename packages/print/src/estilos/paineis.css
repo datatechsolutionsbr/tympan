@@ -258,6 +258,7 @@
   }
 
   .ty-print-livro[data-ty-print-painel='cartao'] .ty-print-painel {
+    padding: 2.2mm 2.6mm;
     border: 0.45mm solid var(--ty-print-linha);
     border-radius: var(--ty-print-raio);
     background: color-mix(in srgb, var(--ty-print-papel) 70%, #ffffff);
@@ -322,16 +323,16 @@
     min-inline-size: 3.8mm;
     block-size: 3.8mm;
     padding-inline: 0.6mm;
-    background: var(--ty-print-prova-refutada);
-    color: var(--ty-print-papel);
+    background: var(--ty-print-rotulo-fundo, var(--ty-print-prova-refutada));
+    color: var(--ty-print-rotulo-tinta, var(--ty-print-papel));
   }
 
   .ty-print-livro[data-ty-print-rotulo='circulo'] .ty-print-letra {
     min-inline-size: 4.2mm;
     block-size: 4.2mm;
     border-radius: 50%;
-    background: var(--ty-print-destaque-2);
-    color: var(--ty-print-papel);
+    background: var(--ty-print-rotulo-fundo, var(--ty-print-destaque-2));
+    color: var(--ty-print-rotulo-tinta, var(--ty-print-papel));
   }
 
   .ty-print-livro[data-ty-print-painel='prancha'][data-ty-print-rotulo='circulo'] .ty-print-letra {
@@ -450,6 +451,7 @@
   }
 
   .ty-print-vs {
+    font-family: var(--ty-print-fonte-corpo);
     font-size: 0.6em;
     font-weight: 400;
     color: var(--ty-print-tinta-3);

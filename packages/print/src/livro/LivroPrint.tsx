@@ -59,6 +59,9 @@ export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carr
       data-ty-print-textura={resolvido.papel.textura}
       data-ty-print-tremor={resolvido.traco.tremor > 0 ? '' : undefined}
       data-ty-print-caixa-alta={resolvido.caixaAlta ? '' : undefined}
+      data-ty-print-moldura={e.moldura && e.moldura !== 'nenhuma' ? e.moldura : undefined}
+      data-ty-print-cabeco={e.cabeco && e.cabeco !== 'texto' ? e.cabeco : undefined}
+      data-ty-print-titulo={e.tituloEstilo && e.tituloEstilo !== 'normal' ? e.tituloEstilo : undefined}
     >
       {fontes ? <link rel="stylesheet" href={fontes} /> : null}
       <style dangerouslySetInnerHTML={{ __html: css }} />

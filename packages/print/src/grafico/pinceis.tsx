@@ -184,11 +184,15 @@ const limpo: Pincel = {
       y={0}
       width={b.w}
       height={b.h}
-      style={{
-        fill: enchimentoCss(c, b.cor, b.enchimento),
-        stroke: b.enchimento === 'cheio' ? 'none' : cssCor(b.cor),
-        strokeWidth: b.enchimento === 'cheio' ? 0 : Math.max(0.18, traco(c, 0.8)),
-      }}
+      style={
+        c.estilo.estrutura.contornoBarra
+          ? { fill: enchimentoCss(c, b.cor, b.enchimento), stroke: 'var(--ty-print-tinta)', strokeWidth: Math.max(0.25, traco(c, 0.9)) }
+          : {
+              fill: enchimentoCss(c, b.cor, b.enchimento),
+              stroke: b.enchimento === 'cheio' ? 'none' : cssCor(b.cor),
+              strokeWidth: b.enchimento === 'cheio' ? 0 : Math.max(0.18, traco(c, 0.8)),
+            }
+      }
     />
   ),
   linha: (c, l) => (

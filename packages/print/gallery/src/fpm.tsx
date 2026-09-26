@@ -18,6 +18,7 @@ import {
   Veredito,
   type GraficoSpec,
   type LinhaPar,
+  usePrint,
 } from '../../src/index.ts'
 
 export const LAKE = '2026-09-25'
@@ -97,12 +98,52 @@ export const GRAFICO_DO_ESTUDO: Record<string, TipoGraficoFpm> = {
   holmes: 'barras',
   bayer: 'barras',
   ft: 'barras',
+  'dados-br': 'barras',
+  minard: 'barras',
+  mccandless: 'barras',
+  construtivismo: 'barras',
+  bauhaus: 'barras',
+  brutalista: 'barras',
+  divulgacao: 'barras',
+  corbusier: 'barras',
+  schiphol: 'barras',
+  aicher: 'barras',
+  vignelli: 'barras',
+  'jornal-do-brasil': 'barras',
+  'athos-bulcao': 'barras',
+  tropicalia: 'barras',
+  'atlas-ibge': 'barras',
+  crouwel: 'barras',
+  'saul-bass': 'barras',
+  'pop-art': 'barras',
+  cientifico: 'barras',
+  'art-nouveau': 'barras',
+  memphis: 'barras',
 }
 
 export const ACHADOS = [
   'Censo 2022: 132 municípios até 3% acima do primeiro corte do FPM e só 36 até 3% abaixo; em 2007 e 2010, o mesmo desenho (127 contra 18, 140 contra 27).',
   'Nos 17 cortes somados, 731 acima contra 293 abaixo no Censo 2022; com a estimativa de 2025, 60 contra 43.',
 ]
+
+/** Horizontal styles stack the two figures; column styles set them side by side, as in the studies. */
+function FigurasMetodo({ g1, g2 }: { g1: GraficoSpec; g2: GraficoSpec }) {
+  const { estilo } = usePrint()
+  if (estilo.estrutura.barras === 'vertical' && g1.tipo === 'barras') {
+    return (
+      <div className="ty-print-figuras">
+        <GraficoMetodo spec={g1} alt={ACHADOS[0]} local largura={70} />
+        <GraficoMetodo spec={g2} alt={ACHADOS[1]} largura={50} />
+      </div>
+    )
+  }
+  return (
+    <>
+      <GraficoMetodo spec={g1} alt={ACHADOS[0]} local />
+      <GraficoMetodo spec={g2} alt={ACHADOS[1]} />
+    </>
+  )
+}
 
 export function DuplaFpm({ grafico = 'halteres' }: { grafico?: TipoGraficoFpm }) {
   const [g1, g2] = specsFpm(grafico)
@@ -131,8 +172,7 @@ export function DuplaFpm({ grafico = 'halteres' }: { grafico?: TipoGraficoFpm })
           paragrafos={['A descontinuidade compara quem está logo acima com quem está logo abaixo do corte, e só vale se os dois lados forem parecidos. Antes de medir o dinheiro, contam-se os municípios de cada lado.']}
         />
         <Painel letra="d" titulo="O gráfico do método: quantos municípios de cada lado do corte">
-          <GraficoMetodo spec={g1} alt={ACHADOS[0]} local />
-          <GraficoMetodo spec={g2} alt={ACHADOS[1]} />
+          <FigurasMetodo g1={g1} g2={g2} />
           <TabelaDados
             colunas={['Base', 'Cortes', { rotulo: 'Até 3% abaixo', numerica: true }, { rotulo: 'Até 3% acima', numerica: true }, 'Lake']}
             linhas={[

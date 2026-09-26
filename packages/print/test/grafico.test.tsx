@@ -3,7 +3,7 @@
 import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import type { RenderizadorGrafico } from '@datatechsolutions/tympan-tokens'
-import { GraficoMetodo, LivroPrint, layoutBarras, layoutHalteres, marcasEixo, type SpecBarras, type SpecHalteres } from '../src/index.ts'
+import { GraficoMetodo, LivroPrint, layoutBarras, layoutColunas, layoutHalteres, marcasEixo, type SpecBarras, type SpecHalteres } from '../src/index.ts'
 import { PRIMEIRO, SOMADOS, specsFpm } from '../gallery/src/fpm.tsx'
 
 const RENDERIZADORES: RenderizadorGrafico[] = ['limpo', 'mao', 'isotype', 'gravura', 'prancheta', 'aquarela', 'riso', 'pontos']
@@ -89,6 +89,34 @@ describe('barras: bar lengths come from the data in every renderer', () => {
         expect(x).toBeCloseTo(L.eixo.x0, 3)
         expect(Number(b.getAttribute('data-w'))).toBeCloseTo(valor * L.mmPorUnidade, 1)
       }
+    })
+  }
+})
+
+describe('colunas (vertical bars): heights come from the data in every renderer', () => {
+  const spec = specsFpm('barras')[1] as SpecBarras
+  for (const r of RENDERIZADORES) {
+    it(r, () => {
+      const { container } = render(
+        <LivroPrint estilo="cientifico">
+          <GraficoMetodo spec={spec} renderizador={r} largura={120} />
+        </LivroPrint>,
+      )
+      const L = layoutColunas(spec, 120)
+      const svg = container.querySelector('svg.ty-print-grafico')!
+      expect(svg.getAttribute('data-orientacao')).toBe('vertical')
+      const colunas = [...container.querySelectorAll('g.ty-print-barra')]
+      expect(colunas).toHaveLength(SOMADOS.length * 2)
+      const xs = new Set<number>()
+      for (const b of colunas) {
+        const valor = Number(b.getAttribute('data-valor'))
+        const [x, y] = translate(b)
+        expect(y).toBeCloseTo(L.area.y1, 3)
+        expect(b.getAttribute('transform')).toContain('rotate(-90)')
+        expect(Number(b.getAttribute('data-h'))).toBeCloseTo((valor * (L.area.y1 - L.area.y0)) / (spec.escala[1] - spec.escala[0]), 2)
+        xs.add(x)
+      }
+      expect(xs.size).toBe(colunas.length)
     })
   }
 })

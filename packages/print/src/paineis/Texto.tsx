@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { usePrint } from '../contexto.tsx'
 import { cx } from '../util.ts'
 import { comColchetes } from './comum.tsx'
 import { larguraColunas } from './Painel.tsx'
@@ -23,11 +24,23 @@ export interface TextoProps {
 /** Running text: eyebrow, title and paragraphs or a list. `[brackets]` print as placeholders. */
 export function Texto({ eyebrow, titulo, nivel = 2, variante = 'corpo', paragrafos, lista, largura, className, children }: TextoProps) {
   const H = (`h${Math.min(4, Math.max(1, nivel))}` as 'h1' | 'h2' | 'h3' | 'h4')
+  const { estilo } = usePrint()
+  const recorte = estilo.estrutura.tituloEstilo === 'recorte' && nivel <= 2
   const Lista = lista?.ordenada ? 'ol' : 'ul'
   return (
     <div className={cx('ty-print-texto', className)} data-variante={variante} data-nivel={nivel} style={larguraColunas(largura)}>
       {eyebrow ? <p className="ty-print-sobretitulo">{comColchetes(eyebrow)}</p> : null}
-      {titulo ? <H className="ty-print-titulo">{comColchetes(titulo)}</H> : null}
+      {titulo ? (
+        <H className="ty-print-titulo">
+          {recorte
+            ? titulo.split(/\s+/).map((p, i) => (
+                <span key={i} className="ty-print-palavra">
+                  {comColchetes(p)}
+                </span>
+              ))
+            : comColchetes(titulo)}
+        </H>
+      ) : null}
       {variante === 'codigo'
         ? paragrafos?.map((p, i) => (
             <pre key={i} className="ty-print-codigo">

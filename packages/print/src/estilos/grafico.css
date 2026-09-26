@@ -188,3 +188,14 @@
     inline-size: 100% !important;
   }
 }
+
+@layer tympan-print {
+  /* Figures side by side (small multiples); each keeps its own width in mm. */
+  .ty-print-figuras {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2mm 4mm;
+  }
+}

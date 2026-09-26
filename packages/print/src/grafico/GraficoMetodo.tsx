@@ -6,6 +6,7 @@ import { semente } from '../rough.ts'
 import { cx, useIdSeguro } from '../util.ts'
 import {
   layoutBarras,
+  layoutColunas,
   layoutContagem,
   layoutHalteres,
   layoutSerie,
@@ -123,11 +124,13 @@ function Anotacoes({ c, postas, marcas }: { c: Ctx; postas: AnotacaoPosta[]; mar
   )
 }
 
-function Legenda({ c, y, itens }: { c: Ctx; y: number; itens: Array<{ x: number; texto: string; cor: CorDado; tipo: 'ponto-vazio' | 'ponto' | 'barra-a' | 'barra-b' }> }) {
+function Legenda({ c, y: yBase, itens }: { c: Ctx; y: number; itens: Array<{ x: number; y?: number; texto: string; cor: CorDado; tipo: 'ponto-vazio' | 'ponto' | 'barra-a' | 'barra-b' }> }) {
   const hachura = c.estilo.traco.hachura !== 'nenhuma'
   return (
     <g className="ty-print-g-legenda">
-      {itens.map((it, k) => (
+      {itens.map((it, k) => {
+        const y = it.y ?? yBase
+        return (
         <g key={k}>
           <g transform={`translate(${n(it.x + 1.2)} ${n(y - 0.8)})`}>
             {it.tipo === 'ponto' || it.tipo === 'ponto-vazio'
@@ -138,7 +141,8 @@ function Legenda({ c, y, itens }: { c: Ctx; y: number; itens: Array<{ x: number;
             {it.texto}
           </text>
         </g>
-      ))}
+        )
+      })}
     </g>
   )
 }
@@ -266,6 +270,90 @@ function Barras({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numbe
           linhas: linhasG.map((l) => [l.nota ? `${l.rotulo} (${l.nota})` : l.rotulo, l.valores[0]?.valor ?? '', l.valores[1]?.valor ?? '']),
         },
     eixo: { x0: L.eixo.x0, x1: L.eixo.x1, d0: spec.escala[0], d1: spec.escala[1] },
+  }
+}
+
+function Colunas({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: number }) {
+  const L = layoutColunas(spec, largura)
+  const linhasG = linhasDe(spec)
+  const algum = linhasG.some((l) => l.destaque)
+  const hachura = c.estilo.traco.hachura !== 'nenhuma'
+  const unico = !L.legenda
+  const { x0, x1, y1 } = L.area
+  const u = c.p.nome === 'isotype' ? unidadeIsotype(L.mmPorUnidade) : 0
+  return {
+    L,
+    corpo: (
+      <>
+        {L.legenda ? (
+          <Legenda
+            c={c}
+            y={L.legenda.y}
+            itens={L.legenda.itens.map((it) => ({ x: it.x, y: it.y, texto: it.texto, cor: (algum ? (it.serie === 'a' ? 'contexto' : 'tinta') : it.serie === 'a' ? 'destaque-2' : 'destaque') as CorDado, tipo: it.serie === 'a' ? ('barra-a' as const) : ('barra-b' as const) }))}
+          />
+        ) : null}
+        {u ? (
+          <text className="ty-print-g-chave" x={largura} y={2.4} textAnchor="end">
+            1 ícone = {numeroBr(u)}
+          </text>
+        ) : null}
+        <g className="ty-print-g-eixo">
+          {L.marcasY.map((m) => (
+            <g key={m.v}>
+              <g className="ty-print-grade">{c.p.linha(c, { chave: `gy-${m.v}`, x1: x0, y1: m.y, x2: x1, y2: m.y, cor: 'linha', largura: 0.12, tipo: 'grade' })}</g>
+              <text className="ty-print-g-eixo-texto" x={n(x0 - 1.2)} y={n(m.y + 0.7)} textAnchor="end">
+                {m.texto}
+              </text>
+            </g>
+          ))}
+          <g className="ty-print-eixo-cheio">{c.p.linha(c, { chave: 'eixo-x', x1: x0, y1: y1, x2: x1, y2: y1, cor: 'tinta', largura: 0.3, tipo: 'eixo' })}</g>
+          {spec.unidade ? (
+            <text className="ty-print-g-unidade" x={x1} y={n(L.altura - 1.4)} textAnchor="end">
+              {spec.unidade}
+            </text>
+          ) : null}
+        </g>
+        {L.grupos.map((g) => {
+          const cor = coresLinha(g.destaque, algum)
+          const extra = g.local ? (g.nota ? `${g.nota} · lake local` : 'lake local') : g.nota
+          return (
+            <g key={g.i} className="ty-print-g-linha" data-linha={g.i} data-destaque={g.destaque ? '' : undefined}>
+              {g.colunas.map((b) => {
+                const corB: CorDado = unico ? (algum && !g.destaque ? 'contexto' : 'destaque') : b.serie === 'a' ? (algum && !g.destaque ? 'contexto' : cor.a) : cor.b
+                return (
+                  <g key={b.serie}>
+                    {/* The bar is drawn horizontally by the renderer and turned upright: length = data, width = column. */}
+                    <g className="ty-print-barra" data-linha={g.i} data-serie={b.serie} data-valor={b.valor} data-x={b.x} data-base={b.base} data-h={b.h} transform={`translate(${b.x} ${b.base}) rotate(-90)`}>
+                      {c.p.barra(c, { chave: `col-${g.i}-${b.serie}`, w: b.h, h: b.w, cor: corB, enchimento: b.serie === 'a' && hachura ? 'hachura' : 'cheio', valor: b.valor, mmPorUnidade: L.mmPorUnidade })}
+                    </g>
+                    <text className={b.serie === 'a' && !unico ? 'ty-print-g-valor-a' : 'ty-print-g-valor'} x={b.rotulo.x} y={b.rotulo.y} textAnchor="middle" data-cor={g.destaque ? 'destaque' : 'tinta'}>
+                      {numeroBr(b.valor)}
+                    </text>
+                  </g>
+                )
+              })}
+              <text className="ty-print-g-rotulo" x={g.cx} y={n(y1 + 3.3)} textAnchor="middle">
+                {g.rotulo}
+              </text>
+              {extra ? (
+                <text className="ty-print-g-nota" x={g.cx} y={n(y1 + 5.9)} textAnchor="middle" data-local={g.local ? '' : undefined}>
+                  {extra}
+                </text>
+              ) : null}
+              {g.marca ? <Chamada x={g.marca.x} y={g.marca.y} texto={g.marca.texto} /> : null}
+            </g>
+          )
+        })}
+        <Anotacoes c={c} postas={L.anotacoes} marcas={linhasG.map((l) => l.marca)} />
+      </>
+    ),
+    tabela: unico
+      ? { colunas: ['Base', { rotulo: spec.unidade ?? 'valor', numerica: true }], linhas: linhasG.map((l) => [l.rotulo, l.valores[0]?.valor ?? '']) }
+      : {
+          colunas: ['Base', { rotulo: spec.rotuloA ?? 'a', numerica: true }, { rotulo: spec.rotuloB ?? 'b', numerica: true }],
+          linhas: linhasG.map((l) => [l.nota ? `${l.rotulo} (${l.nota})` : l.rotulo, l.valores[0]?.valor ?? '', l.valores[1]?.valor ?? '']),
+        },
+    eixo: { x0: L.area.y1, x1: L.area.y0, d0: spec.escala[0], d1: spec.escala[1], vertical: true },
   }
 }
 
@@ -502,7 +590,9 @@ export function GraficoMetodo({ spec, renderizador, alt, tabela, local = false, 
     spec.tipo === 'halteres'
       ? Halteres({ c, spec, largura })
       : spec.tipo === 'barras'
-        ? Barras({ c, spec, largura })
+        ? estilo.estrutura.barras === 'vertical'
+          ? Colunas({ c, spec, largura })
+          : Barras({ c, spec, largura })
         : spec.tipo === 'contagem'
           ? Contagem({ c, spec, largura })
           : spec.tipo === 'serie'
@@ -528,6 +618,7 @@ export function GraficoMetodo({ spec, renderizador, alt, tabela, local = false, 
         data-x1={r.eixo?.x1}
         data-d0={r.eixo?.d0}
         data-d1={r.eixo?.d1}
+        data-orientacao={r.eixo && 'vertical' in r.eixo ? 'vertical' : undefined}
       >
         <defs>{p.defs(c)}</defs>
         {r.corpo}
