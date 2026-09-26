@@ -5,23 +5,24 @@ import { FormsSection } from '../sections/FormsSection'
 import { RunSection } from '../sections/RunSection'
 import { AssistantVisualBlock, parseAssistantVisual } from '../../../src'
 
+// Sample data only: neutral categories and counts.
 const envelope = parseAssistantVisual({
   type: 'bar',
-  titulo: 'Casos por estágio (edição 2026-09-20)',
+  titulo: 'Gráfico de exemplo',
   dados: [
-    { estagio: '1', casos: 18 },
-    { estagio: '2', casos: 21 },
-    { estagio: '3', casos: 19 },
-    { estagio: '4', casos: 18 },
-    { estagio: '5', casos: 18 },
+    { categoria: 'A', valor: 4 },
+    { categoria: 'B', valor: 7 },
+    { categoria: 'C', valor: 5 },
   ],
 })
 
 export function ComponentsPage() {
   return (
     <div className="fk-gallery-sections">
+      <p className="fk-gallery-section">Dados de exemplo / Sample data: every name and value on this page is a neutral placeholder.</p>
       <section className="fk-gallery-section" aria-labelledby="g-assistant">
         <h2 id="g-assistant">Assistant answer</h2>
+        <p>Dados de exemplo / Sample data</p>
         {envelope ? <AssistantVisualBlock envelope={envelope} locale="pt-BR" /> : null}
       </section>
       <RunSection />

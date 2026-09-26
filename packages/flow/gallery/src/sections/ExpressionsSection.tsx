@@ -9,16 +9,16 @@ const trace = {
     label: 'count',
     args: {},
     result: 37,
-    children: [{ kind: 'operation' as const, label: 'filter', result: [1, 2, 3], children: [{ kind: 'ref' as const, label: 'records', result: new Array(94).fill(0) }] }],
+    children: [{ kind: 'operation' as const, label: 'filter', result: [1, 2, 3], children: [{ kind: 'ref' as const, label: 'records', result: new Array(12).fill(0) }] }],
   },
   truncated: false,
   frameCount: 3,
   frameLimit: 500,
 }
 
-/** Expressions, rules and traces: census analysis examples, with an Arabic (RTL) rule editor. */
+/** Expressions, rules and traces with neutral sample data, and an Arabic (RTL) rule editor. */
 export function ExpressionsSection() {
-  const [rule, setRule] = useState<RuleValue>({ ...defaultRule(), name: 'Only primary confirmations', tags: ['census'] })
+  const [rule, setRule] = useState<RuleValue>({ ...defaultRule(), name: 'Sample rule', tags: ['sample'] })
   const [ruleAr, setRuleAr] = useState<RuleValue>(defaultRule())
   return (
     <ExpressionCatalogProvider catalog={exampleExpressionCatalog}>

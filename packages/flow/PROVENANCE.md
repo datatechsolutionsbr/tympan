@@ -42,7 +42,7 @@ draws state.
 | Forms | SchemaConfigForm (+ NodeFormFooter), VariableListEditor, ToolServerListField, StartNodeForm, AgentNodeForm, DataSourceNodeForm, ReportOutputNodeForm, GroupNodeForm, OutputSchemaBuilder, DecisionNodeForm (B-002) | 71 | RAC RadioGroup, ListBox; DS fields, CheckboxGroup, Switch; APG Tabs, Radio Group, Listbox | No vendor logos; `maxLimit` prop for the row limit; decision needs two unique options and an input reference |
 | Dialogs | NodeConfigDialog, FlowSettingsDialog, DefinitionExportDialog, DefinitionImportDialog | 40 | RAC DropZone, FileTrigger, Modal, Dialog, Switch; APG Dialog | Export file name keeps Unicode letters; copy failure is reported (not claimed as success) |
 | Agents | AgentEditorDialog, AgentCreationWizard (with local StepList, ChoiceTiles, TagInput) | 18 | RAC Slider, ToggleButtonGroup, Tabs (vertical), RadioGroup, Disclosure; APG Dialog, Tabs, Slider, Radio Group | Capability tiers and presets come from props; slider value text names the tier; wizard Enter advances only outside fields |
-| Assistant and report | useAssistantChat, AssistantConversation, MarkdownView, AssistantVisualBlock (+ `parseAssistantVisual`, `envelopeToReport`), ConversationShell (+ `groupConversationsByDate`, ConversationMetaLine), ReportView | 39 | RAC TextField, ToggleButton; DS Drawer, Skeleton; APG log region | Composer stays editable while busy; pt, en and es payload key aliases; currency only when the host gives a code; date groups by calendar day in a time zone |
+| Assistant and report | useAssistantSession, AssistantConversation, MarkdownView, AssistantVisualBlock (+ `parseAssistantVisual`, `envelopeToReport`), ConversationShell (+ `groupThreadsByDay`, ThreadMetaLine), ReportView | 39 | RAC TextField, ToggleButton; DS Drawer, Skeleton; APG log region | Composer stays editable while busy; pt, en and es payload key aliases; currency only when the host gives a code; date groups by calendar day in a time zone |
 
 Total: 508 tests in 36 files (Vitest count; the per-group numbers above count `it` blocks).
 
@@ -83,3 +83,26 @@ variants and the `[data-tone]` mapping; `--fk-flow-connector`, `-active`,
 `--fk-flow-band-label` (130px), `--fk-flow-node-h` (72px), `--fk-flow-node-w`
 (236px), `--fk-flow-col-gap` (56px). All are defined in `src/tokens.css` on existing `--fk-*`
 roles.
+
+## Gallery data
+
+Project rule: no invented research data. The gallery uses neutral
+placeholders (Caso A, Fonte 1, [hash], [trecho citado], [modelo], Opção A,
+Fonte de dados A) under a visible "Dados de exemplo / Sample data" label.
+The only real values are those of the census edition 2026-09-20: record
+`ae-tamm-4-0`, retrieval `r115b`, assertion
+`governance.operator_regulatory_position = confirmed_primary`, original
+coder `deep-research/middle-east-africa`, and the edition manifest (857
+hashes); they are shown without proof ("no proof"), because the verifier
+(G7a) does not exist yet.
+
+## Similarity rework, round 2
+
+`useAssistantChat` became `useAssistantSession` with a new vocabulary
+(renames listed at the end of `wave-3/assistant-chat.md` and
+`wave-3/conversation-shell.md`); ConversationShell was split into
+`threadDays`, `ThreadHistory`, `LiveCanvasPanel` and a layout shell; the
+rewind dialog moved its logic to `rewindPlan.ts`; ExpressionBuilder moved its
+levels into `expressions/builder/`; ComputeNodeForm into `computeDraft`,
+`ComputeInsertPanel` and `ComputeTrial`; VariableListEditor into
+`nameListModel` and a parts table. Behaviour and tests unchanged.

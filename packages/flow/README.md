@@ -55,7 +55,7 @@ import { ProvenanceGraph, FlowEditor } from '@fakhir/flow-canvas'
   form, `ExpressionBuilder`, `TraceTree`, `RuleEditor` with the rule action
   catalog, `NodeConfigDialog`, `FlowSettingsDialog`, definition export and
   import, `AgentEditorDialog`, `AgentCreationWizard`).
-- **Assistant** (`useAssistantChat`, `AssistantConversation`,
+- **Assistant** (`useAssistantSession`, `AssistantConversation`,
   `AssistantVisualBlock`, `ConversationShell`, `ReportView`).
 - **Foundations**: `CanvasSurface` (pan, zoom, pinch, marquee, node drag,
   connection drawing, overview map), `autoLayout` (dagre), `NodeKindCatalog`,

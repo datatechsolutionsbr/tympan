@@ -4,18 +4,18 @@ import { DataSourceNodeForm, DecisionNodeForm, OutputSchemaBuilder, ReportOutput
 
 const noop = () => {}
 const sources = [
-  { id: 'census', name: 'Censo IA gov · edição 2026-09-20', dialect: 'PostgreSQL' },
-  { id: 'coding', name: 'Planilhas de codificação', dialect: 'SQLite' },
+  { id: 'source-a', name: 'Fonte de dados A', dialect: 'PostgreSQL' },
+  { id: 'source-b', name: 'Fonte de dados B', dialect: 'SQLite' },
 ]
-const tables = ['records', 'assertions', 'retrievals']
+const tables = ['tabela_a', 'tabela_b', 'tabela_c']
 const columns = [
-  { name: 'record_id', type: 'text' },
-  { name: 'country', type: 'text' },
-  { name: 'stage', type: 'integer' },
-  { name: 'proof_state', type: 'text' },
+  { name: 'col_a', type: 'text' },
+  { name: 'col_b', type: 'text' },
+  { name: 'col_c', type: 'integer' },
+  { name: 'col_d', type: 'text' },
 ]
 
-/** Node configuration forms with research-census data, in English, Portuguese and Arabic (RTL). */
+/** Node configuration forms with neutral sample data, in English, Portuguese and Arabic (RTL). */
 export function FormsSection() {
   const [dsOpen, setDsOpen] = useState(false)
   const [schema, setSchema] = useState<OutputSchema | Record<string, unknown> | undefined>({ type: 'object', properties: { position: { type: 'string' }, confidence: { type: 'number' } }, required: ['position'] })
@@ -24,22 +24,22 @@ export function FormsSection() {
       <h2 id="forms-title">Node forms</h2>
       <h3>Decision step (B-002)</h3>
       <DecisionNodeForm
-        value={{ kind: 'decision', input: { ref: 'assertion.value' }, options: [{ value: 'confirmed_primary', label: 'Confirmed, primary source' }, { value: 'confirmed_secondary', label: 'Confirmed, secondary source' }, { value: 'not_confirmed', label: 'Not confirmed' }], provider: 'p1', model: 'm1', modelVersion: '2026-09-01', threshold: 0.7 }}
-        references={['assertion.value', 'retrieval.text']}
+        value={{ kind: 'decision', input: { ref: 'item.value' }, options: [{ value: 'option_a', label: 'Option A' }, { value: 'option_b', label: 'Option B' }, { value: 'option_c', label: 'Option C' }], provider: 'p1', model: 'm1', modelVersion: '[version]', threshold: 0.7 }}
+        references={['item.value', 'item.text']}
         providers={[{ id: 'p1', name: 'Provider A' }]}
         models={[{ id: 'm1', name: 'Model one', provider: 'p1' }]}
         onSave={noop}
         onCancel={noop}
       />
       <h3>Report output</h3>
-      <ReportOutputNodeForm value={{ report: { sections: [{ type: 'figures', data: { items: [{ label: 'Casos', value: 94 }, { label: 'Estágios 3 e 4', value: 37 }] } }] } }} onSave={noop} onCancel={noop} />
+      <ReportOutputNodeForm value={{ report: { sections: [{ type: 'figures', data: { items: [{ label: 'Valor A', value: 12 }, { label: 'Valor B', value: 30 }] } }] } }} onSave={noop} onCancel={noop} />
       <h3>Output schema</h3>
       <OutputSchemaBuilder value={schema} onChange={setSchema} />
       <h3>Data source</h3>
       <Button onPress={() => setDsOpen(true)}>Configure data source</Button>
       <DataSourceNodeForm
         open={dsOpen}
-        value={{ sourceId: 'census', table: 'records', columns: ['record_id', 'stage'], filters: [{ column: 'country', operator: 'in', value: ['AE', 'EE', 'GB'] }], outputVariable: 'records', limit: 500 }}
+        value={{ sourceId: 'source-a', table: 'tabela_a', columns: ['col_a', 'col_c'], filters: [{ column: 'col_b', operator: 'in', value: ['x', 'y'] }], outputVariable: 'rows', limit: 500 }}
         sources={sources}
         loadTables={() => Promise.resolve(tables)}
         loadColumns={() => Promise.resolve(columns)}
@@ -48,12 +48,12 @@ export function FormsSection() {
       />
       <h3>Português</h3>
       <FakhirProvider locale="pt-BR">
-        <StartNodeForm config={{ inputVariables: ['edicao', 'pais'], inputDefaults: { edicao: '2026-09-20' } }} onSave={noop} onCancel={noop} />
+        <StartNodeForm config={{ inputVariables: ['edicao', 'grupo'], inputDefaults: { edicao: '[edição]' } }} onSave={noop} onCancel={noop} />
       </FakhirProvider>
       <h3>العربية (RTL)</h3>
       <FakhirProvider locale="ar">
         <div dir="rtl" lang="ar">
-          <DecisionNodeForm value={{ kind: 'decision', input: { ref: 'assertion.value' }, options: [{ value: 'confirmed', label: 'مؤكد' }, { value: 'not_confirmed', label: 'غير مؤكد' }] }} onSave={noop} onCancel={noop} />
+          <DecisionNodeForm value={{ kind: 'decision', input: { ref: 'item.value' }, options: [{ value: 'option_a', label: 'الخيار أ' }, { value: 'option_b', label: 'الخيار ب' }] }} onSave={noop} onCancel={noop} />
         </div>
       </FakhirProvider>
     </section>
