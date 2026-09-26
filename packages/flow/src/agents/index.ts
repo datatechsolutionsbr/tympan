@@ -1,2 +1,4 @@
 // @fakhir/flow-canvas: agents group barrel.
-export {}
+export * from './AgentEditorDialog'
+export * from './AgentCreationWizard'
+export { StepList, ChoiceTiles, TagInput, type StepListProps, type ChoiceTile } from './parts'
