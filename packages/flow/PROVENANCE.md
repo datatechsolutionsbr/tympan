@@ -71,21 +71,23 @@ kept.
   already follow the locale.
 - **Connector contrast.** `--fk-input` for resting connectors (≥ 3:1).
 
-## Tokens to upstream into @fakhir/tokens
+## Canvas tokens (upstreamed into @fakhir/tokens)
 
-`--fk-flow-tone-{categorical-1…8,neutral}` with `-ink`, `-soft`, `-text`
-variants and the `[data-tone]` mapping; `--fk-flow-connector`, `-active`,
-`-true`, `-false`, `-rule`, `-width`, `-width-active`; node frame tokens
-`--fk-flow-node-border`, `-border-hover`, `-surface`, `-radius`,
-`--fk-flow-ring-selected`, `-running`, `-succeeded`, `-failed`; canvas
-`--fk-flow-plane`, `--fk-flow-grid-dot`, `--fk-flow-guide`,
-`--fk-flow-marquee`; provenance bands `--fk-flow-band` (96px),
-`--fk-flow-band-label` (130px), `--fk-flow-node-h` (72px), `--fk-flow-node-w`
-(236px), `--fk-flow-col-gap` (56px); research steps `--fk-flow-step-w`
-(250px), `--fk-flow-step-h` (86px) and the data shape colours
-`--fk-flow-shape-records` (accent), `-table` (categorical-1), `-number`
-(warning), `-chart` (categorical-8), `-decision` (danger). All are defined in
-`src/tokens.css` on existing `--fk-*` roles.
+The `--fk-flow-*` tokens first lived in this package's `src/tokens.css`. They
+now live in `@fakhir/tokens` (`src/flow.ts`, DTCG aliases of theme roles in
+`dist/dtcg/flow.tokens.json`, emitted into `tokens.css`): the kind tones
+`--fk-flow-tone-{categorical-1…8,neutral}` with `-ink`, `-soft`, `-text` and
+the `[data-tone]` mapping; connectors (`--fk-flow-connector`, `-active`,
+`-true`, `-false`, `-rule`, `-width`, `-width-active`); node frame
+(`--fk-flow-node-border`, `-border-hover`, `-surface`, `-radius`) and rings
+(`--fk-flow-ring-selected`, `-running`, `-succeeded`, `-failed`); canvas
+(`--fk-flow-plane`, `--fk-flow-grid-dot`, `--fk-flow-guide`,
+`--fk-flow-marquee`); provenance bands (`--fk-flow-band` 96px,
+`--fk-flow-band-label` 130px, `--fk-flow-node-h` 72px, `--fk-flow-node-w`
+236px, `--fk-flow-col-gap` 56px); research steps (`--fk-flow-step-w` 250px,
+`--fk-flow-step-h` 86px) and data shapes (`--fk-flow-shape-records` accent,
+`-table` categorical-1, `-number` warning, `-chart` categorical-8, `-decision`
+danger). Values are unchanged; this package only reads them.
 
 ## Gallery data
 
