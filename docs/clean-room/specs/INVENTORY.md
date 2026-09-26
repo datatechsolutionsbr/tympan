@@ -20,6 +20,24 @@ unless needed" plus the four pieces whose open decisions were resolved
 (complete port: nothing is dropped any more). Apps: `yes` = imported by an app,
 `local eq.` = the app has its own copy, `no` = unused by apps.
 
+## Implementation status (2026-09-26)
+
+| Wave | Specs | Status in `@fakhir/design-system` |
+|---|---|---|
+| 1 | 36 | implemented (branch `ds/clean-room`) |
+| 2 | 89 | implemented on `ds/wave-2` (88 files; `wave-2/floating-action-bar.md` is superseded and built from its wave-4 version) |
+| 3 | 63 | not in this package: the canvas specs go to `packages/flow-canvas` (separate worktree) |
+| 4 | 25 + 9 | 20 implemented on `ds/wave-2`; 5 canvas specs (run-view-modes, rule-action-catalog, data-source-node, node-state-styles, flow-palette-tokens) left to `packages/flow-canvas`; 9 research-shell specs added by the implementer (below) and implemented |
+
+Research-shell specs added on `ds/wave-2` (written by the implementer from the
+approved storyboards and the design direction; they have no fork
+counterpart): `wave-4/app-frame-rail.md`, `wave-4/page-header-editorial.md`,
+`wave-4/evidence-panel.md`, `wave-4/resizable-split.md`,
+`wave-4/stat-strip.md`, `wave-4/stage-strip.md`, `wave-4/attention-list.md`,
+`wave-4/activity-feed.md`, `wave-4/phase-bar.md`.
+
+Per-component provenance and test counts: `packages/design-system/PROVENANCE.md`.
+
 ## @fakhir/ui
 
 | Fork export(s) | New name | Category | Wave | Apps | Spec |
