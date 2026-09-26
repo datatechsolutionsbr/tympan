@@ -7,6 +7,9 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { TextField } from '../text-field/TextField'
 import { FieldGrid, FieldGridItem, FormContainer, FormSection, FramedForm, InlineRow } from './FormLayout'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 describe('FormLayout', () => {
   it('FramedForm is a form named by its title with header, body and footer', () => {
@@ -122,5 +125,13 @@ describe('FormLayout', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('FormLayout in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<FormSection title="التعريف"><FieldGrid><FieldGridItem><input aria-label="الاسم" /></FieldGridItem></FieldGrid></FormSection>)
+    expect(rtlDom.screen.getByRole('textbox', { name: 'الاسم' })).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

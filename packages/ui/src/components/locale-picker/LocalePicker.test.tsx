@@ -5,6 +5,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { LocalePicker, type LocaleEntry } from './LocalePicker'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 const locales: LocaleEntry[] = [
   { code: 'pt-BR', nativeName: 'Português', shortCode: 'PT' },
@@ -84,5 +87,13 @@ describe('LocalePicker', () => {
     await expectNoAxeViolations(container)
     await userEvent.click(screen.getAllByRole('button', { name: /Language/ })[0]!)
     await expectNoAxeViolations(document.body)
+  })
+})
+
+describe('LocalePicker in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<LocalePicker locales={[{ code: 'ar', nativeName: 'العربية' }, { code: 'he', nativeName: 'עברית' }]} value="ar" onChange={() => {}} />)
+    expect(rtlDom.screen.getByRole('button')).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

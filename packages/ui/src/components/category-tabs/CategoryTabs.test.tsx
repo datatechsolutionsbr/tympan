@@ -5,6 +5,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { CategoryLabel, CategoryTabs, type CategoryItem } from './CategoryTabs'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 const items: CategoryItem[] = [
   { key: 'pt', value: 'pt-v', code: 'PT', name: 'PT Portugal', marker: 1 },
@@ -103,5 +106,13 @@ describe('CategoryTabs', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('CategoryTabs in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<CategoryTabs label="الدولة" items={[{ key: 'eg', code: 'EG', name: 'مصر', marker: 1 }, { key: 'sa', code: 'SA', name: 'السعودية', marker: 3 }]} selected="eg" onSelect={() => {}} />)
+    expect(rtlDom.screen.getByRole('radio', { name: /مصر/ })).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

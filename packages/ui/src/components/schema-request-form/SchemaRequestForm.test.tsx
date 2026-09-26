@@ -5,6 +5,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { SchemaRequestForm, type InputRequest } from './SchemaRequestForm'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 const request: InputRequest = {
   stepId: 'verify-1',
@@ -121,5 +124,15 @@ describe('SchemaRequestForm', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('SchemaRequestForm in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(
+      <SchemaRequestForm runId="run-1" request={{ stepId: 's', prompt: 'هل يؤكد المصدر السنة؟', fields: [{ key: 'page', kind: 'number', label: 'الصفحة', min: 1 }] }} submit={vi.fn()} />,
+    )
+    expect(rtlDom.screen.getByText('هل يؤكد المصدر السنة؟')).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

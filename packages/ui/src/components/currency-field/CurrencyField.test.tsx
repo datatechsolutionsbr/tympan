@@ -6,6 +6,11 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { CurrencyField, type CurrencyFieldProps } from './CurrencyField'
+import * as rtlDom from '@testing-library/react'
+import rtlUser from '@testing-library/user-event'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { useState as useRtlState } from 'react'
+import { renderRtl } from '../../../test/rtl'
 
 function Controlled(props: Omit<CurrencyFieldProps, 'value' | 'label'> & { initial?: string; spy?: (v: string) => void }) {
   const { initial = '', spy, ...rest } = props
@@ -121,5 +126,22 @@ describe('CurrencyField', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('CurrencyField in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const onValueChange = vi.fn()
+    function Host() {
+      const [value, setValue] = useRtlState('')
+      return <CurrencyField label="الميزانية" value={value} onValueChange={(v) => { setValue(v); onValueChange(v) }} currency="EGP" />
+    }
+    const { container } = renderRtl(<Host />, { locale: 'ar-EG' })
+    const input = rtlDom.screen.getByRole('textbox', { name: /الميزانية/ })
+    // Digits typed in Arabic-Indic script are read as values and shown in the locale's digits.
+    await rtlUser.type(input, '١٢٣٤')
+    expect(onValueChange).toHaveBeenLastCalledWith('1234')
+    expect((input as HTMLInputElement).value).toMatch(/١/)
+    await axeRtl(container)
   })
 })

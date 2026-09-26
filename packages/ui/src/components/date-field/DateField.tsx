@@ -117,13 +117,13 @@ export function DateField(props: DateFieldProps) {
     >
       <div className="fk-fb-stepper">
         <AriaButton slot="previous" className="fk-fb-nav" aria-label={t.previousMonth}>
-          <ChevronLeft className="fk-icon" aria-hidden="true" focusable="false" />
+          <ChevronLeft className="fk-icon fk-mirror-rtl" aria-hidden="true" focusable="false" />
         </AriaButton>
         <AriaButton slot={null} className="fk-date-field__heading" onPress={() => setView('months')} aria-label={t.chooseMonth(heading)}>
           <span aria-live="polite">{heading}</span>
         </AriaButton>
         <AriaButton slot="next" className="fk-fb-nav" aria-label={t.nextMonth}>
-          <ChevronRight className="fk-icon" aria-hidden="true" focusable="false" />
+          <ChevronRight className="fk-icon fk-mirror-rtl" aria-hidden="true" focusable="false" />
         </AriaButton>
       </div>
       <CalendarGrid className="fk-date-field__grid" weekdayStyle="short">

@@ -1,5 +1,11 @@
-// Copy of the "forms-b" group (wave 2). One namespace per component, English
-// and Brazilian Portuguese. Merged into `Messages` by ../messages.ts.
+// Copy of the "forms-b" group (wave 2). One namespace per component, English,
+// Brazilian Portuguese and Spanish. Merged into `Messages` by ../messages.ts.
+
+import { speaker } from './plural'
+
+const en = speaker('en')
+const pt = speaker('pt-BR')
+const es = speaker('es')
 
 export interface FormsBMessages {
   tagField: {
@@ -129,8 +135,8 @@ export const formsBEn: FormsBMessages = {
     choose: 'Choose…',
     required: 'Fill in this field.',
     notNumber: 'Enter a number.',
-    atLeast: (n) => `Enter ${n} or more.`,
-    atMost: (n) => `Enter ${n} or less.`,
+    atLeast: (n) => `Enter ${en.n(n)} or more.`,
+    atMost: (n) => `Enter ${en.n(n)} or less.`,
     defaultReason: 'Rejected by the reviewer',
     approved: 'Approved',
     rejected: 'Rejected',
@@ -200,8 +206,8 @@ export const formsBPtBR: FormsBMessages = {
     choose: 'Escolha…',
     required: 'Preencha este campo.',
     notNumber: 'Digite um número.',
-    atLeast: (n) => `Digite ${n} ou mais.`,
-    atMost: (n) => `Digite ${n} ou menos.`,
+    atLeast: (n) => `Digite ${pt.n(n)} ou mais.`,
+    atMost: (n) => `Digite ${pt.n(n)} ou menos.`,
     defaultReason: 'Rejeitado por quem revisou',
     approved: 'Aprovado',
     rejected: 'Rejeitado',
@@ -214,5 +220,74 @@ export const formsBPtBR: FormsBMessages = {
   },
 }
 
-/** Spanish (placeholder until translated: falls back to English). */
-export const formsBEs: FormsBMessages = formsBEn
+/** Spanish (neutral Latin American). */
+export const formsBEs: FormsBMessages = {
+  tagField: {
+    remove: (d) => `Quitar ${d}`,
+    chosen: (f) => `${f}: valores elegidos`,
+    suggestions: 'Sugerencias',
+  },
+  currencyField: {
+    currency: (name) => `Moneda: ${name}`,
+  },
+  dateField: {
+    placeholder: 'Seleccione una fecha',
+    previousMonth: 'Mes anterior',
+    nextMonth: 'Mes siguiente',
+    previousYear: 'Año anterior',
+    nextYear: 'Año siguiente',
+    today: 'Hoy',
+    todayMarker: 'hoy',
+    chooseMonth: (c) => `${c}, elegir mes y año`,
+    backToDays: 'Volver a los días',
+    months: 'Meses',
+    years: 'Años',
+  },
+  timeField: {
+    placeholder: 'Seleccione una hora',
+    hours: 'Horas',
+    minutes: 'Minutos',
+    confirm: 'Confirmar',
+    future: 'Esta hora todavía está en el futuro. Elija una hora hasta ahora.',
+  },
+  monthField: {
+    placeholder: 'Seleccione un mes',
+    previousYear: 'Año anterior',
+    nextYear: 'Año siguiente',
+    months: 'Meses',
+    years: 'Años con datos',
+  },
+  localePicker: {
+    title: 'Idioma',
+    trigger: (t, l) => `${t}: ${l}`,
+    current: (l, c) => `Idioma actual: ${l} (${c})`,
+    list: 'Idiomas disponibles',
+  },
+  imagePicker: {
+    change: 'Cambiar imagen',
+    wrongType: 'Este tipo de archivo no se acepta. Elija una imagen JPEG, PNG o WebP.',
+    tooLarge: (limit) => `El archivo supera ${limit}. Elija una imagen más pequeña.`,
+    failed: 'No se pudo subir la imagen. Inténtelo de nuevo.',
+    updated: 'Imagen actualizada',
+    uploading: 'Subiendo la imagen',
+  },
+  requestForm: {
+    submit: 'Enviar',
+    reject: 'Rechazar',
+    sending: 'Enviando',
+    choose: 'Elija…',
+    required: 'Complete este campo.',
+    notNumber: 'Escriba un número.',
+    atLeast: (n) => `Escriba ${es.n(n)} o más.`,
+    atMost: (n) => `Escriba ${es.n(n)} o menos.`,
+    defaultReason: 'Rechazado por quien revisó',
+    approved: 'Aprobado',
+    rejected: 'Rechazado',
+    approvedSentence: 'Respuesta enviada. La ejecución se reanudó.',
+    rejectedSentence: 'Solicitud rechazada. La ejecución se cerró.',
+    failed: 'No se pudo enviar la respuesta.',
+  },
+  formActions: {
+    saving: 'Guardando',
+  },
+}

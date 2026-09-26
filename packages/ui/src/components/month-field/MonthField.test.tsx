@@ -5,6 +5,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { MonthField } from './MonthField'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 const months = ['2025-11', '2025-12', '2026-01', '2026-02', '2026-03']
 
@@ -86,5 +89,13 @@ describe('MonthField', () => {
     await expectNoAxeViolations(container)
     await userEvent.click(screen.getByRole('button', { name: /Period light/ }))
     await expectNoAxeViolations(document.body)
+  })
+})
+
+describe('MonthField in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<MonthField label="الفترة" value="2026-03" onChange={() => {}} availableMonths={['2026-03', '2026-04']} />)
+    expect(rtlDom.screen.getByRole('button', { name: /الفترة/ })).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

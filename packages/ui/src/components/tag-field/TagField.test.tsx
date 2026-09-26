@@ -6,6 +6,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { TagField, type TagFieldProps } from './TagField'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 function Stateful(props: Omit<TagFieldProps, 'value' | 'onChange'> & { initial?: string[]; spy?: (v: string[]) => void }) {
   const { initial = [], spy, ...rest } = props
@@ -141,5 +144,13 @@ describe('TagField', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('TagField in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<TagField label="الرؤوس" value={['معرف']} onChange={() => {}} />)
+    expect(rtlDom.screen.getByText('معرف')).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

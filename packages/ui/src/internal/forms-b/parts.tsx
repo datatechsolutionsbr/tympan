@@ -77,13 +77,13 @@ export function StepperHeader(props: {
   return (
     <div className="fk-fb-stepper">
       <AriaButton className="fk-fb-nav" aria-label={props.previousLabel} isDisabled={props.previousDisabled} onPress={props.onPrevious}>
-        <ChevronLeft className="fk-icon" aria-hidden="true" focusable="false" />
+        <ChevronLeft className="fk-icon fk-mirror-rtl" aria-hidden="true" focusable="false" />
       </AriaButton>
       <span className="fk-fb-stepper__heading" id={props.headingId} aria-live="polite">
         {props.heading}
       </span>
       <AriaButton className="fk-fb-nav" aria-label={props.nextLabel} isDisabled={props.nextDisabled} onPress={props.onNext}>
-        <ChevronRight className="fk-icon" aria-hidden="true" focusable="false" />
+        <ChevronRight className="fk-icon fk-mirror-rtl" aria-hidden="true" focusable="false" />
       </AriaButton>
     </div>
   )

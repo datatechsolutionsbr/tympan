@@ -1,8 +1,9 @@
 import { Clock } from 'lucide-react'
 import { useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
-import { Button as AriaButton, DialogTrigger, Heading } from 'react-aria-components'
+import { Button as AriaButton, DialogTrigger, Heading, useLocale } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 import { FieldLine, FloatSurface, joinIds } from '../../internal/forms-b/parts'
+import { asciiDigits } from '../../internal/forms-b/digits'
 import { useMessages } from '../../internal/provider'
 import { Button } from '../button/Button'
 
@@ -30,7 +31,12 @@ export interface TimeFieldProps {
 }
 
 const two = (n: number) => String(n).padStart(2, '0')
-export const formatTimeOfDay = (t: TimeOfDay) => `${two(t.hours)}:${two(t.minutes)}`
+/** "HH:MM" (24 h). Without a locale: ASCII machine form; with one: the locale's digits and separator. */
+export function formatTimeOfDay(t: TimeOfDay, locale?: string): string {
+  if (!locale) return `${two(t.hours)}:${two(t.minutes)}`
+  // Display form: 24 h as the spec asks, with the locale's separator and digits.
+  return new Intl.DateTimeFormat(locale, { hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZone: 'UTC' }).format(Date.UTC(2000, 0, 1, t.hours, t.minutes))
+}
 
 /** One spinbutton segment: digits only, clamped, arrows step and wrap. */
 const SEGMENTS = {
@@ -53,7 +59,7 @@ function Segment(props: {
   const [text, setText] = useState(two(props.value))
   useEffect(() => setText(two(props.value)), [props.value])
   const typed = (raw: string) => {
-    const digits = raw.replace(/\D/g, '').slice(-2)
+    const digits = asciiDigits(raw).replace(/\D/g, '').slice(-2)
     const n = digits === '' ? 0 : Math.min(max, Number(digits))
     setText(digits === '' ? '' : Number(digits) > max ? two(n) : digits)
     props.onValue(n)
@@ -135,6 +141,7 @@ function Editor(props: { initial: TimeOfDay; title: string; blocked: (t: TimeOfD
 /** A time of day (24 h) edited in a small popover and confirmed (spec: wave-2/time-field.md). */
 export function TimeField(props: TimeFieldProps) {
   const t = useMessages().timeField
+  const { locale } = useLocale()
   const [open, setOpen] = useState(false)
   const base = useId()
   const labelId = `${base}-label`
@@ -172,7 +179,7 @@ export function TimeField(props: TimeFieldProps) {
             <Clock />
           </span>
           <span id={textId} className="fk-fb-trigger__text" data-placeholder={props.value ? undefined : true}>
-            {props.value ? formatTimeOfDay(props.value) : (props.placeholder ?? t.placeholder)}
+            {props.value ? formatTimeOfDay(props.value, locale) : (props.placeholder ?? t.placeholder)}
           </span>
         </AriaButton>
         <FloatSurface labelledBy={labelId}>

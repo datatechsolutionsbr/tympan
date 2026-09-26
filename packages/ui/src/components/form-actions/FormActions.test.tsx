@@ -5,6 +5,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { FormActions } from './FormActions'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 describe('FormActions', () => {
   it('calls onCancel from the secondary button', async () => {
@@ -81,5 +84,13 @@ describe('FormActions', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('FormActions in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<FormActions cancelLabel="إلغاء" saveLabel="حفظ" onCancel={() => {}} onSave={() => {}} />)
+    expect(rtlDom.screen.getByRole('button', { name: 'حفظ' })).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

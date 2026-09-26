@@ -6,6 +6,9 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { setMedia } from '../../../test/media'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { WheelPicker, WheelPickerGroup } from './WheelPicker'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 describe('WheelPicker', () => {
   const scrollTo = vi.fn()
@@ -120,5 +123,13 @@ describe('WheelPicker', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('WheelPicker in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<WheelPicker label="الساعة" options={['٠٨', '٠٩', '١٠']} value="٠٩" onChange={() => {}} />)
+    expect(rtlDom.screen.getByRole('listbox', { name: 'الساعة' })).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

@@ -5,6 +5,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { ImagePicker } from './ImagePicker'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 const MIB = 1024 * 1024
 const file = (name: string, type: string, bytes = 1024) => {
@@ -35,7 +38,7 @@ describe('ImagePicker', () => {
     const upload = vi.fn()
     const { container } = render(<ImagePicker upload={upload} maxBytes={5 * MIB} />)
     await userEvent.upload(input(container), file('big.png', 'image/png', 6 * MIB))
-    expect(screen.getByRole('status')).toHaveTextContent(/larger than 5 MiB/)
+    expect(screen.getByRole('status')).toHaveTextContent(/larger than 5 MB/)
     expect(upload).not.toHaveBeenCalled()
   })
 
@@ -118,5 +121,13 @@ describe('ImagePicker', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('ImagePicker in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<ImagePicker fallbackText="نم" label="تغيير الصورة" upload={vi.fn()} />)
+    expect(rtlDom.screen.getByRole('button', { name: /تغيير الصورة/ })).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

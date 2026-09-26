@@ -5,6 +5,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { TimeField } from './TimeField'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 const open = async (name: RegExp) => userEvent.click(screen.getByRole('button', { name }))
 
@@ -122,5 +125,14 @@ describe('TimeField', () => {
     await expectNoAxeViolations(container)
     await open(/Time light/)
     await expectNoAxeViolations(document.body)
+  })
+})
+
+describe('TimeField in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<TimeField label="وقت الاسترجاع" value={{ hours: 9, minutes: 5 }} onChange={() => {}} />, { locale: 'ar-EG' })
+    // The trigger shows the time with the locale's digits.
+    expect(rtlDom.screen.getByRole('button', { name: /وقت الاسترجاع/ })).toHaveTextContent('٠٩')
+    await axeRtl(container)
   })
 })

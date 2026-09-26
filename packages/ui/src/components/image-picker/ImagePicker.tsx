@@ -1,6 +1,6 @@
 import { Camera, Check, LoaderCircle } from 'lucide-react'
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
-import { Button as AriaButton, DropZone, type DropZoneProps } from 'react-aria-components'
+import { Button as AriaButton, DropZone, useLocale, type DropZoneProps } from 'react-aria-components'
 
 type DropEvent = Parameters<NonNullable<DropZoneProps['onDrop']>>[0]
 import { cx } from '../../internal/cx'
@@ -36,7 +36,13 @@ const MIB = 1024 * 1024
 
 type Phase = { kind: 'idle' } | { kind: 'busy' } | { kind: 'done' } | { kind: 'error'; text: string }
 
-const sizeText = (bytes: number) => (bytes % MIB === 0 ? `${bytes / MIB} MiB` : `${Math.round(bytes / 1024)} KiB`)
+/** Size limit in the locale's unit wording and digits (binary multiples, shown with the SI unit names Intl knows). */
+function sizeText(bytes: number, locale: string): string {
+  const whole = bytes % MIB === 0
+  return new Intl.NumberFormat(locale, { style: 'unit', unit: whole ? 'megabyte' : 'kilobyte', unitDisplay: 'short', maximumFractionDigits: 0 }).format(
+    whole ? bytes / MIB : Math.round(bytes / 1024),
+  )
+}
 
 function previewOf(file: File): string | null {
   try {
@@ -52,6 +58,7 @@ function previewOf(file: File): string | null {
  */
 export function ImagePicker(props: ImagePickerProps) {
   const m = useMessages().imagePicker
+  const { locale } = useLocale()
   const accept = props.accept ?? DEFAULT_IMAGE_TYPES
   const maxBytes = props.maxBytes ?? 5 * MIB
   const fileRef = useRef<HTMLInputElement>(null)
@@ -74,7 +81,7 @@ export function ImagePicker(props: ImagePickerProps) {
 
   const take = async (file: File) => {
     if (!accept.includes(file.type)) return reject(props.messages?.wrongType ?? m.wrongType)
-    if (file.size > maxBytes) return reject(props.messages?.tooLarge ?? m.tooLarge(sizeText(maxBytes)))
+    if (file.size > maxBytes) return reject(props.messages?.tooLarge ?? m.tooLarge(sizeText(maxBytes, locale)))
     const before = preview
     setPreview(previewOf(file))
     setPhase({ kind: 'busy' })

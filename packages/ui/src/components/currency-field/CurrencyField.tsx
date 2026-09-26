@@ -2,6 +2,7 @@ import { useId, useLayoutEffect, useMemo, useRef, useState, type ReactNode } fro
 import { Input, TextField as AriaTextField, useLocale } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 import { FieldLine, joinIds } from '../../internal/forms-b/parts'
+import { asciiDigits, isDigit, localeDigits, withLocaleDigits } from '../../internal/forms-b/digits'
 import { useMessages } from '../../internal/provider'
 
 export type CurrencyFieldSize = 'small' | 'medium' | 'large' | 'display'
@@ -66,7 +67,7 @@ interface Reading {
 /** Keeps digits and the first locale decimal mark; drops extra fraction digits and leading zeros. */
 function readTyped(raw: string, decimal: string, decimals: number): Reading {
   const out: Reading = { whole: '', mark: false, fraction: '' }
-  for (const ch of raw) {
+  for (const ch of asciiDigits(raw)) {
     if (ch >= '0' && ch <= '9') {
       if (!out.mark) out.whole += ch
       else if (out.fraction.length < decimals) out.fraction += ch
@@ -89,15 +90,15 @@ function readCanonical(value: string, decimals: number): Reading {
 }
 
 /** Groups the integer part with the locale separator. */
-function display(r: Reading, sep: Separators): string {
+function display(r: Reading, sep: Separators, digits: string[]): string {
   const grouped = r.whole.replace(/\B(?=(\d{3})+(?!\d))/g, sep.group)
-  return r.mark ? `${grouped}${sep.decimal}${r.fraction}` : grouped
+  return withLocaleDigits(r.mark ? `${grouped}${sep.decimal}${r.fraction}` : grouped, digits)
 }
 
 /** Count of meaningful characters (digits and the decimal mark) before `pos`. */
 function meaningfulBefore(text: string, pos: number, decimal: string): number {
   let n = 0
-  for (const ch of text.slice(0, pos)) if ((ch >= '0' && ch <= '9') || ch === decimal) n++
+  for (const ch of text.slice(0, pos)) if (isDigit(ch) || ch === decimal) n++
   return n
 }
 
@@ -107,7 +108,7 @@ function positionAfter(text: string, count: number, decimal: string): number {
   let seen = 0
   for (let i = 0; i < text.length; i++) {
     const ch = text[i]!
-    if ((ch >= '0' && ch <= '9') || ch === decimal) seen++
+    if (isDigit(ch) || ch === decimal) seen++
     if (seen === count) return i + 1
   }
   return text.length
@@ -123,6 +124,7 @@ export function CurrencyField(props: CurrencyFieldProps) {
   const locale = props.locale ?? contextLocale
   const decimals = Math.max(0, props.decimals ?? 2)
   const sep = useMemo(() => separatorsOf(locale), [locale])
+  const digits = useMemo(() => localeDigits(locale), [locale])
   const inputRef = useRef<HTMLInputElement>(null)
   const pendingCaret = useRef<number | null>(null)
   const lastReported = useRef<string | null>(null)
@@ -131,7 +133,7 @@ export function CurrencyField(props: CurrencyFieldProps) {
   // Local text keeps a trailing decimal mark the canonical value cannot carry.
   const [draft, setDraft] = useState<Reading>(() => readCanonical(props.value, decimals))
   const shown = props.value === lastReported.current ? draft : readCanonical(props.value, decimals)
-  const text = display(shown, sep)
+  const text = display(shown, sep, digits)
 
   useLayoutEffect(() => {
     const el = inputRef.current

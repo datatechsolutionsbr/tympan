@@ -5,6 +5,10 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { DateField } from './DateField'
+import * as rtlDom from '@testing-library/react'
+import rtlUser from '@testing-library/user-event'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 const sameDay = (a: Date, y: number, m: number, d: number) => a.getFullYear() === y && a.getMonth() === m - 1 && a.getDate() === d
 
@@ -124,5 +128,16 @@ describe('DateField', () => {
     await expectNoAxeViolations(container)
     await userEvent.click(screen.getByRole('button', { name: /Launch light/ }))
     await expectNoAxeViolations(document.body)
+  })
+})
+
+describe('DateField in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<DateField label="تاريخ الاسترجاع" value={new Date(2026, 8, 20)} onChange={() => {}} />)
+    await rtlUser.click(rtlDom.screen.getByRole('button', { name: /تاريخ الاسترجاع/ }))
+    const dialog = await rtlDom.screen.findByRole('dialog')
+    // Previous/next month chevrons mirror in right-to-left.
+    for (const svg of dialog.querySelectorAll('svg.fk-icon')) if (svg.classList.contains('lucide-chevron-left') || svg.classList.contains('lucide-chevron-right')) expect(svg).toHaveClass('fk-mirror-rtl')
+    await axeRtl(container)
   })
 })

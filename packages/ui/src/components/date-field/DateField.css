@@ -24,7 +24,6 @@
     font: inherit;
     font-size: var(--fk-font-size-label);
     font-weight: var(--fk-font-weight-semibold);
-    text-transform: capitalize;
     cursor: pointer;
     outline: none;
   }
@@ -45,7 +44,6 @@
     color: var(--fk-ink-3);
     font-size: var(--fk-font-size-meta);
     font-weight: var(--fk-font-weight-regular);
-    text-transform: capitalize;
   }
   .fk-date-field__grid td {
     padding: 1px;
