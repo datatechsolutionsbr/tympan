@@ -266,6 +266,17 @@
       translate: -24px 0;
     }
   }
+  /* The drawer sits at the inline start: it slides in from the right in right-to-left. */
+  [dir='rtl'] .fk-app-nav__drawer[data-entering],
+  .fk-app-nav__drawer[data-entering]:dir(rtl) {
+    animation-name: fk-app-nav-slide-rtl;
+  }
+  @keyframes fk-app-nav-slide-rtl {
+    from {
+      opacity: 0;
+      translate: 24px 0;
+    }
+  }
   .fk-app-nav__drawer-dialog {
     display: flex;
     flex: 1;

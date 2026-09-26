@@ -5,6 +5,10 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf } from '../../../test/css'
 import { setViewportWidth } from '../../../test/media'
 import { DetailsPopover } from './DetailsPopover'
+import * as rtlDom from '@testing-library/react'
+import rtlUser from '@testing-library/user-event'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 const change = {
   triggerLabel: 'Details of the change',
@@ -73,5 +77,16 @@ describe('DetailsPopover', () => {
     await userEvent.click(screen.getByRole('button'))
     await screen.findByRole('dialog')
     await expectNoAxeViolations(document.body)
+  })
+})
+
+describe('DetailsPopover in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    renderRtl(<DetailsPopover triggerLabel="تفاصيل التغيير" title="تغيرت الحالة" tone="success" comparison={{ label: 'الحالة', fromLabel: 'من', fromValue: 'معلق', toLabel: 'إلى', toValue: 'مثبت' }} />)
+    await rtlUser.click(rtlDom.screen.getByRole('button', { name: 'تفاصيل التغيير' }))
+    const dialog = await rtlDom.screen.findByRole('dialog')
+    // The from → to arrow points along the reading direction.
+    expect(dialog.querySelector('.fk-details-popover__arrow')).toHaveClass('fk-mirror-rtl')
+    await axeRtl(document.body)
   })
 })

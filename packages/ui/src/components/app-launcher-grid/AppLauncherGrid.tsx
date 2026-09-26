@@ -1,6 +1,6 @@
 import { Ellipsis } from 'lucide-react'
 import { useState, type MouseEvent, type ReactNode } from 'react'
-import { Button as AriaButton, Link as AriaLink } from 'react-aria-components'
+import { Button as AriaButton, Link as AriaLink, useLocale } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 import { useMenuRequest } from '../../internal/overlays-nav/hold'
 import { cappedCount } from '../../internal/overlays-nav/state'
@@ -100,6 +100,7 @@ function TileFace({ tile, person, ready }: Pick<TileViewProps, 'tile' | 'person'
 
 function Tile(props: TileViewProps) {
   const m = useMessages().appLauncher
+  const { locale } = useLocale()
   const { tile } = props
   const [menuOpen, setMenuOpen] = useState(false)
   const shortcuts = tile.shortcuts ?? []
@@ -117,7 +118,7 @@ function Tile(props: TileViewProps) {
       </span>
       {tile.count || tile.alertCount ? (
         <span className="fk-launcher__badge" data-alert={tile.alertCount ? true : undefined} aria-hidden="true">
-          {cappedCount((tile.alertCount || tile.count) ?? 0)}
+          {cappedCount((tile.alertCount || tile.count) ?? 0, undefined, locale)}
         </span>
       ) : null}
     </>

@@ -4,6 +4,10 @@ import { useState } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { expectNoAxeViolations } from '../../../test/axe'
 import { CommandPalette, type CommandGroup, type CommandPaletteProps } from './CommandPalette'
+import * as rtlDom from '@testing-library/react'
+import rtlUser from '@testing-library/user-event'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 function groups(spy: (id: string) => void = () => {}): CommandGroup[] {
   return [
@@ -162,5 +166,25 @@ describe('CommandPalette', () => {
   it('has no axe violations', async () => {
     render(<Harness scopes={[{ id: 'screens', label: 'Screens' }]} />)
     await expectNoAxeViolations(document.body)
+  })
+})
+
+describe('CommandPalette in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    renderRtl(
+      <CommandPalette
+        open
+        onClose={() => {}}
+        groups={[{ id: 'r', heading: 'السجلات', items: [{ id: 't', label: 'مُساعِد تم', onSelect: () => {}, actions: [{ id: 'p', label: 'افتح المصدر', onSelect: () => {} }] }] }]}
+      />,
+    )
+    const input = await rtlDom.screen.findByRole('combobox')
+    // Arabic diacritics are optional: "مساعد" finds "مُساعِد".
+    await rtlUser.type(input, 'مساعد')
+    expect(await rtlDom.screen.findByRole('option', { name: /تم/ })).toBeInTheDocument()
+    // In right-to-left, Left Arrow opens the actions sub-list (the inline end).
+    await rtlUser.keyboard('{ArrowLeft}')
+    expect(await rtlDom.screen.findByRole('option', { name: /افتح المصدر/ })).toBeInTheDocument()
+    await axeRtl(document.body)
   })
 })

@@ -7,6 +7,9 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { setViewportWidth } from '../../../test/media'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { FloatingActionButton } from './FloatingActionButton'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 describe('FloatingActionButton', () => {
   it('is inline at 1280 with no floating copy', () => {
@@ -72,5 +75,13 @@ describe('FloatingActionButton', () => {
     await expectNoAxeViolations(container)
     setViewportWidth(375)
     await expectNoAxeViolations(document.body)
+  })
+})
+
+describe('FloatingActionButton in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<FloatingActionButton label="جلسة جديدة" icon={<span />} onPress={() => {}} presentation="inline" />)
+    expect(rtlDom.screen.getByRole('button', { name: 'جلسة جديدة' })).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

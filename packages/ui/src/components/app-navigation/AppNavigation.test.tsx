@@ -8,6 +8,10 @@ import { renderWithProvider } from '../../../test/render'
 import { messagesPtBR } from '../../internal/messages'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { AppNavigation, buildFlyoutDestinations, buildFloatingActions, buildLauncherTiles, filterByPermission, type NavEntry } from './AppNavigation'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+import { cssOf as cssOfRtl } from '../../../test/css'
 
 const entries: NavEntry[] = [
   { id: 'home', label: 'Overview', href: '/', icon: <House /> },
@@ -111,5 +115,15 @@ describe('AppNavigation', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('AppNavigation in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<AppNavigation entries={[{ id: 'o', label: 'نظرة عامة', href: '/o', icon: <span /> }, { id: 'v', label: 'التحقق', href: '/v', count: 12, icon: <span /> }]} pathname="/o" />, { navigate: () => {} })
+    expect(rtlDom.screen.getByRole('link', { name: 'نظرة عامة' })).toHaveAttribute('aria-current', 'page')
+    // The drawer sits at the inline start and slides in from the right in right-to-left.
+    expect(cssOfRtl('components/app-navigation/AppNavigation.css')).toMatch(/animation-name:\s*fk-app-nav-slide-rtl/)
+    await axeRtl(container)
   })
 })

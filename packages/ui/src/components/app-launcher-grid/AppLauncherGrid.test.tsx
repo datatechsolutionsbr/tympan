@@ -6,6 +6,8 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { AppLauncherGrid, type LauncherTile } from './AppLauncherGrid'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 const tile = (id: string, extra: Partial<LauncherTile> = {}): LauncherTile => ({ id, label: id.toUpperCase(), href: `/${id}`, icon: <BookOpen />, ...extra })
 
@@ -89,5 +91,13 @@ describe('AppLauncherGrid', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('AppLauncherGrid in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<AppLauncherGrid pages={[{ id: 'v', label: 'التحقق', href: '/v', count: 12, icon: <span /> }]} />, { locale: 'ar-EG', navigate: () => {} })
+    expect(container.textContent).toMatch(/١٢/)
+    await axeRtl(container)
   })
 })

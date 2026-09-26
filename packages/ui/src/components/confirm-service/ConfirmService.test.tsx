@@ -4,6 +4,10 @@ import { useState } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { expectNoAxeViolations } from '../../../test/axe'
 import { ConfirmProvider, useConfirm, type ConfirmOptions } from './ConfirmService'
+import * as rtlDom from '@testing-library/react'
+import rtlUser from '@testing-library/user-event'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 function Asker({ options, onAnswer }: { options: ConfirmOptions; onAnswer: (v: boolean) => void }) {
   const confirm = useConfirm()
@@ -100,5 +104,18 @@ describe('ConfirmService', () => {
     )
     await userEvent.click(screen.getByRole('button', { name: 'Ask' }))
     await expectNoAxeViolations(document.body)
+  })
+})
+
+describe('ConfirmService in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    function Ask() {
+      const confirm = useConfirm()
+      return <button type="button" onClick={() => void confirm({ title: 'إزالة المصدر؟', confirmLabel: 'إزالة' })}>إزالة</button>
+    }
+    renderRtl(<ConfirmProvider><Ask /></ConfirmProvider>)
+    await rtlUser.click(rtlDom.screen.getByRole('button', { name: 'إزالة' }))
+    expect(await rtlDom.screen.findByRole('alertdialog')).toBeInTheDocument()
+    await axeRtl(document.body)
   })
 })

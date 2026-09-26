@@ -4,6 +4,9 @@ import { describe, expect, it, vi } from 'vitest'
 import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { SectionedModal } from './SectionedModal'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 const sections = [
   { id: 'a', label: 'General', content: <p>General content</p> },
@@ -103,5 +106,13 @@ describe('SectionedModal', () => {
       <SectionedModal open onClose={() => {}} title="Settings" eyebrow="Project" sections={sections} onSubmit={() => {}} formFooter={{}} error="Try again." />,
     )
     await expectNoAxeViolations(document.body)
+  })
+})
+
+describe('SectionedModal in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    renderRtl(<SectionedModal open onClose={() => {}} title="تحرير المصدر" size="md"><p>نص</p></SectionedModal>)
+    expect(await rtlDom.screen.findByRole('dialog', { name: /تحرير المصدر/ })).toBeInTheDocument()
+    await axeRtl(document.body)
   })
 })

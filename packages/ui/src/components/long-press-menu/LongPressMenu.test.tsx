@@ -4,6 +4,9 @@ import { describe, expect, it, vi } from 'vitest'
 import { expectNoAxeViolations } from '../../../test/axe'
 import { renderWithProvider } from '../../../test/render'
 import { LongPressMenu } from './LongPressMenu'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 const items = [
   { label: 'Open in new tab', href: '/sources/new-tab' },
@@ -91,5 +94,13 @@ describe('LongPressMenu', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Sources' }))
     await screen.findByRole('menu')
     await expectNoAxeViolations(document.body)
+  })
+})
+
+describe('LongPressMenu in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<LongPressMenu label="المصادر" items={[{ label: 'تثبيت' }]} onTap={() => {}}><span>المصادر</span></LongPressMenu>)
+    expect(rtlDom.screen.getAllByText('المصادر').length).toBeGreaterThan(0)
+    await axeRtl(container)
   })
 })

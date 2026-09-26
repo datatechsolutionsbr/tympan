@@ -1,6 +1,6 @@
 import { Bell, LogOut, UserRound } from 'lucide-react'
 import { useEffect, useId, useMemo, useRef, useState, type MouseEvent, type ReactNode } from 'react'
-import { Dialog, Heading, Link as AriaLink, Modal, ModalOverlay } from 'react-aria-components'
+import { Dialog, Heading, Link as AriaLink, Modal, ModalOverlay, useLocale } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 import { bestMatch, browserPath, cappedCount } from '../../internal/overlays-nav/state'
 import { useMessages } from '../../internal/provider'
@@ -64,6 +64,7 @@ const plainClick = (e: MouseEvent) => !(e.metaKey || e.ctrlKey || e.shiftKey || 
 export function NavigationFlyout(props: NavigationFlyoutProps) {
   const copy = useMessages().navigationFlyout
   const t = { ...copy, ...props.labels }
+  const { locale } = useLocale()
   const titleId = useId()
   const [query, setQuery] = useState('')
   const searchable = props.searchable ?? true
@@ -170,7 +171,7 @@ export function NavigationFlyout(props: NavigationFlyoutProps) {
                   {t.notifications}
                   {qa.unseenCount ? (
                     <span className="fk-flyout__count" aria-hidden="true">
-                      {cappedCount(qa.unseenCount)}
+                      {cappedCount(qa.unseenCount, undefined, locale)}
                     </span>
                   ) : null}
                 </Button>

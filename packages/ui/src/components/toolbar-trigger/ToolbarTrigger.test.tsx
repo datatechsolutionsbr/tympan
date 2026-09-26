@@ -6,6 +6,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { ToolbarTrigger } from './ToolbarTrigger'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 describe('ToolbarTrigger', () => {
   it('names an icon-only trigger by its label and shows a tooltip on focus', async () => {
@@ -60,5 +63,13 @@ describe('ToolbarTrigger', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('ToolbarTrigger in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<ToolbarTrigger icon={<span />} label="اللغة" caption="ع" />)
+    expect(rtlDom.screen.getByRole('button', { name: /اللغة/ })).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

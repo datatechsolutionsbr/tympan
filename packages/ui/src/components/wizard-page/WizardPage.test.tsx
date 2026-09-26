@@ -6,6 +6,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { WizardPage, type WizardPageProps } from './WizardPage'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 const steps = [
   { id: 'scope', title: 'Scope', description: 'What the project studies.' },
@@ -98,5 +101,17 @@ describe('WizardPage', () => {
       </>,
     )
     await expectNoAxeViolations(container, ['page-has-heading-one', 'heading-order'])
+  })
+})
+
+describe('WizardPage in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(
+      <WizardPage title="مشروع جديد" eyebrow="إنشاء" icon={<span />} steps={[{ id: 'a', title: 'النطاق' }, { id: 'b', title: 'الفريق' }]} currentIndex={0} onStepChange={() => {}} onSubmit={() => {}} onCancel={() => {}} submitLabel="إنشاء">
+        <p>نص</p>
+      </WizardPage>,
+    )
+    expect(rtlDom.screen.getByRole('heading', { level: 1 })).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

@@ -4,6 +4,9 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { CompactConfirm } from './CompactConfirm'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 const base = { title: 'Sign out?', onConfirm: () => {}, onCancel: () => {} }
 
@@ -74,5 +77,13 @@ describe('CompactConfirm', () => {
   it('has no axe violations', async () => {
     render(<CompactConfirm {...base} open tone="neutral" sourceLabel="Fakhir" message="Consequence." />)
     await expectNoAxeViolations(document.body)
+  })
+})
+
+describe('CompactConfirm in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    renderRtl(<CompactConfirm open title="تسجيل الخروج؟" message="ستحتاج إلى تسجيل الدخول مرة أخرى." onConfirm={() => {}} onCancel={() => {}} tone="neutral" />)
+    expect(await rtlDom.screen.findByRole('alertdialog', { name: /تسجيل الخروج/ })).toBeInTheDocument()
+    await axeRtl(document.body)
   })
 })

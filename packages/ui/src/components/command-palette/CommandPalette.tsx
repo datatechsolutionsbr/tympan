@@ -1,6 +1,6 @@
 import { ChevronRight, Search, X } from 'lucide-react'
 import { useEffect, useId, useMemo, useReducer, useRef, type KeyboardEvent } from 'react'
-import { Button as AriaButton, Dialog, Modal, ModalOverlay } from 'react-aria-components'
+import { Button as AriaButton, Dialog, Modal, ModalOverlay, useLocale } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 import { markPieces } from '../../internal/overlays-nav/fuzzy'
 import { loadRecent, noteRecent, type RecentEntry } from '../../internal/overlays-nav/recent'
@@ -84,6 +84,7 @@ export function CommandPalette(props: CommandPaletteProps) {
   const optionPrefix = useId()
   const inputRef = useRef<HTMLInputElement>(null)
   const scopes = props.scopes ?? []
+  const { locale, direction } = useLocale()
   const [scope, setScope] = useHeldOrOwn<string | null>(props.activeScope, null, props.onScopeChange)
   const [state, send] = useReducer(reduce, { query: '', cursor: 0, sub: null, recent: [] })
   const storageKey = props.recent?.storageKey
@@ -97,6 +98,7 @@ export function CommandPalette(props: CommandPaletteProps) {
       props.loading
         ? []
         : buildView({
+            locale,
             groups: props.groups,
             scope,
             query: state.query,
@@ -108,7 +110,7 @@ export function CommandPalette(props: CommandPaletteProps) {
           }),
     // copy functions are stable per catalogue
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [props.loading, props.groups, props.fallbackActions, scope, state.query, state.sub, state.recent, props.recent?.visible],
+    [props.loading, props.groups, props.fallbackActions, scope, state.query, state.sub, state.recent, props.recent?.visible, locale],
   )
   const rows = sections.flatMap((s) => s.rows)
   const cursor = rows.length ? Math.min(state.cursor, rows.length - 1) : -1
@@ -140,7 +142,9 @@ export function CommandPalette(props: CommandPaletteProps) {
       e.preventDefault()
       if (rows.length) send({ type: 'point', cursor: (to + rows.length) % rows.length })
     }
-    switch (e.key) {
+    // Inline-axis keys follow the reading direction: "into" the sub-list is the inline end.
+    const mirrored: Record<string, string> = { ArrowLeft: 'ArrowRight', ArrowRight: 'ArrowLeft' }
+    switch (direction === 'rtl' ? (mirrored[e.key] ?? e.key) : e.key) {
       case 'ArrowDown':
         return step(cursor + 1)
       case 'ArrowUp':
@@ -295,7 +299,7 @@ export function CommandPalette(props: CommandPaletteProps) {
                                 if (row.item) send({ type: 'open-sub', item: row.item })
                               }}
                             >
-                              <ChevronRight />
+                              <ChevronRight className="fk-mirror-rtl" />
                             </span>
                           ) : null}
                         </div>

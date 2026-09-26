@@ -1,5 +1,5 @@
 import { useRef, type KeyboardEvent } from 'react'
-import { Button as AriaButton } from 'react-aria-components'
+import { Button as AriaButton, useLocale } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 import { useMessages } from '../../internal/provider'
 
@@ -28,6 +28,7 @@ const ROVE: Record<string, number> = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -
 /** Dots showing (and optionally choosing) the visible page (spec: wave-2/page-dots.md). */
 export function PageDots(props: PageDotsProps) {
   const copy = useMessages().pageDots
+  const { direction } = useLocale()
   const { count, currentIndex, onSelect } = props
   const total = Math.max(0, count)
   const current = Math.min(Math.max(0, currentIndex), Math.max(0, total - 1))
@@ -54,7 +55,7 @@ export function PageDots(props: PageDotsProps) {
   if (!onSelect) {
     return (
       <div {...shell} data-mode="static">
-        <span className="fk-visually-hidden">{nameOf(current + 1, total).toLocaleLowerCase()}</span>
+        <span className="fk-visually-hidden">{nameOf(current + 1, total)}</span>
         {pips.map((i) => (
           <span key={i} className="fk-page-dots__pip" data-on={i === current || undefined} aria-hidden="true" />
         ))}
@@ -64,7 +65,9 @@ export function PageDots(props: PageDotsProps) {
 
   // Roving focus: only the current dot is in the tab order; arrows move.
   const move = (e: KeyboardEvent<HTMLDivElement>) => {
-    const step = ROVE[e.key] ?? (e.key === 'Home' ? -Infinity : e.key === 'End' ? Infinity : 0)
+    // Left and Right follow the reading direction (dots run from the inline start).
+    const inline = direction === 'rtl' && (e.key === 'ArrowLeft' || e.key === 'ArrowRight') ? -1 : 1
+    const step = (ROVE[e.key] ?? 0) * inline || (e.key === 'Home' ? -Infinity : e.key === 'End' ? Infinity : 0)
     if (!step) return
     const buttons = Array.from(row.current?.querySelectorAll<HTMLButtonElement>('button') ?? [])
     const from = buttons.indexOf(document.activeElement as HTMLButtonElement)

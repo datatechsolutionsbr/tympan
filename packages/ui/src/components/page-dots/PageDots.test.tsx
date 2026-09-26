@@ -5,6 +5,11 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { PageDots } from './PageDots'
+import * as rtlDom from '@testing-library/react'
+import rtlUser from '@testing-library/user-event'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
+import { useState as useRtlState } from 'react'
 
 describe('PageDots', () => {
   it('renders one button per page with aria-current on the current one', () => {
@@ -30,7 +35,7 @@ describe('PageDots', () => {
   it('is not focusable without onSelect and exposes the position as text', () => {
     const { container } = render(<PageDots count={5} currentIndex={2} />)
     expect(screen.queryAllByRole('button')).toHaveLength(0)
-    expect(container).toHaveTextContent('page 3 of 5')
+    expect(container).toHaveTextContent('Page 3 of 5')
     expect(container.querySelectorAll('[tabindex]')).toHaveLength(0)
   })
 
@@ -62,5 +67,21 @@ describe('PageDots', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('PageDots in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    function Host() {
+      const [dot, setDot] = useRtlState(0)
+      return <PageDots count={4} currentIndex={dot} onSelect={setDot} label="الشرائح" />
+    }
+    const { container } = renderRtl(<Host />)
+    const dots = rtlDom.screen.getAllByRole('button')
+    dots[0]!.focus()
+    // In right-to-left, Left Arrow moves to the next dot.
+    await rtlUser.keyboard('{ArrowLeft}')
+    expect(dots[1]).toHaveFocus()
+    await axeRtl(container)
   })
 })

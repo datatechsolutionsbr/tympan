@@ -73,6 +73,8 @@ export interface ViewInput {
   recent: RecentEntry[]
   recentVisible: number
   headings: { recent: string; actionsFor: (label: string) => string; fallback: string }
+  /** Locale for case folding and word breaks in matching. */
+  locale?: string
 }
 
 const inScope = (scope: string | null, group: CommandGroup, item: CommandItem) =>
@@ -102,12 +104,12 @@ const actionRow = (a: CommandAction, kind: RowKind, label = a.label): Row => ({
 })
 
 /** Best score of an item over its label, description, keywords and group heading. */
-function scoreItem(query: string, item: CommandItem, heading: string): { score: number; marks: number[] } | null {
-  const label = fuzzyHit(query, item.label)
+function scoreItem(query: string, item: CommandItem, heading: string, locale?: string): { score: number; marks: number[] } | null {
+  const label = fuzzyHit(query, item.label, locale)
   let best = label ? label.score : -Infinity
   for (const other of [item.description, ...(item.keywords ?? []), heading]) {
     if (!other) continue
-    const hit = fuzzyHit(query, other)
+    const hit = fuzzyHit(query, other, locale)
     if (hit && hit.score - 1 > best) best = hit.score - 1
   }
   if (best === -Infinity) return null
@@ -138,7 +140,7 @@ export function buildView(v: ViewInput): Section[] {
   for (const g of v.groups) {
     const scored = g.items
       .filter((it) => inScope(v.scope, g, it))
-      .map((it) => ({ it, hit: scoreItem(q, it, g.heading) }))
+      .map((it) => ({ it, hit: scoreItem(q, it, g.heading, v.locale) }))
       .filter((x): x is { it: CommandItem; hit: { score: number; marks: number[] } } => x.hit !== null)
       .sort((a, b) => b.hit.score - a.hit.score)
     if (scored.length) sections.push({ key: g.id, heading: g.heading, rows: scored.map((x) => itemRow(x.it, `${g.id}-`, x.hit.marks)) })

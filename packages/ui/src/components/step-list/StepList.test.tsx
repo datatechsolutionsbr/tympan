@@ -6,6 +6,8 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { renderWithProvider } from '../../../test/render'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { StepList } from './StepList'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 const four = [
   { id: 'a', name: 'Scope' },
@@ -79,5 +81,13 @@ describe('StepList', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('StepList in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<StepList label="إعداد المشروع" currentIndex={1} steps={[{ id: 'a', name: 'النطاق' }, { id: 'b', name: 'الفريق' }, { id: 'c', name: 'المراجعة' }]} />, { locale: 'ar-EG' })
+    expect(container.textContent).toMatch(/الفريق/)
+    await axeRtl(container)
   })
 })

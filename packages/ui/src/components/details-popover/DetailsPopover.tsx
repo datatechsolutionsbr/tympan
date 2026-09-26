@@ -76,7 +76,7 @@ function ChangeCard({ p, titleId, withHeading }: { p: DetailsPopoverProps; title
           <span className="fk-details-popover__side">
             {p.comparison.fromLabel} <strong>{p.comparison.fromValue}</strong>
           </span>{' '}
-          <ArrowRight className="fk-details-popover__arrow" aria-hidden="true" focusable="false" />{' '}
+          <ArrowRight className="fk-mirror-rtl fk-details-popover__arrow" aria-hidden="true" focusable="false" />{' '}
           <span className="fk-details-popover__side">
             {p.comparison.toLabel} <strong>{p.comparison.toValue}</strong>
           </span>

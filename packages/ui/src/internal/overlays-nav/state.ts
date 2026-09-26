@@ -47,6 +47,8 @@ export function browserPath(): string | undefined {
 }
 
 /** Caps a count for a corner badge: 150 → "99+". */
-export function cappedCount(n: number, cap = 99): string {
-  return n > cap ? `${cap}+` : String(n)
+export function cappedCount(n: number, cap = 99, locale?: string): string {
+  // Digits in the locale's script; the plus sign is a mathematical mark, kept after the number.
+  const nf = new Intl.NumberFormat(locale)
+  return n > cap ? `${nf.format(cap)}+` : nf.format(n)
 }

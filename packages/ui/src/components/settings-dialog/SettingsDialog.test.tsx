@@ -3,6 +3,9 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { expectNoAxeViolations } from '../../../test/axe'
 import { PreferenceGroup, SettingsDialog, type SettingsDialogProps } from './SettingsDialog'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 const base: SettingsDialogProps = {
   open: true,
@@ -106,5 +109,13 @@ describe('SettingsDialog', () => {
   it('has no axe violations on preferences', async () => {
     render(<SettingsDialog {...base} initialSection="preferences" />)
     await expectNoAxeViolations(document.body)
+  })
+})
+
+describe('SettingsDialog in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    renderRtl(<SettingsDialog open onClose={() => {}} title="الإعدادات" sections={[{ id: 'preferences', label: 'التفضيلات' }]} />)
+    expect(await rtlDom.screen.findByRole('dialog', { name: /الإعدادات/ })).toBeInTheDocument()
+    await axeRtl(document.body)
   })
 })

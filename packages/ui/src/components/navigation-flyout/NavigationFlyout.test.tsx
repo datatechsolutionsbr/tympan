@@ -5,6 +5,9 @@ import { useState } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { expectNoAxeViolations } from '../../../test/axe'
 import { NavigationFlyout, type FlyoutDestination, type NavigationFlyoutProps } from './NavigationFlyout'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 const names = ['Overview', 'Sources', 'Instruments', 'Verification', 'Base', 'Atlas', 'Analyses', 'Editions']
 const destinations: FlyoutDestination[] = names.map((label, i) => ({
@@ -94,5 +97,15 @@ describe('NavigationFlyout', () => {
     render(<Harness quickActions={quick()} />)
     await userEvent.click(screen.getByRole('button', { name: 'Open' }))
     await expectNoAxeViolations(document.body)
+  })
+})
+
+describe('NavigationFlyout in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    renderRtl(<NavigationFlyout open onOpenChange={() => {}} title="كل الوجهات" destinations={[{ id: 'a', label: 'نظرة عامة', href: '/a', icon: <span /> }]} quickActions={{ unseenCount: 120, onNotifications: () => {}, theme: 'light', onThemeChange: () => {}, onProfile: () => {}, onSignOut: () => {} }} />, { locale: 'ar-EG', navigate: () => {} })
+    const dialog = await rtlDom.screen.findByRole('dialog')
+    // The capped count uses the locale's digits.
+    expect(dialog.textContent).toMatch(/٩٩\+/)
+    await axeRtl(document.body)
   })
 })
