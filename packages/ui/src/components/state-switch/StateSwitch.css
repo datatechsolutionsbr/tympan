@@ -50,7 +50,8 @@
     content: '';
     position: absolute;
     inset-block-start: 50%;
-    inset-inline-start: 50%;
+    /* physical: centring with translate(-50%) is the same in both directions */
+    left: 50%;
     inline-size: max(100%, var(--fk-control-target));
     block-size: max(100%, var(--fk-control-target));
     transform: translate(-50%, -50%);
@@ -69,6 +70,11 @@
   .fk-state-switch__control[data-selected] .fk-state-switch__thumb {
     background: var(--fk-accent-ink);
     translate: calc(var(--fk-ss-w) - var(--fk-ss-thumb) - 6px) 0;
+  }
+  /* The thumb travels towards the inline end: leftwards in right-to-left. */
+  [dir='rtl'] .fk-state-switch__control[data-selected] .fk-state-switch__thumb,
+  .fk-state-switch__control[data-selected] .fk-state-switch__thumb:dir(rtl) {
+    translate: calc(-1 * (var(--fk-ss-w) - var(--fk-ss-thumb) - 6px)) 0;
   }
   .fk-state-switch__control[data-focus-visible] .fk-state-switch__track {
     outline: var(--fk-focus-width) solid var(--fk-focus-ring);

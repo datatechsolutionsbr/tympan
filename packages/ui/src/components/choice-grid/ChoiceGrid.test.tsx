@@ -6,6 +6,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { ChoiceGrid } from './ChoiceGrid'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import * as rtlDom from '@testing-library/react'
+import { renderRtl } from '../../../test/rtl'
 
 const currencies = [
   { value: 'BRL', symbol: '🇧🇷', label: 'Brazilian real' },
@@ -70,5 +73,13 @@ describe('ChoiceGrid', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('ChoiceGrid in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<ChoiceGrid title="العملة" value="EGP" onChange={() => {}} options={[{ value: 'EGP', label: 'جنيه' }, { value: 'SAR', label: 'ريال' }]} />)
+    expect(rtlDom.screen.getByRole('radio', { name: /جنيه/ })).toBeChecked()
+    await axeRtl(container)
   })
 })

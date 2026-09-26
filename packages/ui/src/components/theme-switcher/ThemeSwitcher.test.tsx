@@ -5,6 +5,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { ThemeSwitcher } from './ThemeSwitcher'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import * as rtlDom from '@testing-library/react'
+import { renderRtl } from '../../../test/rtl'
 
 describe('ThemeSwitcher', () => {
   it('full variant: an unchecked switch named "Dark mode" in light mode', () => {
@@ -55,5 +58,14 @@ describe('ThemeSwitcher', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('ThemeSwitcher in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<ThemeSwitcher mode="light" onModeChange={() => {}} />)
+    expect(rtlDom.screen.getByRole('switch')).toBeInTheDocument()
+    expect(cssOf('components/theme-switcher/ThemeSwitcher.css')).toMatch(/:dir\(rtl\)\s*\{[^}]*translate:\s*calc\(-1/)
+    await axeRtl(container)
   })
 })

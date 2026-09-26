@@ -34,7 +34,8 @@
     content: '';
     position: absolute;
     inset-block-start: 50%;
-    inset-inline-start: 50%;
+    /* physical: centring with translate(-50%) is the same in both directions */
+    left: 50%;
     inline-size: max(100%, var(--fk-control-target));
     block-size: max(100%, var(--fk-control-target));
     transform: translate(-50%, -50%);
@@ -93,6 +94,11 @@
     background: var(--fk-accent-ink);
     color: var(--fk-accent);
     translate: calc(var(--fk-ts-track-w) - var(--fk-ts-knob) - 4px) 0;
+  }
+  /* The knob travels towards the inline end: leftwards in right-to-left. */
+  [dir='rtl'] .fk-theme-switcher[data-selected] .fk-theme-switcher__knob,
+  .fk-theme-switcher[data-selected] .fk-theme-switcher__knob:dir(rtl) {
+    translate: calc(-1 * (var(--fk-ts-track-w) - var(--fk-ts-knob) - 4px)) 0;
   }
   .fk-theme-switcher[data-selected] .fk-theme-switcher__knob-check {
     visibility: visible;

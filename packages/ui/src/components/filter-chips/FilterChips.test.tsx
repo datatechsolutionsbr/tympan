@@ -7,6 +7,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { FilterChips, type ActiveFilter } from './FilterChips'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import * as rtlDom from '@testing-library/react'
+import { renderRtl } from '../../../test/rtl'
 
 const brazil: ActiveFilter = { kind: 'country', value: 'br', label: 'Brazil' }
 const year: ActiveFilter = { kind: 'year', value: '2024', label: '2024' }
@@ -106,5 +109,13 @@ describe('FilterChips', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('FilterChips in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<FilterChips groupLabel="المرشحات" filters={[{ kind: 'country', value: 'eg', label: 'مصر' }]} onRemove={() => {}} onClearAll={() => {}} />)
+    expect(rtlDom.screen.getByText('مصر')).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

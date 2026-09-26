@@ -7,6 +7,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { ChoiceCard, ChoiceCardGroup } from './ChoiceCard'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import * as rtlDom from '@testing-library/react'
+import { renderRtl } from '../../../test/rtl'
 
 function Models({ onChange }: { onChange?: (v: string) => void }) {
   const [value, setValue] = useState('b')
@@ -96,5 +99,13 @@ describe('ChoiceCard', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('ChoiceCard in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<ChoiceCard selected={false} onSelect={() => {}} label="أداة البحث" description="تفتح صفحات عامة." />)
+    expect(rtlDom.screen.getByRole('button', { name: /أداة البحث/ })).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

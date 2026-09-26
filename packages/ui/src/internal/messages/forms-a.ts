@@ -1,6 +1,12 @@
 // Copy of the "forms-a" group (wave 2). One namespace per component, English
 // and Brazilian Portuguese. Merged into `Messages` by ../messages.ts.
 
+import { speaker } from './plural'
+
+const en = speaker('en')
+const pt = speaker('pt-BR')
+const es = speaker('es')
+
 export interface FormsAMessages {
   themeSwitcher: { label: string; toLight: string; toDark: string }
   stateSwitch: { off: string; on: string }
@@ -55,7 +61,7 @@ export interface FormsAMessages {
 export const formsAEn: FormsAMessages = {
   themeSwitcher: { label: 'Dark mode', toLight: 'Switch to light mode', toDark: 'Switch to dark mode' },
   stateSwitch: { off: 'Inactive', on: 'Active' },
-  oneTimeCode: { label: 'Verification code', box: (n, total) => `Character ${n} of ${total}` },
+  oneTimeCode: { label: 'Verification code', box: (n, total) => `Character ${en.n(n)} of ${en.n(total)}` },
   passwordStrength: {
     label: 'Password strength',
     levels: ['Weak', 'Fair', 'Good', 'Strong'],
@@ -63,7 +69,7 @@ export const formsAEn: FormsAMessages = {
     notMet: 'not met:',
     announce: (word) => `Password strength: ${word}`,
     rules: {
-      minLength: (n) => `At least ${n} characters`,
+      minLength: (n) => `At least ${en.n(n)} ${en.word(n, { one: 'character', other: 'characters' })}`,
       uppercase: 'An uppercase letter',
       lowercase: 'A lowercase letter',
       digit: 'A digit',
@@ -78,7 +84,7 @@ export const formsAEn: FormsAMessages = {
     clearAll: 'Clear all',
     cancel: 'Cancel',
     filters: 'Filters',
-    filtersActive: (n) => `Filters, ${n} active`,
+    filtersActive: (n) => `Filters, ${en.n(n)} active`,
     filtersTitle: 'Filters',
     clear: 'Clear',
     done: 'Done',
@@ -92,7 +98,7 @@ export const formsAEn: FormsAMessages = {
   },
   choiceCard: { unavailable: 'Unavailable' },
   chipGroup: {
-    selected: (n) => `${n} selected`,
+    selected: (n) => `${en.n(n)} selected`,
     selectAll: 'Select all',
     clear: 'Clear',
     empty: 'No items to choose from',
@@ -107,7 +113,7 @@ export const formsAEn: FormsAMessages = {
 export const formsAPtBR: FormsAMessages = {
   themeSwitcher: { label: 'Modo escuro', toLight: 'Mudar para o modo claro', toDark: 'Mudar para o modo escuro' },
   stateSwitch: { off: 'Inativo', on: 'Ativo' },
-  oneTimeCode: { label: 'Código de verificação', box: (n, total) => `Caractere ${n} de ${total}` },
+  oneTimeCode: { label: 'Código de verificação', box: (n, total) => `Caractere ${pt.n(n)} de ${pt.n(total)}` },
   passwordStrength: {
     label: 'Força da senha',
     levels: ['Fraca', 'Razoável', 'Boa', 'Forte'],
@@ -115,7 +121,7 @@ export const formsAPtBR: FormsAMessages = {
     notMet: 'não atendido:',
     announce: (word) => `Força da senha: ${word}`,
     rules: {
-      minLength: (n) => `Pelo menos ${n} caracteres`,
+      minLength: (n) => `Pelo menos ${pt.n(n)} ${pt.word(n, { one: 'caractere', other: 'caracteres' })}`,
       uppercase: 'Uma letra maiúscula',
       lowercase: 'Uma letra minúscula',
       digit: 'Um número',
@@ -130,7 +136,7 @@ export const formsAPtBR: FormsAMessages = {
     clearAll: 'Limpar tudo',
     cancel: 'Cancelar',
     filters: 'Filtros',
-    filtersActive: (n) => (n === 1 ? 'Filtros, 1 ativo' : `Filtros, ${n} ativos`),
+    filtersActive: (n) => `Filtros, ${pt.n(n)} ${pt.word(n, { one: 'ativo', other: 'ativos' })}`,
     filtersTitle: 'Filtros',
     clear: 'Limpar',
     done: 'Concluir',
@@ -144,7 +150,7 @@ export const formsAPtBR: FormsAMessages = {
   },
   choiceCard: { unavailable: 'Indisponível' },
   chipGroup: {
-    selected: (n) => (n === 1 ? '1 selecionado' : `${n} selecionados`),
+    selected: (n) => `${pt.n(n)} ${pt.word(n, { one: 'selecionado', other: 'selecionados' })}`,
     selectAll: 'Selecionar todos',
     clear: 'Limpar',
     empty: 'Nenhum item para escolher',
@@ -160,7 +166,7 @@ export const formsAPtBR: FormsAMessages = {
 export const formsAEs: FormsAMessages = {
   themeSwitcher: { label: 'Modo oscuro', toLight: 'Cambiar al modo claro', toDark: 'Cambiar al modo oscuro' },
   stateSwitch: { off: 'Inactivo', on: 'Activo' },
-  oneTimeCode: { label: 'Código de verificación', box: (n, total) => `Carácter ${n} de ${total}` },
+  oneTimeCode: { label: 'Código de verificación', box: (n, total) => `Carácter ${es.n(n)} de ${es.n(total)}` },
   passwordStrength: {
     label: 'Seguridad de la contraseña',
     levels: ['Débil', 'Aceptable', 'Buena', 'Fuerte'],
@@ -168,7 +174,7 @@ export const formsAEs: FormsAMessages = {
     notMet: 'no cumplido:',
     announce: (word) => `Seguridad de la contraseña: ${word}`,
     rules: {
-      minLength: (n) => `Al menos ${n} caracteres`,
+      minLength: (n) => `Al menos ${es.n(n)} ${es.word(n, { one: 'carácter', other: 'caracteres' })}`,
       uppercase: 'Una letra mayúscula',
       lowercase: 'Una letra minúscula',
       digit: 'Un número',
@@ -183,7 +189,7 @@ export const formsAEs: FormsAMessages = {
     clearAll: 'Borrar todo',
     cancel: 'Cancelar',
     filters: 'Filtros',
-    filtersActive: (n) => (n === 1 ? 'Filtros, 1 activo' : `Filtros, ${n} activos`),
+    filtersActive: (n) => `Filtros, ${es.n(n)} ${es.word(n, { one: 'activo', other: 'activos' })}`,
     filtersTitle: 'Filtros',
     clear: 'Borrar',
     done: 'Listo',
@@ -197,7 +203,7 @@ export const formsAEs: FormsAMessages = {
   },
   choiceCard: { unavailable: 'No disponible' },
   chipGroup: {
-    selected: (n) => (n === 1 ? '1 seleccionado' : `${n} seleccionados`),
+    selected: (n) => `${es.n(n)} ${es.word(n, { one: 'seleccionado', other: 'seleccionados' })}`,
     selectAll: 'Seleccionar todo',
     clear: 'Borrar',
     empty: 'No hay elementos para elegir',

@@ -5,6 +5,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { StateSwitch } from './StateSwitch'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import * as rtlDom from '@testing-library/react'
+import { renderRtl } from '../../../test/rtl'
 
 describe('StateSwitch', () => {
   it('is an unchecked switch named by label with "Inactive" emphasised', () => {
@@ -86,5 +89,14 @@ describe('StateSwitch', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('StateSwitch in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<StateSwitch label="حالة الوكيل" checked={false} onCheckedChange={() => {}} />)
+    expect(rtlDom.screen.getByRole('switch', { name: 'حالة الوكيل' })).toBeInTheDocument()
+    expect(cssOf('components/state-switch/StateSwitch.css')).toMatch(/:dir\(rtl\)\s*\{[^}]*translate:\s*calc\(-1/)
+    await axeRtl(container)
   })
 })

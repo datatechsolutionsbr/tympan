@@ -6,6 +6,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { FilterField } from './FilterField'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import * as rtlDom from '@testing-library/react'
+import { renderRtl } from '../../../test/rtl'
 
 describe('FilterField', () => {
   it('is a searchbox named by its visible label', () => {
@@ -77,5 +80,13 @@ describe('FilterField', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('FilterField in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<FilterField label="تصفية الأعضاء" value="نور" onChange={() => {}} />)
+    expect(rtlDom.screen.getByRole('searchbox', { name: 'تصفية الأعضاء' })).toHaveValue('نور')
+    await axeRtl(container)
   })
 })

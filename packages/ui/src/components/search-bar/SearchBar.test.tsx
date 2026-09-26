@@ -7,6 +7,9 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import type { ActiveFilter } from '../filter-chips/FilterChips'
 import { SearchBar, type SearchBarProps } from './SearchBar'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import * as rtlDom from '@testing-library/react'
+import { renderRtl } from '../../../test/rtl'
 
 const brazil: ActiveFilter = { kind: 'country', value: 'br', label: 'Brazil' }
 const stage: ActiveFilter = { kind: 'stage', value: '4', label: 'Stage 4' }
@@ -119,5 +122,13 @@ describe('SearchBar', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('SearchBar in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<SearchBar label="ابحث في الحالات" query="" onQueryChange={() => {}} filters={[]} onRemoveFilter={() => {}} onClearAll={() => {}} />)
+    expect(rtlDom.screen.getByRole('searchbox')).toBeInTheDocument()
+    await axeRtl(container)
   })
 })

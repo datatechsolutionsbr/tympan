@@ -6,6 +6,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { FilterTile, FilterTileGrid, FilterTileGroupHeading } from './FilterTile'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import * as rtlDom from '@testing-library/react'
+import { renderRtl } from '../../../test/rtl'
 
 describe('FilterTile', () => {
   it('Space on an unselected tile calls onToggle once', async () => {
@@ -54,5 +57,13 @@ describe('FilterTile', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('FilterTile in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<FilterTileGrid label="الدول"><FilterTile selected onToggle={() => {}} label="مصر" detail="٤٢ سجلًا" icon={<Flag />} /></FilterTileGrid>)
+    expect(rtlDom.screen.getByRole('button', { name: /مصر/ })).toHaveAttribute('aria-pressed', 'true')
+    await axeRtl(container)
   })
 })

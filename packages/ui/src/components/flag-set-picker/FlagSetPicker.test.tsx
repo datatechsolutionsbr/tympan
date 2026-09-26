@@ -4,6 +4,9 @@ import { describe, expect, it, vi } from 'vitest'
 import { expectNoAxeViolations } from '../../../test/axe'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { FlagSetPicker } from './FlagSetPicker'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import * as rtlDom from '@testing-library/react'
+import { renderRtl } from '../../../test/rtl'
 
 const labels = { a: 'Cite sources', b: 'Require review' }
 const strict = { id: 'Strict', label: 'Strict', description: 'Everything on', values: { a: true, b: true } }
@@ -60,5 +63,13 @@ describe('FlagSetPicker', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('FlagSetPicker in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<FlagSetPicker label="قواعد المراجعة" labels={{ cite: 'استشهد بالمصادر' }} values={{ cite: true }} onChange={() => {}} />)
+    expect(rtlDom.screen.getByRole('checkbox', { name: /استشهد بالمصادر/ })).toBeChecked()
+    await axeRtl(container)
   })
 })

@@ -6,6 +6,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { ChipGroup, type ChipItem } from './ChipGroup'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import * as rtlDom from '@testing-library/react'
+import { renderRtl } from '../../../test/rtl'
 
 const ab: ChipItem[] = [
   { id: 'a', name: 'A' },
@@ -120,5 +123,13 @@ describe('ChipGroup', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('ChipGroup in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<ChipGroup label="اللغات" items={[{ id: 'ar', name: 'العربية' }, { id: 'he', name: 'עברית' }]} selectedIds={['ar']} onSelectionChange={() => {}} />)
+    expect(rtlDom.screen.getByRole('checkbox', { name: /العربية/ })).toBeChecked()
+    await axeRtl(container)
   })
 })

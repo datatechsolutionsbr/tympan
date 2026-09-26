@@ -6,6 +6,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { OneTimeCodeField, type OneTimeCodeFieldProps } from './OneTimeCodeField'
+import rtlUser from '@testing-library/user-event'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 function Harness(props: Partial<OneTimeCodeFieldProps> & { initial?: string }) {
   const [value, setValue] = useState(props.initial ?? '')
@@ -131,5 +134,17 @@ describe('OneTimeCodeField', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('OneTimeCodeField in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<OneTimeCodeField value="12" onChange={() => {}} label="رمز التحقق" />)
+    const boxes = container.querySelectorAll('input')
+    boxes[0]!.focus()
+    // In right-to-left, Left Arrow goes to the next box.
+    await rtlUser.keyboard('{ArrowLeft}')
+    expect(boxes[1]).toHaveFocus()
+    await axeRtl(container)
   })
 })

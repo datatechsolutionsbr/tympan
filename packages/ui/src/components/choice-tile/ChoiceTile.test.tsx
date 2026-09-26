@@ -6,6 +6,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { ChoiceTile } from './ChoiceTile'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import * as rtlDom from '@testing-library/react'
+import { renderRtl } from '../../../test/rtl'
 
 function stubVibrate() {
   const vibrate = vi.fn(() => true)
@@ -103,5 +106,13 @@ describe('ChoiceTile', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('ChoiceTile in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<ChoiceTile selected shape="pill" onPress={() => {}}>العربية</ChoiceTile>)
+    expect(rtlDom.screen.getByRole('button', { name: 'العربية' })).toHaveAttribute('aria-pressed', 'true')
+    await axeRtl(container)
   })
 })

@@ -4,6 +4,9 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { cssOf, mediaBlock } from '../../../test/css'
 import { ThemeScope } from '../../internal/ThemeScope'
 import { PasswordStrength } from './PasswordStrength'
+import * as rtlDom from '@testing-library/react'
+import { expectNoAxeViolations as axeRtl } from '../../../test/axe'
+import { renderRtl } from '../../../test/rtl'
 
 const word = () => screen.getByRole('meter').getAttribute('aria-valuetext')
 
@@ -75,5 +78,13 @@ describe('PasswordStrength', () => {
       </>,
     )
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('PasswordStrength in right-to-left (ar)', () => {
+  it('renders mirrored where directional and passes axe', async () => {
+    const { container } = renderRtl(<PasswordStrength password="كلمةسرطويلة1" showRequirements />)
+    expect(rtlDom.screen.getByRole('meter')).toBeInTheDocument()
+    await axeRtl(container)
   })
 })
