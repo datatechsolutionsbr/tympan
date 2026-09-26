@@ -1,97 +1,72 @@
-// Two vocabularies live here (spec: wave-2/chart.md).
-//
-// 1. The *figure* hosts and agents send (`ChartFigure`), with its own names;
-//    the mapping from the spec's names is in docs (chart.md, "Renamed in
-//    implementation").
-// 2. The *drawing model* (`Plot`) the component actually works on: plain
-//    numbers per track, resolved paint, placed pins and a resolved value span.
-//    Only `toPlot()` (plot.ts) crosses from one to the other.
+// Two vocabularies live here (spec: wave-2/chart.md; spec names are mapped in
+// its "Renamed in implementation" section):
+//   figure        what hosts and agents send (ChartFigure);
+//   drawing model what the component works on (Plot), built by toPlot().
+// Shapes are composed from ambient descriptor tables and two helpers, so the
+// allowed values and the required/optional split are each written once.
+
+/** `R` required, `O` optional. */
+type Shape<R, O = unknown> = R & { [K in keyof O]?: O[K] }
+/** Low and high end of a numeric range. */
+type Ends = [low: number, high: number]
+
+declare const figureForms: readonly ['trend', 'band', 'columns', 'bins']
+declare const figureFaces: readonly ['drawing', 'table']
+declare const markerOutlines: readonly ['dot', 'box', 'wedge', 'rhomb']
 
 /* ---------------------------------------------------------------- input -- */
 
-/**
- * Figure forms (spec names in brackets): `trend` [line], `band` [area],
- * `columns` [bar], `bins` [histogram].
- */
-export type ChartForm = 'trend' | 'band' | 'columns' | 'bins'
+/** `trend` [line], `band` [area], `columns` [bar], `bins` [histogram]. */
+export type ChartForm = (typeof figureForms)[number]
 
-/** One measured layer. `field` is both its label and the record key read. */
-export interface ChartLayer {
-  field: string
-  /** Paint token name: `chart-3`, `categorical-5`. */
-  tone?: string
-  /** Estimates or projections: drawn with a dash pattern. */
-  projected?: boolean
-}
+/** Which face of the figure is shown. */
+export type ChartFace = (typeof figureFaces)[number]
 
 /** One record: the category field plus one value per layer field. */
 export type ChartRecord = Record<string, string | number | null | undefined>
 
+/**
+ * One measured layer: `field` is its label and the record key read; `tone` a
+ * paint token (`chart-3`, `categorical-5`); `projected` draws it dashed.
+ */
+export type ChartLayer = Shape<{ field: string }, { tone: string; projected: boolean }>
+
 /** A labelled rule at one category. */
-export interface ChartNote {
-  at: string | number
-  text: string
-}
+export type ChartNote = Shape<{ at: string | number; text: string }>
 
-/** The declarative figure a Chart draws (renamed from the spec's chart description). */
-export interface ChartFigure {
-  form: ChartForm
-  /** Visible name of the figure. */
-  heading: string
-  /** Secondary line under the heading. */
-  aside?: string
-  /** Reading sentence under the heading (design direction §5). */
-  reading?: string
-  /** The category dimension: which record field, and its caption. */
-  across: { field: string; caption?: string }
-  /** The value dimension: caption, unit and optional fixed bounds [low, high]. */
-  up?: { caption?: string; unit?: string; bounds?: [number, number] }
-  layers: ChartLayer[]
-  records: ChartRecord[]
-  notes?: ChartNote[]
-}
+/** The category dimension (record field and caption). */
+type Across = Shape<{ field: string }, { caption: string }>
+/** The value dimension (caption, unit, fixed bounds). */
+type Up = Shape<unknown, { caption: string; unit: string; bounds: Ends }>
 
-/** Which face of the figure is shown. */
-export type ChartFace = 'drawing' | 'table'
+/**
+ * The declarative figure a Chart draws: `heading` names it, `aside` is the
+ * secondary line, `reading` the finding sentence (design direction §5).
+ */
+export type ChartFigure = Shape<
+  { form: ChartForm; heading: string; across: Across; layers: ChartLayer[]; records: ChartRecord[] },
+  { aside: string; reading: string; up: Up; notes: ChartNote[] }
+>
 
 /* -------------------------------------------------------- drawing model -- */
 
-/** A reading: a finite number, or `null` for a gap. */
+/** A finite number, or `null` for a gap. */
 export type Reading = number | null
 
 /** Marker outline, cycled per track so colour never carries identity alone. */
-export type Glyph = 'dot' | 'box' | 'wedge' | 'rhomb'
+export type Glyph = (typeof markerOutlines)[number]
 
-/** How the tracks are drawn, decided once from the kind. */
-export type Stroke = { mode: 'path'; fill: boolean } | { mode: 'block'; flush: boolean }
+/** How tracks are drawn, decided once from the form. */
+export type Stroke = Shape<{ mode: 'path'; fill: boolean }> | Shape<{ mode: 'block'; flush: boolean }>
 
-export interface Track {
-  /** Series name as declared (also its column header). */
-  label: string
-  /** CSS colour expression, always a design token. */
-  hue: string
-  /** Dash pattern for projections, else undefined. */
-  dash?: string
-  glyph: Glyph
-  readings: Reading[]
-}
+/** One drawn series: declared label, token colour, optional dash, readings. */
+export type Track = Shape<{ label: string; hue: string; glyph: Glyph; readings: Reading[] }, { dash: string }>
 
-/** A reference line at a category, only when the category exists. */
-export interface Pin {
-  slot: number
-  text: string
-}
+/** A reference line at an existing category slot. */
+export type Pin = Shape<{ slot: number; text: string }>
 
-export interface Plot {
-  kind: ChartForm
-  stroke: Stroke
-  /** Category labels, one per row, in data order. */
-  stops: string[]
-  tracks: Track[]
-  pins: Pin[]
-  /** Resolved value span [low, high]. */
-  span: [number, number]
-  unit?: string
-  /** Header of the category column in the table view. */
-  stopsHeader?: string
-}
+/** The resolved drawing: categories (`stops`), tracks, pins and value span. */
+export type Plot = Shape<
+  { kind: ChartForm; stroke: Stroke; stops: string[]; tracks: Track[]; pins: Pin[]; span: Ends },
+  { unit: string; stopsHeader: string }
+>
