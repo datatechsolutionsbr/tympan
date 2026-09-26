@@ -110,6 +110,9 @@ function reservaDireita(linhas: Array<{ marca?: string }>, maximo: number): numb
   return r3(1.9 + digitos * 0.56 * TEXTO + 1.6 + marca)
 }
 
+/** Share of the available width an annotation line may take (see anotar). */
+export const FOLGA_ANOTACAO = 0.88
+
 function anotar(
   anotacoes: SpecHalteres['anotacoes'],
   ancora: (linha: number) => { x: number; y: number } | null,
@@ -126,7 +129,9 @@ function anotar(
   for (const a of lista) {
     const alvo = ancora(a.linha)
     if (!alvo) continue
-    const linhas = quebrar(a.texto, largura - (numeradas ? 5 : x0), TEXTO * 1.05)
+    // Wrap against a width 12% narrower than the room: the estimate in larguraTexto is per-glyph and the
+    // annotation font (italic, or a hand font) can run wider, so the text never crosses the figure's edge.
+    const linhas = quebrar(a.texto, (largura - (numeradas ? 5 : x0)) * FOLGA_ANOTACAO, TEXTO * 1.05)
     y += TEXTO * 1.5
     postas.push({ linha: a.linha, linhas, x: numeradas ? 4.6 : largura, y: r3(y), guia: numeradas ? null : { x: alvo.x, y1: r3(alvo.y), y2: r3(y - TEXTO * 1.05) } })
     y += (linhas.length - 1) * TEXTO * 1.4 + (numeradas ? 0.5 : 1)
@@ -173,7 +178,8 @@ export function layoutHalteres(spec: SpecHalteres, largura: number): LayoutHalte
   const x1 = r3(largura - reservaDireita(spec.linhas, spec.escala[1]))
   const x = escalaLinear(spec.escala, [x0, x1])
   const passo = 7.2
-  const topo = 5.2
+  // Reference labels ("metade") get their own band above the rows, so they never sit on a point.
+  const topo = spec.referencias?.length ? 8.4 : 5.2
   const linhas: LinhaHalteres[] = spec.linhas.map((l, i) => {
     const y = r3(topo + 2.4 + i * passo)
     const xa = x(l.a)
@@ -220,10 +226,12 @@ export function layoutHalteres(spec: SpecHalteres, largura: number): LayoutHalte
     },
     largura,
     x0,
-    yEixo + 3.2,
+    // The unit and the "eixo não começa no zero" warning sit at yEixo + 5.6: notes start below them.
+    yEixo + (spec.unidade || spec.eixoNaoComecaNoZero ? 6.4 : 3.2),
   )
   const referencias = (spec.referencias ?? []).map((r) => ({ x: x(r.valor), rotulo: r.rotulo, valor: r.valor }))
-  return { largura, altura: r3(Math.max(fim, yEixo + 3.4) + (spec.eixoNaoComecaNoZero ? 3.2 : 0) + 1.2), raio, x, linhas, eixo, legenda, anotacoes: postas, referencias }
+  const piso = yEixo + (spec.unidade || spec.eixoNaoComecaNoZero ? 6.6 : 3.4)
+  return { largura, altura: r3(Math.max(fim, piso) + 1.2), raio, x, linhas, eixo, legenda, anotacoes: postas, referencias }
 }
 
 // ---------------------------------------------------------------------------
@@ -578,7 +586,8 @@ export function layoutSerie(spec: SpecSerie, largura: number, alturaPlot = 44): 
   const marcasYv = marcasEixo(spec.escala, 4)
   const x0 = r3(Math.max(...marcasYv.map((v) => larguraTexto(numeroBr(v), TEXTO_PEQUENO))) + 2.4)
   const x1 = r3(largura - 10)
-  const y0 = 5
+  // The unit is printed above the plot (higher when there are shaded periods, whose label band is on top).
+  const y0 = spec.unidade ? (spec.faixas?.length ? 7.4 : 5) : 5
   const y1 = r3(y0 + alturaPlot)
   const x = escalaLinear(spec.eixoX, [x0, x1])
   const y = escalaLinear(spec.escala, [y1, y0])

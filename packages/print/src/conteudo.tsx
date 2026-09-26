@@ -6,6 +6,7 @@
 import type { ComponentType, ReactNode } from 'react'
 import type { PrintPresetName, PrintStyle, PrintStyleOverrides } from '@datatechsolutions/tympan-tokens'
 import { GraficoMetodo } from './grafico/GraficoMetodo.tsx'
+import { ITENS_SPEC_CORRELACAO, SPEC_CORRELACAO } from './grafico/contratoCorrelacao.ts'
 import { Dupla } from './livro/Dupla.tsx'
 import { LivroPrint } from './livro/LivroPrint.tsx'
 import { Pagina } from './livro/Pagina.tsx'
@@ -94,6 +95,7 @@ const SPEC: Record<string, string[]> = {
   serie: [...BASE_GRAFICO, 'escala', 'eixoX', 'unidade', 'interpolar', 'pontos', 'eventos', 'faixas'],
   contagem: [...BASE_GRAFICO, 'unidade', 'grupos', 'linhas', 'rotuloA', 'rotuloB', 'rotuloUnidade', 'icone'],
   esquema: [...BASE_GRAFICO, 'nome', 'rotulos'],
+  ...SPEC_CORRELACAO,
 }
 const ITENS_SPEC: Record<string, string[]> = {
   linhas: ['rotulo', 'nota', 'a', 'b', 'destaque', 'marca', 'local'],
@@ -162,7 +164,7 @@ export function propsDesconhecidas(no: NoJson, caminho = no.tipo): string[] {
     if (!spec || !aceitas) out.push(`${caminho}.spec.tipo`)
     else {
       for (const k of Object.keys(spec)) if (!aceitas.includes(k)) out.push(`${caminho}.spec.${k}`)
-      for (const [lista, chaves] of Object.entries(ITENS_SPEC)) {
+      for (const [lista, chaves] of Object.entries({ ...ITENS_SPEC, ...ITENS_SPEC_CORRELACAO[String(spec.tipo)] })) {
         const arr = spec[lista]
         if (Array.isArray(arr)) arr.forEach((it, i) => Object.keys(it ?? {}).forEach((k) => (chaves.includes(k) ? null : out.push(`${caminho}.spec.${lista}[${i}].${k}`))))
       }

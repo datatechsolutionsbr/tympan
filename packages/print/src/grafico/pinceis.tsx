@@ -163,6 +163,39 @@ function icone(_c: CtxPincel, i: IconeProps, contorno = 0.22, filtro?: string): 
 
 const r = (n: number) => Math.round(n * 1000) / 1000
 
+/**
+ * Hand-drawn circle of radius `r` mm whose tremble is a fixed fraction of the
+ * radius. rough.js offsets are absolute (in user units), so a 1 mm point drawn
+ * directly turns into a scribble that covers labels; here the contour is traced
+ * at a radius of 10 units and scaled down, and the fill is a plain circle of
+ * exactly `r` (the mark never grows past its radius, so labels stay clear).
+ */
+export function circuloMao(
+  c: CtxPincel,
+  p: PontoProps,
+  o: { stroke: string; fill?: string; fillOpacity?: number; largura: number; tremor?: number; filtro?: string; escala?: number },
+): ReactNode {
+  const raio = Math.max(0.15, p.r * (o.escala ?? 1))
+  const S = 10 / raio
+  const t = Math.min(1, o.tremor ?? c.estilo.traco.tremor)
+  const tracos = tracar({ k: 'elipse', cx: 0, cy: 0, w: 20, h: 20 }, p.chave, {
+    roughness: 0.35 + 0.35 * t,
+    maxRandomnessOffset: 0.5,
+    bowing: 0.4,
+    strokeWidth: r(o.largura * S),
+    curveStepCount: 11,
+    stroke: o.stroke,
+  })
+  return (
+    <g filter={o.filtro ? `url(#${o.filtro})` : undefined}>
+      {o.fill ? <circle cx={0} cy={0} r={r(raio)} style={{ fill: o.fill, fillOpacity: o.fillOpacity }} /> : null}
+      <g transform={`scale(${r(1 / S)})`}>
+        <Caminhos tracos={tracos} />
+      </g>
+    </g>
+  )
+}
+
 // ---------------------------------------------------------------------------
 // limpo: ruled, crisp (jornal, dashboard, Tufte, Suíço, Economist…)
 // ---------------------------------------------------------------------------
@@ -237,16 +270,7 @@ function opcoesMao(c: CtxPincel, extra: Record<string, unknown> = {}) {
 const mao: Pincel = {
   nome: 'mao',
   defs: (c) => padroesHachura(c),
-  ponto: (c, p) => (
-    <Caminhos
-      tracos={tracar({ k: 'elipse', cx: 0, cy: 0, w: p.r * 2.1, h: p.r * 2 }, p.chave, {
-        ...opcoesMao(c, { maxRandomnessOffset: 0.18, roughness: Math.min(1, c.estilo.traco.tremor) }),
-        stroke: cssCor(p.cor),
-        fill: p.cheio ? cssCor(p.cor) : undefined,
-        fillStyle: 'solid',
-      })}
-    />
-  ),
+  ponto: (c, p) => circuloMao(c, p, { stroke: cssCor(p.cor), fill: p.cheio ? cssCor(p.cor) : 'var(--ty-print-papel)', largura: Math.max(0.2, traco(c)) }),
   barra: (c, b) => {
     const cruzada = c.estilo.traco.hachura === 'cruzada'
     const fillStyle = b.enchimento === 'hachura' ? 'hachure' : cruzada ? 'cross-hatch' : 'solid'
@@ -316,18 +340,8 @@ const gravura: Pincel = {
       {filtrosGravura(c)}
     </>
   ),
-  ponto: (c, p) => (
-    <Caminhos
-      filtro={filtroId(c, 'prensa')}
-      tracos={tracar({ k: 'elipse', cx: 0, cy: 0, w: p.r * 2.3, h: p.r * 2.2 }, p.chave, {
-        ...opcoesMao(c, { maxRandomnessOffset: 0.2, roughness: 0.8 }),
-        strokeWidth: traco(c, 0.9),
-        stroke: cssCor(p.cor),
-        fill: p.cheio ? cssCor(p.cor) : 'var(--ty-print-papel)',
-        fillStyle: 'solid',
-      })}
-    />
-  ),
+  ponto: (c, p) =>
+    circuloMao(c, p, { stroke: cssCor(p.cor), fill: p.cheio ? cssCor(p.cor) : 'var(--ty-print-papel)', largura: Math.max(0.2, traco(c, 0.9)), tremor: 0.8, filtro: filtroId(c, 'prensa'), escala: 1.1 }),
   barra: (c, b) => (
     <g>
       <Caminhos
@@ -477,13 +491,7 @@ const aquarela: Pincel = {
   ponto: (c, p) => (
     <g>
       <circle cx={0} cy={0} r={p.r * 1.35} filter={`url(#${filtroId(c, 'aguada')})`} style={{ fill: cssCor(p.cor), fillOpacity: p.cheio ? 0.85 : 0.35 }} />
-      <Caminhos
-        tracos={tracar({ k: 'elipse', cx: 0, cy: 0, w: p.r * 2, h: p.r * 2 }, p.chave, {
-          ...opcoesMao(c, { maxRandomnessOffset: 0.12, roughness: 0.6 }),
-          stroke: 'var(--ty-print-tinta)',
-          strokeWidth: traco(c, 0.7),
-        })}
-      />
+      {circuloMao(c, p, { stroke: 'var(--ty-print-tinta)', largura: Math.max(0.15, traco(c, 0.7)), tremor: 0.6 })}
     </g>
   ),
   barra: (c, b) => (
@@ -532,13 +540,7 @@ const pontos: Pincel = {
   ponto: (c, p) => (
     <g>
       <circle cx={0} cy={0} r={p.r * 0.55} style={{ fill: p.cheio ? cssCor(p.cor) : 'none', stroke: cssCor(p.cor), strokeWidth: 0.2 }} />
-      <Caminhos
-        tracos={tracar({ k: 'elipse', cx: 0, cy: 0, w: p.r * 2.3, h: p.r * 2.1 }, p.chave, {
-          ...opcoesMao(c, { maxRandomnessOffset: 0.15, roughness: 0.9 }),
-          stroke: cssCor(p.cor),
-          strokeWidth: 0.2,
-        })}
-      />
+      {circuloMao(c, p, { stroke: cssCor(p.cor), largura: 0.2, tremor: 0.9, escala: 1.1 })}
     </g>
   ),
   barra: (_c, b) => {

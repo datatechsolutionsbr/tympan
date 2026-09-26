@@ -1,4 +1,5 @@
 import type { RenderizadorGrafico } from '@datatechsolutions/tympan-tokens'
+import type { SpecCorrelacao } from './tiposCorrelacao.ts'
 
 /** One compared pair: `a` (e.g. "até 3% abaixo") against `b` (e.g. "até 3% acima"). */
 export interface LinhaPar {
@@ -97,6 +98,8 @@ export interface SpecEsquema extends Base {
   rotulos?: string[]
 }
 
-export type GraficoSpec = SpecHalteres | SpecBarras | SpecSerie | SpecContagem | SpecEsquema
+export type GraficoSpec = SpecHalteres | SpecBarras | SpecSerie | SpecContagem | SpecEsquema | SpecCorrelacao
+
+export type { SpecDispersao, SpecSimpson, SpecMatrizCorrelacao, SpecAntesDepoisControle, SpecCorrelacao, PontoMunicipio, EixoDispersao, DestaqueMunicipio } from './tiposCorrelacao.ts'
 
 export type { RenderizadorGrafico }

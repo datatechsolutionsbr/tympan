@@ -13,12 +13,14 @@ import {
   linhasDe,
   larguraTexto,
   numeroBr,
+  FOLGA_ANOTACAO,
   TEXTO,
   type AnotacaoPosta,
   type Eixo,
 } from './geometria.ts'
 import { PINCEIS, unidadeIsotype, type CorDado, type CtxPincel, type Pincel } from './pinceis.tsx'
 import type { GraficoSpec, RenderizadorGrafico, SpecBarras, SpecContagem, SpecEsquema, SpecHalteres, SpecSerie } from './tipos.ts'
+import { AntesDepoisControle, Dispersao, MatrizCorrelacao, Simpson } from './correlacao.tsx'
 
 export interface GraficoMetodoProps {
   spec: GraficoSpec
@@ -169,7 +171,7 @@ function Halteres({ c, spec, largura }: { c: Ctx; spec: SpecHalteres; largura: n
         {L.referencias.map((r, k) => (
           <g key={k} className="ty-print-g-referencia">
             <line x1={r.x} x2={r.x} y1={L.eixo.topo} y2={L.eixo.y} style={{ stroke: 'var(--ty-print-tinta-3)', strokeWidth: 0.2 }} strokeDasharray="0.8 0.6" />
-            <text x={n(r.x + 0.8)} y={n(L.eixo.topo + 1.6)}>
+            <text x={n(r.x + 0.8)} y={n(L.eixo.topo - 1)}>
               {r.rotulo}
             </text>
           </g>
@@ -553,7 +555,11 @@ function Esquema({ c, spec, largura }: { c: Ctx; spec: SpecEsquema; largura: num
       )
     }
     partes.push(<g key="corte">{c.p.linha(c, { chave: 'corte', x1: xc, y1: y0 - 1, x2: xc, y2: y1, cor: 'tinta', largura: 0.3, tipo: 'guia' })}</g>)
-    if (r[0]) partes.push(<text key="r0" className="ty-print-g-anotacao-texto" x={n(xc + bw + 1.2)} y={n(y0 + 2)}>{r[0]}</text>)
+    // Inside the figure: right of the jump when it fits, else end-aligned at the right edge.
+    if (r[0]) {
+      const cabe = xc + bw + 1.2 + (larguraTexto(r[0], TEXTO * 1.05) / FOLGA_ANOTACAO) <= W
+      partes.push(<text key="r0" className="ty-print-g-anotacao-texto" x={cabe ? n(xc + bw + 1.2) : n(W)} y={n(y0 + 2)} textAnchor={cabe ? 'start' : 'end'}>{r[0]}</text>)
+    }
     if (r[1]) partes.push(<text key="r1" className="ty-print-g-eixo-texto" x={x1} y={n(y1 + 3.6)} textAnchor="end">{r[1]}</text>)
   } else {
     partes.push(eixos)
@@ -597,10 +603,19 @@ export function GraficoMetodo({ spec, renderizador, alt, tabela, local = false, 
           ? Contagem({ c, spec, largura })
           : spec.tipo === 'serie'
             ? Serie({ c, spec, largura })
-            : Esquema({ c, spec, largura })
+            : spec.tipo === 'dispersao'
+              ? Dispersao({ c, spec, largura })
+              : spec.tipo === 'simpson'
+                ? Simpson({ c, spec, largura })
+                : spec.tipo === 'matriz-correlacao'
+                  ? MatrizCorrelacao({ c, spec, largura })
+                  : spec.tipo === 'antes-depois-controle'
+                    ? AntesDepoisControle({ c, spec, largura })
+                    : Esquema({ c, spec, largura })
   const W = r.L.largura
   const H = r.L.altura
-  const nomeAcessivel = alt ?? spec.achado ?? spec.titulo
+  // Correlation charts write their finding from the coefficients they recompute from the points.
+  const nomeAcessivel = alt ?? spec.achado ?? ('achado' in r ? r.achado : undefined) ?? spec.titulo
   return (
     <figure className={cx('ty-print-figura', className)} data-tipo={spec.tipo} data-renderizador={nome} data-local={local ? '' : undefined}>
       <figcaption className="ty-print-figura-cabeca">
