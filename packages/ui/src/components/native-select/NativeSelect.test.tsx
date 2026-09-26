@@ -140,3 +140,21 @@ describe('NativeSelect in right-to-left (ar)', () => {
     await axeRtl(container)
   })
 })
+
+describe('NativeSelect control size', () => {
+  const css = cssOf('components/native-select/NativeSelect.css').replace(/\/\*[\s\S]*?\*\//g, '')
+  const at = css.indexOf('.fk-native-select__control {')
+  const control = css.slice(at, css.indexOf('}', at))
+
+  it('is 40px on desktop and 44px below 1024px', () => {
+    expect(control).toMatch(/--fk-select-block:\s*var\(--fk-control-height\);/)
+    expect(control).toMatch(/(^|\s)block-size:\s*var\(--fk-select-block\);/)
+    expect(mediaBlock(css, /\(max-width:\s*1023\.98px\)/)).toMatch(/--fk-select-block:\s*var\(--fk-control-height-touch\)/)
+  })
+
+  it('centres the value: the line box fills the inner height, after the font shorthand', () => {
+    expect(control).toMatch(/padding-block:\s*0;/)
+    const line = control.search(/line-height:\s*calc\(var\(--fk-select-block\) - 2px\);/)
+    expect(line).toBeGreaterThan(control.indexOf('font: inherit;'))
+  })
+})

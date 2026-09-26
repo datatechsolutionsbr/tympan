@@ -41,7 +41,11 @@
     box-sizing: border-box;
     appearance: none;
     inline-size: 100%;
-    min-block-size: var(--fk-control-height);
+    /* 40px on desktop, 44px below 1024px (density tokens). The line box fills
+       the inner height so every engine centres the value vertically. */
+    --fk-select-block: var(--fk-control-height);
+    block-size: var(--fk-select-block);
+    min-block-size: var(--fk-select-block);
     padding-block: 0;
     padding-inline: var(--fk-space-3) calc(var(--fk-space-3) + var(--fk-space-5));
     border: 1px solid var(--fk-input);
@@ -51,6 +55,7 @@
     font: inherit;
     font-family: var(--fk-font-sans);
     font-size: var(--fk-font-size-body);
+    line-height: calc(var(--fk-select-block) - 2px);
     text-align: start;
     cursor: pointer;
     outline: none;
@@ -192,7 +197,7 @@
 
   @media (max-width: 1023.98px) {
     .fk-native-select__control {
-      min-block-size: var(--fk-control-height-touch);
+      --fk-select-block: var(--fk-control-height-touch);
     }
   }
 

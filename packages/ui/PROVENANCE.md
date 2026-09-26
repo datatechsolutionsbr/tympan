@@ -16,8 +16,8 @@ No fork or commercial template material was used for any row.
 | Heading, Subheading | heading.md | RAC Heading; DD §2.2 | 9 | Eyebrow sits in a wrapper outside the heading element |
 | TextField | text-field.md | RAC TextField, SearchField; DD §2.10 | 12 | `maxLength` not native so the over-limit state exists; reveal has `aria-pressed` and a changing name |
 | TextArea | text-area.md | RAC TextField + TextArea | 9 | Auto-grow counts hard lines, measures soft wraps in browsers |
-| NativeSelect | native-select.md | native select; RAC Modal, Dialog, ListBox (wheel) | 13 | Wheel only below 640 px with a coarse pointer; hidden native select keeps form submission |
-| ListboxSelect | listbox-select.md | RAC Select, ListBox; APG select-only combobox | 11 | Narrow screens: the same Popover laid out as a bottom tray (RAC collections need the Popover) |
+| NativeSelect | native-select.md | native select; RAC Modal, Dialog, ListBox (wheel) | 15 | Wheel only below 640 px with a coarse pointer; hidden native select keeps form submission; control 40 px on desktop and 44 px below 1024 px (density tokens), value centred by a full-height line box |
+| ListboxSelect | listbox-select.md | RAC Select, ListBox; APG select-only combobox | 13 | Narrow screens: the same Popover laid out as a bottom tray (RAC collections need the Popover); trigger 40 px on desktop and 44 px below 1024 px, one centred line: the chosen option's description and check stay in the list |
 | Checkbox, CheckboxGroup | checkbox.md | RAC Checkbox, CheckboxGroup; APG Checkbox | 9 | |
 | Switch, SwitchGroup | switch.md | RAC Switch; APG Switch | 11 | Enter also toggles, as the spec asks |
 | Field, Fieldset, FieldStack | field.md | native fieldset/label; WCAG 1.3.1, 3.3.2 | 10 | Error replaces the hint; error announced politely only when it appears after mount; required marker is text |

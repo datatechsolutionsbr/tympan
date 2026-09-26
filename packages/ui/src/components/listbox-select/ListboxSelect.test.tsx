@@ -127,3 +127,31 @@ describe('ListboxSelect in right-to-left (ar)', () => {
     await axeRtl(container)
   })
 })
+
+describe('ListboxSelect trigger size', () => {
+  /** Body of the first rule whose selector is exactly `selector`. */
+  const ruleOf = (css: string, selector: string) => {
+    const at = css.indexOf(`${selector} {`)
+    return at < 0 ? '' : css.slice(at, css.indexOf('}', at))
+  }
+  const css = cssOf('components/listbox-select/ListboxSelect.css').replace(/\/\*[\s\S]*?\*\//g, '')
+
+  it('is 40px on desktop and 44px below 1024px, never taller than one line', () => {
+    const trigger = ruleOf(css, '.fk-listbox-select__trigger')
+    expect(trigger).toMatch(/--fk-select-block:\s*var\(--fk-control-height\);/)
+    expect(trigger).toMatch(/(^|\s)block-size:\s*var\(--fk-select-block\);/)
+    expect(trigger).toMatch(/padding-block:\s*0;/)
+    expect(mediaBlock(css, /\(max-width:\s*1023\.98px\)/)).toMatch(/--fk-select-block:\s*var\(--fk-control-height-touch\)/)
+  })
+
+  it('centres the value and shows only the chosen label (no description, no check)', () => {
+    const value = ruleOf(css, '.fk-listbox-select__value')
+    expect(value).toMatch(/display:\s*flex;/)
+    expect(value).toMatch(/align-items:\s*center;/)
+    expect(css).toMatch(/\.fk-listbox-select__value \.fk-listbox-select__option-description,\s*\.fk-listbox-select__value \.fk-listbox-select__check \{\s*display:\s*none;/)
+    render(<ListboxSelect label="Fruit" options={options} defaultValue="banana" />)
+    const trigger = screen.getByRole('button', { name: /Fruit/ })
+    // The description is rendered by the list's item template but hidden in the trigger by the rule above.
+    expect(trigger.querySelector('.fk-listbox-select__value .fk-listbox-select__option-label')?.textContent).toBe('Banana')
+  })
+})

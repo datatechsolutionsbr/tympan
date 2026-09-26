@@ -37,7 +37,12 @@
     align-items: center;
     gap: var(--fk-space-2);
     inline-size: 100%;
-    min-block-size: var(--fk-control-height);
+    /* One line, the height of the text fields: 40px on desktop, 44px below
+       1024px (density tokens); the value sits in the vertical centre. */
+    --fk-select-block: var(--fk-control-height);
+    block-size: var(--fk-select-block);
+    min-block-size: var(--fk-select-block);
+    padding-block: 0;
     padding-inline: var(--fk-space-3);
     border: 1px solid var(--fk-input);
     border-radius: var(--fk-radius-control);
@@ -72,9 +77,27 @@
 
   .fk-listbox-select__value {
     flex: 1;
+    display: flex;
+    align-items: center;
+    min-inline-size: 0;
+    block-size: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  /* The trigger shows the chosen option's label only: its description and
+     check mark belong to the list. */
+  .fk-listbox-select__value .fk-listbox-select__option-text {
+    display: block;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .fk-listbox-select__value .fk-listbox-select__option-description,
+  .fk-listbox-select__value .fk-listbox-select__check {
+    display: none;
   }
 
   .fk-listbox-select__value[data-placeholder] {
@@ -197,7 +220,7 @@
 
   @media (max-width: 1023.98px) {
     .fk-listbox-select__trigger {
-      min-block-size: var(--fk-control-height-touch);
+      --fk-select-block: var(--fk-control-height-touch);
     }
   }
 
