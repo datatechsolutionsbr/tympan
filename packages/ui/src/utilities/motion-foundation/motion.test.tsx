@@ -63,3 +63,14 @@ describe('MotionFoundation', () => {
     expect(screen.getByRole('status')).toHaveTextContent('true')
   })
 })
+
+describe('motion presets in right-to-left pages', () => {
+  it('slideFromEnd enters from the inline end in both directions', async () => {
+    const { getPreset } = await import('./motion')
+    const ltr = getPreset('slideFromEnd', false, 'ltr')
+    const rtl = getPreset('slideFromEnd', false, 'rtl')
+    expect(ltr.from.translate).toBe('var(--fk-motion-end-offset, 16px) 0')
+    expect(rtl.from.translate).toBe('calc(-1 * var(--fk-motion-end-offset, 16px)) 0')
+    expect(getPreset('slideFromBottom', false, 'rtl').from.translate).toBe('0 16px')
+  })
+})

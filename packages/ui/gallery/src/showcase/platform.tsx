@@ -1,6 +1,7 @@
 // Gallery section for the "platform" group: touch gestures (each with its
 // non-gesture path), layout helpers, developer aids and utilities.
 import { useRef, useState } from 'react'
+import { useLocale } from 'react-aria-components'
 import {
   Button,
   CascadeGrid,
@@ -30,6 +31,7 @@ export function PlatformShowcase({ scope }: { scope: string }) {
   const id = (s: string) => `${scope}-${s}`
   const toast = useToast()
   const presets = useSwipeActionPresets()
+  const { locale } = useLocale()
   const pull = useRef<PullToRefreshHandle>(null)
   const [refreshed, setRefreshed] = useState(0)
   const [replay, setReplay] = useState(0)
@@ -125,10 +127,10 @@ export function PlatformShowcase({ scope }: { scope: string }) {
 
       <Section id={id('formatters')} title="Formatters, MotionFoundation">
         <div className="fk-gallery-stack">
-          <Text>formatMoney: {formatMoney(1234.5, 'BRL', 'pt-BR')}</Text>
-          <Text>formatPercent: {formatPercent(12.5, 'en-US')}</Text>
+          <Text>formatMoney: {formatMoney(1234.5, 'BRL', locale)}</Text>
+          <Text>formatPercent: {formatPercent(12.5, locale)}</Text>
           <Text>
-            formatDateTime: {formatDateTime('2026-09-20T14:02:00Z', { locale: 'pt-BR', withTimeZone: true, timeZone: 'America/Sao_Paulo' })}
+            formatDateTime: {formatDateTime('2026-09-20T14:02:00Z', { locale, withTimeZone: true, timeZone: 'America/Sao_Paulo' })}
           </Text>
           <Text>formatAddress (unregistered country): {formatAddress({ street: 'Rua Arlindo Béttio, 1000', district: '', city: 'São Paulo' }, 'BR')}</Text>
           <Text>formatMoney(null): {formatMoney(null, 'BRL')}</Text>

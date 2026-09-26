@@ -1,5 +1,5 @@
-// Copy of the "platform" group (wave 2/4). One namespace per component, English
-// and Brazilian Portuguese. Merged into `Messages` by ../messages.ts.
+// Copy of the "platform" group (wave 2/4). One namespace per component, English,
+// Brazilian Portuguese and Spanish. Merged into `Messages` by ../messages.ts.
 
 export interface PlatformMessages {
   formatters: { placeholder: string }
@@ -46,5 +46,18 @@ export const platformPtBR: PlatformMessages = {
   },
 }
 
-/** Spanish (placeholder until translated: falls back to English). */
-export const platformEs: PlatformMessages = platformEn
+export const platformEs: PlatformMessages = {
+  formatters: { placeholder: 'no informado' },
+  swipeRow: {
+    actionsFor: (row) => `Acciones de ${row}`,
+    delete: 'Eliminar',
+    archive: 'Archivar',
+    edit: 'Editar',
+    favourite: 'Marcar como favorito',
+  },
+  pullToRefresh: { refreshing: 'Actualizando' },
+  glassCheck: {
+    label: 'Prueba del vidrio',
+    notApplicable: 'Las superficies son opacas en este modo de visualización, así que la prueba no se aplica.',
+  },
+}

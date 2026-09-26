@@ -143,9 +143,13 @@ function renderLine(line: string | string[], fields: AddressFields): string {
 }
 
 /** Fills the country's template; unknown countries join non-empty fields with commas. */
-export function formatAddress(fields: AddressFields, countryCode: string): string {
+export function formatAddress(fields: AddressFields, countryCode: string, locale?: string): string {
   const template = getCountry(countryCode)?.address?.template
-  if (!template) return Object.values(fields).filter(filled).map((v) => v!.trim()).join(', ')
+  // Unknown country: the filled parts in the given order, joined with the locale's list separator.
+  if (!template) {
+    const parts = Object.values(fields).filter(filled).map((v) => v!.trim())
+    return locale ? new Intl.ListFormat(locale, { type: 'unit', style: 'short' }).format(parts) : parts.join(', ')
+  }
   return template
     .map((line) => renderLine(line, fields))
     .filter((l) => l !== '')
@@ -178,7 +182,7 @@ export function useFormatters() {
       money: (value: number | Missing, currency: string) => formatMoney(value, currency, locale, { placeholder }),
       percent: (value: number | Missing, fractionDigits?: number) => formatPercent(value, locale, { placeholder, fractionDigits }),
       dateTime: (input: DateInput, withTimeZone?: boolean) => formatDateTime(input, { locale, withTimeZone, placeholder }),
-      address: formatAddress,
+      address: (fields: AddressFields, countryCode: string) => formatAddress(fields, countryCode, locale),
       toneForStatus,
     }),
     [locale, placeholder],

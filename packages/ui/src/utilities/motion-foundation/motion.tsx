@@ -82,10 +82,25 @@ export const motionPresets = {
 
 export type MotionPresetName = keyof typeof motionPresets
 
-/** Picks the preset variant for the current (or given) reduced-motion state. */
-export function getPreset(name: MotionPresetName, reduced: boolean = prefersReducedMotion()): MotionPreset {
+/** The same preset seen from a right-to-left page: offsets along the inline axis change sign. */
+function mirrorInline(p: MotionPreset): MotionPreset {
+  const flip = (t?: string) => {
+    if (!t) return t
+    const [inline, ...rest] = t.trim().split(/\s+(?![^(]*\))/)
+    return inline === '0' ? t : [`calc(-1 * ${inline})`, ...rest].join(' ')
+  }
+  return { ...p, from: { ...p.from, translate: flip(p.from.translate) }, to: { ...p.to, translate: flip(p.to.translate) } }
+}
+
+/**
+ * Picks the preset variant for the current (or given) reduced-motion state and
+ * reading direction: `slideFromEnd` slides in from the inline end in both
+ * left-to-right and right-to-left pages.
+ */
+export function getPreset(name: MotionPresetName, reduced: boolean = prefersReducedMotion(), direction: 'ltr' | 'rtl' = 'ltr'): MotionPreset {
   const entry = motionPresets[name]
-  return reduced ? entry.reduced : entry.normal
+  const chosen = reduced ? entry.reduced : entry.normal
+  return direction === 'rtl' ? mirrorInline(chosen) : chosen
 }
 
 /* The decorativeMotion switch (wave 4): off unless a host opts in. */
