@@ -13,11 +13,42 @@ import {
 } from '../src/print-presets.ts'
 
 /**
- * The lakebrasil mark (diagramacao/logo/*.svg and marca-lakebrasil.md): the
- * eight gradient stops of the iceberg plus the site greens. #5cc2e8 is the
- * light blue as quoted in the brief; the SVGs use #5cb8e8. Both are checked.
+ * Brand colours that data colours must stay away from (ΔE2000 >= 10), as in
+ * diagramacao/marca-lakebrasil.md §3.5 and gerador/de_marcas.py:
+ * - lakebrasil: the eight gradient stops of the iceberg plus the site greens
+ *   (#5cc2e8, the light blue as quoted in the brief, is checked too; the SVGs use #5cb8e8);
+ * - Datatech Solutions: the badge and DATA gradients (light and dark
+ *   background) sampled every 5 %, plus the node tint #e0e7ff.
  */
-const LOGO = ['#16c47e', '#0a8754', '#ffd566', '#e8b03a', '#5cb8e8', '#5cc2e8', '#2d7eb0', '#2c66a8', '#143962', '#059669', '#34d399', '#10b981']
+const hex = (c: string) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16))
+function gradiente(paradas: Array<[number, string]>, n = 20): string[] {
+  const out: string[] = []
+  for (let k = 0; k <= n; k++) {
+    const t = k / n
+    for (let j = 0; j < paradas.length - 1; j++) {
+      const [p0, c0] = paradas[j]!
+      const [p1, c1] = paradas[j + 1]!
+      if (p0 <= t && t <= p1) {
+        const u = p1 === p0 ? 0 : (t - p0) / (p1 - p0)
+        const a = hex(c0)
+        const b = hex(c1)
+        out.push(`#${a.map((x, i) => Math.round(x + (b[i]! - x) * u).toString(16).padStart(2, '0')).join('')}`)
+        break
+      }
+    }
+  }
+  return out
+}
+const LAKEBRASIL = ['#16c47e', '#0a8754', '#ffd566', '#e8b03a', '#5cb8e8', '#5cc2e8', '#2d7eb0', '#2c66a8', '#143962', '#059669', '#34d399', '#10b981']
+const DATATECH = [
+  ...new Set([
+    ...gradiente([[0, '#38bdf8'], [0.4, '#6366f1'], [1, '#a855f7']]),
+    ...gradiente([[0, '#38bdf8'], [0.5, '#6366f1'], [1, '#a855f7']]),
+    ...gradiente([[0, '#7dd3fc'], [0.5, '#818cf8'], [1, '#c084fc']]),
+    '#e0e7ff',
+  ]),
+]
+const LOGO = [...LAKEBRASIL, ...DATATECH]
 
 const presets = Object.values(printPresets) as PrintStyle[]
 const HEX = /^#[0-9a-f]{6}$/
@@ -27,7 +58,11 @@ function dataColours(s: PrintStyle): Array<[string, string]> {
     ['destaque', s.cor.destaque],
     ['destaque2', s.cor.destaque2],
     ['contexto', s.cor.contexto],
+    ['marcaTexto', s.cor.marcaTexto],
     ...ESTADOS_PROVA.map((e) => [`prova.${e}`, s.cor.prova[e]] as [string, string]),
+    // literal black and white adjustments of the style
+    ...(['destaque', 'destaque2', 'contexto', 'marcaTexto'] as const).flatMap((k) => (s.pb[k] ? [[`pb.${k}`, s.pb[k]!] as [string, string]] : [])),
+    ...ESTADOS_PROVA.flatMap((e) => (s.pb.prova?.[e] ? [[`pb.prova.${e}`, s.pb.prova[e]!] as [string, string]] : [])),
   ]
 }
 
@@ -76,13 +111,15 @@ describe('print presets', () => {
     }
   })
 
-  it.each(presets.map((s) => [s.name, s] as const))('%s: data colours stay at ΔE2000 >= 10 from the lakebrasil logo', (_, s) => {
+  it.each(presets.map((s) => [s.name, s] as const))('%s: data colours stay at ΔE2000 >= 10 from the lakebrasil and Datatech marks', (_, s) => {
+    const conflitos: string[] = []
     for (const [name, c] of dataColours(s)) {
       for (const logo of LOGO) {
         const d = deltaE2000(parseColor(c), parseColor(logo))
-        expect(d, `${s.name} ${name} ${c} vs logo ${logo}: ΔE ${d.toFixed(1)}`).toBeGreaterThanOrEqual(10)
+        if (d < 10) conflitos.push(`${name} ${c} vs ${logo}: ΔE ${d.toFixed(1)}`)
       }
     }
+    expect(conflitos, `${s.name}: ${conflitos.join('; ')}`).toEqual([])
   })
 
   it('CIEDE2000 matches published reference pairs', () => {

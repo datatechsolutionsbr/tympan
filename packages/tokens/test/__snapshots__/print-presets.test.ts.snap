@@ -32,6 +32,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
+  --ty-print-minusculas: none;
 }
 [data-ty-print-style="dashboard"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Source Serif 4", Georgia, "Times New Roman", serif;
@@ -64,6 +65,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
+  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="dubois"] {
@@ -80,7 +82,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-linha: #1d1a16;
   --ty-print-destaque: #c23b2e;
   --ty-print-destaque-2: #c98a2b;
-  --ty-print-marca-texto: #e3c989;
+  --ty-print-marca-texto: #dcc690;
   --ty-print-contexto: #7a5a3e;
   --ty-print-prova-sustentada: #3e6a48;
   --ty-print-prova-refutada: #a8342a;
@@ -97,6 +99,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: small-caps;
   --ty-print-rotulo-espaco: 0.07em;
+  --ty-print-minusculas: none;
 }
 [data-ty-print-style="dubois"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Rubik Mono One", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -112,7 +115,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-linha: #1a1a1a;
   --ty-print-destaque: #3a3a3a;
   --ty-print-destaque-2: #9a9a9a;
-  --ty-print-marca-texto: #cbcbcb;
+  --ty-print-marca-texto: #c8c8c8;
   --ty-print-contexto: #606060;
   --ty-print-prova-sustentada: #606060;
   --ty-print-prova-refutada: #5d5d5d;
@@ -129,6 +132,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: small-caps;
   --ty-print-rotulo-espaco: 0.07em;
+  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="deardata"] {
@@ -162,6 +166,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
+  --ty-print-minusculas: none;
 }
 [data-ty-print-style="deardata"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Newsreader", Georgia, "Times New Roman", serif;
@@ -194,6 +199,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
+  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="caderno"] {
@@ -210,7 +216,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-linha: #474747;
   --ty-print-destaque: #2b2b2b;
   --ty-print-destaque-2: #b8322a;
-  --ty-print-marca-texto: #ffe45c;
+  --ty-print-marca-texto: #fff45c;
   --ty-print-contexto: #6b665c;
   --ty-print-prova-sustentada: #2b2b2b;
   --ty-print-prova-refutada: #b0302a;
@@ -227,6 +233,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
+  --ty-print-minusculas: none;
 }
 [data-ty-print-style="caderno"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Source Serif 4", Georgia, "Times New Roman", serif;
@@ -259,6 +266,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
+  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="isotype"] {
@@ -292,6 +300,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
+  --ty-print-minusculas: none;
 }
 [data-ty-print-style="isotype"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Jost", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -324,6 +333,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
+  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="cordel"] {
@@ -357,6 +367,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: small-caps;
   --ty-print-rotulo-espaco: 0.07em;
+  --ty-print-minusculas: none;
 }
 [data-ty-print-style="cordel"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Alfa Slab One", Georgia, "Times New Roman", serif;
@@ -389,6 +400,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: small-caps;
   --ty-print-rotulo-espaco: 0.07em;
+  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="riso"] {
@@ -406,7 +418,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-destaque: #3d3fa0;
   --ty-print-destaque-2: #ff48b0;
   --ty-print-marca-texto: #ffd3ea;
-  --ty-print-contexto: #8f8fc4;
+  --ty-print-contexto: #9a8fc4;
   --ty-print-prova-sustentada: #3d3fa0;
   --ty-print-prova-refutada: #c8187a;
   --ty-print-prova-nao-da-para-afirmar: #3d3fa0;
@@ -422,6 +434,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
+  --ty-print-minusculas: none;
 }
 [data-ty-print-style="riso"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Bricolage Grotesque", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -438,7 +451,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-destaque: #1a1a1a;
   --ty-print-destaque-2: #8a8a8a;
   --ty-print-marca-texto: #dfdfdf;
-  --ty-print-contexto: #949494;
+  --ty-print-contexto: #969696;
   --ty-print-prova-sustentada: #4b4b4b;
   --ty-print-prova-refutada: #6a6a6a;
   --ty-print-prova-nao-da-para-afirmar: #4b4b4b;
@@ -454,6 +467,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
+  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="jornal"] {
@@ -487,6 +501,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
+  --ty-print-minusculas: none;
 }
 [data-ty-print-style="jornal"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Newsreader", Georgia, "Times New Roman", serif;
@@ -519,6 +534,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
+  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="prancheta"] {
@@ -529,20 +545,20 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-fonte-anotacao: "IBM Plex Sans Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --ty-print-papel: #1d4b8f;
-  --ty-print-tinta: #eef4ff;
-  --ty-print-tinta-2: #d6e1f3;
-  --ty-print-tinta-3: #bccbe4;
-  --ty-print-linha: #eef4ff;
-  --ty-print-destaque: #eef4ff;
-  --ty-print-destaque-2: #dce6f7;
-  --ty-print-marca-texto: #2c5aa0;
-  --ty-print-contexto: #b9c6e2;
-  --ty-print-prova-sustentada: #eef4ff;
-  --ty-print-prova-refutada: #eef4ff;
-  --ty-print-prova-nao-da-para-afirmar: #eef4ff;
-  --ty-print-prova-pendente: #d6e1f3;
-  --ty-print-prova-sem-dado: #d6e1f3;
-  --ty-print-prova-nao-testada: #d6e1f3;
+  --ty-print-tinta: #f6f4ea;
+  --ty-print-tinta-2: #e2dfd3;
+  --ty-print-tinta-3: #d9d6c8;
+  --ty-print-linha: #f6f4ea;
+  --ty-print-destaque: #f6f4ea;
+  --ty-print-destaque-2: #ece9dc;
+  --ty-print-marca-texto: #4d5d78;
+  --ty-print-contexto: #c9c5b5;
+  --ty-print-prova-sustentada: #f6f4ea;
+  --ty-print-prova-refutada: #f6f4ea;
+  --ty-print-prova-nao-da-para-afirmar: #f6f4ea;
+  --ty-print-prova-pendente: #e2dfd3;
+  --ty-print-prova-sem-dado: #e2dfd3;
+  --ty-print-prova-nao-testada: #e2dfd3;
   --ty-print-textura-intensidade: 0.7;
   --ty-print-traco: 0.25mm;
   --ty-print-tremor: 0;
@@ -552,6 +568,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
+  --ty-print-minusculas: none;
 }
 [data-ty-print-style="prancheta"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Share Tech Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -567,7 +584,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-linha: #111111;
   --ty-print-destaque: #111111;
   --ty-print-destaque-2: #444444;
-  --ty-print-marca-texto: #e6e6e6;
+  --ty-print-marca-texto: #eeeeee;
   --ty-print-contexto: #9a9a9a;
   --ty-print-prova-sustentada: #111111;
   --ty-print-prova-refutada: #111111;
@@ -584,6 +601,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
+  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="prancheta-clara"] {
@@ -600,7 +618,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-linha: #1f4787;
   --ty-print-destaque: #2e3192;
   --ty-print-destaque-2: #2e3192;
-  --ty-print-marca-texto: #dfe5ef;
+  --ty-print-marca-texto: #e2dfd3;
   --ty-print-contexto: #9aa3c4;
   --ty-print-prova-sustentada: #2e3192;
   --ty-print-prova-refutada: #2e3192;
@@ -617,6 +635,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
+  --ty-print-minusculas: none;
 }
 [data-ty-print-style="prancheta-clara"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Share Tech Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -632,7 +651,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-linha: #484848;
   --ty-print-destaque: #1a1a1a;
   --ty-print-destaque-2: #1a1a1a;
-  --ty-print-marca-texto: #e4e4e4;
+  --ty-print-marca-texto: #dfdfdf;
   --ty-print-contexto: #a4a4a4;
   --ty-print-prova-sustentada: #3e3e3e;
   --ty-print-prova-refutada: #3e3e3e;
@@ -649,6 +668,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: 0.07em;
+  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="aquarela"] {
@@ -682,6 +702,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
+  --ty-print-minusculas: none;
 }
 [data-ty-print-style="aquarela"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Cormorant Garamond", Georgia, "Times New Roman", serif;
@@ -714,6 +735,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
+  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="tufte"] {
@@ -747,6 +769,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: small-caps;
   --ty-print-rotulo-espaco: 0.07em;
+  --ty-print-minusculas: none;
 }
 [data-ty-print-style="tufte"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "EB Garamond", Georgia, "Times New Roman", serif;
@@ -779,30 +802,31 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: small-caps;
   --ty-print-rotulo-espaco: 0.07em;
+  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="suico"] {
-  --ty-print-fonte-titulo: "Inter Tight", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-corpo: "Inter", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-numero: "Inter Tight", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-rotulo: "Inter", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-anotacao: "Inter", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --ty-print-papel: #f4f3ef;
-  --ty-print-tinta: #111111;
+  --ty-print-fonte-titulo: "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-corpo: "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-numero: "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-rotulo: "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-anotacao: "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --ty-print-papel: #fbfbf9;
+  --ty-print-tinta: #0d0d0d;
   --ty-print-tinta-2: #2e2e2e;
-  --ty-print-tinta-3: #555555;
-  --ty-print-linha: #111111;
-  --ty-print-destaque: #e30613;
-  --ty-print-destaque-2: #111111;
+  --ty-print-tinta-3: #595959;
+  --ty-print-linha: #0d0d0d;
+  --ty-print-destaque: #0d0d0d;
+  --ty-print-destaque-2: #e0261b;
   --ty-print-marca-texto: #f9d7d2;
-  --ty-print-contexto: #b0afa9;
-  --ty-print-prova-sustentada: #111111;
-  --ty-print-prova-refutada: #c8050f;
-  --ty-print-prova-nao-da-para-afirmar: #111111;
-  --ty-print-prova-pendente: #555555;
-  --ty-print-prova-sem-dado: #555555;
-  --ty-print-prova-nao-testada: #555555;
+  --ty-print-contexto: #b5b5b0;
+  --ty-print-prova-sustentada: #0d0d0d;
+  --ty-print-prova-refutada: #c8150b;
+  --ty-print-prova-nao-da-para-afirmar: #0d0d0d;
+  --ty-print-prova-pendente: #595959;
+  --ty-print-prova-sem-dado: #595959;
+  --ty-print-prova-nao-testada: #595959;
   --ty-print-textura-intensidade: 0;
   --ty-print-traco: 0.35mm;
   --ty-print-tremor: 0;
@@ -812,29 +836,30 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
+  --ty-print-minusculas: none;
 }
 [data-ty-print-style="suico"][data-ty-print-pb] {
-  --ty-print-fonte-titulo: "Inter Tight", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-corpo: "Inter", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-numero: "Inter Tight", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-rotulo: "Inter", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-anotacao: "Inter", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --ty-print-papel: #f3f3f3;
-  --ty-print-tinta: #111111;
+  --ty-print-fonte-titulo: "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-corpo: "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-numero: "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-rotulo: "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-anotacao: "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --ty-print-papel: #fbfbfb;
+  --ty-print-tinta: #0d0d0d;
   --ty-print-tinta-2: #2e2e2e;
-  --ty-print-tinta-3: #555555;
-  --ty-print-linha: #111111;
-  --ty-print-destaque: #111111;
-  --ty-print-destaque-2: #111111;
+  --ty-print-tinta-3: #595959;
+  --ty-print-linha: #0d0d0d;
+  --ty-print-destaque: #0d0d0d;
+  --ty-print-destaque-2: #8a8a8a;
   --ty-print-marca-texto: #dedede;
-  --ty-print-contexto: #afafaf;
-  --ty-print-prova-sustentada: #111111;
-  --ty-print-prova-refutada: #636363;
-  --ty-print-prova-nao-da-para-afirmar: #111111;
-  --ty-print-prova-pendente: #555555;
-  --ty-print-prova-sem-dado: #555555;
-  --ty-print-prova-nao-testada: #555555;
+  --ty-print-contexto: #b5b5b5;
+  --ty-print-prova-sustentada: #0d0d0d;
+  --ty-print-prova-refutada: #646464;
+  --ty-print-prova-nao-da-para-afirmar: #0d0d0d;
+  --ty-print-prova-pendente: #595959;
+  --ty-print-prova-sem-dado: #595959;
+  --ty-print-prova-nao-testada: #595959;
   --ty-print-textura-intensidade: 0;
   --ty-print-traco: 0.35mm;
   --ty-print-tremor: 0;
@@ -844,32 +869,33 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
+  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="concretismo"] {
-  --ty-print-fonte-titulo: "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-corpo: "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-numero: "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-rotulo: "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-anotacao: "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-mono: "Space Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --ty-print-papel: #f6f4ee;
+  --ty-print-fonte-titulo: "Barlow", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-corpo: "Barlow", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-numero: "Barlow", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-rotulo: "Barlow Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-anotacao: "Barlow", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-mono: "Barlow Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-papel: #f3efe6;
   --ty-print-tinta: #141414;
   --ty-print-tinta-2: #2b2b2b;
-  --ty-print-tinta-3: #525252;
+  --ty-print-tinta-3: #57534c;
   --ty-print-linha: #141414;
-  --ty-print-destaque: #e2401c;
+  --ty-print-destaque: #d7372a;
   --ty-print-destaque-2: #3d3fa0;
-  --ty-print-marca-texto: #f8d8cd;
-  --ty-print-contexto: #c4bfb3;
+  --ty-print-marca-texto: #f3d3cc;
+  --ty-print-contexto: #c9c3b6;
   --ty-print-prova-sustentada: #141414;
-  --ty-print-prova-refutada: #c2360f;
+  --ty-print-prova-refutada: #b82e22;
   --ty-print-prova-nao-da-para-afirmar: #3d3fa0;
-  --ty-print-prova-pendente: #525252;
-  --ty-print-prova-sem-dado: #525252;
-  --ty-print-prova-nao-testada: #525252;
+  --ty-print-prova-pendente: #57534c;
+  --ty-print-prova-sem-dado: #57534c;
+  --ty-print-prova-nao-testada: #57534c;
   --ty-print-textura-intensidade: 0;
-  --ty-print-traco: 0.8mm;
+  --ty-print-traco: 0.7mm;
   --ty-print-tremor: 0;
   --ty-print-raio: 0mm;
   --ty-print-titulo-caixa: none;
@@ -877,31 +903,32 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
+  --ty-print-minusculas: lowercase;
 }
 [data-ty-print-style="concretismo"][data-ty-print-pb] {
-  --ty-print-fonte-titulo: "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-corpo: "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-numero: "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-rotulo: "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-anotacao: "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-mono: "Space Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --ty-print-papel: #f4f4f4;
+  --ty-print-fonte-titulo: "Barlow", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-corpo: "Barlow", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-numero: "Barlow", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-rotulo: "Barlow Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-anotacao: "Barlow", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-mono: "Barlow Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-papel: #efefef;
   --ty-print-tinta: #141414;
   --ty-print-tinta-2: #2b2b2b;
-  --ty-print-tinta-3: #525252;
+  --ty-print-tinta-3: #535353;
   --ty-print-linha: #141414;
   --ty-print-destaque: #141414;
-  --ty-print-destaque-2: #7a7a7a;
-  --ty-print-marca-texto: #dfdfdf;
-  --ty-print-contexto: #bfbfbf;
+  --ty-print-destaque-2: #8a8a8a;
+  --ty-print-marca-texto: #dadada;
+  --ty-print-contexto: #c3c3c3;
   --ty-print-prova-sustentada: #141414;
-  --ty-print-prova-refutada: #696969;
+  --ty-print-prova-refutada: #626262;
   --ty-print-prova-nao-da-para-afirmar: #4b4b4b;
-  --ty-print-prova-pendente: #525252;
-  --ty-print-prova-sem-dado: #525252;
-  --ty-print-prova-nao-testada: #525252;
+  --ty-print-prova-pendente: #535353;
+  --ty-print-prova-sem-dado: #535353;
+  --ty-print-prova-nao-testada: #535353;
   --ty-print-textura-intensidade: 0;
-  --ty-print-traco: 0.8mm;
+  --ty-print-traco: 0.7mm;
   --ty-print-tremor: 0;
   --ty-print-raio: 0mm;
   --ty-print-titulo-caixa: none;
@@ -909,30 +936,31 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
+  --ty-print-minusculas: lowercase;
 }
 
 [data-ty-print-style="economist"] {
-  --ty-print-fonte-titulo: "Roboto Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-titulo: "Source Serif 4", Georgia, "Times New Roman", serif;
   --ty-print-fonte-corpo: "Source Serif 4", Georgia, "Times New Roman", serif;
-  --ty-print-fonte-numero: "Roboto Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-rotulo: "Roboto Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-anotacao: "Roboto Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-mono: "Roboto Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --ty-print-papel: #fbfbf9;
+  --ty-print-fonte-numero: "Fira Sans Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-rotulo: "Fira Sans Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-anotacao: "Fira Sans Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-mono: "Fira Sans Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-papel: #ffffff;
   --ty-print-tinta: #121212;
   --ty-print-tinta-2: #333333;
-  --ty-print-tinta-3: #575757;
+  --ty-print-tinta-3: #595959;
   --ty-print-linha: #b7c6cf;
-  --ty-print-destaque: #e3120b;
-  --ty-print-destaque-2: #0d6f74;
+  --ty-print-destaque: #3a4aa0;
+  --ty-print-destaque-2: #b0bee0;
   --ty-print-marca-texto: #fbdcd8;
   --ty-print-contexto: #b7c6cf;
-  --ty-print-prova-sustentada: #121212;
-  --ty-print-prova-refutada: #c50f09;
-  --ty-print-prova-nao-da-para-afirmar: #0d6f74;
-  --ty-print-prova-pendente: #575757;
-  --ty-print-prova-sem-dado: #575757;
-  --ty-print-prova-nao-testada: #575757;
+  --ty-print-prova-sustentada: #3a4aa0;
+  --ty-print-prova-refutada: #d7110a;
+  --ty-print-prova-nao-da-para-afirmar: #3a4aa0;
+  --ty-print-prova-pendente: #595959;
+  --ty-print-prova-sem-dado: #595959;
+  --ty-print-prova-nao-testada: #595959;
   --ty-print-textura-intensidade: 0;
   --ty-print-traco: 0.3mm;
   --ty-print-tremor: 0;
@@ -942,29 +970,30 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
+  --ty-print-minusculas: none;
 }
 [data-ty-print-style="economist"][data-ty-print-pb] {
-  --ty-print-fonte-titulo: "Roboto Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-titulo: "Source Serif 4", Georgia, "Times New Roman", serif;
   --ty-print-fonte-corpo: "Source Serif 4", Georgia, "Times New Roman", serif;
-  --ty-print-fonte-numero: "Roboto Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-rotulo: "Roboto Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-anotacao: "Roboto Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-mono: "Roboto Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --ty-print-papel: #fbfbfb;
+  --ty-print-fonte-numero: "Fira Sans Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-rotulo: "Fira Sans Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-anotacao: "Fira Sans Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-mono: "Fira Sans Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-papel: #ffffff;
   --ty-print-tinta: #121212;
   --ty-print-tinta-2: #333333;
-  --ty-print-tinta-3: #575757;
+  --ty-print-tinta-3: #595959;
   --ty-print-linha: #c4c4c4;
   --ty-print-destaque: #121212;
-  --ty-print-destaque-2: #777777;
+  --ty-print-destaque-2: #9a9a9a;
   --ty-print-marca-texto: #e3e3e3;
   --ty-print-contexto: #c4c4c4;
-  --ty-print-prova-sustentada: #121212;
-  --ty-print-prova-refutada: #626262;
-  --ty-print-prova-nao-da-para-afirmar: #646464;
-  --ty-print-prova-pendente: #575757;
-  --ty-print-prova-sem-dado: #575757;
-  --ty-print-prova-nao-testada: #575757;
+  --ty-print-prova-sustentada: #525252;
+  --ty-print-prova-refutada: #6c6c6c;
+  --ty-print-prova-nao-da-para-afirmar: #525252;
+  --ty-print-prova-pendente: #595959;
+  --ty-print-prova-sem-dado: #595959;
+  --ty-print-prova-nao-testada: #595959;
   --ty-print-textura-intensidade: 0;
   --ty-print-traco: 0.3mm;
   --ty-print-tremor: 0;
@@ -974,96 +1003,99 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
+  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="holmes"] {
-  --ty-print-fonte-titulo: "Fredoka", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-corpo: "Source Sans 3", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-numero: "Fredoka", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-rotulo: "Fredoka", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-anotacao: "Patrick Hand", "Comic Neue", "Segoe Print", cursive;
-  --ty-print-fonte-mono: "Source Code Pro", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --ty-print-papel: #fbf5e6;
-  --ty-print-tinta: #1f1b16;
-  --ty-print-tinta-2: #3b342c;
-  --ty-print-tinta-3: #5a5147;
-  --ty-print-linha: #1f1b16;
-  --ty-print-destaque: #e05a2b;
-  --ty-print-destaque-2: #2f7f86;
-  --ty-print-marca-texto: #ffe6a3;
-  --ty-print-contexto: #c9bca3;
-  --ty-print-prova-sustentada: #2f6b3a;
-  --ty-print-prova-refutada: #b8401a;
-  --ty-print-prova-nao-da-para-afirmar: #6b4e8a;
-  --ty-print-prova-pendente: #5a5147;
-  --ty-print-prova-sem-dado: #5a5147;
-  --ty-print-prova-nao-testada: #5a5147;
-  --ty-print-textura-intensidade: 0.2;
+  --ty-print-fonte-titulo: "Rubik", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-corpo: "Nunito Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-numero: "Rubik", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-rotulo: "Rubik", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-anotacao: "Nunito Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-mono: "Nunito Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-papel: #fbf6ea;
+  --ty-print-tinta: #22303c;
+  --ty-print-tinta-2: #34424e;
+  --ty-print-tinta-3: #56606a;
+  --ty-print-linha: #22303c;
+  --ty-print-destaque: #e0603f;
+  --ty-print-destaque-2: #2b8a86;
+  --ty-print-marca-texto: #f6e1ad;
+  --ty-print-contexto: #d9cfbb;
+  --ty-print-prova-sustentada: #1f6f6b;
+  --ty-print-prova-refutada: #b8401f;
+  --ty-print-prova-nao-da-para-afirmar: #22303c;
+  --ty-print-prova-pendente: #56606a;
+  --ty-print-prova-sem-dado: #56606a;
+  --ty-print-prova-nao-testada: #56606a;
+  --ty-print-textura-intensidade: 0;
   --ty-print-traco: 0.5mm;
-  --ty-print-tremor: 0.3;
+  --ty-print-tremor: 0;
   --ty-print-raio: 2.4mm;
   --ty-print-titulo-caixa: none;
   --ty-print-titulo-espaco: normal;
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
+  --ty-print-minusculas: none;
 }
 [data-ty-print-style="holmes"][data-ty-print-pb] {
-  --ty-print-fonte-titulo: "Fredoka", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-corpo: "Source Sans 3", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-numero: "Fredoka", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-rotulo: "Fredoka", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-anotacao: "Patrick Hand", "Comic Neue", "Segoe Print", cursive;
-  --ty-print-fonte-mono: "Source Code Pro", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --ty-print-papel: #f5f5f5;
-  --ty-print-tinta: #1c1c1c;
-  --ty-print-tinta-2: #353535;
-  --ty-print-tinta-3: #525252;
-  --ty-print-linha: #1c1c1c;
+  --ty-print-fonte-titulo: "Rubik", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-corpo: "Nunito Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-numero: "Rubik", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-rotulo: "Rubik", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-anotacao: "Nunito Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-mono: "Nunito Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-papel: #f6f6f6;
+  --ty-print-tinta: #2e2e2e;
+  --ty-print-tinta-2: #404040;
+  --ty-print-tinta-3: #5f5f5f;
+  --ty-print-linha: #2e2e2e;
   --ty-print-destaque: #2a2a2a;
   --ty-print-destaque-2: #8a8a8a;
-  --ty-print-marca-texto: #e8e8e8;
-  --ty-print-contexto: #bdbdbd;
-  --ty-print-prova-sustentada: #5f5f5f;
+  --ty-print-marca-texto: #e3e3e3;
+  --ty-print-contexto: #d0d0d0;
+  --ty-print-prova-sustentada: #646464;
   --ty-print-prova-refutada: #686868;
-  --ty-print-prova-nao-da-para-afirmar: #5b5b5b;
-  --ty-print-prova-pendente: #525252;
-  --ty-print-prova-sem-dado: #525252;
-  --ty-print-prova-nao-testada: #525252;
-  --ty-print-textura-intensidade: 0.2;
+  --ty-print-prova-nao-da-para-afirmar: #2e2e2e;
+  --ty-print-prova-pendente: #5f5f5f;
+  --ty-print-prova-sem-dado: #5f5f5f;
+  --ty-print-prova-nao-testada: #5f5f5f;
+  --ty-print-textura-intensidade: 0;
   --ty-print-traco: 0.5mm;
-  --ty-print-tremor: 0.3;
+  --ty-print-tremor: 0;
   --ty-print-raio: 2.4mm;
   --ty-print-titulo-caixa: none;
   --ty-print-titulo-espaco: normal;
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
+  --ty-print-minusculas: none;
 }
 
 [data-ty-print-style="bayer"] {
-  --ty-print-fonte-titulo: "Josefin Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-corpo: "Work Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-numero: "Josefin Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-rotulo: "Josefin Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-anotacao: "Work Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-mono: "Space Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --ty-print-papel: #f1ebdd;
-  --ty-print-tinta: #1a1a1a;
+  --ty-print-fonte-titulo: "League Spartan", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-corpo: "Jost", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-numero: "League Spartan", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-rotulo: "League Spartan", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-anotacao: "Jost", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-mono: "Jost", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-papel: #f1ece0;
+  --ty-print-tinta: #1b1a17;
   --ty-print-tinta-2: #36342f;
-  --ty-print-tinta-3: #57534a;
-  --ty-print-linha: #1a1a1a;
-  --ty-print-destaque: #b8452c;
+  --ty-print-tinta-3: #5c574d;
+  --ty-print-linha: #1b1a17;
+  --ty-print-destaque: #c0512d;
   --ty-print-destaque-2: #5a5f93;
-  --ty-print-marca-texto: #e6d9b8;
-  --ty-print-contexto: #cdbf9c;
-  --ty-print-prova-sustentada: #3e6a48;
-  --ty-print-prova-refutada: #a63d26;
-  --ty-print-prova-nao-da-para-afirmar: #4f548a;
-  --ty-print-prova-pendente: #57534a;
-  --ty-print-prova-sem-dado: #57534a;
-  --ty-print-prova-nao-testada: #57534a;
-  --ty-print-textura-intensidade: 0.25;
+  --ty-print-marca-texto: #ecd8a8;
+  --ty-print-contexto: #cbc2ae;
+  --ty-print-prova-sustentada: #56602a;
+  --ty-print-prova-refutada: #a8401f;
+  --ty-print-prova-nao-da-para-afirmar: #1b1a17;
+  --ty-print-prova-pendente: #5c574d;
+  --ty-print-prova-sem-dado: #5c574d;
+  --ty-print-prova-nao-testada: #5c574d;
+  --ty-print-textura-intensidade: 0;
   --ty-print-traco: 0.4mm;
   --ty-print-tremor: 0;
   --ty-print-raio: 0mm;
@@ -1072,30 +1104,31 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
+  --ty-print-minusculas: lowercase;
 }
 [data-ty-print-style="bayer"][data-ty-print-pb] {
-  --ty-print-fonte-titulo: "Josefin Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-corpo: "Work Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-numero: "Josefin Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-rotulo: "Josefin Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-anotacao: "Work Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-mono: "Space Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --ty-print-papel: #ebebeb;
+  --ty-print-fonte-titulo: "League Spartan", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-corpo: "Jost", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-numero: "League Spartan", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-rotulo: "League Spartan", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-anotacao: "Jost", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-mono: "Jost", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-papel: #ececec;
   --ty-print-tinta: #1a1a1a;
   --ty-print-tinta-2: #343434;
-  --ty-print-tinta-3: #535353;
+  --ty-print-tinta-3: #575757;
   --ty-print-linha: #1a1a1a;
   --ty-print-destaque: #2a2a2a;
   --ty-print-destaque-2: #8a8a8a;
   --ty-print-marca-texto: #dadada;
-  --ty-print-contexto: #c0c0c0;
-  --ty-print-prova-sustentada: #606060;
-  --ty-print-prova-refutada: #606060;
-  --ty-print-prova-nao-da-para-afirmar: #585858;
-  --ty-print-prova-pendente: #535353;
-  --ty-print-prova-sem-dado: #535353;
-  --ty-print-prova-nao-testada: #535353;
-  --ty-print-textura-intensidade: 0.25;
+  --ty-print-contexto: #c3c3c3;
+  --ty-print-prova-sustentada: #5b5b5b;
+  --ty-print-prova-refutada: #626262;
+  --ty-print-prova-nao-da-para-afirmar: #1a1a1a;
+  --ty-print-prova-pendente: #575757;
+  --ty-print-prova-sem-dado: #575757;
+  --ty-print-prova-nao-testada: #575757;
+  --ty-print-textura-intensidade: 0;
   --ty-print-traco: 0.4mm;
   --ty-print-tremor: 0;
   --ty-print-raio: 0mm;
@@ -1104,27 +1137,28 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-caixa: none;
   --ty-print-rotulo-variante: normal;
   --ty-print-rotulo-espaco: normal;
+  --ty-print-minusculas: lowercase;
 }
 
 [data-ty-print-style="ft"] {
-  --ty-print-fonte-titulo: "Libre Caslon Text", Georgia, "Times New Roman", serif;
-  --ty-print-fonte-corpo: "Libre Caslon Text", Georgia, "Times New Roman", serif;
-  --ty-print-fonte-numero: "Source Sans 3", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-rotulo: "Source Sans 3", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-anotacao: "Source Sans 3", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-mono: "Source Code Pro", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --ty-print-fonte-titulo: "DM Serif Display", Georgia, "Times New Roman", serif;
+  --ty-print-fonte-corpo: "Gelasio", Georgia, "Times New Roman", serif;
+  --ty-print-fonte-numero: "Hanken Grotesk", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-rotulo: "Hanken Grotesk", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-anotacao: "Hanken Grotesk", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-mono: "Hanken Grotesk", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-papel: #fff1e5;
   --ty-print-tinta: #33302e;
   --ty-print-tinta-2: #4a4543;
   --ty-print-tinta-3: #625c58;
-  --ty-print-linha: #ccc1b7;
-  --ty-print-destaque: #990f3d;
-  --ty-print-destaque-2: #0d7680;
+  --ty-print-linha: #e3d2c3;
+  --ty-print-destaque: #3a4aa0;
+  --ty-print-destaque-2: #b0bee0;
   --ty-print-marca-texto: #f2dfce;
-  --ty-print-contexto: #b7aba1;
-  --ty-print-prova-sustentada: #33302e;
+  --ty-print-contexto: #c9bcb0;
+  --ty-print-prova-sustentada: #3a4aa0;
   --ty-print-prova-refutada: #990f3d;
-  --ty-print-prova-nao-da-para-afirmar: #0d6770;
+  --ty-print-prova-nao-da-para-afirmar: #33302e;
   --ty-print-prova-pendente: #625c58;
   --ty-print-prova-sem-dado: #625c58;
   --ty-print-prova-nao-testada: #625c58;
@@ -1134,29 +1168,30 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-raio: 0mm;
   --ty-print-titulo-caixa: none;
   --ty-print-titulo-espaco: normal;
-  --ty-print-rotulo-caixa: none;
+  --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
-  --ty-print-rotulo-espaco: normal;
+  --ty-print-rotulo-espaco: 0.07em;
+  --ty-print-minusculas: none;
 }
 [data-ty-print-style="ft"][data-ty-print-pb] {
-  --ty-print-fonte-titulo: "Libre Caslon Text", Georgia, "Times New Roman", serif;
-  --ty-print-fonte-corpo: "Libre Caslon Text", Georgia, "Times New Roman", serif;
-  --ty-print-fonte-numero: "Source Sans 3", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-rotulo: "Source Sans 3", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-anotacao: "Source Sans 3", system-ui, "Helvetica Neue", Arial, sans-serif;
-  --ty-print-fonte-mono: "Source Code Pro", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --ty-print-fonte-titulo: "DM Serif Display", Georgia, "Times New Roman", serif;
+  --ty-print-fonte-corpo: "Gelasio", Georgia, "Times New Roman", serif;
+  --ty-print-fonte-numero: "Hanken Grotesk", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-rotulo: "Hanken Grotesk", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-anotacao: "Hanken Grotesk", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --ty-print-fonte-mono: "Hanken Grotesk", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-papel: #ffffff;
   --ty-print-tinta: #313131;
   --ty-print-tinta-2: #464646;
   --ty-print-tinta-3: #5d5d5d;
-  --ty-print-linha: #c3c3c3;
+  --ty-print-linha: #d5d5d5;
   --ty-print-destaque: #1a1a1a;
-  --ty-print-destaque-2: #7a7a7a;
+  --ty-print-destaque-2: #a0a0a0;
   --ty-print-marca-texto: #e2e2e2;
-  --ty-print-contexto: #adadad;
-  --ty-print-prova-sustentada: #313131;
+  --ty-print-contexto: #bebebe;
+  --ty-print-prova-sustentada: #525252;
   --ty-print-prova-refutada: #4d4d4d;
-  --ty-print-prova-nao-da-para-afirmar: #5d5d5d;
+  --ty-print-prova-nao-da-para-afirmar: #313131;
   --ty-print-prova-pendente: #5d5d5d;
   --ty-print-prova-sem-dado: #5d5d5d;
   --ty-print-prova-nao-testada: #5d5d5d;
@@ -1166,9 +1201,10 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-raio: 0mm;
   --ty-print-titulo-caixa: none;
   --ty-print-titulo-espaco: normal;
-  --ty-print-rotulo-caixa: none;
+  --ty-print-rotulo-caixa: uppercase;
   --ty-print-rotulo-variante: normal;
-  --ty-print-rotulo-espaco: normal;
+  --ty-print-rotulo-espaco: 0.07em;
+  --ty-print-minusculas: none;
 }
 "
 `;

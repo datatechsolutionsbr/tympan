@@ -72,6 +72,8 @@ export interface PrintEstrutura {
   notas: 'dentro' | 'margem'
   /** Figure mark: none, a short bar and rule on top (The Economist). */
   figura: 'simples' | 'barra-topo'
+  /** Titles and labels in lower case (Bayer's universal alphabet, concrete design). */
+  minusculas: boolean
 }
 
 export interface PrintStyle {
@@ -98,6 +100,12 @@ export interface PrintStyle {
   /** Adjustments for black and white print, applied after the grey conversion. */
   pb: PrintCoresParciais
   estrutura: PrintEstrutura
+  /**
+   * Brand marks (lakebrasil, Datatech) in colour (default) or in their
+   * official one-ink version, for styles whose technique is one or two inks
+   * (woodcut, risograph, cyanotype). Never recoloured to the style's ink.
+   */
+  logo?: 'cor' | 'mono'
 }
 
 /** Any token of a style may be overridden by the editor (partial, nested). */
@@ -114,6 +122,7 @@ export interface PrintStyleOverrides {
   caixaAlta?: boolean
   pb?: PrintCoresParciais
   estrutura?: Partial<PrintEstrutura>
+  logo?: 'cor' | 'mono'
 }
 
 // ---------------------------------------------------------------------------
@@ -175,7 +184,7 @@ const dashboard: PrintStyle = {
   raio: 1.6,
   caixaAlta: false,
   pb: {},
-  estrutura: { painel: 'nenhum', rotulo: 'letra', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples' },
+  estrutura: { painel: 'nenhum', rotulo: 'letra', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false },
 }
 
 const dubois: PrintStyle = {
@@ -199,7 +208,7 @@ const dubois: PrintStyle = {
     linha: '#1d1a16',
     destaque: '#c23b2e',
     destaque2: '#c98a2b',
-    marcaTexto: '#e3c989',
+    marcaTexto: '#dcc690',
     contexto: '#7a5a3e',
     prova: {
       sustentada: '#3e6a48',
@@ -217,7 +226,7 @@ const dubois: PrintStyle = {
   raio: 0,
   caixaAlta: true,
   pb: { destaque: '#3a3a3a', destaque2: '#9a9a9a' },
-  estrutura: { painel: 'caixa-grossa', rotulo: 'letra', rotuloCaixa: 'versalete', notas: 'dentro', figura: 'simples' },
+  estrutura: { painel: 'caixa-grossa', rotulo: 'letra', rotuloCaixa: 'versalete', notas: 'dentro', figura: 'simples', minusculas: false },
 }
 
 const deardata: PrintStyle = {
@@ -263,7 +272,7 @@ const deardata: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: { destaque: '#1a1a1a', destaque2: '#8a8a8a' },
-  estrutura: { painel: 'caixa', rotulo: 'parenteses', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples' },
+  estrutura: { painel: 'caixa', rotulo: 'parenteses', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false },
 }
 
 const caderno: PrintStyle = {
@@ -292,7 +301,7 @@ const caderno: PrintStyle = {
     linha: '#474747',
     destaque: '#2b2b2b',
     destaque2: '#b8322a',
-    marcaTexto: '#ffe45c',
+    marcaTexto: '#fff45c',
     contexto: '#6b665c',
     prova: {
       sustentada: '#2b2b2b',
@@ -310,7 +319,7 @@ const caderno: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: { destaque2: '#3a3a3a', marcaTexto: '#dddddd' },
-  estrutura: { painel: 'caixa', rotulo: 'parenteses', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples' },
+  estrutura: { painel: 'caixa', rotulo: 'parenteses', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false },
 }
 
 const isotype: PrintStyle = {
@@ -352,7 +361,7 @@ const isotype: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: { destaque2: '#8c8c8c' },
-  estrutura: { painel: 'fio-grosso', rotulo: 'quadrado', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples' },
+  estrutura: { painel: 'fio-grosso', rotulo: 'quadrado', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false },
 }
 
 const cordel: PrintStyle = {
@@ -394,7 +403,8 @@ const cordel: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: {},
-  estrutura: { painel: 'caixa-grossa', rotulo: 'quadrado', rotuloCaixa: 'versalete', notas: 'dentro', figura: 'simples' },
+  estrutura: { painel: 'caixa-grossa', rotulo: 'quadrado', rotuloCaixa: 'versalete', notas: 'dentro', figura: 'simples', minusculas: false },
+  logo: 'mono',
 }
 
 const riso: PrintStyle = {
@@ -423,7 +433,7 @@ const riso: PrintStyle = {
     destaque: '#3d3fa0',
     destaque2: '#ff48b0',
     marcaTexto: '#ffd3ea',
-    contexto: '#8f8fc4',
+    contexto: '#9a8fc4',
     prova: {
       sustentada: '#3d3fa0',
       refutada: '#c8187a',
@@ -440,7 +450,8 @@ const riso: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: { tinta: '#1a1a1a', tinta2: '#1a1a1a', tinta3: '#3a3a3a', linha: '#1a1a1a', destaque: '#1a1a1a', destaque2: '#8a8a8a' },
-  estrutura: { painel: 'caixa', rotulo: 'circulo', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples' },
+  estrutura: { painel: 'caixa', rotulo: 'circulo', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false },
+  logo: 'mono',
 }
 
 const jornal: PrintStyle = {
@@ -486,7 +497,7 @@ const jornal: PrintStyle = {
   raio: 3,
   caixaAlta: false,
   pb: { destaque: '#121212' },
-  estrutura: { painel: 'fio', rotulo: 'letra', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples' },
+  estrutura: { painel: 'fio', rotulo: 'letra', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false },
 }
 
 const prancheta: PrintStyle = {
@@ -504,21 +515,21 @@ const prancheta: PrintStyle = {
   googleFonts: ['Share Tech Mono', 'IBM Plex Sans Condensed:ital,wght@0,400;0,500;1,400', PLEX_MONO],
   cor: {
     papel: '#1d4b8f',
-    tinta: '#eef4ff',
-    tinta2: '#d6e1f3',
-    tinta3: '#bccbe4',
-    linha: '#eef4ff',
-    destaque: '#eef4ff',
-    destaque2: '#dce6f7',
-    marcaTexto: '#2c5aa0',
-    contexto: '#b9c6e2',
+    tinta: '#f6f4ea',
+    tinta2: '#e2dfd3',
+    tinta3: '#d9d6c8',
+    linha: '#f6f4ea',
+    destaque: '#f6f4ea',
+    destaque2: '#ece9dc',
+    marcaTexto: '#4d5d78',
+    contexto: '#c9c5b5',
     prova: {
-      sustentada: '#eef4ff',
-      refutada: '#eef4ff',
-      'nao-da-para-afirmar': '#eef4ff',
-      pendente: '#d6e1f3',
-      'sem-dado': '#d6e1f3',
-      'nao-testada': '#d6e1f3',
+      sustentada: '#f6f4ea',
+      refutada: '#f6f4ea',
+      'nao-da-para-afirmar': '#f6f4ea',
+      pendente: '#e2dfd3',
+      'sem-dado': '#e2dfd3',
+      'nao-testada': '#e2dfd3',
     },
   },
   papel: { textura: 'milimetrado', intensidade: 0.7 },
@@ -536,11 +547,12 @@ const prancheta: PrintStyle = {
     linha: '#111111',
     destaque: '#111111',
     destaque2: '#444444',
-    marcaTexto: '#e6e6e6',
+    marcaTexto: '#eeeeee',
     contexto: '#9a9a9a',
     prova: { sustentada: '#111111', refutada: '#111111', 'nao-da-para-afirmar': '#111111', pendente: '#333333', 'sem-dado': '#333333', 'nao-testada': '#333333' },
   },
-  estrutura: { painel: 'prancha', rotulo: 'circulo', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples' },
+  estrutura: { painel: 'prancha', rotulo: 'circulo', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false },
+  logo: 'mono',
 }
 
 const pranchetaClara: PrintStyle = {
@@ -556,7 +568,7 @@ const pranchetaClara: PrintStyle = {
     linha: '#1f4787',
     destaque: '#2e3192',
     destaque2: '#2e3192',
-    marcaTexto: '#dfe5ef',
+    marcaTexto: '#e2dfd3',
     contexto: '#9aa3c4',
     prova: {
       sustentada: '#2e3192',
@@ -615,7 +627,7 @@ const aquarela: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: { destaque: '#5a5a5a', destaque2: '#b0b0b0' },
-  estrutura: { painel: 'caixa', rotulo: 'parenteses', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples' },
+  estrutura: { painel: 'caixa', rotulo: 'parenteses', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false },
 }
 
 const tufte: PrintStyle = {
@@ -653,11 +665,11 @@ const tufte: PrintStyle = {
   papel: { textura: 'nenhuma', intensidade: 0 },
   traco: { largura: 0.15, tremor: 0, hachura: 'nenhuma' },
   grafico: 'limpo',
-  marcaProva: 'sublinhado',
+  marcaProva: 'etiqueta',
   raio: 0,
   caixaAlta: false,
   pb: { destaque: '#111111' },
-  estrutura: { painel: 'nenhum', rotulo: 'letra', rotuloCaixa: 'versalete', notas: 'margem', figura: 'simples' },
+  estrutura: { painel: 'nenhum', rotulo: 'letra', rotuloCaixa: 'versalete', notas: 'margem', figura: 'simples', minusculas: false },
 }
 
 const suico: PrintStyle = {
@@ -665,83 +677,83 @@ const suico: PrintStyle = {
   label: 'Estilo Suíço',
   referencia: 'Estilo tipográfico internacional (Josef Müller-Brockmann, Grid Systems, 1981): grade rígida, grotesca, assimetria, um vermelho',
   fontes: {
-    titulo: f('Inter Tight', SANS),
-    corpo: f('Inter', SANS),
-    numero: f('Inter Tight', SANS),
-    rotulo: f('Inter', SANS),
-    anotacao: f('Inter', SANS),
-    mono: f('JetBrains Mono', MONO),
-  },
-  googleFonts: ['Inter Tight:wght@500;600;700;800', 'Inter:ital,wght@0,400;0,500;0,600;0,700;1,400', 'JetBrains Mono:wght@400;500'],
-  cor: {
-    papel: '#f4f3ef',
-    tinta: '#111111',
-    tinta2: '#2e2e2e',
-    tinta3: '#555555',
-    linha: '#111111',
-    destaque: '#e30613',
-    destaque2: '#111111',
-    marcaTexto: '#f9d7d2',
-    contexto: '#b0afa9',
-    prova: {
-      sustentada: '#111111',
-      refutada: '#c8050f',
-      'nao-da-para-afirmar': '#111111',
-      pendente: '#555555',
-      'sem-dado': '#555555',
-      'nao-testada': '#555555',
-    },
-  },
-  papel: { textura: 'nenhuma', intensidade: 0 },
-  traco: { largura: 0.35, tremor: 0, hachura: 'simples' },
-  grafico: 'limpo',
-  marcaProva: 'barra',
-  raio: 0,
-  caixaAlta: false,
-  pb: { destaque: '#111111' },
-  estrutura: { painel: 'fio-grosso', rotulo: 'letra', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples' },
-}
-
-const concretismo: PrintStyle = {
-  name: 'concretismo',
-  label: 'Concretismo',
-  referencia: 'Design concreto brasileiro (Alexandre Wollner, Aloísio Magalhães, ESDI, anos 1950-60): geometria, grotesca, preto, vermelhão e ultramar',
-  fontes: {
     titulo: f('Archivo', SANS),
     corpo: f('Archivo', SANS),
     numero: f('Archivo', SANS),
     rotulo: f('Archivo', SANS),
     anotacao: f('Archivo', SANS),
-    mono: f('Space Mono', MONO),
+    mono: f('IBM Plex Mono', MONO),
   },
-  googleFonts: ['Archivo:ital,wdth,wght@0,62..125,400;0,62..125,500;0,62..125,700;0,62..125,800;1,62..125,400', 'Space Mono'],
+  googleFonts: ['Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400', PLEX_MONO],
   cor: {
-    papel: '#f6f4ee',
-    tinta: '#141414',
-    tinta2: '#2b2b2b',
-    tinta3: '#525252',
-    linha: '#141414',
-    destaque: '#e2401c',
-    destaque2: '#3d3fa0',
-    marcaTexto: '#f8d8cd',
-    contexto: '#c4bfb3',
+    papel: '#fbfbf9',
+    tinta: '#0d0d0d',
+    tinta2: '#2e2e2e',
+    tinta3: '#595959',
+    linha: '#0d0d0d',
+    destaque: '#0d0d0d',
+    destaque2: '#e0261b',
+    marcaTexto: '#f9d7d2',
+    contexto: '#b5b5b0',
     prova: {
-      sustentada: '#141414',
-      refutada: '#c2360f',
-      'nao-da-para-afirmar': '#3d3fa0',
-      pendente: '#525252',
-      'sem-dado': '#525252',
-      'nao-testada': '#525252',
+      sustentada: '#0d0d0d',
+      refutada: '#c8150b',
+      'nao-da-para-afirmar': '#0d0d0d',
+      pendente: '#595959',
+      'sem-dado': '#595959',
+      'nao-testada': '#595959',
     },
   },
   papel: { textura: 'nenhuma', intensidade: 0 },
-  traco: { largura: 0.8, tremor: 0, hachura: 'simples' },
+  traco: { largura: 0.35, tremor: 0, hachura: 'nenhuma' },
   grafico: 'limpo',
-  marcaProva: 'circulo',
+  marcaProva: 'barra',
   raio: 0,
   caixaAlta: false,
-  pb: { destaque: '#141414', destaque2: '#7a7a7a' },
-  estrutura: { painel: 'fio-grosso', rotulo: 'circulo', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples' },
+  pb: { destaque2: '#8a8a8a' },
+  estrutura: { painel: 'fio-grosso', rotulo: 'letra', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false },
+}
+
+const concretismo: PrintStyle = {
+  name: 'concretismo',
+  label: 'Concretismo',
+  referencia: 'Design concreto brasileiro (Alexandre Wollner, Aloísio Magalhães, ESDI, anos 1950-60): geometria, grotesca em caixa-baixa, preto, vermelho e ultramar',
+  fontes: {
+    titulo: f('Barlow', SANS),
+    corpo: f('Barlow', SANS),
+    numero: f('Barlow', SANS),
+    rotulo: f('Barlow Condensed', SANS),
+    anotacao: f('Barlow', SANS),
+    mono: f('Barlow Condensed', SANS),
+  },
+  googleFonts: ['Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400', 'Barlow Condensed:wght@500;600'],
+  cor: {
+    papel: '#f3efe6',
+    tinta: '#141414',
+    tinta2: '#2b2b2b',
+    tinta3: '#57534c',
+    linha: '#141414',
+    destaque: '#d7372a',
+    destaque2: '#3d3fa0',
+    marcaTexto: '#f3d3cc',
+    contexto: '#c9c3b6',
+    prova: {
+      sustentada: '#141414',
+      refutada: '#b82e22',
+      'nao-da-para-afirmar': '#3d3fa0',
+      pendente: '#57534c',
+      'sem-dado': '#57534c',
+      'nao-testada': '#57534c',
+    },
+  },
+  papel: { textura: 'nenhuma', intensidade: 0 },
+  traco: { largura: 0.7, tremor: 0, hachura: 'nenhuma' },
+  grafico: 'limpo',
+  marcaProva: 'etiqueta',
+  raio: 0,
+  caixaAlta: false,
+  pb: { destaque: '#141414', destaque2: '#8a8a8a' },
+  estrutura: { painel: 'fio-grosso', rotulo: 'quadrado', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: true },
 }
 
 const economist: PrintStyle = {
@@ -749,158 +761,157 @@ const economist: PrintStyle = {
   label: 'The Economist',
   referencia: 'Gráficos da revista The Economist: barra vermelha no topo, título curto, grotesca condensada, grade só horizontal',
   fontes: {
-    titulo: f('Roboto Condensed', SANS),
+    titulo: f('Source Serif 4', SERIF),
     corpo: f('Source Serif 4', SERIF),
-    numero: f('Roboto Condensed', SANS),
-    rotulo: f('Roboto Condensed', SANS),
-    anotacao: f('Roboto Condensed', SANS),
-    mono: f('Roboto Mono', MONO),
+    numero: f('Fira Sans Condensed', SANS),
+    rotulo: f('Fira Sans Condensed', SANS),
+    anotacao: f('Fira Sans Condensed', SANS),
+    mono: f('Fira Sans Condensed', SANS),
   },
   googleFonts: [
-    'Roboto Condensed:ital,wght@0,400;0,500;0,700;1,400',
-    'Source Serif 4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400',
-    'Roboto Mono:wght@400;500',
+    'Fira Sans Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400',
+    'Source Serif 4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400',
   ],
   cor: {
-    papel: '#fbfbf9',
+    papel: '#ffffff',
     tinta: '#121212',
     tinta2: '#333333',
-    tinta3: '#575757',
+    tinta3: '#595959',
     linha: '#b7c6cf',
-    destaque: '#e3120b',
-    destaque2: '#0d6f74',
+    destaque: '#3a4aa0',
+    destaque2: '#b0bee0',
     marcaTexto: '#fbdcd8',
     contexto: '#b7c6cf',
     prova: {
-      sustentada: '#121212',
-      refutada: '#c50f09',
-      'nao-da-para-afirmar': '#0d6f74',
-      pendente: '#575757',
-      'sem-dado': '#575757',
-      'nao-testada': '#575757',
+      sustentada: '#3a4aa0',
+      refutada: '#d7110a',
+      'nao-da-para-afirmar': '#3a4aa0',
+      pendente: '#595959',
+      'sem-dado': '#595959',
+      'nao-testada': '#595959',
     },
   },
   papel: { textura: 'nenhuma', intensidade: 0 },
   traco: { largura: 0.3, tremor: 0, hachura: 'nenhuma' },
   grafico: 'limpo',
-  marcaProva: 'etiqueta',
+  marcaProva: 'barra',
   raio: 0,
   caixaAlta: false,
-  pb: { destaque: '#121212', destaque2: '#777777' },
-  estrutura: { painel: 'fio', rotulo: 'letra', rotuloCaixa: 'normal', notas: 'dentro', figura: 'barra-topo' },
+  pb: { destaque: '#121212', destaque2: '#9a9a9a' },
+  estrutura: { painel: 'fio', rotulo: 'quadrado', rotuloCaixa: 'normal', notas: 'dentro', figura: 'barra-topo', minusculas: false },
 }
 
 const holmes: PrintStyle = {
   name: 'holmes',
   label: 'Nigel Holmes',
-  referencia: 'Infografia explicativa de Nigel Holmes (Time, Wordless Diagrams): pictogramas, cantos redondos, legenda amigável à mão',
+  referencia: 'Infografia explicativa de Nigel Holmes (Time, Wordless Diagrams): pictogramas, cantos redondos, balão de fala, cores amigáveis',
   fontes: {
-    titulo: f('Fredoka', SANS),
-    corpo: f('Source Sans 3', SANS),
-    numero: f('Fredoka', SANS),
-    rotulo: f('Fredoka', SANS),
-    anotacao: f('Patrick Hand', HAND),
-    mono: f('Source Code Pro', MONO),
+    titulo: f('Rubik', SANS),
+    corpo: f('Nunito Sans', SANS),
+    numero: f('Rubik', SANS),
+    rotulo: f('Rubik', SANS),
+    anotacao: f('Nunito Sans', SANS),
+    mono: f('Nunito Sans', SANS),
   },
-  googleFonts: ['Fredoka:wght@400;500;600;700', 'Source Sans 3:ital,wght@0,400;0,600;0,700;1,400', 'Patrick Hand', 'Source Code Pro:wght@400;500'],
+  googleFonts: ['Rubik:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400', 'Nunito Sans:ital,opsz,wght@0,6..12,400;0,6..12,600;0,6..12,700;1,6..12,400'],
   cor: {
-    papel: '#fbf5e6',
-    tinta: '#1f1b16',
-    tinta2: '#3b342c',
-    tinta3: '#5a5147',
-    linha: '#1f1b16',
-    destaque: '#e05a2b',
-    destaque2: '#2f7f86',
-    marcaTexto: '#ffe6a3',
-    contexto: '#c9bca3',
+    papel: '#fbf6ea',
+    tinta: '#22303c',
+    tinta2: '#34424e',
+    tinta3: '#56606a',
+    linha: '#22303c',
+    destaque: '#e0603f',
+    destaque2: '#2b8a86',
+    marcaTexto: '#f6e1ad',
+    contexto: '#d9cfbb',
     prova: {
-      sustentada: '#2f6b3a',
-      refutada: '#b8401a',
-      'nao-da-para-afirmar': '#6b4e8a',
-      pendente: '#5a5147',
-      'sem-dado': '#5a5147',
-      'nao-testada': '#5a5147',
+      sustentada: '#1f6f6b',
+      refutada: '#b8401f',
+      'nao-da-para-afirmar': '#22303c',
+      pendente: '#56606a',
+      'sem-dado': '#56606a',
+      'nao-testada': '#56606a',
     },
   },
-  papel: { textura: 'grao', intensidade: 0.2 },
-  traco: { largura: 0.5, tremor: 0.3, hachura: 'simples' },
+  papel: { textura: 'nenhuma', intensidade: 0 },
+  traco: { largura: 0.5, tremor: 0, hachura: 'nenhuma' },
   grafico: 'isotype',
   marcaProva: 'pilula',
   raio: 2.4,
   caixaAlta: false,
   pb: { destaque: '#2a2a2a', destaque2: '#8a8a8a' },
-  estrutura: { painel: 'cartao', rotulo: 'circulo', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples' },
+  estrutura: { painel: 'cartao', rotulo: 'circulo', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false },
 }
 
 const bayer: PrintStyle = {
   name: 'bayer',
   label: 'Herbert Bayer',
-  referencia: 'World Geo-Graphic Atlas de Herbert Bayer (1953): atlas modernista, cores chapadas, sans geométrica, pictogramas de escala',
+  referencia: 'World Geo-Graphic Atlas de Herbert Bayer (1953): atlas modernista, blocos de cor chapada, sans geométrica em caixa-baixa',
   fontes: {
-    titulo: f('Josefin Sans', SANS),
-    corpo: f('Work Sans', SANS),
-    numero: f('Josefin Sans', SANS),
-    rotulo: f('Josefin Sans', SANS),
-    anotacao: f('Work Sans', SANS),
-    mono: f('Space Mono', MONO),
+    titulo: f('League Spartan', SANS),
+    corpo: f('Jost', SANS),
+    numero: f('League Spartan', SANS),
+    rotulo: f('League Spartan', SANS),
+    anotacao: f('Jost', SANS),
+    mono: f('Jost', SANS),
   },
-  googleFonts: ['Josefin Sans:ital,wght@0,400;0,600;0,700;1,400', 'Work Sans:ital,wght@0,400;0,500;0,600;1,400', 'Space Mono'],
+  googleFonts: ['League Spartan:wght@400;500;600;700', 'Jost:ital,wght@0,400;0,500;0,600;1,400'],
   cor: {
-    papel: '#f1ebdd',
-    tinta: '#1a1a1a',
+    papel: '#f1ece0',
+    tinta: '#1b1a17',
     tinta2: '#36342f',
-    tinta3: '#57534a',
-    linha: '#1a1a1a',
-    destaque: '#b8452c',
+    tinta3: '#5c574d',
+    linha: '#1b1a17',
+    destaque: '#c0512d',
     destaque2: '#5a5f93',
-    marcaTexto: '#e6d9b8',
-    contexto: '#cdbf9c',
+    marcaTexto: '#ecd8a8',
+    contexto: '#cbc2ae',
     prova: {
-      sustentada: '#3e6a48',
-      refutada: '#a63d26',
-      'nao-da-para-afirmar': '#4f548a',
-      pendente: '#57534a',
-      'sem-dado': '#57534a',
-      'nao-testada': '#57534a',
+      sustentada: '#56602a',
+      refutada: '#a8401f',
+      'nao-da-para-afirmar': '#1b1a17',
+      pendente: '#5c574d',
+      'sem-dado': '#5c574d',
+      'nao-testada': '#5c574d',
     },
   },
-  papel: { textura: 'grao', intensidade: 0.25 },
+  papel: { textura: 'nenhuma', intensidade: 0 },
   traco: { largura: 0.4, tremor: 0, hachura: 'nenhuma' },
   grafico: 'limpo',
   marcaProva: 'etiqueta',
   raio: 0,
   caixaAlta: false,
   pb: { destaque: '#2a2a2a', destaque2: '#8a8a8a' },
-  estrutura: { painel: 'bloco', rotulo: 'circulo', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples' },
+  estrutura: { painel: 'bloco', rotulo: 'circulo', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: true },
 }
 
 const ft: PrintStyle = {
   name: 'ft',
   label: 'Financial Times',
-  referencia: 'Gráficos do Financial Times: papel salmão, serifa editorial no título, grotesca nos rótulos, clarete e azul-petróleo',
+  referencia: 'Gráficos do Financial Times: papel salmão, serifa editorial no título, grotesca nos rótulos, clarete e azul',
   fontes: {
-    titulo: f('Libre Caslon Text', SERIF),
-    corpo: f('Libre Caslon Text', SERIF),
-    numero: f('Source Sans 3', SANS),
-    rotulo: f('Source Sans 3', SANS),
-    anotacao: f('Source Sans 3', SANS),
-    mono: f('Source Code Pro', MONO),
+    titulo: f('DM Serif Display', SERIF),
+    corpo: f('Gelasio', SERIF),
+    numero: f('Hanken Grotesk', SANS),
+    rotulo: f('Hanken Grotesk', SANS),
+    anotacao: f('Hanken Grotesk', SANS),
+    mono: f('Hanken Grotesk', SANS),
   },
-  googleFonts: ['Libre Caslon Text:ital,wght@0,400;0,700;1,400', 'Source Sans 3:ital,wght@0,400;0,600;0,700;1,400', 'Source Code Pro:wght@400;500'],
+  googleFonts: ['DM Serif Display:ital@0;1', 'Gelasio:ital,wght@0,400;0,500;0,600;1,400', 'Hanken Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400'],
   cor: {
     papel: '#fff1e5',
     tinta: '#33302e',
     tinta2: '#4a4543',
     tinta3: '#625c58',
-    linha: '#ccc1b7',
-    destaque: '#990f3d',
-    destaque2: '#0d7680',
+    linha: '#e3d2c3',
+    destaque: '#3a4aa0',
+    destaque2: '#b0bee0',
     marcaTexto: '#f2dfce',
-    contexto: '#b7aba1',
+    contexto: '#c9bcb0',
     prova: {
-      sustentada: '#33302e',
+      sustentada: '#3a4aa0',
       refutada: '#990f3d',
-      'nao-da-para-afirmar': '#0d6770',
+      'nao-da-para-afirmar': '#33302e',
       pendente: '#625c58',
       'sem-dado': '#625c58',
       'nao-testada': '#625c58',
@@ -912,8 +923,8 @@ const ft: PrintStyle = {
   marcaProva: 'etiqueta',
   raio: 0,
   caixaAlta: false,
-  pb: { papel: '#ffffff', destaque: '#1a1a1a', destaque2: '#7a7a7a' },
-  estrutura: { painel: 'fio', rotulo: 'letra', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples' },
+  pb: { papel: '#ffffff', destaque: '#1a1a1a', destaque2: '#a0a0a0' },
+  estrutura: { painel: 'fio', rotulo: 'letra', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false },
 }
 
 /** The 18 book styles, by name. */
@@ -970,6 +981,7 @@ export function mergePrintStyle(style: PrintStyle, overrides?: PrintStyleOverrid
     caixaAlta: overrides.caixaAlta ?? style.caixaAlta,
     pb: overrides.pb ? mergeCores({ ...style.cor, ...style.pb, prova: { ...style.cor.prova, ...style.pb.prova } }, overrides.pb) : style.pb,
     estrutura: { ...style.estrutura, ...overrides.estrutura },
+    logo: overrides.logo ?? style.logo,
   }
 }
 
@@ -1047,6 +1059,7 @@ export function printStyleVariables(style: PrintStyle): Array<[string, string]> 
   vars.push(['--ty-print-rotulo-caixa', rc === 'alta' ? 'uppercase' : 'none'])
   vars.push(['--ty-print-rotulo-variante', rc === 'versalete' ? 'small-caps' : 'normal'])
   vars.push(['--ty-print-rotulo-espaco', rc === 'normal' ? 'normal' : '0.07em'])
+  vars.push(['--ty-print-minusculas', style.estrutura.minusculas ? 'lowercase' : 'none'])
   return vars
 }
 
