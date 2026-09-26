@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { expectNoAxeViolations } from '../../../test/axe'
@@ -13,7 +13,7 @@ import { renderRtl } from '../../../test/rtl'
 describe('WheelPicker', () => {
   const scrollTo = vi.fn()
   beforeEach(() => {
-    scrollTo.mockClear()
+    scrollTo.mockReset()
     Object.defineProperty(Element.prototype, 'scrollTo', { configurable: true, writable: true, value: scrollTo })
   })
   afterEach(() => {
@@ -87,8 +87,23 @@ describe('WheelPicker', () => {
     expect(day).not.toHaveBeenCalled()
   })
 
-  it('animates programmatic moves, and jumps under reduced motion', () => {
+  it('centres the initial value on mount, once its row exists (React 18 and 19)', async () => {
+    // Clamp like a browser: a list cannot scroll past the rows it holds, so a
+    // scroll issued before React Aria commits the option rows would land on 0.
+    scrollTo.mockImplementation(function (this: HTMLElement, options: ScrollToOptions) {
+      const rowsInDom = this.querySelectorAll('[role="option"]').length
+      this.scrollTop = Math.min(options.top ?? 0, Math.max(0, rowsInDom - 1) * 44)
+    })
+    render(<WheelPicker label="Letter" options={['a', 'b', 'c', 'd', 'e']} value="d" onChange={() => {}} />)
+    await waitFor(() => expect(scrollTo).toHaveBeenCalled())
+    expect(screen.getByRole('listbox', { name: 'Letter' }).scrollTop).toBe(3 * 44)
+    expect(scrollTo).toHaveBeenCalledTimes(1)
+    expect(scrollTo).toHaveBeenCalledWith({ top: 3 * 44, behavior: 'instant' })
+  })
+
+  it('animates programmatic moves, and jumps under reduced motion', async () => {
     const { rerender } = render(<WheelPicker label="Letter" options={['a', 'b', 'c']} value="a" onChange={() => {}} />)
+    await waitFor(() => expect(scrollTo).toHaveBeenCalledWith(expect.objectContaining({ top: 0, behavior: 'instant' })))
     rerender(<WheelPicker label="Letter" options={['a', 'b', 'c']} value="c" onChange={() => {}} />)
     expect(scrollTo).toHaveBeenLastCalledWith(expect.objectContaining({ behavior: 'smooth' }))
     setMedia({ reducedMotion: true })

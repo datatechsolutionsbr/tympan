@@ -88,21 +88,42 @@ export function WheelPicker(props: WheelPickerProps) {
     return item?.offsetHeight || DEFAULT_ROW
   }
 
-  // Bring the value's row to the band whenever the value changes.
+  // Bring the value's row to the band whenever the value changes. React Aria
+  // commits the option rows in a later pass than the ListBox itself (on
+  // React 18 in particular), so on mount the list can still be empty here and
+  // a scroll would be clamped to 0. Wait until the target row exists; the
+  // first placement jumps, later moves animate.
+  const placed = useRef(false)
   useEffect(() => {
     const el = listRef.current
     const target = Math.max(0, index)
     setCentre(target)
     if (!el) return
-    programmatic.current = true
-    const top = target * rowHeight()
-    const behavior: ScrollBehavior = prefersReducedMotion() ? 'instant' : 'smooth'
-    if (typeof el.scrollTo === 'function') el.scrollTo({ top, behavior })
-    else el.scrollTop = top
-    clearTimeout(settleTimer.current)
-    settleTimer.current = setTimeout(() => {
-      programmatic.current = false
-    }, 400)
+    const place = () => {
+      const first = !placed.current
+      placed.current = true
+      programmatic.current = true
+      const top = target * rowHeight()
+      const behavior: ScrollBehavior = first || prefersReducedMotion() ? 'instant' : 'smooth'
+      if (typeof el.scrollTo === 'function') el.scrollTo({ top, behavior })
+      else el.scrollTop = top
+      clearTimeout(settleTimer.current)
+      settleTimer.current = setTimeout(() => {
+        programmatic.current = false
+      }, 400)
+    }
+    const ready = () => el.querySelectorAll('[role="option"]').length > target
+    if (ready() || typeof MutationObserver === 'undefined') {
+      place()
+      return
+    }
+    const observer = new MutationObserver(() => {
+      if (!ready()) return
+      observer.disconnect()
+      place()
+    })
+    observer.observe(el, { childList: true, subtree: true })
+    return () => observer.disconnect()
   }, [index])
 
   // User scrolling: tick on every row that crosses the band, report on settle.
