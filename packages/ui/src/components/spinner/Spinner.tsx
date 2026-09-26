@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { ProgressBar as AriaProgressBar } from 'react-aria-components'
 import { cx } from '../../internal/cx'
+import { inertProps } from '../../internal/inert'
 import { useReducedMotion } from '../../internal/media'
 import { useMessages } from '../../internal/provider'
 
@@ -46,7 +47,7 @@ function Covered(p: { look: Look; name: string; shown: boolean; reduced: boolean
   const busy = p.shown || undefined
   return (
     <div className={cx('fk-spinner-region', p.className)} aria-busy={busy}>
-      <div className="fk-spinner-region__content" inert={busy}>
+      <div className="fk-spinner-region__content" {...inertProps(busy)}>
         {p.children}
       </div>
       {p.shown && (

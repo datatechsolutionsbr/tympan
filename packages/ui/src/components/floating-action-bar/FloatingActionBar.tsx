@@ -15,6 +15,7 @@ import {
 import { mergeProps, useButton, useLink, useLongPress } from 'react-aria'
 import { Menu, MenuItem, Popover, useLocale } from 'react-aria-components'
 import { cx } from '../../internal/cx'
+import { inertProps } from '../../internal/inert'
 import { breakpoints, useMinWidth, useReducedMotion } from '../../internal/media'
 import { useMessages } from '../../internal/provider'
 import { useLocaleText } from '../../internal/speech'
@@ -516,7 +517,7 @@ export function FloatingActionBar(props: FloatingActionBarProps) {
         ref={barRef as RefObject<HTMLElement>}
         className={cx('fk-action-bar', props.className)}
         data-hidden={hidden || undefined}
-        inert={hidden || undefined}
+        {...inertProps(hidden)}
         tabIndex={-1}
         onFocus={(e) => {
           // Skip-link arrival on the landmark forwards focus to the active item.

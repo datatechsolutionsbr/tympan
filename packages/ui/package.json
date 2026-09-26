@@ -1,7 +1,7 @@
 {
   "name": "@fakhir/design-system",
   "version": "0.1.0",
-  "description": "Fakhir design system: accessible React 19 components on React Aria Components, styled with --fk-* CSS custom properties in @layer fakhir. No Tailwind.",
+  "description": "Fakhir design system: accessible React components (React 18.3 or 19) on React Aria Components, styled with --fk-* CSS custom properties in @layer fakhir. No Tailwind.",
   "license": "MIT",
   "private": true,
   "type": "module",
@@ -37,8 +37,8 @@
     "pretypecheck": "npm run build -w @fakhir/tokens"
   },
   "peerDependencies": {
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react": "^18.3.0 || ^19.0.0",
+    "react-dom": "^18.3.0 || ^19.0.0"
   },
   "dependencies": {
     "@fakhir/tokens": "0.1.0",

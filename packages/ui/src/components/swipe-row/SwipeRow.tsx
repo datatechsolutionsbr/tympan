@@ -5,6 +5,7 @@ import { Archive, Ellipsis, Pencil, Star, Trash2 } from 'lucide-react'
 import { useMemo, useRef, useState, type KeyboardEvent, type ReactNode, type TouchEvent } from 'react'
 import { useLocale } from 'react-aria-components'
 import { cx } from '../../internal/cx'
+import { inertProps } from '../../internal/inert'
 import { useReducedMotion } from '../../internal/media'
 import { beginTrack, advanceTrack, firstTouch, type Track } from '../../internal/platform/touchTrack'
 import { useMessages } from '../../internal/provider'
@@ -62,7 +63,7 @@ export function useSwipeActionPresets() {
 function ActionStrip({ side, actions, open, onPick }: { side: 'leading' | 'trailing'; actions: SwipeAction[]; open: boolean; onPick: (a: SwipeAction) => void }) {
   if (actions.length === 0) return null
   return (
-    <div className="fk-swipe-row__actions" data-side={side} aria-hidden={!open || undefined} inert={!open || undefined}>
+    <div className="fk-swipe-row__actions" data-side={side} aria-hidden={!open || undefined} {...inertProps(!open)}>
       {actions.map((action) => (
         <button key={action.label} type="button" className="fk-swipe-row__action" data-tone={action.tone} tabIndex={open ? undefined : -1} onClick={() => onPick(action)}>
           {action.icon ? (

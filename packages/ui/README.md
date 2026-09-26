@@ -1,6 +1,6 @@
 # @fakhir/design-system
 
-Accessible React 19 components for Fakhir, built on
+Accessible React components for Fakhir (React 18.3 or 19), built on
 [React Aria Components](https://react-spectrum.adobe.com/react-aria/) and
 styled with plain CSS custom properties (`--fk-*`) in `@layer fakhir`. No
 Tailwind. MIT licence.
