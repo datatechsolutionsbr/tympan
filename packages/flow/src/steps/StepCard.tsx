@@ -14,7 +14,7 @@ import { useNodeResult } from '../state/editorState'
 import { useSurface } from '../surface/SurfaceContext'
 import { ShapeChip } from './ShapeChip'
 import { shapeList, type DataShape } from './shapes'
-import { specOfNode, summaryLine } from './researchSteps'
+import { settingProblems, specOfNode, summaryLine } from './researchSteps'
 import { useSteps } from './StepsContext'
 import { inPort, OUT_PORT } from './wiring'
 
@@ -39,7 +39,11 @@ export function StepCard({ node, locked, selected, preview, onConfigure }: FlowN
   const Icon = spec?.icon
   const run = result?.status === 'success' ? 'ok' : result?.status === 'running' ? 'running' : result?.status === 'error' ? 'failed' : null
   const runWord = run === 'ok' ? w.runOk : run === 'running' ? w.runRunning : run === 'failed' ? w.runFailed : null
-  const problems = issues.map((i) => fill(w.mismatch, { expects: shapeList(i.expects, rt.shapes), gets: i.gets ? rt.shapes[i.gets] : w.nothing }, locale))
+  const settings = Object.entries(settingProblems(spec, node.data, rt.problems.get(node.id)))
+  const problems = [
+    ...issues.map((i) => fill(w.mismatch, { expects: shapeList(i.expects, rt.shapes), gets: i.gets ? rt.shapes[i.gets] : w.nothing }, locale)),
+    ...(settings.length ? [w.configIncomplete] : []),
+  ]
   const editable = !locked && !preview
   const inputs = spec?.inputs ?? []
   const output = spec?.output ?? null
@@ -54,7 +58,7 @@ export function StepCard({ node, locked, selected, preview, onConfigure }: FlowN
   }
 
   return (
-    <div className="fk-step" data-selected={selected ? 'true' : undefined} data-issue={issues.length ? 'true' : undefined} data-run={run ?? undefined}>
+    <div className="fk-step" data-selected={selected ? 'true' : undefined} data-issue={problems.length ? 'true' : undefined} data-run={run ?? undefined}>
       {inputs.length ? (
         <span className="fk-step__ports" data-edge="in">
           {inputs.map((accepts, i) => (

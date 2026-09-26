@@ -252,6 +252,53 @@ describe('FlowEditor with research steps', () => {
     expect(store.getState().nodes.some((n) => n.id === 'cnt')).toBe(false)
   })
 
+  it('edits settings kept inside the node data, marks problems on the card and inline, and refuses structured text that does not parse', async () => {
+    const catalog = {
+      shelves: [{ id: 'input' }, { id: 'prepare' }],
+      steps: [
+        { id: 'records', verb: 'input', icon: 'library', inputs: [], output: 'records' as const, summary: '{record_type}', configIn: 'config', fields: [{ key: 'record_type', type: 'text' as const, required: true }] },
+        {
+          id: 'pick',
+          verb: 'prepare',
+          icon: 'split',
+          inputs: [['records' as const]],
+          output: 'records' as const,
+          configIn: 'config',
+          fields: [
+            { key: 'how', type: 'choice' as const, options: ['inner', 'left'] },
+            { key: 'keep', type: 'boolean' as const },
+            { key: 'by', type: 'list' as const },
+            { key: 'where', type: 'json' as const, required: true },
+          ],
+          check: (v: Record<string, unknown>) => (v.where === undefined ? { where: 'Fill in this field.' } : {}),
+        },
+      ],
+    }
+    const graph = { nodes: [step('r', 'records', { config: { record_type: 'case' } }), step('p', 'pick', { config: { how: 'inner' } })], connectors: [wire('a', 'r', 'p')] }
+    const { store, container } = mount(graph, { steps: catalog, stepProblems: new Map([['r', { record_type: 'no record type case' }]]) })
+    expect(container.querySelector('[data-fk-node-id="p"] .fk-step__line')).toHaveTextContent('configuration incomplete')
+    expect(container.querySelector('[data-fk-node-id="r"] .fk-step__line')).toHaveTextContent('configuration incomplete')
+    act(() => store.actions.select(['r']))
+    expect(screen.getByRole('textbox', { name: /record_type/ })).toHaveAccessibleDescription(/no record type case/)
+    act(() => store.actions.select(['p']))
+    const settings = screen.getByRole('complementary', { name: 'pick' })
+    const where = within(settings).getByRole('textbox', { name: /where/ })
+    expect(where).toHaveAccessibleDescription(/Fill in this field/)
+    await userEvent.click(within(settings).getByRole('switch', { name: 'keep' }))
+    expect(store.getState().nodes.find((n) => n.id === 'p')!.data.config).toEqual({ how: 'inner', keep: true })
+    await userEvent.type(within(settings).getByRole('textbox', { name: 'by' }), 'a, b ,{Tab}')
+    expect((store.getState().nodes.find((n) => n.id === 'p')!.data.config as Record<string, unknown>).by).toEqual(['a', 'b'])
+    await userEvent.type(where, '{{"x": ')
+    await userEvent.tab()
+    expect(where).toHaveAccessibleDescription(/Not valid JSON/)
+    expect((store.getState().nodes.find((n) => n.id === 'p')!.data.config as Record<string, unknown>).where).toBeUndefined()
+    await userEvent.clear(where)
+    await userEvent.type(where, '{{"x": 1}')
+    await userEvent.tab()
+    expect((store.getState().nodes.find((n) => n.id === 'p')!.data.config as Record<string, unknown>).where).toEqual({ x: 1 })
+    expect(container.querySelector('[data-fk-node-id="p"] .fk-step__line')).not.toHaveTextContent('configuration incomplete')
+  })
+
   it('shows the list view from the dock: arrows move, Alt+arrows reorder, A adds, Enter configures', async () => {
     const { store, container } = mount()
     await userEvent.click(screen.getByRole('button', { name: 'Show as list' }))

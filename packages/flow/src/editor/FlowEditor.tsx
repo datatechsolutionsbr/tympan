@@ -223,6 +223,8 @@ export interface FlowEditorProps {
   /** Called after "validate flow" with the wiring issues found. */
   onValidate?: (issues: readonly WiringIssue[]) => void
   onTestStep?: (nodeId: string) => void
+  /** Problems the host found in steps' settings (e.g. the API's validation), by node id, then field key ('' for the whole configuration). */
+  stepProblems?: ReadonlyMap<string, Record<string, string>>
   /** A few rows of a step's output for the side panel. */
   outputPreview?: (nodeId: string) => OutputPreview | null
   /** Horizontal layouts read left to right even in RTL locales. */
@@ -924,7 +926,7 @@ function EditorBody(props: FlowEditorProps & { reference: FlowReferenceData }) {
   const dragName = dragStep ? ready.byId.get(dragStep)?.name : undefined
 
   return (
-    <StepsProvider catalog={props.steps ?? researchStepCatalog} aiAllowed={aiAllowed} issues={issuesByNode} addAfter={openAfter}>
+    <StepsProvider catalog={props.steps ?? researchStepCatalog} aiAllowed={aiAllowed} issues={issuesByNode} {...(props.stepProblems ? { problems: props.stepProblems } : {})} addAfter={openAfter}>
       <div
         ref={rootRef}
         className={['fk-editor', props.className].filter(Boolean).join(' ')}
