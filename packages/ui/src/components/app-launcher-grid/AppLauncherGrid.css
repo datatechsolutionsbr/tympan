@@ -1,0 +1,140 @@
+/* AppLauncherGrid (spec: wave-2/app-launcher-grid.md; design direction §2.2, §2.4, §2.7). */
+@layer fakhir.components {
+  .fk-launcher {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-5);
+  }
+  .fk-launcher__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 10rem), 1fr));
+    gap: var(--fk-space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .fk-launcher__cell {
+    position: relative;
+    display: flex;
+    min-inline-size: 0;
+  }
+  .fk-launcher__tile {
+    position: relative;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--fk-space-3);
+    min-block-size: 8.5rem;
+    padding: var(--fk-space-4);
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-card);
+    background: var(--fk-surface-raised);
+    color: var(--fk-ink-2);
+    font: inherit;
+    text-align: start;
+    text-decoration: none;
+    cursor: pointer;
+    outline: none;
+    transition: border-color var(--fk-dur-instant) var(--fk-ease);
+  }
+  .fk-launcher__tile:hover,
+  .fk-launcher__tile[data-hovered] {
+    border-color: var(--fk-line-strong);
+  }
+  .fk-launcher__tile:focus-visible,
+  .fk-launcher__tile[data-focus-visible] {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+  .fk-launcher__tile[data-pressed] {
+    scale: 0.99;
+  }
+  .fk-launcher__icon {
+    display: inline-grid;
+    place-items: center;
+    inline-size: 44px;
+    block-size: 44px;
+    border-radius: var(--fk-radius-control);
+    background: var(--fk-accent-soft);
+    color: var(--fk-accent);
+  }
+  .fk-launcher__icon > svg {
+    inline-size: 22px;
+    block-size: 22px;
+  }
+  .fk-launcher__icon--ghost {
+    background: var(--fk-surface-sunken);
+  }
+  .fk-launcher__face {
+    display: flex;
+    align-items: center;
+    gap: var(--fk-space-2);
+  }
+  .fk-launcher__role {
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+  }
+  .fk-launcher__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-1);
+    min-inline-size: 0;
+    padding-inline-end: var(--fk-space-6);
+  }
+  .fk-launcher__name {
+    color: var(--fk-ink);
+    font-size: var(--fk-font-size-body);
+    font-weight: var(--fk-font-weight-semibold);
+  }
+  .fk-launcher__description {
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+  .fk-launcher__badge {
+    position: absolute;
+    inset-block-start: var(--fk-space-3);
+    inset-inline-end: var(--fk-space-3);
+    min-inline-size: 1.5rem;
+    padding: 0 var(--fk-space-1);
+    border-radius: var(--fk-radius-pill);
+    background: var(--fk-neutral-soft);
+    color: var(--fk-on-neutral-soft);
+    font-size: var(--fk-font-size-meta);
+    line-height: 1.5rem;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .fk-launcher__badge[data-alert] {
+    background: var(--fk-danger-soft);
+    color: var(--fk-on-danger-soft);
+  }
+  .fk-launcher__more {
+    position: absolute;
+    inset-block-end: var(--fk-space-2);
+    inset-inline-end: var(--fk-space-2);
+  }
+  @media (max-width: 639.98px) {
+    .fk-launcher__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--fk-space-3);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fk-launcher__tile {
+      transition: none;
+    }
+    .fk-launcher__tile[data-pressed] {
+      scale: none;
+    }
+  }
+  @media (forced-colors: active) {
+    .fk-launcher__tile {
+      border: 1px solid CanvasText;
+    }
+    .fk-launcher__badge {
+      border: 1px solid CanvasText;
+    }
+  }
+}

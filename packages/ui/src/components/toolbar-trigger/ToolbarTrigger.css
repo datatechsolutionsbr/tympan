@@ -1,0 +1,104 @@
+/* ToolbarTrigger (spec: wave-2/toolbar-trigger.md; design direction §2.3, §2.6, §2.10). */
+@layer fakhir.components {
+  .fk-toolbar-trigger {
+    --fk-tt-fill: transparent;
+    position: relative;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--fk-space-1);
+    min-inline-size: var(--fk-control-height);
+    block-size: var(--fk-control-height);
+    padding-inline: var(--fk-space-2);
+    border: 1px solid transparent;
+    border-radius: var(--fk-radius-control);
+    background: var(--fk-tt-fill);
+    color: var(--fk-ink-2);
+    font: inherit;
+    font-size: var(--fk-font-size-label);
+    font-weight: var(--fk-font-weight-semibold);
+    cursor: pointer;
+    outline: none;
+    transition: background-color var(--fk-dur-instant) var(--fk-ease);
+  }
+  .fk-toolbar-trigger::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: max(100%, var(--fk-control-target));
+    block-size: max(100%, var(--fk-control-target));
+    transform: translate(-50%, -50%);
+  }
+  .fk-toolbar-trigger__glyph {
+    display: inline-flex;
+  }
+  .fk-toolbar-trigger__glyph > svg {
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+  }
+  .fk-toolbar-trigger__caption {
+    font-family: var(--fk-font-sans);
+    text-transform: uppercase;
+  }
+  /* Hover uses a neutral tint: accent-soft is reserved for the active item (§2.3). */
+  .fk-toolbar-trigger[data-hovered],
+  .fk-toolbar-trigger[data-expanded-state] {
+    --fk-tt-fill: var(--fk-surface-sunken);
+  }
+  .fk-toolbar-trigger[data-toggled] {
+    --fk-tt-fill: var(--fk-surface-sunken);
+    border-color: var(--fk-line-strong);
+    color: var(--fk-ink);
+  }
+  .fk-toolbar-trigger[data-pressed] {
+    opacity: 0.85;
+  }
+  .fk-toolbar-trigger[data-focus-visible] {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+  .fk-toolbar-trigger[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+  .fk-toolbar-trigger__tip {
+    padding: var(--fk-space-1) var(--fk-space-2);
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-control);
+    background: var(--fk-surface-raised-solid);
+    color: var(--fk-ink);
+    box-shadow: var(--fk-shadow-floating);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+    z-index: var(--fk-z-popover);
+  }
+  @media (max-width: 1023.98px) {
+    .fk-toolbar-trigger {
+      min-inline-size: var(--fk-control-height-touch);
+      block-size: var(--fk-control-height-touch);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fk-toolbar-trigger {
+      transition: none;
+    }
+  }
+  @media (forced-colors: active) {
+    .fk-toolbar-trigger {
+      color: ButtonText;
+      forced-color-adjust: none;
+    }
+    .fk-toolbar-trigger[data-toggled],
+    .fk-toolbar-trigger[data-expanded-state] {
+      border-color: Highlight;
+    }
+    .fk-toolbar-trigger[data-focus-visible] {
+      outline: 2px solid Highlight;
+    }
+    .fk-toolbar-trigger__tip {
+      border-color: CanvasText;
+    }
+  }
+}

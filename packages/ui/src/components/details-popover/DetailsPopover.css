@@ -1,0 +1,165 @@
+/* DetailsPopover (spec: wave-2/details-popover.md; design direction §2.3, §2.5, §2.11). */
+@layer fakhir.components {
+  .fk-details-popover__trigger {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    inline-size: 28px;
+    block-size: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--fk-radius-pill);
+    background: transparent;
+    color: var(--fk-ink-3);
+    cursor: pointer;
+    outline: none;
+  }
+  .fk-details-popover__trigger::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: max(100%, var(--fk-control-target));
+    block-size: max(100%, var(--fk-control-target));
+    transform: translate(-50%, -50%);
+  }
+  .fk-details-popover__trigger > svg {
+    inline-size: 18px;
+    block-size: 18px;
+  }
+  .fk-details-popover__trigger[data-hovered] {
+    background: var(--fk-surface-sunken);
+    color: var(--fk-ink-2);
+  }
+  .fk-details-popover__trigger[data-focus-visible] {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+  .fk-details-popover {
+    box-sizing: border-box;
+    inline-size: min(22rem, calc(100vw - 2 * var(--fk-space-4)));
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-card);
+    background: var(--fk-surface-raised);
+    color: var(--fk-on-surface-raised);
+    box-shadow: var(--fk-shadow-floating);
+    backdrop-filter: blur(var(--fk-glass-blur-floating));
+    -webkit-backdrop-filter: blur(var(--fk-glass-blur-floating));
+  }
+  .fk-details-popover[data-entering] {
+    animation: fk-details-in var(--fk-dur-quick) var(--fk-ease);
+  }
+  @keyframes fk-details-in {
+    from {
+      opacity: 0;
+      translate: 0 4px;
+    }
+  }
+  .fk-details-popover__arrow-tip svg {
+    display: block;
+    fill: var(--fk-surface-raised-solid);
+    stroke: var(--fk-line);
+  }
+  .fk-details-popover__arrow-tip[data-placement='bottom'] svg {
+    rotate: 180deg;
+  }
+  .fk-details-popover__arrow-tip[data-placement='start'] svg {
+    rotate: -90deg;
+  }
+  .fk-details-popover__arrow-tip[data-placement='end'] svg {
+    rotate: 90deg;
+  }
+  .fk-details-popover__dialog {
+    padding: var(--fk-space-4);
+    outline: none;
+  }
+  .fk-details-popover__card-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-3);
+  }
+  .fk-details-popover__head {
+    display: flex;
+    align-items: center;
+    gap: var(--fk-space-2);
+  }
+  .fk-details-popover__title {
+    margin: 0;
+    color: var(--fk-ink);
+    font-size: var(--fk-font-size-body);
+    font-weight: var(--fk-font-weight-semibold);
+  }
+  .fk-details-popover__tone,
+  .fk-details-popover__when {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fk-space-1);
+    margin: 0;
+    font-size: var(--fk-font-size-meta);
+  }
+  .fk-details-popover__tone > svg,
+  .fk-details-popover__when > svg {
+    inline-size: 14px;
+    block-size: 14px;
+  }
+  .fk-details-popover__card-body[data-tone='success'] .fk-details-popover__tone {
+    color: var(--fk-on-success-soft);
+  }
+  .fk-details-popover__card-body[data-tone='pending'] .fk-details-popover__tone {
+    color: var(--fk-on-warning-soft);
+  }
+  .fk-details-popover__card-body[data-tone='error'] .fk-details-popover__tone {
+    color: var(--fk-on-danger-soft);
+  }
+  .fk-details-popover__when {
+    color: var(--fk-ink-3);
+  }
+  .fk-details-popover__change,
+  .fk-details-popover__note-text {
+    margin: 0;
+    color: var(--fk-ink-2);
+  }
+  .fk-details-popover__change strong {
+    color: var(--fk-ink);
+  }
+  .fk-details-popover__arrow {
+    inline-size: 14px;
+    block-size: 14px;
+    vertical-align: -2px;
+    color: var(--fk-ink-3);
+  }
+  .fk-details-popover__label {
+    margin: 0;
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-label);
+    font-weight: var(--fk-font-weight-semibold);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fk-details-popover[data-entering] {
+      animation: fk-details-fade var(--fk-dur-quick) linear;
+    }
+    @keyframes fk-details-fade {
+      from {
+        opacity: 0;
+      }
+    }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .fk-details-popover {
+      background: var(--fk-surface-raised-solid);
+      backdrop-filter: none;
+    }
+  }
+  @media (forced-colors: active) {
+    .fk-details-popover {
+      border: 1px solid CanvasText;
+    }
+    .fk-details-popover__arrow-tip svg {
+      fill: Canvas;
+      stroke: CanvasText;
+    }
+    .fk-details-popover__trigger[data-focus-visible] {
+      outline: 2px solid Highlight;
+    }
+  }
+}

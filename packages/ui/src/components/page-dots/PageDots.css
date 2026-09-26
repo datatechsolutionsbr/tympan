@@ -1,0 +1,90 @@
+/* PageDots (spec: wave-2/page-dots.md; design direction §2.3, §2.7, §2.10). */
+@layer fakhir.components {
+  .fk-page-dots {
+    --fk-pip: 8px;
+    --fk-pip-rest: var(--fk-line-strong);
+    --fk-pip-on: var(--fk-accent);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fk-space-1);
+    margin: 0;
+    color: var(--fk-ink-3);
+  }
+  .fk-page-dots[data-size='small'] { --fk-pip: 6px; }
+  .fk-page-dots[data-size='large'] { --fk-pip: 10px; }
+  .fk-page-dots[data-contrast='onDark'] {
+    --fk-pip-rest: rgb(238 242 247 / 0.45);
+    --fk-pip-on: #eef2f7;
+    color: #eef2f7;
+  }
+  .fk-page-dots[data-contrast='onLight'] {
+    --fk-pip-rest: rgb(15 23 42 / 0.35);
+    --fk-pip-on: #0f172a;
+    color: #0f172a;
+  }
+  .fk-page-dots__pip {
+    display: block;
+    inline-size: var(--fk-pip);
+    block-size: var(--fk-pip);
+    border-radius: var(--fk-radius-pill);
+    background: var(--fk-pip-rest);
+    transition:
+      inline-size var(--fk-dur-instant) var(--fk-ease),
+      background-color var(--fk-dur-instant) var(--fk-ease);
+  }
+  .fk-page-dots__pip[data-on] {
+    background: var(--fk-pip-on);
+  }
+  .fk-page-dots[data-appearance='pill'] .fk-page-dots__pip[data-on] {
+    inline-size: calc(var(--fk-pip) * 3);
+  }
+  /* The button is the hit area: 44 px on touch, 24 px on fine pointers. */
+  .fk-page-dots__hit {
+    display: inline-grid;
+    place-items: center;
+    min-inline-size: var(--fk-control-target);
+    min-block-size: var(--fk-control-target);
+    padding: 0;
+    border: 0;
+    border-radius: var(--fk-radius-pill);
+    background: transparent;
+    cursor: pointer;
+    outline: none;
+  }
+  @media (pointer: fine) {
+    .fk-page-dots__hit {
+      min-inline-size: 24px;
+      min-block-size: 24px;
+    }
+  }
+  .fk-page-dots__hit[data-hovered] .fk-page-dots__pip:not([data-on]) {
+    background: var(--fk-ink-3);
+  }
+  .fk-page-dots__hit[data-focus-visible] {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 0;
+  }
+  .fk-page-dots__counter {
+    font-family: var(--fk-font-mono);
+    font-size: var(--fk-font-size-meta);
+    font-variant-numeric: tabular-nums;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fk-page-dots__pip {
+      transition: none;
+    }
+  }
+  @media (forced-colors: active) {
+    .fk-page-dots__pip {
+      background: Canvas;
+      border: 1px solid CanvasText;
+    }
+    .fk-page-dots__pip[data-on] {
+      background: Highlight;
+      border-color: Highlight;
+    }
+    .fk-page-dots__hit[data-focus-visible] {
+      outline: 2px solid Highlight;
+    }
+  }
+}

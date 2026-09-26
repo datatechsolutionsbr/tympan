@@ -1,0 +1,97 @@
+/* LongPressMenu (spec: wave-2/long-press-menu.md; design direction §2.5, §2.7, §2.10). */
+@layer fakhir.components {
+  .fk-long-press-menu {
+    display: inline-flex;
+  }
+  .fk-long-press-menu__trigger {
+    display: inline-flex;
+    min-block-size: var(--fk-control-target);
+    padding: 0;
+    border: 0;
+    border-radius: var(--fk-radius-card);
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    text-decoration: none;
+    cursor: pointer;
+    outline: none;
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+  .fk-long-press-menu__trigger[data-pressed] {
+    opacity: 0.85;
+  }
+  .fk-long-press-menu__trigger[data-focus-visible] {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+  .fk-long-press-menu__popover {
+    min-inline-size: 12rem;
+    padding: var(--fk-space-1);
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-card);
+    background: var(--fk-surface-raised);
+    box-shadow: var(--fk-shadow-floating);
+    backdrop-filter: blur(var(--fk-glass-blur-floating));
+    -webkit-backdrop-filter: blur(var(--fk-glass-blur-floating));
+  }
+  .fk-long-press-menu__popover[data-entering] {
+    animation: fk-lpm-in var(--fk-dur-quick) var(--fk-ease);
+  }
+  @keyframes fk-lpm-in {
+    from {
+      opacity: 0;
+      scale: 0.97;
+    }
+  }
+  .fk-long-press-menu__menu {
+    outline: none;
+  }
+  .fk-long-press-menu__item {
+    display: flex;
+    align-items: center;
+    gap: var(--fk-space-2);
+    min-block-size: var(--fk-control-target);
+    padding-inline: var(--fk-space-3);
+    border-radius: var(--fk-radius-control);
+    color: var(--fk-ink-2);
+    text-decoration: none;
+    cursor: pointer;
+    outline: none;
+  }
+  .fk-long-press-menu__item[data-focused] {
+    background: var(--fk-surface-sunken);
+    color: var(--fk-ink);
+  }
+  .fk-long-press-menu__item[data-tone='danger'] {
+    color: var(--fk-danger);
+  }
+  .fk-long-press-menu__icon > svg {
+    inline-size: 18px;
+    block-size: 18px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fk-long-press-menu__popover[data-entering] {
+      animation: none;
+    }
+    .fk-long-press-menu__trigger[data-pressed] {
+      transform: none;
+    }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .fk-long-press-menu__popover {
+      background: var(--fk-surface-raised-solid);
+      backdrop-filter: none;
+    }
+  }
+  @media (forced-colors: active) {
+    .fk-long-press-menu__popover {
+      border: 1px solid CanvasText;
+    }
+    .fk-long-press-menu__item[data-focused] {
+      background: Highlight;
+      color: HighlightText;
+    }
+  }
+}
