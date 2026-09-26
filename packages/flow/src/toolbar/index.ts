@@ -2,3 +2,4 @@
 export * from './canvasTools'
 export * from './CanvasToolbar'
 export * from './CanvasNodeSearch'
+export * from './dockItems'
