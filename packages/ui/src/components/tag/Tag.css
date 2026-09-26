@@ -1,0 +1,145 @@
+/* Tag and TagList (spec: wave-1/tag.md; design direction §2.2, §2.3, §2.4). */
+@layer fakhir.components {
+  .fk-tag {
+    --fk-tag-fill: var(--fk-surface-sunken);
+    --fk-tag-ink: var(--fk-ink-2);
+    --fk-tag-border: var(--fk-line);
+    position: relative;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fk-space-1);
+    max-inline-size: 100%;
+    min-block-size: calc(var(--fk-space-5) + 2px);
+    padding-inline: var(--fk-space-2);
+    border: 1px solid var(--fk-tag-border);
+    border-radius: var(--fk-radius-pill);
+    background: var(--fk-tag-fill);
+    color: var(--fk-tag-ink);
+    font: inherit;
+    font-size: var(--fk-font-size-label);
+    line-height: var(--fk-font-line-height-label);
+    text-decoration: none;
+    vertical-align: middle;
+    outline: none;
+    transition: border-color var(--fk-dur-instant) var(--fk-ease);
+  }
+  .fk-tag[data-size='small'] {
+    min-block-size: var(--fk-space-5);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+  .fk-tag[data-size='large'] {
+    min-block-size: var(--fk-space-6);
+    padding-inline: var(--fk-space-3);
+    font-size: var(--fk-font-size-body);
+    line-height: var(--fk-font-line-height-body);
+  }
+  .fk-tag[data-tone='accent'] {
+    --fk-tag-fill: var(--fk-accent-soft);
+    --fk-tag-ink: var(--fk-on-accent-soft);
+    --fk-tag-border: transparent;
+  }
+
+  .fk-tag__text {
+    overflow: hidden;
+    min-inline-size: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .fk-tag__icon {
+    display: inline-flex;
+    flex: none;
+  }
+  .fk-tag__icon > svg {
+    inline-size: 14px;
+    block-size: 14px;
+  }
+  .fk-tag__swatch {
+    flex: none;
+    inline-size: var(--fk-space-2);
+    block-size: var(--fk-space-2);
+    border: 1px solid color-mix(in srgb, var(--fk-ink) 25%, transparent);
+    border-radius: 2px;
+    background: var(--fk-tag-category, var(--fk-ink-3));
+  }
+
+  /* Interactive tags and the remove button keep a 44 x 44 px hit area. */
+  .fk-tag[data-interactive] {
+    cursor: pointer;
+  }
+  .fk-tag[data-interactive]::before,
+  .fk-tag__remove::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: max(100%, var(--fk-control-target));
+    block-size: max(100%, var(--fk-control-target));
+    transform: translate(-50%, -50%);
+  }
+  .fk-tag[data-interactive][data-hovered] {
+    --fk-tag-border: var(--fk-line-strong);
+  }
+  .fk-tag[data-focus-visible],
+  .fk-tag__remove[data-focus-visible] {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+
+  .fk-tag__remove {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 18px;
+    block-size: 18px;
+    margin-inline-end: calc(var(--fk-space-1) * -1);
+    padding: 0;
+    border: 0;
+    border-radius: var(--fk-radius-pill);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    outline: none;
+  }
+  .fk-tag__remove[data-hovered] {
+    background: var(--fk-line);
+  }
+  .fk-tag__remove > svg {
+    inline-size: 12px;
+    block-size: 12px;
+  }
+
+  .fk-tag-list__items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--fk-space-2);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-tag {
+      transition: none;
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .fk-tag[data-tone='accent'] {
+      background: color-mix(in srgb, var(--fk-accent) 12%, var(--fk-surface-solid));
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-tag {
+      border: 1px solid CanvasText;
+    }
+    .fk-tag__swatch {
+      border-color: CanvasText;
+      forced-color-adjust: none;
+    }
+    .fk-tag[data-focus-visible],
+    .fk-tag__remove[data-focus-visible] {
+      outline-color: Highlight;
+    }
+  }
+}

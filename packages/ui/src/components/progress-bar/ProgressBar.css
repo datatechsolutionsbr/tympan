@@ -1,0 +1,87 @@
+/* ProgressBar (spec: wave-1/progress-bar.md; design direction §2.3, §2.4, §2.7). */
+@layer fakhir.components {
+  .fk-progress {
+    --fk-progress-fill: var(--fk-accent);
+    --fk-progress-thickness: var(--fk-space-2);
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-1);
+    inline-size: 100%;
+  }
+  .fk-progress[data-size='thin'] {
+    --fk-progress-thickness: var(--fk-space-1);
+  }
+  .fk-progress[data-tone='success'] {
+    --fk-progress-fill: var(--fk-success);
+  }
+  .fk-progress[data-tone='warning'] {
+    --fk-progress-fill: var(--fk-warning);
+  }
+  .fk-progress[data-tone='danger'] {
+    --fk-progress-fill: var(--fk-danger);
+  }
+
+  .fk-progress__header {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--fk-space-3);
+    font-size: var(--fk-font-size-label);
+    line-height: var(--fk-font-line-height-label);
+  }
+  .fk-progress__label {
+    color: var(--fk-ink);
+    font-weight: var(--fk-font-weight-semibold);
+  }
+  .fk-progress__value {
+    color: var(--fk-ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .fk-progress__track {
+    position: relative;
+    overflow: hidden;
+    block-size: var(--fk-progress-thickness);
+    border-radius: var(--fk-radius-pill);
+    background: var(--fk-surface-sunken);
+  }
+  .fk-progress__fill {
+    block-size: 100%;
+    border-radius: inherit;
+    background: var(--fk-progress-fill);
+    transition: inline-size var(--fk-dur-quick) var(--fk-ease);
+  }
+  .fk-progress[data-indeterminate] .fk-progress__fill {
+    inline-size: 35%;
+    animation: fk-progress-slide 1400ms var(--fk-ease) infinite;
+  }
+
+  @keyframes fk-progress-slide {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(300%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-progress__fill {
+      transition: none;
+    }
+    /* Static partial fill; the header still says "in progress". */
+    .fk-progress[data-indeterminate] .fk-progress__fill {
+      animation: none;
+      inline-size: 50%;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-progress__track {
+      border: 1px solid CanvasText;
+    }
+    .fk-progress__fill {
+      background: Highlight;
+      forced-color-adjust: none;
+    }
+  }
+}

@@ -1,0 +1,70 @@
+/* EmptyState (spec: wave-1/empty-state.md; design direction §2.2, §2.10, §2.12). */
+@layer fakhir.components {
+  .fk-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--fk-space-2);
+    margin-inline: auto;
+    padding: var(--fk-space-6) var(--fk-space-4);
+    text-align: center;
+  }
+  .fk-empty[data-framing='inline'] {
+    padding: var(--fk-space-4);
+  }
+  .fk-empty[data-framing='page'] {
+    justify-content: center;
+    min-block-size: 50vh;
+    padding-block: var(--fk-space-8);
+  }
+
+  .fk-empty__icon {
+    inline-size: var(--fk-space-5);
+    block-size: var(--fk-space-5);
+    color: var(--fk-ink-3);
+  }
+
+  .fk-empty__title {
+    max-inline-size: calc(var(--fk-measure-summary) * 1ch);
+    margin: 0;
+    color: var(--fk-ink);
+    font-family: var(--fk-font-sans);
+    font-size: var(--fk-font-size-body-lg);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-body-lg);
+  }
+
+  .fk-empty__description {
+    max-inline-size: calc(var(--fk-measure-summary) * 1ch);
+    margin: 0;
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-body);
+    line-height: var(--fk-font-line-height-body);
+  }
+
+  .fk-empty__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--fk-space-3);
+    margin-block-start: var(--fk-space-3);
+  }
+  .fk-empty__actions .fk-button {
+    min-block-size: var(--fk-control-target);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-empty {
+      animation: none;
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-empty__icon,
+    .fk-empty__title,
+    .fk-empty__description {
+      color: CanvasText;
+    }
+  }
+}
