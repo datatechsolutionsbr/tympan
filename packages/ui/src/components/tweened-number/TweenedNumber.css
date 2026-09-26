@@ -1,0 +1,7 @@
+/* TweenedNumber (spec: wave-2/tweened-number.md; design direction §2.2, §2.7). */
+@layer fakhir.components {
+  .fk-tweened-number {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+}

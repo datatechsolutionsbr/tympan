@@ -1,0 +1,43 @@
+/* ProfileSummary (spec: wave-2/profile-summary.md; design direction §2.2, §2.11). */
+@layer fakhir.components {
+  .fk-profile-summary {
+    display: flex;
+    align-items: center;
+    gap: var(--fk-space-3);
+    min-inline-size: 0;
+  }
+  .fk-profile-summary > .fk-avatar {
+    flex: none;
+  }
+  .fk-profile-summary__text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-inline-size: 0;
+  }
+  .fk-profile-summary__line {
+    max-inline-size: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .fk-profile-summary__line[data-line='name'] {
+    color: var(--fk-ink);
+    font-family: var(--fk-font-sans);
+    font-size: var(--fk-font-size-body);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-body);
+  }
+  .fk-profile-summary__line[data-line='email'] {
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+
+  @media (forced-colors: active) {
+    .fk-profile-summary > .fk-avatar {
+      border: 1px solid CanvasText;
+    }
+  }
+}

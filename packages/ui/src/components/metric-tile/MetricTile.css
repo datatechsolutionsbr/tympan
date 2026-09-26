@@ -1,0 +1,104 @@
+/* MetricTile (spec: wave-2/metric-tile.md; design direction §2.2, §2.3, §2.5). */
+@layer fakhir.components {
+  .fk-metric-tile {
+    --fk-metric-badge-ink: var(--fk-ink-3);
+    --fk-metric-badge-fill: var(--fk-surface-sunken);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-1);
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    padding: var(--fk-space-4);
+    color: var(--fk-ink-2);
+  }
+  .fk-metric-tile[data-surface='raised'] {
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-card);
+    background: var(--fk-surface-raised);
+    box-shadow: var(--fk-shadow-raised);
+  }
+  .fk-metric-tile[data-surface='plain'] {
+    padding-inline: 0;
+  }
+  .fk-metric-tile[data-tone='success'] {
+    --fk-metric-badge-ink: var(--fk-on-success-soft);
+    --fk-metric-badge-fill: var(--fk-success-soft);
+  }
+  .fk-metric-tile[data-tone='warning'] {
+    --fk-metric-badge-ink: var(--fk-on-warning-soft);
+    --fk-metric-badge-fill: var(--fk-warning-soft);
+  }
+  .fk-metric-tile[data-tone='danger'] {
+    --fk-metric-badge-ink: var(--fk-on-danger-soft);
+    --fk-metric-badge-fill: var(--fk-danger-soft);
+  }
+
+  .fk-metric-tile__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--fk-space-3);
+  }
+  .fk-metric-tile__title {
+    min-inline-size: 0;
+    color: var(--fk-ink-2);
+    font-size: var(--fk-font-size-label);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-label);
+  }
+  .fk-metric-tile__badge {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    inline-size: 32px;
+    block-size: 32px;
+    border-radius: var(--fk-radius-agent);
+    background: var(--fk-metric-badge-fill);
+    color: var(--fk-metric-badge-ink);
+  }
+  .fk-metric-tile__badge > svg {
+    inline-size: 18px;
+    block-size: 18px;
+  }
+  .fk-metric-tile__value {
+    min-inline-size: 0;
+    color: var(--fk-ink);
+    font-family: var(--fk-font-serif);
+    font-size: var(--fk-font-size-h2);
+    font-variant-numeric: tabular-nums;
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-h2);
+    overflow-wrap: anywhere;
+  }
+  .fk-metric-tile__subtitle,
+  .fk-metric-tile__trend {
+    margin: 0;
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+  .fk-metric-tile__trend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--fk-space-2);
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .fk-metric-tile[data-surface='raised'] {
+      background: var(--fk-surface-raised-solid);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-metric-tile,
+    .fk-metric-tile[data-surface='raised'] {
+      border: 1px solid CanvasText;
+      box-shadow: none;
+    }
+    .fk-metric-tile__badge {
+      border: 1px solid CanvasText;
+    }
+  }
+}

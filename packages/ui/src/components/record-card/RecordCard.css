@@ -1,0 +1,151 @@
+/* RecordCard and RecordActions (spec: wave-2/record-card.md; design direction §2.3, §2.5, §2.6, §2.7). */
+@layer fakhir.components {
+  .fk-record-card {
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-3);
+    min-inline-size: 0;
+    margin: 0;
+    padding: var(--fk-space-4);
+    overflow: hidden;
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-card);
+    background: var(--fk-surface-raised);
+    box-shadow: var(--fk-shadow-raised);
+    color: var(--fk-ink-2);
+    list-style: none;
+    transition: background-color var(--fk-dur-instant) var(--fk-ease);
+  }
+  /* Decorative categorical strip along the top edge. */
+  .fk-record-card[data-accent]::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    block-size: 3px;
+    background: var(--fk-record-accent, transparent);
+  }
+  .fk-record-card[data-interactive]:has(.fk-record-card__open[data-hovered]) {
+    background: var(--fk-surface-sunken);
+  }
+  .fk-record-card:has(.fk-record-card__open[data-focus-visible]) {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+  .fk-record-card[data-dragging] {
+    opacity: 0.6;
+    outline: 2px dashed var(--fk-line-strong);
+    outline-offset: 2px;
+  }
+
+  .fk-record-card__head {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--fk-space-3);
+  }
+  .fk-record-card__leading {
+    display: inline-flex;
+    flex: none;
+  }
+  .fk-record-card__names {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 2px;
+    min-inline-size: 0;
+  }
+  .fk-record-card__open {
+    display: flex;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+    outline: none;
+  }
+  /* The whole card presses the title; actions sit above this layer. */
+  .fk-record-card__open::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .fk-record-card__title {
+    display: block;
+    min-inline-size: 0;
+    overflow: hidden;
+    color: var(--fk-ink);
+    font-size: var(--fk-font-size-body);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-body);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .fk-record-card__secondary {
+    display: -webkit-box;
+    overflow: hidden;
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow-wrap: anywhere;
+  }
+  .fk-record-card__state {
+    flex: none;
+  }
+  .fk-record-card__body {
+    font-size: var(--fk-font-size-body);
+    line-height: var(--fk-font-line-height-body);
+  }
+  .fk-record-card__footer {
+    position: relative;
+    z-index: 1;
+    padding-block-start: var(--fk-space-3);
+    border-block-start: 1px solid var(--fk-line);
+  }
+  .fk-record-card__state,
+  .fk-record-card__body {
+    position: relative;
+    z-index: 1;
+  }
+
+  .fk-record-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--fk-space-2);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-record-card {
+      transition: none;
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .fk-record-card {
+      background: var(--fk-surface-raised-solid);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-record-card {
+      border: 1px solid CanvasText;
+      box-shadow: none;
+    }
+    .fk-record-card[data-accent]::before {
+      display: none;
+    }
+    .fk-record-card:has(.fk-record-card__open[data-focus-visible]) {
+      outline: 2px solid Highlight;
+    }
+  }
+}

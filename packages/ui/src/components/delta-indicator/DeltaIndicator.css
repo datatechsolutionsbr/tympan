@@ -1,0 +1,58 @@
+/* DeltaIndicator (spec: wave-2/delta-indicator.md; design direction §2.2, §2.3, §2.4). */
+@layer fakhir.components {
+  .fk-delta {
+    --fk-delta-ink: var(--fk-ink-2);
+    --fk-delta-fill: transparent;
+    --fk-delta-edge: transparent;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fk-space-1);
+    color: var(--fk-delta-ink);
+    font-family: var(--fk-font-sans);
+    font-size: var(--fk-font-size-meta);
+    font-variant-numeric: tabular-nums;
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-meta);
+    white-space: nowrap;
+  }
+  .fk-delta[data-size='medium'] {
+    font-size: var(--fk-font-size-body);
+    line-height: var(--fk-font-line-height-body);
+  }
+  .fk-delta__glyph {
+    flex: none;
+    inline-size: 1.1em;
+    block-size: 1.1em;
+  }
+  .fk-delta[data-sentiment='positive'] {
+    --fk-delta-ink: var(--fk-on-success-soft);
+    --fk-delta-fill: var(--fk-success-soft);
+    --fk-delta-edge: var(--fk-success);
+  }
+  .fk-delta[data-sentiment='negative'] {
+    --fk-delta-ink: var(--fk-on-danger-soft);
+    --fk-delta-fill: var(--fk-danger-soft);
+    --fk-delta-edge: var(--fk-danger);
+  }
+  .fk-delta[data-sentiment='neutral'] {
+    --fk-delta-ink: var(--fk-ink-3);
+    --fk-delta-fill: var(--fk-surface-sunken);
+    --fk-delta-edge: var(--fk-line-strong);
+  }
+  .fk-delta[data-appearance='pill'] {
+    padding: 0 var(--fk-space-2);
+    border: 1px solid var(--fk-delta-edge);
+    border-radius: var(--fk-radius-pill);
+    background: var(--fk-delta-fill);
+  }
+
+  @media (forced-colors: active) {
+    .fk-delta {
+      color: CanvasText;
+    }
+    .fk-delta[data-appearance='pill'] {
+      border: 1px solid CanvasText;
+      background: Canvas;
+    }
+  }
+}
