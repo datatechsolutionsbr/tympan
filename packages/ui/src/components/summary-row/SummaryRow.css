@@ -1,0 +1,85 @@
+/* SummaryRow (spec: wave-2/summary-row.md; design direction §2.2, §2.3). */
+@layer fakhir.components {
+  .fk-summary-row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--fk-space-3);
+    min-inline-size: 0;
+  }
+
+  .fk-summary-row__tile {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    inline-size: var(--fk-control-height);
+    block-size: var(--fk-control-height);
+    border: 1px solid transparent;
+    border-radius: var(--fk-radius-control);
+    background: var(--fk-surface-sunken);
+    color: var(--fk-ink-2);
+  }
+  .fk-summary-row__tile[data-tone='accent'] {
+    background: var(--fk-accent-soft);
+    color: var(--fk-accent);
+  }
+  .fk-summary-row__tile > svg {
+    inline-size: 1.25em;
+    block-size: 1.25em;
+  }
+
+  .fk-summary-row__text {
+    display: grid;
+    flex: 1;
+    gap: var(--fk-space-1);
+    min-inline-size: 0;
+  }
+
+  .fk-summary-row__title,
+  .fk-summary-row__subtitle {
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .fk-summary-row__title {
+    color: var(--fk-ink);
+    font-size: var(--fk-font-size-body);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-body);
+  }
+  .fk-summary-row__subtitle {
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+
+  .fk-summary-row__pairs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--fk-space-1) var(--fk-space-4);
+    margin: 0;
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+  .fk-summary-row__pair {
+    display: inline-flex;
+    gap: var(--fk-space-1);
+    min-inline-size: 0;
+  }
+  .fk-summary-row__pair dt {
+    color: var(--fk-ink-3);
+  }
+  .fk-summary-row__pair dd {
+    margin: 0;
+    color: var(--fk-ink-2);
+    font-weight: var(--fk-font-weight-semibold);
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+  }
+
+  @media (forced-colors: active) {
+    .fk-summary-row__tile {
+      border-color: CanvasText;
+    }
+  }
+}

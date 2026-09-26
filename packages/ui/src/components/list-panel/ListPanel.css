@@ -1,0 +1,95 @@
+/* ListPanel (spec: wave-2/list-panel.md; design direction §2.3, §2.5, §2.6, §2.7). */
+@layer fakhir.components {
+  .fk-list-panel {
+    overflow: hidden;
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-card);
+    background: var(--fk-surface);
+  }
+  .fk-list-panel[data-elevation='raised'] {
+    background: var(--fk-surface-raised);
+    box-shadow: var(--fk-shadow-raised);
+  }
+
+  .fk-list-panel__rows {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    outline: none;
+  }
+
+  .fk-list-panel__row {
+    display: flex;
+    align-items: center;
+    gap: var(--fk-space-3);
+    min-block-size: var(--fk-control-target);
+    box-sizing: border-box;
+    padding: var(--fk-space-3) var(--fk-space-4);
+    color: var(--fk-ink-2);
+    text-decoration: none;
+    outline: none;
+    transition: background-color var(--fk-dur-instant) var(--fk-ease);
+  }
+  .fk-list-panel__row + .fk-list-panel__row {
+    border-block-start: 1px solid var(--fk-line);
+  }
+  .fk-list-panel__row[data-actionable] {
+    cursor: pointer;
+  }
+  .fk-list-panel__row[data-actionable][data-hovered] {
+    background: var(--fk-surface-sunken);
+  }
+  .fk-list-panel__row[data-actionable][data-pressed] {
+    background: var(--fk-accent-soft);
+  }
+  .fk-list-panel__row[data-focus-visible],
+  article.fk-list-panel__row:focus-visible {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: -2px;
+  }
+  .fk-list-panel__row[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  .fk-list-panel__leading,
+  .fk-list-panel__trailing {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: var(--fk-space-2);
+  }
+  .fk-list-panel__leading {
+    color: var(--fk-ink-3);
+  }
+  .fk-list-panel__main {
+    flex: 1;
+    min-inline-size: 0;
+  }
+  .fk-list-panel__chevron {
+    color: var(--fk-ink-3);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-list-panel__row {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-list-panel {
+      border-color: CanvasText;
+    }
+    .fk-list-panel__row + .fk-list-panel__row {
+      border-block-start-color: CanvasText;
+    }
+    .fk-list-panel__row[data-focus-visible],
+    article.fk-list-panel__row:focus-visible {
+      outline-color: Highlight;
+    }
+    .fk-list-panel__row[data-actionable][data-hovered] {
+      outline: 1px dashed CanvasText;
+      outline-offset: -3px;
+    }
+  }
+}

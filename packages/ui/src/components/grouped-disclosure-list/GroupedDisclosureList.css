@@ -1,0 +1,80 @@
+/* GroupedDisclosureList (spec: wave-2/grouped-disclosure-list.md; design direction §2.5, §2.7). */
+@layer fakhir.components {
+  .fk-grouped-list__group + .fk-grouped-list__group {
+    border-block-start: 1px solid var(--fk-line);
+  }
+  .fk-grouped-list__heading {
+    margin: 0;
+    font-size: var(--fk-font-size-label);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-label);
+  }
+  .fk-grouped-list__trigger {
+    display: flex;
+    align-items: center;
+    gap: var(--fk-space-2);
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: var(--fk-control-target);
+    padding: var(--fk-space-2);
+    border: 0;
+    border-radius: var(--fk-radius-control);
+    background: none;
+    color: var(--fk-ink);
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+    outline: none;
+  }
+  .fk-grouped-list__trigger[data-hovered] {
+    background: var(--fk-surface-sunken);
+  }
+  .fk-grouped-list__trigger[data-focus-visible] {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: -2px;
+  }
+  .fk-grouped-list__header {
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--fk-space-2);
+    min-inline-size: 0;
+  }
+  .fk-grouped-list__chevron {
+    color: var(--fk-ink-3);
+    transition: rotate var(--fk-dur-quick) var(--fk-ease);
+  }
+  .fk-grouped-list__group:not([data-expanded]) .fk-grouped-list__chevron {
+    rotate: -90deg;
+  }
+  .fk-grouped-list__body[hidden] {
+    display: none;
+  }
+  .fk-grouped-list__items {
+    margin: 0;
+    padding: 0 0 var(--fk-space-3);
+    list-style: none;
+  }
+  .fk-grouped-list__item {
+    padding: var(--fk-space-2);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-grouped-list__chevron {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-grouped-list__group + .fk-grouped-list__group {
+      border-block-start-color: CanvasText;
+    }
+    .fk-grouped-list__trigger {
+      border: 1px solid CanvasText;
+    }
+    .fk-grouped-list__chevron {
+      color: CanvasText;
+    }
+  }
+}
