@@ -117,6 +117,30 @@ surfaces, ink, lines, semantic tones, the CTA gradient) on top of the generated
 roles, so the product keeps the approved look; every other role is generated.
 `neutral` and `high-contrast` are fully generated.
 
+## Book-style print presets
+
+`printPresets` holds the 18 book diagramming styles used by
+`@datatechsolutions/tympan-print` (`dashboard`, `dubois`, `deardata`,
+`caderno`, `isotype`, `cordel`, `riso`, `jornal`, `prancheta`,
+`prancheta-clara`, `aquarela`, `tufte`, `suico`, `concretismo`, `economist`,
+`holmes`, `bayer`, `ft`). Each `PrintStyle` names its fonts (Google Fonts,
+OFL), paper and ink, data and proof-state colours, paper texture, stroke,
+chart renderer, proof-mark shape and page structure.
+
+```ts
+import { printPresets, printStyleToCss, googleFontsUrl } from '@datatechsolutions/tympan-tokens'
+
+printStyleToCss(printPresets.jornal)                       // [data-ty-print-style="jornal"] { --ty-print-*: … }
+printStyleToCss(printPresets.jornal, { pb: true })          // black and white: greys of equal luminance + the style's pb
+printStyleToCss(printPresets.jornal, { overrides: { cor: { destaque: '#8a1c7c' } } })
+```
+
+Tests hold every preset to WCAG AA for `tinta`, `tinta2` and the six proof
+colours on the paper (in colour and in P&B) and keep every data colour
+(`destaque`, `destaque2`, `contexto`, proof states) at CIEDE2000 ΔE ≥ 10 from
+the colours of the lakebrasil logo. `deltaE2000` and `rgbToLab` are exported
+from the colour module.
+
 ## Generator API
 
 ```ts

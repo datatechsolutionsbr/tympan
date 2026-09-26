@@ -171,3 +171,69 @@ export function apcaContrast(text: Rgba, background: Rgba): number {
   const sapc = (yb ** 0.65 - yt ** 0.62) * 1.14
   return sapc > -0.1 ? 0 : (sapc + 0.027) * 100
 }
+
+/** CIE L*a*b* (D65) from sRGB, via CIE XYZ. */
+export function rgbToLab({ r, g, b }: Rgba): { L: number; a: number; b: number } {
+  const lr = toLinear(r)
+  const lg = toLinear(g)
+  const lb = toLinear(b)
+  const x = (0.4124564 * lr + 0.3575761 * lg + 0.1804375 * lb) / 0.95047
+  const y = 0.2126729 * lr + 0.7151522 * lg + 0.072175 * lb
+  const z = (0.0193339 * lr + 0.119192 * lg + 0.9503041 * lb) / 1.08883
+  const f = (t: number) => (t > 216 / 24389 ? Math.cbrt(t) : (24389 / 27 * t + 16) / 116)
+  const fx = f(x)
+  const fy = f(y)
+  const fz = f(z)
+  return { L: 116 * fy - 16, a: 500 * (fx - fy), b: 200 * (fy - fz) }
+}
+
+/**
+ * CIEDE2000 colour difference (ΔE00) between two opaque colours, implemented
+ * from the published formula (Sharma, Wu and Dalal, 2005). About 1 is a just
+ * noticeable difference; 10 or more reads as clearly different colours.
+ */
+export function deltaE2000(c1: Rgba, c2: Rgba): number {
+  const { L: L1, a: a1, b: b1 } = rgbToLab(c1)
+  const { L: L2, a: a2, b: b2 } = rgbToLab(c2)
+  const rad = Math.PI / 180
+  const C1 = Math.hypot(a1, b1)
+  const C2 = Math.hypot(a2, b2)
+  const Cm = (C1 + C2) / 2
+  const G = 0.5 * (1 - Math.sqrt(Cm ** 7 / (Cm ** 7 + 25 ** 7)))
+  const a1p = (1 + G) * a1
+  const a2p = (1 + G) * a2
+  const C1p = Math.hypot(a1p, b1)
+  const C2p = Math.hypot(a2p, b2)
+  const hp = (a: number, b: number) => {
+    if (a === 0 && b === 0) return 0
+    const h = Math.atan2(b, a) / rad
+    return h < 0 ? h + 360 : h
+  }
+  const h1p = hp(a1p, b1)
+  const h2p = hp(a2p, b2)
+  const dLp = L2 - L1
+  const dCp = C2p - C1p
+  let dhp = 0
+  if (C1p * C2p !== 0) {
+    dhp = h2p - h1p
+    if (dhp > 180) dhp -= 360
+    else if (dhp < -180) dhp += 360
+  }
+  const dHp = 2 * Math.sqrt(C1p * C2p) * Math.sin((dhp / 2) * rad)
+  const Lmp = (L1 + L2) / 2
+  const Cmp = (C1p + C2p) / 2
+  let hmp = h1p + h2p
+  if (C1p * C2p !== 0) {
+    if (Math.abs(h1p - h2p) <= 180) hmp = (h1p + h2p) / 2
+    else hmp = h1p + h2p < 360 ? (h1p + h2p + 360) / 2 : (h1p + h2p - 360) / 2
+  }
+  const T =
+    1 - 0.17 * Math.cos((hmp - 30) * rad) + 0.24 * Math.cos(2 * hmp * rad) + 0.32 * Math.cos((3 * hmp + 6) * rad) - 0.2 * Math.cos((4 * hmp - 63) * rad)
+  const dTheta = 30 * Math.exp(-(((hmp - 275) / 25) ** 2))
+  const Rc = 2 * Math.sqrt(Cmp ** 7 / (Cmp ** 7 + 25 ** 7))
+  const Sl = 1 + (0.015 * (Lmp - 50) ** 2) / Math.sqrt(20 + (Lmp - 50) ** 2)
+  const Sc = 1 + 0.045 * Cmp
+  const Sh = 1 + 0.015 * Cmp * T
+  const Rt = -Math.sin(2 * dTheta * rad) * Rc
+  return Math.sqrt((dLp / Sl) ** 2 + (dCp / Sc) ** 2 + (dHp / Sh) ** 2 + Rt * (dCp / Sc) * (dHp / Sh))
+}

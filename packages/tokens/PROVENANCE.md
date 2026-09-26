@@ -26,3 +26,14 @@ URLs consulted on 2026-09-26:
 - https://ui.shadcn.com/docs/theming
 - https://tailwindcss.com/docs/colors
 - https://tailwindcss.com/docs/theme
+
+## Print presets (2026-09-26)
+
+`src/print-presets.ts` interprets the visual studies of the Brasil Real
+volume 0 (`brasil-real/volumes/v0-guia/diagramacao/estilos/`, the author's own
+work) and published design traditions (Tufte, Müller-Brockmann, Brazilian
+concrete design, The Economist, Nigel Holmes, Herbert Bayer, the Financial
+Times) as colours and font choices; no code or stylesheet was copied. Fonts
+are Google Fonts families (SIL Open Font License). CIEDE2000 (`deltaE2000`)
+is implemented from Sharma, Wu and Dalal, "The CIEDE2000 color-difference
+formula" (2005).
