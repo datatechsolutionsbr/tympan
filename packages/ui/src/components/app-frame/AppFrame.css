@@ -1,0 +1,285 @@
+/* AppFrame (spec: wave-1/app-frame.md; design direction §2.1, §2.5, §2.8, §3.2). */
+@layer fakhir.components {
+  .fk-app-frame {
+    --fk-frame-gutter: var(--fk-space-4);
+    --fk-frame-side: var(--fk-layout-sidebar);
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: var(--fk-layout-topbar) minmax(0, 1fr);
+    grid-template-areas: 'top' 'main';
+    min-block-size: 100dvh;
+    background: var(--fk-bg);
+    color: var(--fk-ink-2);
+  }
+
+  .fk-app-frame__ambient {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .fk-app-frame__orb {
+    position: absolute;
+    inline-size: 60vmax;
+    block-size: 60vmax;
+    border-radius: 50%;
+    filter: blur(120px);
+  }
+  .fk-app-frame__orb--top {
+    inset-block-start: -30vmax;
+    inset-inline-end: -10vmax;
+    background: var(--fk-ambient-1);
+  }
+  .fk-app-frame__orb--bottom {
+    inset-block-end: -30vmax;
+    inset-inline-start: 10vmax;
+    background: var(--fk-ambient-2);
+  }
+
+  .fk-app-frame__progress {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: calc(var(--fk-z-sticky) + 1);
+  }
+
+  /* Glass level 1: navigation column and top bar (§2.5). */
+  .fk-app-frame__side,
+  .fk-app-frame__top {
+    position: relative;
+    z-index: var(--fk-z-sticky);
+    background: var(--fk-surface);
+    backdrop-filter: blur(var(--fk-glass-blur-sheet)) saturate(var(--fk-glass-saturate));
+    -webkit-backdrop-filter: blur(var(--fk-glass-blur-sheet)) saturate(var(--fk-glass-saturate));
+  }
+
+  .fk-app-frame__top {
+    position: sticky;
+    inset-block-start: 0;
+    grid-area: top;
+    display: flex;
+    align-items: center;
+    gap: var(--fk-space-2);
+    padding-inline: var(--fk-frame-gutter);
+    border-block-end: 1px solid var(--fk-line);
+  }
+  .fk-app-frame__top-content {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: var(--fk-space-3);
+    min-inline-size: 0;
+  }
+
+  .fk-app-frame__side {
+    grid-area: side;
+    position: sticky;
+    inset-block-start: 0;
+    display: flex;
+    flex-direction: column;
+    block-size: 100dvh;
+    border-inline-end: 1px solid var(--fk-line);
+    transition: inline-size var(--fk-dur-base) var(--fk-ease);
+  }
+  .fk-app-frame__nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--fk-space-4) var(--fk-space-3);
+  }
+  .fk-app-frame__side-footer {
+    padding: var(--fk-space-2) var(--fk-space-3);
+    border-block-start: 1px solid var(--fk-line);
+  }
+
+  .fk-app-frame__main {
+    position: relative;
+    z-index: 1;
+    grid-area: main;
+    min-inline-size: 0;
+    padding-inline: var(--fk-frame-gutter);
+    padding-block-end: var(--fk-space-7);
+    outline: none;
+  }
+  .fk-app-frame__content {
+    margin-inline: auto;
+    inline-size: 100%;
+    max-inline-size: var(--fk-layout-reading);
+  }
+  .fk-app-frame[data-width='data'] .fk-app-frame__content {
+    max-inline-size: var(--fk-layout-data);
+  }
+  .fk-app-frame[data-width='full'] .fk-app-frame__content {
+    max-inline-size: none;
+  }
+
+  .fk-app-frame__aside {
+    grid-area: aside;
+    position: sticky;
+    inset-block-start: var(--fk-layout-topbar);
+    z-index: 1;
+    align-self: start;
+    max-block-size: calc(100dvh - var(--fk-layout-topbar));
+    overflow-y: auto;
+    padding: var(--fk-space-5);
+    border-inline-start: 1px solid var(--fk-line);
+    background: var(--fk-surface-raised);
+  }
+
+  /* Overlays: navigation drawer (start), aside overlay (end), aside sheet (bottom). Level 4. */
+  .fk-app-frame__overlay {
+    position: fixed;
+    inset: 0;
+    z-index: var(--fk-z-nav-drawer);
+    background: var(--fk-backdrop);
+  }
+  .fk-app-frame__drawer,
+  .fk-app-frame__aside-modal {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    background: var(--fk-surface-raised);
+    box-shadow: var(--fk-shadow-modal);
+    backdrop-filter: blur(var(--fk-glass-blur-floating));
+    -webkit-backdrop-filter: blur(var(--fk-glass-blur-floating));
+    outline: none;
+  }
+  .fk-app-frame__drawer[data-placement='start'] {
+    inset-block: 0;
+    inset-inline-start: 0;
+    inline-size: min(var(--fk-layout-sidebar), 88vw);
+    border-start-end-radius: var(--fk-radius-sheet);
+    border-end-end-radius: var(--fk-radius-sheet);
+  }
+  .fk-app-frame__aside-modal[data-placement='end'] {
+    inset-block: 0;
+    inset-inline-end: 0;
+    inline-size: min(var(--fk-layout-aside), 92vw);
+    border-start-start-radius: var(--fk-radius-sheet);
+    border-end-start-radius: var(--fk-radius-sheet);
+  }
+  .fk-app-frame__aside-modal[data-placement='bottom'] {
+    inset-inline: 0;
+    inset-block-end: 0;
+    max-block-size: 80dvh;
+    border-start-start-radius: var(--fk-radius-sheet);
+    border-start-end-radius: var(--fk-radius-sheet);
+  }
+  .fk-app-frame__drawer-dialog {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-block-size: 0;
+    outline: none;
+  }
+  .fk-app-frame__drawer-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--fk-space-2);
+    padding: var(--fk-space-3) var(--fk-space-4);
+  }
+  .fk-app-frame__aside-title {
+    margin: 0;
+    color: var(--fk-ink);
+    font-family: var(--fk-font-serif);
+    font-size: var(--fk-font-size-h3);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-h3);
+  }
+  .fk-app-frame__aside-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 var(--fk-space-5) var(--fk-space-5);
+  }
+
+  .fk-app-frame__drawer[data-entering],
+  .fk-app-frame__aside-modal[data-entering] {
+    animation: fk-app-frame-in var(--fk-dur-base) var(--fk-ease);
+  }
+  .fk-app-frame__overlay[data-entering] {
+    animation: fk-app-frame-fade var(--fk-dur-base) var(--fk-ease);
+  }
+  @keyframes fk-app-frame-in {
+    from {
+      opacity: 0;
+      translate: var(--fk-frame-enter-x, 0) var(--fk-frame-enter-y, 0);
+    }
+  }
+  @keyframes fk-app-frame-fade {
+    from {
+      opacity: 0;
+    }
+  }
+  .fk-app-frame__drawer[data-placement='start'] {
+    --fk-frame-enter-x: -24px;
+  }
+  .fk-app-frame__aside-modal[data-placement='end'] {
+    --fk-frame-enter-x: 24px;
+  }
+  .fk-app-frame__aside-modal[data-placement='bottom'] {
+    --fk-frame-enter-y: 24px;
+  }
+
+  /* Hit areas for bar controls stay 44 px (Button provides them). */
+  .fk-app-frame__menu-button {
+    flex: none;
+  }
+
+  /* >= 768: gutter 32 (§2.1). */
+  @media (min-width: 768px) {
+    .fk-app-frame {
+      --fk-frame-gutter: var(--fk-space-6);
+    }
+  }
+
+  /* >= 1024: navigation column. */
+  @media (min-width: 1024px) {
+    .fk-app-frame {
+      grid-template-columns: var(--fk-frame-side) minmax(0, 1fr);
+      grid-template-areas: 'side top' 'side main';
+    }
+    .fk-app-frame[data-nav='rail'] {
+      --fk-frame-side: var(--fk-layout-rail);
+    }
+    .fk-app-frame__side {
+      grid-row: 1 / span 2;
+    }
+  }
+
+  /* >= 1280: gutter 48; aside column pushes the content. */
+  @media (min-width: 1280px) {
+    .fk-app-frame {
+      --fk-frame-gutter: var(--fk-space-7);
+    }
+    .fk-app-frame[data-aside='column'] {
+      grid-template-columns: var(--fk-frame-side) minmax(0, 1fr) var(--fk-layout-aside);
+      grid-template-areas: 'side top top' 'side main aside';
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-app-frame__side {
+      transition: none;
+    }
+    .fk-app-frame__drawer[data-entering],
+    .fk-app-frame__aside-modal[data-entering],
+    .fk-app-frame__overlay[data-entering] {
+      animation: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-app-frame__top,
+    .fk-app-frame__side,
+    .fk-app-frame__aside,
+    .fk-app-frame__drawer,
+    .fk-app-frame__aside-modal {
+      border: 1px solid CanvasText;
+    }
+    .fk-app-frame__ambient {
+      display: none;
+    }
+  }
+}
