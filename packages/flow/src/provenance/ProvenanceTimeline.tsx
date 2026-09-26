@@ -4,12 +4,11 @@
 // buttons in time order; arrow keys move along a lane (Left/Right, mirrored
 // in RTL) and between lanes (Up/Down).
 
-import { useMemo, useRef, type KeyboardEvent } from 'react'
-import { Server } from 'lucide-react'
-import { ActorChip, ProofBadge } from '@fakhir/design-system'
+import { useMemo, useRef, type KeyboardEvent, type ReactNode } from 'react'
+import { ProofPill, ActorMark } from './ProvenanceNode'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import { useControllable } from '../internal/useControllable'
-import type { ProvActor, ProvActorKind, ProvItem } from './model'
+import type { ProvActor, ProvItem } from './model'
 
 export interface ProvenanceTimelineLabels {
   title: string
@@ -24,6 +23,9 @@ export interface ProvenanceTimelineLabels {
   detail: string
   noSelection: string
   when: string
+  kindWord: string
+  proofWord: string
+  ids: string
   kinds: Record<string, string>
   proof: Record<'proved' | 'pending' | 'refuted' | 'not_disclosed' | 'none', string>
 }
@@ -44,6 +46,9 @@ export const provenanceTimelineLabels = defineLabels<ProvenanceTimelineLabels>('
     detail: 'Selected event',
     noSelection: 'Choose an event to see its details.',
     when: 'When',
+    kindWord: 'Kind',
+    proofWord: 'Proof',
+    ids: 'Identifiers',
     kinds: kindsEn,
     proof: { proved: 'proved', pending: 'pending', refuted: 'refuted', not_disclosed: 'not disclosed', none: 'no proof' },
   },
@@ -60,6 +65,9 @@ export const provenanceTimelineLabels = defineLabels<ProvenanceTimelineLabels>('
     detail: 'Evento selecionado',
     noSelection: 'Escolha um evento para ver os detalhes.',
     when: 'Quando',
+    kindWord: 'Tipo',
+    proofWord: 'Prova',
+    ids: 'Identificadores',
     kinds: { query: 'busca', retrieval: 'leitura', source: 'fonte', assertion: 'afirmação', record: 'registro', verification: 'verificação', analysis: 'análise', edition: 'edição', manuscript: 'frase do manuscrito' },
     proof: { proved: 'provada', pending: 'pendente', refuted: 'refutada', not_disclosed: 'não informada', none: 'sem prova' },
   },
@@ -76,6 +84,9 @@ export const provenanceTimelineLabels = defineLabels<ProvenanceTimelineLabels>('
     detail: 'Evento seleccionado',
     noSelection: 'Elija un evento para ver sus detalles.',
     when: 'Cuándo',
+    kindWord: 'Tipo',
+    proofWord: 'Prueba',
+    ids: 'Identificadores',
     kinds: { query: 'búsqueda', retrieval: 'lectura', source: 'fuente', assertion: 'afirmación', record: 'registro', verification: 'verificación', analysis: 'análisis', edition: 'edición', manuscript: 'frase del manuscrito' },
     proof: { proved: 'probada', pending: 'pendiente', refuted: 'refutada', not_disclosed: 'no informada', none: 'sin prueba' },
   },
@@ -89,6 +100,10 @@ export interface ProvenanceTimelineProps {
   defaultSelectedId?: string | null
   onSelect?: (id: string) => void
   labels?: Partial<ProvenanceTimelineLabels>
+  /** Words for a time (axis ticks and the detail panel); Intl dates by default. */
+  formatTime?: (time: number, use: 'tick' | 'detail') => string
+  /** Actions under the selected event (for example "See the answer"). */
+  renderDetailActions?: (item: ProvItem) => ReactNode
   className?: string
 }
 
@@ -99,18 +114,14 @@ interface Lane {
   undated: ProvItem[]
 }
 
-const ROW_HEIGHT = 64
-const TICKS = 4
+const ROW_HEIGHT = 40
+const MAX_TICKS = 8
 
 function laneKey(a: ProvActor | undefined): string {
   return a ? `${a.kind}:${a.id ?? a.name}` : 'unattributed'
 }
 
-function chipKind(k: ProvActorKind): 'person' | 'agent' | 'system' {
-  return k
-}
-
-export function ProvenanceTimeline({ items, selectedId: selectedProp, defaultSelectedId = null, onSelect, labels, className }: ProvenanceTimelineProps) {
+export function ProvenanceTimeline({ items, selectedId: selectedProp, defaultSelectedId = null, onSelect, labels, formatTime, renderDetailActions, className }: ProvenanceTimelineProps) {
   const l = useLabels(provenanceTimelineLabels, labels)
   const [selectedId, setSelected] = useControllable<string | null>(selectedProp, defaultSelectedId, (id) => {
     if (id) onSelect?.(id)
@@ -141,13 +152,13 @@ export function ProvenanceTimeline({ items, selectedId: selectedProp, defaultSel
 
   const span = Number.isFinite(min) && max > min ? max - min : 0
   // Events keep a margin at both ends of the axis so none hangs over the edge.
-  const at = (t: number) => (span ? 9 + ((t - min) / span) * 82 : 50)
-  /** Stack events that are close in time into rows so they never overlap. */
+  const at = (t: number) => (span ? 6 + ((t - min) / span) * 76 : 40)
+  /** Stack events that are close in time into rows so their labels never overlap. */
   const rowsOf = (dated: ReadonlyArray<{ item: ProvItem; time: number }>) => {
     const ends: number[] = []
     return dated.map(({ time }) => {
       const x = at(time)
-      let row = ends.findIndex((end) => x - end >= 14)
+      let row = ends.findIndex((end) => x - end >= 20)
       if (row < 0) row = ends.length
       ends[row] = x
       return row
@@ -155,7 +166,17 @@ export function ProvenanceTimeline({ items, selectedId: selectedProp, defaultSel
   }
   const dateFmt = useMemo(() => new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }), [locale])
   const timeFmt = useMemo(() => new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }), [locale])
-  const ticks = Number.isFinite(min) ? Array.from({ length: span ? TICKS + 1 : 1 }, (_, i) => (span ? min + (span * i) / TICKS : min)) : []
+  // Ticks where something happened (distinct dates), thinned to a few.
+  const ticks = useMemo(() => {
+    const all = [...new Set(lanes.flatMap((ln) => ln.dated.map((d) => d.time)))].sort((a, b) => a - b)
+    // Keep ticks far enough apart that their words never touch.
+    const kept: number[] = []
+    for (const t of all) if (!kept.length || at(t) - at(kept[kept.length - 1]!) >= 11) kept.push(t)
+    return kept.slice(0, MAX_TICKS)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lanes, min, span])
+  const tickWord = (t: number) => (formatTime ? formatTime(t, 'tick') : dateFmt.format(t))
+  const detailWord = (t: number) => (formatTime ? formatTime(t, 'detail') : timeFmt.format(t))
 
   const selected = selectedId ? (items.find((i) => i.id === selectedId) ?? null) : null
   const kindWord = (k: string) => l.kinds[k] ?? k
@@ -198,7 +219,7 @@ export function ProvenanceTimeline({ items, selectedId: selectedProp, defaultSel
 
   const eventButton = (item: ProvItem, time: number | null, row = 0) => {
     const proofKey = item.proofState ?? 'none'
-    const name = fill(l.event, { kind: kindWord(item.kind), title: item.title, proof: l.proof[proofKey], time: time === null ? l.undated : timeFmt.format(time) }, locale)
+    const name = fill(l.event, { kind: kindWord(item.kind), title: item.title, proof: l.proof[proofKey], time: time === null ? l.undated : detailWord(time) }, locale)
     return (
       <li key={item.id} className="fk-prov-timeline__slot" data-row={row} style={time === null ? undefined : { insetInlineStart: `${at(time)}%`, insetBlockStart: `${8 + row * ROW_HEIGHT}px` }}>
         <button
@@ -212,14 +233,9 @@ export function ProvenanceTimeline({ items, selectedId: selectedProp, defaultSel
           title={item.title}
           onClick={() => setSelected(item.id)}
         >
-          <span className="fk-prov-timeline__kind" aria-hidden="true">
-            {kindWord(item.kind)}
-          </span>
-          <span className="fk-prov-timeline__title" aria-hidden="true">
+          <span className="fk-prov-timeline__dot" aria-hidden="true" />
+          <span className="fk-prov-timeline__title" aria-hidden="true" dir="auto">
             {item.title}
-          </span>
-          <span aria-hidden="true">
-            <ProofBadge state={item.proofState ?? null} size="compact" label={l.proof[proofKey]} />
           </span>
         </button>
       </li>
@@ -243,7 +259,7 @@ export function ProvenanceTimeline({ items, selectedId: selectedProp, defaultSel
           <ol className="fk-prov-timeline__ticks">
             {ticks.map((t, i) => (
               <li key={i} className="fk-prov-timeline__tick" style={{ insetInlineStart: `${at(t)}%` }}>
-                <time dateTime={new Date(t).toISOString()}>{dateFmt.format(t)}</time>
+                <time dateTime={new Date(t).toISOString()}>{tickWord(t)}</time>
               </li>
             ))}
           </ol>
@@ -259,18 +275,10 @@ export function ProvenanceTimeline({ items, selectedId: selectedProp, defaultSel
             <h3 className="fk-prov-timeline__lane-head" id={headingId}>
               <span className="fk-visually-hidden">{fill(l.laneName, { name: lane.actor?.name ?? l.systemWord, kind: actorWord(lane.actor), count }, locale)}</span>
               <span aria-hidden="true" className="fk-prov-timeline__actor">
-                {lane.actor && lane.actor.kind !== 'system' ? (
-                  <ActorChip kind={chipKind(lane.actor.kind)} name={lane.actor.name} compact />
-                ) : (
-                  <span className="fk-prov-timeline__system">
-                    <Server focusable="false" />
-                    <span>{l.systemWord}</span>
-                    {lane.actor ? <code dir="ltr">{lane.actor.name}</code> : null}
-                  </span>
-                )}
+                <ActorMark actor={lane.actor ?? { kind: 'system', name: l.systemWord }} />
               </span>
             </h3>
-            <ol className="fk-prov-timeline__track" aria-labelledby={headingId} style={{ minBlockSize: `${Math.max(110, 32 + rowCount * ROW_HEIGHT)}px` }}>
+            <ol className="fk-prov-timeline__track" aria-labelledby={headingId} style={{ minBlockSize: `${Math.max(112, 28 + rowCount * ROW_HEIGHT)}px` }}>
               {lane.dated.map(({ item, time }, i) => eventButton(item, time, rows[i]))}
             </ol>
             {lane.undated.length ? (
@@ -284,34 +292,46 @@ export function ProvenanceTimeline({ items, selectedId: selectedProp, defaultSel
       })}
       </div>
       <aside className="fk-prov-timeline__detail" aria-label={l.detail} aria-live="polite">
+        <span className="fk-prov-timeline__eyebrow">{l.detail}</span>
         {selected ? (
           <>
-            <p className="fk-prov-timeline__detail-kind">{kindWord(selected.kind)}</p>
-            <h3 className="fk-prov-timeline__detail-title">{selected.title}</h3>
-            <ProofBadge state={selected.proofState ?? null} size="inline" label={l.proof[selected.proofState ?? 'none']} />
-            <dl className="fk-prov-timeline__detail-facts">
-              {selected.actor ? (
-                <div>
-                  <dt className="fk-visually-hidden">{actorWord(selected.actor)}</dt>
-                  <dd>
-                    <ActorChip kind={chipKind(selected.actor.kind)} name={selected.actor.name} compact />
-                  </dd>
-                </div>
-              ) : null}
+            <h3 className="fk-prov-timeline__detail-title" dir="auto">
+              {selected.title}
+            </h3>
+            {selected.actor ? <ActorMark actor={selected.actor} /> : null}
+            <dl className="fk-prov-timeline__facts">
               <div>
                 <dt>{l.when}</dt>
-                <dd>{selected.at && Number.isFinite(Date.parse(selected.at)) ? <time dateTime={selected.at}>{timeFmt.format(Date.parse(selected.at))}</time> : l.undated}</dd>
+                <dd data-mono="true">{selected.at && Number.isFinite(Date.parse(selected.at)) ? <time dateTime={selected.at}>{detailWord(Date.parse(selected.at))}</time> : l.undated}</dd>
               </div>
+              <div>
+                <dt>{l.kindWord}</dt>
+                <dd>{kindWord(selected.kind)}</dd>
+              </div>
+              <div>
+                <dt>{l.proofWord}</dt>
+                <dd>
+                  <ProofPill state={selected.proofState ?? 'none'} word={l.proof[selected.proofState ?? 'none']} size="small" />
+                </dd>
+              </div>
+              {(selected.meta ?? []).map((m, i) => (
+                <div key={m}>
+                  <dt>{i === 0 ? l.ids : ''}</dt>
+                  <dd data-mono="true" dir="ltr">
+                    <code>{m}</code>
+                  </dd>
+                </div>
+              ))}
+              {(selected.details ?? []).map((d) => (
+                <div key={d.label}>
+                  <dt>{d.label}</dt>
+                  <dd data-mono={d.mono ? 'true' : undefined} dir={d.mono ? 'ltr' : 'auto'}>
+                    {d.value}
+                  </dd>
+                </div>
+              ))}
             </dl>
-            {selected.meta?.length ? (
-              <ul className="fk-prov-timeline__detail-meta">
-                {selected.meta.map((m) => (
-                  <li key={m}>
-                    <code dir="ltr">{m}</code>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
+            {renderDetailActions ? <div className="fk-prov-timeline__actions">{renderDetailActions(selected)}</div> : null}
           </>
         ) : (
           <p className="fk-prov-timeline__detail-empty">{l.noSelection}</p>

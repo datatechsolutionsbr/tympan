@@ -4,8 +4,9 @@
 
 import { useMemo } from 'react'
 import { Button as AriaButton, Tree, TreeItem, TreeItemContent, type Key } from 'react-aria-components'
-import { ChevronRight, CircleCheck, CircleX, Download, Hourglass, RotateCcw, ShieldCheck } from 'lucide-react'
-import { Button, ProofBadge } from '@fakhir/design-system'
+import { Check, ChevronRight, CircleCheck, CircleX, FileDown, Hourglass, ShieldCheck } from 'lucide-react'
+import { Button } from '@fakhir/design-system'
+import { ProofPill } from './ProvenanceNode'
 import { defineLabels, fill, useFlowLocale, useLabels } from '../internal/labels'
 import type { ObligationStatus, ProofCertificate, ProofObligation } from './proofTypes'
 
@@ -27,6 +28,9 @@ export interface ProvenanceCertificateLabels {
   status: Record<ObligationStatus, string>
   verdicts: Record<'proved' | 'pending' | 'refuted', string>
   obligationsTitle: string
+  /** Verdict line beside the pill: how many obligations are still open. */
+  openCount: string
+  allHold: string
 }
 
 export const provenanceCertificateLabels = defineLabels<ProvenanceCertificateLabels>('ProvenanceCertificate', {
@@ -48,6 +52,8 @@ export const provenanceCertificateLabels = defineLabels<ProvenanceCertificateLab
     status: { ok: 'holds', pending: 'pending', failed: 'fails' },
     verdicts: { proved: 'proved', pending: 'pending', refuted: 'refuted' },
     obligationsTitle: 'Proof obligations',
+    openCount: '{pending, plural, =0 {} one {# obligation pending} other {# obligations pending}}{failed, plural, =0 {} one { · # fails} other { · # fail}}',
+    allHold: 'every obligation holds',
   },
   'pt-BR': {
     title: 'Certificado',
@@ -67,6 +73,8 @@ export const provenanceCertificateLabels = defineLabels<ProvenanceCertificateLab
     status: { ok: 'cumprida', pending: 'pendente', failed: 'falhou' },
     verdicts: { proved: 'provada', pending: 'pendente', refuted: 'refutada' },
     obligationsTitle: 'Obrigações da prova',
+    openCount: '{pending, plural, =0 {} one {# obrigação pendente} other {# obrigações pendentes}}{failed, plural, =0 {} one { · # falhou} other { · # falharam}}',
+    allHold: 'todas as obrigações cumpridas',
   },
   es: {
     title: 'Certificado',
@@ -86,6 +94,8 @@ export const provenanceCertificateLabels = defineLabels<ProvenanceCertificateLab
     status: { ok: 'cumplida', pending: 'pendiente', failed: 'falla' },
     verdicts: { proved: 'probada', pending: 'pendiente', refuted: 'refutada' },
     obligationsTitle: 'Obligaciones de prueba',
+    openCount: '{pending, plural, =0 {} one {# obligación pendiente} other {# obligaciones pendientes}}{failed, plural, =0 {} one { · # falla} other { · # fallan}}',
+    allHold: 'todas las obligaciones se cumplen',
   },
 })
 
@@ -122,6 +132,7 @@ export function ProvenanceCertificate({ certificate, onRerun, onDownload, busy =
     )
   }
 
+  const open = countOpen(certificate.obligations)
   const ranAt = Number.isFinite(Date.parse(certificate.ranAt)) ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'medium' }).format(Date.parse(certificate.ranAt)) : certificate.ranAt
 
   const obligationRow = (o: ProofObligation, key: string) => {
@@ -138,10 +149,7 @@ export function ProvenanceCertificate({ certificate, onRerun, onDownload, busy =
               ) : (
                 <span className="fk-cert__spacer" aria-hidden="true" />
               )}
-              <span className="fk-cert__status">
-                <Icon aria-hidden="true" focusable="false" />
-                <span>{l.status[o.status]}</span>
-              </span>
+              <Icon className="fk-cert__icon" aria-hidden="true" focusable="false" />
               <span className="fk-cert__text">
                 <span className="fk-cert__label">{o.label}</span>
                 {o.detail ? (
@@ -150,6 +158,7 @@ export function ProvenanceCertificate({ certificate, onRerun, onDownload, busy =
                   </code>
                 ) : null}
               </span>
+              <span className="fk-cert__status">{l.status[o.status]}</span>
             </div>
           )}
         </TreeItemContent>
@@ -166,12 +175,25 @@ export function ProvenanceCertificate({ certificate, onRerun, onDownload, busy =
           <TreeItem id="root" textValue={`${certificate.claim}, ${l.verdicts[certificate.verdict]}`} className="fk-cert__item" data-root="">
             <TreeItemContent>
               {() => (
-                <div className="fk-cert__row fk-cert__row--root">
+                <div className="fk-cert__row fk-cert__row--root" data-status={certificate.verdict === 'proved' ? 'ok' : certificate.verdict === 'refuted' ? 'failed' : 'pending'}>
                   <AriaButton slot="chevron" className="fk-cert__chevron">
                     <ChevronRight aria-hidden="true" focusable="false" />
                   </AriaButton>
-                  <ProofBadge state={certificate.verdict} size="inline" label={l.verdicts[certificate.verdict]} />
-                  <span className="fk-cert__claim">{certificate.claim}</span>
+                  {(() => {
+                    const Icon = STATUS_ICON[certificate.verdict === 'proved' ? 'ok' : certificate.verdict === 'refuted' ? 'failed' : 'pending']
+                    return <Icon className="fk-cert__icon" aria-hidden="true" focusable="false" />
+                  })()}
+                  <span className="fk-cert__text">
+                    <span className="fk-cert__claim" dir="auto">
+                      {certificate.claim}
+                    </span>
+                    {certificate.note ? (
+                      <code className="fk-cert__detail" dir="auto">
+                        {certificate.note}
+                      </code>
+                    ) : null}
+                  </span>
+                  <span className="fk-cert__status">{l.verdicts[certificate.verdict]}</span>
                 </div>
               )}
             </TreeItemContent>
@@ -180,13 +202,13 @@ export function ProvenanceCertificate({ certificate, onRerun, onDownload, busy =
         </Tree>
       </div>
       <aside className="fk-cert__side" aria-label={l.facts}>
+        <span className="fk-cert__eyebrow">{l.verdict}</span>
+        <div className="fk-cert__verdict">
+          <ProofPill state={certificate.verdict} word={l.verdicts[certificate.verdict]} />
+          <span className="fk-cert__open">{open.pending || open.failed ? fill(l.openCount, open, locale) : l.allHold}</span>
+        </div>
+        <p className="fk-cert__note">{l.deterministic}</p>
         <dl className="fk-cert__facts">
-          <div>
-            <dt>{l.verdict}</dt>
-            <dd>
-              <ProofBadge state={certificate.verdict} size="inline" label={l.verdicts[certificate.verdict]} />
-            </dd>
-          </div>
           <div>
             <dt>{l.verifier}</dt>
             <dd className="fk-cert__mono" dir="ltr">
@@ -195,7 +217,7 @@ export function ProvenanceCertificate({ certificate, onRerun, onDownload, busy =
           </div>
           <div>
             <dt>{l.ranAt}</dt>
-            <dd>
+            <dd className="fk-cert__mono">
               <time dateTime={certificate.ranAt}>{ranAt}</time>
             </dd>
           </div>
@@ -212,20 +234,30 @@ export function ProvenanceCertificate({ certificate, onRerun, onDownload, busy =
             </dd>
           </div>
         </dl>
-        <p className="fk-cert__note">{l.deterministic}</p>
         <div className="fk-cert__actions">
           {onRerun ? (
-            <Button variant="secondary" leadingIcon={<RotateCcw />} busy={busy} busyLabel={l.rerunning} onPress={onRerun}>
+            <Button variant="secondary" leadingIcon={<Check />} busy={busy} busyLabel={l.rerunning} onPress={onRerun}>
               {l.rerun}
             </Button>
           ) : null}
           {onDownload ? (
-            <Button variant="secondary" leadingIcon={<Download />} onPress={onDownload}>
+            <Button variant="quiet" leadingIcon={<FileDown />} onPress={onDownload}>
               {l.download}
             </Button>
           ) : null}
         </div>
       </aside>
     </section>
+  )
+}
+
+/** Pending and failed obligations, at every level. */
+function countOpen(list: readonly ProofObligation[]): { pending: number; failed: number } {
+  return list.reduce(
+    (acc, o) => {
+      const inner = countOpen(o.children ?? [])
+      return { pending: acc.pending + inner.pending + (o.status === 'pending' ? 1 : 0), failed: acc.failed + inner.failed + (o.status === 'failed' ? 1 : 0) }
+    },
+    { pending: 0, failed: 0 },
   )
 }

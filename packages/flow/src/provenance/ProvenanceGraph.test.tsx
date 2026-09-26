@@ -7,6 +7,7 @@ import { cssOf, mediaBlock } from '../../test/css'
 import { setViewportWidth } from '../../test/media'
 import { bandLayout, EMPTY_FILTERS, proofPath, provenanceView, type ProvActor, type ProvItem, type ProvStatement } from './model'
 import { ProvenanceGraph } from './ProvenanceGraph'
+import { ProvenanceNode } from './ProvenanceNode'
 import { ProvenanceLegend } from './ProvenanceLegend'
 import { defaultProvenanceLabels } from './labels'
 
@@ -111,11 +112,15 @@ describe('ProvenanceGraph', () => {
   it('highlights the proof path, dims the rest, marks the focus, and can show only the path', async () => {
     const { container } = renderGraph({ defaultBack: 3, defaultForward: 2, defaultFilters: { ...EMPTY_FILTERS } })
     const node = (id: string) => container.querySelector(`[data-fk-node-id="${id}"]`)
-    expect(node('src')!.querySelector('.fk-prov-node-frame')).toHaveAttribute('data-on-path', 'true')
-    expect(node('as1')!.querySelector('.fk-prov-node-frame')).toHaveAttribute('data-focus', 'true')
-    expect(node('rec')!.querySelector('.fk-node-card')).toHaveAttribute('data-dimmed', 'true')
+    expect(node('src')!.querySelector('.fk-prov-card')).toHaveAttribute('data-on-path', 'true')
+    expect(node('as1')!.querySelector('.fk-prov-card')).toHaveAttribute('data-focus', 'true')
+    // What was made from the focus reads in full; only items beside the path dim.
+    expect(node('rec')!.querySelector('.fk-prov-card')).not.toHaveAttribute('data-dimmed')
     expect(container.querySelector('.fk-prov-link[data-on-path="true"]')).not.toBeNull()
-    expect(screen.getByRole('button', { name: /^record: ae-tamm-4-0/ })).toHaveAccessibleDescription(/off the proof path/)
+    const aside = render(<ProvenanceNode item={items[4]!} labels={defaultProvenanceLabels} dimmed onActivate={() => {}} />)
+    expect(aside.container.querySelector('.fk-prov-card')).toHaveAttribute('data-dimmed', 'true')
+    expect(within(aside.container).getByRole('button', { name: /^assertion: model.sovereignty/ })).toHaveAccessibleDescription(/off the proof path/)
+    aside.unmount()
     await userEvent.click(screen.getByRole('switch', { name: 'Only the proof path' }))
     expect(node('rec')).toBeNull()
     expect(node('src')).not.toBeNull()
@@ -249,7 +254,8 @@ describe('ProvenanceGraph', () => {
     renderGraph({ defaultFocusId: null, defaultFilters: { ...EMPTY_FILTERS, proofStates: ['refuted'] } })
     const canvas = screen.getByRole('group', { name: 'Provenance graph' })
     expect(canvas.querySelectorAll('[data-fk-node-id]')).toHaveLength(1)
-    expect(screen.getByRole('button', { name: 'Filters (1 active)' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Proof: 1 chosen' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Type: all' })).toBeInTheDocument()
     await userEvent.click(screen.getByRole('radio', { name: 'Tree' }))
     expect(within(screen.getByRole('treegrid')).getAllByRole('row')).toHaveLength(1)
   })
@@ -348,8 +354,8 @@ describe('ProvenanceGraph', () => {
   it('updates the selection when controlled', () => {
     const { rerender } = renderGraph({ selectedId: 'src' })
     const canvas = screen.getByRole('group', { name: 'Provenance graph' })
-    expect(canvas.querySelector('[data-fk-node-id="src"] .fk-node-card')).toHaveAttribute('data-selected', 'true')
+    expect(canvas.querySelector('[data-fk-node-id="src"] .fk-prov-card')).toHaveAttribute('data-selected', 'true')
     act(() => rerender(<ProvenanceGraph items={items} statements={statements} defaultFocusId="as1" defaultBack={2} selectedId="r115b" />))
-    expect(canvas.querySelector('[data-fk-node-id="r115b"] .fk-node-card')).toHaveAttribute('data-selected', 'true')
+    expect(canvas.querySelector('[data-fk-node-id="r115b"] .fk-prov-card')).toHaveAttribute('data-selected', 'true')
   })
 })

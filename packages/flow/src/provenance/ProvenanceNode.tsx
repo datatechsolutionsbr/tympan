@@ -1,17 +1,17 @@
-// A provenance item (or an actor drawn as a node) on the canvas, composed from
-// GraphNodeCard: kind icon and word, title, mono identifiers, ProofBadge and
-// ActorChip (design direction §2.11, §3.13). The border line style follows the
-// proof state, so the state never rests on colour.
+// A provenance item (or an actor drawn as a node) on the canvas: one
+// 236×72 card with three lines, the kind glyph and title, the mono
+// identifier, then who acted and the check that matters for this item
+// (the hash state of a reading, or the proof word of a claim). Proof and
+// hash states always carry a word and an icon, never colour alone.
 
-import type { KeyboardEvent } from 'react'
-import { ShieldCheck, ShieldQuestion, ShieldX } from 'lucide-react'
-import { ActorChip, ProofBadge } from '@fakhir/design-system'
+import { useId, type KeyboardEvent, type ReactNode } from 'react'
+import { Bot, CircleCheck, CircleDashed, CircleMinus, CircleX, Hourglass, Server, ShieldCheck, ShieldQuestion, ShieldX, User } from 'lucide-react'
+import { Button as AriaButton } from 'react-aria-components'
 import { resolveIcon, FALLBACK_KIND_ICONS } from '../catalog/icons'
-import { kindTone } from '../catalog/palette'
 import { fill } from '../internal/labels'
-import { GraphNodeCard } from '../nodes/GraphNodeCard'
+import { useSurface } from '../surface/SurfaceContext'
 import type { ProvenanceLabels } from './labels'
-import { proofKeyOf, type ProvActor, type ProvItem } from './model'
+import { proofKeyOf, type ProofKey, type ProvActor, type ProvActorKind, type ProvItem } from './model'
 
 /** Canvas size a provenance card is laid out with before it is measured. */
 export const PROV_CARD = Object.freeze({ width: 236, height: 72 })
@@ -20,6 +20,52 @@ export const ACTOR_CARD = Object.freeze({ width: 200, height: 60 })
 export function itemAccessibleName(item: ProvItem, l: ProvenanceLabels, locale?: string): string {
   const actor = item.actor ? `${l.actorKinds[item.actor.kind]} ${item.actor.name}` : ''
   return fill(l.nodeName, { kind: l.kinds[item.kind], title: item.title, proof: l.proof[proofKeyOf(item)], actor }, locale).replace(/,\s*$/, '')
+}
+
+/** Items whose proof word is worth a pill (claims, or any item with an explicit state). */
+export function showsProof(item: ProvItem): boolean {
+  return item.kind === 'assertion' || (item.proofState !== null && item.proofState !== undefined)
+}
+
+const ACTOR_GLYPH: Record<ProvActorKind, typeof Bot> = { agent: Bot, person: User, system: Server }
+
+/** Who acted: a small glyph box (dashed for agents, round for people, square for systems) and the name. */
+export function ActorMark({ actor, className }: { actor: Pick<ProvActor, 'kind' | 'name'>; className?: string }) {
+  const Glyph = ACTOR_GLYPH[actor.kind]
+  return (
+    <span className={['fk-prov-actor', className].filter(Boolean).join(' ')} data-kind={actor.kind}>
+      <span className="fk-prov-actor__glyph" aria-hidden="true">
+        <Glyph focusable="false" />
+      </span>
+      <span className="fk-prov-actor__name" dir="auto">
+        {actor.name}
+      </span>
+    </span>
+  )
+}
+
+const PROOF_GLYPH: Record<ProofKey, typeof CircleCheck> = { proved: CircleCheck, pending: Hourglass, refuted: CircleX, not_disclosed: CircleDashed, none: CircleMinus }
+
+/** The proof state as a pill: word and glyph, with a border style per state. */
+export function ProofPill({ state, word, size = 'regular' }: { state: ProofKey; word: string; size?: 'regular' | 'small' }) {
+  const Glyph = PROOF_GLYPH[state]
+  return (
+    <span className="fk-prov-proof" data-proof={state} data-size={size}>
+      <Glyph aria-hidden="true" focusable="false" />
+      {word}
+    </span>
+  )
+}
+
+/** "hash matches" / "not reread" / "hash does not match": icon and word, never colour alone. */
+export function HashCheck({ state, labels: l }: { state: NonNullable<ProvItem['hashCheck']>; labels: ProvenanceLabels }) {
+  const Icon = state === 'match' ? ShieldCheck : state === 'mismatch' ? ShieldX : ShieldQuestion
+  return (
+    <span className="fk-prov-hash" data-state={state}>
+      <Icon aria-hidden="true" focusable="false" />
+      {l.hash[state]}
+    </span>
+  )
 }
 
 export interface ProvenanceNodeProps {
@@ -36,58 +82,59 @@ export interface ProvenanceNodeProps {
   onKeyDown?: (e: KeyboardEvent<HTMLElement>) => void
 }
 
-export function ProvenanceNode({ item, labels: l, locale, selected, dimmed, onPath, focused, onActivate, onKeyDown }: ProvenanceNodeProps) {
-  const proof = proofKeyOf(item)
-  const words = [...(focused ? [l.focusWord] : []), ...(onPath && !focused ? [l.proofPath] : []), ...(item.hashCheck ? [l.hash[item.hashCheck]] : [])]
+/** Card chrome shared by items and actors: a full-size activator under three lines of text. */
+function CardShell({ name, words, onActivate, onKeyDown, attrs, children }: { name: string; words: string[]; onActivate: () => void; onKeyDown?: ((e: KeyboardEvent<HTMLElement>) => void) | undefined; attrs: Record<string, string | undefined>; children: ReactNode }) {
+  const surface = useSurface()
+  const describedBy = useId()
   return (
-    <div className="fk-prov-node-frame" data-on-path={onPath ? 'true' : undefined} data-focus={focused ? 'true' : undefined}>
-    <GraphNodeCard
-      className="fk-prov-node"
-      kind={item.kind}
-      kindLabel={l.kinds[item.kind]}
-      title={item.title}
-      icon={resolveIcon(FALLBACK_KIND_ICONS[item.kind])}
-      tone={kindTone(item.kind)}
-      width="narrow"
-      selected={!!selected}
-      dimmed={!!dimmed}
-      proofState={proof}
-      accessibleName={itemAccessibleName(item, l, locale)}
-      stateWords={words}
-      labels={{ dimmed: l.offPath }}
-      onActivate={onActivate}
-      {...(onKeyDown ? { onKeyDown } : {})}
-      meta={
-        <div className="fk-prov-node__meta">
-          {item.meta?.length ? (
-            <span className="fk-prov-node__ids">
-              {item.meta.slice(0, 1).map((m) => (
-                <code key={m} className="fk-prov-node__id" title={m} dir="ltr">
-                  {m}
-                </code>
-              ))}
-            </span>
-          ) : null}
-          <span className="fk-prov-node__facts">
-            <ProofBadge state={item.proofState ?? null} size="compact" label={l.proof[proof]} />
-            {item.actor ? <ActorChip kind={item.actor.kind} name={item.actor.name} compact /> : null}
-            {item.hashCheck ? <HashCheck state={item.hashCheck} labels={l} /> : null}
-          </span>
-        </div>
-      }
-    />
+    <div className="fk-prov-card" {...attrs}>
+      <AriaButton
+        className="fk-prov-card__hit"
+        data-fk-node-focus=""
+        aria-label={name}
+        {...(words.length ? { 'aria-describedby': describedBy } : {})}
+        onPress={() => {
+          if (surface.justDragged()) return
+          onActivate()
+        }}
+        onKeyDown={(e) => onKeyDown?.(e)}
+      />
+      {children}
+      {words.length ? (
+        <span id={describedBy} className="fk-visually-hidden">
+          {words.join(', ')}
+        </span>
+      ) : null}
     </div>
   )
 }
 
-/** "hash matches" / "not reread" / "hash does not match": icon and word, never colour alone. */
-export function HashCheck({ state, labels: l }: { state: NonNullable<ProvItem['hashCheck']>; labels: ProvenanceLabels }) {
-  const Icon = state === 'match' ? ShieldCheck : state === 'mismatch' ? ShieldX : ShieldQuestion
+export function ProvenanceNode({ item, labels: l, locale, selected, dimmed, onPath, focused, onActivate, onKeyDown }: ProvenanceNodeProps) {
+  const proof = proofKeyOf(item)
+  const Icon = resolveIcon(FALLBACK_KIND_ICONS[item.kind])
+  const words = [...(focused ? [l.focusWord] : []), ...(onPath && !focused ? [l.proofPath] : []), ...(dimmed ? [l.offPath] : []), ...(item.hashCheck ? [l.hash[item.hashCheck]] : [])]
   return (
-    <span className="fk-prov-hash" data-state={state}>
-      <Icon aria-hidden="true" focusable="false" />
-      {l.hash[state]}
-    </span>
+    <CardShell
+      name={itemAccessibleName(item, l, locale)}
+      words={words}
+      onActivate={onActivate}
+      onKeyDown={onKeyDown}
+      attrs={{ 'data-kind': item.kind, 'data-on-path': onPath ? 'true' : undefined, 'data-focus': focused ? 'true' : undefined, 'data-selected': selected ? 'true' : undefined, 'data-dimmed': dimmed ? 'true' : undefined }}
+    >
+      <span className="fk-prov-card__head" aria-hidden="true">
+        <Icon className="fk-prov-card__icon" focusable="false" />
+        <span className="fk-prov-card__title" dir="auto" title={item.title}>
+          {item.title}
+        </span>
+      </span>
+      <code className="fk-prov-card__id" dir="ltr" title={item.meta?.[0]} aria-hidden="true">
+        {item.meta?.[0] ?? ''}
+      </code>
+      <span className="fk-prov-card__foot" aria-hidden="true">
+        {item.actor ? <ActorMark actor={item.actor} /> : <span />}
+        {item.hashCheck ? <HashCheck state={item.hashCheck} labels={l} /> : showsProof(item) ? <ProofPill state={proof} word={l.proof[proof]} size="small" /> : null}
+      </span>
+    </CardShell>
   )
 }
 
@@ -103,18 +150,22 @@ export interface ActorNodeProps {
 /** An actor as its own node (only when "show actors as nodes" is on). */
 export function ActorNode({ actor, labels: l, locale, selected, onActivate, onKeyDown }: ActorNodeProps) {
   return (
-    <GraphNodeCard
-      className="fk-prov-node"
-      kind="actor"
-      kindLabel={l.actorKinds[actor.kind]}
-      title={actor.name}
-      tone="neutral"
-      width="narrow"
-      selected={!!selected}
-      accessibleName={fill(l.actorNodeName, { kind: l.actorKinds[actor.kind], name: actor.name }, locale)}
+    <CardShell
+      name={fill(l.actorNodeName, { kind: l.actorKinds[actor.kind], name: actor.name }, locale)}
+      words={[]}
       onActivate={onActivate}
-      {...(onKeyDown ? { onKeyDown } : {})}
-      meta={<ActorChip kind={actor.kind} name={actor.name} {...(actor.agentKey ? { agentKey: actor.agentKey } : {})} {...(actor.model ? { model: actor.model } : {})} />}
-    />
+      onKeyDown={onKeyDown}
+      attrs={{ 'data-kind': 'actor', 'data-selected': selected ? 'true' : undefined }}
+    >
+      <span className="fk-prov-card__head" aria-hidden="true">
+        <span className="fk-prov-card__title">{l.actorKinds[actor.kind]}</span>
+      </span>
+      <code className="fk-prov-card__id" dir="ltr" aria-hidden="true">
+        {actor.model ?? ''}
+      </code>
+      <span className="fk-prov-card__foot" aria-hidden="true">
+        <ActorMark actor={actor} />
+      </span>
+    </CardShell>
   )
 }

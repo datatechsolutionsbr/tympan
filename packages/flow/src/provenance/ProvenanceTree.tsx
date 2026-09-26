@@ -5,17 +5,16 @@
 // Up/Down move, Right/Left expand/collapse (mirrored in RTL by React Aria),
 // Home/End jump, Enter/Space select.
 
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
-import { Button as AriaButton, Tree, TreeItem, TreeItemContent, type Key, type Selection } from 'react-aria-components'
+import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from 'react'
+import { Button as AriaButton, Radio, RadioGroup, Tree, TreeItem, TreeItemContent, type Key, type Selection } from 'react-aria-components'
 import { ChevronRight } from 'lucide-react'
-import { ActorChip, ProofBadge, SegmentedControl } from '@fakhir/design-system'
 import { useControllable } from '../internal/useControllable'
+import { fill } from '../internal/labels'
 import { FALLBACK_KIND_ICONS, resolveIcon } from '../catalog/icons'
-import { kindTone } from '../catalog/palette'
 import type { HopDirection } from '../model/graph'
 import type { ProvenanceLabels } from './labels'
 import { proofKeyOf, provenanceTree, treeKeys, type ProvTreeRow, type ProvView } from './model'
-import { HashCheck, itemAccessibleName } from './ProvenanceNode'
+import { ActorMark, HashCheck, itemAccessibleName, showsProof } from './ProvenanceNode'
 
 export interface ProvenanceTreeProps {
   view: ProvView
@@ -51,11 +50,13 @@ export function ProvenanceTree({ view, focusId, selectedId, onSelect, onOpenInGr
     const via = row.via ? (row.via.way === 'back' ? l.relations[row.via.relation] : l.relationsReversed[row.via.relation]) : null
     const text = vertex.type === 'item' ? itemAccessibleName(vertex.item, l, locale) : `${l.actorKinds[vertex.actor.kind]}: ${vertex.actor.name}`
     const Icon = vertex.type === 'item' ? resolveIcon(FALLBACK_KIND_ICONS[vertex.item.kind]) : null
+    const meta = vertex.type === 'item' ? vertex.item.meta?.[0] : undefined
+    const proofWord = vertex.type === 'item' && showsProof(vertex.item) ? l.proof[proofKeyOf(vertex.item)] : undefined
     return (
-      <TreeItem key={row.key} id={row.key} textValue={via ? `${via}: ${text}` : text} className="fk-prov-tree__item">
+      <TreeItem key={row.key} id={row.key} textValue={via ? `${via}: ${text}` : text} className="fk-prov-tree__item" style={({ level }) => ({ '--fk-tree-level': level }) as CSSProperties}>
         <TreeItemContent>
-          {({ hasChildItems, isExpanded }) => (
-            <div className="fk-prov-tree__row" data-expanded={isExpanded || undefined}>
+          {({ hasChildItems }) => (
+            <div className="fk-prov-tree__row">
               {hasChildItems ? (
                 <AriaButton slot="chevron" className="fk-prov-tree__chevron">
                   <ChevronRight aria-hidden="true" focusable="false" />
@@ -63,29 +64,25 @@ export function ProvenanceTree({ view, focusId, selectedId, onSelect, onOpenInGr
               ) : (
                 <span className="fk-prov-tree__spacer" aria-hidden="true" />
               )}
-              {Icon && vertex.type === 'item' ? (
-                <span className="fk-prov-tree__bubble" data-tone={kindTone(vertex.item.kind)} aria-hidden="true">
-                  <Icon focusable="false" />
-                </span>
-              ) : null}
+              {Icon ? <Icon className="fk-prov-tree__icon" aria-hidden="true" focusable="false" /> : <span className="fk-prov-tree__icon" aria-hidden="true" />}
               <span className="fk-prov-tree__text">
-                {via ? <span className="fk-prov-tree__via">{via}</span> : null}
-                <span className="fk-prov-tree__title">
-                  <span className="fk-prov-tree__kind">{vertex.type === 'item' ? l.kinds[vertex.item.kind] : l.actorKinds[vertex.actor.kind]}</span> {vertex.type === 'item' ? vertex.item.title : vertex.actor.name}
+                <span className="fk-prov-tree__line">
+                  {via ? <span className="fk-visually-hidden">{via} </span> : null}
+                  <span className="fk-prov-tree__kind">{vertex.type === 'item' ? l.kinds[vertex.item.kind] : l.actorKinds[vertex.actor.kind]}</span>
+                  <span className="fk-prov-tree__title" dir="auto">
+                    {vertex.type === 'item' ? vertex.item.title : vertex.actor.name}
+                  </span>
                 </span>
-                {vertex.type === 'item' && vertex.item.meta?.[0] ? (
-                  <code className="fk-prov-tree__meta" dir="ltr">
-                    {vertex.item.meta[0]}
-                  </code>
+                {meta || proofWord ? (
+                  <span className="fk-prov-tree__meta">
+                    {meta ? <code dir="ltr">{meta}</code> : null}
+                    {meta && proofWord ? ' · ' : null}
+                    {proofWord ?? null}
+                  </span>
                 ) : null}
               </span>
-              {vertex.type === 'item' ? (
-                <span className="fk-prov-tree__facts">
-                  <ProofBadge state={vertex.item.proofState ?? null} size="compact" label={l.proof[proofKeyOf(vertex.item)]} />
-                  {vertex.item.actor ? <ActorChip kind={vertex.item.actor.kind} name={vertex.item.actor.name} compact /> : null}
-                  {vertex.item.hashCheck ? <HashCheck state={vertex.item.hashCheck} labels={l} /> : null}
-                </span>
-              ) : null}
+              {vertex.type === 'item' && vertex.item.actor ? <ActorMark actor={vertex.item.actor} className="fk-prov-tree__actor" /> : null}
+              {vertex.type === 'item' && vertex.item.hashCheck ? <HashCheck state={vertex.item.hashCheck} labels={l} /> : null}
             </div>
           )}
         </TreeItemContent>
@@ -94,22 +91,28 @@ export function ProvenanceTree({ view, focusId, selectedId, onSelect, onOpenInGr
     )
   }
 
+  const counts = useMemo(() => {
+    const items = view.vertices.flatMap((v) => (v.type === 'item' ? [v.item] : []))
+    const actors = new Set(items.flatMap((i) => (i.actor ? [`${i.actor.kind}:${i.actor.name}`] : [])))
+    return { nodes: view.vertices.length, actors: actors.size, hashes: items.filter((i) => i.hashCheck === 'match').length }
+  }, [view])
+
   return (
     <div className="fk-prov-tree-wrap">
-    {focusId ? (
-      <SegmentedControl
-        className="fk-prov-tree__way"
-        label={l.treeWay}
-        size="compact"
-        options={[
-          { value: 'backward', label: l.treeBackward },
-          { value: 'forward', label: l.treeForward },
-        ]}
-        value={way}
-        onChange={(v) => setWay(v as 'backward' | 'forward')}
-      />
-    ) : null}
-    <p className="fk-prov-tree__hint">{onOpenInGraph ? l.openInGraph : null}</p>
+    <div className="fk-prov-tree__bar">
+      {focusId ? (
+        <RadioGroup className="fk-prov-tree__way" aria-label={l.treeWay} orientation="horizontal" value={way} onChange={(v) => setWay(v as 'backward' | 'forward')}>
+          <Radio value="backward" className="fk-prov-chip fk-prov-tree__way-option">
+            {l.treeBackward}
+          </Radio>
+          <Radio value="forward" className="fk-prov-chip fk-prov-tree__way-option">
+            {l.treeForward}
+          </Radio>
+        </RadioGroup>
+      ) : null}
+      <span className="fk-prov__spacer" />
+      <p className="fk-prov-tree__count">{fill(l.treeCount, counts, locale)}</p>
+    </div>
     <Tree
       aria-label={l.treeName}
       className={['fk-prov-tree', className].filter(Boolean).join(' ')}
@@ -128,6 +131,7 @@ export function ProvenanceTree({ view, focusId, selectedId, onSelect, onOpenInGr
     >
       {rows.map(renderRow)}
     </Tree>
+    <p className="fk-prov-tree__hint">{onOpenInGraph ? l.treeKeys : null}</p>
     </div>
   )
 }

@@ -1,0 +1,39 @@
+/* Provenance gallery page: the sheet body fills with the viewer; the graph
+   view uses the compact header of the storyboard (crumbs and title, then the
+   question and the view switch in the same row). */
+.fk-prov-page {
+  display: contents;
+}
+.fk-prov-page__query {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.fk-prov-page__mono {
+  font-family: var(--fk-font-mono);
+}
+.fk-prov-page__edition {
+  font-weight: 500;
+}
+.fk-shell__sheet:has(.fk-prov[data-view='graph']) .fk-shell__head {
+  align-items: center;
+  gap: 16px;
+  padding-block: 18px 14px;
+  padding-inline: 32px;
+}
+.fk-shell__sheet:has(.fk-prov[data-view='graph']) .fk-shell__titles {
+  flex: none;
+  gap: 4px;
+}
+.fk-shell__sheet:has(.fk-prov[data-view='graph']) .fk-shell__crumbs {
+  font: 400 12px/1.4 var(--fk-font-mono);
+}
+.fk-shell__sheet:has(.fk-prov[data-view='graph']) .fk-shell__title {
+  font: 600 24px/1.1 var(--fk-font-serif);
+  letter-spacing: 0;
+}
+.fk-shell__sheet:has(.fk-prov[data-view='graph']) .fk-shell__actions {
+  flex: 1 1 auto;
+  gap: 16px;
+  min-inline-size: 0;
+}

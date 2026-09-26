@@ -32,6 +32,8 @@ export interface ProofCertificate {
   inputEdition: string
   /** Hash of the certificate document. */
   hash: string
+  /** One line under the claim (certificate type, verifier version). */
+  note?: string
   obligations: ProofObligation[]
 }
 
@@ -53,12 +55,17 @@ export interface EditionDiffRow {
   change: EditionChange
   /** Who made the change. */
   who?: ProvActor
+  /** One mono line under each value (source, coder, date). */
+  aNote?: string
+  bNote?: string
 }
 
 export interface EditionComparison {
   a: EditionRef
   b: EditionRef
   rows: EditionDiffRow[]
+  /** Hashes that differ between the two editions (a count, or a placeholder word). */
+  divergentHashes?: number | string
 }
 
 /** One step of the chain behind a number in the manuscript. */
@@ -76,6 +83,8 @@ export interface TracedNumber {
   id: string
   /** The number exactly as written in the text. */
   text: string
+  /** What the number counts, in words (under the number in the panel). */
+  caption?: string
   /** Chain from the sentence back to the assertions: sentence → run → edition → records → assertions. */
   chain: NumberTraceStep[]
 }

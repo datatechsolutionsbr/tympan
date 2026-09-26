@@ -84,6 +84,23 @@ export interface ProvenanceLabels {
   relationsReversed: Record<ProvRelation, string>
   proof: Record<ProofKey, string>
   actorKinds: Record<ProvActorKind, string>
+  /** Inspector eyebrow: "{kind} in focus". */
+  inFocus: string
+  /** Proof note when there is no certificate yet. */
+  noCertificateYet: string
+  filterKindChip: string
+  filterActorChip: string
+  filterProofChip: string
+  filterAllKinds: string
+  filterAllActors: string
+  filterAllProof: string
+  filterChosen: string
+  hopsWord: string
+  treeCount: string
+  treeKeys: string
+  toolTree: string
+  toolExport: string
+  questionField: string
 }
 
 export const defaultProvenanceLabels: ProvenanceLabels = {
@@ -173,6 +190,21 @@ export const defaultProvenanceLabels: ProvenanceLabels = {
   relationsReversed: { wasDerivedFrom: 'source of', used: 'used by', wasGeneratedBy: 'generated', wasAttributedTo: 'responsible for' },
   proof: { proved: 'proved', pending: 'pending', refuted: 'refuted', not_disclosed: 'not disclosed', none: 'no proof' },
   actorKinds: { person: 'person', agent: 'agent', system: 'system' },
+  inFocus: '{kind} in focus',
+  noCertificateYet: 'the verifier (G7a) has not issued a certificate yet',
+  filterKindChip: 'Type: {value}',
+  filterActorChip: 'Actor: {value}',
+  filterProofChip: 'Proof: {value}',
+  filterAllKinds: 'all',
+  filterAllActors: 'all',
+  filterAllProof: 'all',
+  filterChosen: '{count, plural, one {# chosen} other {# chosen}}',
+  hopsWord: 'steps',
+  treeCount: '{nodes, plural, one {# node} other {# nodes}} · {actors, plural, one {# actor} other {# actors}} · {hashes, plural, one {# hash checked} other {# hashes checked}}',
+  treeKeys: 'Arrows move · → opens · ← closes · Enter shows it in the graph',
+  toolTree: 'Navigable tree',
+  toolExport: 'Export PROV',
+  questionField: 'value, record, number or sentence',
 }
 
 export const provenanceLabelsPtBR: ProvenanceLabels = {
@@ -262,6 +294,21 @@ export const provenanceLabelsPtBR: ProvenanceLabels = {
   relationsReversed: { wasDerivedFrom: 'origem de', used: 'usado por', wasGeneratedBy: 'gerou', wasAttributedTo: 'responsável por' },
   proof: { proved: 'provada', pending: 'pendente', refuted: 'refutada', not_disclosed: 'não informada', none: 'sem prova' },
   actorKinds: { person: 'pessoa', agent: 'agente', system: 'sistema' },
+  inFocus: '{kind} em foco',
+  noCertificateYet: 'o verificador (G7a) ainda não emitiu certificado',
+  filterKindChip: 'Tipo: {value}',
+  filterActorChip: 'Ator: {value}',
+  filterProofChip: 'Prova: {value}',
+  filterAllKinds: 'todos',
+  filterAllActors: 'todos',
+  filterAllProof: 'todas',
+  filterChosen: '{count, plural, one {# escolhido} other {# escolhidos}}',
+  hopsWord: 'saltos',
+  treeCount: '{nodes, plural, one {# nó} other {# nós}} · {actors, plural, one {# ator} other {# atores}} · {hashes, plural, one {# hash conferido} other {# hashes conferidos}}',
+  treeKeys: 'Setas movem · → abre · ← fecha · Enter mostra no grafo',
+  toolTree: 'Árvore navegável',
+  toolExport: 'Exportar PROV',
+  questionField: 'valor, registro, número ou frase',
 }
 
 export const provenanceLabelsEs: ProvenanceLabels = {
@@ -351,6 +398,21 @@ export const provenanceLabelsEs: ProvenanceLabels = {
   relationsReversed: { wasDerivedFrom: 'origen de', used: 'usado por', wasGeneratedBy: 'generó', wasAttributedTo: 'responsable de' },
   proof: { proved: 'probada', pending: 'pendiente', refuted: 'refutada', not_disclosed: 'no informada', none: 'sin prueba' },
   actorKinds: { person: 'persona', agent: 'agente', system: 'sistema' },
+  inFocus: '{kind} en foco',
+  noCertificateYet: 'el verificador (G7a) aún no emitió certificado',
+  filterKindChip: 'Tipo: {value}',
+  filterActorChip: 'Actor: {value}',
+  filterProofChip: 'Prueba: {value}',
+  filterAllKinds: 'todos',
+  filterAllActors: 'todos',
+  filterAllProof: 'todas',
+  filterChosen: '{count, plural, one {# elegido} other {# elegidos}}',
+  hopsWord: 'saltos',
+  treeCount: '{nodes, plural, one {# nodo} other {# nodos}} · {actors, plural, one {# actor} other {# actores}} · {hashes, plural, one {# hash verificado} other {# hashes verificados}}',
+  treeKeys: 'Flechas mueven · → abre · ← cierra · Enter lo muestra en el grafo',
+  toolTree: 'Árbol navegable',
+  toolExport: 'Exportar PROV',
+  questionField: 'valor, registro, número o frase',
 }
 
 export const provenanceLabels = defineLabels<ProvenanceLabels>('provenance', { en: defaultProvenanceLabels, 'pt-BR': provenanceLabelsPtBR, es: provenanceLabelsEs })

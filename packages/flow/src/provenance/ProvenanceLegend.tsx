@@ -45,9 +45,10 @@ export function ProvenanceLegend({ labels: l, states = PROOF_KEYS, relations = P
       entries: states.map((k) => ({ id: k, sample: proofSample(k), word: <ProofBadge state={k === 'none' ? null : k} size="inline" label={l.proof[k]} /> })),
     },
   ]
+  const shown = groups.filter((g) => g.entries.length)
   return (
-    <section className="fk-prov-legend" data-variant={variant} aria-label={l.legend} data-fk-surface-chrome="">
-      {groups.map((g) => (
+    <section className="fk-prov-legend" data-variant={variant} aria-label={states.length ? l.legend : l.relationLegend} data-fk-surface-chrome="">
+      {shown.map((g) => (
         <div key={g.heading} className="fk-prov-legend__group">
           <h3 className="fk-prov-legend__title">{g.heading}</h3>
           <ul className="fk-prov-legend__list">

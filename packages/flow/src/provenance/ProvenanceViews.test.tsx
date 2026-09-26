@@ -185,15 +185,19 @@ describe('ProvenanceCertificate', () => {
 })
 
 describe('EditionCompare', () => {
-  it('counts each kind of change with plural words and filters the table', async () => {
-    render(<EditionCompare comparison={comparison} />)
-    expect(screen.getByText('1 altered')).toBeInTheDocument()
-    expect(screen.getByText('1 new')).toBeInTheDocument()
-    expect(screen.getByText('1 removed')).toBeInTheDocument()
+  it('counts each kind of change with plural words and filters the table from the counts', async () => {
+    render(<EditionCompare comparison={{ ...comparison, divergentHashes: 0 }} />)
+    expect(screen.getByRole('button', { name: '1 altered' })).toHaveTextContent('1values altered')
+    expect(screen.getByRole('button', { name: '1 new' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '1 removed' })).toBeInTheDocument()
+    expect(screen.getByText('divergent hashes')).toBeInTheDocument()
     expect(screen.getAllByRole('row')).toHaveLength(4)
-    await userEvent.click(screen.getByRole('radio', { name: 'new' }))
+    await userEvent.click(screen.getByRole('button', { name: '1 new' }))
+    expect(screen.getByRole('button', { name: '1 new' })).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getAllByRole('row')).toHaveLength(2)
     expect(screen.getByRole('button', { name: 'Bürokratt record' })).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: '1 new' }))
+    expect(screen.getAllByRole('row')).toHaveLength(4)
   })
 
   it('writes a word for missing values and never a dash; values are mono', () => {
@@ -212,8 +216,8 @@ describe('EditionCompare', () => {
     expect(onSelectItem).toHaveBeenCalledWith('ae-tamm-4-0.stage')
     const cards = container.querySelectorAll('.fk-diff__card')
     expect(cards).toHaveLength(2)
-    expect(cards[0]).toHaveTextContent('Before, in 2026-08-15')
-    expect(cards[1]).toHaveTextContent('After, in 2026-09-20')
+    expect(cards[0]).toHaveTextContent('Before · 2026-08-15')
+    expect(cards[1]).toHaveTextContent('After · 2026-09-20')
     expect(cards[1]).toHaveTextContent('4')
     await expectNoAxeViolations(container)
   })
@@ -224,7 +228,7 @@ describe('EditionCompare', () => {
         <EditionCompare comparison={comparison} />
       </FakhirProvider>,
     )
-    expect(screen.getByText('1 alterado')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '1 alterado' })).toHaveTextContent('valores alterados')
     expect(screen.getAllByText('não consta')).toHaveLength(2)
   })
 
@@ -263,7 +267,7 @@ describe('NumberTrace', () => {
   it('reports a chosen step and keeps the text direction automatic', async () => {
     const onOpenStep = vi.fn()
     const { container } = render(<NumberTrace passage={passage} onOpenStep={onOpenStep} />)
-    expect(container.querySelector('.fk-trace__text')).toHaveAttribute('dir', 'auto')
+    expect(container.querySelector('.fk-numtrace__text')).toHaveAttribute('dir', 'auto')
     await userEvent.click(screen.getByRole('button', { name: /number 37/ }))
     await userEvent.click(screen.getByRole('button', { name: 'Open Count by stage' }))
     expect(onOpenStep).toHaveBeenCalledWith(expect.objectContaining({ id: 'run' }))
