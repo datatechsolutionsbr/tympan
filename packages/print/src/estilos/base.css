@@ -193,6 +193,30 @@
     display: block;
   }
 
+  .ty-print-logo--datatech {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.2mm;
+  }
+
+  .ty-print-logo-rotulo {
+    font: 600 6pt/1 var(--ty-print-fonte-rotulo);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+  .ty-print-assinatura {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.4mm;
+  }
+
+  .ty-print-assinatura-texto {
+    font: 500 6.4pt/1.2 var(--ty-print-fonte-rotulo);
+    color: var(--ty-print-tinta-2);
+  }
+
   @media print {
     .ty-print-dupla {
       display: contents;

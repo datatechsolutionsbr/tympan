@@ -202,7 +202,7 @@ function Halteres({ c, spec, largura }: { c: Ctx; spec: SpecHalteres; largura: n
       </>
     ),
     tabela: {
-      colunas: ['', { rotulo: spec.rotuloA, numerica: true }, { rotulo: spec.rotuloB, numerica: true }],
+      colunas: ['Base', { rotulo: spec.rotuloA, numerica: true }, { rotulo: spec.rotuloB, numerica: true }],
       linhas: spec.linhas.map((l) => [l.nota ? `${l.rotulo} (${l.nota})` : l.rotulo, l.a, l.b]),
     },
     eixo: { x0: L.eixo.x0, x1: L.eixo.x1, d0: spec.escala[0], d1: spec.escala[1] },
@@ -259,9 +259,9 @@ function Barras({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numbe
       </>
     ),
     tabela: unico
-      ? { colunas: ['', { rotulo: spec.unidade ?? 'valor', numerica: true }], linhas: linhasG.map((l) => [l.rotulo, l.valores[0]?.valor ?? '']) }
+      ? { colunas: ['Base', { rotulo: spec.unidade ?? 'valor', numerica: true }], linhas: linhasG.map((l) => [l.rotulo, l.valores[0]?.valor ?? '']) }
       : {
-          colunas: ['', { rotulo: spec.rotuloA ?? 'a', numerica: true }, { rotulo: spec.rotuloB ?? 'b', numerica: true }],
+          colunas: ['Base', { rotulo: spec.rotuloA ?? 'a', numerica: true }, { rotulo: spec.rotuloB ?? 'b', numerica: true }],
           linhas: linhasG.map((l) => [l.nota ? `${l.rotulo} (${l.nota})` : l.rotulo, l.valores[0]?.valor ?? '', l.valores[1]?.valor ?? '']),
         },
     eixo: { x0: L.eixo.x0, x1: L.eixo.x1, d0: spec.escala[0], d1: spec.escala[1] },
@@ -315,10 +315,10 @@ function Contagem({ c, spec, largura }: { c: Ctx; spec: SpecContagem; largura: n
     ),
     tabela: L.pares
       ? {
-          colunas: ['', { rotulo: spec.rotuloA ?? 'a', numerica: true }, { rotulo: spec.rotuloB ?? 'b', numerica: true }],
+          colunas: ['Base', { rotulo: spec.rotuloA ?? 'a', numerica: true }, { rotulo: spec.rotuloB ?? 'b', numerica: true }],
           linhas: linhasG.map((l) => [l.rotulo, l.valores[0]?.valor ?? '', l.valores[1]?.valor ?? '']),
         }
-      : { colunas: ['', { rotulo: spec.rotuloUnidade ?? 'valor', numerica: true }], linhas: linhasG.map((l) => [l.rotulo, l.valores[0]?.valor ?? '']) },
+      : { colunas: ['Base', { rotulo: spec.rotuloUnidade ?? 'valor', numerica: true }], linhas: linhasG.map((l) => [l.rotulo, l.valores[0]?.valor ?? '']) },
     eixo: null,
   }
 }
@@ -387,7 +387,7 @@ function Serie({ c, spec, largura }: { c: Ctx; spec: SpecSerie; largura: number 
         <Anotacoes c={c} postas={L.anotacoes} marcas={spec.pontos.map((p) => (p.chamada !== undefined ? String(p.chamada) : undefined))} />
       </>
     ),
-    tabela: { colunas: ['', { rotulo: spec.unidade ?? 'valor', numerica: true }], linhas: spec.pontos.map((p) => [String(p.x), p.y]) },
+    tabela: { colunas: ['Base', { rotulo: spec.unidade ?? 'valor', numerica: true }], linhas: spec.pontos.map((p) => [String(p.x), p.y]) },
     eixo: { x0, x1, d0: spec.eixoX[0], d1: spec.eixoX[1] },
   }
 }

@@ -54,7 +54,7 @@ export {
   type MapaProps,
 } from './paineis/Aberturas.tsx'
 export { LogoLakebrasil, SeloLakebrasil, type LogoLakebrasilProps, type SeloLakebrasilProps, type VarianteLogo } from './marca/LogoLakebrasil.tsx'
-export { LogoDatatech, type LogoDatatechProps, type VarianteDatatech } from './marca/LogoDatatech.tsx'
+export { LogoDatatech, tintasDoEstilo, type LogoDatatechProps, type VarianteDatatech } from './marca/LogoDatatech.tsx'
 export { GraficoMetodo, type GraficoMetodoProps } from './grafico/GraficoMetodo.tsx'
 export type { GraficoSpec, SpecHalteres, SpecBarras, SpecSerie, SpecContagem, SpecEsquema, LinhaPar, AnotacaoGrafico } from './grafico/tipos.ts'
 export { layoutHalteres, layoutBarras, layoutContagem, layoutSerie, escalaLinear, marcasEixo } from './grafico/geometria.ts'

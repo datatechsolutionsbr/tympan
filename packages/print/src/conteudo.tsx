@@ -107,7 +107,7 @@ const ITENS_SPEC: Record<string, string[]> = {
 
 /** Components by content `tipo`, with the props each one reads. */
 export const COMPONENTES: Record<string, Registro> = {
-  Painel: { componente: Painel, props: ['letra', 'titulo', 'eyebrow', 'largura', 'variante', 'children', 'className'] },
+  Painel: { componente: Painel, props: ['letra', 'titulo', 'eyebrow', 'largura', 'variante', 'nivel', 'children', 'className'] },
   Texto: { componente: Texto, props: ['eyebrow', 'titulo', 'nivel', 'variante', 'paragrafos', 'lista', 'largura', 'className'] },
   Margem: { componente: Margem, props: ['titulo', 'texto', 'className'] },
   Anotacao: { componente: Anotacao, props: ['alvo', 'texto', 'className'] },
@@ -125,7 +125,7 @@ export const COMPONENTES: Record<string, Registro> = {
   },
   Fonte: { componente: Fonte, props: ['texto', 'versaoLake', 'rodape', 'className'] },
   LogoLakebrasil: { componente: LogoLakebrasil, props: ['variante', 'largura', 'protecao', 'decorativo', 'className'] },
-  LogoDatatech: { componente: LogoDatatech, props: ['variante', 'largura', 'className'] },
+  LogoDatatech: { componente: LogoDatatech, props: ['variante', 'largura', 'cor', 'cor2', 'rotulo', 'texto', 'protecao', 'className'] },
   AberturaParte: { componente: AberturaParte, props: ['numero', 'titulo', 'pergunta', 'partes', 'nestaParte', 'ondeIssoVolta', 'className'] },
   Capa: {
     componente: Capa,

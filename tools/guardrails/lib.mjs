@@ -4,8 +4,8 @@ import { join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 export const repoRoot = join(fileURLToPath(import.meta.url), '..', '..', '..')
-export const SCANNED_PACKAGES = ['packages/tokens', 'packages/ui', 'packages/flow']
-const SKIP_DIRS = new Set(['node_modules', 'dist', 'dist-gallery', 'coverage', '.turbo'])
+export const SCANNED_PACKAGES = ['packages/tokens', 'packages/ui', 'packages/flow', 'packages/print']
+const SKIP_DIRS = new Set(['node_modules', 'dist', 'dist-gallery', 'coverage', '.turbo', 'shots'])
 
 /** Every file under the scanned packages (source, docs, config), skipping build output. */
 export function* walk(dir = null) {

@@ -15,6 +15,8 @@ export interface PainelProps {
   largura?: number
   /** normal; filete (top rule); filete-forte (heavy top rule); cidade ("in your city", dashed); teste (tests); bolso (small inset); pilha (stacked, no frame). */
   variante?: VariantePainel
+  /** Heading level of the panel title (default 2, so a page can go from its h1 straight to panels). */
+  nivel?: 2 | 3 | 4
   className?: string
   style?: CSSProperties
   children?: ReactNode
@@ -26,7 +28,8 @@ export function larguraColunas(largura?: number): CSSProperties | undefined {
 }
 
 /** A lettered dashboard panel; its frame follows the style (rule, box, card, band, drafting board). */
-export function Painel({ letra, titulo, eyebrow, largura, variante = 'normal', className, style, children }: PainelProps) {
+export function Painel({ letra, titulo, eyebrow, largura, variante = 'normal', nivel = 2, className, style, children }: PainelProps) {
+  const H = `h${nivel}` as 'h2' | 'h3' | 'h4'
   const { estilo } = usePrint()
   const id = useIdSeguro('ty-print-painel')
   const moldura = estilo.estrutura.painel
@@ -43,10 +46,10 @@ export function Painel({ letra, titulo, eyebrow, largura, variante = 'normal', c
       {mao ? <BordaMao chave={`painel-${letra ?? ''}-${typeof titulo === 'string' ? titulo : ''}`} grossa={moldura === 'caixa-grossa'} dupla={moldura === 'caixa-grossa'} /> : null}
       {eyebrow ? <p className="ty-print-sobretitulo">{eyebrow}</p> : null}
       {temCabeca ? (
-        <h3 className="ty-print-painel-titulo" id={`${id}-t`}>
+        <H className="ty-print-painel-titulo" id={`${id}-t`}>
           {letra ? <span className="ty-print-letra">{letra}</span> : null}
           {titulo ? <span className="ty-print-painel-nome">{titulo}</span> : null}
-        </h3>
+        </H>
       ) : null}
       <div className="ty-print-painel-corpo">{children}</div>
     </section>
