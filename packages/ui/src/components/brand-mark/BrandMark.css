@@ -1,0 +1,60 @@
+/* BrandMark (spec: wave-2/brand-mark.md; design direction §2.2, §2.3). */
+@layer fakhir.components {
+  .fk-brand-mark {
+    --fk-brand-mark-unit: var(--fk-space-6);
+    --fk-brand-mark-type: var(--fk-font-size-h3);
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--fk-brand-mark-unit) / 3);
+    color: var(--fk-ink);
+    line-height: 1;
+  }
+  .fk-brand-mark[data-size='small'] {
+    --fk-brand-mark-unit: var(--fk-space-5);
+    --fk-brand-mark-type: var(--fk-font-size-body-lg);
+  }
+  .fk-brand-mark[data-size='large'] {
+    --fk-brand-mark-unit: var(--fk-space-7);
+    --fk-brand-mark-type: var(--fk-font-size-display);
+  }
+  .fk-brand-mark__badge {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    inline-size: var(--fk-brand-mark-unit);
+    block-size: var(--fk-brand-mark-unit);
+    border-radius: calc(var(--fk-brand-mark-unit) * 0.3);
+    background: var(--fk-cta);
+    color: var(--fk-on-cta);
+  }
+  .fk-brand-mark__art {
+    inline-size: 64%;
+    block-size: 64%;
+  }
+  /* Wordmark in plain ink: gradient text is not allowed (contrast). */
+  .fk-brand-mark__word {
+    color: var(--fk-ink);
+    font-family: var(--fk-font-serif);
+    font-size: var(--fk-brand-mark-type);
+    font-weight: var(--fk-font-weight-semibold);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+  .fk-brand-logo {
+    display: block;
+    block-size: var(--fk-space-6);
+    inline-size: auto;
+  }
+
+  @media (forced-colors: active) {
+    .fk-brand-mark__badge {
+      outline: 1px solid CanvasText;
+      background: Canvas;
+      color: CanvasText;
+      forced-color-adjust: none;
+    }
+    .fk-brand-mark__word {
+      color: CanvasText;
+    }
+  }
+}

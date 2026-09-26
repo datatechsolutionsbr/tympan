@@ -1,0 +1,85 @@
+/* AuthFrame (spec: wave-2/auth-frame.md; design direction §2.1, §2.5, §3.3). */
+@layer fakhir.components {
+  .fk-auth-frame {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    min-block-size: 100dvh;
+    background: var(--fk-bg);
+    color: var(--fk-ink-2);
+  }
+  .fk-auth-frame[data-split] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .fk-auth-frame__brand,
+  .fk-auth-frame__form-side {
+    position: relative;
+    z-index: 1;
+  }
+  .fk-auth-frame__form-side {
+    display: grid;
+    place-items: center;
+    padding: var(--fk-space-6) var(--fk-space-4);
+    overflow-y: auto;
+    outline: none;
+  }
+  .fk-auth-frame__column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-5);
+    inline-size: 100%;
+    max-inline-size: 400px;
+  }
+  .fk-auth-frame__column[data-width='narrow'] {
+    max-inline-size: 340px;
+  }
+  .fk-auth-frame__column[data-width='wide'] {
+    max-inline-size: 520px;
+  }
+  .fk-auth-frame__mark {
+    display: flex;
+    justify-content: center;
+  }
+  .fk-auth-frame__sheet {
+    box-sizing: border-box;
+    min-inline-size: 0;
+    padding: var(--fk-space-5);
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-sheet);
+    background: var(--fk-surface);
+    box-shadow: var(--fk-shadow-sheet);
+    backdrop-filter: blur(var(--fk-glass-blur-sheet)) saturate(var(--fk-glass-saturate));
+    -webkit-backdrop-filter: blur(var(--fk-glass-blur-sheet)) saturate(var(--fk-glass-saturate));
+  }
+  /* The page title of this frame uses the display step (§2.2). */
+  .fk-auth-frame__sheet :where(h1) {
+    margin: 0 0 var(--fk-space-4);
+    color: var(--fk-ink);
+    font-family: var(--fk-font-serif);
+    font-size: var(--fk-font-size-display);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-display);
+  }
+
+  @media (min-width: 768px) {
+    .fk-auth-frame__form-side {
+      padding-inline: var(--fk-space-6);
+    }
+    .fk-auth-frame__sheet {
+      padding: var(--fk-space-6);
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .fk-auth-frame__sheet {
+      background: var(--fk-surface-solid);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+  }
+  @media (forced-colors: active) {
+    .fk-auth-frame__sheet {
+      border: 1px solid CanvasText;
+    }
+  }
+}

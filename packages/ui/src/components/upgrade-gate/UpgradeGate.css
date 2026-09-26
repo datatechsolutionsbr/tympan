@@ -1,0 +1,94 @@
+/* UpgradeGate (spec: wave-2/upgrade-gate.md; design direction §2.5, §2.7, §2.10). */
+@layer fakhir.components {
+  .fk-gate {
+    position: fixed;
+    inset: 0;
+    z-index: var(--fk-z-modal);
+    display: grid;
+    place-items: center;
+    padding: var(--fk-space-4);
+    overflow-y: auto;
+    background: var(--fk-bg);
+  }
+  .fk-gate[data-entering] {
+    animation: fk-gate-fade var(--fk-dur-quick) var(--fk-ease);
+  }
+  @keyframes fk-gate-fade {
+    from {
+      opacity: 0;
+    }
+  }
+  .fk-gate__modal {
+    position: relative;
+    z-index: 1;
+    inline-size: min(100%, 560px);
+    outline: none;
+  }
+  .fk-gate__dialog {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fk-space-4);
+    padding: var(--fk-space-6);
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-sheet);
+    background: var(--fk-surface-raised);
+    box-shadow: var(--fk-shadow-modal);
+    backdrop-filter: blur(var(--fk-glass-blur-floating));
+    -webkit-backdrop-filter: blur(var(--fk-glass-blur-floating));
+    outline: none;
+  }
+  .fk-gate__eyebrow {
+    margin: 0;
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-eyebrow);
+    font-weight: var(--fk-font-weight-semibold);
+    line-height: var(--fk-font-line-height-eyebrow);
+    letter-spacing: var(--fk-font-tracking-eyebrow);
+    text-transform: uppercase;
+  }
+  .fk-gate__title {
+    margin: 0;
+    color: var(--fk-ink);
+    font-family: var(--fk-font-serif);
+    font-size: var(--fk-font-size-h1);
+    font-weight: var(--fk-font-weight-bold);
+    line-height: var(--fk-font-line-height-h1);
+  }
+  .fk-gate__description {
+    margin: 0;
+    max-inline-size: var(--fk-measure-summary);
+    font-size: var(--fk-font-size-body-lg);
+    line-height: var(--fk-font-line-height-body-lg);
+  }
+  .fk-gate__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--fk-space-3);
+  }
+  @media (max-width: 639.98px) {
+    .fk-gate__actions {
+      flex-direction: column;
+    }
+    .fk-gate__actions > * {
+      inline-size: 100%;
+      min-block-size: var(--fk-control-target);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fk-gate[data-entering] {
+      animation: none;
+    }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .fk-gate__dialog {
+      background: var(--fk-surface-raised-solid);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+  }
+  @media (forced-colors: active) {
+    .fk-gate__dialog {
+      border: 1px solid CanvasText;
+    }
+  }
+}

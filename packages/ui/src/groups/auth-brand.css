@@ -1,0 +1,15 @@
+/* Stylesheets of the "auth-brand" group (imported by src/styles.css). */
+@import '../components/ambient-backdrop/AmbientBackdrop.css';
+@import '../components/auth-frame/AuthFrame.css';
+@import '../components/brand-loader/BrandLoader.css';
+@import '../components/brand-mark/BrandMark.css';
+@import '../components/brand-panel/BrandPanel.css';
+@import '../components/consent-banner/ConsentBanner.css';
+@import '../components/environment-banner/EnvironmentBanner.css';
+@import '../components/federated-sign-in/FederatedSignIn.css';
+@import '../components/http-error-page/HttpErrorPage.css';
+@import '../components/legal-document-frame/LegalDocumentFrame.css';
+@import '../components/route-progress/RouteProgress.css';
+@import '../components/skeleton-fill/SkeletonFill.css';
+@import '../components/third-party-mark-slot/ThirdPartyMarkSlot.css';
+@import '../components/upgrade-gate/UpgradeGate.css';

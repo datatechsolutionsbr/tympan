@@ -1,0 +1,73 @@
+/* ConsentBanner (spec: wave-2/consent-banner.md; design direction §2.5, §2.10). */
+@layer fakhir.components {
+  .fk-consent {
+    position: fixed;
+    inset-block-end: var(--fk-space-4);
+    inset-inline: var(--fk-space-4);
+    z-index: var(--fk-z-toast);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--fk-space-4);
+    max-inline-size: 760px;
+    margin-inline: auto;
+    padding: var(--fk-space-4) var(--fk-space-5);
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-card);
+    background: var(--fk-surface-raised);
+    box-shadow: var(--fk-shadow-floating);
+    backdrop-filter: blur(var(--fk-glass-blur-floating));
+    -webkit-backdrop-filter: blur(var(--fk-glass-blur-floating));
+    color: var(--fk-ink-2);
+    animation: fk-consent-fade var(--fk-dur-quick) var(--fk-ease);
+  }
+  @keyframes fk-consent-fade {
+    from {
+      opacity: 0;
+    }
+  }
+  .fk-consent__message {
+    flex: 1 1 320px;
+    margin: 0;
+    font-size: var(--fk-font-size-body);
+    line-height: var(--fk-font-line-height-body);
+  }
+  .fk-consent__choices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--fk-space-3);
+  }
+  @media (max-width: 639.98px) {
+    .fk-consent {
+      inset-inline: 0;
+      inset-block-end: 0;
+      border-radius: var(--fk-radius-card) var(--fk-radius-card) 0 0;
+      padding-block-end: max(var(--fk-space-4), env(safe-area-inset-bottom));
+    }
+    .fk-consent__choices {
+      flex-direction: column;
+      inline-size: 100%;
+    }
+    .fk-consent__choices > * {
+      inline-size: 100%;
+      min-block-size: var(--fk-control-target);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fk-consent {
+      animation: none;
+    }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .fk-consent {
+      background: var(--fk-surface-raised-solid);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+  }
+  @media (forced-colors: active) {
+    .fk-consent {
+      border: 1px solid CanvasText;
+    }
+  }
+}

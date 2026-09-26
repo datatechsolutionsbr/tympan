@@ -1,0 +1,78 @@
+/* BrandLoader (spec: wave-2/brand-loader.md, presets wave-4/loader-presets.md; design direction §2.7, §2.12). */
+@layer fakhir.components {
+  .fk-brand-loader {
+    --fk-loader-tone: var(--fk-accent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--fk-space-3);
+    color: var(--fk-ink-2);
+    text-align: center;
+  }
+  .fk-brand-loader[data-layout='fullscreen'] {
+    position: fixed;
+    inset: 0;
+    z-index: var(--fk-z-modal);
+    min-block-size: 100dvh;
+    background: var(--fk-bg);
+  }
+  .fk-brand-loader[data-layout='inline'] {
+    padding: var(--fk-space-5);
+  }
+  .fk-brand-loader__figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--fk-space-3);
+  }
+  /* A tone ring around the mark; the whole figure breathes in opacity only. */
+  .fk-brand-loader__pulse {
+    display: inline-grid;
+    place-items: center;
+    padding: var(--fk-space-2);
+    border: 2px solid var(--fk-loader-tone);
+    border-radius: var(--fk-radius-card);
+    animation: fk-brand-loader-breathe var(--fk-dur-pulse) var(--fk-ease) infinite alternate;
+  }
+  .fk-brand-loader__name {
+    color: var(--fk-loader-tone);
+    font-family: var(--fk-font-serif);
+    font-size: var(--fk-font-size-h3);
+    font-weight: var(--fk-font-weight-semibold);
+  }
+  .fk-brand-loader[data-tone='neutral'] .fk-brand-loader__name,
+  .fk-brand-loader[data-tone^='categorical'] .fk-brand-loader__name {
+    color: var(--fk-ink);
+  }
+  .fk-brand-loader__label {
+    margin: 0;
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+    line-height: var(--fk-font-line-height-meta);
+  }
+  @keyframes fk-brand-loader-breathe {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0.45;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fk-brand-loader__pulse {
+      animation: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .fk-brand-loader__pulse {
+      border-color: CanvasText;
+    }
+    .fk-brand-loader__name,
+    .fk-brand-loader__label {
+      color: CanvasText;
+    }
+  }
+}

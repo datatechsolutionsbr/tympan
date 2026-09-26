@@ -1,0 +1,56 @@
+/* ThirdPartyMarkSlot and ProviderMark (spec: wave-4/third-party-mark-slot.md; design direction §2.3). */
+@layer fakhir.components {
+  .fk-mark {
+    --fk-mark-box: 1.1em;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fk-space-2);
+    min-inline-size: 0;
+    color: inherit;
+    vertical-align: middle;
+  }
+  .fk-mark[data-size='bubble'] {
+    --fk-mark-box: var(--fk-space-5);
+  }
+  .fk-mark__art {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    inline-size: var(--fk-mark-box);
+    block-size: var(--fk-mark-box);
+    color: currentColor;
+  }
+  .fk-mark[data-size='bubble'] .fk-mark__art {
+    inline-size: calc(var(--fk-mark-box) + var(--fk-space-3));
+    block-size: calc(var(--fk-mark-box) + var(--fk-space-3));
+    border: 1px solid var(--fk-line);
+    border-radius: var(--fk-radius-control);
+    background: var(--fk-surface-sunken);
+  }
+  .fk-mark__art > svg,
+  .fk-mark__image,
+  .fk-mark__glyph {
+    inline-size: var(--fk-mark-box);
+    block-size: var(--fk-mark-box);
+    object-fit: contain;
+  }
+  .fk-mark__glyph {
+    color: var(--fk-ink-3);
+  }
+  .fk-mark__name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (forced-colors: active) {
+    .fk-mark__art,
+    .fk-mark__art * {
+      color: CanvasText;
+      fill: currentColor;
+    }
+    .fk-mark[data-size='bubble'] .fk-mark__art {
+      border-color: CanvasText;
+    }
+  }
+}

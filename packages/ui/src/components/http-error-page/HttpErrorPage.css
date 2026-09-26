@@ -1,0 +1,70 @@
+/* HttpErrorPage (spec: wave-2/http-error-page.md; design direction §2.2, §2.3, §2.12). Neutral ink only. */
+@layer fakhir.components {
+  .fk-http-error {
+    display: grid;
+    place-items: center;
+    min-block-size: 100dvh;
+    padding: var(--fk-space-6) var(--fk-space-4);
+    background: var(--fk-bg);
+    color: var(--fk-ink-2);
+    text-align: center;
+  }
+  .fk-http-error__column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--fk-space-3);
+    max-inline-size: var(--fk-measure-summary);
+  }
+  .fk-http-error__icon {
+    inline-size: var(--fk-space-5);
+    block-size: var(--fk-space-5);
+    color: var(--fk-ink-3);
+  }
+  .fk-http-error__code {
+    margin: 0;
+    color: var(--fk-ink-3);
+    font-family: var(--fk-font-serif);
+    font-size: var(--fk-font-size-display);
+    line-height: var(--fk-font-line-height-display);
+    font-variant-numeric: tabular-nums;
+  }
+  .fk-http-error__title {
+    margin: 0;
+    color: var(--fk-ink);
+    font-family: var(--fk-font-serif);
+    font-size: var(--fk-font-size-h1);
+    font-weight: var(--fk-font-weight-bold);
+    line-height: var(--fk-font-line-height-h1);
+    outline: none;
+  }
+  .fk-http-error__title:focus-visible {
+    outline: var(--fk-focus-width) solid var(--fk-focus-ring);
+    outline-offset: 2px;
+  }
+  .fk-http-error__message {
+    margin: 0;
+    font-size: var(--fk-font-size-body-lg);
+    line-height: var(--fk-font-line-height-body-lg);
+  }
+  .fk-http-error__problem {
+    margin: 0;
+    color: var(--fk-ink-3);
+    font-size: var(--fk-font-size-meta);
+  }
+  .fk-http-error__problem code {
+    font-family: var(--fk-font-mono);
+  }
+  .fk-http-error__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--fk-space-3);
+    margin-block-start: var(--fk-space-3);
+  }
+  @media (forced-colors: active) {
+    .fk-http-error__icon {
+      color: CanvasText;
+    }
+  }
+}

@@ -1,0 +1,45 @@
+/* AmbientBackdrop (spec: wave-2/ambient-backdrop.md; design direction §2.5). Intensities come from
+   --fk-ambient-1 (teal, top) and --fk-ambient-2 (sky, bottom), which the token sheet sets per mode. */
+@layer fakhir.components {
+  .fk-ambient {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    contain: strict;
+  }
+  .fk-ambient__glow {
+    position: absolute;
+    inline-size: 64vmax;
+    block-size: 64vmax;
+    border-radius: 50%;
+    filter: blur(110px);
+  }
+  .fk-ambient__glow[data-glow='upper'] {
+    inset-block-start: -34vmax;
+    inset-inline-end: -14vmax;
+    background: var(--fk-ambient-1);
+  }
+  .fk-ambient__glow[data-glow='lower'] {
+    inset-block-end: -34vmax;
+    inset-inline-start: 6vmax;
+    background: var(--fk-ambient-2);
+  }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .fk-ambient {
+      display: none;
+    }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .fk-ambient {
+      display: none;
+    }
+  }
+  @media (forced-colors: active) {
+    .fk-ambient {
+      display: none;
+    }
+  }
+}
