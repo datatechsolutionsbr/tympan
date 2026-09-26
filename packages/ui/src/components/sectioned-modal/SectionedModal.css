@@ -1,53 +1,62 @@
-/* SectionedModal (spec: wave-2/sectioned-modal.md; design direction §2.4, §2.5, §2.7, §2.8). */
+/*
+ * SectionedModal (spec: wave-2/sectioned-modal.md; design direction §2.4, §2.5, §2.7, §2.8).
+ * Layout is driven by a handful of local custom properties set on the panel;
+ * the breakpoints only change those properties, the rules below stay put.
+ */
 @layer fakhir.components {
+  /* ---- Local variables ---------------------------------------------------- */
+  .fk-sectioned-modal {
+    --fk-sm-cap: 52rem; /* panel width cap */
+    --fk-sm-gutter: var(--fk-space-6); /* inline padding of head, body, foot */
+    --fk-sm-outer: var(--fk-space-5); /* space between panel and viewport */
+    --fk-sm-flow: row; /* frame: rail beside or above the content */
+    --fk-sm-rail-size: 15rem;
+    --fk-sm-marker: inset calc(3px * var(--fk-inline-sign)) 0 0 var(--fk-accent);
+  }
+  .fk-sectioned-modal[data-size='sm'] {
+    --fk-sm-cap: 28rem;
+  }
+  .fk-sectioned-modal[data-size='md'] {
+    --fk-sm-cap: 40rem;
+  }
+  .fk-sectioned-modal[data-size='xl'] {
+    --fk-sm-cap: 68rem;
+  }
+  .fk-sectioned-modal[data-size='full'] {
+    --fk-sm-cap: 100%;
+    block-size: 100%;
+  }
+
+  /* ---- Overlay and panel (level 4) --------------------------------------- */
   .fk-sectioned-modal__backdrop {
     position: fixed;
     inset: 0;
     z-index: var(--fk-z-modal);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    place-items: center;
     padding: var(--fk-space-5);
     background: var(--fk-backdrop);
   }
   .fk-sectioned-modal {
-    --fk-smodal-width: 52rem;
     box-sizing: border-box;
     display: flex;
-    inline-size: min(var(--fk-smodal-width), 100%);
-    max-block-size: calc(100dvh - 2 * var(--fk-space-5));
+    inline-size: min(var(--fk-sm-cap), 100%);
+    max-block-size: calc(100dvh - 2 * var(--fk-sm-outer));
+    overflow: hidden;
     border: 1px solid var(--fk-line);
     border-radius: var(--fk-radius-sheet);
     background: var(--fk-surface-raised);
-    color: var(--fk-on-surface-raised);
     box-shadow: var(--fk-shadow-modal);
+    color: var(--fk-on-surface-raised);
+    outline: none;
     backdrop-filter: blur(var(--fk-glass-blur-floating)) saturate(var(--fk-glass-saturate));
     -webkit-backdrop-filter: blur(var(--fk-glass-blur-floating)) saturate(var(--fk-glass-saturate));
-    overflow: hidden;
-    outline: none;
   }
-  .fk-sectioned-modal[data-size='sm'] { --fk-smodal-width: 28rem; }
-  .fk-sectioned-modal[data-size='md'] { --fk-smodal-width: 40rem; }
-  .fk-sectioned-modal[data-size='xl'] { --fk-smodal-width: 68rem; }
-  .fk-sectioned-modal[data-size='full'] { --fk-smodal-width: 100%; block-size: 100%; }
-  .fk-sectioned-modal[data-entering] {
-    animation: fk-smodal-in var(--fk-dur-base) var(--fk-ease);
-  }
-  .fk-sectioned-modal__backdrop[data-entering] {
-    animation: fk-smodal-fade var(--fk-dur-base) var(--fk-ease);
-  }
-  @keyframes fk-smodal-in {
-    from {
-      opacity: 0;
-      translate: 0 12px;
-    }
-  }
-  @keyframes fk-smodal-fade {
-    from {
-      opacity: 0;
-    }
-  }
-  .fk-sectioned-modal__dialog {
+
+  /* Columns that must be allowed to shrink. */
+  .fk-sectioned-modal__dialog,
+  .fk-sectioned-modal__form,
+  .fk-sectioned-modal__body {
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -55,18 +64,27 @@
     min-inline-size: 0;
     outline: none;
   }
+  .fk-sectioned-modal__frame {
+    display: flex;
+    flex: 1;
+    flex-direction: var(--fk-sm-flow);
+    min-block-size: 0;
+  }
+
+  /* ---- Head --------------------------------------------------------------- */
   .fk-sectioned-modal__head {
     position: relative;
     display: flex;
     align-items: flex-start;
     gap: var(--fk-space-3);
-    padding: var(--fk-space-5) var(--fk-space-6);
+    padding: var(--fk-space-5) var(--fk-sm-gutter);
     border-block-end: 1px solid var(--fk-line);
   }
   .fk-sectioned-modal__head[data-accent]::before {
     content: '';
     position: absolute;
-    inset: 0 0 auto;
+    inset-block-start: 0;
+    inset-inline: 0;
     block-size: 3px;
     background: var(--fk-accent);
   }
@@ -82,14 +100,6 @@
   .fk-sectioned-modal__titles {
     flex: 1;
     min-inline-size: 0;
-  }
-  .fk-sectioned-modal__eyebrow {
-    margin: 0;
-    color: var(--fk-ink-3);
-    font-size: var(--fk-font-size-eyebrow);
-    font-weight: var(--fk-font-weight-semibold);
-    letter-spacing: var(--fk-font-tracking-eyebrow);
-    text-transform: uppercase;
   }
   .fk-sectioned-modal__title {
     margin: 0;
@@ -112,39 +122,43 @@
     display: flex;
     gap: var(--fk-space-2);
   }
-  .fk-sectioned-modal__frame {
-    display: flex;
-    flex: 1;
-    min-block-size: 0;
-  }
-  .fk-sectioned-modal__rail {
-    display: flex;
-    flex: none;
-    flex-direction: column;
-    gap: var(--fk-space-4);
-    inline-size: 15rem;
-    padding: var(--fk-space-4);
-    border-inline-end: 1px solid var(--fk-line);
-    background: var(--fk-surface-sunken);
-    overflow-y: auto;
-  }
-  .fk-sectioned-modal__nav {
-    display: flex;
-    flex-direction: column;
-    gap: var(--fk-space-4);
-  }
+
+  /* Eyebrow-style labels share one treatment. */
+  .fk-sectioned-modal__eyebrow,
   .fk-sectioned-modal__group-name {
-    margin: 0 0 var(--fk-space-1);
-    padding-inline: var(--fk-space-3);
+    margin: 0;
     color: var(--fk-ink-3);
     font-size: var(--fk-font-size-eyebrow);
     font-weight: var(--fk-font-weight-semibold);
     letter-spacing: var(--fk-font-tracking-eyebrow);
     text-transform: uppercase;
   }
+  .fk-sectioned-modal__group-name {
+    margin-block-end: var(--fk-space-1);
+    padding-inline: var(--fk-space-3);
+  }
+
+  /* ---- Section navigation (rail) ------------------------------------------ */
+  .fk-sectioned-modal__rail {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    gap: var(--fk-space-4);
+    inline-size: var(--fk-sm-rail-size);
+    padding: var(--fk-space-4);
+    overflow-y: auto;
+    border-inline-end: 1px solid var(--fk-line);
+    background: var(--fk-surface-sunken);
+  }
+  .fk-sectioned-modal__nav,
   .fk-sectioned-modal__list {
     display: flex;
     flex-direction: column;
+  }
+  .fk-sectioned-modal__nav {
+    gap: var(--fk-space-4);
+  }
+  .fk-sectioned-modal__list {
     gap: 2px;
     margin: 0;
     padding: 0;
@@ -157,7 +171,7 @@
     gap: var(--fk-space-2);
     inline-size: 100%;
     min-block-size: var(--fk-control-target);
-    padding-inline: var(--fk-space-3);
+    padding: 0 var(--fk-space-3);
     border: 0;
     border-radius: var(--fk-radius-control);
     background: transparent;
@@ -170,15 +184,15 @@
   .fk-sectioned-modal__item[data-hovered] {
     background: var(--fk-surface);
   }
-  .fk-sectioned-modal__item[data-active] {
-    background: var(--fk-accent-soft);
-    color: var(--fk-accent);
-    font-weight: var(--fk-font-weight-semibold);
-    box-shadow: inset 3px 0 0 var(--fk-accent);
-  }
   .fk-sectioned-modal__item[data-focus-visible] {
     outline: var(--fk-focus-width) solid var(--fk-focus-ring);
     outline-offset: -2px;
+  }
+  .fk-sectioned-modal__item[data-active] {
+    background: var(--fk-accent-soft);
+    box-shadow: var(--fk-sm-marker);
+    color: var(--fk-accent);
+    font-weight: var(--fk-font-weight-semibold);
   }
   .fk-sectioned-modal__item-icon > svg {
     inline-size: 18px;
@@ -197,20 +211,11 @@
     padding-block-start: var(--fk-space-3);
     border-block-start: 1px solid var(--fk-line);
   }
-  .fk-sectioned-modal__form {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    min-block-size: 0;
-    min-inline-size: 0;
-  }
+
+  /* ---- Body and footer ---------------------------------------------------- */
   .fk-sectioned-modal__body {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
     gap: var(--fk-space-4);
-    min-block-size: 0;
-    padding: var(--fk-space-6);
+    padding: var(--fk-space-6) var(--fk-sm-gutter);
     overflow-y: auto;
   }
   .fk-sectioned-modal__foot {
@@ -218,69 +223,88 @@
     flex-wrap: wrap;
     justify-content: flex-end;
     gap: var(--fk-space-3);
-    padding: var(--fk-space-4) var(--fk-space-6) calc(var(--fk-space-4) + env(safe-area-inset-bottom, 0px));
+    padding-block: var(--fk-space-4) calc(var(--fk-space-4) + env(safe-area-inset-bottom, 0px));
+    padding-inline: var(--fk-sm-gutter);
     border-block-start: 1px solid var(--fk-line);
   }
-  /* Under 1024: the section navigation becomes a scrollable row above the content. */
+
+  /* ---- Motion ------------------------------------------------------------- */
+  @keyframes fk-smodal-rise {
+    from {
+      opacity: 0;
+      translate: 0 12px;
+    }
+  }
+  @keyframes fk-smodal-appear {
+    from {
+      opacity: 0;
+    }
+  }
+  .fk-sectioned-modal[data-entering] {
+    animation: fk-smodal-rise var(--fk-dur-base) var(--fk-ease);
+  }
+  .fk-sectioned-modal__backdrop[data-entering] {
+    animation: fk-smodal-appear var(--fk-dur-base) var(--fk-ease);
+  }
+
+  /* ---- Below 1024 px: navigation becomes a scrollable row on top ---------- */
   @media (max-width: 1023.98px) {
-    .fk-sectioned-modal__frame {
-      flex-direction: column;
+    .fk-sectioned-modal {
+      --fk-sm-flow: column;
+      --fk-sm-rail-size: auto;
+      --fk-sm-marker: inset 0 -3px 0 var(--fk-accent);
     }
-    .fk-sectioned-modal__rail {
-      inline-size: auto;
-      flex-direction: row;
-      align-items: center;
-      padding: var(--fk-space-2) var(--fk-space-4);
-      border-inline-end: 0;
-      border-block-end: 1px solid var(--fk-line);
-      overflow-x: auto;
-    }
+    .fk-sectioned-modal__rail,
     .fk-sectioned-modal__nav,
     .fk-sectioned-modal__list {
       flex-direction: row;
+    }
+    .fk-sectioned-modal__rail {
+      align-items: center;
+      padding: var(--fk-space-2) var(--fk-space-4);
+      overflow-x: auto;
+      border-inline-end: 0;
+      border-block-end: 1px solid var(--fk-line);
+    }
+    .fk-sectioned-modal__item {
+      white-space: nowrap;
     }
     .fk-sectioned-modal__group-name,
     .fk-sectioned-modal__identity {
       display: none;
     }
-    .fk-sectioned-modal__item {
-      white-space: nowrap;
-    }
-    .fk-sectioned-modal__item[data-active] {
-      box-shadow: inset 0 -3px 0 var(--fk-accent);
-    }
     .fk-sectioned-modal__rail-foot {
-      margin-block-start: 0;
+      margin: 0;
       margin-inline-start: auto;
       padding: 0;
       border: 0;
     }
   }
-  /* Under 640: full screen, footer pinned above the safe area. */
+
+  /* ---- Below 640 px: full screen, footer pinned above the safe area ------- */
   @media (max-width: 639.98px) {
-    .fk-sectioned-modal__backdrop {
-      padding: 0;
-    }
     .fk-sectioned-modal {
+      --fk-sm-gutter: var(--fk-space-4);
+      --fk-sm-outer: 0px;
       inline-size: 100%;
       block-size: 100dvh;
       max-block-size: 100dvh;
       border-radius: 0;
     }
-    .fk-sectioned-modal__head,
-    .fk-sectioned-modal__body {
-      padding-inline: var(--fk-space-4);
+    .fk-sectioned-modal__backdrop {
+      padding: 0;
     }
     .fk-sectioned-modal__foot {
       position: sticky;
       inset-block-end: 0;
-      padding-inline: var(--fk-space-4);
       background: var(--fk-surface-raised);
     }
   }
+
+  /* ---- Preferences -------------------------------------------------------- */
   @media (prefers-reduced-motion: reduce) {
     .fk-sectioned-modal[data-entering] {
-      animation: fk-smodal-fade var(--fk-dur-base) linear;
+      animation: fk-smodal-appear var(--fk-dur-base) linear;
     }
   }
   @media (prefers-reduced-transparency: reduce) {
