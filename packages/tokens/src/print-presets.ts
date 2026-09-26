@@ -48,6 +48,8 @@ export interface PrintCores {
   marcaTexto: string
   contexto: string
   prova: Record<EstadoProva, string>
+  /** Colours of page ornaments only (frames, tiles, waves); never data. Up to four. */
+  ornamento?: string[]
 }
 
 /** Partial colours: any role, and any subset of the proof states. */
@@ -63,7 +65,7 @@ export type Hachura = 'nenhuma' | 'simples' | 'cruzada' | 'pontilhada' | 'goiva'
  */
 export interface PrintEstrutura {
   /** Panel frame: top rule, heavy top rule, box, heavy box, drafting board, soft card, flat title band or none. */
-  painel: 'fio' | 'fio-grosso' | 'caixa' | 'caixa-grossa' | 'prancha' | 'cartao' | 'bloco' | 'nenhum'
+  painel: 'fio' | 'fio-grosso' | 'caixa' | 'caixa-grossa' | 'prancha' | 'cartao' | 'bloco' | 'nenhum' | 'dossie' | 'placa'
   /** Panel letter: plain, in a filled square, in a circle, in parentheses. */
   rotulo: 'letra' | 'quadrado' | 'circulo' | 'parenteses'
   /** Casing of panel labels and eyebrows. */
@@ -74,7 +76,33 @@ export interface PrintEstrutura {
   figura: 'simples' | 'barra-topo' | 'amplitude'
   /** Titles and labels in lower case (Bayer's universal alphabet, concrete design). */
   minusculas: boolean
+  /** Bar charts drawn as horizontal bars (default) or vertical columns. Lengths come from the data either way. */
+  barras?: 'horizontal' | 'vertical'
+  /** Page ornament drawn in the margins, outside the type area (never over data). */
+  moldura?: Moldura
+  /** Running head: plain text (default), a full-width band (Vignelli, constructivism) or a tag with an arrow (signage). */
+  cabeco?: 'texto' | 'faixa' | 'etiqueta'
+  /** Title treatment: cut-paper word blocks, a band with a hard shadow, an offset colour shadow, or the ornament colours. */
+  tituloEstilo?: 'normal' | 'recorte' | 'faixa' | 'sombra' | 'arcoiris'
+  /** Fill of the square or round panel letter. */
+  corRotulo?: 'destaque' | 'destaque2' | 'tinta' | 'marcaTexto' | 'sustentada' | 'refutada'
+  /** Bars get an ink outline (Memphis, pop art). */
+  contornoBarra?: boolean
 }
+
+/** Page ornaments (optional, CONTRATO §1). */
+export type Moldura =
+  | 'nenhuma'
+  | 'dupla' // double rule frame (Minard)
+  | 'regua' // cartographic neatline with alternating segments (atlas)
+  | 'azulejo' // column of modernist tiles (Athos Bulcão)
+  | 'ondas' // wavy stripes (Tropicália)
+  | 'ramos' // vine with leaves and a rounded frame (art nouveau)
+  | 'recortes' // torn paper strips (Saul Bass)
+  | 'reticula' // halftone dot columns (pop art)
+  | 'memphis' // zigzags, triangles, circles and confetti
+  | 'diagonais' // header wedges and a diagonal bar (constructivism)
+  | 'formas' // triangle, square and circle (Bauhaus)
 
 export interface PrintStyle {
   /** Stable id, e.g. 'jornal'. */
@@ -928,7 +956,371 @@ const ft: PrintStyle = {
   estrutura: { painel: 'fio', rotulo: 'letra', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false },
 }
 
-/** The 18 book styles, by name. */
+
+// ---------------------------------------------------------------------------
+// Studies 17–41 (diagramacao/estilos/estilo-17 … estilo-41; the archived ones excluded)
+// ---------------------------------------------------------------------------
+
+const cinzas = (a: string, b = a) => ({ pendente: a, 'sem-dado': b, 'nao-testada': b })
+
+const dadosBr: PrintStyle = {
+  name: 'dados-br',
+  label: 'Dados à brasileira',
+  referencia: 'Jornalismo de dados brasileiro (Núcleo, Folha, Estadão, Agência Pública): grotesca pesada, serifa no texto, vermelho só no lado que importa',
+  fontes: { titulo: f('Libre Franklin', SANS), corpo: f('Source Serif 4', SERIF), numero: f('Libre Franklin', SANS), rotulo: f('Libre Franklin', SANS), anotacao: f('Source Serif 4', SERIF), mono: f('IBM Plex Mono', MONO) },
+  googleFonts: ['Libre Franklin:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400', 'Source Serif 4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400', PLEX_MONO],
+  cor: { papel: '#fbfaf6', tinta: '#1f1e1c', tinta2: '#3d3a36', tinta3: '#625d56', linha: '#dcd8cf', destaque: '#c4553a', destaque2: '#b5afa4', marcaTexto: '#f3efe6', contexto: '#b5afa4', prova: { sustentada: '#1f1e1c', refutada: '#b24a31', 'nao-da-para-afirmar': '#1f1e1c', ...cinzas('#625d56') } },
+  papel: { textura: 'nenhuma', intensidade: 0 },
+  traco: { largura: 0.3, tremor: 0, hachura: 'nenhuma' },
+  grafico: 'limpo',
+  marcaProva: 'barra',
+  raio: 0.8,
+  caixaAlta: false,
+  pb: { destaque: '#1f1e1c' },
+  estrutura: { painel: 'fio', rotulo: 'letra', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false },
+}
+
+const minard: PrintStyle = {
+  name: 'minard',
+  label: 'Minard e Nightingale',
+  referencia: 'Cartas figurativas do século XIX (Charles Joseph Minard, Florence Nightingale): papel envelhecido, tinta sépia, filete duplo, versaletes',
+  fontes: { titulo: f('IM Fell English', SERIF), corpo: f('Old Standard TT', SERIF), numero: f('Old Standard TT', SERIF), rotulo: f('IM Fell English SC', SERIF), anotacao: f('IM Fell English', SERIF), mono: f('Old Standard TT', SERIF) },
+  googleFonts: ['IM Fell English:ital@0;1', 'IM Fell English SC', 'Old Standard TT:ital,wght@0,400;0,700;1,400'],
+  cor: { papel: '#efe3c6', tinta: '#3b2a1a', tinta2: '#4f3d2a', tinta3: '#5e4a36', linha: '#b89d78', destaque: '#caa472', destaque2: '#3b2a1a', marcaTexto: '#e6d5ae', contexto: '#b89d78', prova: { sustentada: '#3b2a1a', refutada: '#8f4431', 'nao-da-para-afirmar': '#3b2a1a', ...cinzas('#5e4a36') } },
+  papel: { textura: 'fibra', intensidade: 0.35 },
+  traco: { largura: 0.25, tremor: 0, hachura: 'pontilhada' },
+  grafico: 'limpo',
+  marcaProva: 'etiqueta',
+  raio: 0,
+  caixaAlta: false,
+  pb: { destaque: '#8a8a8a' },
+  estrutura: { painel: 'fio', rotulo: 'letra', rotuloCaixa: 'versalete', notas: 'dentro', figura: 'simples', minusculas: false, moldura: 'dupla' },
+}
+
+const mccandless: PrintStyle = {
+  name: 'mccandless',
+  label: 'Blocos coloridos (McCandless)',
+  referencia: 'Infografia de David McCandless (Information is Beautiful): cartões em cores claras, colunas, números grandes, grotesca geométrica',
+  fontes: { titulo: f('Montserrat', SANS), corpo: f('Lato', SANS), numero: f('Montserrat', SANS), rotulo: f('Montserrat', SANS), anotacao: f('Lato', SANS), mono: f('Lato', SANS) },
+  googleFonts: ['Montserrat:ital,wght@0,500;0,600;0,700;0,800;0,900;1,500', 'Lato:ital,wght@0,400;0,700;1,400'],
+  cor: { papel: '#ffffff', tinta: '#2b2b2b', tinta2: '#444444', tinta3: '#6b6b76', linha: '#e4e4ea', destaque: '#f0506e', destaque2: '#7b5ea7', marcaTexto: '#ffe9cf', contexto: '#d3d3cf', prova: { sustentada: '#2b2b2b', refutada: '#c93a58', 'nao-da-para-afirmar': '#b8561a', ...cinzas('#6b6b76') } },
+  papel: { textura: 'nenhuma', intensidade: 0 },
+  traco: { largura: 0.3, tremor: 0, hachura: 'nenhuma' },
+  grafico: 'limpo',
+  marcaProva: 'barra',
+  raio: 1.6,
+  caixaAlta: false,
+  pb: { destaque: '#2b2b2b', destaque2: '#9a9a9a' },
+  estrutura: { painel: 'cartao', rotulo: 'quadrado', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical', corRotulo: 'tinta' },
+}
+
+const construtivismo: PrintStyle = {
+  name: 'construtivismo',
+  label: 'Construtivismo russo',
+  referencia: 'Construtivismo soviético (El Lissitzky, Rodchenko, os Stenberg): vermelho e preto, diagonais, grotesca condensada em caixa-alta',
+  fontes: { titulo: f('Oswald', SANS), corpo: f('PT Sans', SANS), numero: f('Oswald', SANS), rotulo: f('Oswald', SANS), anotacao: f('PT Sans Narrow', SANS), mono: f('PT Sans Narrow', SANS) },
+  googleFonts: ['Oswald:wght@400;500;600;700', 'PT Sans:ital,wght@0,400;0,700;1,400', 'PT Sans Narrow:wght@400;700'],
+  cor: { papel: '#efe6d2', tinta: '#1a1714', tinta2: '#2e2a25', tinta3: '#5e564c', linha: '#1a1714', destaque: '#c8201e', destaque2: '#1a1714', marcaTexto: '#e3d6bb', contexto: '#b9ad97', prova: { sustentada: '#1a1714', refutada: '#b01c1a', 'nao-da-para-afirmar': '#1a1714', ...cinzas('#5e564c') }, ornamento: ['#c8201e', '#1a1714'] },
+  papel: { textura: 'nenhuma', intensidade: 0 },
+  traco: { largura: 0.4, tremor: 0, hachura: 'nenhuma' },
+  grafico: 'limpo',
+  marcaProva: 'barra',
+  raio: 0,
+  caixaAlta: true,
+  pb: { destaque: '#6a6a6a' },
+  estrutura: { painel: 'fio-grosso', rotulo: 'quadrado', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false, moldura: 'diagonais', corRotulo: 'refutada' },
+}
+
+const bauhaus: PrintStyle = {
+  name: 'bauhaus',
+  label: 'Bauhaus',
+  referencia: 'Bauhaus (Herbert Bayer, Joost Schmidt, 1923–1930): triângulo, quadrado e círculo nas três primárias, sans geométrica em caixa-baixa',
+  fontes: { titulo: f('Jost', SANS), corpo: f('Jost', SANS), numero: f('Jost', SANS), rotulo: f('Jost', SANS), anotacao: f('Jost', SANS), mono: f('Jost', SANS) },
+  googleFonts: ['Jost:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400'],
+  cor: { papel: '#f6f2e9', tinta: '#141414', tinta2: '#2e2d2b', tinta3: '#5d5a55', linha: '#141414', destaque: '#d4372c', destaque2: '#3a3f9e', marcaTexto: '#ece21c', contexto: '#cfc9bd', prova: { sustentada: '#141414', refutada: '#b52d24', 'nao-da-para-afirmar': '#141414', ...cinzas('#5d5a55') }, ornamento: ['#ece21c', '#d4372c', '#3a3f9e'] },
+  papel: { textura: 'nenhuma', intensidade: 0 },
+  traco: { largura: 0.4, tremor: 0, hachura: 'nenhuma' },
+  grafico: 'limpo',
+  marcaProva: 'etiqueta',
+  raio: 0,
+  caixaAlta: false,
+  pb: { destaque: '#5a5a5a', destaque2: '#a0a0a0', marcaTexto: '#e0e0e0' },
+  estrutura: { painel: 'fio-grosso', rotulo: 'circulo', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: true, barras: 'vertical', moldura: 'formas', corRotulo: 'marcaTexto' },
+}
+
+const brutalista: PrintStyle = {
+  name: 'brutalista',
+  label: 'Brutalista (dossiê)',
+  referencia: 'Design brutalista de dossiê e formulário: mono em caixa-alta, campos numerados, faixas pretas, hachura, carimbo',
+  fontes: { titulo: f('Space Mono', MONO), corpo: f('IBM Plex Mono', MONO), numero: f('Space Mono', MONO), rotulo: f('Space Mono', MONO), anotacao: f('IBM Plex Mono', MONO), mono: f('IBM Plex Mono', MONO) },
+  googleFonts: ['Space Mono:ital,wght@0,400;0,700;1,400', 'IBM Plex Mono:ital,wght@0,400;0,500;0,600;0,700;1,400'],
+  cor: { papel: '#ebeae5', tinta: '#0d0d0d', tinta2: '#2e2e2c', tinta3: '#4d4d4a', linha: '#0d0d0d', destaque: '#0d0d0d', destaque2: '#0d0d0d', marcaTexto: '#d6d5cf', contexto: '#9a9994', prova: { sustentada: '#0d0d0d', refutada: '#0d0d0d', 'nao-da-para-afirmar': '#0d0d0d', ...cinzas('#2e2e2c', '#4d4d4a') } },
+  papel: { textura: 'nenhuma', intensidade: 0 },
+  traco: { largura: 0.35, tremor: 0, hachura: 'simples' },
+  grafico: 'limpo',
+  marcaProva: 'carimbo',
+  raio: 0,
+  caixaAlta: true,
+  pb: {},
+  estrutura: { painel: 'dossie', rotulo: 'letra', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false },
+}
+
+const divulgacao: PrintStyle = {
+  name: 'divulgacao',
+  label: 'Revista de divulgação',
+  referencia: 'Revistas de divulgação científica para jovens (Ciência Hoje das Crianças, Superinteressante): cores vivas, cartões arredondados, balões, títulos pesados',
+  fontes: { titulo: f('Archivo Black', SANS), corpo: f('Nunito', SANS), numero: f('Archivo Black', SANS), rotulo: f('Nunito', SANS), anotacao: f('Nunito', SANS), mono: f('Nunito', SANS) },
+  googleFonts: ['Archivo Black', 'Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400'],
+  cor: { papel: '#fffdf7', tinta: '#1b1446', tinta2: '#2a1d5c', tinta3: '#5f5a7a', linha: '#6a2c91', destaque: '#f58220', destaque2: '#6a2c91', marcaTexto: '#fff4c2', contexto: '#dcd3c4', prova: { sustentada: '#3d6b1f', refutada: '#c4006a', 'nao-da-para-afirmar': '#b35a00', ...cinzas('#5f5a7a') }, ornamento: ['#e6007e', '#f58220', '#8cc63f', '#6a2c91'] },
+  papel: { textura: 'nenhuma', intensidade: 0 },
+  traco: { largura: 0.35, tremor: 0, hachura: 'nenhuma' },
+  grafico: 'limpo',
+  marcaProva: 'pilula',
+  raio: 3,
+  caixaAlta: false,
+  pb: { destaque: '#8a8a8a', destaque2: '#2a2a2a' },
+  estrutura: { painel: 'cartao', rotulo: 'circulo', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical', corRotulo: 'destaque', contornoBarra: true, tituloEstilo: 'normal' },
+}
+
+const corbusier: PrintStyle = {
+  name: 'corbusier',
+  label: 'Le Corbusier (Modulor)',
+  referencia: 'Le Corbusier (Modulor, policromia arquitetônica de 1931 e 1959): letras em estêncil, siena e verde, paredes de cor chapada',
+  fontes: { titulo: f('Stardos Stencil', SERIF), corpo: f('Work Sans', SANS), numero: f('Work Sans', SANS), rotulo: f('Work Sans', SANS), anotacao: f('Work Sans', SANS), mono: f('Allerta Stencil', SANS) },
+  googleFonts: ['Stardos Stencil:wght@400;700', 'Work Sans:ital,wght@0,400;0,500;0,600;1,400', 'Allerta Stencil'],
+  cor: { papel: '#f7f2e8', tinta: '#26221d', tinta2: '#3c3630', tinta3: '#6a6259', linha: '#26221d', destaque: '#9a4b33', destaque2: '#2f5f45', marcaTexto: '#e9dcc3', contexto: '#d6cbb8', prova: { sustentada: '#2a5a40', refutada: '#9a4b33', 'nao-da-para-afirmar': '#26221d', ...cinzas('#6a6259') } },
+  papel: { textura: 'nenhuma', intensidade: 0 },
+  traco: { largura: 0.3, tremor: 0, hachura: 'nenhuma' },
+  grafico: 'limpo',
+  marcaProva: 'etiqueta',
+  raio: 0,
+  caixaAlta: true,
+  pb: { destaque: '#5a5a5a', destaque2: '#a0a0a0' },
+  estrutura: { painel: 'bloco', rotulo: 'quadrado', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical', corRotulo: 'tinta' },
+}
+
+const schiphol: PrintStyle = {
+  name: 'schiphol',
+  label: 'Sinalização de aeroporto (Schiphol)',
+  referencia: 'Sinalização do aeroporto de Schiphol (Benno Wissing, Total Design, 1967): faixas amarelas, setas, preto, grotesca legível à distância',
+  fontes: { titulo: f('Hind', SANS), corpo: f('Hind', SANS), numero: f('Hind', SANS), rotulo: f('Hind', SANS), anotacao: f('Hind', SANS), mono: f('Hind', SANS) },
+  googleFonts: ['Hind:wght@400;500;600;700'],
+  cor: { papel: '#fbfbf8', tinta: '#121212', tinta2: '#2b2b2b', tinta3: '#555553', linha: '#121212', destaque: '#121212', destaque2: '#9d9d9d', marcaTexto: '#fff200', contexto: '#9d9d9d', prova: { sustentada: '#121212', refutada: '#121212', 'nao-da-para-afirmar': '#121212', ...cinzas('#555553') } },
+  papel: { textura: 'nenhuma', intensidade: 0 },
+  traco: { largura: 0.35, tremor: 0, hachura: 'nenhuma' },
+  grafico: 'limpo',
+  marcaProva: 'pilula',
+  raio: 0,
+  caixaAlta: false,
+  pb: { marcaTexto: '#d9d9d9' },
+  estrutura: { painel: 'placa', rotulo: 'quadrado', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, cabeco: 'etiqueta', corRotulo: 'tinta' },
+}
+
+const aicher: PrintStyle = {
+  name: 'aicher',
+  label: 'Otl Aicher (Munique 1972)',
+  referencia: 'Identidade dos Jogos de Munique 1972 (Otl Aicher): pictogramas em grade, azul-claro, verde e laranja, sans de corpo leve',
+  fontes: { titulo: f('Albert Sans', SANS), corpo: f('Albert Sans', SANS), numero: f('Albert Sans', SANS), rotulo: f('Albert Sans', SANS), anotacao: f('Albert Sans', SANS), mono: f('Albert Sans', SANS) },
+  googleFonts: ['Albert Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400'],
+  cor: { papel: '#ffffff', tinta: '#1f2a33', tinta2: '#34414b', tinta3: '#5f6b73', linha: '#1f2a33', destaque: '#f28c28', destaque2: '#6b8e3a', marcaTexto: '#d4e6e8', contexto: '#b9bcc0', prova: { sustentada: '#2f5f45', refutada: '#b35a0c', 'nao-da-para-afirmar': '#1f2a33', ...cinzas('#5f6b73') } },
+  papel: { textura: 'nenhuma', intensidade: 0 },
+  traco: { largura: 0.3, tremor: 0, hachura: 'nenhuma' },
+  grafico: 'limpo',
+  marcaProva: 'etiqueta',
+  raio: 0,
+  caixaAlta: false,
+  pb: { destaque: '#8a8a8a', destaque2: '#3a3a3a', marcaTexto: '#d9d9d9' },
+  estrutura: { painel: 'bloco', rotulo: 'quadrado', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical', corRotulo: 'sustentada' },
+}
+
+const vignelli: PrintStyle = {
+  name: 'vignelli',
+  label: 'Vignelli (metrô de NY)',
+  referencia: 'Manual e mapa do metrô de Nova York (Massimo Vignelli, Unimark, 1970–1972): faixa preta no topo, círculos coloridos, grotesca neutra',
+  fontes: { titulo: f('Inter', SANS), corpo: f('Inter', SANS), numero: f('Inter', SANS), rotulo: f('Inter', SANS), anotacao: f('Inter', SANS), mono: f('Inter', SANS) },
+  googleFonts: ['Inter:wght@400;500;600;700'],
+  cor: { papel: '#ffffff', tinta: '#111111', tinta2: '#2e2e2e', tinta3: '#595959', linha: '#111111', destaque: '#ee352e', destaque2: '#a7a9ac', marcaTexto: '#ebebe6', contexto: '#a7a9ac', prova: { sustentada: '#111111', refutada: '#d6261f', 'nao-da-para-afirmar': '#111111', ...cinzas('#595959') }, ornamento: ['#ee352e', '#ff6319', '#b933ad', '#996633'] },
+  papel: { textura: 'nenhuma', intensidade: 0 },
+  traco: { largura: 0.3, tremor: 0, hachura: 'nenhuma' },
+  grafico: 'limpo',
+  marcaProva: 'etiqueta',
+  raio: 0,
+  caixaAlta: false,
+  pb: { destaque: '#4a4a4a' },
+  estrutura: { painel: 'fio', rotulo: 'circulo', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical', cabeco: 'faixa', corRotulo: 'tinta' },
+}
+
+const jornalDoBrasil: PrintStyle = {
+  name: 'jornal-do-brasil',
+  label: 'Jornal de 1959 (Amilcar de Castro)',
+  referencia: 'Reforma do Jornal do Brasil por Amilcar de Castro (1956–1959): branco, preto e cinza, filetes, Bodoni no título, grade limpa',
+  fontes: { titulo: f('Libre Bodoni', SERIF), corpo: f('PT Serif', SERIF), numero: f('Libre Bodoni', SERIF), rotulo: f('Libre Franklin', SANS), anotacao: f('PT Serif', SERIF), mono: f('Libre Franklin', SANS) },
+  googleFonts: ['Libre Bodoni:wght@400;700', 'PT Serif:ital,wght@0,400;0,700;1,400', 'Libre Franklin:wght@400;500;600;700'],
+  cor: { papel: '#fdfdfb', tinta: '#111111', tinta2: '#2b2b2b', tinta3: '#595959', linha: '#111111', destaque: '#111111', destaque2: '#a3a3a3', marcaTexto: '#ececea', contexto: '#a3a3a3', prova: { sustentada: '#111111', refutada: '#111111', 'nao-da-para-afirmar': '#111111', ...cinzas('#595959') } },
+  papel: { textura: 'nenhuma', intensidade: 0 },
+  traco: { largura: 0.25, tremor: 0, hachura: 'nenhuma' },
+  grafico: 'limpo',
+  marcaProva: 'barra',
+  raio: 0,
+  caixaAlta: false,
+  pb: {},
+  estrutura: { painel: 'fio', rotulo: 'letra', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false },
+}
+
+const athosBulcao: PrintStyle = {
+  name: 'athos-bulcao',
+  label: 'Azulejo modernista (Athos Bulcão)',
+  referencia: 'Painéis de azulejo de Athos Bulcão em Brasília: módulo azul e branco com semicírculos e quadrados, acento amarelo, geometria',
+  fontes: { titulo: f('Jost', SANS), corpo: f('Jost', SANS), numero: f('Jost', SANS), rotulo: f('Jost', SANS), anotacao: f('Jost', SANS), mono: f('Jost', SANS) },
+  googleFonts: ['Jost:ital,wght@0,400;0,500;0,600;0,700;1,400'],
+  cor: { papel: '#fbfaf5', tinta: '#15171c', tinta2: '#2b2e35', tinta3: '#5f636b', linha: '#3040b0', destaque: '#3040b0', destaque2: '#aab3de', marcaTexto: '#f0efe8', contexto: '#aab3de', prova: { sustentada: '#15171c', refutada: '#3040b0', 'nao-da-para-afirmar': '#15171c', ...cinzas('#5f636b') }, ornamento: ['#3040b0', '#fbfaf5', '#f0b323'] },
+  papel: { textura: 'nenhuma', intensidade: 0 },
+  traco: { largura: 0.3, tremor: 0, hachura: 'nenhuma' },
+  grafico: 'limpo',
+  marcaProva: 'barra',
+  raio: 0,
+  caixaAlta: false,
+  pb: { destaque: '#3a3a3a', destaque2: '#b0b0b0' },
+  estrutura: { painel: 'fio', rotulo: 'quadrado', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, moldura: 'azulejo', corRotulo: 'destaque' },
+}
+
+const tropicalia: PrintStyle = {
+  name: 'tropicalia',
+  label: 'Tropicália (Rogério Duarte)',
+  referencia: 'Capas e cartazes tropicalistas de Rogério Duarte (1967–1969): ondas de cor, letreiro exuberante, laranja, roxo e magenta',
+  fontes: { titulo: f('Shrikhand', SERIF), corpo: f('Work Sans', SANS), numero: f('Work Sans', SANS), rotulo: f('Work Sans', SANS), anotacao: f('Work Sans', SANS), mono: f('Work Sans', SANS) },
+  googleFonts: ['Shrikhand', 'Work Sans:ital,wght@0,400;0,500;0,600;0,700;1,400'],
+  cor: { papel: '#fff6e3', tinta: '#1e1a24', tinta2: '#332c3b', tinta3: '#61586a', linha: '#5b2a86', destaque: '#5b2a86', destaque2: '#ee8a1c', marcaTexto: '#fde7c2', contexto: '#ead9bf', prova: { sustentada: '#5b2a86', refutada: '#c21f6e', 'nao-da-para-afirmar': '#1e1a24', ...cinzas('#61586a') }, ornamento: ['#e8601c', '#d6247a', '#5b2a86', '#1f8a5b'] },
+  papel: { textura: 'nenhuma', intensidade: 0 },
+  traco: { largura: 0.3, tremor: 0, hachura: 'nenhuma' },
+  grafico: 'limpo',
+  marcaProva: 'barra',
+  raio: 0,
+  caixaAlta: false,
+  pb: { destaque: '#2a2a2a', destaque2: '#a0a0a0' },
+  estrutura: { painel: 'fio', rotulo: 'letra', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, moldura: 'ondas', tituloEstilo: 'arcoiris' },
+}
+
+const atlasIbge: PrintStyle = {
+  name: 'atlas-ibge',
+  label: 'Atlas oficial (cartografia)',
+  referencia: 'Atlas oficiais brasileiros (IBGE, Atlas Nacional): moldura cartográfica com régua alternada, hachura, terra e oliva, legenda de convenções',
+  fontes: { titulo: f('IBM Plex Sans Condensed', SANS), corpo: f('IBM Plex Serif', SERIF), numero: f('IBM Plex Sans Condensed', SANS), rotulo: f('IBM Plex Sans Condensed', SANS), anotacao: f('IBM Plex Serif', SERIF), mono: f('IBM Plex Sans Condensed', SANS) },
+  googleFonts: ['IBM Plex Sans Condensed:wght@400;500;600;700', 'IBM Plex Serif:ital,wght@0,400;0,600;1,400'],
+  cor: { papel: '#fbf8ef', tinta: '#23231d', tinta2: '#3a3a31', tinta3: '#666355', linha: '#23231d', destaque: '#8c5a2b', destaque2: '#5c6b2f', marcaTexto: '#eee8d3', contexto: '#d9d3bd', prova: { sustentada: '#23231d', refutada: '#8c5a2b', 'nao-da-para-afirmar': '#23231d', ...cinzas('#666355') }, ornamento: ['#23231d', '#fbf8ef'] },
+  papel: { textura: 'nenhuma', intensidade: 0 },
+  traco: { largura: 0.3, tremor: 0, hachura: 'simples' },
+  grafico: 'limpo',
+  marcaProva: 'barra',
+  raio: 0,
+  caixaAlta: true,
+  pb: { destaque: '#4a4a4a', destaque2: '#7a7a7a' },
+  estrutura: { painel: 'fio', rotulo: 'letra', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false, moldura: 'regua' },
+}
+
+const crouwel: PrintStyle = {
+  name: 'crouwel',
+  label: 'Grade holandesa (Wim Crouwel)',
+  referencia: 'Wim Crouwel (Stedelijk Museum, New Alphabet, 1967): grade aparente, letreiro modular espaçado, preto e um laranja',
+  fontes: { titulo: f('Major Mono Display', MONO), corpo: f('Hanken Grotesk', SANS), numero: f('Hanken Grotesk', SANS), rotulo: f('Hanken Grotesk', SANS), anotacao: f('Hanken Grotesk', SANS), mono: f('Hanken Grotesk', SANS) },
+  googleFonts: ['Major Mono Display', 'Hanken Grotesk:wght@400;500;600;700;800'],
+  cor: { papel: '#ffffff', tinta: '#111111', tinta2: '#2e2e2e', tinta3: '#595959', linha: '#111111', destaque: '#111111', destaque2: '#f04e23', marcaTexto: '#fde3da', contexto: '#dddddd', prova: { sustentada: '#111111', refutada: '#c8391a', 'nao-da-para-afirmar': '#111111', ...cinzas('#595959') } },
+  papel: { textura: 'milimetrado', intensidade: 0.5 },
+  traco: { largura: 0.3, tremor: 0, hachura: 'nenhuma' },
+  grafico: 'limpo',
+  marcaProva: 'barra',
+  raio: 0,
+  caixaAlta: true,
+  pb: { destaque2: '#9a9a9a' },
+  estrutura: { painel: 'fio-grosso', rotulo: 'quadrado', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: true, corRotulo: 'destaque2' },
+}
+
+const saulBass: PrintStyle = {
+  name: 'saul-bass',
+  label: 'Papel recortado (Saul Bass)',
+  referencia: 'Cartazes e aberturas de Saul Bass (Anatomy of a Murder, Vertigo): papel recortado, preto e laranja, letreiro à mão em blocos',
+  fontes: { titulo: f('Londrina Solid', SANS), corpo: f('Work Sans', SANS), numero: f('Londrina Solid', SANS), rotulo: f('Work Sans', SANS), anotacao: f('Work Sans', SANS), mono: f('Work Sans', SANS) },
+  googleFonts: ['Londrina Solid:wght@400;900', 'Work Sans:ital,wght@0,400;0,500;0,600;0,700;1,400'],
+  cor: { papel: '#f3ead8', tinta: '#161616', tinta2: '#2c2a26', tinta3: '#5e574c', linha: '#161616', destaque: '#161616', destaque2: '#e8591a', marcaTexto: '#ecd9b9', contexto: '#d8cbb0', prova: { sustentada: '#161616', refutada: '#b3431a', 'nao-da-para-afirmar': '#161616', ...cinzas('#5e574c') }, ornamento: ['#161616', '#e8591a'] },
+  papel: { textura: 'nenhuma', intensidade: 0 },
+  traco: { largura: 0.35, tremor: 0, hachura: 'nenhuma' },
+  grafico: 'limpo',
+  marcaProva: 'barra',
+  raio: 0,
+  caixaAlta: false,
+  pb: { destaque2: '#8a8a8a' },
+  estrutura: { painel: 'fio-grosso', rotulo: 'letra', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, moldura: 'recortes', tituloEstilo: 'recorte' },
+}
+
+const popArt: PrintStyle = {
+  name: 'pop-art',
+  label: 'Pop art (Lichtenstein)',
+  referencia: 'Pop art de Roy Lichtenstein: pontos Ben-Day, contorno preto grosso, primárias, balão e letreiro de quadrinhos',
+  fontes: { titulo: f('Bangers', SANS), corpo: f('Nunito Sans', SANS), numero: f('Bangers', SANS), rotulo: f('Nunito Sans', SANS), anotacao: f('Comic Neue', HAND), mono: f('Nunito Sans', SANS) },
+  googleFonts: ['Bangers', 'Nunito Sans:wght@400;600;700;800', 'Comic Neue:wght@400;700'],
+  cor: { papel: '#fffdf5', tinta: '#111111', tinta2: '#2b2b2b', tinta3: '#555555', linha: '#111111', destaque: '#2b44b8', destaque2: '#e4252b', marcaTexto: '#f6ea00', contexto: '#d9d4c4', prova: { sustentada: '#111111', refutada: '#c81e24', 'nao-da-para-afirmar': '#111111', ...cinzas('#555555') }, ornamento: ['#e4252b', '#f6ea00', '#2b44b8'] },
+  papel: { textura: 'nenhuma', intensidade: 0 },
+  traco: { largura: 0.45, tremor: 0, hachura: 'pontilhada' },
+  grafico: 'limpo',
+  marcaProva: 'barra',
+  raio: 0,
+  caixaAlta: true,
+  pb: { destaque: '#2a2a2a', destaque2: '#8a8a8a', marcaTexto: '#d9d9d9' },
+  estrutura: { painel: 'fio-grosso', rotulo: 'letra', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, moldura: 'reticula', tituloEstilo: 'faixa', contornoBarra: true },
+}
+
+const cientifico: PrintStyle = {
+  name: 'cientifico',
+  label: 'Figura de periódico científico',
+  referencia: 'Figuras de periódicos científicos (Nature, Science, PNAS): painéis A e B, eixos com rótulo, paleta segura para daltônicos, legenda longa',
+  fontes: { titulo: f('STIX Two Text', SERIF), corpo: f('STIX Two Text', SERIF), numero: f('Arimo', SANS), rotulo: f('Arimo', SANS), anotacao: f('Arimo', SANS), mono: f('Arimo', SANS) },
+  googleFonts: ['STIX Two Text:ital,wght@0,400;0,600;0,700;1,400', 'Arimo:wght@400;700'],
+  cor: { papel: '#ffffff', tinta: '#111111', tinta2: '#2e2e2e', tinta3: '#555555', linha: '#111111', destaque: '#3b4aa8', destaque2: '#d97a00', marcaTexto: '#f2f2f2', contexto: '#bdbdbd', prova: { sustentada: '#111111', refutada: '#111111', 'nao-da-para-afirmar': '#111111', ...cinzas('#555555') } },
+  papel: { textura: 'nenhuma', intensidade: 0 },
+  traco: { largura: 0.25, tremor: 0, hachura: 'nenhuma' },
+  grafico: 'limpo',
+  marcaProva: 'barra',
+  raio: 0,
+  caixaAlta: false,
+  pb: { destaque: '#2a2a2a', destaque2: '#9a9a9a' },
+  estrutura: { painel: 'fio', rotulo: 'letra', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical' },
+}
+
+const artNouveau: PrintStyle = {
+  name: 'art-nouveau',
+  label: 'Art nouveau (Mucha)',
+  referencia: 'Art nouveau de Alphonse Mucha: moldura arredondada, ramos e folhas, ocre e verde-oliva, letreiro decorativo',
+  fontes: { titulo: f('Federo', SERIF), corpo: f('EB Garamond', SERIF), numero: f('EB Garamond', SERIF), rotulo: f('Federo', SERIF), anotacao: f('EB Garamond', SERIF), mono: f('EB Garamond', SERIF) },
+  googleFonts: ['Federo', 'EB Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500'],
+  cor: { papel: '#f6eedb', tinta: '#2a2718', tinta2: '#3f3a26', tinta3: '#625a44', linha: '#8a6d2c', destaque: '#4a5a2a', destaque2: '#b9832a', marcaTexto: '#efe2c2', contexto: '#e0d2ae', prova: { sustentada: '#4a5a2a', refutada: '#9a4a36', 'nao-da-para-afirmar': '#2a2718', ...cinzas('#625a44') }, ornamento: ['#4a5a2a', '#b9832a', '#8a6d2c'] },
+  papel: { textura: 'nenhuma', intensidade: 0 },
+  traco: { largura: 0.3, tremor: 0, hachura: 'nenhuma' },
+  grafico: 'limpo',
+  marcaProva: 'pilula',
+  raio: 2,
+  caixaAlta: false,
+  pb: { destaque: '#3a3a3a', destaque2: '#a0a0a0' },
+  estrutura: { painel: 'fio', rotulo: 'letra', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, moldura: 'ramos' },
+}
+
+const memphis: PrintStyle = {
+  name: 'memphis',
+  label: 'Memphis (Sottsass)',
+  referencia: 'Grupo Memphis (Ettore Sottsass, Milão, 1981): zigue-zagues, triângulos, confete, turquesa, amarelo e rosa, contorno preto',
+  fontes: { titulo: f('Bungee', SANS), corpo: f('Rubik', SANS), numero: f('Bungee', SANS), rotulo: f('Rubik', SANS), anotacao: f('Rubik', SANS), mono: f('Rubik', SANS) },
+  googleFonts: ['Bungee', 'Rubik:ital,wght@0,400;0,500;0,700;1,400'],
+  cor: { papel: '#fffaf0', tinta: '#161616', tinta2: '#2c2b29', tinta3: '#5c5a57', linha: '#161616', destaque: '#1fb5a8', destaque2: '#f6ea00', marcaTexto: '#fff2b8', contexto: '#e2dccb', prova: { sustentada: '#161616', refutada: '#c2185b', 'nao-da-para-afirmar': '#161616', ...cinzas('#5c5a57') }, ornamento: ['#161616', '#f6ea00', '#ff5fa2', '#1fb5a8'] },
+  papel: { textura: 'nenhuma', intensidade: 0 },
+  traco: { largura: 0.3, tremor: 0, hachura: 'nenhuma' },
+  grafico: 'limpo',
+  marcaProva: 'barra',
+  raio: 0,
+  caixaAlta: true,
+  pb: { destaque: '#5a5a5a', destaque2: '#d0d0d0' },
+  estrutura: { painel: 'caixa', rotulo: 'circulo', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, moldura: 'memphis', tituloEstilo: 'sombra', contornoBarra: true, corRotulo: 'destaque2' },
+}
+
+/** The 39 book styles, by name. */
 export const printPresets = {
   dashboard,
   dubois,
@@ -948,6 +1340,27 @@ export const printPresets = {
   holmes,
   bayer,
   ft,
+  'dados-br': dadosBr,
+  minard,
+  mccandless,
+  construtivismo,
+  bauhaus,
+  brutalista,
+  divulgacao,
+  corbusier,
+  schiphol,
+  aicher,
+  vignelli,
+  'jornal-do-brasil': jornalDoBrasil,
+  'athos-bulcao': athosBulcao,
+  tropicalia,
+  'atlas-ibge': atlasIbge,
+  crouwel,
+  'saul-bass': saulBass,
+  'pop-art': popArt,
+  cientifico,
+  'art-nouveau': artNouveau,
+  memphis,
 } satisfies Record<string, PrintStyle>
 
 export type PrintPresetName = keyof typeof printPresets
@@ -1010,6 +1423,7 @@ export function printStyleCoresPb(style: PrintStyle): PrintCores {
     marcaTexto: toGrey(g.marcaTexto),
     contexto: toGrey(g.contexto),
     prova: Object.fromEntries(ESTADOS_PROVA.map((e) => [e, toGrey(g.prova[e])])) as Record<EstadoProva, string>,
+    ...(g.ornamento ? { ornamento: g.ornamento.map(toGrey) } : {}),
   }
   return mergeCores(grey, style.pb)
 }
@@ -1030,7 +1444,7 @@ export function resolvePrintStyle(style: PrintStyle, options: Omit<PrintCssOptio
   return { ...merged, cor: printStyleCoresPb(merged) }
 }
 
-const kebab: Record<Exclude<keyof PrintCores, 'prova'>, string> = {
+const kebab: Record<Exclude<keyof PrintCores, 'prova' | 'ornamento'>, string> = {
   papel: 'papel',
   tinta: 'tinta',
   tinta2: 'tinta-2',
@@ -1061,6 +1475,15 @@ export function printStyleVariables(style: PrintStyle): Array<[string, string]> 
   vars.push(['--ty-print-rotulo-caixa', minusculas ? 'lowercase' : rc === 'alta' ? 'uppercase' : 'none'])
   vars.push(['--ty-print-rotulo-variante', rc === 'versalete' ? 'small-caps' : 'normal'])
   vars.push(['--ty-print-rotulo-espaco', rc === 'normal' ? 'normal' : '0.07em'])
+  const orn = style.cor.ornamento ?? []
+  const reserva = [style.cor.destaque, style.cor.destaque2, style.cor.tinta, style.cor.marcaTexto]
+  for (let i = 0; i < 4; i++) vars.push([`--ty-print-ornamento-${i + 1}`, orn[i] ?? reserva[i]!])
+  const cr = style.estrutura.corRotulo
+  if (cr) {
+    const fundo = cr === 'sustentada' || cr === 'refutada' ? style.cor.prova[cr] : style.cor[cr]
+    vars.push(['--ty-print-rotulo-fundo', fundo])
+    vars.push(['--ty-print-rotulo-tinta', luminance(parseColor(fundo)) > 0.4 ? style.cor.tinta : style.cor.papel])
+  }
   return vars
 }
 

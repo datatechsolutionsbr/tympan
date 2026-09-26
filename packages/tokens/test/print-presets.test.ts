@@ -67,10 +67,13 @@ function dataColours(s: PrintStyle): Array<[string, string]> {
 }
 
 describe('print presets', () => {
-  it('has the 18 styles of the contract, keyed by name', () => {
+  it('has the 39 styles of the contract, keyed by name', () => {
     expect(PRINT_PRESET_NAMES).toEqual([
       'dashboard', 'dubois', 'deardata', 'caderno', 'isotype', 'cordel', 'riso', 'jornal', 'prancheta',
       'prancheta-clara', 'aquarela', 'tufte', 'suico', 'concretismo', 'economist', 'holmes', 'bayer', 'ft',
+      'dados-br', 'minard', 'mccandless', 'construtivismo', 'bauhaus', 'brutalista', 'divulgacao', 'corbusier',
+      'schiphol', 'aicher', 'vignelli', 'jornal-do-brasil', 'athos-bulcao', 'tropicalia', 'atlas-ibge', 'crouwel',
+      'saul-bass', 'pop-art', 'cientifico', 'art-nouveau', 'memphis',
     ])
     for (const [key, s] of Object.entries(printPresets)) expect(s.name).toBe(key)
   })
@@ -83,6 +86,8 @@ describe('print presets', () => {
       expect(s.cor[k], k).toMatch(HEX)
     }
     for (const e of ESTADOS_PROVA) expect(s.cor.prova[e], e).toMatch(HEX)
+    for (const c of s.cor.ornamento ?? []) expect(c, 'ornamento').toMatch(HEX)
+    expect((s.cor.ornamento ?? []).length).toBeLessThanOrEqual(4)
     expect(s.papel.intensidade).toBeGreaterThanOrEqual(0)
     expect(s.papel.intensidade).toBeLessThanOrEqual(1)
     expect(s.traco.largura).toBeGreaterThan(0)

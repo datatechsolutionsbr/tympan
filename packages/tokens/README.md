@@ -119,11 +119,14 @@ roles, so the product keeps the approved look; every other role is generated.
 
 ## Book-style print presets
 
-`printPresets` holds the 18 book diagramming styles used by
-`@datatechsolutions/tympan-print` (`dashboard`, `dubois`, `deardata`,
-`caderno`, `isotype`, `cordel`, `riso`, `jornal`, `prancheta`,
-`prancheta-clara`, `aquarela`, `tufte`, `suico`, `concretismo`, `economist`,
-`holmes`, `bayer`, `ft`). Each `PrintStyle` names its fonts (Google Fonts,
+`printPresets` holds the 39 book diagramming styles used by
+`@datatechsolutions/tympan-print` (`PRINT_PRESET_NAMES` gives the order:
+`dashboard` … `ft`, then `dados-br`, `minard`, `mccandless`, `construtivismo`,
+`bauhaus`, `brutalista`, `divulgacao`, `corbusier`, `schiphol`, `aicher`,
+`vignelli`, `jornal-do-brasil`, `athos-bulcao`, `tropicalia`, `atlas-ibge`,
+`crouwel`, `saul-bass`, `pop-art`, `cientifico`, `art-nouveau`, `memphis`).
+Optional fields cover page ornaments (`estrutura.moldura`, `cor.ornamento`),
+columns (`estrutura.barras`), running-head bands and title treatments. Each `PrintStyle` names its fonts (Google Fonts,
 OFL), paper and ink, data and proof-state colours, paper texture, stroke,
 chart renderer, proof-mark shape and page structure.
 
