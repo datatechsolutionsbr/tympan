@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
-import { useMediaQuery } from './media'
+import { useMediaQuery } from './media.ts'
 
 export type ThemeMode = 'system' | 'light' | 'dark'
 export type ThemeDensity = 'compact' | 'default' | 'comfortable'
