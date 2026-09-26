@@ -87,3 +87,27 @@ describe('annotations never leave the viewBox', () => {
     }
   }
 })
+
+describe('column group labels wrap inside their group', () => {
+  it('no label line is wider than its group', () => {
+    const spec: SpecBarras = {
+      tipo: 'barras',
+      titulo: 't',
+      escala: [0, 100],
+      barras: [
+        { rotulo: '10 municípios que mais desmataram', valor: 22.8 },
+        { rotulo: '10 microrregiões que mais desmataram', valor: 51.9 },
+        { rotulo: 'Pará e Mato Grosso', valor: 58.2 },
+      ],
+    }
+    for (const largura of [60, 92, 128]) {
+      const L = layoutColunas(spec, largura)
+      const passo = (L.area.x1 - L.area.x0) / spec.barras!.length
+      for (const g of L.grupos) {
+        // A single word longer than the group cannot wrap; every line with a break point fits.
+        for (const l of g.linhasRotulo.filter((t) => t.includes(' '))) expect(larguraTexto(l, TEXTO * 1.04) / FOLGA_ANOTACAO).toBeLessThanOrEqual(passo + 0.01)
+        expect(L.area.y1 + 3.3 + (g.linhasRotulo.length - 1) * TEXTO * 1.1).toBeLessThan(L.altura)
+      }
+    }
+  })
+})

@@ -91,7 +91,7 @@ interface Registro {
 const BASE_GRAFICO = ['tipo', 'titulo', 'subtitulo', 'achado', 'anotacoes']
 const SPEC: Record<string, string[]> = {
   halteres: [...BASE_GRAFICO, 'escala', 'linhas', 'rotuloA', 'rotuloB', 'unidade', 'eixoNaoComecaNoZero', 'referencias'],
-  barras: [...BASE_GRAFICO, 'escala', 'unidade', 'barras', 'linhas', 'rotuloA', 'rotuloB'],
+  barras: [...BASE_GRAFICO, 'escala', 'unidade', 'barras', 'linhas', 'rotuloA', 'rotuloB', 'dobra'],
   serie: [...BASE_GRAFICO, 'escala', 'eixoX', 'unidade', 'interpolar', 'pontos', 'eventos', 'faixas'],
   contagem: [...BASE_GRAFICO, 'unidade', 'grupos', 'linhas', 'rotuloA', 'rotuloB', 'rotuloUnidade', 'icone'],
   esquema: [...BASE_GRAFICO, 'nome', 'rotulos'],
@@ -116,7 +116,7 @@ export const COMPONENTES: Record<string, Registro> = {
   Anotacao: { componente: Anotacao, props: ['alvo', 'texto', 'className'] },
   Promessa: { componente: Promessa, props: ['citacao', 'norma', 'data', 'resumo', 'urn', 'detalhes', 'genealogia', 'className'] },
   Numeros: { componente: Numeros, props: ['itens', 'exemplo', 'className'] },
-  GraficoMetodo: { componente: GraficoMetodo, props: ['spec', 'renderizador', 'alt', 'tabela', 'local', 'largura', 'className'] },
+  GraficoMetodo: { componente: GraficoMetodo, props: ['spec', 'renderizador', 'alt', 'tabela', 'local', 'largura', 'letra', 'className'] },
   TabelaDados: { componente: TabelaDados, props: ['titulo', 'colunas', 'linhas', 'nota', 'className'] },
   Veredito: { componente: Veredito, props: ['promessa', 'texto', 'estado', 'itens', 'medicaoMarcada', 'proposto', 'className'] },
   MarcaProva: { componente: MarcaProva, props: ['estado', 'grande', 'forma', 'className'] },

@@ -113,7 +113,7 @@ function reservaDireita(linhas: Array<{ marca?: string }>, maximo: number): numb
 /** Share of the available width an annotation line may take (see anotar). */
 export const FOLGA_ANOTACAO = 0.88
 
-function anotar(
+export function anotar(
   anotacoes: SpecHalteres['anotacoes'],
   ancora: (linha: number) => { x: number; y: number } | null,
   largura: number,
@@ -356,6 +356,10 @@ export interface GrupoColunas {
   /** Centre of the group, where the row label sits. */
   cx: number
   rotulo: string
+  /** The row label wrapped to the group's width (one or more lines under the axis). */
+  linhasRotulo: string[]
+  /** Baseline of the note under the label. */
+  yNota: number
   nota?: string
   destaque: boolean
   local: boolean
@@ -375,7 +379,19 @@ export interface LayoutColunas {
   anotacoes: AnotacaoPosta[]
 }
 
-export function layoutColunas(spec: SpecBarras, largura: number, alturaPlot = 32): LayoutColunas {
+/** Options of the column layout that come from the style (G1): thin columns, room for the cut, callouts above. */
+export interface OpcoesColunas {
+  /** Thin columns (Tufte). */
+  finas?: boolean
+  /** Gap between the two columns of a group, in mm (room for the line of the cut). */
+  vao?: number
+  /** Extra room above the plot, in mm, for callouts drawn inside the chart. */
+  topo?: number
+  /** Notes as the numbered list under the plot (default true); false when callouts draw them. */
+  notasEmbaixo?: boolean
+}
+
+export function layoutColunas(spec: SpecBarras, largura: number, alturaPlot = 32, opcoes: OpcoesColunas = {}): LayoutColunas {
   const linhasG = linhasDe(spec)
   const pares = linhasG.some((l) => l.valores.length > 1)
   const marcasYv = marcasEixo(spec.escala, 4)
@@ -384,35 +400,42 @@ export function layoutColunas(spec: SpecBarras, largura: number, alturaPlot = 32
   // The key goes on one line when it fits, on two otherwise.
   const xB = x0 + larguraTexto(spec.rotuloA ?? 'a') + 9
   const empilha = pares && xB + larguraTexto(spec.rotuloB ?? 'b') + 5 > largura
-  const y0 = pares ? (empilha ? 11.5 : 8.5) : 5
+  const y0 = r3((pares ? (empilha ? 11.5 : 8.5) : 5) + (opcoes.topo ?? 0))
   const y1 = r3(y0 + alturaPlot)
   const y = escalaLinear(spec.escala, [y1, y0])
   const n = Math.max(1, linhasG.length)
   const passo = (x1 - x0) / n
   const nb = pares ? 2 : 1
-  const bw = r3(Math.min(7.5, (passo * 0.6) / nb))
+  const vao = opcoes.vao ?? 0.8
+  const bw = r3(opcoes.finas ? Math.min(2.4, (passo * 0.3) / nb) : Math.min(7.5, (passo * 0.6) / nb))
   const grupos: GrupoColunas[] = linhasG.map((l, i) => {
     const cx = r3(x0 + passo * (i + 0.5))
-    const inicio = cx - (bw * l.valores.length + 0.8 * (l.valores.length - 1)) / 2
+    const inicio = cx - (bw * l.valores.length + vao * (l.valores.length - 1)) / 2
     const colunas = l.valores.map((v, k) => {
-      const xs = r3(inicio + k * (bw + 0.8))
+      const xs = r3(inicio + k * (bw + vao))
       const topo = y(Math.max(0, v.valor))
       const base = y(Math.min(0, v.valor))
       const h = r3(Math.abs(base - topo))
       return { serie: v.serie, valor: v.valor, x: xs, w: bw, base: r3(y(0)), h, rotulo: { x: r3(xs + bw / 2), y: r3(topo - 1.1) } }
     })
     const temNota = Boolean(l.nota || l.local)
+    // Long labels wrap to the group's width instead of running into the next group or out of the figure.
+    const linhasRotulo = quebrar(l.rotulo, passo * 0.96 * FOLGA_ANOTACAO, TEXTO * 1.04)
+    const extra = (linhasRotulo.length - 1) * TEXTO * 1.1
     return {
       i,
       cx,
       rotulo: l.rotulo,
+      linhasRotulo,
+      yNota: r3(y1 + 5.9 + extra),
       nota: l.nota,
       destaque: Boolean(l.destaque),
       local: Boolean(l.local),
       colunas,
-      marca: l.marca ? { texto: l.marca, x: cx, y: r3(y1 + (temNota ? 9.2 : 6.6)) } : undefined,
+      marca: l.marca ? { texto: l.marca, x: cx, y: r3(y1 + (temNota ? 9.2 : 6.6) + extra) } : undefined,
     }
   })
+  const extraRotulos = Math.max(0, ...grupos.map((g) => (g.linhasRotulo.length - 1) * TEXTO * 1.1))
   const legenda = pares
     ? {
         y: 2.4,
@@ -423,9 +446,9 @@ export function layoutColunas(spec: SpecBarras, largura: number, alturaPlot = 32
       }
     : null
   const temMarca = grupos.some((g) => g.marca)
-  const baseTexto = y1 + (grupos.some((g) => g.nota || g.local) ? 6.8 : 4.2) + (temMarca ? 3.2 : 0)
+  const baseTexto = y1 + (grupos.some((g) => g.nota || g.local) ? 6.8 : 4.2) + (temMarca ? 3.2 : 0) + extraRotulos
   const { postas, fim } = anotar(
-    spec.anotacoes,
+    opcoes.notasEmbaixo === false ? [] : spec.anotacoes,
     (i) => {
       const g = grupos[i]
       const c = g?.colunas[g.colunas.length - 1]

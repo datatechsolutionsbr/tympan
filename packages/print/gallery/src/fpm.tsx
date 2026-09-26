@@ -73,8 +73,9 @@ export function specsFpm(tipo: TipoGraficoFpm): [GraficoSpec, GraficoSpec] {
     ]
   }
   return [
-    { tipo: 'barras', titulo: 'O primeiro corte, 10.188 habitantes', subtitulo: 'escala: 0 a 150 municípios', escala: [0, 150], rotuloA, rotuloB, linhas: semDestaque(PRIMEIRO) },
-    { tipo: 'barras', titulo: 'Os 17 cortes somados', subtitulo: 'outra escala: 0 a 800 municípios', escala: [0, 800], rotuloA, rotuloB, linhas: semDestaque(SOMADOS) },
+    // dobra: in the folding shape (Du Bois) both charts share one line = 200 municipalities, as in the study.
+    { tipo: 'barras', titulo: 'O primeiro corte, 10.188 habitantes', subtitulo: 'escala: 0 a 150 municípios', escala: [0, 150], rotuloA, rotuloB, linhas: semDestaque(PRIMEIRO), dobra: 200, anotacoes: [{ linha: 2, texto: 'Em 2022, 132 logo acima e só 36 logo abaixo' }] },
+    { tipo: 'barras', titulo: 'Os 17 cortes somados', subtitulo: 'outra escala: 0 a 800 municípios', escala: [0, 800], rotuloA, rotuloB, linhas: semDestaque(SOMADOS), dobra: 200, anotacoes: [{ linha: 1, texto: 'Com a estimativa de 2025, a diferença encolhe' }] },
   ]
 }
 
@@ -126,14 +127,16 @@ export const ACHADOS = [
   'Nos 17 cortes somados, 731 acima contra 293 abaixo no Censo 2022; com a estimativa de 2025, 60 contra 43.',
 ]
 
-/** Horizontal styles stack the two figures; column styles set them side by side, as in the studies. */
+/** Figures stacked, or side by side as small multiples when the style says so (estrutura.multiplos), as in the studies. */
 function FigurasMetodo({ g1, g2 }: { g1: GraficoSpec; g2: GraficoSpec }) {
   const { estilo } = usePrint()
-  if (estilo.estrutura.barras === 'vertical' && g1.tipo === 'barras') {
+  const e = estilo.estrutura
+  if ((e.multiplos === 'lado-a-lado' || e.barras === 'vertical') && g1.tipo === 'barras') {
+    const letras = e.letraMultiplo ? ['A', 'B'] : [undefined, undefined]
     return (
       <div className="ty-print-figuras">
-        <GraficoMetodo spec={g1} alt={ACHADOS[0]} local largura={70} />
-        <GraficoMetodo spec={g2} alt={ACHADOS[1]} largura={50} />
+        <GraficoMetodo spec={g1} alt={ACHADOS[0]} local largura={e.forma === 'cartoes' ? 76 : 70} letra={letras[0]} />
+        <GraficoMetodo spec={g2} alt={ACHADOS[1]} largura={e.forma === 'cartoes' ? 50 : 54} letra={letras[1]} />
       </div>
     )
   }

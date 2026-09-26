@@ -15,12 +15,15 @@ import {
   numeroBr,
   FOLGA_ANOTACAO,
   TEXTO,
-  type AnotacaoPosta,
   type Eixo,
 } from './geometria.ts'
 import { PINCEIS, unidadeIsotype, type CorDado, type CtxPincel, type Pincel } from './pinceis.tsx'
+import type { FormaGrafico, PrintStyle } from '@datatechsolutions/tympan-tokens'
 import type { GraficoSpec, RenderizadorGrafico, SpecBarras, SpecContagem, SpecEsquema, SpecHalteres, SpecSerie } from './tipos.ts'
-import { AntesDepoisControle, Dispersao, MatrizCorrelacao, Simpson } from './correlacao.tsx'
+import { AntesDepoisControle, Dispersao, MatrizCorrelacao, Simpson, corAchado } from './correlacao.tsx'
+import { Chamadas, posicionarChamadas } from './chamadas.tsx'
+import { Anotacoes, Chamada, Legenda, Rotulos, coresLinha, larguraLegenda } from './partes.tsx'
+import { Cartoes, EixoCentral, Fluxo, Ziguezague } from './formas.tsx'
 
 export interface GraficoMetodoProps {
   spec: GraficoSpec
@@ -34,7 +37,22 @@ export interface GraficoMetodoProps {
   local?: boolean
   /** Figure width in mm (default: the panel's inner width, or 128). */
   largura?: number
+  /** Letter of a small multiple (A, B…), printed large before the title (scientific figure). */
+  letra?: string
   className?: string
+}
+
+/** The style's shape for comparison charts (estrutura.forma; 'colunas' when bars are vertical). */
+export function formaDoEstilo(estilo: PrintStyle): FormaGrafico {
+  return estilo.estrutura.forma ?? (estilo.estrutura.barras === 'vertical' ? 'colunas' : 'barras')
+}
+
+/**
+ * A dumbbell becomes a comparison in the style's own shape when the style declares one (the pairs are the
+ * same data), as long as nothing would be lost: the axis starts at zero and there are no reference lines.
+ */
+function comoBarras(spec: SpecHalteres): SpecBarras {
+  return { tipo: 'barras', titulo: spec.titulo, subtitulo: spec.subtitulo, achado: spec.achado, anotacoes: spec.anotacoes, escala: spec.escala, unidade: spec.unidade, linhas: spec.linhas, rotuloA: spec.rotuloA, rotuloB: spec.rotuloB }
 }
 
 interface Ctx extends CtxPincel {
@@ -42,40 +60,6 @@ interface Ctx extends CtxPincel {
 }
 
 const n = (v: number) => Math.round(v * 1000) / 1000
-
-/** Colours of a row: series colours when nothing is highlighted, highlight against context otherwise. */
-function coresLinha(destaque: boolean, algumDestaque: boolean): { a: CorDado; b: CorDado; conector: CorDado; texto: 'destaque' | 'tinta' } {
-  if (!algumDestaque) return { a: 'destaque-2', b: 'destaque', conector: 'contexto', texto: 'tinta' }
-  if (destaque) return { a: 'destaque', b: 'destaque', conector: 'destaque', texto: 'destaque' }
-  return { a: 'tinta', b: 'tinta', conector: 'contexto', texto: 'tinta' }
-}
-
-function Chamada({ x, y, texto }: { x: number; y: number; texto: string }) {
-  return (
-    <g className="ty-print-g-chamada" transform={`translate(${n(x)} ${n(y)})`}>
-      <circle r={1.45} />
-      <text y={0.72} textAnchor="middle">
-        {texto}
-      </text>
-    </g>
-  )
-}
-
-function Rotulos({ y, rotulo, nota, local }: { y: number; rotulo: string; nota?: string; local?: boolean }) {
-  const extra = local ? (nota ? `${nota} · lake local` : 'lake local') : nota
-  return (
-    <>
-      <text className="ty-print-g-rotulo" x={0} y={n(y)}>
-        {rotulo}
-      </text>
-      {extra ? (
-        <text className="ty-print-g-nota" x={0} y={n(y + TEXTO * 1.15)} data-local={local ? '' : undefined}>
-          {extra}
-        </text>
-      ) : null}
-    </>
-  )
-}
 
 function EixoX({ c, eixo, unidade, naoZero }: { c: Ctx; eixo: Eixo; unidade?: string; naoZero?: boolean }) {
   return (
@@ -104,53 +88,6 @@ function EixoX({ c, eixo, unidade, naoZero }: { c: Ctx; eixo: Eixo; unidade?: st
       ) : null}
     </g>
   )
-}
-
-function Anotacoes({ c, postas, marcas }: { c: Ctx; postas: AnotacaoPosta[]; marcas: Array<string | undefined> }) {
-  const h = TEXTO * 1.4
-  return (
-    <g className="ty-print-g-anotacoes">
-      {postas.map((a, k) => (
-        <g key={k} className="ty-print-g-anotacao" data-linha={a.linha}>
-          {a.guia ? c.p.linha(c, { chave: `guia-${k}`, x1: a.guia.x, y1: a.guia.y1, x2: a.guia.x, y2: a.guia.y2, cor: 'destaque', largura: 0.18, tipo: 'guia' }) : <Chamada x={1.6} y={a.y - TEXTO * 0.32} texto={marcas[a.linha] ?? String(a.linha + 1)} />}
-          <text x={a.x} y={a.y} textAnchor={a.guia ? 'end' : 'start'}>
-            {a.linhas.map((l, i) => (
-              <tspan key={i} x={a.x} dy={i === 0 ? 0 : h}>
-                {l}
-              </tspan>
-            ))}
-          </text>
-        </g>
-      ))}
-    </g>
-  )
-}
-
-function Legenda({ c, y: yBase, itens }: { c: Ctx; y: number; itens: Array<{ x: number; y?: number; texto: string; cor: CorDado; tipo: 'ponto-vazio' | 'ponto' | 'barra-a' | 'barra-b' }> }) {
-  const hachura = c.estilo.traco.hachura !== 'nenhuma'
-  return (
-    <g className="ty-print-g-legenda">
-      {itens.map((it, k) => {
-        const y = it.y ?? yBase
-        return (
-        <g key={k}>
-          <g transform={`translate(${n(it.x + 1.2)} ${n(y - 0.8)})`}>
-            {it.tipo === 'ponto' || it.tipo === 'ponto-vazio'
-              ? c.p.ponto(c, { chave: `leg-${k}`, r: 0.95, cor: it.cor, cheio: it.tipo === 'ponto' })
-              : <g transform="translate(-1.2 -1.2)">{c.p.barra(c, { chave: `leg-${k}`, w: 4, h: 2.4, cor: it.cor, enchimento: it.tipo === 'barra-a' && hachura ? 'hachura' : 'cheio', valor: 4, mmPorUnidade: 1 })}</g>}
-          </g>
-          <text x={n(it.x + (it.tipo.startsWith('barra') ? 4.6 : 3.2))} y={y}>
-            {it.texto}
-          </text>
-        </g>
-        )
-      })}
-    </g>
-  )
-}
-
-function larguraLegenda(t: string) {
-  return t.length * TEXTO * 0.5 + 10
 }
 
 // ---------------------------------------------------------------------------
@@ -275,8 +212,42 @@ function Barras({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numbe
   }
 }
 
+/** Windows of a building column (Holmes): texture only, clipped to the column's exact height. */
+function Janelas({ x, base, w, h }: { x: number; base: number; w: number; h: number }) {
+  const lado = Math.max(0.5, Math.min(1.1, w / 4.5))
+  const colunas = Math.max(1, Math.floor((w - lado) / (2 * lado)))
+  const passoX = (w - lado) / colunas
+  const passoY = lado * 2.2
+  const out: ReactNode[] = []
+  for (let yy = lado * 1.4; yy + lado <= h - lado * 0.6; yy += passoY)
+    for (let k = 0; k < colunas; k++) out.push(<rect key={`${k}-${yy}`} x={n(x + lado * 0.5 + k * passoX + (passoX - lado) / 2)} y={n(base - yy - lado)} width={n(lado)} height={n(lado)} />)
+  return (
+    <g className="ty-print-g-janelas" style={{ fill: 'var(--ty-print-papel)', opacity: 0.85 }}>
+      {out}
+    </g>
+  )
+}
+
 function Colunas({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: number }) {
-  const L = layoutColunas(spec, largura)
+  const e = c.estilo.estrutura
+  const predios = e.forma === 'predios'
+  const corte = e.linhaCorte
+  const estiloChamada = e.chamadas && e.chamadas !== 'numeradas' && spec.anotacoes?.length ? e.chamadas : null
+  const alturaPlot = e.colunasFinas ? 20 : 32
+  const L0 = layoutColunas(spec, largura, alturaPlot, { finas: e.colunasFinas, vao: corte ? 2.6 : undefined })
+  // Callouts inside the chart: the notes get a band above the plot, pointing at the value they explain.
+  const alvosDe = (lay: typeof L0) =>
+    (spec.anotacoes ?? []).flatMap((a) => {
+      const g = lay.grupos[a.linha]
+      const col = g?.colunas[g.colunas.length - 1]
+      if (!col) return []
+      return [{ x: n(col.x + col.w / 2), y: n(col.rotulo.y - TEXTO * 0.95), texto: a.texto, valor: { x: col.rotulo.x, y: col.rotulo.y, texto: numeroBr(col.valor) } }]
+    })
+  const banda = estiloChamada ? posicionarChamadas(alvosDe(L0), largura, estiloChamada) : null
+  const L = banda ? layoutColunas(spec, largura, alturaPlot, { finas: e.colunasFinas, vao: corte ? 2.6 : undefined, topo: banda.altura, notasEmbaixo: false }) : L0
+  // Buildings are solid blocks with windows: a renderer that builds bars from icons or dots would hide them.
+  const pBarra = predios && (c.p.nome === 'isotype' || c.p.nome === 'pontos') ? PINCEIS.limpo : c.p
+  const notas = banda && estiloChamada ? posicionarChamadas(alvosDe(L), largura, estiloChamada).notas : []
   const linhasG = linhasDe(spec)
   const algum = linhasG.some((l) => l.destaque)
   const hachura = c.estilo.traco.hachura !== 'nenhuma'
@@ -320,14 +291,26 @@ function Colunas({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numb
           const extra = g.local ? (g.nota ? `${g.nota} · lake local` : 'lake local') : g.nota
           return (
             <g key={g.i} className="ty-print-g-linha" data-linha={g.i} data-destaque={g.destaque ? '' : undefined}>
+              {corte && g.colunas.length > 1 ? (
+                // The cut between the two columns of the group (Tufte and Holmes dashed, Bayer solid).
+                <g className="ty-print-g-corte" strokeDasharray={corte === 'tracejada' ? '0.7 0.6' : undefined}>
+                  {c.p.linha(c, { chave: `corte-${g.i}`, x1: n((g.colunas[0]!.x + g.colunas[0]!.w + g.colunas[1]!.x) / 2), y1: y1, x2: n((g.colunas[0]!.x + g.colunas[0]!.w + g.colunas[1]!.x) / 2), y2: n(L.area.y0 - 1), cor: corte === 'cheia' ? 'tinta' : 'tinta-3', largura: corte === 'cheia' ? 0.45 : 0.2, tipo: 'guia' })}
+                </g>
+              ) : null}
               {g.colunas.map((b) => {
                 const corB: CorDado = unico ? (algum && !g.destaque ? 'contexto' : 'destaque') : b.serie === 'a' ? (algum && !g.destaque ? 'contexto' : cor.a) : cor.b
                 return (
                   <g key={b.serie}>
                     {/* The bar is drawn horizontally by the renderer and turned upright: length = data, width = column. */}
                     <g className="ty-print-barra" data-linha={g.i} data-serie={b.serie} data-valor={b.valor} data-x={b.x} data-base={b.base} data-h={b.h} transform={`translate(${b.x} ${b.base}) rotate(-90)`}>
-                      {c.p.barra(c, { chave: `col-${g.i}-${b.serie}`, w: b.h, h: b.w, cor: corB, enchimento: b.serie === 'a' && hachura ? 'hachura' : 'cheio', valor: b.valor, mmPorUnidade: L.mmPorUnidade })}
+                      {pBarra.barra(c, { chave: `col-${g.i}-${b.serie}`, w: b.h, h: b.w, cor: corB, enchimento: b.serie === 'a' && hachura && !predios ? 'hachura' : 'cheio', valor: b.valor, mmPorUnidade: L.mmPorUnidade })}
                     </g>
+                    {predios && b.h > 2 ? <Janelas x={b.x} base={b.base} w={b.w} h={b.h} /> : null}
+                    {e.marcador === 'circulo' ? (
+                      <g className="ty-print-g-marcador" transform={`translate(${n(b.x + b.w / 2)} ${n(b.base - b.h)})`}>
+                        {c.p.ponto(c, { chave: `mc-${g.i}-${b.serie}`, r: n(Math.min(1.3, b.w / 2)), cor: corB, cheio: true })}
+                      </g>
+                    ) : null}
                     <text className={b.serie === 'a' && !unico ? 'ty-print-g-valor-a' : 'ty-print-g-valor'} x={b.rotulo.x} y={b.rotulo.y} textAnchor="middle" data-cor={g.destaque ? 'destaque' : 'tinta'}>
                       {numeroBr(b.valor)}
                     </text>
@@ -335,10 +318,14 @@ function Colunas({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numb
                 )
               })}
               <text className="ty-print-g-rotulo" x={g.cx} y={n(y1 + 3.3)} textAnchor="middle">
-                {g.rotulo}
+                {g.linhasRotulo.map((t, k) => (
+                  <tspan key={k} x={g.cx} dy={k === 0 ? 0 : n(TEXTO * 1.1)}>
+                    {t}
+                  </tspan>
+                ))}
               </text>
               {extra ? (
-                <text className="ty-print-g-nota" x={g.cx} y={n(y1 + 5.9)} textAnchor="middle" data-local={g.local ? '' : undefined}>
+                <text className="ty-print-g-nota" x={g.cx} y={g.yNota} textAnchor="middle" data-local={g.local ? '' : undefined}>
                   {extra}
                 </text>
               ) : null}
@@ -347,6 +334,7 @@ function Colunas({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numb
           )
         })}
         <Anotacoes c={c} postas={L.anotacoes} marcas={linhasG.map((l) => l.marca)} />
+        {banda && estiloChamada ? <Chamadas c={c} estilo={estiloChamada} notas={notas} topo={n(L.area.y0 - banda.altura)} cor={corAchado(c)} /> : null}
       </>
     ),
     tabela: unico
@@ -584,7 +572,7 @@ function Esquema({ c, spec, largura }: { c: Ctx; spec: SpecEsquema; largura: num
  * washed, grained, pictorial). Every figure has an accessible name that
  * states the finding and a data table (visible, or for assistive technology).
  */
-export function GraficoMetodo({ spec, renderizador, alt, tabela, local = false, largura: larguraProp, className }: GraficoMetodoProps) {
+export function GraficoMetodo({ spec: specOriginal, renderizador, alt, tabela, local = false, largura: larguraProp, letra, className }: GraficoMetodoProps) {
   const { estilo } = usePrint()
   const disponivel = useLarguraDisponivel()
   const largura = larguraProp ?? Math.min(132, disponivel ?? 128)
@@ -592,13 +580,26 @@ export function GraficoMetodo({ spec, renderizador, alt, tabela, local = false, 
   const nome = renderizador ?? estilo.grafico
   const p = PINCEIS[nome]
   const c: Ctx = { id, estilo, p }
+  const forma = formaDoEstilo(estilo)
+  const spec: GraficoSpec =
+    specOriginal.tipo === 'halteres' && estilo.estrutura.forma && estilo.estrutura.forma !== 'barras' && specOriginal.escala[0] === 0 && !specOriginal.referencias?.length && !specOriginal.eixoNaoComecaNoZero
+      ? comoBarras(specOriginal)
+      : specOriginal
   const r =
     spec.tipo === 'halteres'
       ? Halteres({ c, spec, largura })
       : spec.tipo === 'barras'
-        ? estilo.estrutura.barras === 'vertical'
+        ? forma === 'colunas' || forma === 'predios'
           ? Colunas({ c, spec, largura })
-          : Barras({ c, spec, largura })
+          : forma === 'eixo-central'
+            ? EixoCentral({ c, spec, largura })
+            : forma === 'ziguezague'
+              ? Ziguezague({ c, spec, largura })
+              : forma === 'fluxo'
+                ? Fluxo({ c, spec, largura })
+                : forma === 'cartoes'
+                  ? Cartoes({ c, spec, largura })
+                  : Barras({ c, spec, largura })
         : spec.tipo === 'contagem'
           ? Contagem({ c, spec, largura })
           : spec.tipo === 'serie'
@@ -617,9 +618,16 @@ export function GraficoMetodo({ spec, renderizador, alt, tabela, local = false, 
   // Correlation charts write their finding from the coefficients they recompute from the points.
   const nomeAcessivel = alt ?? spec.achado ?? ('achado' in r ? r.achado : undefined) ?? spec.titulo
   return (
-    <figure className={cx('ty-print-figura', className)} data-tipo={spec.tipo} data-renderizador={nome} data-local={local ? '' : undefined}>
+    <figure className={cx('ty-print-figura', className)} data-tipo={specOriginal.tipo} data-forma={spec.tipo === 'barras' ? forma : undefined} data-renderizador={nome} data-local={local ? '' : undefined}>
       <figcaption className="ty-print-figura-cabeca">
-        <span className="ty-print-figura-titulo">{comColchetes(spec.titulo)}</span>
+        <span className="ty-print-figura-titulo">
+          {letra ? (
+            <span className="ty-print-figura-letra" style={{ fontSize: '11pt', fontWeight: 700, marginInlineEnd: '2.4mm' }}>
+              {letra}
+            </span>
+          ) : null}
+          {comColchetes(spec.titulo)}
+        </span>
         {spec.subtitulo ? <span className="ty-print-figura-subtitulo">{comColchetes(spec.subtitulo)}</span> : null}
         {local ? <span className="ty-print-selo-local">lake local, não publicado</span> : null}
       </figcaption>

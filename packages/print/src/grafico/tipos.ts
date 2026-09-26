@@ -53,6 +53,8 @@ export interface SpecBarras extends Base {
   tipo: 'barras'
   escala: [number, number]
   unidade?: string
+  /** Folding bar (style shape 'ziguezague'): units per full line; default the top of `escala` (no fold). */
+  dobra?: number
   barras?: Array<{ rotulo: string; valor: number; destaque?: boolean; nota?: string }>
   linhas?: LinhaPar[]
   rotuloA?: string
