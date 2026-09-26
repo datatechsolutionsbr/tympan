@@ -3,6 +3,11 @@
 Date: 2026-09-26. Branch: `ds/clean-room` (waves 1 to 3); wave 4 on
 `ds/specs-extra`.
 
+**Status (history note).** The fork described here was deleted from the
+repository on branch `ui/platform-ds` once `apps/platform` ran on the
+clean-room packages. The mentions of `packages/ui`, `packages/workflow`,
+`@fakhir/ui` and `@fakhir/workflow` below record where the specs came from.
+
 ## Why these files exist
 
 The current `@fakhir/ui` and `@fakhir/workflow` packages (the "fork") are partly

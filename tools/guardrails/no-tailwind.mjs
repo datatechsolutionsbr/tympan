@@ -1,8 +1,8 @@
 // check:no-tailwind — the clean-room library must stay free of Tailwind.
 // Fails on:
 //  - any tailwind / tailwind-related or class-variance-authority dependency in
-//    the package.json of packages/tokens, packages/design-system or
-//    packages/flow-canvas, or in their
+//    the package.json of packages/tokens, packages/design-system,
+//    packages/flow-canvas or apps/platform, or in their
 //    package-lock.json entries;
 //  - shadcn registry files (components.json);
 //  - @tailwind, @apply, @theme, @config, @utility, @variant, @custom-variant in CSS;

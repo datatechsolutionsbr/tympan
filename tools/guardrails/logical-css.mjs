@@ -1,5 +1,6 @@
 // check:logical-css — Fakhir supports right-to-left scripts, so layout CSS in
-// packages/tokens, packages/design-system and packages/flow-canvas uses
+// packages/tokens, packages/design-system, packages/flow-canvas and
+// apps/platform uses
 // logical properties only.
 // Fails on physical left/right properties and values:
 //  - margin-left/right, padding-left/right, border-left/right(-*),

@@ -1,5 +1,8 @@
 # Inventory: fork exports → clean-room names
 
+> History note: the fork (`packages/ui`, `packages/workflow`) was deleted on
+> branch `ui/platform-ds`; this inventory records its exports at the time.
+
 Date: 2026-09-26. Sources read: `packages/ui/src/index.ts` and
 `packages/workflow/src/index.ts` (public barrels) plus the component files that
 are not re-exported but exist in the fork. "Apps" was checked with a search of
