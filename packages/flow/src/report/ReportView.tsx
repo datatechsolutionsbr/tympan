@@ -1,9 +1,13 @@
-// Minimal ReportView (stand-in for the wave-2 ReportView of the design
-// system): renders a report definition as stacked sections. Used by
-// AssistantVisualBlock and ReportOutputNodeForm. Owned by the assistant group;
-// this first version fixes the contract.
+// ReportView (stand-in for the design system's wave-2 ReportView): renders a
+// report definition as stacked sections. Used by AssistantVisualBlock and
+// ReportOutputNodeForm. Charts are drawn in SVG from chart tokens, always with
+// a text summary, a legend in words and a data-table toggle, so no value is
+// carried by colour alone.
 
-import type { ReactNode } from 'react'
+import { useId, useState, type ReactNode } from 'react'
+import { useLocale } from 'react-aria-components'
+import { MarkdownView } from '../assistant/MarkdownView'
+import { defineLabels, fill, useLabels } from '../internal/labels'
 
 export type ValueFormat = 'number' | 'currency' | 'percent'
 
@@ -51,142 +55,305 @@ export function validateReport(spec: unknown): ReportIssue[] {
   return issues
 }
 
+/**
+ * Locale-aware value text. Percent accepts a fraction (0.25) or a whole
+ * percentage (25). Currency needs a currency code from the host; without one
+ * the value is shown as a number with two decimals.
+ */
+export function formatValue(value: unknown, format: ValueFormat | undefined, locale?: string, currency?: string): string {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return value === null || value === undefined ? '' : String(value)
+  if (format === 'currency') {
+    return currency
+      ? new Intl.NumberFormat(locale, { style: 'currency', currency }).format(value)
+      : new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value)
+  }
+  if (format === 'percent') return new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 1 }).format(Math.abs(value) > 1 ? value / 100 : value)
+  return new Intl.NumberFormat(locale).format(value)
+}
+
+export interface ReportViewLabels {
+  showTable: string
+  showChart: string
+  chartSummary: string
+  bar: string
+  line: string
+  area: string
+  table: string
+  region: string
+  value: string
+  noContent: string
+}
+
+export const reportViewLabels = defineLabels<ReportViewLabels>('reportView', {
+  en: {
+    showTable: 'Show data table',
+    showChart: 'Show chart',
+    chartSummary: '{kind} of {series} by {x}, {count, plural, one {# row} other {# rows}}',
+    bar: 'Bar chart',
+    line: 'Line chart',
+    area: 'Area chart',
+    table: 'Data table',
+    region: 'Region',
+    value: 'Value',
+    noContent: 'This section has no content to show.',
+  },
+  'pt-BR': {
+    showTable: 'Mostrar tabela de dados',
+    showChart: 'Mostrar gráfico',
+    chartSummary: '{kind} de {series} por {x}, {count, plural, one {# linha} other {# linhas}}',
+    bar: 'Gráfico de barras',
+    line: 'Gráfico de linhas',
+    area: 'Gráfico de área',
+    table: 'Tabela de dados',
+    region: 'Região',
+    value: 'Valor',
+    noContent: 'Esta seção não tem conteúdo para mostrar.',
+  },
+  es: {
+    showTable: 'Mostrar tabla de datos',
+    showChart: 'Mostrar gráfico',
+    chartSummary: '{kind} de {series} por {x}, {count, plural, one {# fila} other {# filas}}',
+    bar: 'Gráfico de barras',
+    line: 'Gráfico de líneas',
+    area: 'Gráfico de área',
+    table: 'Tabla de datos',
+    region: 'Región',
+    value: 'Valor',
+    noContent: 'Esta sección no tiene contenido para mostrar.',
+  },
+})
+
+/** English defaults (plain object). */
+export const defaultReportViewLabels: ReportViewLabels = reportViewLabels.bundles.en
+
 export interface ReportViewProps {
   spec: ReportSpec
   locale?: string
   currency?: string
   /** Heading level of the report title (sections use the next level). */
   headingLevel?: 2 | 3 | 4
+  /** Charts start as a chart or as their data table (phones: table). */
+  defaultChartView?: 'chart' | 'table'
+  labels?: Partial<ReportViewLabels>
   className?: string
-}
-
-export function formatValue(value: unknown, format: ValueFormat | undefined, locale?: string, currency = 'BRL'): string {
-  if (typeof value !== 'number') return value === null || value === undefined ? '' : String(value)
-  if (format === 'currency') return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(value)
-  if (format === 'percent') return new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 1 }).format(value > 1 ? value / 100 : value)
-  return new Intl.NumberFormat(locale).format(value)
 }
 
 type HeadingTag = 'h2' | 'h3' | 'h4' | 'h5'
 
-export function ReportView({ spec, locale, currency, headingLevel = 3, className }: ReportViewProps) {
+export function ReportView({ spec, locale, currency, headingLevel = 3, defaultChartView = 'chart', labels, className }: ReportViewProps) {
+  const l = useLabels(reportViewLabels, labels)
+  const provider = useLocale()
+  const loc = locale ?? provider.locale
   const H = `h${headingLevel}` as HeadingTag
   const S = `h${Math.min(5, headingLevel + 1)}` as HeadingTag
+  const fmt = (v: unknown, f?: ValueFormat) => formatValue(v, f, loc, currency)
   return (
     <div className={['fk-report', className].filter(Boolean).join(' ')}>
       {spec.title ? <H className="fk-report__title">{spec.title}</H> : null}
       {spec.subtitle ? <p className="fk-report__subtitle">{spec.subtitle}</p> : null}
       {spec.sections.map((section, i) => (
         <section key={i} className="fk-report__section" data-type={section.type}>
-          {section.title ? <S className="fk-report__section-title">{section.title}</S> : null}
-          {renderSection(section, locale, currency)}
+          {section.title && !isChart(section) ? <S className="fk-report__section-title">{section.title}</S> : null}
+          {renderSection(section, { fmt, l, S, defaultChartView, locale: loc })}
         </section>
       ))}
     </div>
   )
 }
 
-function renderSection(section: ReportSection, locale?: string, currency?: string): ReactNode {
+function isChart(s: ReportSection): s is Extract<ReportSection, { type: 'bar' | 'line' | 'area' }> {
+  return s.type === 'bar' || s.type === 'line' || s.type === 'area'
+}
+
+interface Ctx {
+  fmt: (v: unknown, f?: ValueFormat) => string
+  l: ReportViewLabels
+  S: HeadingTag
+  defaultChartView: 'chart' | 'table'
+  locale: string
+}
+
+function renderSection(section: ReportSection, ctx: Ctx): ReactNode {
+  const { fmt, l } = ctx
   switch (section.type) {
     case 'figures':
       return (
         <dl className="fk-report__figures">
           {section.data.items.map((f, i) => (
             <div key={i} className="fk-report__figure">
-              <dt>{f.label}</dt>
-              <dd>{formatValue(f.value, f.format, locale, currency)}</dd>
+              <dt className="fk-report__figure-label">{f.label}</dt>
+              <dd className="fk-report__figure-value">{fmt(f.value, f.format)}</dd>
             </div>
           ))}
         </dl>
       )
     case 'table':
       return (
-        <div className="fk-report__table-wrap" tabIndex={0} role="region" aria-label={section.title ?? 'Table'}>
-          <table className="fk-report__table">
-            <thead>
-              <tr>
-                {section.data.columns.map((c) => (
-                  <th key={c.key} scope="col">
-                    {c.label}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {section.data.rows.map((r, i) => (
-                <tr key={i}>
-                  {section.data.columns.map((c) => (
-                    <td key={c.key}>{formatValue(r[c.key], c.format, locale, currency)}</td>
-                  ))}
-                </tr>
+        <ScrollTable label={section.title ?? l.table}>
+          <thead>
+            <tr>
+              {section.data.columns.map((c) => (
+                <th key={c.key} scope="col">
+                  {c.label}
+                </th>
               ))}
-            </tbody>
-          </table>
-        </div>
-      )
-    case 'bar':
-    case 'line':
-    case 'area': {
-      const { rows, x, y, format } = section.data
-      const max = Math.max(1, ...rows.flatMap((r) => y.map((k) => (typeof r[k] === 'number' ? (r[k] as number) : 0))))
-      return (
-        <figure className="fk-report__chart">
-          <div className="fk-report__bars" aria-hidden="true">
-            {rows.map((r, i) => (
-              <div key={i} className="fk-report__bar-row">
-                <span className="fk-report__bar-label">{String(r[x] ?? '')}</span>
-                {y.map((k) => (
-                  <span key={k} className="fk-report__bar" style={{ inlineSize: `${(Math.max(0, Number(r[k]) || 0) / max) * 100}%` }} />
-                ))}
-              </div>
-            ))}
-          </div>
-          <table className="fk-report__table">
-            <caption className="fk-visually-hidden">{section.title ?? ''}</caption>
-            <thead>
-              <tr>
-                <th scope="col">{x}</th>
-                {y.map((k) => (
-                  <th key={k} scope="col">
-                    {k}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((r, i) => (
-                <tr key={i}>
-                  <th scope="row">{String(r[x] ?? '')}</th>
-                  {y.map((k) => (
-                    <td key={k}>{formatValue(r[k], format, locale, currency)}</td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </figure>
-      )
-    }
-    case 'markdown':
-      return section.data.body.split(/\n{2,}/).map((p, i) => (
-        <p key={i} className="fk-report__prose">
-          {p}
-        </p>
-      ))
-    case 'region-map':
-      return (
-        <table className="fk-report__table">
+            </tr>
+          </thead>
           <tbody>
-            {section.data.items.map((it) => (
-              <tr key={it.region}>
-                <th scope="row">{it.label}</th>
-                <td>{formatValue(it.value, section.data.format, locale, currency)}</td>
+            {section.data.rows.map((r, i) => (
+              <tr key={i}>
+                {section.data.columns.map((c) => (
+                  <td key={c.key} data-numeric={typeof r[c.key] === 'number' || undefined}>
+                    {fmt(r[c.key], c.format)}
+                  </td>
+                ))}
               </tr>
             ))}
           </tbody>
-        </table>
+        </ScrollTable>
+      )
+    case 'bar':
+    case 'line':
+    case 'area':
+      return <ChartBlock section={section} ctx={ctx} />
+    case 'markdown':
+      return <MarkdownView source={section.data.body} baseHeadingLevel={4} />
+    case 'region-map':
+      return (
+        <ScrollTable label={section.title ?? l.table}>
+          <thead>
+            <tr>
+              <th scope="col">{l.region}</th>
+              <th scope="col">{l.value}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {section.data.items.map((it) => (
+              <tr key={it.region}>
+                <th scope="row">
+                  {it.label} <span className="fk-report__code">{it.region}</span>
+                </th>
+                <td data-numeric="true">{fmt(it.value, section.data.format)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </ScrollTable>
       )
     default:
-      return <p className="fk-report__note">{section.title ?? section.type}</p>
+      return <p className="fk-report__note">{l.noContent}</p>
   }
+}
+
+function ScrollTable({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div className="fk-report__table-wrap" tabIndex={0} role="region" aria-label={label}>
+      <table className="fk-report__table">{children}</table>
+    </div>
+  )
+}
+
+const W = 480
+const H = 200
+const PAD = { top: 12, right: 12, bottom: 28, left: 12 }
+
+function ChartBlock({ section, ctx }: { section: Extract<ReportSection, { type: 'bar' | 'line' | 'area' }>; ctx: Ctx }) {
+  const { rows, x, y, format } = section.data
+  const { l, fmt, S } = ctx
+  const [view, setView] = useState<'chart' | 'table'>(ctx.defaultChartView)
+  const tableId = useId()
+  const captionId = useId()
+  const values = rows.flatMap((r) => y.map((k) => (typeof r[k] === 'number' ? (r[k] as number) : 0)))
+  const max = Math.max(0, ...values)
+  const min = Math.min(0, ...values)
+  const span = max - min || 1
+  const plotW = W - PAD.left - PAD.right
+  const plotH = H - PAD.top - PAD.bottom
+  const yOf = (v: number) => PAD.top + plotH - ((v - min) / span) * plotH
+  const baseline = yOf(0)
+  const band = plotW / Math.max(1, rows.length)
+  const kind = section.type === 'bar' ? l.bar : section.type === 'line' ? l.line : l.area
+  const summary = fill(l.chartSummary, { kind, series: y.join(', '), x, count: rows.length }, ctx.locale)
+
+  const marks: ReactNode[] = []
+  y.forEach((key, s) => {
+    const val = (r: Record<string, unknown>) => (typeof r[key] === 'number' ? (r[key] as number) : 0)
+    if (section.type === 'bar') {
+      const barW = Math.max(2, (band * 0.7) / y.length)
+      rows.forEach((r, i) => {
+        const v = val(r)
+        const top = Math.min(yOf(v), baseline)
+        marks.push(<rect key={`${key}-${i}`} className="fk-report__mark" data-series={s % 8} x={PAD.left + band * i + band * 0.15 + barW * s} y={top} width={barW} height={Math.max(1, Math.abs(yOf(v) - baseline))} />)
+      })
+    } else {
+      const pts = rows.map((r, i) => `${PAD.left + band * i + band / 2},${yOf(val(r))}`)
+      if (section.type === 'area' && rows.length) {
+        const first = PAD.left + band / 2
+        const last = PAD.left + band * (rows.length - 1) + band / 2
+        marks.push(<polygon key={`${key}-fill`} className="fk-report__area" data-series={s % 8} points={`${first},${baseline} ${pts.join(' ')} ${last},${baseline}`} />)
+      }
+      marks.push(<polyline key={key} className="fk-report__line" data-series={s % 8} points={pts.join(' ')} />)
+      rows.forEach((r, i) => marks.push(<circle key={`${key}-p${i}`} className="fk-report__point" data-series={s % 8} data-shape={s % 3} cx={PAD.left + band * i + band / 2} cy={yOf(val(r))} r={3.5} />))
+    }
+  })
+
+  return (
+    <figure className="fk-report__chart" aria-labelledby={captionId}>
+      <figcaption id={captionId} className="fk-report__caption">
+        {section.title ? <S className="fk-report__section-title">{section.title}</S> : null}
+        <span className="fk-report__summary">{summary}</span>
+      </figcaption>
+      {view === 'chart' ? (
+        <>
+          <svg className="fk-report__svg" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={summary} preserveAspectRatio="none">
+            <line className="fk-report__axis" x1={PAD.left} x2={W - PAD.right} y1={baseline} y2={baseline} />
+            {marks}
+            {rows.map((r, i) => (
+              <text key={i} className="fk-report__tick" x={PAD.left + band * i + band / 2} y={H - 8} textAnchor="middle">
+                {String(r[x] ?? '')}
+              </text>
+            ))}
+          </svg>
+          {y.length > 1 ? (
+            <ul className="fk-report__legend">
+              {y.map((k, s) => (
+                <li key={k} className="fk-report__legend-item" data-series={s % 8} data-shape={s % 3}>
+                  <span className="fk-report__swatch" aria-hidden="true" />
+                  {k}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </>
+      ) : null}
+      <button type="button" className="fk-report__toggle" aria-expanded={view === 'table'} aria-controls={tableId} onClick={() => setView((v) => (v === 'chart' ? 'table' : 'chart'))}>
+        {view === 'chart' ? l.showTable : l.showChart}
+      </button>
+      <div id={tableId} hidden={view !== 'table'}>
+        <ScrollTable label={section.title ?? l.table}>
+          <thead>
+            <tr>
+              <th scope="col">{x}</th>
+              {y.map((k) => (
+                <th key={k} scope="col">
+                  {k}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r, i) => (
+              <tr key={i}>
+                <th scope="row">{String(r[x] ?? '')}</th>
+                {y.map((k) => (
+                  <td key={k} data-numeric="true">
+                    {fmt(r[k], format)}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </ScrollTable>
+      </div>
+    </figure>
+  )
 }
