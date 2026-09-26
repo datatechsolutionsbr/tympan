@@ -6,6 +6,31 @@ import { createStore, useStoreSelector, type Store } from './store'
 
 export type EditorDialogKind = 'agent-editor' | 'node-config' | 'flow-settings'
 
+/** Payload of the node configuration dialog. */
+export interface NodeConfigPayload {
+  nodeId: string
+  kind: string
+  label: string
+  config: Record<string, unknown>
+  /** Upstream values the forms may reference (ancestor node ids and flow inputs). */
+  references: string[]
+}
+
+/** Payload of the agent editor. */
+export interface AgentEditorPayload {
+  mode: 'create' | 'edit'
+  agent?: Record<string, unknown> & { id?: string; name?: string }
+}
+
+/** Payload of the flow settings dialog (lifecycle values only when known). */
+export interface FlowSettingsPayload {
+  name: string
+  description: string
+  slug?: string | null
+  isDraft?: boolean
+  isActive?: boolean
+}
+
 export interface EditorDialogEntry<P = unknown> {
   kind: EditorDialogKind
   payload: P
