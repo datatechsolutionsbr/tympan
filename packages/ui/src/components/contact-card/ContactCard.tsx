@@ -1,16 +1,23 @@
-import { createElement, useId, type ReactNode } from 'react'
+import { useId, type ReactNode } from 'react'
+import { Heading } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 import { useMessages } from '../../internal/provider'
 
 export type ContactHeadingLevel = 2 | 3 | 4 | 5
 
-function Title({ level, id, className, children }: { level: ContactHeadingLevel; id?: string; className: string; children: ReactNode }) {
-  return createElement(`h${level}`, { id, className }, children)
-}
+/** The tel: target dials digits and a leading plus only. */
+const telTarget = (shown: string) => `tel:${shown.replace(/[^\d+]/g, '')}`
 
-/** Strips presentation characters so the tel: target dials the digits. */
-function dialable(phone: string): string {
-  return phone.replace(/[^\d+]/g, '')
+/** Frame shared by both card kinds: a heading, then a body. */
+function CardFrame(props: { kind: 'channel' | 'office'; level: ContactHeadingLevel; heading: string; extra?: string; children: ReactNode }) {
+  return (
+    <div className={cx('fk-contact-card', props.extra)} data-kind={props.kind}>
+      <Heading level={props.level} className="fk-contact-card__title">
+        {props.heading}
+      </Heading>
+      {props.children}
+    </div>
+  )
 }
 
 export interface ContactChannelCardProps {
@@ -23,28 +30,27 @@ export interface ContactChannelCardProps {
 }
 
 /** One contact channel: purpose, e-mail and phone (spec: wave-2/contact-card.md). */
-export function ContactChannelCard({ purposeLabel, email, phone, headingLevel = 3, className }: ContactChannelCardProps) {
-  const terms = useMessages().contact
-  const pairs: Array<{ term: string; href: string; text: string }> = [{ term: terms.email, href: `mailto:${email}`, text: email }]
-  if (phone) pairs.push({ term: terms.phone, href: `tel:${dialable(phone)}`, text: phone })
+export function ContactChannelCard(props: ContactChannelCardProps) {
+  const words = useMessages().contact
+  // Each way to reach the channel: [term, target, visible text].
+  const ways: Array<[string, string, string]> = [[words.email, `mailto:${props.email}`, props.email]]
+  if (props.phone) ways.push([words.phone, telTarget(props.phone), props.phone])
   return (
-    <div className={cx('fk-contact-card', className)} data-kind="channel">
-      <Title level={headingLevel} className="fk-contact-card__title">
-        {purposeLabel}
-      </Title>
+    <CardFrame kind="channel" level={props.headingLevel ?? 3} heading={props.purposeLabel} extra={props.className}>
       <dl className="fk-contact-card__pairs">
-        {pairs.map((p) => (
-          <div key={p.term} className="fk-contact-card__pair">
-            <dt>{p.term}</dt>
+        {ways.map(([term, target, text]) => (
+          <div key={term} className="fk-contact-card__pair">
+            <dt>{term}</dt>
             <dd>
-              <a className="fk-contact-card__link" href={p.href}>
-                {p.text}
+              {/* Native anchors keep mailto: and tel: away from the router adapter. */}
+              <a className="fk-contact-card__link" href={target}>
+                {text}
               </a>
             </dd>
           </div>
         ))}
       </dl>
-    </div>
+    </CardFrame>
   )
 }
 
@@ -56,20 +62,17 @@ export interface ContactOfficeCardProps {
 }
 
 /** An office: city heading and postal address. */
-export function ContactOfficeCard({ city, addressLines, headingLevel = 3, className }: ContactOfficeCardProps) {
+export function ContactOfficeCard(props: ContactOfficeCardProps) {
   return (
-    <div className={cx('fk-contact-card', className)} data-kind="office">
-      <Title level={headingLevel} className="fk-contact-card__title">
-        {city}
-      </Title>
+    <CardFrame kind="office" level={props.headingLevel ?? 3} heading={props.city} extra={props.className}>
       <address className="fk-contact-card__address">
-        {addressLines.map((line, i) => (
-          <span key={i} className="fk-contact-card__line">
-            {line}
+        {props.addressLines.map((text, row) => (
+          <span key={row} className="fk-contact-card__line">
+            {text}
           </span>
         ))}
       </address>
-    </div>
+    </CardFrame>
   )
 }
 
@@ -82,15 +85,15 @@ export interface ContactSectionProps {
 }
 
 /** Section of contact cards with a heading and lead. */
-export function ContactSection({ title, subtitle, headingLevel = 2, children, className }: ContactSectionProps) {
-  const id = useId()
+export function ContactSection(props: ContactSectionProps) {
+  const headingId = useId()
   return (
-    <section className={cx('fk-contact-section', className)} aria-labelledby={id}>
-      <Title level={headingLevel} id={id} className="fk-contact-section__title">
-        {title}
-      </Title>
-      <p className="fk-contact-section__lead">{subtitle}</p>
-      <div className="fk-contact-section__grid">{children}</div>
+    <section aria-labelledby={headingId} className={cx('fk-contact-section', props.className)}>
+      <Heading level={props.headingLevel ?? 2} id={headingId} className="fk-contact-section__title">
+        {props.title}
+      </Heading>
+      <p className="fk-contact-section__lead">{props.subtitle}</p>
+      <div className="fk-contact-section__grid">{props.children}</div>
     </section>
   )
 }

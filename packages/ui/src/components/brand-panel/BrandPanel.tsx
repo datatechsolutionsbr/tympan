@@ -1,4 +1,6 @@
 import { useId, type ReactNode } from 'react'
+import { Heading } from 'react-aria-components'
+import { cx } from '../../internal/cx'
 
 export interface BrandFigure {
   value: string
@@ -16,35 +18,44 @@ export interface BrandPanelProps {
   className?: string
 }
 
-function FigureTiles({ figures }: { figures: readonly BrandFigure[] }) {
-  if (figures.length === 0) return null
-  return (
-    <ul className="fk-brand-panel__figures">
-      {figures.map((f, n) => (
-        <li key={`${n}-${f.label}`} className="fk-brand-panel__figure">
-          <span className="fk-brand-panel__value">{f.value}</span> <span className="fk-brand-panel__caption">{f.label}</span>
-        </li>
-      ))}
-    </ul>
-  )
-}
-
-/** Informative half-screen panel beside an auth form (spec: wave-2/brand-panel.md). */
+/**
+ * Informative half-screen panel beside an auth form (spec:
+ * wave-2/brand-panel.md). Parts render in a fixed order; empty ones drop out.
+ */
 export function BrandPanel(props: BrandPanelProps) {
-  const titleId = `fk-brand-panel-${useId().replace(/:/g, '')}`
-  const Title = props.titleLevel === 3 ? 'h3' : 'h2'
+  const headId = `fk-brand-panel-${useId().replace(/:/g, '')}`
+  const figures = props.figures ?? []
+
+  const parts: Array<ReactNode> = [
+    <div key="decor" className="fk-brand-panel__decor" aria-hidden="true" />,
+    <div key="mark" className="fk-brand-panel__mark">
+      {props.mark}
+    </div>,
+    <div key="headline" className="fk-brand-panel__headline">
+      <Heading level={props.titleLevel ?? 2} id={headId} className="fk-brand-panel__title">
+        {props.title}
+      </Heading>
+      <p className="fk-brand-panel__subtitle">{props.subtitle}</p>
+    </div>,
+    figures.length > 0 && (
+      <ul key="figures" className="fk-brand-panel__figures">
+        {figures.map((figure, n) => (
+          <li key={n + figure.label} className="fk-brand-panel__figure">
+            <span className="fk-brand-panel__value">{figure.value}</span> <span className="fk-brand-panel__caption">{figure.label}</span>
+          </li>
+        ))}
+      </ul>
+    ),
+    props.footnote && (
+      <p key="footnote" className="fk-brand-panel__footnote">
+        {props.footnote}
+      </p>
+    ),
+  ]
+
   return (
-    <aside className={['fk-brand-panel', props.className].filter(Boolean).join(' ')} aria-labelledby={titleId}>
-      <div className="fk-brand-panel__decor" aria-hidden="true" />
-      <div className="fk-brand-panel__mark">{props.mark}</div>
-      <div className="fk-brand-panel__headline">
-        <Title id={titleId} className="fk-brand-panel__title">
-          {props.title}
-        </Title>
-        <p className="fk-brand-panel__subtitle">{props.subtitle}</p>
-      </div>
-      <FigureTiles figures={props.figures ?? []} />
-      {props.footnote ? <p className="fk-brand-panel__footnote">{props.footnote}</p> : null}
+    <aside aria-labelledby={headId} className={cx('fk-brand-panel', props.className)}>
+      {parts}
     </aside>
   )
 }

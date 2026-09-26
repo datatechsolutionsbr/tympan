@@ -18,8 +18,33 @@ export interface TweenedNumberProps {
   className?: string
 }
 
-function isStill(durationMs: number): boolean {
-  return durationMs <= 0 || prefersReducedMotion()
+/** No movement for zero-length tweens or under reduced motion. */
+const jumps = (ms: number) => ms <= 0 || prefersReducedMotion()
+
+/**
+ * The figure on screen, easing towards `target`. One driver lives for the
+ * component's life; a hidden document lands it on the target at once.
+ */
+function useEasedFigure(target: number, ms: number): number {
+  const [figure, setFigure] = useState(() => (jumps(ms) ? target : 0))
+  const engine = useRef<TweenDriver>(null as unknown as TweenDriver)
+  if (!engine.current) {
+    engine.current = new TweenDriver(setFigure)
+    engine.current.current = figure
+  }
+
+  useEffect(() => {
+    const drive = engine.current
+    jumps(ms) ? drive.set(target) : drive.run(target, ms)
+    const onVisibility = () => {
+      if (document.visibilityState === 'hidden' && drive.running) drive.set(target)
+    }
+    document.addEventListener('visibilitychange', onVisibility)
+    return () => document.removeEventListener('visibilitychange', onVisibility)
+  }, [target, ms])
+
+  useEffect(() => () => engine.current.stop(), [])
+  return figure
 }
 
 /**
@@ -27,39 +52,19 @@ function isStill(durationMs: number): boolean {
  * wave-2/tweened-number.md). Not a live region: hosts announce the final
  * value from the surrounding tile when they need to.
  */
-export function TweenedNumber({ value, durationMs = TWEEN_BASE_MS, decimals = 0, format, className }: TweenedNumberProps) {
+export function TweenedNumber(props: TweenedNumberProps) {
+  const places = props.decimals ?? 0
   const { locale } = useLocale()
-  const digits = useMemo(() => new Intl.NumberFormat(locale, { minimumFractionDigits: decimals, maximumFractionDigits: decimals }), [locale, decimals])
-  const [shown, setShown] = useState(() => (isStill(durationMs) ? value : 0))
-  const driver = useRef<TweenDriver | null>(null)
-  if (driver.current === null) {
-    driver.current = new TweenDriver(setShown)
-    driver.current.current = shown
-  }
+  const figure = useEasedFigure(props.value, props.durationMs ?? TWEEN_BASE_MS)
+  const writer = useMemo(() => {
+    if (props.format) return props.format
+    const nf = new Intl.NumberFormat(locale, { minimumFractionDigits: places, maximumFractionDigits: places })
+    return (n: number) => nf.format(Number(n.toFixed(places)))
+  }, [props.format, locale, places])
 
-  useEffect(() => {
-    const d = driver.current!
-    if (isStill(durationMs)) d.set(value)
-    else d.run(value, durationMs)
-  }, [value, durationMs])
-
-  // A hidden tab stops the animation and lands on the target.
-  useEffect(() => {
-    if (typeof document === 'undefined') return
-    const land = () => {
-      if (document.visibilityState === 'hidden' && driver.current?.running) driver.current.set(value)
-    }
-    document.addEventListener('visibilitychange', land)
-    return () => document.removeEventListener('visibilitychange', land)
-  }, [value])
-
-  useEffect(() => () => driver.current?.stop(), [])
-
-  const settled = shown === value
-  const text = format ? format(shown) : digits.format(Number(shown.toFixed(decimals)))
   return (
-    <span className={cx('fk-tweened-number', className)} data-settled={settled || undefined}>
-      {text}
+    <span className={cx('fk-tweened-number', props.className)} data-settled={figure === props.value || undefined}>
+      {writer(figure)}
     </span>
   )
 }
