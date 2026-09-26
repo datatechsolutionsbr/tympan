@@ -292,7 +292,7 @@
     border-radius: var(--fk-radius-control);
     background: var(--fk-surface-sunken);
     direction: ltr;
-    text-align: left;
+    text-align: start;
     unicode-bidi: isolate;
   }
   .fk-markdown__code code {
