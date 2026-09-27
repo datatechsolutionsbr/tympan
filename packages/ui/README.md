@@ -205,6 +205,23 @@ specs), grouped as in the gallery:
 The canvas specs (wave 3 and the five canvas items of wave 4) live in a
 separate package.
 
+## Without React
+
+The stylesheet does not need React. A host that renders HTML another way
+(Rust/Dioxus, server templates, web components) links `dist/styles.css`
+(tokens included) and, if it offers them, the opt-in `print-themes.css` from
+`@datatechsolutions/tympan-tokens`, sets `data-ty-theme` / `data-ty-mode` /
+`data-ty-density` on `<html>`, and emits the markup in
+[`docs/html-contract.md`](docs/html-contract.md): the `ty-` classes,
+data attributes and element structure of each component (button, fields,
+select, checkbox, switch, segmented control, surface, table, status pill,
+tag, tabs, dialog, drawer, popover, menu, toast, notice, rail and app frame,
+floating action bar, page header, headings, empty state, spinner, progress,
+skeleton, avatar, separator). Hover, press, keyboard focus, disabled, checked
+and current states come from the native pseudo-classes and ARIA attributes
+(`src/native-states.css`, scoped to markup React Aria did not render), so
+the host only sets the variant attributes.
+
 ## Styling rules
 
 - Class names are `ty-` prefixed (BEM-ish); state comes from React Aria data
