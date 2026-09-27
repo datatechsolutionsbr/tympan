@@ -129,6 +129,25 @@ fn main() {
     }
     out.push_str("];\n");
 
+    // A content hash of the embedded files, for cache-busting URLs, computed
+    // here so a host that only needs the version does not link the files.
+    let mut hash: u64 = 0xcbf2_9ce4_8422_2325;
+    for file in [
+        "styles.css",
+        "tokens.css",
+        "print-themes.css",
+        "elements.js",
+    ] {
+        println!("cargo:rerun-if-changed=generated/{file}");
+        for byte in
+            std::fs::read(dir.join(file)).unwrap_or_else(|e| panic!("generated/{file}: {e}"))
+        {
+            hash ^= u64::from(byte);
+            hash = hash.wrapping_mul(0x0100_0000_01b3);
+        }
+    }
+    writeln!(out, "\n/// A content hash of the embedded stylesheets and element bundle (cache-busting query).\npub const ASSETS_VERSION: &str = \"{hash:016x}\";").unwrap();
+
     let dest = PathBuf::from(std::env::var("OUT_DIR").unwrap()).join("themes.rs");
     std::fs::write(dest, out).unwrap();
 }

@@ -69,9 +69,16 @@ export class TyThemePaletteElement extends TyElement {
     })
   }
 
-  /** Apply `appearance` to the document, store it and announce it. */
-  select(appearance: Appearance): void {
-    writeStored(storage(), String(this.props.storageKey), appearance)
+  /**
+   * Store `choice` over what is stored (fields left out keep following
+   * the defaults, so an organization default still reaches a person who
+   * only picked a mode), apply the result and announce it.
+   */
+  select(choice: Partial<Appearance>): void {
+    const key = String(this.props.storageKey)
+    const stored = { ...readStored(storage(), key), ...choice }
+    writeStored(storage(), key, stored)
+    const appearance = this.appearance
     this.#applyToDocument(appearance)
     this.emit('ty-theme-change', { ...appearance })
   }
@@ -270,7 +277,7 @@ export class TyThemePaletteElement extends TyElement {
   }
 
   #run(row: Row): void {
-    this.select(choose(this.appearance, row))
+    this.select(choose(row))
     this.#close(true)
   }
 

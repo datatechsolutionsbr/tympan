@@ -67,6 +67,14 @@ fn button_full_width_pill() {
 }
 
 #[test]
+fn button_toggle() {
+    fn app() -> Element {
+        rsx! { TyButton { variant: ButtonVariant::Quiet, pressed: "false", expanded: "false", controls: "panel", haspopup: "dialog", test_id: "toggle", instance: "i", "Filters" } }
+    }
+    common::assert_matches_fixture(app, "ty-button/toggle.html");
+}
+
+#[test]
 fn switch_off() {
     fn app() -> Element {
         rsx! { TySwitch { instance: "i", "Autosave" } }
@@ -85,7 +93,7 @@ fn switch_on_with_description() {
 #[test]
 fn switch_tile_large() {
     fn app() -> Element {
-        rsx! { TySwitch { layout: SwitchLayout::Tile, size: SwitchSize::Large, value: "yes", instance: "i", "Notifications" } }
+        rsx! { TySwitch { layout: SwitchLayout::Tile, size: SwitchSize::Large, value: "yes", test_id: "notifications", instance: "i", "Notifications" } }
     }
     common::assert_matches_fixture(app, "ty-switch/tile-large.html");
 }

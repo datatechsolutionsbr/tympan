@@ -41,7 +41,7 @@ export function readStored(storage: Pick<Storage, 'getItem'> | undefined, key: s
   }
 }
 
-export function writeStored(storage: Pick<Storage, 'setItem'> | undefined, key: string, value: Appearance): void {
+export function writeStored(storage: Pick<Storage, 'setItem'> | undefined, key: string, value: Partial<Appearance>): void {
   try {
     storage?.setItem(key, JSON.stringify(value))
   } catch {
@@ -126,15 +126,15 @@ export function sections(query: string, current: Appearance, labels: RowLabels, 
   return out
 }
 
-/** The appearance after choosing `row`. */
-export function choose(current: Appearance, row: Row): Appearance {
+/** The one field choosing `row` sets. */
+export function choose(row: Row): Partial<Appearance> {
   switch (row.group) {
     case 'preset':
     case 'print':
-      return { ...current, theme: row.value }
+      return { theme: row.value }
     case 'mode':
-      return { ...current, mode: row.value as Mode }
+      return { mode: row.value as Mode }
     case 'density':
-      return { ...current, density: row.value as Density }
+      return { density: row.value as Density }
   }
 }

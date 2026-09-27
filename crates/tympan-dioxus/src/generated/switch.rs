@@ -86,6 +86,8 @@ pub fn TySwitch(
     #[props(default)] layout: SwitchLayout,
     /// Accessible name when there is no visible label.
     #[props(into)] accessible_label: Option<String>,
+    /// Test hook on the native checkbox (`data-testid`).
+    #[props(into)] test_id: Option<String>,
     /// Base of the ids the anatomy needs; a generated one when not given.
     #[props(into)] instance: Option<String>,
     #[props(into)] id: Option<String>,
@@ -113,6 +115,7 @@ pub fn TySwitch(
             "size": Some(size.as_str()),
             "layout": Some(layout.as_str()),
             "accessible-label": accessible_label.as_deref().filter(|v| !v.is_empty()),
+            "test-id": test_id.as_deref().filter(|v| !v.is_empty()),
             label {
                 class: "ty-switch",
                 "data-layout": Some(layout.as_str()),
@@ -132,6 +135,7 @@ pub fn TySwitch(
                     "aria-label": if !(slot_default) { accessible_label.as_deref().filter(|v| !v.is_empty()) } else { None },
                     "aria-labelledby": if slot_default { Some(format!("{instance}-label")) } else { None },
                     "aria-describedby": if slot_description { Some(format!("{instance}-description")) } else { None },
+                    "data-testid": test_id.as_deref().filter(|v| !v.is_empty()),
                     onchange: move |event: FormEvent| { if let Some(handler) = onchange { handler.call(SwitchChange { checked: event.checked() }) } },
                 }
                 span {

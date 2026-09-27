@@ -15,6 +15,7 @@ export const switchDefinition = {
     size: { type: 'enum', values: ['small', 'regular', 'large'], default: 'regular', attribute: 'size', doc: 'Track size.' },
     layout: { type: 'enum', values: ['inline', 'tile'], default: 'inline', attribute: 'layout', doc: '`tile`: text at the start, control at the end, the whole row is the target.' },
     accessibleLabel: { type: 'string', attribute: 'accessible-label', doc: 'Accessible name when there is no visible label.' },
+    testId: { type: 'string', attribute: 'test-id', doc: 'Test hook on the native checkbox (`data-testid`).' },
   },
   events: [{ type: 'change', kind: 'native', detail: { checked: 'boolean' }, reactProp: 'onChange', rustProp: 'onchange', doc: 'The native change of the checkbox; `checked` is the new state.' }],
   slots: {
@@ -46,6 +47,7 @@ export const switchDefinition = {
           'aria-label': { prop: 'accessibleLabel', when: ['!slot:default'] },
           'aria-labelledby': { idref: 'label', when: ['slot:default'] },
           'aria-describedby': { idref: 'description', when: ['slot:description'] },
+          'data-testid': { prop: 'testId' },
         },
       },
       { tag: 'span', class: 'ty-switch__track', attrs: { 'aria-hidden': { value: 'true' } }, children: [{ tag: 'span', class: 'ty-switch__thumb' }] },
@@ -63,7 +65,7 @@ export const switchDefinition = {
   examples: [
     { name: 'off', props: {}, slots: { default: 'Autosave' } },
     { name: 'on-with-description', props: { checked: true, name: 'autosave' }, slots: { default: 'Autosave', description: 'Save every change' } },
-    { name: 'tile-large', props: { layout: 'tile', size: 'large', value: 'yes' }, slots: { default: 'Notifications' } },
+    { name: 'tile-large', props: { layout: 'tile', size: 'large', value: 'yes', testId: 'notifications' }, slots: { default: 'Notifications' } },
     { name: 'read-only', props: { checked: true, readOnly: true }, slots: { default: 'Managed by your organization' } },
     { name: 'disabled-unlabelled', props: { disabled: true, accessibleLabel: 'Dark mode' }, slots: {} },
   ],

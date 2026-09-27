@@ -144,6 +144,16 @@ pub fn TyButton(
     #[props(into)] value: Option<String>,
     /// Accessible name when there is no visible label; also the tooltip of an icon-only button.
     #[props(into)] accessible_label: Option<String>,
+    /// A toggle button's state, `true` or `false` (`aria-pressed`); left out for an ordinary button.
+    #[props(into)] pressed: Option<String>,
+    /// `true` or `false` while the button shows or hides a popup or region (`aria-expanded`).
+    #[props(into)] expanded: Option<String>,
+    /// Id of the element the button controls (`aria-controls`).
+    #[props(into)] controls: Option<String>,
+    /// The kind of popup the button opens (`aria-haspopup`: `menu`, `dialog`, `listbox`, …).
+    #[props(into)] haspopup: Option<String>,
+    /// Test hook on the native button (`data-testid`).
+    #[props(into)] test_id: Option<String>,
     /// Base of the ids the anatomy needs; a generated one when not given.
     #[props(into)] instance: Option<String>,
     #[props(into)] id: Option<String>,
@@ -177,6 +187,11 @@ pub fn TyButton(
             "name": name.as_deref().filter(|v| !v.is_empty()),
             "value": value.as_deref().filter(|v| !v.is_empty()),
             "accessible-label": accessible_label.as_deref().filter(|v| !v.is_empty()),
+            "pressed": pressed.as_deref().filter(|v| !v.is_empty()),
+            "expanded": expanded.as_deref().filter(|v| !v.is_empty()),
+            "controls": controls.as_deref().filter(|v| !v.is_empty()),
+            "haspopup": haspopup.as_deref().filter(|v| !v.is_empty()),
+            "test-id": test_id.as_deref().filter(|v| !v.is_empty()),
             button {
                 class: "ty-button",
                 "type": Some(r#type.as_str()),
@@ -186,6 +201,11 @@ pub fn TyButton(
                 "aria-busy": (busy).then_some("true"),
                 "aria-disabled": (busy).then_some("true"),
                 "aria-label": accessible_label.as_deref().filter(|v| !v.is_empty()),
+                "aria-pressed": pressed.as_deref().filter(|v| !v.is_empty()),
+                "aria-expanded": expanded.as_deref().filter(|v| !v.is_empty()),
+                "aria-controls": controls.as_deref().filter(|v| !v.is_empty()),
+                "aria-haspopup": haspopup.as_deref().filter(|v| !v.is_empty()),
+                "data-testid": test_id.as_deref().filter(|v| !v.is_empty()),
                 "title": if icon_only { accessible_label.as_deref().filter(|v| !v.is_empty()) } else { None },
                 "data-variant": Some(variant.as_str()),
                 "data-size": Some(size.as_str()),

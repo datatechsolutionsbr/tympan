@@ -142,16 +142,8 @@ pub mod assets {
     }
 
     /// A short content hash of every file together, for cache-busting URLs.
-    pub fn version() -> String {
-        // FNV-1a over the embedded bytes: stable across builds of the same inputs.
-        let mut hash: u64 = 0xcbf2_9ce4_8422_2325;
-        for asset in ALL {
-            for byte in asset.body.bytes() {
-                hash ^= u64::from(byte);
-                hash = hash.wrapping_mul(0x0100_0000_01b3);
-            }
-        }
-        format!("{hash:016x}")
+    pub const fn version() -> &'static str {
+        super::ASSETS_VERSION
     }
 }
 

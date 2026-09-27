@@ -26,6 +26,8 @@ export interface TySwitchProps {
   layout?: "inline" | "tile"
   /** Accessible name when there is no visible label. */
   accessibleLabel?: string
+  /** Test hook on the native checkbox (`data-testid`). */
+  testId?: string
   /** The visible label. */
   children?: ReactNode
   /** A secondary line, announced as the description. */
@@ -48,9 +50,9 @@ export const TySwitch = forwardRef<HTMLElement, TySwitchProps>(function TySwitch
   const p: Record<string, unknown> = { ...DEFAULTS }
   for (const [key, value] of Object.entries(props)) if (value !== undefined) p[key] = value
   const slots: Record<string, boolean> = { "default": filled(props.children), "description": filled(props.description) }
-  return createElement("ty-switch", { ref: host, id: props.id, className: props.className, 'data-ty-instance': instance, "checked": truthy(p.checked) ? true : undefined, "disabled": truthy(p.disabled) ? true : undefined, "read-only": truthy(p.readOnly) ? true : undefined, "name": text(p.name), "value": text(p.value), "size": text(p.size), "layout": text(p.layout), "accessible-label": text(p.accessibleLabel) },
+  return createElement("ty-switch", { ref: host, id: props.id, className: props.className, 'data-ty-instance': instance, "checked": truthy(p.checked) ? true : undefined, "disabled": truthy(p.disabled) ? true : undefined, "read-only": truthy(p.readOnly) ? true : undefined, "name": text(p.name), "value": text(p.value), "size": text(p.size), "layout": text(p.layout), "accessible-label": text(p.accessibleLabel), "test-id": text(p.testId) },
     createElement("label", { className: "ty-switch", "data-layout": text(p.layout), "data-size": text(p.size), "data-selected": truthy(p.checked) ? '' : undefined, "data-disabled": truthy(p.disabled) ? '' : undefined, "data-readonly": truthy(p.readOnly) ? '' : undefined },
-      createElement("input", { className: "ty-visually-hidden", type: "checkbox", role: "switch", name: text(p.name), value: text(p.value), checked: Boolean(p.checked), disabled: truthy(p.disabled) || undefined, "aria-readonly": truthy(p.readOnly) ? 'true' : undefined, "aria-label": (!slots["default"]) ? (text(p.accessibleLabel)) : undefined, "aria-labelledby": (slots["default"]) ? (`${instance}-label`) : undefined, "aria-describedby": (slots["description"]) ? (`${instance}-description`) : undefined, onChange: (event) => handlers.current.onChange?.({ checked: event.currentTarget.checked }, event) }),
+      createElement("input", { className: "ty-visually-hidden", type: "checkbox", role: "switch", name: text(p.name), value: text(p.value), checked: Boolean(p.checked), disabled: truthy(p.disabled) || undefined, "aria-readonly": truthy(p.readOnly) ? 'true' : undefined, "aria-label": (!slots["default"]) ? (text(p.accessibleLabel)) : undefined, "aria-labelledby": (slots["default"]) ? (`${instance}-label`) : undefined, "aria-describedby": (slots["description"]) ? (`${instance}-description`) : undefined, "data-testid": text(p.testId), onChange: (event) => handlers.current.onChange?.({ checked: event.currentTarget.checked }, event) }),
       createElement("span", { className: "ty-switch__track", "aria-hidden": "true" },
         createElement("span", { className: "ty-switch__thumb" }),
       ),

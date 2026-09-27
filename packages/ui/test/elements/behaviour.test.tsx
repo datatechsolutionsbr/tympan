@@ -219,6 +219,17 @@ describe('<ty-theme-palette>', () => {
     expect(screen.getByRole('option', { name: /Astrolábio/ })).toBeInTheDocument()
   })
 
+  it('stores only the field that was chosen, so the rest keeps following the defaults', async () => {
+    const container = html('<ty-theme-palette open storage-key="partial" default-theme="astrlabe" themes="astrlabe"></ty-theme-palette>')
+    await userEvent.type(screen.getByRole('combobox'), 'dark')
+    await userEvent.keyboard('{Enter}')
+    expect(JSON.parse(localStorage.getItem('partial')!)).toEqual({ mode: 'dark' })
+    container.firstElementChild!.setAttribute('apply', '')
+    container.firstElementChild!.setAttribute('default-theme', 'neutral')
+    expect(document.documentElement).toHaveAttribute('data-ty-theme', 'neutral')
+    expect(document.documentElement).toHaveAttribute('data-ty-mode', 'dark')
+  })
+
   it('works the same in right-to-left documents', async () => {
     document.documentElement.setAttribute('dir', 'rtl')
     html('<ty-theme-palette open themes="astrlabe,tympan"></ty-theme-palette>')

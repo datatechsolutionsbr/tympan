@@ -32,6 +32,16 @@ export interface TyButtonProps {
   value?: string
   /** Accessible name when there is no visible label; also the tooltip of an icon-only button. */
   accessibleLabel?: string
+  /** A toggle button's state, `true` or `false` (`aria-pressed`); left out for an ordinary button. */
+  pressed?: string
+  /** `true` or `false` while the button shows or hides a popup or region (`aria-expanded`). */
+  expanded?: string
+  /** Id of the element the button controls (`aria-controls`). */
+  controls?: string
+  /** The kind of popup the button opens (`aria-haspopup`: `menu`, `dialog`, `listbox`, …). */
+  haspopup?: string
+  /** Test hook on the native button (`data-testid`). */
+  testId?: string
   /** The label. */
   children?: ReactNode
   /** A leading icon (decorative). */
@@ -56,8 +66,8 @@ export const TyButton = forwardRef<HTMLElement, TyButtonProps>(function TyButton
   const p: Record<string, unknown> = { ...DEFAULTS }
   for (const [key, value] of Object.entries(props)) if (value !== undefined) p[key] = value
   const slots: Record<string, boolean> = { "default": filled(props.children), "icon": filled(props.icon), "trailing-icon": filled(props.trailingIcon) }
-  return createElement("ty-button", { ref: host, id: props.id, className: props.className, 'data-ty-instance': instance, "variant": text(p.variant), "size": text(p.size), "shape": text(p.shape), "icon-only": truthy(p.iconOnly) ? true : undefined, "full-width": truthy(p.fullWidth) ? true : undefined, "busy": truthy(p.busy) ? true : undefined, "disabled": truthy(p.disabled) ? true : undefined, "type": text(p.type), "name": text(p.name), "value": text(p.value), "accessible-label": text(p.accessibleLabel) },
-    createElement("button", { className: "ty-button", type: text(p.type), name: text(p.name), value: text(p.value), disabled: truthy(p.disabled) || undefined, "aria-busy": truthy(p.busy) ? 'true' : undefined, "aria-disabled": truthy(p.busy) ? 'true' : undefined, "aria-label": text(p.accessibleLabel), title: (truthy(p.iconOnly)) ? (text(p.accessibleLabel)) : undefined, "data-variant": text(p.variant), "data-size": text(p.size), "data-shape": text(p.shape), "data-icon-only": truthy(p.iconOnly) ? '' : undefined, "data-full-width": truthy(p.fullWidth) ? '' : undefined, "data-busy": truthy(p.busy) ? '' : undefined, onClick: (event) => handlers.current.onClick?.(event) },
+  return createElement("ty-button", { ref: host, id: props.id, className: props.className, 'data-ty-instance': instance, "variant": text(p.variant), "size": text(p.size), "shape": text(p.shape), "icon-only": truthy(p.iconOnly) ? true : undefined, "full-width": truthy(p.fullWidth) ? true : undefined, "busy": truthy(p.busy) ? true : undefined, "disabled": truthy(p.disabled) ? true : undefined, "type": text(p.type), "name": text(p.name), "value": text(p.value), "accessible-label": text(p.accessibleLabel), "pressed": text(p.pressed), "expanded": text(p.expanded), "controls": text(p.controls), "haspopup": text(p.haspopup), "test-id": text(p.testId) },
+    createElement("button", { className: "ty-button", type: text(p.type), name: text(p.name), value: text(p.value), disabled: truthy(p.disabled) || undefined, "aria-busy": truthy(p.busy) ? 'true' : undefined, "aria-disabled": truthy(p.busy) ? 'true' : undefined, "aria-label": text(p.accessibleLabel), "aria-pressed": text(p.pressed), "aria-expanded": text(p.expanded), "aria-controls": text(p.controls), "aria-haspopup": text(p.haspopup), "data-testid": text(p.testId), title: (truthy(p.iconOnly)) ? (text(p.accessibleLabel)) : undefined, "data-variant": text(p.variant), "data-size": text(p.size), "data-shape": text(p.shape), "data-icon-only": truthy(p.iconOnly) ? '' : undefined, "data-full-width": truthy(p.fullWidth) ? '' : undefined, "data-busy": truthy(p.busy) ? '' : undefined, onClick: (event) => handlers.current.onClick?.(event) },
       (truthy(p.busy)) ? createElement("span", { className: "ty-button__busy", "aria-hidden": "true" }) : null,
       (!truthy(p.busy)) && (slots["icon"]) ? createElement("span", { className: "ty-button__icon", "aria-hidden": "true" },
         props.icon,
