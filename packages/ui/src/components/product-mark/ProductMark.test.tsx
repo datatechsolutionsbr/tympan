@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { ProductMark } from './ProductMark'
+import { plateGeometry, ProductMark } from './ProductMark'
 import { PRODUCT_MARKS } from './marks'
 
 describe('ProductMark', () => {
@@ -22,10 +22,18 @@ describe('ProductMark', () => {
     expect(fills.some((f) => f?.includes('--ty-mark-accent'))).toBe(true)
   })
 
-  it('draws Tympan as its plate mark: three circles and the horizon', () => {
+  it('draws Tympan as its plate: rim, four almucantars, horizon, zenith and twelve ticks', () => {
     const { container } = render(<ProductMark product="tympan" />)
-    expect(container.querySelectorAll('circle')).toHaveLength(3)
-    expect(container.querySelectorAll('line')).toHaveLength(1)
+    // clip circle + 4 almucantars + horizon + rim + zenith
+    expect(container.querySelectorAll('circle')).toHaveLength(8)
+    expect(container.querySelectorAll('line')).toHaveLength(12)
+  })
+
+  it('the plate geometry puts the horizon and zenith where the home page plate has them', () => {
+    const g = plateGeometry()
+    expect(g.almucantar(0).cy).toBeCloseTo(-71.33, 1)
+    expect(g.almucantar(20).r).toBeCloseTo(149.78, 1)
+    expect(g.zenith).toBeCloseTo(122.58, 1)
   })
 
   it('has symbol and horizontal artwork for every other product, each with one accent path', () => {

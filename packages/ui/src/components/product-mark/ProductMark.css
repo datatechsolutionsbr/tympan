@@ -1,16 +1,19 @@
 /* ProductMark: the ink is currentColor; the accent dot reads --ty-mark-accent. */
 @layer tympan.components {
-  :root {
+  /* Gold for the Instrumento marks; Tympan's plate follows the theme's accent. */
+  .ty-product-mark {
     --ty-mark-accent: #a67c2e;
   }
-  :root[data-ty-mode='dark'],
-  [data-ty-mode='dark'] {
+  [data-ty-mode='dark'] .ty-product-mark {
     --ty-mark-accent: #b98b3e;
   }
   @media (prefers-color-scheme: dark) {
-    :root:not([data-ty-mode='light']) {
+    :root:not([data-ty-mode='light']) .ty-product-mark {
       --ty-mark-accent: #b98b3e;
     }
+  }
+  .ty-product-mark.ty-product-mark[data-product='tympan'] {
+    --ty-mark-accent: var(--ty-accent, #166e5a);
   }
   .ty-product-mark {
     display: inline-block;
