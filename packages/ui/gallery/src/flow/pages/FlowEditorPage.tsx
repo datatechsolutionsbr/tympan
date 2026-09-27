@@ -1,17 +1,17 @@
 // Gallery: the analysis flow editor inside the research shell, in the states
-// of the storyboards (#/editor?state=…): canvas (F2), picker (Q2), drag (Q3),
+// of the storyboards (#/flow/editor?state=…): canvas (F2), picker (Q2), drag (Q3),
 // search (Q4), mismatch (Q5), list (Q6). Known values only: the frozen
 // edition 2026-09-20 with 582 records and the counts per phase 9 · 26 · 24 ·
 // 18; everything else is a neutral placeholder.
 
 import { useEffect, useMemo } from 'react'
 import { ArrowRight, Check } from 'lucide-react'
-import { Button, TympanProvider, Tag, messagesPtBR } from '@datatechsolutions/tympan'
-import { FlowEditor } from '../../../src/editor/FlowEditor'
-import { autoLayout } from '../../../src/layout/autoLayout'
-import type { FlowConnector, FlowNode } from '../../../src/model/types'
-import { STEP_MEDIA_TYPE, stepDragType } from '../../../src/steps/StepPalette'
-import { createFlowEditorStore } from '../../../src/state/editorState'
+import { Button, TympanProvider, Tag, messagesPtBR } from '../../../../src'
+import { FlowEditor } from '../../../../src/flow/editor/FlowEditor'
+import { autoLayout } from '../../../../src/flow/layout/autoLayout'
+import type { FlowConnector, FlowNode } from '../../../../src/flow/model/types'
+import { STEP_MEDIA_TYPE, stepDragType } from '../../../../src/flow/steps/StepPalette'
+import { createFlowEditorStore } from '../../../../src/flow/state/editorState'
 import { useHashParams } from '../shell/params'
 import { ResearchShell, useDockTools } from '../shell/ResearchShell'
 
@@ -108,7 +108,7 @@ export function FlowEditorPage() {
   const description = state === 'drag' ? t.drag : state === 'list' ? t.list : undefined
   return (
     <TympanProvider locale={locale} {...(locale === 'pt-BR' ? { baseMessages: messagesPtBR } : {})}>
-      <div lang={locale} dir={rtl ? 'rtl' : 'ltr'} className="ty-gallery-story">
+      <div lang={locale} dir={rtl ? 'rtl' : 'ltr'} className="ty-flow-gallery-story">
         <ResearchShell
           locale={locale}
           area="analyses"

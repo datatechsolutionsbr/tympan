@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Button, TympanProvider } from '@datatechsolutions/tympan'
-import { DataSourceNodeForm, DecisionNodeForm, OutputSchemaBuilder, ReportOutputNodeForm, StartNodeForm, type OutputSchema } from '../../../src'
+import { Button, TympanProvider } from '../../../../src'
+import { DataSourceNodeForm, DecisionNodeForm, OutputSchemaBuilder, ReportOutputNodeForm, StartNodeForm, type OutputSchema } from '../../../../src/flow'
 
 const noop = () => {}
 const sources = [
@@ -20,7 +20,7 @@ export function FormsSection() {
   const [dsOpen, setDsOpen] = useState(false)
   const [schema, setSchema] = useState<OutputSchema | Record<string, unknown> | undefined>({ type: 'object', properties: { position: { type: 'string' }, confidence: { type: 'number' } }, required: ['position'] })
   return (
-    <section className="ty-gallery-section" aria-labelledby="forms-title">
+    <section className="ty-flow-gallery-section" aria-labelledby="forms-title">
       <h2 id="forms-title">Node forms</h2>
       <h3>Decision step (B-002)</h3>
       <DecisionNodeForm

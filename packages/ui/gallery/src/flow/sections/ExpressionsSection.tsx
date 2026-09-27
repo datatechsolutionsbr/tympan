@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { TympanProvider } from '@datatechsolutions/tympan'
-import { ComputeNodeForm, defaultRule, ExpressionCatalogProvider, exampleExpressionCatalog, RuleEditor, RuleNodeForm, SimulationNodeForm, TraceTree, type RuleValue } from '../../../src'
+import { TympanProvider } from '../../../../src'
+import { ComputeNodeForm, defaultRule, ExpressionCatalogProvider, exampleExpressionCatalog, RuleEditor, RuleNodeForm, SimulationNodeForm, TraceTree, type RuleValue } from '../../../../src/flow'
 
 const noop = () => {}
 const trace = {
@@ -22,7 +22,7 @@ export function ExpressionsSection() {
   const [ruleAr, setRuleAr] = useState<RuleValue>(defaultRule())
   return (
     <ExpressionCatalogProvider catalog={exampleExpressionCatalog}>
-      <section className="ty-gallery-section" aria-labelledby="expr-title">
+      <section className="ty-flow-gallery-section" aria-labelledby="expr-title">
         <h2 id="expr-title">Expressions and rules</h2>
         <h3>Compute step</h3>
         <ComputeNodeForm value={{ kind: 'compute', expression: { operation: 'count', list: { ref: 'records' } } }} references={['records', 'assertions']} onSave={noop} onCancel={noop} onDryRun={() => Promise.resolve({ result: 37, trace })} />

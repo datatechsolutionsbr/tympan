@@ -20,9 +20,9 @@ import {
   useTheme,
   type ActionBarItem,
   type IconComponent,
-} from '@datatechsolutions/tympan'
-import type { CanvasToolItem } from '../../../src/toolbar/canvasTools'
-import { dockItemsFromCanvasTools } from '../../../src/toolbar/dockItems'
+} from '../../../../src'
+import type { CanvasToolItem } from '../../../../src/flow/toolbar/canvasTools'
+import { dockItemsFromCanvasTools } from '../../../../src/flow/toolbar/dockItems'
 import { nextLocale, setHashParam } from './params'
 
 export type ShellArea = 'overview' | 'base' | 'sources' | 'provenance' | 'instruments' | 'assignments' | 'analyses' | 'editions' | 'bibliography' | 'people'
@@ -62,9 +62,9 @@ export function ProvenanceGlyph(props: { className?: string }) {
 
 const GROUPS: Array<[string, Array<[ShellArea, IconComponent, string?]>]> = [
   ['research', [['overview', Home]]],
-  ['evidence', [['base', Database], ['sources', Link2], ['provenance', ProvenanceGlyph as unknown as IconComponent, '#/provenance']]],
+  ['evidence', [['base', Database], ['sources', Link2], ['provenance', ProvenanceGlyph as unknown as IconComponent, '#/flow/provenance']]],
   ['collection', [['instruments', FileText], ['assignments', Inbox]]],
-  ['results', [['analyses', ChartColumn, '#/editor'], ['editions', Lock], ['bibliography', BookOpen]]],
+  ['results', [['analyses', ChartColumn, '#/flow/editor'], ['editions', Lock], ['bibliography', BookOpen]]],
   ['team', [['people', Users]]],
 ]
 

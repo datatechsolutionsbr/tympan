@@ -7,7 +7,7 @@
 // does not exist), so the real items read "no proof" and every check on them
 // is pending. Everything else is a bracketed placeholder.
 
-import type { EditionComparison, ProofCertificate, ProvActor, ProvItem, ProvStatement, TracedPassage } from '../../../../src'
+import type { EditionComparison, ProofCertificate, ProvActor, ProvItem, ProvStatement, TracedPassage } from '../../../../../src/flow'
 
 export type Lang = 'pt-BR' | 'en' | 'es' | 'ar' | 'ja'
 

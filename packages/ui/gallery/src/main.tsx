@@ -1,4 +1,4 @@
-import { StrictMode, useEffect, useState } from 'react'
+import { lazy, StrictMode, Suspense, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import '../../src/styles.css'
 // Opt-in print themes (data-ty-theme="print-<style>"), loaded after the token sheet.
@@ -12,6 +12,9 @@ import { Gallery } from './Gallery'
 import { ResearchShellDemo } from './ResearchShell'
 
 const STORAGE_KEY = 'ty-gallery-theme'
+
+// The flow canvas pages (the /flow subpath) load on first visit to #/flow/...
+const FlowGallery = lazy(() => import('./flow/FlowGallery').then((m) => ({ default: m.FlowGallery })))
 
 function useHashRoute() {
   const [hash, setHash] = useState(() => window.location.hash)
@@ -38,6 +41,10 @@ function App() {
             <Customizer />
           ) : hash.startsWith('#/research-shell') ? (
             <ResearchShellDemo />
+          ) : hash.startsWith('#/flow') ? (
+            <Suspense fallback={null}>
+              <FlowGallery hash={hash} />
+            </Suspense>
           ) : (
             <Gallery page={hash.match(/^#\/g\/([\w-]+)/)?.[1]} />
           )}

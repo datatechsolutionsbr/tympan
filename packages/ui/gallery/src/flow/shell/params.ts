@@ -1,4 +1,4 @@
-// Gallery state in the hash: #/editor?lang=pt-BR&state=picker
+// Gallery state in the hash: #/flow/editor?lang=pt-BR&state=picker
 import { useEffect, useState } from 'react'
 
 export function useHashParams(): URLSearchParams {

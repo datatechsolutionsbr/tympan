@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Button, TympanProvider } from '@datatechsolutions/tympan'
-import { createFlowEditorStore, ExecutionTimeline, FlowEditorStateProvider, RunReplayDialog, RunRewindDialog, RunViews, VersionHistoryPanel, type RunSummary, type TimelineEntry } from '../../../src'
+import { Button, TympanProvider } from '../../../../src'
+import { createFlowEditorStore, ExecutionTimeline, FlowEditorStateProvider, RunReplayDialog, RunRewindDialog, RunViews, VersionHistoryPanel, type RunSummary, type TimelineEntry } from '../../../../src/flow'
 
 const runs: RunSummary[] = [
   { id: 'run-sample-2', status: 'completed', startedAt: '2026-01-02T10:00:00Z', durationMs: 3400, actor: { kind: 'agent', name: '[agente]', agentKey: '[agente]' }, nodeResults: [{ nodeId: 'load-sample', status: 'completed', durationMs: 200, outputs: { rows: 30 } }, { nodeId: 'apply-sample-rule', status: 'completed', durationMs: 1100 }, { nodeId: 'count', status: 'completed', durationMs: 400, outputs: { a: 12, b: 18 } }] },
@@ -23,7 +23,7 @@ export function RunSection() {
   const [rewind, setRewind] = useState(false)
   const [versions, setVersions] = useState(false)
   return (
-    <section className="ty-gallery-section" aria-labelledby="run-title">
+    <section className="ty-flow-gallery-section" aria-labelledby="run-title">
       <h2 id="run-title">Runs, trace and replay</h2>
       <FlowEditorStateProvider store={store}>
         <RunViews flowId="sample-analysis" loadRuns={() => Promise.resolve(runs)} defaultRunView={{ mode: 'panel', open: true }} />

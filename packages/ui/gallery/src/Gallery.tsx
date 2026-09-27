@@ -22,6 +22,9 @@ export function GalleryToolbar({ extra }: { extra?: React.ReactNode }) {
           </a>
         ))}
         <a href="#/research-shell">Research shell</a>
+        <a href="#/flow/provenance">Flow: provenance</a>
+        <a href="#/flow/editor">Flow: DAG editor</a>
+        <a href="#/flow/components">Flow: components</a>
         <a href="#/customizer">Theme customizer</a>
       </nav>
       <div className="ty-gallery-toolbar__controls">

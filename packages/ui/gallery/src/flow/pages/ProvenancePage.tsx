@@ -1,12 +1,12 @@
 // Provenance gallery page, inside the research shell at the storyboard size.
-// The hash picks the view: #/provenance?view=graph|tree|timeline|certificate|
+// The hash picks the view: #/flow/provenance?view=graph|tree|timeline|certificate|
 // compare|number and the language (&lang=pt-BR|en|es|ar|ja). Sample data
 // only (see provenance/sampleData.ts); a "Dados de exemplo" tag stays visible.
 
 import { useMemo, useState } from 'react'
 import { Check, ChevronDown, FileDown, FileText, Lock } from 'lucide-react'
-import { Button, TympanProvider, Tag } from '@datatechsolutions/tympan'
-import { NumberTrace, ProvenanceGraph, ProvenanceQuestion, ProvenanceViewSwitch, type ProvenanceViewMode } from '../../../src'
+import { Button, TympanProvider, Tag } from '../../../../src'
+import { NumberTrace, ProvenanceGraph, ProvenanceQuestion, ProvenanceViewSwitch, type ProvenanceViewMode } from '../../../../src/flow'
 import { setHashParam, useHashParams } from '../shell/params'
 import { ResearchShell, useDockTools } from '../shell/ResearchShell'
 import { certificates, comparison, passage, REAL_TIMES, trail, WORDS, type Lang } from './provenance/sampleData'
