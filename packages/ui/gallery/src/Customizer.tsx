@@ -1,6 +1,7 @@
 // Theme customizer: tailor seeds, radius, contrast, glass and CTA live, see
 // every component in light and dark, check contrast, export DTCG and CSS.
 import {
+  astrlabePreset,
   fakhirPreset,
   tympanPreset,
   generateThemeCss,
@@ -21,6 +22,7 @@ import { Showcase } from './Showcase'
 const BUILT_IN: Record<string, ThemeConfig> = {
   tympan: tympanPreset,
   fakhir: fakhirPreset,
+  astrlabe: astrlabePreset,
   neutral: neutralPreset,
   'high-contrast': highContrastPreset,
 }

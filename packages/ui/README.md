@@ -18,7 +18,7 @@ npm run gallery:build -w @datatechsolutions/tympan  # static gallery in dist-gal
 
 Install (workspace or package registry), then import one stylesheet. It
 already contains the `@datatechsolutions/tympan-tokens` stylesheet (every `--ty-*` custom
-property for the `tympan`, `fakhir`, `neutral` and `high-contrast` presets, light and
+property for the `tympan`, `fakhir`, `astrlabe`, `neutral` and `high-contrast` presets, light and
 dark), so no other CSS is needed:
 
 ```sh
@@ -137,7 +137,7 @@ export function App() {
   hard-coded copy. `I18nAdapterProvider` and `RoutingProvider` (wave 2)
   plug a host i18n library or router in without TympanProvider.
 - **`ThemeProvider` / `useTheme`**: sets `data-ty-theme` (`tympan` by default,
-  `fakhir`, `neutral`, `high-contrast`, an opt-in `print-*` theme or a generated theme), `data-ty-mode` (`system`, `light`,
+  `fakhir`, `astrlabe`, `neutral`, `high-contrast`, an opt-in `print-*` theme or a generated theme), `data-ty-mode` (`system`, `light`,
   `dark`) and `data-ty-density` (`compact`, `default`, `comfortable`) on
   `<html>` (or on a wrapper with `target="scope"`). Persistence belongs to the
   host: pass controlled values and callbacks, or `storageKey` for localStorage.

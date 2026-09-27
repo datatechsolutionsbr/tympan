@@ -107,6 +107,81 @@ export const fakhirPreset: ThemeConfig = {
   label: 'Fakhir',
 }
 
+/**
+ * The Astrlabe workflow engine's look (`data-ty-theme="astrlabe"`): slate
+ * neutrals, an indigo brand (indigo 500 as the accent family, one step darker
+ * where text needs 4.5:1 on light grounds), translucent glass surfaces and the
+ * rounder corners of that app (12 px controls, about 20 px cards). The call to
+ * action is the indigo to purple gradient its primary buttons fill with.
+ */
+export const astrlabePreset: ThemeConfig = {
+  name: 'astrlabe',
+  label: 'Astrlabe',
+  seeds: {
+    brand: seedFromColor('#6366f1', 0.2),
+    neutral: { hue: 257, chroma: 0.02 },
+    danger: { hue: 25, chroma: 0.2 },
+    warning: { hue: 70, chroma: 0.15 },
+    success: { hue: 150, chroma: 0.16 },
+    info: { hue: 240, chroma: 0.1 },
+  },
+  chartHues: [277, 237, 163, 75, 12, 293, 185, 48],
+  radius: 12,
+  contrast: 'default',
+  glass: true,
+  cta: 'gradient',
+  pins: {
+    light: {
+      brand: '#4f46e5',
+      'focus-ring': '#6366f1',
+      'brand-strong': '#4338ca',
+      'brand-soft': 'rgb(99 102 241 / 0.12)',
+      'on-brand': '#ffffff',
+      bg: '#f8fafc',
+      surface: 'rgb(255 255 255 / 0.72)',
+      'surface-raised': 'rgb(255 255 255 / 0.9)',
+      'surface-solid': '#ffffff',
+      'surface-raised-solid': '#ffffff',
+      'surface-sunken': '#f1f5f9',
+      line: 'rgb(148 163 184 / 0.3)',
+      'line-strong': 'rgb(100 116 139 / 0.4)',
+      ink: '#0f172a',
+      'ink-2': '#334155',
+      'ink-3': '#546175',
+      success: '#15803d',
+      warning: '#a16207',
+      danger: '#b91c1c',
+      neutral: '#546175',
+    },
+    dark: {
+      brand: '#818cf8',
+      'focus-ring': '#818cf8',
+      'brand-strong': '#a5b4fc',
+      'brand-soft': 'rgb(99 102 241 / 0.2)',
+      'on-brand': '#1e1b4b',
+      bg: '#020617',
+      surface: 'rgb(30 41 59 / 0.62)',
+      'surface-raised': 'rgb(30 41 59 / 0.86)',
+      'surface-solid': '#131c2f',
+      'surface-raised-solid': '#1b2539',
+      'surface-sunken': '#0b1222',
+      line: 'rgb(148 163 184 / 0.18)',
+      'line-strong': 'rgb(148 163 184 / 0.32)',
+      ink: '#f8fafc',
+      'ink-2': '#cbd5e1',
+      'ink-3': '#94a3b8',
+      success: '#4ade80',
+      warning: '#fbbf24',
+      danger: '#f87171',
+      neutral: '#94a3b8',
+    },
+  },
+  ctaPins: {
+    light: ['#4f46e5', '#7c3aed', '#9333ea'],
+    dark: ['#4f46e5', '#7c3aed', '#9333ea'],
+  },
+}
+
 /** Default hues with high contrast, opaque surfaces and a thicker focus ring. */
 export const highContrastPreset: ThemeConfig = {
   name: 'high-contrast',
@@ -118,5 +193,5 @@ export const highContrastPreset: ThemeConfig = {
   cta: 'solid',
 }
 
-export const presets: readonly ThemeConfig[] = [tympanPreset, fakhirPreset, neutralPreset, highContrastPreset]
+export const presets: readonly ThemeConfig[] = [tympanPreset, fakhirPreset, astrlabePreset, neutralPreset, highContrastPreset]
 export const DEFAULT_THEME = 'tympan'

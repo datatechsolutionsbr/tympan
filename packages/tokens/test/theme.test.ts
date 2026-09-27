@@ -3,6 +3,7 @@ import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import {
   apcaContrast,
+  astrlabePreset,
   contrastRatio,
   fakhirPreset,
   generateRamp,
@@ -198,7 +199,7 @@ describe('per-script typography', () => {
 
 describe('fakhir preset', () => {
   it('ships by name with the default theme values, so an app can select it explicitly', () => {
-    expect(presets.map((p) => p.name)).toEqual(['tympan', 'fakhir', 'neutral', 'high-contrast'])
+    expect(presets.map((p) => p.name)).toEqual(['tympan', 'fakhir', 'astrlabe', 'neutral', 'high-contrast'])
     expect(fakhirPreset.label).toBe('Fakhir')
     for (const mode of MODES) {
       expect(themeVariables(resolveTheme(fakhirPreset, mode))).toEqual(themeVariables(resolveTheme(tympanPreset, mode)))
@@ -208,5 +209,39 @@ describe('fakhir preset', () => {
   const built = join(__dirname, '..', 'dist', 'tokens.css')
   it.runIf(existsSync(built))('is scoped to data-ty-theme="fakhir" in the built stylesheet', () => {
     expect(readFileSync(built, 'utf8')).toContain('[data-ty-theme="fakhir"]')
+  })
+})
+
+describe('astrlabe preset', () => {
+  it('is a built-in UI preset, not a print theme', () => {
+    expect(presets).toContain(astrlabePreset)
+    expect(printThemePresets.map((p) => p.name)).not.toContain('astrlabe')
+    expect(astrlabePreset.label).toBe('Astrlabe')
+    expect(astrlabePreset.glass).toBe(true)
+  })
+
+  it('pins slate neutrals and the indigo brand in both modes', () => {
+    const light = new Map(themeVariables(resolveTheme(astrlabePreset, 'light')))
+    expect(light.get('--ty-brand')).toBe('#4f46e5')
+    expect(light.get('--ty-focus-ring')).toBe('#6366f1')
+    expect(light.get('--ty-bg')).toBe('#f8fafc')
+    expect(light.get('--ty-ink')).toBe('#0f172a')
+    expect(light.get('--ty-radius-control')).toBe('12px')
+    expect(light.get('--ty-radius-card')).toBe('19px')
+    const dark = new Map(themeVariables(resolveTheme(astrlabePreset, 'dark')))
+    expect(dark.get('--ty-brand')).toBe('#818cf8')
+    expect(dark.get('--ty-bg')).toBe('#020617')
+    expect(dark.get('--ty-glass-blur-sheet')).toBe('20px')
+  })
+
+  it('meets WCAG 2.2 AA in light and dark, default and high contrast', () => {
+    for (const mode of MODES) for (const contrast of ['default', 'high'] as const) everyPairPasses(astrlabePreset, mode, contrast)
+  })
+
+  const built = join(__dirname, '..', 'dist', 'tokens.css')
+  it.runIf(existsSync(built))('is scoped to data-ty-theme="astrlabe" in the built stylesheet', () => {
+    const text = readFileSync(built, 'utf8')
+    expect(text).toContain('[data-ty-theme="astrlabe"]')
+    expect(text).toContain('[data-ty-theme="astrlabe"][data-ty-mode="dark"]')
   })
 })

@@ -5,7 +5,7 @@ accessible React components and a flow and provenance canvas.
 
 | Package | Path | What it is |
 |---|---|---|
-| `@datatechsolutions/tympan-tokens` | `packages/tokens` | Design tokens in the W3C DTCG format (colour, space, radius, type, elevation and glass, motion, z) and an OKLCH theme generator, built to `--ty-*` CSS custom properties, JSON and a TypeScript export. Presets: `tympan` (default), `fakhir`, `neutral`, `high-contrast`. Formerly `@fakhir/tokens`. |
+| `@datatechsolutions/tympan-tokens` | `packages/tokens` | Design tokens in the W3C DTCG format (colour, space, radius, type, elevation and glass, motion, z) and an OKLCH theme generator, built to `--ty-*` CSS custom properties, JSON and a TypeScript export. Presets: `tympan` (default), `fakhir`, `astrlabe`, `neutral`, `high-contrast`. Formerly `@fakhir/tokens`. |
 | `@datatechsolutions/tympan` | `packages/ui` | Accessible React components (React 18.3 or 19) on React Aria Components, styled with plain CSS in `@layer tympan`. Formerly `@fakhir/ui` (before that `@fakhir/design-system`). |
 | `@datatechsolutions/tympan-print` | `packages/print` | Static, server-renderable React components for data books (spreads, lettered panels, method charts with eight renderers, proof-state marks, number trace, lakebrasil and Datatech marks) in the book-style presets of the tokens package, for PDF and EPUB. |
 | `@datatechsolutions/tympan-flow` | `packages/flow` | The flow and provenance canvas: a W3C PROV provenance graph viewer, a DAG workflow editor, run inspection and the forms and dialogs around them, built on `@datatechsolutions/tympan`. Formerly `@fakhir/flow` (before that `@fakhir/flow-canvas`). |
