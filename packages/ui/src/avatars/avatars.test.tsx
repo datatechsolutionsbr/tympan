@@ -61,10 +61,10 @@ describe('avatarSvg', () => {
     for (const [pkg, style] of Object.entries(MODULES)) {
       for (const seed of SEEDS) {
         // The sentinels never occur in the artwork itself...
-        expect(createAvatar(style as unknown as Style<object>, { seed }).toString(), pkg).not.toMatch(/fe01[abc][123]/i)
+        expect(createAvatar(style as unknown as Style<object>, { seed }).toString(), pkg).not.toMatch(/fe01[a-d][123]/i)
         // ...and none survives in the output.
         const svg = avatarSvg({ seed, style })
-        expect(svg, pkg).not.toMatch(/fe01[abc][123]/i)
+        expect(svg, pkg).not.toMatch(/fe01[a-d][123]/i)
         expect(svg.startsWith('<svg '), pkg).toBe(true)
       }
     }
@@ -94,9 +94,10 @@ describe('avatarSvg', () => {
     expect(svg.toLowerCase()).toMatch(new RegExp(`${tympanLight['ink-1']}|${tympanLight['ink-2']}|${tympanLight['ink-3']}`))
   })
 
-  it('keeps figure art in the artist colours and only paints the background', () => {
+  it('keeps figure art in the artist colours and only paints the background, on light paper', () => {
     const svg = avatarSvg({ seed: 'Iris Calder', style: lorelei })
     expect((svg.match(/var\(--ty-avatar-/g) ?? []).length).toBe(1)
+    expect(svg).toMatch(/var\(--ty-avatar-paper-[123], var\(--ty-(brand|neutral)-[12]00\)\)/)
   })
 
   it('scopes internal ids and sets the size and accessible name when asked', () => {

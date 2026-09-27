@@ -19,8 +19,12 @@ export interface AvatarStyle {
 
 export type AvatarKind = 'person' | 'agent'
 
-/** Colour slots every style draws with: soft backgrounds, ink shapes, solid fills that carry white artwork. */
-export const AVATAR_SLOTS = ['soft-1', 'soft-2', 'soft-3', 'ink-1', 'ink-2', 'ink-3', 'solid-1', 'solid-2', 'solid-3'] as const
+/**
+ * Colour slots the styles draw with: soft backgrounds (follow the mode), ink
+ * shapes, solid fills that carry white artwork, and light paper behind the
+ * black line art of figure styles (light in both modes, so faces stay legible).
+ */
+export const AVATAR_SLOTS = ['soft-1', 'soft-2', 'soft-3', 'ink-1', 'ink-2', 'ink-3', 'solid-1', 'solid-2', 'solid-3', 'paper-1', 'paper-2', 'paper-3'] as const
 export type AvatarSlot = (typeof AVATAR_SLOTS)[number]
 /** One CSS colour per slot. */
 export type AvatarPalette = Record<AvatarSlot, string>
@@ -42,11 +46,15 @@ const SENTINEL: Record<AvatarSlot, string> = {
   'solid-1': 'fe01c1',
   'solid-2': 'fe01c2',
   'solid-3': 'fe01c3',
+  'paper-1': 'fe01d1',
+  'paper-2': 'fe01d2',
+  'paper-3': 'fe01d3',
 }
 const s = (...slots: AvatarSlot[]) => slots.map((slot) => SENTINEL[slot])
 const SOFT = s('soft-1', 'soft-2', 'soft-3')
 const INK = s('ink-1', 'ink-2', 'ink-3')
 const SOLID = s('solid-1', 'solid-2', 'solid-3')
+const PAPER = s('paper-1', 'paper-2', 'paper-3')
 
 /**
  * Which DiceBear colour options each style gets. Figure styles only get a
@@ -57,12 +65,12 @@ const COLOR_OPTIONS: Record<string, Record<string, string[]>> = {
   'Bootstrap Icons': { backgroundColor: SOLID },
   Identicon: { backgroundColor: s('soft-1', 'soft-3'), rowColor: INK },
   Initials: { backgroundColor: s('soft-1', 'soft-2'), textColor: s('ink-2') },
-  Lorelei: { backgroundColor: SOFT },
-  'Lorelei Neutral': { backgroundColor: SOFT },
-  Notionists: { backgroundColor: SOFT },
-  'Open Peeps': { backgroundColor: SOFT },
-  'Pixel Art': { backgroundColor: SOFT },
-  'Pixel Art Neutral': { backgroundColor: SOFT },
+  Lorelei: { backgroundColor: PAPER },
+  'Lorelei Neutral': { backgroundColor: PAPER },
+  Notionists: { backgroundColor: PAPER },
+  'Open Peeps': { backgroundColor: PAPER },
+  'Pixel Art': { backgroundColor: PAPER },
+  'Pixel Art Neutral': { backgroundColor: PAPER },
   Rings: { backgroundColor: s('soft-1', 'soft-3'), ringColor: INK },
   Shapes: { backgroundColor: SOFT, shape1Color: INK, shape2Color: SOLID, shape3Color: s('ink-3', 'solid-1') },
   Thumbs: { backgroundColor: SOFT, shapeColor: INK },
@@ -82,6 +90,9 @@ const CSS_SOURCES: Record<AvatarKind, AvatarPalette> = {
     'solid-1': 'var(--ty-brand-600)',
     'solid-2': 'var(--ty-brand-700)',
     'solid-3': 'var(--ty-brand-800)',
+    'paper-1': 'var(--ty-brand-100)',
+    'paper-2': 'var(--ty-brand-200)',
+    'paper-3': 'var(--ty-neutral-100)',
   },
   agent: {
     'soft-1': mix('var(--ty-ink)', 8, 'var(--ty-bg)'),
@@ -93,6 +104,9 @@ const CSS_SOURCES: Record<AvatarKind, AvatarPalette> = {
     'solid-1': 'var(--ty-neutral-600)',
     'solid-2': 'var(--ty-neutral-700)',
     'solid-3': 'var(--ty-neutral-800)',
+    'paper-1': 'var(--ty-neutral-50)',
+    'paper-2': 'var(--ty-neutral-100)',
+    'paper-3': 'var(--ty-neutral-200)',
   },
 }
 
@@ -146,6 +160,9 @@ export function avatarPalette(theme: string | ThemeConfig, mode: 'light' | 'dark
       'solid-1': hex(r.ramps.neutral[600]),
       'solid-2': hex(r.ramps.neutral[700]),
       'solid-3': hex(r.ramps.neutral[800]),
+      'paper-1': hex(r.ramps.neutral[50]),
+      'paper-2': hex(r.ramps.neutral[100]),
+      'paper-3': hex(r.ramps.neutral[200]),
     }
   }
   return {
@@ -158,6 +175,9 @@ export function avatarPalette(theme: string | ThemeConfig, mode: 'light' | 'dark
     'solid-1': hex(r.ramps.brand[600]),
     'solid-2': hex(r.ramps.brand[700]),
     'solid-3': hex(r.ramps.brand[800]),
+    'paper-1': hex(r.ramps.brand[100]),
+    'paper-2': hex(r.ramps.brand[200]),
+    'paper-3': hex(r.ramps.neutral[100]),
   }
 }
 
