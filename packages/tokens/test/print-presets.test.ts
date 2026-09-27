@@ -3,7 +3,6 @@ import { contrastRatio, deltaE2000, parseColor } from '../src/color.ts'
 import {
   ESTADOS_PROVA,
   PRINT_PRESET_NAMES,
-  PRINT_STYLE_ALIASES,
   googleFontsUrl,
   mergePrintStyle,
   printPresets,
@@ -14,6 +13,7 @@ import {
   toGrey,
   type PrintStyle,
 } from '../src/print-presets.ts'
+import { PRINT_STYLE_ALIASES } from '../src/print-aliases.ts'
 
 /**
  * Brand colours that data colours must stay away from (ΔE2000 >= 10), as in

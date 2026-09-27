@@ -158,7 +158,9 @@ maps each one to its new id, and `resolvePrintStyleName`, `printPresetById`,
 `resolvePrintStyle` (which also takes an id), `LivroPrint estilo` and the UI
 theme lookup (`print-<old id>`, through `PRINT_THEME_ALIASES` and
 `resolvePrintThemeName`, used by `ThemeProvider` and `themeInitScript`) accept
-them, with a one-time console warning in development builds.
+them, with a one-time console warning in development builds. The alias maps
+and resolvers are also published alone, without the presets, as
+`@datatechsolutions/tympan-tokens/print-aliases`.
 
 | Old id | New id | Label |
 | --- | --- | --- |

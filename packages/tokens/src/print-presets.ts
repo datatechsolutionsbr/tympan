@@ -12,6 +12,7 @@
 // `[data-ty-print-style="<name>"]`.
 
 import { luminance, parseColor, toHex, type Rgba } from './color.ts'
+import { PRINT_STYLE_ALIASES, warnDeprecatedPrintId, type PrintStyleAlias } from './print-aliases.ts'
 
 export type RenderizadorGrafico = 'limpo' | 'mao' | 'isotype' | 'gravura' | 'prancheta' | 'aquarela' | 'riso' | 'pontos'
 export type MarcaProva = 'pilula' | 'carimbo' | 'circulo' | 'sublinhado' | 'barra' | 'etiqueta' | 'formas' | 'ponto'
@@ -1433,59 +1434,8 @@ export const DEFAULT_PRINT_STYLE: PrintPresetName = 'jornal'
 // Deprecated ids
 // ---------------------------------------------------------------------------
 
-/**
- * Deprecated style ids and the current id each one maps to. The styles were
- * renamed to neutral, descriptive ids (no trademarks, institutions or people's
- * names); the old ids keep working through `resolvePrintStyleName`,
- * `resolvePrintStyle`, `LivroPrint estilo` and, as `print-<old id>`, the UI
- * theme lookup (`resolvePrintThemeName`), with a one-time console warning in
- * development builds.
- *
- * Removal: the aliases (and the `'modulor'` emblem) will be dropped in the
- * next major version of @datatechsolutions/tympan-tokens and
- * @datatechsolutions/tympan-print; migrate stored data books to the new ids.
- */
-export const PRINT_STYLE_ALIASES = {
-  economist: 'semanario',
-  ft: 'papel-salmao',
-  schiphol: 'sinalizacao',
-  'jornal-do-brasil': 'jornal-1959',
-  'atlas-ibge': 'atlas-oficial',
-  deardata: 'cartao-postal',
-  tufte: 'minimo-de-tinta',
-  holmes: 'infografico-ilustrado',
-  bayer: 'diagrama-modernista',
-  dubois: 'graficos-1900',
-  minard: 'fluxo-historico',
-  mccandless: 'blocos-coloridos',
-  corbusier: 'proporcao-modular',
-  aicher: 'pictogramas',
-  vignelli: 'mapa-de-metro',
-  'athos-bulcao': 'azulejo-modernista',
-  crouwel: 'grade-holandesa',
-  'saul-bass': 'papel-recortado',
-} as const satisfies Record<string, PrintPresetName>
-
-/** A deprecated style id (see PRINT_STYLE_ALIASES). */
-export type PrintStyleAlias = keyof typeof PRINT_STYLE_ALIASES
-/** Any id a style can be named by: a current name or a deprecated alias. */
+/** Any id a style can be named by: a current name or a deprecated alias (PRINT_STYLE_ALIASES). */
 export type PrintStyleId = PrintPresetName | PrintStyleAlias
-
-const isDev = (() => {
-  try {
-    return (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env?.NODE_ENV !== 'production'
-  } catch {
-    return true
-  }
-})()
-const warned = new Set<string>()
-
-/** Warns once per id (development builds only) that a deprecated id was used. @internal */
-export function warnDeprecatedPrintId(old: string, current: string, kind = 'print style'): void {
-  if (!isDev || warned.has(old)) return
-  warned.add(old)
-  console.warn(`[@datatechsolutions/tympan] The ${kind} "${old}" is deprecated; use "${current}". The old id will be removed in the next major version.`)
-}
 
 /**
  * The current name of a style id: a current name is returned as is, a

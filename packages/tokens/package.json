@@ -35,6 +35,11 @@
       "types": "./dist/values.d.ts",
       "default": "./dist/values.js"
     },
+    "./print-aliases": {
+      "tympan-source": "./src/print-aliases.ts",
+      "types": "./dist/print-aliases.d.ts",
+      "default": "./dist/print-aliases.js"
+    },
     "./tokens.css": "./dist/tokens.css",
     "./print-themes.css": "./dist/print-themes.css",
     "./print-themes/*": "./dist/print-themes/*",
