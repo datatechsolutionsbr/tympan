@@ -1,8 +1,9 @@
-// Emblems beside a spread title (PrintEstrutura.emblema, G2 of the style audit): Otl Aicher's pictograms,
-// the concrete bicolour circle, Le Corbusier's Modulor, a cordel woodcut, a magnifier (science
-// communication), Nigel Holmes's buildings. Decoration only, in the style's inks: never data, never a mark.
+// Emblems beside a spread title (PrintEstrutura.emblema, G2 of the style audit): sports pictograms
+// (pictogramas), the concrete bicolour circle, a modular human figure (proporcao-modular), a cordel woodcut,
+// a magnifier (science communication), buildings (infografico-ilustrado). Decoration only, in the style's
+// inks: never data, never a mark.
 import type { ReactNode } from 'react'
-import type { Emblema as NomeEmblema } from '@datatechsolutions/tympan-tokens'
+import { warnDeprecatedPrintId, type Emblema as NomeEmblema } from '@datatechsolutions/tympan-tokens'
 import { usePrint } from '../contexto.tsx'
 
 const D = 'var(--ty-print-destaque)'
@@ -12,7 +13,7 @@ const P = 'var(--ty-print-papel)'
 const O = (i: number, reserva: string) => `var(--ty-print-ornamento-${i}, ${reserva})`
 
 /** Each emblem in its own box (mm); drawn at that size. */
-const EMBLEMAS: Record<NomeEmblema, { w: number; h: number; corpo: ReactNode }> = {
+const EMBLEMAS: Record<Exclude<NomeEmblema, 'modulor'>, { w: number; h: number; corpo: ReactNode }> = {
   pictogramas: {
     w: 40,
     h: 12,
@@ -55,7 +56,7 @@ const EMBLEMAS: Record<NomeEmblema, { w: number; h: number; corpo: ReactNode }> 
       </>
     ),
   },
-  modulor: {
+  'figura-modular': {
     w: 26,
     h: 26,
     corpo: (
@@ -136,8 +137,11 @@ const EMBLEMAS: Record<NomeEmblema, { w: number; h: number; corpo: ReactNode }> 
 /** The style's emblem, or nothing. `escala` resizes it (1 = the size of the studies). */
 export function Emblema({ escala = 1 }: { escala?: number }) {
   const { estilo } = usePrint()
-  const nome = estilo.estrutura.emblema
-  if (!nome) return null
+  const pedido = estilo.estrutura.emblema
+  if (!pedido) return null
+  // 'modulor' is the deprecated name of 'figura-modular' (removed with the style aliases).
+  if (pedido === 'modulor') warnDeprecatedPrintId('modulor', 'figura-modular', 'emblem')
+  const nome = pedido === 'modulor' ? 'figura-modular' : pedido
   const e = EMBLEMAS[nome]
   return (
     <svg className="ty-print-emblema" data-emblema={nome} viewBox={`0 0 ${e.w} ${e.h}`} width={`${e.w * escala}mm`} height={`${e.h * escala}mm`} aria-hidden="true" focusable="false">

@@ -2,11 +2,11 @@ import type { ReactNode } from 'react'
 import {
   googleFontsUrl,
   papelEscuro,
-  printPresets,
+  printPresetById,
   printStyleToCss,
   resolvePrintStyle,
-  type PrintPresetName,
   type PrintStyle,
+  type PrintStyleId,
   type PrintStyleOverrides,
 } from '@datatechsolutions/tympan-tokens'
 import { PrintContextoProvider } from '../contexto.tsx'
@@ -14,8 +14,8 @@ import { PRINT_CSS } from '../estilos.generated.ts'
 import { cx, useIdSeguro } from '../util.ts'
 
 export interface LivroPrintProps {
-  /** The book style: a preset object or its name. */
-  estilo: PrintStyle | PrintPresetName
+  /** The book style: a preset object or its name (a deprecated id from PRINT_STYLE_ALIASES resolves to its new style). */
+  estilo: PrintStyle | PrintStyleId
   /** Editor overrides of any token (partial). */
   tokens?: PrintStyleOverrides
   /** Black and white print. */
@@ -35,7 +35,7 @@ export interface LivroPrintProps {
  * and provides the resolved style to every component below.
  */
 export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carregarFontes = true, lang = 'pt-BR', className, children }: LivroPrintProps) {
-  const base = typeof estilo === 'string' ? printPresets[estilo] : estilo
+  const base = typeof estilo === 'string' ? printPresetById(estilo) : estilo
   const resolvido = resolvePrintStyle(base, { pb, overrides: tokens })
   const escopo = useIdSeguro('ty-print-livro')
   const seletor = `[data-ty-print-livro="${escopo}"]`

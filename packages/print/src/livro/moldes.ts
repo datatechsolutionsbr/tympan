@@ -5,7 +5,7 @@
 // so a dense page reaches the foot of the type area instead of stopping
 // half-way. The content JSON puts each node in an area (`area: "d"`), and the
 // molde decides where that area sits. Styles change the geometry through
-// `estrutura` (Tufte's notes column in the outer margin, for instance), never
+// `estrutura` (the notes column in the outer margin of minimo-de-tinta, for instance), never
 // the content.
 import type { PrintStyle } from '@datatechsolutions/tympan-tokens'
 
@@ -150,9 +150,9 @@ export const MOLDES: Record<string, Molde> = {
 
 /**
  * The page geometry a style gives a molde. Styles with notes in the outer
- * margin (Tufte) move the small blocks of a row (the numbers, how to read the
+ * margin (minimo-de-tinta) move the small blocks of a row (the numbers, how to read the
  * chart, the trace, the source) into a two-column margin beside the main
- * block, as in the study estilo-10-tufte.
+ * block, as in the study of that style (diagramacao/estilos/estilo-10).
  */
 export function linhasDoMolde(molde: Molde, lado: 'par' | 'impar', estilo: PrintStyle): LinhaMolde[] {
   const linhas = molde[lado]
@@ -172,7 +172,7 @@ function margemGenerica(l: LinhaMolde): LinhaMolde {
   return l
 }
 
-/** Tufte: the study keeps the main column at four columns and runs the sidenotes down the outer two. */
+/** minimo-de-tinta: the study keeps the main column at four columns and runs the sidenotes down the outer two. */
 const MARGEM: Record<string, LinhaMolde[]> = {
   'metodo:par': [cheia('titulo'), L([['a', 4], ['b', 2]]), L([['lead', 4], ['b', 2]]), L([['d', 4], ['fonte', 2]], { cresce: true })],
   'metodo:impar': [L([['titulo2', 4], ['d2', 2]]), L([['e', 4], ['d2', 2]], { cresce: true }), L([['f', 4], ['g', 2]], { pe: true })],

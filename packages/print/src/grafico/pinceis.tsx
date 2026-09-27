@@ -197,7 +197,7 @@ export function circuloMao(
 }
 
 // ---------------------------------------------------------------------------
-// limpo: ruled, crisp (jornal, dashboard, Tufte, Suíço, Economist…)
+// limpo: ruled, crisp (jornal, dashboard, minimo-de-tinta, suico, semanario…)
 // ---------------------------------------------------------------------------
 
 const limpo: Pincel = {
@@ -250,7 +250,7 @@ const limpo: Pincel = {
 }
 
 // ---------------------------------------------------------------------------
-// mao: rough.js contours (Du Bois, caderno)
+// mao: rough.js contours (graficos-1900, caderno)
 // ---------------------------------------------------------------------------
 
 function opcoesMao(c: CtxPincel, extra: Record<string, unknown> = {}) {
@@ -514,7 +514,7 @@ const aquarela: Pincel = {
 }
 
 // ---------------------------------------------------------------------------
-// pontos: one dot per unit (Dear Data)
+// pontos: one dot per unit (cartao-postal)
 // ---------------------------------------------------------------------------
 
 /** Dot grid for a bar: columns of `k` dots, each column worth exactly k units, so length stays true to the data. */

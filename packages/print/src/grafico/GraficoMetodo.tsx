@@ -212,7 +212,7 @@ function Barras({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numbe
   }
 }
 
-/** Windows of a building column (Holmes): texture only, clipped to the column's exact height. */
+/** Windows of a building column (infografico-ilustrado): texture only, clipped to the column's exact height. */
 function Janelas({ x, base, w, h }: { x: number; base: number; w: number; h: number }) {
   const lado = Math.max(0.5, Math.min(1.1, w / 4.5))
   const colunas = Math.max(1, Math.floor((w - lado) / (2 * lado)))
@@ -292,7 +292,7 @@ function Colunas({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numb
           return (
             <g key={g.i} className="ty-print-g-linha" data-linha={g.i} data-destaque={g.destaque ? '' : undefined}>
               {corte && g.colunas.length > 1 ? (
-                // The cut between the two columns of the group (Tufte and Holmes dashed, Bayer solid).
+                // The cut between the two columns of the group (minimo-de-tinta and infografico-ilustrado dashed, diagrama-modernista solid).
                 <g className="ty-print-g-corte" strokeDasharray={corte === 'tracejada' ? '0.7 0.6' : undefined}>
                   {c.p.linha(c, { chave: `corte-${g.i}`, x1: n((g.colunas[0]!.x + g.colunas[0]!.w + g.colunas[1]!.x) / 2), y1: y1, x2: n((g.colunas[0]!.x + g.colunas[0]!.w + g.colunas[1]!.x) / 2), y2: n(L.area.y0 - 1), cor: corte === 'cheia' ? 'tinta' : 'tinta-3', largura: corte === 'cheia' ? 0.45 : 0.2, tipo: 'guia' })}
                 </g>

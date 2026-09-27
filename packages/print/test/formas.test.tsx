@@ -78,7 +78,7 @@ describe('every shape draws every value in every renderer', () => {
       })
 })
 
-describe('the folding bar keeps one line = dobra in both figures (same scale, as in the Du Bois study)', () => {
+describe('the folding bar keeps one line = dobra in both figures (same scale, as in the graficos-1900 study)', () => {
   it('mm per unit is the same for the first cut and the 17 cuts', () => {
     const ks = [PRIM, SOMA].map((spec) => {
       const { container, unmount } = desenhar(spec, 'ziguezague', 'limpo')

@@ -1,6 +1,6 @@
 // Callouts drawn inside the chart (G3 of the style audit): handwritten notes
 // with an arrow and the value circled (caderno), speech balloons (divulgação,
-// Holmes) and text with a leader line (FT). They sit in a band above the plot
+// infografico-ilustrado) and text with a leader line (papel-salmao). They sit in a band above the plot
 // that the layout reserves, point at the value they explain, and are wrapped
 // conservatively so they never leave the figure. The note is text; the data
 // still come from the marks.

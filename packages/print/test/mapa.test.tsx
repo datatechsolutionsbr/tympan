@@ -101,7 +101,7 @@ describe('classes', () => {
 })
 
 describe('Mapa', () => {
-  const html = (el: React.ReactElement, estilo: 'jornal' | 'caderno' | 'cordel' | 'deardata' = 'jornal', pb = false) =>
+  const html = (el: React.ReactElement, estilo: 'jornal' | 'caderno' | 'cordel' | 'cartao-postal' = 'jornal', pb = false) =>
     renderToStaticMarkup(
       <LivroPrint estilo={estilo} pb={pb}>
         {el}
@@ -169,7 +169,7 @@ describe('Mapa', () => {
   })
 
   it('is deterministic in every renderer, and never NaN', () => {
-    for (const estilo of ['jornal', 'caderno', 'cordel', 'deardata'] as const) {
+    for (const estilo of ['jornal', 'caderno', 'cordel', 'cartao-postal'] as const) {
       for (const pb of [false, true]) {
         const el = <Mapa titulo="t" alt="a" exemplo largura={90} recorte="Nordeste" destaques={['Recife/PE']} />
         const a = html(el, estilo, pb)

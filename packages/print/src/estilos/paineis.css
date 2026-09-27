@@ -139,7 +139,7 @@
     color: var(--ty-print-tinta-2);
   }
 
-  /* Tufte and other margin-note styles: notes take the last two columns, in small type. */
+  /* minimo-de-tinta and other margin-note styles: notes take the last two columns, in small type. */
   .ty-print-livro[data-ty-print-notas='margem'] :is(.ty-print-margem, .ty-print-anotacao) {
     grid-column: 5 / -1;
     border: 0;
@@ -807,7 +807,7 @@
 }
 
 @layer tympan-print {
-  /* Wide display faces set in capitals (Du Bois, drafting board) print smaller. */
+  /* Wide display faces set in capitals (graficos-1900, drafting board) print smaller. */
   .ty-print-livro[data-ty-print-caixa-alta] .ty-print-texto[data-nivel='1'] .ty-print-titulo {
     font-size: 16pt;
   }

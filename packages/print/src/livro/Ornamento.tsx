@@ -163,7 +163,7 @@ function pagina(moldura: Moldura, lado: 'par' | 'impar'): ReactNode {
         <polygon points={`${W},0 ${W - 96},0 ${W - 81},15 ${W},15`} fill={orn(2)} />
       )
     case 'quartos':
-      // Herbert Bayer: a quarter circle in the outer corner of each page (ochre at the foot, blue at the head).
+      // diagrama-modernista: a quarter circle in the outer corner of each page (ochre at the foot, blue at the head).
       return lado === 'par' ? <path d={`M 0 ${H - 22} A 22 22 0 0 1 22 ${H} L 0 ${H} Z`} fill={orn(1)} /> : <path d={`M ${W - 20} 0 A 20 20 0 0 0 ${W} 20 L ${W} 0 Z`} fill={orn(2)} />
     case 'reticula':
       // Pop art: a burst at the foot of the even page, outside the type area.

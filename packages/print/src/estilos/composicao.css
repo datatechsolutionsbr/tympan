@@ -32,7 +32,7 @@
     font-size: 22pt;
   }
 
-  /* Du Bois: capitals, wide spacing, centred (the plates' lettering). */
+  /* graficos-1900: capitals, wide spacing, centred (the plates' lettering). */
   .ty-print-livro[data-ty-print-titulo='centro'] :is(.ty-print-area[data-area^='titulo'], .ty-print-texto[data-nivel='1']) :is(.ty-print-titulo, .ty-print-sobretitulo) {
     text-align: center;
     letter-spacing: 0.14em;
@@ -43,7 +43,7 @@
     font-size: 15pt;
   }
 
-  /* Minard: centred italic, like the figurative map's cartouche. */
+  /* fluxo-historico: centred italic, like the figurative map's cartouche. */
   .ty-print-livro[data-ty-print-titulo='centro-italico'] :is(.ty-print-area[data-area^='titulo'], .ty-print-texto[data-nivel='1']) :is(.ty-print-titulo, .ty-print-sobretitulo) {
     text-align: center;
   }
@@ -295,7 +295,7 @@
   }
 
   /* ------------------------------------------------------------ G7 the trace, in the style's idiom */
-  /* Vignelli: a metro line with a station at each step. */
+  /* mapa-de-metro: a metro line with a station at each step. */
   .ty-print-livro[data-ty-print-rastro='metro'] .ty-print-rastro {
     gap: 2.4mm;
   }
@@ -326,7 +326,7 @@
     background: var(--ty-print-destaque);
   }
 
-  /* Schiphol: each step a sign plate, label on the yellow band with an arrow. */
+  /* sinalizacao: each step a sign plate, label on the yellow band with an arrow. */
   .ty-print-livro[data-ty-print-rastro='placa'] .ty-print-rastro {
     gap: 1.2mm;
   }
@@ -373,12 +373,12 @@
     block-size: 5.6mm;
   }
 
-  /* Du Bois: stamps pressed at a slight angle. */
-  .ty-print-livro[data-ty-print-style='dubois'] .ty-print-prova[data-forma='carimbo'] {
+  /* graficos-1900: stamps pressed at a slight angle. */
+  .ty-print-livro[data-ty-print-style='graficos-1900'] .ty-print-prova[data-forma='carimbo'] {
     transform: rotate(-3deg);
   }
 
-  .ty-print-livro[data-ty-print-style='dubois'] .ty-print-prova[data-forma='carimbo'][data-grande] {
+  .ty-print-livro[data-ty-print-style='graficos-1900'] .ty-print-prova[data-forma='carimbo'][data-grande] {
     transform: rotate(-6deg);
   }
 }

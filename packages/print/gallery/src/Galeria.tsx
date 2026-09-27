@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { PRINT_PRESET_NAMES, printPresets, type PrintPresetName } from '@datatechsolutions/tympan-tokens'
+import { PRINT_PRESET_NAMES, printPresets, resolvePrintStyleName, type PrintPresetName } from '@datatechsolutions/tympan-tokens'
 import { LivroPrint } from '../../src/index.ts'
 import { DuplaFpm, GRAFICO_DO_ESTUDO, type TipoGraficoFpm } from './fpm.tsx'
 import { DuplaMapas } from './mapas.tsx'
@@ -8,9 +8,10 @@ type Grafico = 'estudo' | 'mapa' | TipoGraficoFpm
 
 function lerUrl() {
   const q = new URLSearchParams(window.location.search)
-  const estilo = (q.get('estilo') ?? 'jornal') as PrintPresetName
+  // Old links with a deprecated style id open the renamed style.
+  const estilo: PrintPresetName = resolvePrintStyleName(q.get('estilo') ?? 'jornal') ?? 'jornal'
   return {
-    estilo: PRINT_PRESET_NAMES.includes(estilo) ? estilo : 'jornal',
+    estilo,
     pb: q.get('pb') === '1',
     grafico: (q.get('grafico') ?? 'estudo') as Grafico,
     foto: q.get('foto') === '1',

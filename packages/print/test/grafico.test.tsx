@@ -125,7 +125,7 @@ describe('accessible figure', () => {
   it('names the finding, keeps a data table and tags local-lake numbers', () => {
     const spec = specsFpm('halteres')[0]
     const { container, getByRole } = render(
-      <LivroPrint estilo="economist">
+      <LivroPrint estilo="semanario">
         <GraficoMetodo spec={spec} alt="Censo 2022: 132 acima, 36 abaixo." local />
       </LivroPrint>,
     )

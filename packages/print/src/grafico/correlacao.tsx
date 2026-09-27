@@ -178,7 +178,7 @@ function Eixos({ c, sx, sy, area, ex, ey, W, H, zero, amplitude }: { c: CtxCorre
         </g>
       ))}
       {amplitude ? (
-        // Range frame (Tufte): shown only by styles with figure 'amplitude', which hide the full axes and grid.
+        // Range frame (minimo-de-tinta): shown only by styles with figure 'amplitude', which hide the full axes and grid.
         <g className="ty-print-eixo-amplitude">
           <line x1={amplitude.x[0]} x2={amplitude.x[1]} y1={y1} y2={y1} style={{ stroke: 'var(--ty-print-tinta-2)', strokeWidth: 0.2 }} />
           <line x1={x0} x2={x0} y1={amplitude.y[0]} y2={amplitude.y[1]} style={{ stroke: 'var(--ty-print-tinta-2)', strokeWidth: 0.2 }} />

@@ -27,7 +27,7 @@
     margin-block-start: 0.8mm;
   }
 
-  /* The Economist: short bar and rule over each figure. */
+  /* semanario: short bar and rule over each figure. */
   .ty-print-livro[data-ty-print-figura='barra-topo'] .ty-print-figura {
     position: relative;
     padding-block-start: 2.6mm;
@@ -201,7 +201,7 @@
     stroke: none;
   }
 
-  /* The range frame is only for figure 'amplitude' (Tufte): no grid, the axis spans the data. */
+  /* The range frame is only for figure 'amplitude' (minimo-de-tinta): no grid, the axis spans the data. */
   .ty-print-eixo-amplitude {
     display: none;
   }

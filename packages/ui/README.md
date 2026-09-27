@@ -46,7 +46,7 @@ import '@datatechsolutions/tympan/styles.css'
 import '@datatechsolutions/tympan-tokens/print-themes.css'   // or print-themes/print-<style>.css for one
 import { printThemeFontUrls } from '@datatechsolutions/tympan-tokens'
 
-<ThemeProvider theme="print-tufte" fonts={printThemeFontUrls}>…</ThemeProvider>
+<ThemeProvider theme="print-minimo-de-tinta" fonts={printThemeFontUrls}>…</ThemeProvider>
 ```
 
 ### The research shell (no top bar)

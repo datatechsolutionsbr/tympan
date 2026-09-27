@@ -4,7 +4,7 @@ import { cx } from '../util.ts'
 
 export interface FigurasProps {
   /**
-   * auto (default): side by side when the style says so (`estrutura.multiplos`; without it, The Economist's
+   * auto (default): side by side when the style says so (`estrutura.multiplos`; without it, semanario's
    * pair with the bar on top and the column styles), stacked otherwise; lado: always side by side; pilha: always stacked.
    */
   arranjo?: 'auto' | 'lado' | 'pilha'

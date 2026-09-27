@@ -3,7 +3,7 @@
 // preset, in colour and in black and white.
 import { renderToStaticMarkup } from 'react-dom/server'
 import type { ReactElement } from 'react'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { ESTADOS_PROVA, PRINT_PRESET_NAMES, printPresets } from '@datatechsolutions/tympan-tokens'
 import {
   AberturaParte,
@@ -38,6 +38,7 @@ import {
   Dupla,
   tintasDoEstilo,
 } from '../src/index.ts'
+import { Emblema } from '../src/marca/Emblema.tsx'
 import { DuplaFpm, specsFpm } from '../gallery/src/fpm.tsx'
 
 const AMOSTRAS: Record<string, ReactElement> = {
@@ -155,8 +156,34 @@ describe('every component in every preset', () => {
     })
   }
 
+  it('renders a deprecated style id as its renamed style (one development warning)', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    try {
+      const antigo = renderToStaticMarkup(<LivroPrint estilo="economist" />)
+      expect(antigo).toContain('data-ty-print-style="semanario"')
+      expect(antigo).toContain('data-ty-print-figura="barra-topo"')
+      renderToStaticMarkup(<LivroPrint estilo="economist" />)
+      expect(warn.mock.calls.filter((c) => String(c[0]).includes('"economist"'))).toHaveLength(1)
+    } finally {
+      warn.mockRestore()
+    }
+  })
+
+  it("draws the deprecated emblem 'modulor' as 'figura-modular'", () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    try {
+      const novo = renderToStaticMarkup(<LivroPrint estilo="proporcao-modular"><Emblema /></LivroPrint>)
+      expect(novo).toContain('data-emblema="figura-modular"')
+      const antigo = renderToStaticMarkup(<LivroPrint estilo="proporcao-modular" tokens={{ estrutura: { emblema: 'modulor' } }}><Emblema /></LivroPrint>)
+      expect(antigo).toContain('data-emblema="figura-modular"')
+      expect(warn).toHaveBeenCalledTimes(1)
+    } finally {
+      warn.mockRestore()
+    }
+  })
+
   it('injects the component CSS, the preset tokens and the page size', () => {
-    const html = renderToStaticMarkup(<LivroPrint estilo="tufte" tokens={{ cor: { destaque: '#8a1c7c' } }} />)
+    const html = renderToStaticMarkup(<LivroPrint estilo="minimo-de-tinta" tokens={{ cor: { destaque: '#8a1c7c' } }} />)
     expect(html).toContain('@layer tympan-print')
     expect(html).toContain('size: 170mm 240mm')
     expect(html).toContain('--ty-print-destaque: #8a1c7c;')

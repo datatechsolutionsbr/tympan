@@ -1,7 +1,7 @@
 // Signature shapes of the comparison chart (G1 of the style audit), chosen by
 // the preset (`estrutura.forma`): the cut as the central axis (concretismo,
-// Dear Data), the folding bar of W. E. B. Du Bois, Minard's flow bands and
-// McCandless's cards. Same rule as every method chart: one linear scale per
+// cartao-postal), the folding bar (graficos-1900), the flow bands
+// (fluxo-historico) and the cards (blocos-coloridos). Same rule as every method chart: one linear scale per
 // figure turns each value into a length, height or thickness; the renderer
 // only decides how the mark looks, so each shape works in all eight of them.
 import type { ReactNode } from 'react'
@@ -106,7 +106,7 @@ function unidadeRedonda(alvo: number) {
 }
 
 // ---------------------------------------------------------------------------
-// eixo-central: the cut is the axis (concretismo; with the dot renderer, Dear Data)
+// eixo-central: the cut is the axis (concretismo; with the dot renderer, cartao-postal)
 // ---------------------------------------------------------------------------
 
 export function EixoCentral({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarras; largura: number }): ResultadoForma {
@@ -197,7 +197,7 @@ export function EixoCentral({ c, spec, largura }: { c: CtxGrafico; spec: SpecBar
 }
 
 // ---------------------------------------------------------------------------
-// ziguezague: a bar longer than one line folds back and forth (Du Bois)
+// ziguezague: a bar longer than one line folds back and forth (graficos-1900)
 // ---------------------------------------------------------------------------
 
 export function Ziguezague({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarras; largura: number }): ResultadoForma {
@@ -291,7 +291,7 @@ export function Ziguezague({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarr
 }
 
 // ---------------------------------------------------------------------------
-// fluxo: bands whose thickness is the value, splitting at the cut (Minard)
+// fluxo: bands whose thickness is the value, splitting at the cut (fluxo-historico)
 // ---------------------------------------------------------------------------
 
 export function Fluxo({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarras; largura: number }): ResultadoForma {
@@ -384,7 +384,7 @@ export function Fluxo({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarras; l
 }
 
 // ---------------------------------------------------------------------------
-// cartoes: one card per row, the numbers written large, mini columns on a shared scale (McCandless)
+// cartoes: one card per row, the numbers written large, mini columns on a shared scale (blocos-coloridos)
 // ---------------------------------------------------------------------------
 
 export function Cartoes({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarras; largura: number }): ResultadoForma {

@@ -130,7 +130,7 @@
 }
 
 @layer tympan-print {
-  /* Notes columns (two columns beside the main block, Tufte's margin): lists and key numbers stack. */
+  /* Notes columns (two columns beside the main block, the minimo-de-tinta margin): lists and key numbers stack. */
   .ty-print-area[data-colunas='2'] :is(.ty-print-chamadas, .ty-print-como-ler-letras, .ty-print-testes-lista) {
     grid-template-columns: minmax(0, 1fr);
   }

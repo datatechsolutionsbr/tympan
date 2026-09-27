@@ -72,7 +72,7 @@ function Icone({ estado }: { estado: EstadoProva }) {
 }
 
 /**
- * Geometric marks: Bauhaus shapes (square, triangle, circle…) or Vignelli/Bayer dots. The shape is the
+ * Geometric marks: Bauhaus shapes (square, triangle, circle…) or the dots of mapa-de-metro and diagrama-modernista. The shape is the
  * state; the word beside it is always printed, so neither colour nor shape alone carries the meaning.
  */
 function Forma({ estado, estilo }: { estado: EstadoProva; estilo: 'formas' | 'ponto' }) {

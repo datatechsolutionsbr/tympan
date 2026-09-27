@@ -81,7 +81,7 @@ export interface Eixo {
   x0: number
   x1: number
   marcas: Array<{ v: number; x: number; texto: string }>
-  /** Range frame (Tufte): the axis drawn only across the data. */
+  /** Range frame (minimo-de-tinta): the axis drawn only across the data. */
   amplitude: [number, number]
 }
 
@@ -381,7 +381,7 @@ export interface LayoutColunas {
 
 /** Options of the column layout that come from the style (G1): thin columns, room for the cut, callouts above. */
 export interface OpcoesColunas {
-  /** Thin columns (Tufte). */
+  /** Thin columns (minimo-de-tinta). */
   finas?: boolean
   /** Gap between the two columns of a group, in mm (room for the line of the cut). */
   vao?: number
