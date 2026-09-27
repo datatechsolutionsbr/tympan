@@ -25,6 +25,20 @@ export interface Seed {
 
 export type SeedName = 'brand' | 'neutral' | 'danger' | 'warning' | 'success' | 'info'
 
+/**
+ * Typographic roles a theme may set. They map onto the base font tokens the
+ * components read: `display` -> `--ty-font-serif` (headings h1 to h3 and KPI
+ * numbers), `body` -> `--ty-font-sans` (everything else), `mono` ->
+ * `--ty-font-mono` (identifiers). A role left out keeps the base stack.
+ */
+export type FontRole = 'display' | 'body' | 'mono'
+
+/** CSS token of each font role (`--ty-font-<name>`). */
+export const FONT_ROLE_TOKENS: Record<FontRole, 'serif' | 'sans' | 'mono'> = { display: 'serif', body: 'sans', mono: 'mono' }
+
+/** Elevation treatment: blurred shadows, none (flat print), or a hard offset shadow without blur. */
+export type Elevation = 'soft' | 'flat' | 'offset'
+
 export interface ThemeConfig {
   /** Identifier used in `data-ty-theme`. Lowercase letters, digits and dashes. */
   name: string
@@ -44,6 +58,16 @@ export interface ThemeConfig {
   pins?: Partial<Record<Mode, Partial<Record<RoleName, string>>>>
   /** Exact gradient stops for the call to action, per mode. */
   ctaPins?: Partial<Record<Mode, string[]>>
+  /** Font families per role, most preferred first, ending with a generic family. */
+  fonts?: Partial<Record<FontRole, string[]>>
+  /**
+   * Stylesheet URL that loads the families of `fonts` (for example a Google
+   * Fonts css2 URL). The token CSS never fetches it; the host or
+   * ThemeProvider's `fonts` map adds the link.
+   */
+  fontsUrl?: string
+  /** Shadow treatment; `soft` when omitted. */
+  elevation?: Elevation
 }
 
 export const RAMP_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const
@@ -261,11 +285,14 @@ export interface ResolvedTheme {
   shadows: Record<'sheet' | 'raised' | 'floating' | 'modal' | 'sheet-inset', ShadowLayer[]>
   /** Pixel dimensions (radius, glass blur, focus width). */
   dimensions: Record<string, number>
+  /** Font stacks keyed by token name (`serif`, `sans`, `mono`); empty when the theme keeps the base stacks. */
+  fonts: Partial<Record<'serif' | 'sans' | 'mono', string[]>>
   numbers: Record<string, number>
   report: ContrastResult[]
 }
 
-const DEFAULT_CHART_HUES = [250, 62, 165, 335, 215, 35, 110, 290]
+/** Hues of the eight chart colours when a theme sets none. */
+export const DEFAULT_CHART_HUES = [250, 62, 165, 335, 215, 35, 110, 290]
 
 function colorFrom(recipe: Recipe, seeds: Record<SeedName, Seed>): Oklch & { a: number } {
   const seed = recipe.seed === 'chart' || recipe.seed === 'ambient' ? undefined : seeds[recipe.seed]
@@ -411,15 +438,29 @@ export function resolveTheme(config: ThemeConfig, mode: Mode, contrastOverride?:
 
   const tint = oklchToRgb({ l: dark ? 0.12 : 0.2, c: config.seeds.neutral.chroma * 2, h: config.seeds.neutral.hue })
   const shade = (alpha: number) => ({ ...tint, a: Math.min(0.9, alpha * (dark ? 2 : 1)) })
-  const shadows: ResolvedTheme['shadows'] = {
-    sheet: [
-      { x: 0, y: 1, blur: 2, spread: 0, color: shade(0.04) },
-      { x: 0, y: 8, blur: 24, spread: -12, color: shade(0.1) },
-    ],
-    raised: [{ x: 0, y: 4, blur: 12, spread: -2, color: shade(0.08) }],
-    floating: [{ x: 0, y: 12, blur: 24, spread: -8, color: shade(0.14) }],
-    modal: [{ x: 0, y: 40, blur: 100, spread: -30, color: shade(0.35) }],
-    'sheet-inset': [{ x: 0, y: 1, blur: 0, spread: 0, inset: true, color: { r: 1, g: 1, b: 1, a: dark && config.glass ? 0.06 : 0 } }],
+  const inset: ShadowLayer = { x: 0, y: 1, blur: 0, spread: 0, inset: true, color: { r: 1, g: 1, b: 1, a: dark && config.glass ? 0.06 : 0 } }
+  const elevation = config.elevation ?? 'soft'
+  let shadows: ResolvedTheme['shadows']
+  if (elevation === 'flat') {
+    // Print-flat: surfaces sit on the page; only overlays keep a faint separation.
+    const none: ShadowLayer[] = [{ x: 0, y: 0, blur: 0, spread: 0, color: { ...tint, a: 0 } }]
+    shadows = { sheet: none, raised: none, floating: [{ x: 0, y: 2, blur: 6, spread: -2, color: shade(0.12) }], modal: [{ x: 0, y: 16, blur: 40, spread: -16, color: shade(0.3) }], 'sheet-inset': [inset] }
+  } else if (elevation === 'offset') {
+    // Hard shadow in the ink colour, no blur (cut-paper and poster styles).
+    const ink = colors.ink ?? tint
+    const hard = (d: number): ShadowLayer[] => [{ x: d, y: d, blur: 0, spread: 0, color: { ...ink, a: 1 } }]
+    shadows = { sheet: hard(3), raised: hard(2), floating: hard(4), modal: hard(6), 'sheet-inset': [inset] }
+  } else {
+    shadows = {
+      sheet: [
+        { x: 0, y: 1, blur: 2, spread: 0, color: shade(0.04) },
+        { x: 0, y: 8, blur: 24, spread: -12, color: shade(0.1) },
+      ],
+      raised: [{ x: 0, y: 4, blur: 12, spread: -2, color: shade(0.08) }],
+      floating: [{ x: 0, y: 12, blur: 24, spread: -8, color: shade(0.14) }],
+      modal: [{ x: 0, y: 40, blur: 100, spread: -30, color: shade(0.35) }],
+      'sheet-inset': [inset],
+    }
   }
 
   const R = config.radius
@@ -436,7 +477,13 @@ export function resolveTheme(config: ThemeConfig, mode: Mode, contrastOverride?:
   }
   const numbers: Record<string, number> = { 'glass-saturate': config.glass ? 1.15 : 1 }
 
-  return { name: config.name, mode, contrast, colors, ramps, cta: { angle: 135, stops: ctaStops }, shadows, dimensions, numbers, report }
+  const fonts: ResolvedTheme['fonts'] = {}
+  for (const role of ['display', 'body', 'mono'] as const) {
+    const list = config.fonts?.[role]
+    if (list?.length) fonts[FONT_ROLE_TOKENS[role]] = [...list]
+  }
+
+  return { name: config.name, mode, contrast, colors, ramps, cta: { angle: 135, stops: ctaStops }, shadows, dimensions, numbers, fonts, report }
 }
 
 // ---------------------------------------------------------------------------
@@ -475,7 +522,25 @@ export function themeVariables(t: ResolvedTheme): Array<[string, string]> {
   for (const [name, layers] of Object.entries(t.shadows)) out.push([`--ty-shadow-${name}`, shadowToCss(layers)])
   for (const [name, px] of Object.entries(t.dimensions)) out.push([`--ty-${name}`, `${px}px`])
   for (const [name, n] of Object.entries(t.numbers)) out.push([`--ty-${name}`, String(n)])
+  for (const [name, list] of Object.entries(t.fonts)) out.push([`--ty-font-${name}`, fontStackToCss(list)])
   return out
+}
+
+/**
+ * CSS `font-family` value of a family list: names with spaces or digits are
+ * quoted, keywords and single identifiers are not (the same rule as the
+ * Style Dictionary font-family transform of the build).
+ */
+export function fontStackToCss(families: readonly string[]): string {
+  return families.map((f) => (/[\s\d]/.test(f) && !/^[\w-]+$/.test(f) ? `'${f}'` : f)).join(', ')
+}
+
+/** Family list of a CSS `font-family` value (quotes removed). */
+export function parseFontStack(stack: string): string[] {
+  return stack
+    .split(',')
+    .map((f) => f.trim().replace(/^["']|["']$/g, ''))
+    .filter(Boolean)
 }
 
 export function densityVariables(density: Density): Array<[string, string]> {
