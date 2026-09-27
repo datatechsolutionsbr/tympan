@@ -6,7 +6,7 @@ export type ThemeMode = 'system' | 'light' | 'dark'
 export type ThemeDensity = 'compact' | 'default' | 'comfortable'
 
 export interface ThemeState {
-  /** Token theme (`tympan`, `fakhir`, `neutral`, `high-contrast`, an opt-in `print-*` theme or a generated one). */
+  /** Token theme (`tympan`, `fakhir`, `astrlabe`, `neutral`, `high-contrast`, an opt-in `print-*` theme or a generated one). */
   theme: string
   mode: ThemeMode
   /** `mode` with `system` resolved through `prefers-color-scheme`. */

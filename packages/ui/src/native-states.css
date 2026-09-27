@@ -1,0 +1,361 @@
+/*
+ * Native interaction states for markup rendered without React (see
+ * docs/html-contract.md). The React components get their interaction state
+ * from React Aria as data attributes (data-hovered, data-pressed,
+ * data-focus-visible, data-disabled, data-selected); markup written by
+ * another framework or by hand does not. These rules give that markup the
+ * same look from the native pseudo-classes and ARIA states instead.
+ *
+ * Every selector is scoped with :not([data-rac]): React Aria marks each
+ * element it renders with data-rac, so nothing here reaches the React
+ * components, whose behaviour (hover only for a real pointer, focus ring
+ * only for keyboard focus, press state across pointer types) stays theirs.
+ * Hover sits behind (hover: hover) so touch screens do not keep a hover
+ * look after a tap, the same rule React Aria follows.
+ */
+@layer tympan.components {
+  /* Button */
+  @media (hover: hover) {
+    .ty-button:not([data-rac], :disabled, [aria-disabled='true'], [data-disabled], [data-busy]):hover {
+      --ty-button-border: var(--ty-ink-3);
+    }
+    .ty-button[data-variant='primary']:not([data-rac], :disabled, [aria-disabled='true'], [data-disabled], [data-busy]):hover {
+      --ty-button-fill: var(--ty-cta-solid);
+      --ty-button-border: transparent;
+    }
+    .ty-button[data-variant='quiet']:not([data-rac], :disabled, [aria-disabled='true'], [data-disabled], [data-busy]):hover {
+      --ty-button-fill: var(--ty-surface-sunken);
+      --ty-button-border: transparent;
+    }
+    .ty-button[data-variant='danger']:not([data-rac], :disabled, [aria-disabled='true'], [data-disabled], [data-busy]):hover {
+      --ty-button-fill: var(--ty-danger-soft);
+      --ty-button-ink: var(--ty-on-danger-soft);
+      --ty-button-border: var(--ty-danger);
+    }
+  }
+  .ty-button:not([data-rac], :disabled, [aria-disabled='true']):active {
+    transform: scale(0.98);
+  }
+  .ty-button:not([data-rac]):focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 2px;
+  }
+  .ty-button[data-variant='primary']:not([data-rac]):focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--ty-bg),
+      0 0 0 calc(2px + var(--ty-focus-width)) var(--ty-focus-ring);
+  }
+  .ty-button:not([data-rac]):is(:disabled, [aria-disabled='true']) {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+  .ty-button:not([data-rac])[aria-current='page'] {
+    --ty-button-fill: var(--ty-accent-soft);
+    --ty-button-ink: var(--ty-accent);
+  }
+
+  /* Link */
+  @media (hover: hover) {
+    .ty-link:not([data-rac]):hover {
+      color: var(--ty-accent-strong);
+      text-decoration-line: underline;
+    }
+  }
+  .ty-link:not([data-rac]):focus-visible {
+    text-decoration-line: underline;
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 2px;
+  }
+  .ty-link:not([data-rac])[aria-current='page'] {
+    font-weight: var(--ty-font-weight-semibold);
+  }
+
+  /* Tag */
+  @media (hover: hover) {
+    .ty-tag[data-interactive]:not([data-rac]):hover {
+      --ty-tag-border: var(--ty-line-strong);
+    }
+    .ty-tag__remove:not([data-rac]):hover {
+      background: var(--ty-line);
+    }
+  }
+  .ty-tag:not([data-rac]):focus-visible,
+  .ty-tag__remove:not([data-rac]):focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* TextField: hover on the group; focus-within is already native. */
+  @media (hover: hover) {
+    .ty-text-field:not([data-rac], [data-disabled]):hover .ty-text-field__group {
+      border-color: var(--ty-ink-3);
+    }
+    .ty-text-field__action:not([data-rac]):hover {
+      background: var(--ty-surface-sunken);
+      color: var(--ty-ink);
+    }
+  }
+  .ty-text-field__action:not([data-rac]):focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 2px;
+  }
+  .ty-text-field:not([data-rac]):has(.ty-text-field__input:disabled) .ty-text-field__group {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  .ty-text-field:not([data-rac]):has(.ty-text-field__input[aria-invalid='true']) .ty-text-field__group {
+    border-color: var(--ty-danger);
+  }
+
+  /* TextArea */
+  @media (hover: hover) {
+    .ty-text-area__input:not([data-rac], :disabled):hover {
+      border-color: var(--ty-ink-3);
+    }
+  }
+  .ty-text-area__input:not([data-rac]):focus {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 2px;
+  }
+  .ty-text-area__input:not([data-rac])[aria-invalid='true'] {
+    border-color: var(--ty-danger);
+  }
+  .ty-text-area__input:not([data-rac]):disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  /* NativeSelect: already styled from :hover, :focus-visible and :disabled. */
+  .ty-native-select__control:not([data-rac])[aria-invalid='true'] {
+    border-color: var(--ty-danger);
+  }
+
+  /* Checkbox: a label.ty-checkbox__row wrapping a visually hidden native input. */
+  .ty-checkbox__row:not([data-rac]):has(> input:checked) .ty-checkbox__indicator,
+  .ty-checkbox__row:not([data-rac]):has(> input:indeterminate) .ty-checkbox__indicator {
+    border-color: var(--ty-accent);
+    background: var(--ty-accent);
+  }
+  .ty-checkbox[data-appearance='tile'] .ty-checkbox__row:not([data-rac]):has(> input:checked) {
+    border-color: var(--ty-accent);
+    background: var(--ty-accent-soft);
+  }
+  @media (hover: hover) {
+    .ty-checkbox[data-appearance='tile'] .ty-checkbox__row:not([data-rac]):hover {
+      border-color: var(--ty-line-strong);
+    }
+  }
+  .ty-checkbox__row:not([data-rac]):has(> input:focus-visible) {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--ty-radius-control);
+  }
+  .ty-checkbox__row:not([data-rac]):has(> input:disabled) {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  .ty-checkbox__row:not([data-rac]):has(> input[aria-invalid='true']) .ty-checkbox__indicator {
+    border-color: var(--ty-danger);
+  }
+
+  /* Switch: a label.ty-switch wrapping a visually hidden input[role=switch]. */
+  .ty-switch:not([data-rac]):has(> input:checked) .ty-switch__track {
+    border-color: var(--ty-accent);
+    background: var(--ty-accent);
+  }
+  .ty-switch:not([data-rac]):has(> input:checked) .ty-switch__thumb {
+    background: var(--ty-accent-ink);
+    transform: translateX(calc(var(--ty-switch-width) - var(--ty-switch-height)));
+  }
+  .ty-switch:not([data-rac]):has(> input:checked) .ty-switch__thumb:dir(rtl) {
+    transform: translateX(calc(-1 * (var(--ty-switch-width) - var(--ty-switch-height))));
+  }
+  @media (hover: hover) {
+    .ty-switch:not([data-rac]):not(:has(> input:disabled)):hover .ty-switch__track {
+      border-color: var(--ty-ink-3);
+    }
+  }
+  .ty-switch:not([data-rac]):has(> input:focus-visible) .ty-switch__track {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 2px;
+  }
+  .ty-switch:not([data-rac]):has(> input:disabled) {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  /* SegmentedControl: segments are buttons with aria-pressed or radios with aria-checked. */
+  .ty-segmented-control__segment:not([data-rac]):is([aria-pressed='true'], [aria-checked='true']) {
+    border-color: var(--ty-line);
+    background: var(--ty-accent-soft);
+    color: var(--ty-on-accent-soft);
+    box-shadow: var(--ty-shadow-raised);
+  }
+  @media (hover: hover) {
+    .ty-segmented-control__segment:not([data-rac], [aria-pressed='true'], [aria-checked='true'], :disabled):hover {
+      color: var(--ty-ink);
+    }
+  }
+  .ty-segmented-control__segment:not([data-rac]):focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 2px;
+  }
+  .ty-segmented-control__segment:not([data-rac]):disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  /* Tabs: role=tab elements carry aria-selected. */
+  .ty-tabs__tab:not([data-rac])[aria-selected='true'] {
+    color: var(--ty-accent);
+    font-weight: var(--ty-font-weight-semibold);
+  }
+  .ty-tabs__tab:not([data-rac])[aria-selected='true']::after {
+    background: var(--ty-accent);
+  }
+  @media (hover: hover) {
+    .ty-tabs__tab:not([data-rac], [aria-selected='true'], [aria-disabled='true'], :disabled):hover {
+      color: var(--ty-ink);
+    }
+  }
+  .ty-tabs__tab:not([data-rac]):focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: -2px;
+  }
+  .ty-tabs__tab:not([data-rac]):is([aria-disabled='true'], :disabled) {
+    color: var(--ty-ink-3);
+    opacity: 0.6;
+  }
+  .ty-tabs__panel:not([data-rac]):focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* DataTable rows the host marks as actionable, and selected rows. */
+  @media (hover: hover) {
+    .ty-table__row[data-actionable]:not([data-rac]):hover .ty-table__cell {
+      background: color-mix(in srgb, var(--ty-surface-sunken) 60%, var(--ty-surface-solid));
+    }
+  }
+  .ty-table__row:not([data-rac])[aria-selected='true'] .ty-table__cell {
+    background: color-mix(in srgb, var(--ty-accent) 10%, var(--ty-surface-solid));
+  }
+  .ty-table__row:not([data-rac]):focus-visible,
+  .ty-table__cell:not([data-rac]):focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: -2px;
+  }
+
+  /* Rail navigation */
+  @media (hover: hover) {
+    .ty-rail-item:not([data-rac]):hover {
+      background: var(--ty-surface-sunken);
+      color: var(--ty-ink);
+    }
+    .ty-rail-context:not([data-rac]):hover {
+      border-color: var(--ty-line-strong);
+    }
+  }
+  .ty-rail-item:not([data-rac]):focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: -2px;
+  }
+  .ty-rail-context:not([data-rac]):focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 2px;
+  }
+  .ty-rail-item:not([data-rac])[aria-current='page'] {
+    background: var(--ty-accent-soft);
+    color: var(--ty-accent);
+    font-weight: var(--ty-font-weight-semibold);
+  }
+  .ty-rail-item:not([data-rac])[aria-current='page']::before {
+    content: '';
+    position: absolute;
+    inset-block: var(--ty-space-2);
+    inset-inline-start: 0;
+    inline-size: 3px;
+    border-radius: var(--ty-radius-pill);
+    background: var(--ty-accent);
+  }
+
+  /* ActionMenu items (role=menuitem) */
+  @media (hover: hover) {
+    .ty-action-menu__item:not([data-rac], [aria-disabled='true']):hover {
+      background: var(--ty-surface-sunken);
+      color: var(--ty-ink);
+    }
+  }
+  .ty-action-menu__item:not([data-rac]):focus {
+    background: var(--ty-surface-sunken);
+    color: var(--ty-ink);
+  }
+  .ty-action-menu__item[data-tone='danger']:not([data-rac]):focus {
+    background: var(--ty-danger-soft);
+    color: var(--ty-on-danger-soft);
+  }
+  .ty-action-menu__item:not([data-rac]):focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: -2px;
+  }
+  .ty-action-menu__item:not([data-rac])[aria-disabled='true'] {
+    color: var(--ty-ink-3);
+    opacity: 0.6;
+  }
+
+  /* Avatar control and the page header trail */
+  @media (hover: hover) {
+    .ty-avatar-control:not([data-rac]):hover .ty-avatar {
+      background: var(--ty-accent-soft);
+      border-color: var(--ty-accent);
+    }
+  }
+  .ty-avatar-control:not([data-rac]):focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* Surface: a pressable card's primary control */
+  .ty-surface:has(> .ty-surface__header .ty-surface__primary:not([data-rac]):focus-visible),
+  .ty-surface:has(> .ty-surface__primary:not([data-rac]):focus-visible) {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 2px;
+  }
+
+  @media (forced-colors: active) {
+    .ty-button:not([data-rac]):focus-visible,
+    .ty-link:not([data-rac]):focus-visible,
+    .ty-tabs__tab:not([data-rac]):focus-visible,
+    .ty-rail-item:not([data-rac]):focus-visible,
+    .ty-action-menu__item:not([data-rac]):focus-visible {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
+    .ty-checkbox__row:not([data-rac]):has(> input:checked) .ty-checkbox__indicator {
+      border-color: Highlight;
+      background: Highlight;
+      color: HighlightText;
+    }
+    .ty-segmented-control__segment:not([data-rac]):is([aria-pressed='true'], [aria-checked='true']) {
+      border: 2px solid Highlight;
+      background: Highlight;
+      color: HighlightText;
+      forced-color-adjust: none;
+    }
+    .ty-tabs__tab:not([data-rac])[aria-selected='true'] {
+      color: Highlight;
+    }
+    .ty-tabs__tab:not([data-rac])[aria-selected='true']::after {
+      background: Highlight;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ty-button:not([data-rac]):active {
+      transform: none;
+      opacity: 0.85;
+    }
+  }
+}

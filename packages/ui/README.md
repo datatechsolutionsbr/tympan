@@ -18,7 +18,7 @@ npm run gallery:build -w @datatechsolutions/tympan  # static gallery in dist-gal
 
 Install (workspace or package registry), then import one stylesheet. It
 already contains the `@datatechsolutions/tympan-tokens` stylesheet (every `--ty-*` custom
-property for the `tympan`, `fakhir`, `neutral` and `high-contrast` presets, light and
+property for the `tympan`, `fakhir`, `astrlabe`, `neutral` and `high-contrast` presets, light and
 dark), so no other CSS is needed:
 
 ```sh
@@ -137,7 +137,7 @@ export function App() {
   hard-coded copy. `I18nAdapterProvider` and `RoutingProvider` (wave 2)
   plug a host i18n library or router in without TympanProvider.
 - **`ThemeProvider` / `useTheme`**: sets `data-ty-theme` (`tympan` by default,
-  `fakhir`, `neutral`, `high-contrast`, an opt-in `print-*` theme or a generated theme), `data-ty-mode` (`system`, `light`,
+  `fakhir`, `astrlabe`, `neutral`, `high-contrast`, an opt-in `print-*` theme or a generated theme), `data-ty-mode` (`system`, `light`,
   `dark`) and `data-ty-density` (`compact`, `default`, `comfortable`) on
   `<html>` (or on a wrapper with `target="scope"`). Persistence belongs to the
   host: pass controlled values and callbacks, or `storageKey` for localStorage.
@@ -236,6 +236,23 @@ gone; its exports are unchanged under the subpath:
 | `npm install @datatechsolutions/tympan-flow` | `npm install @dagrejs/dagre` (next to `@datatechsolutions/tympan`) |
 | `from '@datatechsolutions/tympan-flow'` | `from '@datatechsolutions/tympan/flow'` |
 | `import '@datatechsolutions/tympan-flow/styles.css'` | `import '@datatechsolutions/tympan/flow.css'` |
+
+## Without React
+
+The stylesheet does not need React. A host that renders HTML another way
+(Rust/Dioxus, server templates, web components) links `dist/styles.css`
+(tokens included) and, if it offers them, the opt-in `print-themes.css` from
+`@datatechsolutions/tympan-tokens`, sets `data-ty-theme` / `data-ty-mode` /
+`data-ty-density` on `<html>`, and emits the markup in
+[`docs/html-contract.md`](docs/html-contract.md): the `ty-` classes,
+data attributes and element structure of each component (button, fields,
+select, checkbox, switch, segmented control, surface, table, status pill,
+tag, tabs, dialog, drawer, popover, menu, toast, notice, rail and app frame,
+floating action bar, page header, headings, empty state, spinner, progress,
+skeleton, avatar, separator). Hover, press, keyboard focus, disabled, checked
+and current states come from the native pseudo-classes and ARIA attributes
+(`src/native-states.css`, scoped to markup React Aria did not render), so
+the host only sets the variant attributes.
 
 ## Styling rules
 
