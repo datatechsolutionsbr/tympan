@@ -43,6 +43,17 @@
       "types": "./dist/flow.d.ts",
       "default": "./dist/flow.js"
     },
+    "./elements": {
+      "tympan-source": "./src/elements/index.ts",
+      "types": "./dist/elements.d.ts",
+      "default": "./dist/elements.js"
+    },
+    "./elements/react": {
+      "tympan-source": "./src/elements/react/index.ts",
+      "types": "./dist/elements-react.d.ts",
+      "default": "./dist/elements-react.js"
+    },
+    "./elements.bundle.js": "./dist/elements.bundle.js",
     "./styles.css": "./dist/styles.css",
     "./flow.css": "./dist/flow.css",
     "./package.json": "./package.json"
@@ -55,7 +66,7 @@
   ],
   "scripts": {
     "prebuild": "npm run build -w @datatechsolutions/tympan-tokens",
-    "build": "tsdown && node scripts/build-css.mjs",
+    "build": "tsdown && tsdown -c tsdown.elements.config.ts && node scripts/build-css.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest",

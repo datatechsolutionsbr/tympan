@@ -1,0 +1,69 @@
+/* Custom elements (src/elements): what the ty-* component rules do not
+   already cover. The hosts wrap their anatomy without adding a box. */
+@layer tympan.components {
+  ty-button,
+  ty-switch,
+  ty-theme-palette {
+    display: contents;
+  }
+
+  /* The busy indicator of <ty-button>: a CSS ring (no icon font or SVG). */
+  .ty-button__busy {
+    display: inline-block;
+    flex: none;
+    box-sizing: border-box;
+    inline-size: 1.15em;
+    block-size: 1.15em;
+    border: 2px solid currentColor;
+    border-block-start-color: transparent;
+    border-radius: 50%;
+    animation: ty-button-spin 900ms linear infinite;
+  }
+
+  /* <ty-theme-palette> is a native dialog in the top layer. */
+  dialog.ty-palette {
+    position: fixed;
+    inset-block: 12vh auto;
+    inset-inline: 0;
+    margin-block: 0;
+    margin-inline: auto;
+    padding: 0;
+    inline-size: min(44rem, calc(100% - 2 * var(--ty-space-4)));
+    max-inline-size: none;
+  }
+  dialog.ty-palette:not([open]) {
+    display: none;
+  }
+  dialog.ty-palette::backdrop {
+    background: var(--ty-backdrop, rgb(15 23 42 / 0.4));
+  }
+  .ty-palette__option[data-current] .ty-palette__hint {
+    color: var(--ty-accent);
+    font-weight: var(--ty-font-weight-semibold);
+  }
+  .ty-palette__swatch {
+    display: block;
+    box-sizing: border-box;
+    inline-size: 16px;
+    block-size: 16px;
+    border: 1px solid var(--ty-line-strong);
+    border-radius: var(--ty-radius-pill);
+    background: linear-gradient(135deg, var(--ty-brand) 50%, var(--ty-bg) 50%);
+  }
+  .ty-palette__swatch[data-density-swatch] {
+    border-radius: 3px;
+    background: var(--ty-surface-sunken);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ty-button__busy {
+      animation: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .ty-palette__swatch {
+      forced-color-adjust: none;
+    }
+  }
+}

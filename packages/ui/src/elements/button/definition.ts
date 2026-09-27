@@ -1,0 +1,63 @@
+import type { ElementDefinition } from '../definition.ts'
+
+/** `<ty-button>`: the Button's single source (spec: wave-1/button.md). */
+export const buttonDefinition = {
+  tag: 'ty-button',
+  name: 'TyButton',
+  kind: 'enhancing',
+  doc: 'Triggers one action. A native <button> inside, so focus, keyboard activation and form submission are the platform\'s.',
+  props: {
+    variant: { type: 'enum', values: ['primary', 'secondary', 'quiet', 'danger'], default: 'secondary', attribute: 'variant', doc: 'Visual weight; at most one primary per view.' },
+    size: { type: 'enum', values: ['compact', 'regular', 'large'], default: 'regular', attribute: 'size', doc: 'Height step.' },
+    shape: { type: 'enum', values: ['rounded', 'pill', 'circle'], default: 'rounded', attribute: 'shape', doc: '`circle` only for icon-only buttons.' },
+    iconOnly: { type: 'boolean', attribute: 'icon-only', doc: 'Hides the label; `accessibleLabel` is then required.' },
+    fullWidth: { type: 'boolean', attribute: 'full-width', doc: 'Stretches to the container width.' },
+    busy: { type: 'boolean', attribute: 'busy', doc: 'Shows the busy indicator and blocks presses (`aria-busy`, `aria-disabled`).' },
+    disabled: { type: 'boolean', attribute: 'disabled', doc: 'Native disabled.' },
+    type: { type: 'enum', values: ['button', 'submit', 'reset'], default: 'button', attribute: 'type', doc: 'Native button type; `submit` submits the enclosing form.' },
+    name: { type: 'string', attribute: 'name', doc: 'Form field name sent with a submit.' },
+    value: { type: 'string', attribute: 'value', doc: 'Form field value sent with a submit.' },
+    accessibleLabel: { type: 'string', attribute: 'accessible-label', doc: 'Accessible name when there is no visible label; also the tooltip of an icon-only button.' },
+  },
+  events: [{ type: 'click', kind: 'native', reactProp: 'onClick', rustProp: 'onclick', doc: 'The native click (not fired while busy or disabled).' }],
+  slots: {
+    default: { doc: 'The label.' },
+    icon: { doc: 'A leading icon (decorative).' },
+    'trailing-icon': { doc: 'A trailing icon (decorative).' },
+  },
+  anatomy: {
+    tag: 'button',
+    class: 'ty-button',
+    attrs: {
+      type: { prop: 'type' },
+      name: { prop: 'name' },
+      value: { prop: 'value' },
+      disabled: { prop: 'disabled', kind: 'boolean-attr' },
+      'aria-busy': { prop: 'busy', kind: 'bool' },
+      'aria-disabled': { prop: 'busy', kind: 'bool' },
+      'aria-label': { prop: 'accessibleLabel' },
+      title: { prop: 'accessibleLabel', when: ['iconOnly'] },
+      'data-variant': { prop: 'variant' },
+      'data-size': { prop: 'size' },
+      'data-shape': { prop: 'shape' },
+      'data-icon-only': { prop: 'iconOnly', kind: 'flag' },
+      'data-full-width': { prop: 'fullWidth', kind: 'flag' },
+      'data-busy': { prop: 'busy', kind: 'flag' },
+    },
+    children: [
+      { tag: 'span', class: 'ty-button__busy', attrs: { 'aria-hidden': { value: 'true' } }, when: ['busy'] },
+      { tag: 'span', class: 'ty-button__icon', attrs: { 'aria-hidden': { value: 'true' } }, when: ['!busy', 'slot:icon'], children: [{ slot: 'icon' }] },
+      { tag: 'span', class: 'ty-button__label', when: ['!iconOnly'], children: [{ slot: 'default' }] },
+      { tag: 'span', class: 'ty-button__icon', attrs: { 'aria-hidden': { value: 'true' } }, when: ['!iconOnly', 'slot:trailing-icon'], children: [{ slot: 'trailing-icon' }] },
+    ],
+  },
+  examples: [
+    { name: 'secondary', props: {}, slots: { default: 'Cancel' } },
+    { name: 'primary-large', props: { variant: 'primary', size: 'large' }, slots: { default: 'Save' } },
+    { name: 'submit', props: { variant: 'primary', type: 'submit', name: 'intent', value: 'publish' }, slots: { default: 'Publish' } },
+    { name: 'busy', props: { variant: 'primary', busy: true }, slots: { default: 'Saving' } },
+    { name: 'danger-disabled', props: { variant: 'danger', disabled: true }, slots: { default: 'Delete' } },
+    { name: 'icon-only', props: { variant: 'quiet', iconOnly: true, shape: 'circle', accessibleLabel: 'Close' }, slots: { icon: '×' } },
+    { name: 'full-width-pill', props: { fullWidth: true, shape: 'pill' }, slots: { default: 'Continue', 'trailing-icon': '→' } },
+  ],
+} as const satisfies ElementDefinition
