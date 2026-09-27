@@ -1,0 +1,209 @@
+/* Componentes: catalogue home, documentation pages, framed research screens. */
+.ty-site-lista__inicio {
+  margin-block-end: var(--ty-space-2);
+}
+.ty-site-lista__conta {
+  font-family: var(--ty-site-mono);
+  font-size: 11px;
+  color: var(--ty-ink-3);
+}
+a.ty-site-estilo {
+  text-decoration: none;
+}
+.ty-site-estilo--texto {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+.ty-site-estilo[aria-current='page'] {
+  border-inline-start-color: var(--ty-accent);
+  background: var(--ty-accent-soft);
+  color: var(--ty-ink);
+  font-weight: var(--ty-font-weight-semibold);
+}
+
+.ty-site-catalogo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ty-space-3);
+  padding-block-start: var(--ty-space-3);
+  border-block-start: 1px solid var(--ty-line);
+}
+.ty-site-catalogo__titulo {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0;
+  font-family: var(--ty-font-serif);
+  font-size: 1.35rem;
+  font-weight: var(--ty-font-weight-semibold);
+}
+.ty-site-catalogo__conta {
+  font-family: var(--ty-site-mono);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--ty-ink-3);
+}
+.ty-site-catalogo__grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: var(--ty-space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ty-site-cartao__descricao {
+  padding-inline: var(--ty-space-3);
+  font-size: 13px;
+  color: var(--ty-ink-2);
+  line-height: 1.4;
+}
+.ty-site-miniatura {
+  display: block;
+  block-size: 170px;
+  margin-block-end: var(--ty-space-2);
+  overflow: hidden;
+  border-block-end: 1px solid var(--ty-line);
+  background:
+    repeating-linear-gradient(135deg, transparent 0 7px, color-mix(in oklab, var(--ty-line) 60%, transparent) 7px 8px),
+    var(--ty-surface-sunken);
+  pointer-events: none;
+}
+.ty-site-miniatura__reserva {
+  display: block;
+  block-size: 170px;
+}
+.ty-site-miniatura__pagina {
+  inline-size: 1100px;
+  padding: 24px;
+  background: var(--ty-bg);
+}
+.ty-site-miniatura .ty-site-moldura-tela {
+  block-size: 700px;
+}
+.ty-site-miniatura--livro {
+  background:
+    radial-gradient(60% 60% at 50% 45%, color-mix(in oklab, var(--ty-accent) 18%, transparent), transparent),
+    var(--ty-site-mesa);
+}
+
+.ty-site-doc {
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--ty-space-6);
+}
+@media (min-width: 1400px) {
+  .ty-site-doc {
+    grid-template-columns: minmax(0, 1fr) 220px;
+  }
+}
+.ty-site-doc__principal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ty-space-4);
+  min-inline-size: 0;
+}
+.ty-site-indice {
+  position: sticky;
+  inset-block-start: calc(var(--ty-site-topo) + var(--ty-space-4));
+  align-self: start;
+  max-block-size: calc(100dvh - var(--ty-site-topo) - var(--ty-space-6));
+  overflow-y: auto;
+}
+.ty-site-indice ul {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: var(--ty-space-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.ty-site-indice a {
+  display: block;
+  padding: 3px 8px;
+  border-inline-start: 2px solid var(--ty-line);
+  color: var(--ty-ink-2);
+  font-size: 13px;
+  text-decoration: none;
+}
+.ty-site-indice a:hover {
+  border-inline-start-color: var(--ty-accent);
+  color: var(--ty-ink);
+}
+@media (max-width: 1399.98px) {
+  .ty-site-indice {
+    display: none;
+  }
+}
+.ty-site-pagina-galeria {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ty-space-5);
+}
+.ty-site-tela {
+  border: 1px solid var(--ty-line);
+  border-radius: var(--ty-radius-card);
+  overflow: hidden;
+  box-shadow: var(--ty-shadow-raised);
+}
+.ty-site-moldura-tela {
+  position: relative;
+  block-size: min(820px, calc(100dvh - 200px));
+  overflow: auto;
+  transform: translateZ(0);
+  background: var(--ty-bg);
+}
+.ty-site-paginador {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--ty-space-3);
+  padding-block-start: var(--ty-space-4);
+  border-block-start: 1px solid var(--ty-line);
+}
+.ty-site-paginador__link {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--ty-space-3) var(--ty-space-4);
+  border: 1px solid var(--ty-line);
+  border-radius: var(--ty-radius-card);
+  color: var(--ty-ink);
+  font-weight: var(--ty-font-weight-semibold);
+  text-decoration: none;
+}
+.ty-site-paginador__link:hover {
+  border-color: var(--ty-accent);
+}
+.ty-site-paginador__link--fim {
+  align-items: flex-end;
+  text-align: end;
+}
+.ty-site-paginador__dica {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--ty-ink-3);
+}
+[dir='rtl'] .ty-site-seta {
+  transform: scaleX(-1);
+}
+.ty-site-cartao__alvo {
+  text-decoration: none;
+}
+.ty-site-cartao__alvo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--ty-radius-card);
+}
+.ty-site-cartao__alvo:focus-visible {
+  outline: none;
+}
+.ty-site-cartao:has(.ty-site-cartao__alvo:focus-visible) {
+  outline: var(--ty-focus-width, 2px) solid var(--ty-focus-ring);
+  outline-offset: 2px;
+}
+.ty-site-lateral .ty-site-estilo--texto {
+  padding-inline-end: 12px;
+}
