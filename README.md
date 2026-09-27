@@ -54,6 +54,14 @@ package records its inputs in `CLEAN-ROOM.md` and `PROVENANCE.md`;
 `tools/provenance/README.md` describes the similarity check run from outside
 the clean room.
 
+## History
+
+How Tympan got here, from the liquid-glass components of early 2026 to the
+clean-room rewrite, the print package and the Rust side:
+[História](docs/history/HISTORY.pt-BR.md) ·
+[History](docs/history/HISTORY.en.md) ·
+[timeline.json](docs/history/timeline.json).
+
 ## Licence
 
 FSL-1.1-ALv2 (Functional Source License, Version 1.1, Apache 2.0 Future

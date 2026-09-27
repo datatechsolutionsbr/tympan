@@ -1,0 +1,776 @@
+[
+  {
+    "id": "fuel-app",
+    "date": "2026-01-26",
+    "era": "origin",
+    "title": {
+      "pt-BR": "Um app de preços de combustível",
+      "en": "A fuel-price app"
+    },
+    "body": {
+      "pt-BR": "Começa o repositório de um produto anterior da Datatech, onde nasce a linguagem visual que leva ao Tympan.",
+      "en": "The repository of an earlier Datatech product starts; the visual language that leads to Tympan is born there."
+    }
+  },
+  {
+    "id": "ios-design-system",
+    "date": "2026-02-15",
+    "era": "origin",
+    "title": {
+      "pt-BR": "Design system iOS",
+      "en": "iOS design system"
+    },
+    "body": {
+      "pt-BR": "O app ganha um design system inspirado no iOS para o cadastro, e os erros viram notificações no estilo Dynamic Island.",
+      "en": "The app gets an iOS-inspired design system for onboarding, and errors become Dynamic Island-style notifications."
+    }
+  },
+  {
+    "id": "datatechsolutions-ui",
+    "date": "2026-02-28",
+    "era": "origin",
+    "title": {
+      "pt-BR": "Nasce @datatechsolutions/ui",
+      "en": "@datatechsolutions/ui is born"
+    },
+    "body": {
+      "pt-BR": "Os componentes saem do app para um pacote com repositório próprio. O vidro desenhado tela a tela vira a classe liquid-surface e as cores do iOS viram tokens.",
+      "en": "The components leave the app for a package with its own repository. Glass drawn screen by screen becomes the liquid-surface class and the iOS colours become tokens."
+    },
+    "metrics": [
+      {
+        "label": {
+          "pt-BR": "versão",
+          "en": "version"
+        },
+        "value": "1.0.3"
+      }
+    ]
+  },
+  {
+    "id": "ui-2-6",
+    "date": "2026-03-02",
+    "era": "liquid-glass",
+    "title": {
+      "pt-BR": "Versão 2.6 e o monorepo mater",
+      "en": "Version 2.6 and the mater monorepo"
+    },
+    "body": {
+      "pt-BR": "Publicação no npm por OIDC a partir do CI, catálogo de componentes e primeiros temas. Nasce o monorepo da plataforma, com a UI como submódulo.",
+      "en": "npm publishing through OIDC from CI, a component catalogue and the first themes. The platform monorepo starts, with the UI as a submodule."
+    },
+    "metrics": [
+      {
+        "label": {
+          "pt-BR": "versão",
+          "en": "version"
+        },
+        "value": "2.6.0"
+      }
+    ]
+  },
+  {
+    "id": "workflow-canvas",
+    "date": "2026-03-03",
+    "era": "liquid-glass",
+    "title": {
+      "pt-BR": "O primeiro canvas de workflows",
+      "en": "The first workflow canvas"
+    },
+    "body": {
+      "pt-BR": "O canvas de workflows chega num pacote próprio e, no dia seguinte, como módulo da UI. É o ancestral mais distante do canvas de fluxo do Tympan.",
+      "en": "The workflow canvas arrives in its own package and, the next day, as a module of the UI. It is the most distant ancestor of Tympan's flow canvas."
+    }
+  },
+  {
+    "id": "brand-app-themes",
+    "date": "2026-03-29",
+    "era": "liquid-glass",
+    "title": {
+      "pt-BR": "Um tema por produto",
+      "en": "One theme per product"
+    },
+    "body": {
+      "pt-BR": "O módulo brand traz os logotipos e o mapa APP_THEMES, com um tema para cada produto da Datatech: a ideia que o Tympan leva adiante.",
+      "en": "The brand module brings the logos and the APP_THEMES map, with one theme for each Datatech product: the idea Tympan carries forward."
+    },
+    "metrics": [
+      {
+        "label": {
+          "pt-BR": "versão",
+          "en": "version"
+        },
+        "value": "2.11.31"
+      }
+    ]
+  },
+  {
+    "id": "monorepo-collapse",
+    "date": "2026-05-10",
+    "era": "liquid-glass",
+    "title": {
+      "pt-BR": "A UI entra no monorepo",
+      "en": "The UI moves into the monorepo"
+    },
+    "body": {
+      "pt-BR": "O monorepo deixa os submódulos e a UI passa a morar em packages/ui.",
+      "en": "The monorepo drops its submodules and the UI moves to packages/ui."
+    }
+  },
+  {
+    "id": "storybook",
+    "date": "2026-05-22",
+    "era": "liquid-glass",
+    "title": {
+      "pt-BR": "Storybook e testes de comportamento",
+      "en": "Storybook and behaviour tests"
+    },
+    "body": {
+      "pt-BR": "Storybook, trava de lint contra botão cru e testes de comportamento no lugar de testes de string de classe.",
+      "en": "Storybook, a lint gate against raw buttons, and behaviour tests instead of class-string tests."
+    },
+    "metrics": [
+      {
+        "label": {
+          "pt-BR": "testes de string de classe",
+          "en": "class-string tests"
+        },
+        "value": "74 → 0"
+      }
+    ]
+  },
+  {
+    "id": "consolidation-rounds",
+    "date": "2026-05-26",
+    "era": "liquid-glass",
+    "title": {
+      "pt-BR": "Quatro rodadas de consolidação",
+      "en": "Four consolidation rounds"
+    },
+    "body": {
+      "pt-BR": "O changelog 3.16.0 registra as rodadas: chips de sete para dois, seletores de cinco para dois, botões crus de 232 para 117.",
+      "en": "The 3.16.0 changelog records the rounds: chips from seven to two, pickers from five to two, raw buttons from 232 to 117."
+    },
+    "metrics": [
+      {
+        "label": {
+          "pt-BR": "componentes",
+          "en": "components"
+        },
+        "value": 162
+      },
+      {
+        "label": {
+          "pt-BR": "países com tema regional",
+          "en": "countries with a regional theme"
+        },
+        "value": 30
+      }
+    ]
+  },
+  {
+    "id": "a11y-gate",
+    "date": "2026-07-11",
+    "era": "liquid-glass",
+    "title": {
+      "pt-BR": "Portão de acessibilidade",
+      "en": "Accessibility gate"
+    },
+    "body": {
+      "pt-BR": "Um portão de acessibilidade no Storybook encontra e corrige violações reais.",
+      "en": "An accessibility gate in Storybook finds and fixes real violations."
+    },
+    "metrics": [
+      {
+        "label": {
+          "pt-BR": "violações corrigidas",
+          "en": "violations fixed"
+        },
+        "value": 36
+      }
+    ]
+  },
+  {
+    "id": "astrlabe-ui",
+    "date": "2026-08-30",
+    "era": "astrlabe",
+    "title": {
+      "pt-BR": "@datatech/astrlabe-ui",
+      "en": "@datatech/astrlabe-ui"
+    },
+    "body": {
+      "pt-BR": "A UI do motor Astrlabe vira um pacote separado, em fases: primitivas, avatares, i18n e hooks do canvas. É o elo entre o liquid glass e o Fakhir.",
+      "en": "The Astrlabe engine's UI becomes a separate package, in phases: primitives, avatars, i18n and canvas hooks. It is the link between liquid glass and Fakhir."
+    },
+    "metrics": [
+      {
+        "label": {
+          "pt-BR": "locales",
+          "en": "locales"
+        },
+        "value": 15
+      }
+    ]
+  },
+  {
+    "id": "astrlabe-public-rust",
+    "date": "2026-09-12",
+    "era": "astrlabe",
+    "title": {
+      "pt-BR": "Núcleo público e UI em Rust",
+      "en": "Public core and a Rust UI"
+    },
+    "body": {
+      "pt-BR": "Sai a primeira versão pública do núcleo do Astrlabe e começa a migração da UI para Rust com Dioxus 0.7 em WebAssembly.",
+      "en": "The first public release of the Astrlabe core ships and the UI migration to Rust with Dioxus 0.7 on WebAssembly begins."
+    },
+    "metrics": [
+      {
+        "label": {
+          "pt-BR": "linhas da biblioteca TS",
+          "en": "lines in the TS library"
+        },
+        "value": 102672
+      }
+    ]
+  },
+  {
+    "id": "ts-ui-deleted",
+    "date": "2026-09-13",
+    "era": "astrlabe",
+    "title": {
+      "pt-BR": "A UI TypeScript sai",
+      "en": "The TypeScript UI goes"
+    },
+    "body": {
+      "pt-BR": "A UI TypeScript do Astrlabe é apagada. A UI em Rust mantém o vidro e o Tailwind v4, agora varrendo arquivos .rs.",
+      "en": "Astrlabe's TypeScript UI is deleted. The Rust UI keeps the glass and Tailwind v4, now scanning .rs files."
+    }
+  },
+  {
+    "id": "ux-study",
+    "date": "2026-09-21",
+    "era": "astrlabe",
+    "title": {
+      "pt-BR": "Estudo visual reproduzível",
+      "en": "A reproducible visual study"
+    },
+    "body": {
+      "pt-BR": "Um estudo visual com auditoria de teclado mede os defeitos da UI em Rust e alimenta as escolhas de estilo seguintes.",
+      "en": "A visual study with a keyboard audit measures the Rust UI's defects and feeds the next style choices."
+    }
+  },
+  {
+    "id": "fakhir-fork",
+    "date": "2026-09-25",
+    "era": "fakhir",
+    "title": {
+      "pt-BR": "Fakhir herda o vidro",
+      "en": "Fakhir inherits the glass"
+    },
+    "body": {
+      "pt-BR": "Nasce o monorepo do Fakhir, a plataforma de pesquisa da Datatech. O astrlabe-ui entra inteiro, com histórico, e o canvas vira pacote próprio.",
+      "en": "The monorepo of Fakhir, Datatech's research platform, is born. astrlabe-ui comes in whole, with its history, and the canvas becomes its own package."
+    }
+  },
+  {
+    "id": "design-direction",
+    "date": "2026-09-26T00:40-03:00",
+    "era": "fakhir",
+    "title": {
+      "pt-BR": "Direção de design",
+      "en": "Design direction"
+    },
+    "body": {
+      "pt-BR": "Um documento de direção define a bancada de trabalho calma e editorial, com a evidência em primeiro lugar, títulos em serifa, acento teal e controles de 40 px (44 px no toque).",
+      "en": "A direction document sets a calm, editorial workbench with evidence first, serif headings, a teal accent and 40 px controls (44 px on touch)."
+    }
+  },
+  {
+    "id": "clean-room-specs",
+    "date": "2026-09-26T01:11-03:00",
+    "era": "clean-room",
+    "title": {
+      "pt-BR": "Especificações de comportamento",
+      "en": "Behaviour specs"
+    },
+    "body": {
+      "pt-BR": "Quem escreve especificações descreve só comportamento; quem implementa escreve a biblioteca nova só a partir delas. Quatro ondas.",
+      "en": "The spec writer describes behaviour only; the implementer writes the new library only from the specs. Four waves."
+    },
+    "metrics": [
+      {
+        "label": {
+          "pt-BR": "especificações",
+          "en": "specs"
+        },
+        "value": 222
+      },
+      {
+        "label": {
+          "pt-BR": "onda 1",
+          "en": "wave 1"
+        },
+        "value": 36
+      },
+      {
+        "label": {
+          "pt-BR": "onda 2",
+          "en": "wave 2"
+        },
+        "value": 89
+      },
+      {
+        "label": {
+          "pt-BR": "onda 3",
+          "en": "wave 3"
+        },
+        "value": 63
+      },
+      {
+        "label": {
+          "pt-BR": "onda 4",
+          "en": "wave 4"
+        },
+        "value": 34
+      }
+    ],
+    "links": [
+      {
+        "label": {
+          "pt-BR": "Especificações",
+          "en": "Specs"
+        },
+        "href": "../clean-room/specs/README.md"
+      }
+    ]
+  },
+  {
+    "id": "tokens-oklch",
+    "date": "2026-09-26T01:39-03:00",
+    "era": "clean-room",
+    "title": {
+      "pt-BR": "Tokens com contas",
+      "en": "Tokens with maths"
+    },
+    "body": {
+      "pt-BR": "Tokens no formato W3C DTCG, gerador de temas em OKLCH e build pelo Style Dictionary. Entram as travas contra Tailwind e de proveniência.",
+      "en": "Tokens in the W3C DTCG format, an OKLCH theme generator and a Style Dictionary build. The Tailwind and provenance guards go in."
+    },
+    "links": [
+      {
+        "label": {
+          "pt-BR": "Tokens",
+          "en": "Tokens"
+        },
+        "href": "../../packages/tokens/README.md"
+      }
+    ]
+  },
+  {
+    "id": "wave-1",
+    "date": "2026-09-26T01:42-03:00",
+    "era": "clean-room",
+    "title": {
+      "pt-BR": "Onda 1",
+      "en": "Wave 1"
+    },
+    "body": {
+      "pt-BR": "Os 36 componentes do núcleo sobre React Aria Components, a galeria com personalizador de temas e os registros de sala limpa.",
+      "en": "The 36 core components on React Aria Components, the gallery with a theme customizer, and the clean-room records."
+    },
+    "metrics": [
+      {
+        "label": {
+          "pt-BR": "testes nos componentes",
+          "en": "component tests"
+        },
+        "value": 424
+      },
+      {
+        "label": {
+          "pt-BR": "testes nos tokens",
+          "en": "token tests"
+        },
+        "value": 24
+      }
+    ]
+  },
+  {
+    "id": "waves-2-4",
+    "date": "2026-09-26T03:22-03:00",
+    "era": "clean-room",
+    "title": {
+      "pt-BR": "Ondas 2 e 4 e a casca de pesquisa",
+      "en": "Waves 2 and 4 and the research shell"
+    },
+    "body": {
+      "pt-BR": "Nove grupos de componentes, a casca de pesquisa (trilho, dock, cabeçalho editorial, painel de evidência), CSS só lógico e tipografia por escrita com Noto.",
+      "en": "Nine component groups, the research shell (rail, dock, editorial header, evidence panel), logical-only CSS and per-script typography with Noto."
+    }
+  },
+  {
+    "id": "i18n-rtl",
+    "date": "2026-09-26T03:25-03:00",
+    "era": "clean-room",
+    "title": {
+      "pt-BR": "Idiomas e direita para a esquerda",
+      "en": "Languages and right-to-left"
+    },
+    "body": {
+      "pt-BR": "Catálogo em espanhol, plurais do CLDR, dígitos do locale, glifos espelhados, um teste RTL por componente, pseudolocalização e isolamento bidi do conteúdo.",
+      "en": "A Spanish catalogue, CLDR plurals, locale digits, mirrored glyphs, one RTL test per component, pseudo-localization and bidi isolation of content."
+    },
+    "metrics": [
+      {
+        "label": {
+          "pt-BR": "locales na galeria",
+          "en": "locales in the gallery"
+        },
+        "value": 8
+      }
+    ]
+  },
+  {
+    "id": "similarity-audit",
+    "date": "2026-09-26T04:04-03:00",
+    "era": "clean-room",
+    "title": {
+      "pt-BR": "Auditoria de similaridade",
+      "en": "Similarity audit"
+    },
+    "body": {
+      "pt-BR": "De fora da sala limpa, cada arquivo novo é comparado por impressões digitais de tokens e formato da árvore sintática; quem passa do limite é reestruturado a partir da especificação.",
+      "en": "From outside the clean room, every new file is compared by token fingerprints and syntax-tree shape; any file over the line is restructured from its spec."
+    },
+    "metrics": [
+      {
+        "label": {
+          "pt-BR": "rodadas",
+          "en": "rounds"
+        },
+        "value": "≥ 3"
+      },
+      {
+        "label": {
+          "pt-BR": "contenção máxima",
+          "en": "maximum containment"
+        },
+        "value": "0.03"
+      },
+      {
+        "label": {
+          "pt-BR": "Jaccard estrutural máximo",
+          "en": "maximum structural Jaccard"
+        },
+        "value": "0.20"
+      }
+    ],
+    "links": [
+      {
+        "label": {
+          "pt-BR": "Verificação de proveniência",
+          "en": "Provenance check"
+        },
+        "href": "../../tools/provenance/README.md"
+      }
+    ]
+  },
+  {
+    "id": "flow-canvas",
+    "date": "2026-09-26T05:50-03:00",
+    "era": "clean-room",
+    "title": {
+      "pt-BR": "Canvas de fluxo e proveniência",
+      "en": "Flow and provenance canvas"
+    },
+    "body": {
+      "pt-BR": "Editor de DAG, visualizador de proveniência W3C PROV em faixas, execuções e assistente, alinhados aos storyboards.",
+      "en": "DAG editor, W3C PROV provenance viewer in bands, runs and assistant, aligned with the storyboards."
+    },
+    "metrics": [
+      {
+        "label": {
+          "pt-BR": "testes nos componentes",
+          "en": "component tests"
+        },
+        "value": 1625
+      },
+      {
+        "label": {
+          "pt-BR": "testes no canvas",
+          "en": "canvas tests"
+        },
+        "value": 508
+      }
+    ]
+  },
+  {
+    "id": "fork-removed",
+    "date": "2026-09-26T11:40-03:00",
+    "era": "clean-room",
+    "title": {
+      "pt-BR": "Os pacotes antigos saem",
+      "en": "The old packages go"
+    },
+    "body": {
+      "pt-BR": "Com a plataforma rodando nos pacotes novos, os pacotes antigos de UI e de workflow são apagados do Fakhir.",
+      "en": "With the platform running on the new packages, the old UI and workflow packages are deleted from Fakhir."
+    }
+  },
+  {
+    "id": "fsl-licence",
+    "date": "2026-09-26T15:01-03:00",
+    "era": "tympan",
+    "title": {
+      "pt-BR": "Licença FSL-1.1-ALv2",
+      "en": "FSL-1.1-ALv2 licence"
+    },
+    "body": {
+      "pt-BR": "O repositório próprio ganha workspace, CI em Node 24 e a licença FSL-1.1-ALv2, decidida no mesmo dia para toda a suíte.",
+      "en": "The new repository gets a workspace, CI on Node 24 and the FSL-1.1-ALv2 licence, decided the same day for the whole suite."
+    },
+    "links": [
+      {
+        "label": {
+          "pt-BR": "Licença",
+          "en": "Licence"
+        },
+        "href": "../../LICENSE"
+      }
+    ]
+  },
+  {
+    "id": "rename-tympan",
+    "date": "2026-09-26T15:25-03:00",
+    "era": "tympan",
+    "title": {
+      "pt-BR": "O nome Tympan",
+      "en": "The name Tympan"
+    },
+    "body": {
+      "pt-BR": "A biblioteca vira Tympan, publicada pela Datatech: prefixo ty-, escopo @datatechsolutions, repositório na organização datatechsolutionsbr. O tema do Fakhir vira uma placa entre outras.",
+      "en": "The library becomes Tympan, published by Datatech: ty- prefix, @datatechsolutions scope, repository in the datatechsolutionsbr organization. Fakhir's theme becomes one plate among others."
+    }
+  },
+  {
+    "id": "print-presets",
+    "date": "2026-09-26T18:11-03:00",
+    "era": "print",
+    "title": {
+      "pt-BR": "Estilos de livro",
+      "en": "Book styles"
+    },
+    "body": {
+      "pt-BR": "Estilos de livro entram nos tokens como presets de impressão, a partir de estudos visuais próprios, para os livros de dados de uma coleção editorial da Datatech.",
+      "en": "Book styles enter the tokens as print presets, from the collection's own visual studies, for the data books of a Datatech editorial collection."
+    },
+    "metrics": [
+      {
+        "label": {
+          "pt-BR": "estilos",
+          "en": "styles"
+        },
+        "value": 18
+      }
+    ]
+  },
+  {
+    "id": "tympan-print",
+    "date": "2026-09-26T19:03-03:00",
+    "era": "print",
+    "title": {
+      "pt-BR": "@datatechsolutions/tympan-print",
+      "en": "@datatechsolutions/tympan-print"
+    },
+    "body": {
+      "pt-BR": "Páginas duplas de 170 × 240 mm, painéis com letra, gráfico do método com oito renderizadores, marcas de estado de prova em seis formas. Renderização no servidor e saída determinística.",
+      "en": "170 × 240 mm spreads, lettered panels, a method chart with eight renderers, proof-state marks in six shapes. Server rendering and deterministic output."
+    },
+    "metrics": [
+      {
+        "label": {
+          "pt-BR": "renderizadores",
+          "en": "renderers"
+        },
+        "value": 8
+      },
+      {
+        "label": {
+          "pt-BR": "formas de marca de prova",
+          "en": "proof-mark shapes"
+        },
+        "value": 6
+      }
+    ],
+    "links": [
+      {
+        "label": {
+          "pt-BR": "Pacote de impressão",
+          "en": "Print package"
+        },
+        "href": "../../packages/print/README.md"
+      }
+    ]
+  },
+  {
+    "id": "print-39",
+    "date": "2026-09-26T19:36-03:00",
+    "era": "print",
+    "title": {
+      "pt-BR": "39 estilos",
+      "en": "39 styles"
+    },
+    "body": {
+      "pt-BR": "Mais 21 estilos, com ornamentos de página, colunas, faixas de cabeço e tratamentos de título.",
+      "en": "21 more styles, with page ornaments, columns, running-head bands and title treatments."
+    },
+    "metrics": [
+      {
+        "label": {
+          "pt-BR": "estilos",
+          "en": "styles"
+        },
+        "value": 39
+      }
+    ]
+  },
+  {
+    "id": "print-moldes",
+    "date": "2026-09-26T20:53-03:00",
+    "era": "print",
+    "title": {
+      "pt-BR": "Moldes e a forma de cada estilo",
+      "en": "Moldes and each style's shape"
+    },
+    "body": {
+      "pt-BR": "Depois de uma auditoria estilo por estilo, cada estilo ganha sua forma de gráfico e suas chamadas, mapa coroplético, gráficos de correlação e modelos explícitos de página dupla.",
+      "en": "After a style-by-style audit, each style gets its own chart shape and callouts, a choropleth map, correlation charts and explicit spread templates."
+    }
+  },
+  {
+    "id": "print-themes",
+    "date": "2026-09-26T21:12-03:00",
+    "era": "print",
+    "title": {
+      "pt-BR": "Estilos de livro viram temas de tela",
+      "en": "Book styles become screen themes"
+    },
+    "body": {
+      "pt-BR": "O gerador ganha papéis de fonte e tipos de elevação; cada estilo vira um tema print-<estilo>, com o contraste conferido em claro, escuro e alto contraste.",
+      "en": "The generator gets font roles and elevation kinds; every style becomes a print-<style> theme, with contrast checked in light, dark and high contrast."
+    },
+    "metrics": [
+      {
+        "label": {
+          "pt-BR": "conjuntos de impressão no AA",
+          "en": "print sets at AA"
+        },
+        "value": 156
+      },
+      {
+        "label": {
+          "pt-BR": "conjuntos de interface no AA",
+          "en": "interface sets at AA"
+        },
+        "value": 14
+      }
+    ]
+  },
+  {
+    "id": "docs-gallery",
+    "date": "2026-09-26T21:29-03:00",
+    "era": "consolidation",
+    "title": {
+      "pt-BR": "A galeria vira documentação",
+      "en": "The gallery becomes documentation"
+    },
+    "body": {
+      "pt-BR": "Barra lateral por categoria, um cartão por componente com prévia e código, claro e escuro, larguras de telefone e tablet.",
+      "en": "A sidebar by category, one card per component with preview and code, light and dark, phone and tablet widths."
+    }
+  },
+  {
+    "id": "neutral-renames",
+    "date": "2026-09-26T21:34-03:00",
+    "era": "print",
+    "title": {
+      "pt-BR": "Ids neutros",
+      "en": "Neutral ids"
+    },
+    "body": {
+      "pt-BR": "Os estilos são renomeados para ids e rótulos descritivos, sem nomes de pessoas, instituições ou marcas. Os ids antigos seguem como aliases até a próxima versão maior.",
+      "en": "The styles are renamed to descriptive ids and labels, with no names of people, institutions or brands. The old ids stay as aliases until the next major version."
+    },
+    "metrics": [
+      {
+        "label": {
+          "pt-BR": "ids renomeados",
+          "en": "ids renamed"
+        },
+        "value": 18
+      }
+    ]
+  },
+  {
+    "id": "flow-subpath",
+    "date": "2026-09-26T21:54-03:00",
+    "era": "consolidation",
+    "title": {
+      "pt-BR": "O canvas vira /flow",
+      "en": "The canvas becomes /flow"
+    },
+    "body": {
+      "pt-BR": "O canvas entra no pacote de componentes como o subpath @datatechsolutions/tympan/flow. Uma branch leva também os tokens para dentro, o que deixaria dois pacotes.",
+      "en": "The canvas moves into the components package as the @datatechsolutions/tympan/flow subpath. A branch also moves the tokens in, which would leave two packages."
+    }
+  },
+  {
+    "id": "astrlabe-on-tympan",
+    "date": "2026-09-26T21:57-03:00",
+    "era": "consolidation",
+    "title": {
+      "pt-BR": "Astrlabe no Tympan",
+      "en": "Astrlabe on Tympan"
+    },
+    "body": {
+      "pt-BR": "O Tympan ganha um preset astrlabe e um contrato HTML para quem renderiza sem React. A UI em Rust do Astrlabe começa a usar o CSS do Tympan; crates tympan-tokens e tympan-dioxus estão planejadas.",
+      "en": "Tympan gets an astrlabe preset and an HTML contract for hosts that render without React. Astrlabe's Rust UI starts using Tympan's CSS; tympan-tokens and tympan-dioxus crates are planned."
+    }
+  },
+  {
+    "id": "site",
+    "date": "2026-09-26T22:15-03:00",
+    "era": "consolidation",
+    "title": {
+      "pt-BR": "O site do Tympan",
+      "en": "The Tympan site"
+    },
+    "body": {
+      "pt-BR": "A página inicial desenha um tímpano de astrolábio para 23°32′ S. Seções de componentes, temas, estilos de livro, vídeo e instalação, e um seletor de temas em paleta de comandos.",
+      "en": "The home page draws an astrolabe tympan for 23°32′ S. Sections for components, themes, book styles, video and installation, and a command-palette theme picker."
+    }
+  },
+  {
+    "id": "avatars-flags",
+    "date": "2026-09-26T22:41-03:00",
+    "era": "consolidation",
+    "title": {
+      "pt-BR": "Avatares e bandeiras",
+      "en": "Avatars and flags"
+    },
+    "body": {
+      "pt-BR": "Avatares gerados e bandeiras de países e regiões como subpaths, com registros de licença.",
+      "en": "Generated avatars and country and region flags as subpaths, with licence records."
+    },
+    "metrics": [
+      {
+        "label": {
+          "pt-BR": "testes passando (tokens, componentes, impressão)",
+          "en": "passing tests (tokens, components, print)"
+        },
+        "value": "483 / 2193 / 343"
+      }
+    ]
+  }
+]
