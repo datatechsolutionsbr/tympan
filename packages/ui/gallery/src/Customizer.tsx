@@ -6,6 +6,7 @@ import {
   generateThemeCss,
   highContrastPreset,
   neutralPreset,
+  printThemePresets,
   resolveTheme,
   themeToDtcg,
   type ContrastResult,
@@ -17,12 +18,17 @@ import { Button, NativeSelect, ProofBadge, SegmentedControl, Switch, TextArea, T
 import { GalleryToolbar } from './Gallery'
 import { Showcase } from './Showcase'
 
-const PRESETS: Record<string, ThemeConfig> = {
+const BUILT_IN: Record<string, ThemeConfig> = {
   tympan: tympanPreset,
   fakhir: fakhirPreset,
   neutral: neutralPreset,
   'high-contrast': highContrastPreset,
 }
+const PRESETS: Record<string, ThemeConfig> = { ...BUILT_IN, ...Object.fromEntries(printThemePresets.map((p) => [p.name, p])) }
+const PRESET_GROUPS = [
+  { label: 'Built-in', options: Object.keys(BUILT_IN) },
+  { label: 'Print styles', options: printThemePresets.map((p) => ({ value: p.name, label: p.label ?? p.name })) },
+]
 const CUSTOM = 'custom'
 const SEEDS: SeedName[] = ['brand', 'neutral', 'danger', 'warning', 'success', 'info']
 
@@ -107,13 +113,14 @@ export function Customizer() {
   return (
     <div className="ty-gallery">
       <style data-ty-customizer>{css}</style>
+      {effective.fontsUrl ? <link rel="stylesheet" href={effective.fontsUrl} /> : null}
       <GalleryToolbar extra={<span className="ty-gallery-toolbar__note">Theme: custom</span>} />
       <div className="ty-gallery-customizer">
         <aside className="ty-gallery-customizer__panel" aria-labelledby="customizer-title">
           <h1 id="customizer-title" className="ty-gallery-customizer__title">
             Theme customizer
           </h1>
-          <NativeSelect label="Start from preset" options={Object.keys(PRESETS)} value={presetName} onChange={loadPreset} />
+          <NativeSelect label="Start from preset" groups={PRESET_GROUPS} value={presetName} onChange={loadPreset} />
           {hasPins ? (
             <Switch
               label="Pin design-direction colours"

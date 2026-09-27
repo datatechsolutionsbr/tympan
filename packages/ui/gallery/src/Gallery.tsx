@@ -1,8 +1,13 @@
-import { NativeSelect, SegmentedControl, Switch, ThemeScope, useTheme, type ThemeDensity, type ThemeMode } from '../../src'
+import { presets, printThemePresets } from '@datatechsolutions/tympan-tokens'
+import { NativeSelect, SegmentedControl, Switch, ThemeScope, useTheme, type NativeSelectGroup, type ThemeDensity, type ThemeMode } from '../../src'
 import { GALLERY_LOCALES, useGalleryLocale } from './locale'
 import { GALLERY_PAGES } from './Groups'
 
-export const PRESET_NAMES = ['tympan', 'fakhir', 'neutral', 'high-contrast']
+/** Theme picker groups: the built-in presets, then the opt-in print themes (print-themes.css). */
+export const THEME_GROUPS: NativeSelectGroup[] = [
+  { label: 'Built-in', options: presets.map((p) => ({ value: p.name, label: p.label ?? p.name })) },
+  { label: 'Print styles', options: printThemePresets.map((p) => ({ value: p.name, label: p.label ?? p.name })) },
+]
 
 export function GalleryToolbar({ extra }: { extra?: React.ReactNode }) {
   const t = useTheme()
@@ -20,7 +25,7 @@ export function GalleryToolbar({ extra }: { extra?: React.ReactNode }) {
         <a href="#/customizer">Theme customizer</a>
       </nav>
       <div className="ty-gallery-toolbar__controls">
-        {extra ?? <NativeSelect label="Theme" options={PRESET_NAMES} value={t.theme} onChange={t.setTheme} />}
+        {extra ?? <NativeSelect label="Theme" groups={THEME_GROUPS} value={t.theme} onChange={t.setTheme} />}
         <SegmentedControl label="Mode" size="compact" options={['system', 'light', 'dark']} value={t.mode} onChange={(m) => t.setMode(m as ThemeMode)} />
         <NativeSelect
           label="Language"

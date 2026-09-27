@@ -1,7 +1,10 @@
 import { StrictMode, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import '../../src/styles.css'
+// Opt-in print themes (data-ty-theme="print-<style>"), loaded after the token sheet.
+import '@datatechsolutions/tympan-tokens/print-themes.css'
 import './gallery.css'
+import { printThemeFontUrls } from '@datatechsolutions/tympan-tokens'
 import { TympanProvider, ThemeProvider, ToastProvider } from '../../src'
 import { GalleryLocaleContext, useGalleryLocaleState } from './locale'
 import { Customizer } from './Customizer'
@@ -29,7 +32,7 @@ function App() {
   return (
     <GalleryLocaleContext.Provider value={locale}>
     <TympanProvider navigate={navigate} locale={locale.locale} pseudo={locale.pseudo}>
-      <ThemeProvider storageKey={STORAGE_KEY}>
+      <ThemeProvider storageKey={STORAGE_KEY} fonts={printThemeFontUrls}>
         <ToastProvider>
           {hash.startsWith('#/customizer') ? (
             <Customizer />
