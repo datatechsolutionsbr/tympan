@@ -5,6 +5,7 @@
 //   #/<loc>/componentes/<página>                          Componentes
 //   #/<loc>/temas/<tema>/<modo>/<tema B>                  Temas
 //   #/<loc>/livro/<estilo>/<gráfico>/<cor|pb>/<modo>/<estilo B>   Livro
+//   #/<loc>/livro/<estilo>/<gráfico>/<cor|pb>/completo/<dupla>     Livro, the whole sample book
 //   #/<loc>/video/<tema>                                   Vídeo
 //   #/<loc>/instalar                                       Instalar
 // Trailing segments may be left out (their defaults apply). Pure functions, tested in test/rotas.test.ts.
@@ -15,8 +16,8 @@ export type SecaoId = 'inicio' | 'componentes' | 'temas' | 'livro' | 'video' | '
 export const SECAO_IDS: readonly SecaoId[] = ['inicio', 'componentes', 'temas', 'livro', 'video', 'instalar']
 
 /** The four ways of looking at themes and book styles (from the Estúdio's Livro tab). */
-export type Modo = 'um' | 'comparar' | 'antes' | 'galeria'
-export const MODOS: readonly Modo[] = ['um', 'comparar', 'antes', 'galeria']
+export type Modo = 'um' | 'comparar' | 'antes' | 'galeria' | 'completo'
+export const MODOS: readonly Modo[] = ['um', 'comparar', 'antes', 'galeria', 'completo']
 
 /** Chart of the method spread: the style's own ('estudo'), a fixed shape, or the map spread. */
 export type Grafico = 'estudo' | 'halteres' | 'barras' | 'contagem' | 'mapa'
@@ -32,7 +33,7 @@ export type Rota =
   | { secao: 'inicio' }
   | { secao: 'componentes'; pagina?: string }
   | { secao: 'temas'; tema: string; modo: Modo; b: string }
-  | { secao: 'livro'; estilo: PrintPresetName; grafico: Grafico; pb: boolean; modo: Modo; b: PrintPresetName }
+  | { secao: 'livro'; estilo: PrintPresetName; grafico: Grafico; pb: boolean; modo: Modo; b: PrintPresetName; dupla?: string }
   | { secao: 'video'; tema: string }
   | { secao: 'instalar' }
 
@@ -67,7 +68,10 @@ export function lerRota(hash: string): Rota {
     case 'temas':
       return { secao, tema: a || TEMA_PADRAO, modo: modoDe(b), b: c || TEMA_PADRAO }
     case 'livro':
-      return { secao, estilo: estiloDe(a), grafico: graficoDe(b), pb: c === 'pb', modo: modoDe(d), b: estiloDe(e, ESTILO_BASE) }
+      // In the whole-book mode the last segment is the spread; elsewhere it is the style B.
+      return modoDe(d) === 'completo'
+        ? { secao, estilo: estiloDe(a), grafico: graficoDe(b), pb: c === 'pb', modo: 'completo', b: ESTILO_BASE, ...(e ? { dupla: e } : {}) }
+        : { secao, estilo: estiloDe(a), grafico: graficoDe(b), pb: c === 'pb', modo: modoDe(d), b: estiloDe(e, ESTILO_BASE) }
     case 'video':
       return { secao, tema: a || TEMA_PADRAO }
     case 'instalar':
@@ -90,7 +94,8 @@ function partesDaRota(r: Rota): string[] {
     }
     case 'livro': {
       const usaB = (r.modo === 'comparar' || r.modo === 'antes') && r.b !== ESTILO_BASE
-      return aparar(['livro', r.estilo, r.grafico, r.pb ? 'pb' : 'cor', r.modo, ...(usaB ? [r.b] : [])], [null, null, 'estudo', 'cor', 'um'])
+      const fim = r.modo === 'completo' && r.dupla ? [r.dupla] : usaB ? [r.b] : []
+      return aparar(['livro', r.estilo, r.grafico, r.pb ? 'pb' : 'cor', r.modo, ...fim], [null, null, 'estudo', 'cor', 'um'])
     }
     case 'video':
       return ['video', r.tema]

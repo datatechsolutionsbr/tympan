@@ -2,8 +2,8 @@
 // styles (search, swatches, favourites), the spread on a neutral desk with fit-to-width zoom and fullscreen,
 // ← → to change style, the modes Um / Comparar / Antes × depois / Galeria (from the Estúdio's Livro tab),
 // and the style sheet: fonts, palette, paper, proof states, theme id and snippets. State lives in the hash.
-import { BookOpen, ChevronLeft, ChevronRight, Columns2, Expand, GalleryHorizontalEnd, Minimize, Minus, PanelRightClose, PanelRightOpen, Plus, Scan, SplitSquareHorizontal, Square, Star } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { BookOpen, BookOpenText, ChevronLeft, ChevronRight, Columns2, Expand, GalleryHorizontalEnd, Minus, PanelRightClose, PanelRightOpen, Plus, Scan, SplitSquareHorizontal, Square, Star } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { Button, ListboxSelect, SearchBar, SegmentedControl, useMediaQuery } from '@datatechsolutions/tympan'
 import { ESTADOS_PROVA, printPresets, resolvePrintStyle, type PrintPresetName } from '../../tokens'
 import { Cortina } from '../../comum/Cortina'
@@ -15,6 +15,9 @@ import { useFavoritos, useLocal } from '../../local'
 import { Cabeca, Moldura, useHref } from '../../Moldura'
 import { teclaDeTroca, TODOS_ESTILOS, vizinho, type Grafico, type Modo, type RotaDe } from '../../rotas'
 import { DuplaEstilo, QuandoVisivel } from './Dupla'
+import { DUPLAS, DuplaDoLivroNoEstilo } from './LivroCompleto'
+import { Notas } from './Notas'
+import { Visor } from '../../comum/Visor'
 import { useTextosEstilo } from './textos'
 
 type RotaLivro = RotaDe<'livro'>
@@ -140,7 +143,7 @@ function Linha({ rotulo, children }: { rotulo: string; children: ReactNode }) {
   )
 }
 
-function Ficha({ estilo, pb }: { estilo: PrintPresetName; pb: boolean }) {
+function Ficha({ estilo, pb, notas }: { estilo: PrintPresetName; pb: boolean; notas?: ReactNode }) {
   const { t } = useI18n()
   const { rotulo, papelDe, rendDe, marcaDe, rotuloProva } = useTextosEstilo()
   const s = useMemo(() => resolvePrintStyle(printPresets[estilo], { pb }), [estilo, pb])
@@ -223,6 +226,7 @@ function Ficha({ estilo, pb }: { estilo: PrintPresetName; pb: boolean }) {
         </ul>
       </section>
 
+      {notas}
       <section className="ty-site-ficha__bloco" aria-labelledby="ficha-uso">
         <h3 className="ty-site-ficha__sub" id="ficha-uso">
           {t('livro.uso')}
@@ -289,7 +293,7 @@ export function Livro({ rota, ir }: { rota: RotaLivro; ir: Ir }) {
   const [ficha, setFicha] = useLocal<boolean>('livro:ficha', true)
   const [escala, setEscala] = useState(0)
   const [cheia, setCheia] = useState(false)
-  const palco = useRef<HTMLDivElement>(null)
+  const [so, setSo] = useState<'todos' | 'favoritos'>('todos')
   const estreito = useMediaQuery('(max-width: 767.98px)')
   const { estilo, grafico, pb, modo, b } = rota
   const set = useCallback((m: Partial<RotaLivro>, substituir = false) => ir({ ...rota, ...m }, { substituir }), [ir, rota])
@@ -306,26 +310,6 @@ export function Livro({ rota, ir }: { rota: RotaLivro; ir: Ir }) {
     addEventListener('keydown', on)
     return () => removeEventListener('keydown', on)
   }, [estilo, set, dir])
-
-  // Fullscreen on the desk (the Fullscreen API where there is one, else a fixed overlay).
-  useEffect(() => {
-    const on = () => setCheia(document.fullscreenElement === palco.current && !!palco.current)
-    document.addEventListener('fullscreenchange', on)
-    return () => document.removeEventListener('fullscreenchange', on)
-  }, [])
-  const alternarCheia = async () => {
-    const el = palco.current
-    if (!el) return
-    if (document.fullscreenElement) await document.exitFullscreen().catch(() => {})
-    else if (el.requestFullscreen) await el.requestFullscreen().catch(() => setCheia(true))
-    else setCheia((c) => !c)
-  }
-  useEffect(() => {
-    if (!cheia || document.fullscreenElement) return
-    const on = (e: KeyboardEvent) => e.key === 'Escape' && setCheia(false)
-    addEventListener('keydown', on)
-    return () => removeEventListener('keydown', on)
-  }, [cheia])
 
   const passoZoom = (d: 1 | -1) => {
     const i = ZOOMS.findIndex((z) => z >= zoom - 1e-6)
@@ -355,6 +339,7 @@ export function Livro({ rota, ir }: { rota: RotaLivro; ir: Ir }) {
           { value: 'comparar', label: t('modo.comparar'), icon: Columns2 },
           { value: 'antes', label: t('modo.antes'), icon: SplitSquareHorizontal },
           { value: 'galeria', label: t('modo.galeria'), icon: GalleryHorizontalEnd },
+          { value: 'completo', label: t('modo.completo'), icon: BookOpenText },
         ]}
       />
       {estreito ? (
@@ -389,16 +374,16 @@ export function Livro({ rota, ir }: { rota: RotaLivro; ir: Ir }) {
             <Button variant="quiet" size="compact" iconOnly accessibleLabel={t('livro.proximoEstilo')} leadingIcon={dir === 'rtl' ? <ChevronLeft aria-hidden="true" /> : <ChevronRight aria-hidden="true" />} onPress={() => set({ estilo: vizinho(TODOS_ESTILOS, estilo, 1) }, true)} />
           </div>
         ) : null}
-        {modo === 'um' ? (
+        {modo === 'um' || modo === 'completo' ? (
           <Button
             variant="quiet"
             size="compact"
             iconOnly={estreito}
-            accessibleLabel={cheia ? t('livro.sairTelaCheia') : t('livro.telaCheia')}
-            leadingIcon={cheia ? <Minimize aria-hidden="true" /> : <Expand aria-hidden="true" />}
-            onPress={alternarCheia}
+            accessibleLabel={t('livro.telaCheia')}
+            leadingIcon={<Expand aria-hidden="true" />}
+            onPress={() => setCheia(true)}
           >
-            {estreito ? undefined : cheia ? t('livro.sairTelaCheia') : t('livro.telaCheia')}
+            {estreito ? undefined : t('livro.telaCheia')}
           </Button>
         ) : null}
         {modo !== 'galeria' ? (
@@ -418,11 +403,60 @@ export function Livro({ rota, ir }: { rota: RotaLivro; ir: Ir }) {
     </div>
   )
 
+  const duplaAtual = DUPLAS.find((d) => d.id === rota.dupla) ?? DUPLAS[0]!
+  const iDupla = DUPLAS.indexOf(duplaAtual)
+  const irDupla = (i: number) => set({ dupla: DUPLAS[(i + DUPLAS.length) % DUPLAS.length]!.id }, true)
   const corpo = (() => {
+    if (modo === 'completo') {
+      return (
+        <div className="ty-site-completo">
+          <div className="ty-site-completo__nav">
+            <nav className="ty-site-completo__capitulos" aria-label={t('completo.capitulos')}>
+              {DUPLAS.map((d, i) => (
+                <a key={d.id} href={href({ ...rota, dupla: d.id })} className="ty-site-completo__capitulo" aria-current={d.id === duplaAtual.id ? 'page' : undefined}>
+                  <span className="ty-site-completo__num">{n(i + 1)}</span>
+                  {t(d.chave)}
+                </a>
+              ))}
+            </nav>
+            <div className="ty-site-passos" role="group" aria-label={t('completo.navegar')}>
+              <Button variant="quiet" size="compact" iconOnly accessibleLabel={t('completo.anterior')} leadingIcon={dir === 'rtl' ? <ChevronRight aria-hidden="true" /> : <ChevronLeft aria-hidden="true" />} onPress={() => irDupla(iDupla - 1)} />
+              <span className="ty-site-completo__pos">{t('completo.posicao', { n: iDupla + 1, total: DUPLAS.length })}</span>
+              <Button variant="quiet" size="compact" iconOnly accessibleLabel={t('completo.proxima')} leadingIcon={dir === 'rtl' ? <ChevronLeft aria-hidden="true" /> : <ChevronRight aria-hidden="true" />} onPress={() => irDupla(iDupla + 1)} />
+            </div>
+          </div>
+          <figure className="ty-site-mesa">
+            <Encaixe zoom={zoom} onEscala={setEscala}>
+              <DuplaDoLivroNoEstilo id={duplaAtual.id} estilo={estilo} grafico={grafico} pb={pb} />
+            </Encaixe>
+            <figcaption className="ty-site-visually-hidden">{t(duplaAtual.chave)}</figcaption>
+          </figure>
+          {cheia ? (
+            <Visor titulo={t(duplaAtual.chave)} subtitulo={rotulo(estilo)} aoFechar={() => setCheia(false)} aoAnterior={() => irDupla(iDupla - 1)} aoProximo={() => irDupla(iDupla + 1)}>
+              <DuplaDoLivroNoEstilo id={duplaAtual.id} estilo={estilo} grafico={grafico} pb={pb} />
+            </Visor>
+          ) : null}
+        </div>
+      )
+    }
     if (modo === 'galeria') {
       return (
+        <>
+        <div className="ty-site-linha">
+          <SegmentedControl
+            label={t('livro.mostrar')}
+            size="compact"
+            value={so}
+            onChange={(v) => setSo(v as 'todos' | 'favoritos')}
+            options={[
+              { value: 'todos', label: t('livro.mostrarTodos', { n: TODOS_ESTILOS.length }) },
+              { value: 'favoritos', label: t('livro.mostrarFavoritos', { n: favs.length }) },
+            ]}
+          />
+        </div>
+        {so === 'favoritos' && !favs.length ? <p className="ty-site-dica">{t('livro.semFavoritos')}</p> : null}
         <ul className="ty-site-galeria" aria-label={t('livro.galeria')}>
-          {TODOS_ESTILOS.map((id) => (
+          {TODOS_ESTILOS.filter((id) => so === 'todos' || favs.includes(id)).map((id) => (
             <li key={id} className="ty-site-cartao" data-atual={id === estilo || undefined}>
               <a className="ty-site-cartao__link" href={href({ ...rota, estilo: id, modo: 'um' })}>
                 <span className="ty-site-cartao__mesa" aria-hidden="true">
@@ -447,6 +481,7 @@ export function Livro({ rota, ir }: { rota: RotaLivro; ir: Ir }) {
             </li>
           ))}
         </ul>
+        </>
       )
     }
     if (modo === 'comparar') {
@@ -481,16 +516,19 @@ export function Livro({ rota, ir }: { rota: RotaLivro; ir: Ir }) {
       )
     }
     return (
-      <div ref={palco} className="ty-site-palco" data-cheia={cheia ? '' : undefined}>
+      <div className="ty-site-palco">
+        <Mesa estilo={estilo} grafico={grafico} pb={pb} zoom={zoom} rotulo={rotulo(estilo)} onEscala={setEscala} />
         {cheia ? (
-          <div className="ty-site-palco__barra">
-            <span>{rotulo(estilo)}</span>
-            <Button variant="secondary" size="compact" leadingIcon={<Minimize aria-hidden="true" />} onPress={alternarCheia}>
-              {t('livro.sairTelaCheia')}
-            </Button>
-          </div>
+          <Visor
+            titulo={rotulo(estilo)}
+            subtitulo={descricao(estilo)}
+            aoFechar={() => setCheia(false)}
+            aoAnterior={() => set({ estilo: vizinho(TODOS_ESTILOS, estilo, -1) }, true)}
+            aoProximo={() => set({ estilo: vizinho(TODOS_ESTILOS, estilo, 1) }, true)}
+          >
+            <DuplaEstilo estilo={estilo} grafico={grafico} pb={pb} />
+          </Visor>
         ) : null}
-        <Mesa estilo={estilo} grafico={grafico} pb={pb} zoom={cheia ? 1 : zoom} rotulo={rotulo(estilo)} inteira={cheia} onEscala={setEscala} />
       </div>
     )
   })()
@@ -525,7 +563,7 @@ export function Livro({ rota, ir }: { rota: RotaLivro; ir: Ir }) {
           {corpo}
           {modo !== 'galeria' ? <p className="ty-site-dica">{t('livro.dicaTeclas')}</p> : null}
         </div>
-        {ficha && modo !== 'galeria' ? <Ficha estilo={estilo} pb={pb} /> : null}
+        {ficha && modo !== 'galeria' ? <Ficha estilo={estilo} pb={pb} notas={<Notas estilo={estilo} />} /> : null}
         </div>
       </div>
     </Moldura>
