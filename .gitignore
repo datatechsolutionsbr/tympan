@@ -11,3 +11,6 @@ test-results/
 .env.*
 !.env.example
 packages/print/gallery/shots/
+
+# Rust crates built in place (CI uses its own target dir)
+crates/target/

@@ -1,0 +1,80 @@
+// One definition, three renderers: every example of every enhancing element
+// renders the same markup through the reference renderer (the fixtures the
+// Rust bindings are tested against), the generated React wrapper, and the
+// element itself when used from plain HTML.
+import { execFileSync } from 'node:child_process'
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
+import { createElement, type ComponentType } from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { describe, expect, it } from 'vitest'
+import { renderAnatomy, renderElement } from '../../src/elements/anatomy'
+import { buttonDefinition } from '../../src/elements/button/definition'
+import { switchDefinition } from '../../src/elements/switch/definition'
+import type { ElementDefinition } from '../../src/elements/definition'
+import { defineTympanElements } from '../../src/elements'
+import { TyButton, TySwitch } from '../../src/elements/react'
+import { canon, canonElement } from './canon'
+
+const repo = join(__dirname, '..', '..', '..', '..')
+const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+const camel = (s: string) => s.replace(/-([a-z0-9])/g, (_, c: string) => c.toUpperCase())
+
+const CASES: Array<[ElementDefinition, ComponentType<Record<string, unknown>>]> = [
+  [buttonDefinition, TyButton as unknown as ComponentType<Record<string, unknown>>],
+  [switchDefinition, TySwitch as unknown as ComponentType<Record<string, unknown>>],
+]
+
+defineTympanElements()
+
+describe('generated files', () => {
+  it('are up to date with the definitions', () => {
+    expect(() => execFileSync('node', [join(repo, 'tools/elements/generate.mjs'), '--check'], { stdio: 'pipe' })).not.toThrow()
+  })
+})
+
+for (const [def, Wrapper] of CASES) {
+  describe(`${def.tag} parity`, () => {
+    for (const example of def.examples) {
+      const slots = Object.fromEntries(Object.entries(example.slots).map(([k, v]) => [k, escape(v)]))
+
+      it(`${example.name}: the Rust fixture is the reference rendering`, () => {
+        const fixture = readFileSync(join(repo, 'crates/tympan-dioxus/tests/fixtures', def.tag, `${example.name}.html`), 'utf8')
+        expect(canon(fixture)).toEqual(canon(renderElement(def, example.props, slots, 'i')))
+      })
+
+      it(`${example.name}: the React wrapper renders the reference markup`, () => {
+        const props: Record<string, unknown> = { ...example.props }
+        for (const [slot, text] of Object.entries(example.slots)) props[slot === 'default' ? 'children' : camel(slot)] = text
+        const html = renderToStaticMarkup(createElement(Wrapper, props))
+        // The wrapper's instance id comes from useId; compare with its own id.
+        const instance = /data-ty-instance="([^"]+)"/.exec(html)?.[1] ?? ''
+        expect(canon(html)).toEqual(canon(renderElement(def, example.props, slots, instance)))
+      })
+
+      it(`${example.name}: the element builds the same anatomy from plain HTML`, () => {
+        const host = document.createElement(def.tag)
+        host.setAttribute('data-ty-instance', 'i')
+        for (const [name, value] of Object.entries(example.props)) {
+          const attribute = def.props[name]!.attribute
+          if (value === true) host.setAttribute(attribute, '')
+          else if (value !== false) host.setAttribute(attribute, String(value))
+        }
+        for (const [slot, text] of Object.entries(example.slots)) {
+          if (slot === 'default') host.append(text)
+          else {
+            const span = document.createElement('span')
+            span.setAttribute('slot', slot)
+            span.textContent = text
+            host.append(span)
+          }
+        }
+        document.body.append(host)
+        // Named-slot content keeps its wrapper span; compare the anatomy with that span in place.
+        const expectedSlots = Object.fromEntries(Object.entries(slots).map(([k, v]) => [k, k === 'default' ? v : `<span slot="${k}">${v}</span>`]))
+        expect(canonElement(host)).toEqual(canon(renderAnatomy(def, example.props, expectedSlots, 'i')))
+        host.remove()
+      })
+    }
+  })
+}

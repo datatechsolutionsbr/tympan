@@ -20,11 +20,16 @@
     "build": "npm run build -w @datatechsolutions/tympan-tokens && npm run build -w @datatechsolutions/tympan && npm run build -w @datatechsolutions/tympan-print",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
-    "lint": "npm run check:no-utility-css && npm run check:logical-css && npm run check:provenance",
+    "lint": "npm run check:no-utility-css && npm run check:logical-css && npm run check:provenance && npm run check:elements",
     "check:no-utility-css": "node tools/guardrails/no-utility-css.mjs",
     "check:logical-css": "node tools/guardrails/logical-css.mjs",
     "check:provenance": "node tools/guardrails/provenance.mjs",
-    "check": "npm run lint && npm run build && npm run typecheck && npm test"
+    "check": "npm run lint && npm run build && npm run check:rust-sync && npm run typecheck && npm test",
+    "generate:elements": "node tools/elements/generate.mjs",
+    "check:elements": "node tools/elements/generate.mjs --check",
+    "sync:rust": "node tools/rust/sync.mjs",
+    "check:rust-sync": "node tools/rust/sync.mjs --check",
+    "check:rust": "cd crates && cargo fmt --all -- --check && cargo clippy --all-targets -- -D warnings && cargo test"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.2",

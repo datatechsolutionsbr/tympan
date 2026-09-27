@@ -1,0 +1,13 @@
+[package]
+name = "tympan-tokens"
+version = "0.1.0"
+edition = "2021"
+license-file = "../../LICENSE"
+description = "Tympan design tokens for Rust: every theme as a typed enum (the built-in presets and the print styles), modes and densities, the preset token values, and the built stylesheets and custom-element bundle embedded for a host to serve."
+repository = "https://github.com/datatechsolutionsbr/tympan"
+include = ["src/**", "generated/**", "build.rs", "Cargo.toml", "README.md"]
+
+[dependencies]
+
+[build-dependencies]
+serde_json = "1"

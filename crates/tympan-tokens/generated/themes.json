@@ -1,0 +1,266 @@
+[
+  {
+    "name": "tympan",
+    "label": "Tympan",
+    "kind": "preset",
+    "fontsUrl": null
+  },
+  {
+    "name": "fakhir",
+    "label": "Fakhir",
+    "kind": "preset",
+    "fontsUrl": null
+  },
+  {
+    "name": "astrlabe",
+    "label": "Astrlabe",
+    "kind": "preset",
+    "fontsUrl": null
+  },
+  {
+    "name": "neutral",
+    "label": "Neutral",
+    "kind": "preset",
+    "fontsUrl": null
+  },
+  {
+    "name": "high-contrast",
+    "label": "High contrast",
+    "kind": "preset",
+    "fontsUrl": null
+  },
+  {
+    "name": "print-dashboard",
+    "label": "Dashboard editorial",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap"
+  },
+  {
+    "name": "print-graficos-1900",
+    "label": "Gráficos de exposição (1900)",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap"
+  },
+  {
+    "name": "print-cartao-postal",
+    "label": "Cartão-postal desenhado à mão",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap"
+  },
+  {
+    "name": "print-caderno",
+    "label": "Caderno de campo",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Courier+Prime:wght@400;700&display=swap"
+  },
+  {
+    "name": "print-isotype",
+    "label": "Isotype",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+  },
+  {
+    "name": "print-cordel",
+    "label": "Cordel",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Courier+Prime&display=swap"
+  },
+  {
+    "name": "print-riso",
+    "label": "Risografia",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Archivo:ital,wdth,wght@0,62..125,400;0,62..125,600;1,62..125,400&family=Space+Mono&display=swap"
+  },
+  {
+    "name": "print-jornal",
+    "label": "Editorial de jornal",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&family=IBM+Plex+Mono:wght@400;500&display=swap"
+  },
+  {
+    "name": "print-prancheta",
+    "label": "Prancheta (cianotipia)",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap"
+  },
+  {
+    "name": "print-prancheta-clara",
+    "label": "Prancheta clara",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap"
+  },
+  {
+    "name": "print-aquarela",
+    "label": "Aquarela",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap"
+  },
+  {
+    "name": "print-minimo-de-tinta",
+    "label": "Mínimo de tinta",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@400;500&display=swap"
+  },
+  {
+    "name": "print-suico",
+    "label": "Estilo Suíço",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap"
+  },
+  {
+    "name": "print-concretismo",
+    "label": "Concretismo",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
+  },
+  {
+    "name": "print-semanario",
+    "label": "Semanário de economia",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap"
+  },
+  {
+    "name": "print-infografico-ilustrado",
+    "label": "Infográfico ilustrado",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Nunito+Sans:ital,opsz,wght@0,6..12,400;0,6..12,600;0,6..12,700;1,6..12,400&display=swap"
+  },
+  {
+    "name": "print-diagrama-modernista",
+    "label": "Diagrama modernista",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700&family=Jost:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+  },
+  {
+    "name": "print-papel-salmao",
+    "label": "Papel salmão",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Gelasio:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+  },
+  {
+    "name": "print-dados-br",
+    "label": "Dados à brasileira",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap"
+  },
+  {
+    "name": "print-fluxo-historico",
+    "label": "Fluxo histórico (séc. XIX)",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap"
+  },
+  {
+    "name": "print-blocos-coloridos",
+    "label": "Blocos coloridos",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,600;0,700;0,800;0,900;1,500&family=Lato:ital,wght@0,400;0,700;1,400&display=swap"
+  },
+  {
+    "name": "print-construtivismo",
+    "label": "Construtivismo russo",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=PT+Sans:ital,wght@0,400;0,700;1,400&display=swap"
+  },
+  {
+    "name": "print-bauhaus",
+    "label": "Bauhaus",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
+  },
+  {
+    "name": "print-brutalista",
+    "label": "Brutalista (dossiê)",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+  },
+  {
+    "name": "print-divulgacao",
+    "label": "Revista de divulgação",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Archivo+Black&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400&display=swap"
+  },
+  {
+    "name": "print-proporcao-modular",
+    "label": "Proporção modular",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Stardos+Stencil:wght@400;700&family=Work+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+  },
+  {
+    "name": "print-sinalizacao",
+    "label": "Sinalização de aeroporto",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&display=swap"
+  },
+  {
+    "name": "print-pictogramas",
+    "label": "Pictogramas esportivos",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
+  },
+  {
+    "name": "print-mapa-de-metro",
+    "label": "Mapa de metrô",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+  },
+  {
+    "name": "print-jornal-1959",
+    "label": "Jornal modernista (1959)",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Libre+Bodoni:wght@400;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap"
+  },
+  {
+    "name": "print-azulejo-modernista",
+    "label": "Azulejo modernista",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+  },
+  {
+    "name": "print-tropicalia",
+    "label": "Tropicália",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Shrikhand&family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+  },
+  {
+    "name": "print-atlas-oficial",
+    "label": "Atlas oficial (cartografia)",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap"
+  },
+  {
+    "name": "print-grade-holandesa",
+    "label": "Grade holandesa",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap"
+  },
+  {
+    "name": "print-papel-recortado",
+    "label": "Papel recortado",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@400;900&family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+  },
+  {
+    "name": "print-pop-art",
+    "label": "Pop art",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Bangers&family=Nunito+Sans:wght@400;600;700;800&display=swap"
+  },
+  {
+    "name": "print-cientifico",
+    "label": "Figura de periódico científico",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+  },
+  {
+    "name": "print-art-nouveau",
+    "label": "Art nouveau",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Federo&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap"
+  },
+  {
+    "name": "print-memphis",
+    "label": "Memphis",
+    "kind": "print",
+    "fontsUrl": "https://fonts.googleapis.com/css2?family=Bungee&family=Rubik:ital,wght@0,400;0,500;0,700;1,400&display=swap"
+  }
+]
