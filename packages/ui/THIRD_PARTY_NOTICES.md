@@ -169,3 +169,12 @@ SOFTWARE.
 - A subset of ICU MessageFormat (arguments, `number`, `plural` with `=n`
   and CLDR categories through `Intl.PluralRules`, `select`), written from the
   public ICU syntax description (flow canvas labels).
+
+## Fonts converted to outlines
+
+| Font | Licence | Use |
+|---|---|---|
+| Archivo (Omnibus-Type) | SIL Open Font License 1.1 | the wordmarks of `ProductMark` (horizontal variant), converted to outlined paths; no font file is shipped |
+
+SIL OFL 1.1: https://openfontlicense.org. Outlined glyphs in a logo are artwork,
+not a font software redistribution; the notice is kept for attribution.

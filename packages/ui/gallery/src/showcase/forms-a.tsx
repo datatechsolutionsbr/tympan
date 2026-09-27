@@ -18,6 +18,8 @@ import {
   SearchBar,
   StateSwitch,
   Tag,
+  ThemePaletteTrigger,
+  ThemeSwatch,
   ThemeSwitcher,
   type ActiveFilter,
   type ChipItem,
@@ -71,6 +73,16 @@ export function FormsAShowcase({ scope }: { scope: string }) {
           <ThemeSwitcher mode={mode} variant="compact" onModeChange={setMode} />
           <StateSwitch label="Agent status" checked={active} onCheckedChange={setActive} />
           <StateSwitch label="Saving status" checked={false} onCheckedChange={() => {}} pending />
+        </div>
+      </Section>
+
+      <Section id={id('theme-palette')} title="ThemePaletteTrigger, ThemeSwatch">
+        <div className="ty-gallery-row">
+          <ThemePaletteTrigger shortcut={false} />
+          <ThemePaletteTrigger shortcut={false} compact />
+          <ThemeSwatch theme="tympan" />
+          <ThemeSwatch theme="print-cordel" />
+          <ThemeSwatch theme="print-prancheta" />
         </div>
       </Section>
 

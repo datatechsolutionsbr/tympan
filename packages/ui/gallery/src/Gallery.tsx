@@ -1,8 +1,8 @@
-import { presets, printThemePresets, resolveTheme, type ThemeConfig } from '@datatechsolutions/tympan-tokens'
-import { ChevronDown, Languages, Monitor, Moon, SlidersHorizontal, Sun } from 'lucide-react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { presets, printThemePresets } from '@datatechsolutions/tympan-tokens'
+import { Languages, Monitor, Moon, SlidersHorizontal, Sun } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { Button as AriaButton } from 'react-aria-components'
-import { Popover, SegmentedControl, Switch, useTheme, type NativeSelectGroup, type ThemeDensity, type ThemeMode } from '../../src'
+import { Popover, SegmentedControl, Switch, ThemePaletteTrigger, useTheme, type NativeSelectGroup, type ThemeDensity, type ThemeMode } from '../../src'
 import { GALLERY_LOCALES, directionOf, useGalleryLocale } from './locale'
 import { GALLERY_CATEGORIES, GALLERY_PAGES } from './Groups'
 import { GalleryFrameContext, scrollToSpecimen } from './Section'
@@ -31,82 +31,10 @@ const EXTRA_GROUPS: { heading: string; links: { label: string; href: string; ext
   { heading: 'Tools', links: [{ label: 'Theme customizer', href: '#/customizer' }] },
 ]
 
-interface ThemeSwatch {
-  name: string
-  label: string
-  bg: string
-  ink: string
-  brand: string
-}
 
-/** Paper, ink and accent of every theme in light mode, for the picker swatches. */
-function useThemeSwatches(): { builtIn: ThemeSwatch[]; print: ThemeSwatch[] } {
-  return useMemo(() => {
-    const swatch = (p: ThemeConfig): ThemeSwatch => {
-      const r = resolveTheme(p, 'light') as unknown as Record<string, string>
-      return { name: p.name, label: p.label ?? p.name, bg: String(r.bg), ink: String(r.ink), brand: String(r.brand) }
-    }
-    return { builtIn: presets.map(swatch), print: printThemePresets.map(swatch) }
-  }, [])
-}
-
-function Swatch({ s }: { s: ThemeSwatch }) {
-  return (
-    <span className="ty-gallery-swatch" aria-hidden="true" style={{ background: s.bg, borderColor: s.ink }}>
-      <span style={{ background: s.brand }} />
-    </span>
-  )
-}
-
+/** The library's ThemePalette: fuzzy search, live preview with ↑↓, Enter applies, Esc reverts. */
 function ThemePicker() {
-  const t = useTheme()
-  const { builtIn, print } = useThemeSwatches()
-  const [query, setQuery] = useState('')
-  const all = [...builtIn, ...print]
-  const active = all.find((s) => s.name === t.theme) ?? builtIn[0]!
-  const q = query.trim().toLocaleLowerCase()
-  const match = (s: ThemeSwatch) => !q || s.label.toLocaleLowerCase().includes(q) || s.name.includes(q)
-  const group = (title: string, items: ThemeSwatch[]) => {
-    const shown = items.filter(match)
-    if (!shown.length) return null
-    return (
-      <div className="ty-gallery-themes__group" role="group" aria-label={title}>
-        <p className="ty-gallery-themes__title">
-          {title} <span>{shown.length}</span>
-        </p>
-        <div className="ty-gallery-themes__grid">
-          {shown.map((s) => (
-            <AriaButton key={s.name} className="ty-gallery-themes__item" aria-pressed={s.name === t.theme} onPress={() => t.setTheme(s.name)}>
-              <Swatch s={s} />
-              <span>{s.label}</span>
-            </AriaButton>
-          ))}
-        </div>
-      </div>
-    )
-  }
-  return (
-    <Popover
-      title="Theme"
-      placement="bottom"
-      align="end"
-      showArrow={false}
-      className="ty-gallery-popover ty-gallery-popover--wide"
-      trigger={
-        <AriaButton className="ty-gallery-bar-button" aria-label={`Theme: ${active.label}`}>
-          <Swatch s={active} />
-          <span className="ty-gallery-bar-button__text">{active.label}</span>
-          <ChevronDown aria-hidden="true" size={14} />
-        </AriaButton>
-      }
-    >
-      <input className="ty-gallery-themes__search" type="search" placeholder="Filter themes" aria-label="Filter themes" value={query} onChange={(e) => setQuery(e.target.value)} />
-      <div className="ty-gallery-themes">
-        {group('Built-in', builtIn)}
-        {group('Print styles', print)}
-      </div>
-    </Popover>
-  )
+  return <ThemePaletteTrigger />
 }
 
 const MODES: { id: ThemeMode; label: string; Icon: typeof Sun }[] = [

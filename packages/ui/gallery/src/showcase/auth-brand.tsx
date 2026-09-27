@@ -8,6 +8,7 @@ import {
   AuthFrame,
   BrandLoader,
   BrandMark,
+  ProductMark,
   BrandPanel,
   Button,
   ConsentBanner,
@@ -73,6 +74,19 @@ export function AuthBrandShowcase({ scope }: { scope: string }) {
           <BrandMark />
           <BrandMark size="large" />
           <BrandMark showWordmark={false} label="Home" />
+        </div>
+      </Section>
+
+      <Section id={id('product-mark')} title="ProductMark">
+        <div className="ty-gallery-row">
+          {(['tympan', 'fakhir', 'astrlabe', 'datatech'] as const).map((p) => (
+            <ProductMark key={p} product={p} size={40} />
+          ))}
+        </div>
+        <div className="ty-gallery-row">
+          {(['tympan', 'fakhir', 'astrlabe', 'datatech'] as const).map((p) => (
+            <ProductMark key={p} product={p} variant="horizontal" size={40} />
+          ))}
         </div>
       </Section>
 

@@ -293,3 +293,15 @@ names (`--fk-*`), our own ramp curves and hues, and our own `variants()` helper
 class string, CSS file or palette value from either project was read or copied.
 Details and URLs: `packages/tokens/README.md`, section "Ideas taken from public
 documentation".
+
+## ProductMark: the Datatech family marks (author's artwork)
+
+`src/components/product-mark/marks.ts` holds the symbol and horizontal marks
+of Fakhir, Astrlabe and Datatech from the "Instrumento" brand direction, and
+the wordmark of Tympan; Tympan's symbol stays its original plate mark (outer
+circle, two almucantars, horizon), drawn in `ProductMark.tsx`. The artwork is the author's own (Datatech), produced by her brand
+generator script (Python, in the brand redesign working folder) and exported
+as per-product SVGs; the module was generated from those SVGs by replacing the
+ink fill with `currentColor` and the accent fill with `var(--ty-mark-accent)`.
+The wordmarks are set in Archivo and converted to outlines (see
+THIRD_PARTY_NOTICES.md). No third-party logo or icon set was used.
