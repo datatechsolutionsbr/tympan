@@ -1,5 +1,6 @@
 // check:provenance — hard-fail markers that would suggest material from the
-// forked component library or commercial templates leaked into the clean room.
+// forked component library or commercial templates leaked into the clean room,
+// and imports of avatar artwork outside the licence allow-list.
 // Scans every file of packages/tokens, packages/ui (with the flow canvas) and packages/print except build
 // output and node_modules. The similarity comparison against the fork runs
 // outside the clean room (see tools/provenance/README.md).
@@ -16,6 +17,9 @@ const RULES = [
   [/catalyst|tailwind\s*(ui|plus)/gi, 'commercial template name'],
   [/(?:from\s+|import\s*\(\s*|require\s*\(\s*)['"](@fakhir\/workflow|astrlabe-ui|@datatech\/astrlabe-ui)(\/[^'"]*)?['"]/g, 'import of the forked packages'],
   [/(?:from\s+|import\s*\(\s*|require\s*\(\s*)['"][^'"]*ui-components[^'"]*['"]/g, 'import from a ui-components folder'],
+  // DiceBear styles whose artwork is CC BY 4.0 or custom-licensed, and the collection that re-exports them
+  // (allow-list: packages/ui/src/avatars/styles.ts).
+  [/(?:from\s+|import\s*\(\s*|require\s*\(\s*)['"]@dicebear\/(?:adventurer|avataaars|big-ears|big-smile|bottts|croodles|dylan|fun-emoji|micah|miniavs|personas|toon-head|collection)(?:-neutral)?(?:\/[^'"]*)?['"]/g, 'DiceBear style outside the CC0/MIT allow-list'],
 ]
 const TEXT = /\.(tsx?|jsx?|mjs|cjs|css|json|md|html|svg|txt|ya?ml)$/
 

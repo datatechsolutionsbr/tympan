@@ -1,9 +1,10 @@
 import { defineConfig } from 'tsdown'
 
 export default defineConfig({
-  // Two entries: the flow canvas is a subpath (@datatechsolutions/tympan/flow), so
-  // hosts that only use the components never load it or its layout dependency.
-  entry: { index: 'src/index.ts', flow: 'src/flow/index.ts' },
+  // One entry per subpath: the flow canvas (@datatechsolutions/tympan/flow) and
+  // generated avatars (/avatars) sit apart from the components, so hosts that
+  // do not import them never load them or their optional peer dependencies.
+  entry: { index: 'src/index.ts', flow: 'src/flow/index.ts', avatars: 'src/avatars/index.ts' },
   format: ['esm'],
   platform: 'neutral',
   target: 'es2022',
@@ -11,7 +12,7 @@ export default defineConfig({
   tsconfig: 'tsconfig.build.json',
   sourcemap: true,
   clean: true,
-  external: [/^react/, /^react-aria/, /^react-aria-components/, /^lucide-react/, /^@datatechsolutions\/tympan-tokens/, /^d3-geo/, /^@internationalized\//, /^@dagrejs\//],
+  external: [/^react/, /^react-aria/, /^react-aria-components/, /^lucide-react/, /^@datatechsolutions\/tympan-tokens/, /^d3-geo/, /^@internationalized\//, /^@dagrejs\//, /^@dicebear\//],
   outExtensions: () => ({ js: '.js', dts: '.d.ts' }),
   // Components use React context and effects: client modules for RSC hosts.
   banner: { js: '"use client";' },

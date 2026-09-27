@@ -1,7 +1,7 @@
 {
   "name": "@datatechsolutions/tympan",
   "version": "0.1.0",
-  "description": "Tympan: accessible React components (React 18.3 or 19) on React Aria Components, styled with --ty-* CSS custom properties in @layer tympan. The flow and provenance canvas (graph viewer, DAG editor, run inspection) ships as the @datatechsolutions/tympan/flow subpath.",
+  "description": "Tympan: accessible React components (React 18.3 or 19) on React Aria Components, styled with --ty-* CSS custom properties in @layer tympan. The flow and provenance canvas (graph viewer, DAG editor, run inspection) ships as the @datatechsolutions/tympan/flow subpath. Generated avatars (DiceBear, CC0/MIT styles only) ship as the /avatars subpath.",
   "license": "FSL-1.1-ALv2",
   "author": "Natalia Mesquita",
   "repository": {
@@ -22,7 +22,9 @@
     "dag",
     "workflow-editor",
     "provenance",
-    "w3c-prov"
+    "w3c-prov",
+    "avatar",
+    "dicebear"
   ],
   "private": true,
   "type": "module",
@@ -42,6 +44,11 @@
       "tympan-source": "./src/flow/index.ts",
       "types": "./dist/flow.d.ts",
       "default": "./dist/flow.js"
+    },
+    "./avatars": {
+      "tympan-source": "./src/avatars/index.ts",
+      "types": "./dist/avatars.d.ts",
+      "default": "./dist/avatars.js"
     },
     "./styles.css": "./dist/styles.css",
     "./flow.css": "./dist/flow.css",
@@ -64,12 +71,72 @@
     "pretypecheck": "npm run build -w @datatechsolutions/tympan-tokens"
   },
   "peerDependencies": {
+    "@dagrejs/dagre": "^3.1.1",
     "react": "^18.3.0 || ^19.0.0",
     "react-dom": "^18.3.0 || ^19.0.0",
-    "@dagrejs/dagre": "^3.1.1"
+    "@dicebear/core": "^9.4.3",
+    "@dicebear/glass": "^9.4.3",
+    "@dicebear/icons": "^9.4.3",
+    "@dicebear/identicon": "^9.4.3",
+    "@dicebear/initials": "^9.4.3",
+    "@dicebear/lorelei": "^9.4.3",
+    "@dicebear/lorelei-neutral": "^9.4.3",
+    "@dicebear/notionists": "^9.4.3",
+    "@dicebear/notionists-neutral": "^9.4.3",
+    "@dicebear/open-peeps": "^9.4.3",
+    "@dicebear/pixel-art": "^9.4.3",
+    "@dicebear/pixel-art-neutral": "^9.4.3",
+    "@dicebear/rings": "^9.4.3",
+    "@dicebear/shapes": "^9.4.3",
+    "@dicebear/thumbs": "^9.4.3"
   },
   "peerDependenciesMeta": {
     "@dagrejs/dagre": {
+      "optional": true
+    },
+    "@dicebear/core": {
+      "optional": true
+    },
+    "@dicebear/glass": {
+      "optional": true
+    },
+    "@dicebear/icons": {
+      "optional": true
+    },
+    "@dicebear/identicon": {
+      "optional": true
+    },
+    "@dicebear/initials": {
+      "optional": true
+    },
+    "@dicebear/lorelei": {
+      "optional": true
+    },
+    "@dicebear/lorelei-neutral": {
+      "optional": true
+    },
+    "@dicebear/notionists": {
+      "optional": true
+    },
+    "@dicebear/notionists-neutral": {
+      "optional": true
+    },
+    "@dicebear/open-peeps": {
+      "optional": true
+    },
+    "@dicebear/pixel-art": {
+      "optional": true
+    },
+    "@dicebear/pixel-art-neutral": {
+      "optional": true
+    },
+    "@dicebear/rings": {
+      "optional": true
+    },
+    "@dicebear/shapes": {
+      "optional": true
+    },
+    "@dicebear/thumbs": {
       "optional": true
     }
   },
@@ -83,6 +150,21 @@
   },
   "devDependencies": {
     "@dagrejs/dagre": "^3.1.1",
+    "@dicebear/core": "^9.4.3",
+    "@dicebear/glass": "^9.4.3",
+    "@dicebear/icons": "^9.4.3",
+    "@dicebear/identicon": "^9.4.3",
+    "@dicebear/initials": "^9.4.3",
+    "@dicebear/lorelei": "^9.4.3",
+    "@dicebear/lorelei-neutral": "^9.4.3",
+    "@dicebear/notionists": "^9.4.3",
+    "@dicebear/notionists-neutral": "^9.4.3",
+    "@dicebear/open-peeps": "^9.4.3",
+    "@dicebear/pixel-art": "^9.4.3",
+    "@dicebear/pixel-art-neutral": "^9.4.3",
+    "@dicebear/rings": "^9.4.3",
+    "@dicebear/shapes": "^9.4.3",
+    "@dicebear/thumbs": "^9.4.3",
     "@types/d3-geo": "^3.1.1",
     "axe-core": "^4.13.0"
   }
