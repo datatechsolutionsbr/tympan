@@ -24,7 +24,10 @@ use dioxus::prelude::*;
 
 /// Links Tympan's stylesheet and loads its custom elements from `base`
 /// (where the host serves [`tympan_tokens::assets::ALL`], e.g. `/tympan`),
-/// with `version` as a cache-busting query.
+/// with `version` as a cache-busting query. Both go into the document head,
+/// in the order this renders relative to the host's own head elements, so a
+/// host that declares its `@layer` order in its own stylesheet renders that
+/// first.
 #[component]
 pub fn TympanHead(#[props(into)] base: String, #[props(into, default)] version: String) -> Element {
     let query = if version.is_empty() {
@@ -33,7 +36,7 @@ pub fn TympanHead(#[props(into)] base: String, #[props(into, default)] version: 
         format!("?v={version}")
     };
     rsx! {
-        link { rel: "stylesheet", href: "{base}/styles.css{query}" }
-        script { r#type: "module", src: "{base}/elements.js{query}" }
+        document::Stylesheet { href: "{base}/styles.css{query}" }
+        document::Script { r#type: "module", src: "{base}/elements.js{query}" }
     }
 }

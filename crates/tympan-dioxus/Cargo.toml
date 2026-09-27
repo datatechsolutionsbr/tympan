@@ -7,7 +7,7 @@ description = "Dioxus 0.7 bindings of Tympan's custom elements, generated from t
 repository = "https://github.com/datatechsolutionsbr/tympan"
 
 [dependencies]
-dioxus = { version = "0.7", default-features = false, features = ["macro", "html", "signals", "hooks", "mounted"] }
+dioxus = { version = "0.7", default-features = false, features = ["macro", "html", "signals", "hooks", "mounted", "document"] }
 tympan-tokens = { path = "../tympan-tokens" }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
