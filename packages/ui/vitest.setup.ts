@@ -25,3 +25,11 @@ if (!('ResizeObserver' in globalThis)) {
 if (!Element.prototype.scrollIntoView) {
   Element.prototype.scrollIntoView = function scrollIntoView() {}
 }
+// The flow canvas captures the pointer while dragging nodes and connectors.
+if (!Element.prototype.setPointerCapture) {
+  Element.prototype.setPointerCapture = function setPointerCapture() {}
+  Element.prototype.releasePointerCapture = function releasePointerCapture() {}
+  Element.prototype.hasPointerCapture = function hasPointerCapture() {
+    return false
+  }
+}

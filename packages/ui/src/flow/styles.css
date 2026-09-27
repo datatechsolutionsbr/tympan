@@ -1,0 +1,23 @@
+/* Flow canvas stylesheet entry (FSL-1.1-ALv2), published as
+   '@datatechsolutions/tympan/flow.css'. Import after
+   '@datatechsolutions/tympan/styles.css'; everything lives in @layer tympan.*.
+   The canvas tokens (--ty-flow-*) and the [data-tone] mapping come from
+   @datatechsolutions/tympan-tokens (src/flow.ts), loaded by styles.css. */
+@layer tympan.tokens, tympan.base, tympan.components;
+
+@import './internal/internal.css';
+@import './surface/surface.css';
+@import './nodes/nodes.css';
+@import './connectors/connectors.css';
+@import './decision/decision.css';
+@import './provenance/provenance.css';
+@import './editor/editor.css';
+@import './steps/steps.css';
+@import './toolbar/toolbar.css';
+@import './run/run.css';
+@import './forms/forms.css';
+@import './expressions/expressions.css';
+@import './dialogs/dialogs.css';
+@import './agents/agents.css';
+@import './assistant/assistant.css';
+@import './report/report.css';

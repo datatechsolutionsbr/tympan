@@ -1,7 +1,7 @@
 {
   "name": "@datatechsolutions/tympan",
   "version": "0.1.0",
-  "description": "Tympan: accessible React components (React 18.3 or 19) on React Aria Components, styled with --ty-* CSS custom properties in @layer tympan.",
+  "description": "Tympan: accessible React components (React 18.3 or 19) on React Aria Components, styled with --ty-* CSS custom properties in @layer tympan. The flow and provenance canvas (graph viewer, DAG editor, run inspection) ships as the @datatechsolutions/tympan/flow subpath.",
   "license": "FSL-1.1-ALv2",
   "author": "Natalia Mesquita",
   "repository": {
@@ -17,7 +17,12 @@
     "design-tokens",
     "css-custom-properties",
     "rtl",
-    "i18n"
+    "i18n",
+    "graph",
+    "dag",
+    "workflow-editor",
+    "provenance",
+    "w3c-prov"
   ],
   "private": true,
   "type": "module",
@@ -33,7 +38,13 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./flow": {
+      "tympan-source": "./src/flow/index.ts",
+      "types": "./dist/flow.d.ts",
+      "default": "./dist/flow.js"
+    },
     "./styles.css": "./dist/styles.css",
+    "./flow.css": "./dist/flow.css",
     "./package.json": "./package.json"
   },
   "files": [
@@ -54,7 +65,13 @@
   },
   "peerDependencies": {
     "react": "^18.3.0 || ^19.0.0",
-    "react-dom": "^18.3.0 || ^19.0.0"
+    "react-dom": "^18.3.0 || ^19.0.0",
+    "@dagrejs/dagre": "^3.1.1"
+  },
+  "peerDependenciesMeta": {
+    "@dagrejs/dagre": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@datatechsolutions/tympan-tokens": "0.1.0",
@@ -65,6 +82,7 @@
     "react-aria-components": "^1.21.1"
   },
   "devDependencies": {
+    "@dagrejs/dagre": "^3.1.1",
     "@types/d3-geo": "^3.1.1",
     "axe-core": "^4.13.0"
   }

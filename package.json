@@ -2,7 +2,7 @@
   "name": "@datatechsolutions/tympan-workspace",
   "private": true,
   "version": "0.0.0",
-  "description": "Tympan, an Astrlabe-family component published by Datatech: design tokens (@datatechsolutions/tympan-tokens), accessible React components (@datatechsolutions/tympan) the flow and provenance canvas (@datatechsolutions/tympan-flow) and data-book print components (@datatechsolutions/tympan-print).",
+  "description": "Tympan, an Astrlabe-family component published by Datatech: design tokens (@datatechsolutions/tympan-tokens), accessible React components with the flow and provenance canvas as the /flow subpath (@datatechsolutions/tympan) and data-book print components (@datatechsolutions/tympan-print).",
   "license": "FSL-1.1-ALv2",
   "author": "Natalia Mesquita",
   "repository": {
@@ -17,7 +17,7 @@
     "node": ">=24"
   },
   "scripts": {
-    "build": "npm run build -w @datatechsolutions/tympan-tokens && npm run build -w @datatechsolutions/tympan && npm run build -w @datatechsolutions/tympan-flow && npm run build -w @datatechsolutions/tympan-print",
+    "build": "npm run build -w @datatechsolutions/tympan-tokens && npm run build -w @datatechsolutions/tympan && npm run build -w @datatechsolutions/tympan-print",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "lint": "npm run check:no-utility-css && npm run check:logical-css && npm run check:provenance",

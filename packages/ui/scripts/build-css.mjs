@@ -1,5 +1,7 @@
-// Bundles src/styles.css into dist/styles.css: inlines relative @imports and
-// the @datatechsolutions/tympan-tokens stylesheet, keeps the leading @layer order statement.
+// Bundles the stylesheets: src/styles.css into dist/styles.css (inlines
+// relative @imports and the @datatechsolutions/tympan-tokens stylesheet, keeps
+// the leading @layer order statement) and src/flow/styles.css into
+// dist/flow.css (the flow canvas; hosts import it after styles.css).
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join, resolve } from 'node:path'
@@ -19,8 +21,13 @@ function inline(file, seen = new Set()) {
   })
 }
 
-const out = inline(join(pkg, 'src', 'styles.css'))
-if (/@import/.test(out.replace(/\/\*[\s\S]*?\*\//g, ''))) throw new Error('Unresolved @import left in dist/styles.css')
-mkdirSync(join(pkg, 'dist'), { recursive: true })
-writeFileSync(join(pkg, 'dist', 'styles.css'), out)
-console.log(`ui: wrote dist/styles.css (${Math.round(out.length / 1024)} kB)`)
+for (const [from, to] of [
+  ['styles.css', 'styles.css'],
+  ['flow/styles.css', 'flow.css'],
+]) {
+  const out = inline(join(pkg, 'src', from))
+  if (/@import/.test(out.replace(/\/\*[\s\S]*?\*\//g, ''))) throw new Error(`Unresolved @import left in dist/${to}`)
+  mkdirSync(join(pkg, 'dist'), { recursive: true })
+  writeFileSync(join(pkg, 'dist', to), out)
+  console.log(`ui: wrote dist/${to} (${Math.round(out.length / 1024)} kB)`)
+}
