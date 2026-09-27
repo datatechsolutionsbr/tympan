@@ -37,6 +37,21 @@ describe('Avatar', () => {
     expect(css).toMatch(/\[data-kind='agent'\]\s*\{[^}]*border-radius:\s*var\(--ty-radius-agent\)[^}]*dashed/)
   })
 
+  it('draws artwork instead of the initials and keeps the name on the frame', () => {
+    const { container } = render(<Avatar name="Rosa Alvim" fallbackText="RA" artwork={<svg data-testid="art" aria-hidden="true" />} />)
+    expect(screen.getByRole('img', { name: 'Rosa Alvim' })).toHaveAttribute('data-artwork')
+    expect(screen.getByTestId('art')).toBeInTheDocument()
+    expect(screen.queryByText('RA')).toBeNull()
+    expect(container.querySelector('.ty-avatar__icon')).toBeNull()
+  })
+
+  it('prefers the image over the artwork and falls back to initials when the artwork is null', () => {
+    const { rerender } = render(<Avatar src="/a.png" name="Rosa Alvim" artwork={<svg data-testid="art" />} />)
+    expect(screen.queryByTestId('art')).toBeNull()
+    rerender(<Avatar name="Rosa Alvim" fallbackText="RA" artwork={null} />)
+    expect(screen.getByText('RA')).toBeInTheDocument()
+  })
+
   it('is hidden from assistive tech when decorative', () => {
     const { container } = render(<Avatar decorative fallbackText="NM" />)
     expect(container.firstElementChild).toHaveAttribute('aria-hidden', 'true')

@@ -1,5 +1,5 @@
 import { Bot, User } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { Button as AriaButton, Link as AriaLink, type PressEvent } from 'react-aria-components'
 import { cx } from '../../internal/cx'
 import { devWarning } from '../../internal/dev'
@@ -35,6 +35,13 @@ export interface AvatarProps {
   size?: AvatarSize
   /** Fallback background: accent-soft or neutral. */
   tint?: 'accent' | 'neutral'
+  /**
+   * Artwork drawn when there is no image (or the image fails): a generated
+   * avatar (`@datatechsolutions/tympan/avatars`) or the host's own. It replaces
+   * the initials and the agent bot icon and is always decorative; the frame
+   * carries the name. Without it (or when it is null) the fallback shows.
+   */
+  artwork?: ReactNode
   /** Makes the avatar a button. */
   onPress?: (e: PressEvent) => void
   /** Makes the avatar a link (router adapter). */
@@ -43,7 +50,7 @@ export interface AvatarProps {
 }
 
 /** Person or agent picture with fallback (spec: wave-1/avatar.md; design direction §2.11). */
-export function Avatar({ src, fallbackText, name, decorative = false, actorKind = 'person', size = 'regular', tint = 'accent', onPress, href, className }: AvatarProps) {
+export function Avatar({ src, fallbackText, name, decorative = false, actorKind = 'person', size = 'regular', tint = 'accent', artwork, onPress, href, className }: AvatarProps) {
   const messages = useMessages()
   const [failed, setFailed] = useState(false)
   useEffect(() => setFailed(false), [src])
@@ -52,12 +59,15 @@ export function Avatar({ src, fallbackText, name, decorative = false, actorKind 
 
   const isAgent = actorKind === 'agent'
   const showImage = !!src && !failed
+  const showArtwork = !showImage && artwork != null
   // Inside a pressable wrapper the visual is decorative: the control carries the name.
   const hidden = decorative || pressable
 
   let inner
   if (showImage) {
     inner = <img className="ty-avatar__image" src={src ?? undefined} alt={hidden ? '' : (name ?? '')} onError={() => setFailed(true)} />
+  } else if (showArtwork) {
+    inner = artwork
   } else if (isAgent) {
     inner = <Bot className="ty-avatar__icon" aria-hidden="true" focusable="false" />
   } else if (fallbackText) {
@@ -77,6 +87,7 @@ export function Avatar({ src, fallbackText, name, decorative = false, actorKind 
       data-size={size}
       data-tint={tint}
       data-image={showImage || undefined}
+      data-artwork={showArtwork || undefined}
       aria-hidden={hidden ? true : undefined}
       role={!hidden && !showImage ? 'img' : undefined}
       aria-label={!hidden && !showImage ? name : undefined}

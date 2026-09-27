@@ -52,6 +52,16 @@
     block-size: 100%;
     object-fit: cover;
   }
+  /* Artwork (a generated avatar or the host's own SVG) fills the frame; the frame clips it. */
+  .ty-avatar[data-artwork] {
+    background: var(--ty-surface-sunken);
+  }
+  .ty-avatar__artwork,
+  .ty-avatar__artwork > svg {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+  }
   .ty-avatar__icon {
     inline-size: 60%;
     block-size: 60%;
