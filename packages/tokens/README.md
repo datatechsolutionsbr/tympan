@@ -19,7 +19,10 @@ npm test -w @datatechsolutions/tympan-tokens           # vitest: colour math, ra
 |---|---|
 | `@datatechsolutions/tympan-tokens/tokens.css` | every `--ty-*` custom property, in `@layer tympan.tokens` |
 | `@datatechsolutions/tympan-tokens/tokens.json` | resolved values: base, density steps, each preset × mode (× high contrast) |
-| `@datatechsolutions/tympan-tokens/dtcg/*.tokens.json` | W3C DTCG trees (2025.10 format) of every set, as fed to Style Dictionary |
+| `@datatechsolutions/tympan-tokens/dtcg/*.tokens.json` | W3C DTCG trees (2025.10 format) of every set, as fed to Style Dictionary (`dtcg/print/` for the print themes) |
+| `@datatechsolutions/tympan-tokens/print-themes.css` | opt-in: every print book style as a UI theme (`data-ty-theme="print-<style>"`), light, dark and high contrast |
+| `@datatechsolutions/tympan-tokens/print-themes/<theme>.css` | opt-in: one print theme per file (for example `print-themes/print-suico.css`) |
+| `@datatechsolutions/tympan-tokens/print-themes.json` | name, label, font stylesheet URL and CSS file of each print theme |
 | `@datatechsolutions/tympan-tokens/values` | the resolved values as a typed JS module (`values`, `cssVar()`) |
 | `@datatechsolutions/tympan-tokens` | the generator: colour math, `resolveTheme`, presets, `generateThemeCss`, DTCG conversion |
 | `dist/contrast-report.md` | WCAG ratio and APCA Lc of every declared pair, per preset and mode |
@@ -57,6 +60,11 @@ heights, weights and tracking (§2.2), prose measures, durations and easings
   `glass-blur-floating`, `glass-saturate` (§2.5).
 - **Design-direction aliases**: `accent`, `accent-strong`, `accent-soft`,
   `accent-ink`, `on-accent`, `on-accent-soft` point at the brand roles.
+- **Typography (optional)**: a theme with `fonts` sets `--ty-font-serif`
+  (role `display`: headings h1 to h3 and KPI numbers), `--ty-font-sans`
+  (role `body`) and `--ty-font-mono` (role `mono`) on its scope; the built-in
+  presets leave them to the base tokens. `elevation` (`soft` | `flat` |
+  `offset`) picks blurred shadows, none, or a hard ink shadow.
 
 **Density** (`data-ty-density`): `compact | default | comfortable` sets
 `--ty-control-height`, `--ty-control-height-touch`, `--ty-control-height-compact`
@@ -144,6 +152,60 @@ colours on the paper (in colour and in P&B) and keep every data colour
 the colours of the lakebrasil logo. `deltaE2000` and `rgbToLab` are exported
 from the colour module.
 
+## Print styles as UI themes
+
+`printStyleToTheme(style)` derives a `ThemeConfig` from any `PrintStyle`, and
+`printThemePresets` holds one per book style, named `print-<style>` (for
+example `print-suico`, `print-tufte`). The mapping is data-driven:
+
+- **Palette**: in the style's own mode (light for paper styles, dark for
+  dark-paper styles such as `prancheta`) the paper is `bg`, surfaces step
+  lighter than it and the well darker, `tinta`/`tinta2`/`tinta3` are the three
+  ink levels, the printed rule gives the lines, the highlighter tint is
+  `brand-soft` and the selected nav item, and the proof-state colours are the
+  danger, success and warning tones where they are chromatic. The brand is the
+  style's accent (`printStyleAccent`), moved along OKLCH lightness only as far
+  as it needs to read on the paper (`legibleOn`). Chart hues come from the
+  accents, ornaments and proof colours.
+- **Other mode**: generated from the same hues (neutral from the paper tint,
+  brand from the accent), with the paper colour as the ink and the printed
+  accent kept as the brand where it reads.
+- **Typography**: `fonts.display` and `fonts.body` are the style's title and
+  body stacks; `fonts.mono` is the style's mono stack only when it is really
+  monospace (otherwise the base mono stays). `fontsUrl` is the style's Google
+  Fonts css2 URL (`googleFontsUrl`) limited to those families.
+- **Surface**: radius from the print corner radius (mm at 96 dpi); glass,
+  a gradient call to action and soft shadows only for the card and wash
+  styles (`dashboard`, `aquarela`); flat shadows for the ruled print styles
+  (`suico`, `tufte`, `bauhaus` …); a hard offset shadow for cut-paper and
+  poster styles (`brutalista`, `memphis`, `pop-art`, `divulgacao`).
+- **Contrast**: every exact print colour is a pin only while all WCAG 2.2 AA
+  pairs hold in that mode; a pin that fails is dropped and the role is
+  regenerated from the style's hue (`printThemeDroppedPins(style)` lists
+  them). Tests run every pair of every print theme in light, dark and high
+  contrast.
+- **Overrides**: `printStyleToTheme(style, { brand, radius, glass, cta, elevation, pins })`,
+  and `PRINT_THEME_OVERRIDES` for judgements the data cannot express.
+
+The print themes are **not** in `tokens.css`. To enable them in an app:
+
+```ts
+import '@datatechsolutions/tympan/styles.css'                      // or tokens.css
+import '@datatechsolutions/tympan-tokens/print-themes.css'         // all print themes (about 2 MB, 160 kB gzip)
+// or only the ones you offer:
+import '@datatechsolutions/tympan-tokens/print-themes/print-suico.css'
+
+import { printThemeFontUrls } from '@datatechsolutions/tympan-tokens'
+<ThemeProvider theme="print-suico" fonts={printThemeFontUrls}>…</ThemeProvider>
+```
+
+`ThemeProvider`'s `fonts` map (theme name to stylesheet URL) adds the font
+link of the current theme; `themeInitScript(key, defaults, { fonts })` does the
+same before first paint. Without it the stacks fall back to the style's
+system families. `generatePrintThemesCss(list)` builds the same sheet at
+runtime. A default theme nested inside a print theme inherits the print
+fonts, because the built-in presets do not redeclare the font tokens.
+
 ## Generator API
 
 ```ts
@@ -164,7 +226,8 @@ const dtcg = themeToDtcg(light)                // DTCG tree
 ```
 
 Inputs: seed hue and chroma for six seeds, chart hues, radius base, contrast
-(`default` | `high`), glass on/off, CTA style, optional pinned colours. It is
+(`default` | `high`), glass on/off, CTA style, optional pinned colours, and
+optionally font families per role (`fonts`, `fontsUrl`) and `elevation`. It is
 pure and deterministic (same input, same output).
 
 **Contrast is enforced, then tested.** Each theme declares 70+ pairs

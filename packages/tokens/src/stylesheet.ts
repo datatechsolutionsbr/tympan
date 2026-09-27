@@ -4,6 +4,7 @@
 // directly by the generator); both produce the same text for the same input.
 
 import { presets as builtInPresets, DEFAULT_THEME } from './presets.ts'
+import { printThemePresets } from './print-themes.ts'
 import { scriptRules } from './scripts.ts'
 import { DENSITIES, densityVariables, resolveTheme, themeVariables, type Density, type ThemeConfig } from './theme.ts'
 
@@ -35,6 +36,12 @@ export interface StylesheetInput {
   /** Cascade layer; `null` for none. */
   layer?: string | null
   banner?: string
+  /**
+   * Emit the user-preference blocks (reduced motion and transparency,
+   * forced colours). Default true; add-on theme sheets loaded after the main
+   * token sheet set it to false because those blocks already apply to every theme.
+   */
+  preferences?: boolean
 }
 
 const indent = (s: string, n = 2) =>
@@ -160,11 +167,13 @@ export function buildStylesheet(input: StylesheetInput): string {
     parts.push(`/* prefers-contrast: more -> the high-contrast variant of each theme */\n${media('(prefers-contrast: more)', inner.join('\n\n'))}`)
   }
 
-  const durations = (input.base ?? []).filter(([n]) => n.startsWith('--ty-dur-')).map(([n]) => [n, '0ms'] as [string, string])
-  if (durations.length) parts.push(media('(prefers-reduced-motion: reduce)', rule(ANY_SCOPE, decls(durations))))
-  parts.push(media('(prefers-reduced-transparency: reduce)', rule(ANY_SCOPE, decls(OPAQUE_VARS))))
-  parts.push(`@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {\n${indent(rule(ANY_SCOPE, decls(OPAQUE_VARS)))}\n}`)
-  parts.push(media('(forced-colors: active)', rule(ANY_SCOPE, decls(FORCED_COLORS_VARS))))
+  if (input.preferences !== false) {
+    const durations = (input.base ?? []).filter(([n]) => n.startsWith('--ty-dur-')).map(([n]) => [n, '0ms'] as [string, string])
+    if (durations.length) parts.push(media('(prefers-reduced-motion: reduce)', rule(ANY_SCOPE, decls(durations))))
+    parts.push(media('(prefers-reduced-transparency: reduce)', rule(ANY_SCOPE, decls(OPAQUE_VARS))))
+    parts.push(`@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {\n${indent(rule(ANY_SCOPE, decls(OPAQUE_VARS)))}\n}`)
+    parts.push(media('(forced-colors: active)', rule(ANY_SCOPE, decls(FORCED_COLORS_VARS))))
+  }
 
   const body = parts.join('\n\n')
   const layered = input.layer === null ? body : `@layer ${input.layer ?? 'tympan.tokens'} {\n${indent(body)}\n}`
@@ -208,6 +217,22 @@ export function generateThemeCss(config: ThemeConfig, options: ThemeCssOptions =
 /** Variable lists of every built-in preset. */
 export function presetThemeVars(list: readonly ThemeConfig[] = builtInPresets): ThemeVars[] {
   return list.map(themeVarsFor)
+}
+
+/**
+ * The opt-in stylesheet of the print themes (`print-themes.css`): every
+ * listed theme scoped to its `data-ty-theme` attribute, with its high-contrast
+ * variant, and no user-preference blocks (the main token sheet has them).
+ * Load it after `tokens.css`.
+ */
+export function generatePrintThemesCss(list: readonly ThemeConfig[] = printThemePresets, options: { layer?: string | null; banner?: string; themes?: ThemeVars[] } = {}): string {
+  return buildStylesheet({
+    themes: options.themes ?? list.map(themeVarsFor),
+    defaultTheme: null,
+    layer: options.layer === undefined ? 'tympan.tokens' : options.layer,
+    preferences: false,
+    banner: options.banner,
+  })
 }
 
 export { DENSITIES }

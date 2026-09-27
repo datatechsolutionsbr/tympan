@@ -1,7 +1,7 @@
 {
   "name": "@datatechsolutions/tympan-tokens",
   "version": "0.1.0",
-  "description": "Tympan design tokens: W3C DTCG source (colour, space, radius, type, elevation and glass, motion, z) and an OKLCH theme generator, with the tympan, fakhir, neutral and high-contrast presets in light and dark, built to --ty-* CSS custom properties, JSON and a TypeScript export.",
+  "description": "Tympan design tokens: W3C DTCG source (colour, space, radius, type, elevation and glass, motion, z) and an OKLCH theme generator, with the tympan, fakhir, neutral and high-contrast presets in light and dark (plus opt-in UI themes derived from the print book styles), built to --ty-* CSS custom properties, JSON and a TypeScript export.",
   "license": "FSL-1.1-ALv2",
   "author": "Natalia Mesquita",
   "repository": {
@@ -36,6 +36,9 @@
       "default": "./dist/values.js"
     },
     "./tokens.css": "./dist/tokens.css",
+    "./print-themes.css": "./dist/print-themes.css",
+    "./print-themes/*": "./dist/print-themes/*",
+    "./print-themes.json": "./dist/print-themes.json",
     "./tokens.json": "./dist/tokens.json",
     "./dtcg/*": "./dist/dtcg/*",
     "./package.json": "./package.json"

@@ -1,0 +1,322 @@
+// UI themes derived from the book styles of print-presets.ts. One function,
+// `printStyleToTheme`, maps a PrintStyle onto a ThemeConfig: the paper and ink
+// become the surfaces and text of the style's native mode (light for paper
+// styles, dark for dark-paper styles), the first legible chromatic accent
+// becomes the brand, the proof-state colours become the semantic tones, the
+// display, body and mono families become the font roles, and the corner
+// radius, panel and chart treatment choose radius, glass, call to action and
+// elevation. The other mode is generated from the same hues. Every exact
+// colour is kept as a pin only while the generator's WCAG 2.2 AA pairs hold;
+// a pin that fails is dropped and the role is regenerated (and nudged) from
+// the style's hue, so identity is kept wherever contrast allows.
+
+import { contrastRatio, deltaE2000, luminance, oklchToRgb, parseColor, rgbToOklch, toCss } from './color.ts'
+import { googleFontsUrl, printPresets, type PrintPresetName, type PrintStyle } from './print-presets.ts'
+import {
+  DEFAULT_CHART_HUES,
+  parseFontStack,
+  resolveTheme,
+  type Mode,
+  type RoleName,
+  type Seed,
+  type SeedName,
+  type ThemeConfig,
+} from './theme.ts'
+
+/** Prefix of every print theme name: `data-ty-theme="print-<style>"`. */
+export const PRINT_THEME_PREFIX = 'print-'
+
+/** Chroma under which a colour counts as grey (ink, paper, rules). */
+const CHROMATIC = 0.05
+/** One millimetre of the print radius in CSS pixels (96 dpi). */
+const MM = 96 / 25.4
+
+const oklch = (c: string) => rgbToOklch(parseColor(c))
+const chromatic = (c: string) => oklch(c).c >= CHROMATIC
+const ratio = (a: string, b: string) => contrastRatio(parseColor(a), parseColor(b))
+const shiftL = (c: string, dl: number, chromaScale = 1, alpha = 1): string => {
+  const v = oklch(c)
+  return toCss(oklchToRgb({ l: Math.min(0.998, Math.max(0.02, v.l + dl)), c: v.c * chromaScale, h: v.h }, alpha))
+}
+const seedOf = (c: string, fallback?: Seed): Seed => {
+  const v = oklch(c)
+  if (fallback && v.c < CHROMATIC) return fallback
+  return { hue: Math.round(v.h * 10) / 10, chroma: Math.round(v.c * 1000) / 1000 }
+}
+const hueGap = (a: number, b: number) => {
+  const d = Math.abs(a - b) % 360
+  return d > 180 ? 360 - d : d
+}
+
+/** Default semantic seeds, used where a style's proof colour is grey. */
+const TONE_FALLBACK: Record<'danger' | 'warning' | 'success' | 'info', Seed> = {
+  danger: { hue: 18, chroma: 0.19 },
+  warning: { hue: 70, chroma: 0.14 },
+  success: { hue: 150, chroma: 0.14 },
+  info: { hue: 255, chroma: 0.06 },
+}
+
+/** Per-style adjustments where the derivation misjudges; merged over the derived config. */
+export interface PrintThemeOverride {
+  /** Brand colour to use instead of the derived one. */
+  brand?: string
+  glass?: boolean
+  cta?: ThemeConfig['cta']
+  elevation?: ThemeConfig['elevation']
+  /** Radius in px. */
+  radius?: number
+  /** Extra pins per mode (applied before the contrast check, dropped if they fail like any pin). */
+  pins?: ThemeConfig['pins']
+}
+
+/**
+ * Where the derivation reads a style differently from its tradition. Kept
+ * short on purpose: every entry is a judgement the data cannot express.
+ */
+export const PRINT_THEME_OVERRIDES: Partial<Record<PrintPresetName, PrintThemeOverride>> = {}
+
+/** The colour moved along OKLCH lightness (hue and chroma kept) until it reaches `min` against `over`. */
+export function legibleOn(colour: string, over: string, min = 4.6): string {
+  const v = oklch(colour)
+  const step = luminance(parseColor(over)) > 0.2 ? -0.005 : 0.005
+  let out = colour
+  for (let i = 0; i < 200 && ratio(out, over) < min; i++) {
+    v.l = Math.min(0.995, Math.max(0.02, v.l + step))
+    out = toCss(oklchToRgb(v))
+  }
+  return out
+}
+
+/**
+ * The accent that represents a style, before any legibility adjustment: the
+ * first chromatic accent that nearly reads on the paper (3:1), else the most
+ * legible chromatic accent, else the first chromatic ornament, else the ink
+ * (or, on dark paper, the paper itself).
+ */
+export function printStyleAccent(style: PrintStyle): string {
+  const c = style.cor
+  const darkPaper = luminance(parseColor(c.papel)) < 0.2
+  const accents = [c.destaque, c.destaque2].filter(chromatic)
+  const near = accents.find((x) => ratio(x, c.papel) >= 3)
+  if (near) return near
+  if (accents.length) return [...accents].sort((a, b) => ratio(b, c.papel) - ratio(a, c.papel))[0]!
+  const ornament = (c.ornamento ?? []).find(chromatic)
+  if (ornament) return ornament
+  return darkPaper ? c.papel : c.tinta
+}
+
+function chartHues(style: PrintStyle): number[] {
+  const c = style.cor
+  const sources = [c.destaque, c.destaque2, ...(c.ornamento ?? []), c.prova.refutada, c.prova.sustentada, c.prova['nao-da-para-afirmar'], c.marcaTexto]
+  const hues: number[] = []
+  for (const s of sources) {
+    const v = oklch(s)
+    if (v.c < CHROMATIC) continue
+    if (hues.every((h) => hueGap(h, v.h) >= 30)) hues.push(Math.round(v.h))
+  }
+  for (const h of DEFAULT_CHART_HUES) {
+    if (hues.length >= 8) break
+    if (hues.every((x) => hueGap(x, h) >= 30)) hues.push(h)
+  }
+  for (const h of DEFAULT_CHART_HUES) if (hues.length < 8 && !hues.includes(h)) hues.push(h)
+  return hues.slice(0, 8)
+}
+
+/** Families of a print stack for a UI role; `mono` is kept only when the stack is really monospace. */
+function fontsOf(style: PrintStyle): { fonts: NonNullable<ThemeConfig['fonts']>; url?: string } {
+  const display = parseFontStack(style.fontes.titulo)
+  const body = parseFontStack(style.fontes.corpo)
+  const monoStack = parseFontStack(style.fontes.mono)
+  const fonts: NonNullable<ThemeConfig['fonts']> = { display, body }
+  if (monoStack.at(-1) === 'monospace') fonts.mono = monoStack
+  const used = new Set([display[0], body[0], fonts.mono?.[0]].filter(Boolean))
+  const specs = style.googleFonts.filter((g) => used.has(g.split(':')[0]))
+  const url = googleFontsUrl({ googleFonts: specs }) ?? undefined
+  return { fonts, url }
+}
+
+/**
+ * Exact colours of the style's own mode (paper as background, ink as text).
+ * Surfaces step lighter than the paper, the sunken well a little darker.
+ */
+function nativePins(style: PrintStyle, brand: string, glass: boolean, darkPaper: boolean): Partial<Record<RoleName, string>> {
+  const c = style.cor
+  const paper = c.papel
+  const dl = darkPaper ? 0.04 : 0.012
+  const surface = shiftL(paper, dl, 0.7)
+  const raised = shiftL(paper, dl * 1.8, 0.6)
+  const pins: Partial<Record<RoleName, string>> = {
+    bg: paper,
+    'surface-solid': surface,
+    'surface-raised-solid': raised,
+    surface: glass ? shiftL(paper, dl, 0.7, 0.82) : surface,
+    'surface-raised': glass ? shiftL(paper, dl * 1.8, 0.6, 0.94) : raised,
+    'surface-sunken': shiftL(paper, darkPaper ? -0.04 : -0.03, 1.1),
+    secondary: raised,
+    ink: c.tinta,
+    'ink-2': c.tinta2,
+    'ink-3': c.tinta3,
+    'on-secondary': c.tinta,
+    brand,
+    'focus-ring': brand,
+    'cta-solid': brand,
+    'on-brand': ratio(paper, brand) >= ratio(c.tinta, brand) ? paper : c.tinta,
+    'on-cta': ratio(paper, brand) >= ratio(c.tinta, brand) ? paper : c.tinta,
+  }
+  // Rules: a pale printed rule is used as is; an ink-weight rule is thinned with alpha.
+  const lineRgb = parseColor(c.linha)
+  const lineAlpha = (a: number) => toCss({ ...lineRgb, a })
+  if (ratio(c.linha, paper) >= 3) {
+    pins.line = lineAlpha(0.3)
+    pins['line-soft'] = lineAlpha(0.16)
+    pins['line-strong'] = lineAlpha(0.55)
+  } else {
+    pins.line = c.linha
+    pins['line-soft'] = lineAlpha(0.6)
+    pins['line-strong'] = shiftL(c.linha, darkPaper ? 0.12 : -0.12)
+  }
+  // The highlighter tint is the soft brand (selected nav item, soft badges) when it reads against the paper.
+  if (deltaE2000(parseColor(c.marcaTexto), parseColor(paper)) >= 6) {
+    pins['brand-soft'] = c.marcaTexto
+    pins['nav-active'] = c.marcaTexto
+  }
+  for (const [tone, colour] of [
+    ['danger', c.prova.refutada],
+    ['success', c.prova.sustentada],
+    ['warning', c.prova['nao-da-para-afirmar']],
+  ] as const) {
+    if (chromatic(colour)) pins[tone] = colour
+  }
+  return pins
+}
+
+/**
+ * Exact colours of the other mode, over the generated background: the paper
+ * colour becomes the ink, and the accent is tried as the brand as printed (a
+ * grey accent, as in one-ink styles, is replaced by the paper colour).
+ */
+function counterPins(style: PrintStyle, accent: string): Partial<Record<RoleName, string>> {
+  const brand = chromatic(accent) ? accent : style.cor.papel
+  const pins: Partial<Record<RoleName, string>> = { ink: style.cor.papel, brand, 'focus-ring': brand }
+  if (!chromatic(accent)) pins['cta-solid'] = brand
+  return pins
+}
+
+/** Resolves both modes and drops every pin that takes part in a failing pair, until all pairs pass. */
+function settlePins(config: ThemeConfig): ThemeConfig {
+  const pins: Record<Mode, Partial<Record<RoleName, string>>> = { light: { ...config.pins?.light }, dark: { ...config.pins?.dark } }
+  for (const mode of ['light', 'dark'] as const) {
+    for (let round = 0; round < 12; round++) {
+      const failing = resolveTheme({ ...config, pins }, mode).report.filter((r) => !r.pass)
+      if (!failing.length) break
+      let dropped = false
+      // Foreground pins first; a background pin only when its foreground is already generated.
+      for (const r of failing) {
+        const fg = r.fg as RoleName
+        if (fg in pins[mode]) {
+          delete pins[mode][fg]
+          dropped = true
+        }
+      }
+      if (!dropped) {
+        for (const r of failing) {
+          for (const layer of r.over) {
+            if (layer in pins[mode]) {
+              delete pins[mode][layer as RoleName]
+              dropped = true
+            }
+          }
+        }
+      }
+      if (!dropped) break
+    }
+  }
+  return { ...config, pins }
+}
+
+/**
+ * The UI theme of a book style, in light and dark. The name is
+ * `print-<style name>`; the label is the style's own.
+ */
+export function printStyleToTheme(style: PrintStyle, override?: PrintThemeOverride): ThemeConfig {
+  return settlePins(draftPrintTheme(style, override))
+}
+
+/**
+ * Exact print colours the derivation had to give up for contrast, per mode
+ * (role -> the print colour that was dropped and regenerated).
+ */
+export function printThemeDroppedPins(style: PrintStyle, override?: PrintThemeOverride): Record<Mode, Partial<Record<RoleName, string>>> {
+  const draft = draftPrintTheme(style, override)
+  const settled = settlePins(draft)
+  const out: Record<Mode, Partial<Record<RoleName, string>>> = { light: {}, dark: {} }
+  for (const mode of ['light', 'dark'] as const) {
+    for (const [role, value] of Object.entries(draft.pins?.[mode] ?? {}) as Array<[RoleName, string]>) {
+      if (!(role in (settled.pins?.[mode] ?? {}))) out[mode][role] = value
+    }
+  }
+  return out
+}
+
+function draftPrintTheme(style: PrintStyle, override: PrintThemeOverride = PRINT_THEME_OVERRIDES[style.name as PrintPresetName] ?? {}): ThemeConfig {
+  const c = style.cor
+  const darkPaper = luminance(parseColor(c.papel)) < 0.2
+  const accent = override.brand ?? printStyleAccent(style)
+  // The brand is text on the paper (links, active states): the accent at a legible lightness.
+  const brand = legibleOn(accent, c.papel)
+  const e = style.estrutura
+
+  // Neutral hue: from the paper, or the ink when the paper is plain white or black.
+  const paper = oklch(c.papel)
+  const ink = oklch(c.tinta)
+  const tinted = paper.c >= ink.c ? paper : ink
+  const neutral: Seed = { hue: Math.round(tinted.h * 10) / 10, chroma: Math.min(0.02, Math.round(tinted.c * 1000) / 1000) }
+  const brandSeed = seedOf(accent)
+  const seeds: Record<SeedName, Seed> = {
+    brand: { hue: brandSeed.hue, chroma: Math.max(brandSeed.chroma, 0.01) },
+    neutral,
+    danger: seedOf(c.prova.refutada, TONE_FALLBACK.danger),
+    warning: seedOf(c.prova['nao-da-para-afirmar'], TONE_FALLBACK.warning),
+    success: seedOf(c.prova.sustentada, TONE_FALLBACK.success),
+    info: TONE_FALLBACK.info,
+  }
+
+  // Surface treatment: soft (glass, gradient, blurred shadow) only for the card and wash styles.
+  const soft = style.grafico === 'aquarela' || (e.painel === 'nenhum' && style.raio > 1)
+  const glass = override.glass ?? soft
+  const offset = e.tituloEstilo === 'sombra' || e.contornoBarra === true || e.painel === 'dossie'
+  const elevation = override.elevation ?? (offset ? 'offset' : soft || e.painel === 'cartao' ? 'soft' : 'flat')
+  const { fonts, url } = fontsOf(style)
+
+  const native = nativePins(style, brand, glass, darkPaper)
+  const counter = counterPins(style, accent)
+  const nativeMode: Mode = darkPaper ? 'dark' : 'light'
+  const counterMode: Mode = darkPaper ? 'light' : 'dark'
+
+  const config: ThemeConfig = {
+    name: `${PRINT_THEME_PREFIX}${style.name}`,
+    label: style.label,
+    seeds,
+    chartHues: chartHues(style),
+    radius: override.radius ?? Math.min(16, Math.round(style.raio * MM)),
+    contrast: 'default',
+    glass,
+    cta: override.cta ?? (soft ? 'gradient' : 'solid'),
+    elevation,
+    fonts,
+    ...(url ? { fontsUrl: url } : {}),
+    pins: {
+      [nativeMode]: { ...native, ...override.pins?.[nativeMode] },
+      [counterMode]: { ...counter, ...override.pins?.[counterMode] },
+    },
+  }
+  return config
+}
+
+/** Every book style as a UI theme, in the order of `printPresets`. */
+export const printThemePresets: readonly ThemeConfig[] = (Object.values(printPresets) as PrintStyle[]).map((s) => printStyleToTheme(s))
+
+/** Stylesheet URL of the families of each print theme, by theme name (for ThemeProvider's `fonts`). */
+export const printThemeFontUrls: Readonly<Record<string, string>> = Object.fromEntries(
+  printThemePresets.filter((t) => t.fontsUrl).map((t) => [t.name, t.fontsUrl!]),
+)

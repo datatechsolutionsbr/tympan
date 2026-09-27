@@ -10,6 +10,7 @@ import {
   oklchToRgb,
   parseColor,
   presets,
+  printThemePresets,
   RAMP_STEPS,
   resolveTheme,
   rgbToOklch,
@@ -64,7 +65,8 @@ function everyPairPasses(config: ThemeConfig, mode: Mode, contrast?: ContrastLev
 }
 
 describe('WCAG 2.2 AA in every preset and mode', () => {
-  for (const preset of presets) {
+  // The built-in presets and every UI theme derived from a print book style.
+  for (const preset of [...presets, ...printThemePresets]) {
     for (const mode of MODES) {
       for (const contrast of new Set<ContrastLevel>([preset.contrast, 'high'])) {
         it(`${preset.name} / ${mode} / ${contrast}: every on-X/X pair meets 4.5:1 text and 3:1 UI`, () => {
