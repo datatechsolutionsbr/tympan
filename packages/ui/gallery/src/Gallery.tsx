@@ -1,7 +1,9 @@
-import { presets, printThemePresets } from '@datatechsolutions/tympan-tokens'
-import { useEffect, useRef, useState } from 'react'
-import { NativeSelect, SegmentedControl, Switch, useTheme, type NativeSelectGroup, type ThemeDensity, type ThemeMode } from '../../src'
-import { GALLERY_LOCALES, useGalleryLocale } from './locale'
+import { presets, printThemePresets, resolveTheme, type ThemeConfig } from '@datatechsolutions/tympan-tokens'
+import { ChevronDown, Languages, Monitor, Moon, SlidersHorizontal, Sun } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Button as AriaButton } from 'react-aria-components'
+import { Popover, SegmentedControl, Switch, useTheme, type NativeSelectGroup, type ThemeDensity, type ThemeMode } from '../../src'
+import { GALLERY_LOCALES, directionOf, useGalleryLocale } from './locale'
 import { GALLERY_CATEGORIES, GALLERY_PAGES } from './Groups'
 import { GalleryFrameContext, scrollToSpecimen } from './Section'
 
@@ -16,16 +18,178 @@ const SIBLING_GALLERIES = [
   { label: 'Print gallery', href: import.meta.env.DEV ? 'http://localhost:3330' : '../print/index.html' },
 ]
 
-export function GalleryToolbar({ extra, current }: { extra?: React.ReactNode; current?: 'components' | 'research-shell' | 'flow' | 'customizer' }) {
+interface ThemeSwatch {
+  name: string
+  label: string
+  bg: string
+  ink: string
+  brand: string
+}
+
+/** Paper, ink and accent of every theme in light mode, for the picker swatches. */
+function useThemeSwatches(): { builtIn: ThemeSwatch[]; print: ThemeSwatch[] } {
+  return useMemo(() => {
+    const swatch = (p: ThemeConfig): ThemeSwatch => {
+      const r = resolveTheme(p, 'light') as unknown as Record<string, string>
+      return { name: p.name, label: p.label ?? p.name, bg: String(r.bg), ink: String(r.ink), brand: String(r.brand) }
+    }
+    return { builtIn: presets.map(swatch), print: printThemePresets.map(swatch) }
+  }, [])
+}
+
+function Swatch({ s }: { s: ThemeSwatch }) {
+  return (
+    <span className="ty-gallery-swatch" aria-hidden="true" style={{ background: s.bg, borderColor: s.ink }}>
+      <span style={{ background: s.brand }} />
+    </span>
+  )
+}
+
+function ThemePicker() {
   const t = useTheme()
+  const { builtIn, print } = useThemeSwatches()
+  const [query, setQuery] = useState('')
+  const all = [...builtIn, ...print]
+  const active = all.find((s) => s.name === t.theme) ?? builtIn[0]!
+  const q = query.trim().toLocaleLowerCase()
+  const match = (s: ThemeSwatch) => !q || s.label.toLocaleLowerCase().includes(q) || s.name.includes(q)
+  const group = (title: string, items: ThemeSwatch[]) => {
+    const shown = items.filter(match)
+    if (!shown.length) return null
+    return (
+      <div className="ty-gallery-themes__group" role="group" aria-label={title}>
+        <p className="ty-gallery-themes__title">
+          {title} <span>{shown.length}</span>
+        </p>
+        <div className="ty-gallery-themes__grid">
+          {shown.map((s) => (
+            <AriaButton key={s.name} className="ty-gallery-themes__item" aria-pressed={s.name === t.theme} onPress={() => t.setTheme(s.name)}>
+              <Swatch s={s} />
+              <span>{s.label}</span>
+            </AriaButton>
+          ))}
+        </div>
+      </div>
+    )
+  }
+  return (
+    <Popover
+      title="Theme"
+      placement="bottom"
+      align="end"
+      showArrow={false}
+      className="ty-gallery-popover ty-gallery-popover--wide"
+      trigger={
+        <AriaButton className="ty-gallery-bar-button" aria-label={`Theme: ${active.label}`}>
+          <Swatch s={active} />
+          <span className="ty-gallery-bar-button__text">{active.label}</span>
+          <ChevronDown aria-hidden="true" size={14} />
+        </AriaButton>
+      }
+    >
+      <input className="ty-gallery-themes__search" type="search" placeholder="Filter themes" aria-label="Filter themes" value={query} onChange={(e) => setQuery(e.target.value)} />
+      <div className="ty-gallery-themes">
+        {group('Built-in', builtIn)}
+        {group('Print styles', print)}
+      </div>
+    </Popover>
+  )
+}
+
+const MODES: { id: ThemeMode; label: string; Icon: typeof Sun }[] = [
+  { id: 'system', label: 'System', Icon: Monitor },
+  { id: 'light', label: 'Light', Icon: Sun },
+  { id: 'dark', label: 'Dark', Icon: Moon },
+]
+
+function ModeSwitch() {
+  const t = useTheme()
+  return (
+    <div className="ty-gallery-modes" role="group" aria-label="Color mode">
+      {MODES.map(({ id, label, Icon }) => (
+        <AriaButton key={id} className="ty-gallery-modes__item" aria-pressed={t.mode === id} aria-label={label} onPress={() => t.setMode(id)}>
+          <Icon aria-hidden="true" size={15} />
+        </AriaButton>
+      ))}
+    </div>
+  )
+}
+
+function LanguagePicker() {
   const l = useGalleryLocale()
+  const active = GALLERY_LOCALES.find((x) => x.tag === l.locale) ?? GALLERY_LOCALES[0]!
+  return (
+    <Popover
+      title="Language"
+      placement="bottom"
+      align="end"
+      showArrow={false}
+      className="ty-gallery-popover"
+      trigger={
+        <AriaButton className="ty-gallery-bar-button" aria-label={`Language: ${active.name}`}>
+          <Languages aria-hidden="true" size={15} />
+          <span className="ty-gallery-bar-button__text ty-gallery-bar-button__code">{active.tag}</span>
+        </AriaButton>
+      }
+    >
+      <ul className="ty-gallery-langs">
+        {GALLERY_LOCALES.map((x) => (
+          <li key={x.tag}>
+            <AriaButton className="ty-gallery-langs__item" aria-pressed={x.tag === l.locale} onPress={() => l.setLocale(x.tag)}>
+              <span lang={x.tag} dir={directionOf(x.tag)}>
+                {x.name}
+              </span>
+              <code>{x.tag}</code>
+            </AriaButton>
+          </li>
+        ))}
+      </ul>
+      <div className="ty-gallery-popover__footer">
+        <Switch isSelected={l.pseudo} onChange={l.setPseudo} label="Pseudo-localization" />
+      </div>
+    </Popover>
+  )
+}
+
+function DisplayOptions() {
+  const t = useTheme()
+  return (
+    <Popover
+      title="Display"
+      placement="bottom"
+      align="end"
+      showArrow={false}
+      className="ty-gallery-popover"
+      trigger={
+        <AriaButton className="ty-gallery-bar-button ty-gallery-bar-button--icon" aria-label="Display options">
+          <SlidersHorizontal aria-hidden="true" size={15} />
+        </AriaButton>
+      }
+    >
+      <SegmentedControl label="Density" size="compact" options={['compact', 'default', 'comfortable']} value={t.density} onChange={(d) => t.setDensity(d as ThemeDensity)} />
+    </Popover>
+  )
+}
+
+function BrandMark() {
+  return (
+    <svg className="ty-gallery-toolbar__mark" viewBox="0 0 32 32" aria-hidden="true">
+      <circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" strokeWidth="1.6" />
+      <circle cx="16" cy="20" r="9" fill="none" stroke="currentColor" strokeWidth="1" />
+      <circle cx="16" cy="22.5" r="5" fill="none" stroke="currentColor" strokeWidth="1" />
+      <line x1="2" y1="16" x2="30" y2="16" stroke="currentColor" strokeWidth="1" />
+    </svg>
+  )
+}
+
+export function GalleryToolbar({ extra, current }: { extra?: React.ReactNode; current?: 'components' | 'research-shell' | 'flow' | 'customizer' }) {
   const links = [
     { id: 'components', label: 'Components', href: '#/g/core' },
     { id: 'research-shell', label: 'Research shell', href: '#/research-shell' },
     { id: 'flow', label: 'Flow canvas', href: '#/flow/provenance' },
-    { id: 'customizer', label: 'Theme customizer', href: '#/customizer' },
+    { id: 'customizer', label: 'Customizer', href: '#/customizer' },
   ]
-  // The toolbar wraps on narrow screens; the sticky sidebars sit under it.
+  // The sticky sidebars sit under the toolbar.
   const header = useRef<HTMLElement>(null)
   useEffect(() => {
     const el = header.current
@@ -38,7 +202,8 @@ export function GalleryToolbar({ extra, current }: { extra?: React.ReactNode; cu
   }, [])
   return (
     <header className="ty-gallery-toolbar" ref={header}>
-      <a className="ty-gallery-toolbar__brand" href="#/g/core">
+      <a className="ty-gallery-toolbar__brand" href={import.meta.env.DEV ? '#/g/core' : '../index.html'}>
+        <BrandMark />
         Tympan
       </a>
       <nav className="ty-gallery-toolbar__nav" aria-label="Gallery">
@@ -54,16 +219,10 @@ export function GalleryToolbar({ extra, current }: { extra?: React.ReactNode; cu
         ))}
       </nav>
       <div className="ty-gallery-toolbar__controls">
-        {extra ?? <NativeSelect label="Theme" groups={THEME_GROUPS} value={t.theme} onChange={t.setTheme} />}
-        <SegmentedControl label="Mode" size="compact" options={['system', 'light', 'dark']} value={t.mode} onChange={(m) => t.setMode(m as ThemeMode)} />
-        <NativeSelect
-          label="Language"
-          options={GALLERY_LOCALES.map((x) => ({ value: x.tag, label: x.name }))}
-          value={l.locale}
-          onChange={l.setLocale}
-        />
-        <Switch isSelected={l.pseudo} onChange={l.setPseudo} label="Pseudo-localization" />
-        <SegmentedControl label="Density" size="compact" options={['compact', 'default', 'comfortable']} value={t.density} onChange={(d) => t.setDensity(d as ThemeDensity)} />
+        {extra ?? <ThemePicker />}
+        <ModeSwitch />
+        <LanguagePicker />
+        <DisplayOptions />
       </div>
     </header>
   )
