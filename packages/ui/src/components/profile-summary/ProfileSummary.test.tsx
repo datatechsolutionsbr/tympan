@@ -7,9 +7,9 @@ import { ProfileSummary } from './ProfileSummary'
 
 describe('ProfileSummary', () => {
   it('falls back to the initials when the picture fails', () => {
-    const { container } = render(<ProfileSummary name="Natália Mesquita" pictureUrl="/missing.png" />)
+    const { container } = render(<ProfileSummary name="Júlia Andrade" pictureUrl="/missing.png" />)
     fireEvent.error(container.querySelector('img')!)
-    expect(container.querySelector('.ty-avatar')).toHaveTextContent('NM')
+    expect(container.querySelector('.ty-avatar')).toHaveTextContent('JA')
   })
 
   it('leaves the e-mail out of the document unless showEmail is true', () => {
@@ -42,7 +42,7 @@ describe('ProfileSummary', () => {
       <>
         {(['light', 'dark'] as const).map((s) => (
           <ThemeScope key={s} scheme={s}>
-            <ProfileSummary name="Natália Mesquita" email="n@example.org" showEmail role="Owner" />
+            <ProfileSummary name="Júlia Andrade" email="n@example.org" showEmail role="Owner" />
           </ThemeScope>
         ))}
       </>,

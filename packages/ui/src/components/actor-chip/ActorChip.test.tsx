@@ -8,12 +8,12 @@ import { ActorChip } from './ActorChip'
 
 describe('ActorChip', () => {
   it('shows a person with a round initials avatar, the name and the e-mail', () => {
-    const { container } = render(<ActorChip kind="user" name="Natália Mesquita" email="n@example.org" />)
+    const { container } = render(<ActorChip kind="user" name="Júlia Andrade" email="n@example.org" />)
     const avatar = container.querySelector('.ty-avatar')!
     expect(avatar).toHaveAttribute('data-kind', 'person')
-    expect(avatar).toHaveTextContent('NM')
+    expect(avatar).toHaveTextContent('JA')
     expect(avatar).toHaveAttribute('aria-hidden', 'true')
-    expect(screen.getByText('Natália Mesquita')).toBeInTheDocument()
+    expect(screen.getByText('Júlia Andrade')).toBeInTheDocument()
     expect(screen.getByText('n@example.org')).toBeInTheDocument()
   })
 
@@ -24,7 +24,7 @@ describe('ActorChip', () => {
   })
 
   it('shows an agent with a square bot avatar, no initials and the word "agent"', () => {
-    const { container } = render(<ActorChip kind="agent" name="stage-counter" agentKey="ak_91" model="nova-lite" />)
+    const { container } = render(<ActorChip kind="agent" name="limit-counter" agentKey="ak_91" model="nova-lite" />)
     const avatar = container.querySelector('.ty-avatar')!
     expect(avatar).toHaveAttribute('data-kind', 'agent')
     expect(avatar.querySelector('svg')).not.toBeNull()

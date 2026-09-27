@@ -18,8 +18,8 @@ import { ProvenanceTimeline } from './ProvenanceTimeline'
 
 const coder = { id: 'c', kind: 'agent' as const, name: 'coder' }
 const items: ProvItem[] = [
-  { id: 'r', kind: 'retrieval', title: 'r115b', meta: ['sha256 [hash]'], actor: coder, proofState: null, hashCheck: 'not-reread', at: '2026-09-01T00:00:00Z' },
-  { id: 'a', kind: 'assertion', title: 'governance.operator_regulatory_position', meta: ['= confirmed_primary'], actor: coder, proofState: null, evidence: '[quote]', at: '2026-09-02T00:00:00Z' },
+  { id: 'r', kind: 'retrieval', title: 'rd-0714', meta: ['sha256 [hash]'], actor: coder, proofState: null, hashCheck: 'not-reread', at: '2026-09-01T00:00:00Z' },
+  { id: 'a', kind: 'assertion', title: 'air.pm25_days_above_limit', meta: ['= above_limit'], actor: coder, proofState: null, evidence: '[quote]', at: '2026-09-02T00:00:00Z' },
   { id: 'e', kind: 'edition', title: 'Edition 2026-09-20', actor: { kind: 'person', name: 'P' }, proofState: null, at: '2026-09-20T00:00:00Z' },
 ]
 const statements: ProvStatement[] = [
@@ -41,7 +41,7 @@ describe('host-placed parts', () => {
       )
     }
     const { container } = render(<Host />)
-    expect(screen.getByRole('combobox', { name: 'Where did this come from' })).toHaveValue('governance.operator_regulatory_position')
+    expect(screen.getByRole('combobox', { name: 'Where did this come from' })).toHaveValue('air.pm25_days_above_limit')
     expect(screen.getByText('value, record, number or sentence')).toBeInTheDocument()
     await userEvent.click(screen.getByRole('radio', { name: 'Certificate' }))
     expect(screen.getByTestId('view')).toHaveTextContent('certificate')
@@ -122,7 +122,7 @@ describe('host-placed parts', () => {
 
   it('offers "reread" on a claim resting on quoted evidence and words its time through the host', async () => {
     render(<ProvenanceGraph items={items} statements={statements} defaultFocusId="a" onReread={() => {}} formatTime={() => '[date time]'} />)
-    const panel = screen.getByRole('complementary', { name: /^Evidence: governance/ })
+    const panel = screen.getByRole('complementary', { name: /^Evidence: air/ })
     expect(within(panel).getByRole('button', { name: 'Reread the source now' })).toBeInTheDocument()
     expect(panel).toHaveTextContent('[date time]')
     expect(panel).toHaveTextContent('the verifier (G7a) has not issued a certificate yet')

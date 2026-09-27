@@ -48,13 +48,13 @@ function Preview({ children, tall = false }: { children: ReactNode; tall?: boole
 }
 
 const providers = [
-  { id: 'usp', name: 'USP' },
+  { id: 'example-sso', name: 'Example Lab SSO' },
   { id: 'orcid', name: 'ORCID' },
 ]
 
 const figures = [
-  { value: '94', label: 'cases' },
-  { value: '31', label: 'countries' },
+  { value: '5', label: 'stations' },
+  { value: '1460', label: 'daily readings' },
   { value: '512', label: 'proved claims' },
 ]
 
@@ -81,7 +81,7 @@ export function AuthBrandShowcase({ scope }: { scope: string }) {
           <AuthFrame
             mainLabel={`Sign in (${scope})`}
             mark={<BrandMark />}
-            brandPanel={{ mark: <BrandMark showWordmark={false} />, title: 'Evidence before opinion', subtitle: 'A calm workbench for researchers and reviewers.', figures, footnote: 'EACH/USP' }}
+            brandPanel={{ mark: <BrandMark showWordmark={false} />, title: 'Evidence before opinion', subtitle: 'A calm workbench for researchers and reviewers.', figures, footnote: 'Example Lab' }}
           >
             <h1>Sign in</h1>
             <form className="ty-gallery-stack" onSubmit={(e) => e.preventDefault()}>
@@ -108,7 +108,7 @@ export function AuthBrandShowcase({ scope }: { scope: string }) {
       </Section>
 
       <Section id={id('loader')} title="BrandLoader, SkeletonBlock">
-        <BrandLoader layout="inline" label="Opening the census" />
+        <BrandLoader layout="inline" label="Opening the air-quality study" />
         <div className="ty-gallery-stack">
           <SkeletonBlock width="60%" />
           <SkeletonBlock />
@@ -155,7 +155,7 @@ export function AuthBrandShowcase({ scope }: { scope: string }) {
 
       <Section id={id('legal')} title="LegalDocumentFrame">
         <Preview tall>
-          <LegalDocumentFrame title="Privacy policy" updatedAt="Updated on 20 September 2026" topBar={<BrandMark size="small" />} footer={<span>EACH/USP, 2026</span>} contentsLabel={`Contents (${scope})`}>
+          <LegalDocumentFrame title="Privacy policy" updatedAt="Updated on 20 September 2026" topBar={<BrandMark size="small" />} footer={<span>Example Lab, 2026</span>} contentsLabel={`Contents (${scope})`}>
             <p>This policy explains what the research platform keeps and why.</p>
             <h2>Data we collect</h2>
             <p>Only what a research protocol needs: sign-in e-mail, role and the claims you verify.</p>

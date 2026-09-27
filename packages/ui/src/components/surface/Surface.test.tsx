@@ -19,19 +19,19 @@ describe('Surface', () => {
   it('fires onPress once when clicked anywhere outside nested controls', async () => {
     const onPress = vi.fn()
     render(
-      <Surface title="TAMM" onPress={onPress}>
-        <p>Abu Dhabi, 2024</p>
+      <Surface title="Centro" onPress={onPress}>
+        <p>Vila Aurora, 2024</p>
       </Surface>,
     )
-    await userEvent.click(screen.getByText('Abu Dhabi, 2024'))
+    await userEvent.click(screen.getByText('Vila Aurora, 2024'))
     expect(onPress).toHaveBeenCalledTimes(1)
   })
 
   it('fires onPress when Tab reaches the title control and Enter is pressed', async () => {
     const onPress = vi.fn()
-    render(<Surface title="TAMM" onPress={onPress} />)
+    render(<Surface title="Centro" onPress={onPress} />)
     await userEvent.tab()
-    expect(screen.getByRole('button', { name: 'TAMM' })).toHaveFocus()
+    expect(screen.getByRole('button', { name: 'Centro' })).toHaveFocus()
     await userEvent.keyboard('{Enter}')
     expect(onPress).toHaveBeenCalledTimes(1)
   })
@@ -40,7 +40,7 @@ describe('Surface', () => {
     const onPress = vi.fn()
     const onNested = vi.fn()
     render(
-      <Surface title="TAMM" onPress={onPress}>
+      <Surface title="Centro" onPress={onPress}>
         <button type="button" onClick={onNested}>
           Edit
         </button>
@@ -54,14 +54,14 @@ describe('Surface', () => {
   it('navigates through the router adapter with href', async () => {
     const navigate = vi.fn()
     renderWithProvider(
-      <Surface title="Boti" href="/base/boti">
-        <p>Argentina</p>
+      <Surface title="Harbour" href="/base/harbour">
+        <p>Port district</p>
       </Surface>,
       { navigate },
     )
-    await userEvent.click(screen.getByText('Argentina'))
-    expect(navigate).toHaveBeenCalledWith('/base/boti', undefined)
-    expect(screen.getByRole('link', { name: 'Boti' })).toBeInTheDocument()
+    await userEvent.click(screen.getByText('Port district'))
+    expect(navigate).toHaveBeenCalledWith('/base/harbour', undefined)
+    expect(screen.getByRole('link', { name: 'Harbour' })).toBeInTheDocument()
   })
 
   it('keeps its boundary visible in forced colours', () => {

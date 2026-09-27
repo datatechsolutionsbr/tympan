@@ -1,8 +1,8 @@
 // Gallery: the analysis flow editor inside the research shell, in the states
 // of the storyboards (#/flow/editor?state=…): canvas (F2), picker (Q2), drag (Q3),
-// search (Q4), mismatch (Q5), list (Q6). Known values only: the frozen
-// edition 2026-09-20 with 582 records and the counts per phase 9 · 26 · 24 ·
-// 18; everything else is a neutral placeholder.
+// search (Q4), mismatch (Q5), list (Q6). Fictional data only: the Vila Aurora
+// air-quality study, edition 2026-09 with 1460 daily readings and the days
+// above the PM2.5 limit per station 12 · 31 · 7 · 19.
 
 import { useEffect, useMemo } from 'react'
 import { ArrowRight, Check } from 'lucide-react'
@@ -19,29 +19,30 @@ type Words = Record<string, string>
 
 const TEXT: Record<string, Words> = {
   'pt-BR': {
-    crumbs: 'each-usp / censo-ia-gov / análises', title: 'Casos por fase e país', saved: 'salvo', run: 'Executar', sample: 'Dados de exemplo',
-    group: 'Agrupar por país e fase', count: 'Contagem por fase', keys: 'país, fase', groups: '[n] grupos', table: 'hash [sha256]', chart: 'Vega-Lite · barras',
-    version: 'v[n] · rascunho', runsOn: 'edição 2026-09-20', perField: 'α por campo', country: 'país', phase: 'fase', tools: 'Ferramentas do canvas',
+    crumbs: 'laboratorio-exemplo / ar-vila-aurora / análises', title: 'Dias acima do limite por estação', saved: 'salvo', run: 'Executar', sample: 'Dados de exemplo',
+    group: 'Agrupar por estação e mês', count: 'Dias acima do limite por estação', keys: 'estação, mês', groups: '60 grupos', table: 'hash 9f2c…e41a', chart: 'Vega-Lite · barras',
+    version: 'v3 · rascunho', runsOn: 'edição 2026-09 (dados fictícios)', perField: 'α por campo', country: 'mês', phase: 'estação', tools: 'Ferramentas do canvas',
     drag: 'Arraste da paleta, use + entre dois passos, ou A para adicionar onde está o foco.',
     list: 'Mesma informação do canvas, navegável por teclado: ↑↓ move, Alt+↑↓ reordena, A adiciona, Enter configura.',
   },
   en: {
-    crumbs: 'each-usp / censo-ia-gov / analyses', title: 'Cases by phase and country', saved: 'saved', run: 'Run', sample: 'Sample data',
-    group: 'Group by country and phase', count: 'Count per phase', keys: 'country, phase', groups: '[n] groups', table: 'hash [sha256]', chart: 'Vega-Lite · bars',
-    version: 'v[n] · draft', runsOn: 'edition 2026-09-20', perField: 'α per field', country: 'country', phase: 'phase', tools: 'Canvas tools',
+    crumbs: 'example-lab / vila-aurora-air / analyses', title: 'Days above the limit by station', saved: 'saved', run: 'Run', sample: 'Sample data',
+    group: 'Group by station and month', count: 'Days above the limit per station', keys: 'station, month', groups: '60 groups', table: 'hash 9f2c…e41a', chart: 'Vega-Lite · bars',
+    version: 'v3 · draft', runsOn: 'edition 2026-09 (fictional data)', perField: 'α per field', country: 'month', phase: 'station', tools: 'Canvas tools',
     drag: 'Drag from the palette, use + between two steps, or A to add where the focus is.',
     list: 'The same as the canvas, by keyboard: ↑↓ moves, Alt+↑↓ reorders, A adds, Enter configures.',
   },
 }
 
-const COUNTS = [9, 26, 24, 18]
+const COUNTS = [12, 31, 7, 19]
+const STATIONS = ['Centro', 'Harbour', 'Park', 'North']
 const link = (id: string, source: string, target: string): FlowConnector => ({ id, source, target, sourcePort: 'out', targetPort: 'in-0' })
 
 function buildFlow(t: Words, mismatch: boolean, rtl: boolean): { nodes: FlowNode[]; connectors: FlowConnector[] } {
   const at = { x: 0, y: 0 }
   const nodes: FlowNode[] = [
-    { id: 'edition', kind: 'step', position: at, data: { stepId: 'frozen-edition', edition: '2026-09-20', count: 582 } },
-    { id: 'filter', kind: 'step', position: at, data: { stepId: 'filter', before: 582, after: '[n]' } },
+    { id: 'edition', kind: 'step', position: at, data: { stepId: 'frozen-edition', edition: '2026-09', count: 1460 } },
+    { id: 'filter', kind: 'step', position: at, data: { stepId: 'filter', before: 1460, after: 1412 } },
     { id: 'group', kind: 'step', position: at, data: { stepId: 'group', label: t.group, keys: t.keys, aggregate: 'count', line: t.groups } },
     mismatch
       ? { id: 'count', kind: 'step', position: at, data: { stepId: 'reliability', line: t.perField } }
@@ -135,14 +136,14 @@ export function FlowEditorPage() {
             flowId="sample-analysis"
             store={store}
             defaultListView={state === 'list'}
-            flowFacts={{ name: t.title, version: t.version, runsOn: t.runsOn, deterministic: true, seed: '[seed]' }}
+            flowFacts={{ name: t.title, version: t.version, runsOn: t.runsOn, deterministic: true, seed: 'va-2026-09' }}
             onRunFlow={() => undefined}
             onTestStep={() => undefined}
             outputPreview={(id) =>
               id === 'group'
-                ? { columns: [t.country!, t.phase!, 'n'], rows: [[`[${t.country}]`, `[${t.phase}]`, '[n]'], [`[${t.country}]`, `[${t.phase}]`, '[n]']] }
+                ? { columns: [t.country!, t.phase!, 'n'], rows: [['2026-07', 'Centro', 5], ['2026-07', 'Harbour', 11]] }
                 : id === 'count'
-                  ? { columns: [t.phase!, 'n'], rows: COUNTS.map((n, i) => [`[${t.phase} ${i + 1}]`, n]) }
+                  ? { columns: [t.phase!, 'n'], rows: COUNTS.map((n, i) => [STATIONS[i]!, n]) }
                   : null
             }
             renderTools={renderTools}

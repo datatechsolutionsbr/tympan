@@ -17,9 +17,9 @@ const columns: DataTableColumn[] = [
   { id: 'date', header: 'Date', sortable: true, numeric: true },
 ]
 const rows: DataTableRow[] = [
-  { id: 'r1', cells: { name: 'TAMM', country: 'UAE', date: '2024' } },
-  { id: 'r2', cells: { name: 'Boti', country: 'Argentina', date: '2019' } },
-  { id: 'r3', cells: { name: 'Bürokratt', country: 'Estonia', date: '2020' } },
+  { id: 'r1', cells: { name: 'Centro', country: 'Downtown', date: '2024' } },
+  { id: 'r2', cells: { name: 'Harbour', country: 'Port district', date: '2019' } },
+  { id: 'r3', cells: { name: 'Riverside', country: 'Park', date: '2020' } },
 ]
 
 describe('DataTable', () => {
@@ -114,7 +114,7 @@ describe('DataTable', () => {
     )
     expect(screen.getByRole('table')).toHaveAttribute('aria-busy', 'true')
     expect(container.querySelectorAll('[data-loading="true"]')).toHaveLength(4)
-    expect(screen.queryByText('TAMM')).toBeNull()
+    expect(screen.queryByText('Centro')).toBeNull()
     expect(screen.getByRole('status')).toHaveTextContent('Loading the list')
     expect(container.querySelector('.ty-table-wrap')).toHaveAttribute('data-density', 'compact')
   })
@@ -164,7 +164,7 @@ describe('DataTable', () => {
   it('calls onRowAction when a row without href is activated', async () => {
     const onRowAction = vi.fn()
     render(<DataTable caption="Cases" columns={columns} rows={rows} onRowAction={onRowAction} />)
-    await userEvent.click(screen.getByText('Boti'))
+    await userEvent.click(screen.getByText('Harbour'))
     expect(onRowAction).toHaveBeenCalledWith('r2')
   })
 

@@ -25,7 +25,7 @@ import {
 } from '../../../src'
 import { Section } from '../Section'
 
-const cases = ['Case A', 'Case B', 'Case C']
+const cases = ['Centro station', 'Harbour station', 'Park station']
 
 export function PlatformShowcase({ scope }: { scope: string }) {
   const id = (s: string) => `${scope}-${s}`
@@ -116,7 +116,7 @@ export function PlatformShowcase({ scope }: { scope: string }) {
             aria-label={`Modules (${scope})`}
             style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 'var(--ty-space-3)' }}
           >
-            {['Sources', 'Instruments', 'Base', 'Atlas', 'Analyses', 'Editions'].map((w) => (
+            {['Stations', 'Instruments', 'Base', 'Atlas', 'Analyses', 'Editions'].map((w) => (
               <div key={w} role="listitem" className="ty-gallery-section">
                 <Text>{w}</Text>
               </div>
@@ -132,7 +132,7 @@ export function PlatformShowcase({ scope }: { scope: string }) {
           <Text>
             formatDateTime: {formatDateTime('2026-09-20T14:02:00Z', { locale, withTimeZone: true, timeZone: 'America/Sao_Paulo' })}
           </Text>
-          <Text>formatAddress (unregistered country): {formatAddress({ street: 'Rua Arlindo Béttio, 1000', district: '', city: 'São Paulo' }, 'BR')}</Text>
+          <Text>formatAddress (unregistered country): {formatAddress({ street: 'Rua das Estações, 100', district: '', city: 'Vila Aurora' }, 'BR')}</Text>
           <Text>formatMoney(null): {formatMoney(null, 'BRL')}</Text>
           <Text>toneForStatus rejected: {toneForStatus('rejected')}</Text>
           <Text>

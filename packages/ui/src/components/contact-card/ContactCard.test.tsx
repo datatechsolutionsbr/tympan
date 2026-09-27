@@ -18,8 +18,8 @@ describe('ContactCard', () => {
   })
 
   it('puts the office address inside an address element', () => {
-    const { container } = render(<ContactOfficeCard city="São Paulo" addressLines={['Rua Arlindo Béttio, 1000', '03828-000']} />)
-    expect(container.querySelector('address')).toHaveTextContent('Rua Arlindo Béttio, 1000')
+    const { container } = render(<ContactOfficeCard city="São Paulo" addressLines={['Rua das Estações, 1000', '01000-000']} />)
+    expect(container.querySelector('address')).toHaveTextContent('Rua das Estações, 1000')
   })
 
   it('exposes the section title at the configured level', () => {
@@ -47,7 +47,7 @@ describe('ContactCard', () => {
           <ThemeScope key={s} scheme={s}>
             <ContactSection title={`Contact ${s}`} subtitle="Lead">
               <ContactChannelCard purposeLabel="Press" email="press@example.org" phone="+55 11 3091-1000" />
-              <ContactOfficeCard city="São Paulo" addressLines={['Rua Arlindo Béttio, 1000']} />
+              <ContactOfficeCard city="São Paulo" addressLines={['Rua das Estações, 1000']} />
             </ContactSection>
           </ThemeScope>
         ))}

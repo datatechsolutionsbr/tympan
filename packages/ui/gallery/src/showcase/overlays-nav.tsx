@@ -26,7 +26,7 @@ import { Section } from '../Section'
 
 const entries: NavEntry[] = [
   { id: 'overview', label: 'Overview', href: '#/overview', icon: <House /> },
-  { id: 'sources', label: 'Sources and trail', href: '#/sources', icon: <BookOpen />, group: 'Collect', description: 'Sessions, queries, retrievals' },
+  { id: 'sources', label: 'Stations and trail', href: '#/sources', icon: <BookOpen />, group: 'Collect', description: 'Readings, cleaning steps, aggregates' },
   { id: 'verify', label: 'Verification', href: '#/verify', icon: <ClipboardCheck />, group: 'Collect', count: 12 },
   { id: 'base', label: 'Base', href: '#/base', icon: <Database />, group: 'Organise', menu: [{ id: 'saved', label: 'Saved views' }] },
   { id: 'atlas', label: 'Atlas', href: '#/atlas', icon: <Map />, group: 'Organise' },
@@ -47,7 +47,7 @@ function ConfirmDemo() {
       variant="danger"
       leadingIcon={<Trash2 />}
       onPress={async () => {
-        const yes = await confirm({ title: 'Remove this source?', message: 'The 3 claims that cite it lose their evidence.', tone: 'danger', confirmLabel: 'Remove' })
+        const yes = await confirm({ title: 'Remove this station reading?', message: 'The 3 claims that cite it lose their evidence.', tone: 'danger', confirmLabel: 'Remove' })
         toast.info(yes ? 'Removed' : 'Kept')
       }}
     >
@@ -78,7 +78,7 @@ export function OverlaysNavShowcase({ scope }: { scope: string }) {
               entries={entries}
               pathname="#/verify"
               brand={<strong>Acme Research</strong>}
-              footer={<span>Edition 2026-09-20, verified</span>}
+              footer={<span>Edition 2026-09, verified</span>}
               account={account}
               collapsed={collapsed}
               onCollapsedChange={setCollapsed}
@@ -136,16 +136,16 @@ export function OverlaysNavShowcase({ scope }: { scope: string }) {
               scopeId: 'records',
               items: [
                 {
-                  id: 'case a',
-                  label: 'Case A',
-                  description: 'Country A, stage 4',
+                  id: 'centro',
+                  label: 'Centro station',
+                  description: 'Downtown, 12 days above the limit',
                   onSelect: () => {},
                   actions: [
                     { id: 'prov', label: 'Open provenance', onSelect: () => {} },
                     { id: 'copy', label: 'Copy link', shortcut: 'C', onSelect: () => {} },
                   ],
                 },
-                { id: 'boti', label: 'Case B', description: 'Country B, stage 4', onSelect: () => {} },
+                { id: 'harbour', label: 'Harbour station', description: 'Port district, 31 days above the limit', onSelect: () => {} },
               ],
             },
           ]}

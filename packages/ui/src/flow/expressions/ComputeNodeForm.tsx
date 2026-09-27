@@ -31,7 +31,7 @@ export interface ComputeExample {
   expression: OperationNode
 }
 
-/** Examples authored for a research census; names come from labels. */
+/** Examples authored for a research dataset of assertions; names come from labels. */
 export const defaultComputeExamples: ComputeExample[] = [
   {
     id: 'countConfirmed',

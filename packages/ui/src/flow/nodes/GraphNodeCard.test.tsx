@@ -73,7 +73,7 @@ describe('GraphNodeCard', () => {
       <GraphNodeCard
         kind="assertion"
         kindLabel="assertion"
-        title="governance.operator_regulatory_position"
+        title="air.pm25_days_above_limit"
         description="assertion"
         icon={Quote}
         proofState="proved"

@@ -173,7 +173,7 @@ describe('RuleEditor', () => {
   })
 
   it('opens the advanced section when tags exist', () => {
-    render(<RuleHarness initial={{ ...defaultRule(), tags: ['census'] }} />)
+    render(<RuleHarness initial={{ ...defaultRule(), tags: ['air'] }} />)
     expect(screen.getByRole('button', { name: 'Advanced' })).toHaveAttribute('aria-expanded', 'true')
   })
 

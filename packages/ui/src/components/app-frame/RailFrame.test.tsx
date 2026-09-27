@@ -43,8 +43,8 @@ function Shell(props: Partial<AppFrameProps>) {
   return (
     <AppFrame
       brand={<span>Tympan</span>}
-      context={<RailContextButton scope="EACH/USP" name="Census of government AI" />}
-      account={<span>Natalia</span>}
+      context={<RailContextButton scope="Example Lab" name="Vila Aurora air-quality study" />}
+      account={<span>Marina</span>}
       navigation={<Navigation />}
       navOpen={navOpen}
       onNavOpenChange={setNavOpen}
@@ -119,7 +119,7 @@ describe('AppFrame rail layout', () => {
   })
 
   it('keeps the wave-1 top bar layout when a top bar is given', () => {
-    render(<AppFrame navigation={<Navigation />} topBar={<span>Census</span>}>content</AppFrame>)
+    render(<AppFrame navigation={<Navigation />} topBar={<span>Air study</span>}>content</AppFrame>)
     expect(screen.getByRole('banner')).toBeInTheDocument()
   })
 

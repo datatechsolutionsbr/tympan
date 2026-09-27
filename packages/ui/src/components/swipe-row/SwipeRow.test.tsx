@@ -19,8 +19,8 @@ function setup(extra: Partial<SwipeRowProps> = {}) {
     { label: 'Delete', icon: <Trash2 />, tone: 'danger', onAction: remove, undoable: true },
   ]
   const utils = render(
-    <SwipeRow label="Boti" leadingActions={leading} trailingActions={trailing} {...extra}>
-      <span>Boti, Argentina</span>
+    <SwipeRow label="Harbour" leadingActions={leading} trailingActions={trailing} {...extra}>
+      <span>Harbour, Vila Aurora</span>
     </SwipeRow>,
   )
   const surface = utils.container.querySelector<HTMLElement>('.ty-swipe-row__surface')!
@@ -40,7 +40,7 @@ describe('SwipeRow', () => {
   it('lists every action from the actions menu button, by keyboard', async () => {
     setup()
     await userEvent.tab()
-    const button = screen.getByRole('button', { name: 'Actions for Boti' })
+    const button = screen.getByRole('button', { name: 'Actions for Harbour' })
     expect(button).toHaveFocus()
     await userEvent.keyboard('{Enter}')
     const items = await screen.findAllByRole('menuitem')

@@ -45,7 +45,7 @@ describe('DetailsPopover', () => {
   })
 
   it('shows the agent mark and word for an agent', async () => {
-    render(<DetailsPopover {...change} actor={{ kind: 'agent', name: 'stage-counter', detail: 'model-x' }} />)
+    render(<DetailsPopover {...change} actor={{ kind: 'agent', name: 'limit-counter', detail: 'model-x' }} />)
     await userEvent.click(screen.getByRole('button'))
     const dialog = await screen.findByRole('dialog')
     expect(dialog).toHaveTextContent('agent')

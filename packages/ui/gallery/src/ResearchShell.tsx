@@ -1,9 +1,9 @@
 // Research shell demo: the overview storyboard on the rail + glass sheet +
 // bottom dock shell (no top bar). Copy in Brazilian Portuguese, the
 // platform's first language (the library copy follows the gallery's language
-// switch). No invented research data: record, source and page counts and the
-// edition date are the census's known values; everything else is labelled
-// example data with neutral names (Caso A, B, C) and round numbers.
+// switch). All data is fictional: the Vila Aurora urban air-quality study of
+// Laboratório Exemplo, with invented stations, readings and people, labelled
+// "Dados de exemplo" on the page.
 import {
   BookMarked,
   BookOpen,
@@ -55,20 +55,20 @@ const base = '#/research-shell'
 const go = (section: string) => `${base}/${section}`
 
 const stats: StatStripItem[] = [
-  { id: 'records', value: 582, label: 'registros', href: go('base'), detail: 'edição 2026-09-20' },
-  { id: 'sources', value: 774, label: 'fontes', href: go('fontes') },
-  { id: 'pages', value: 456, label: 'páginas lidas', href: go('fontes') },
+  { id: 'records', value: 1460, label: 'leituras diárias', href: go('base'), detail: 'edição 2026-09 (dados fictícios)' },
+  { id: 'sources', value: 5, label: 'estações', href: go('fontes') },
+  { id: 'pages', value: 38, label: 'dias acima do limite', href: go('fontes') },
 ]
 
 const stages: Stage[] = [
-  { id: 'busca', label: 'Busca', href: go('fontes'), status: 'done', figures: ['774 fontes'] },
-  { id: 'organizar', label: 'Organizar', href: go('base'), status: 'current', figures: ['582 registros'] },
+  { id: 'busca', label: 'Coleta', href: go('fontes'), status: 'done', figures: ['5 estações'] },
+  { id: 'organizar', label: 'Organizar', href: go('base'), status: 'current', figures: ['1460 leituras'] },
   { id: 'analisar', label: 'Analisar', href: go('analises'), status: 'attention', figures: ['exemplo'] },
-  { id: 'publicar', label: 'Publicar', href: go('edicoes'), status: 'upcoming', figures: ['edição 2026-09-20'] },
+  { id: 'publicar', label: 'Publicar', href: go('edicoes'), status: 'upcoming', figures: ['edição 2026-09'] },
   { id: 'manuscrito', label: 'Manuscrito', href: go('manuscrito'), status: 'upcoming' },
 ]
 
-/** Example shares (round numbers, not census results). */
+/** Example shares (round, fictional numbers). */
 const phases: PhaseSegment[] = [
   { id: 'proved', label: 'provadas', value: 60, tone: 'proved' },
   { id: 'pending', label: 'pendentes', value: 30, tone: 'pending' },
@@ -79,9 +79,9 @@ const phases: PhaseSegment[] = [
 const minutesAgo = (n: number) => new Date(Date.now() - n * 60_000)
 
 const activity: ActivityEntry[] = [
-  { id: 'a1', actor: { kind: 'person', name: 'Natalia Mesquita' }, text: 'verificou um valor do Caso A', at: minutesAgo(6), meta: 'exemplo' },
-  { id: 'a2', actor: { kind: 'agent', name: 'agente-exemplo' }, text: 'executou uma análise de exemplo', at: minutesAgo(180), meta: 'regra de exemplo' },
-  { id: 'a3', actor: { kind: 'system', name: 'freeze' }, text: 'congelou a edição 2026-09-20', at: minutesAgo(6 * 1440) },
+  { id: 'a1', actor: { kind: 'person', name: 'Marina Duarte' }, text: 'verificou a leitura da estação Centro', at: minutesAgo(6), meta: 'exemplo' },
+  { id: 'a2', actor: { kind: 'agent', name: 'agente-limpeza' }, text: 'limpou as leituras de PM2.5 da estação Porto', at: minutesAgo(180), meta: 'regra limpeza@2' },
+  { id: 'a3', actor: { kind: 'system', name: 'freeze' }, text: 'congelou a edição 2026-09', at: minutesAgo(6 * 1440) },
 ]
 
 function Navigation() {
@@ -92,7 +92,7 @@ function Navigation() {
     <>
       <RailNavSection>{item('Visão geral', Home, 'visao-geral', { current: true })}</RailNavSection>
       <RailNavSection label="Coletar">
-        {item('Fontes e trilha', BookOpen, 'fontes')}
+        {item('Estações e trilha', BookOpen, 'fontes')}
         {item('Instrumentos', ClipboardList, 'instrumentos')}
         {item('Verificação', CheckSquare, 'verificacao', { count: 3 })}
       </RailNavSection>
@@ -116,9 +116,9 @@ function Account() {
   return (
     <div className="ty-demo-account">
       <div className="ty-demo-account__who">
-        <ProfileAvatar name="Natalia Mesquita" size="sm" decorative />
+        <ProfileAvatar name="Marina Duarte" size="sm" decorative />
         <span className="ty-demo-account__name">
-          <strong>Natalia Mesquita</strong>
+          <strong>Marina Duarte</strong>
           <span>Owner</span>
         </span>
       </div>
@@ -133,10 +133,10 @@ export function ResearchShellDemo() {
   const [evidence, setEvidence] = useState<AttentionItem | null>(null)
 
   const attention: AttentionItem[] = [
-    { id: 'a', proof: 'pending', title: 'Caso A', detail: 'Valor de exemplo sem fonte aberta' },
-    { id: 'b', proof: 'refuted', title: 'Caso B', detail: 'Valor de exemplo refutado pela segunda codificação' },
-    { id: 'c', proof: 'not_disclosed', title: 'Caso C', detail: 'Campo de exemplo não informado pelo órgão' },
-    { id: 'd', proof: 'none', title: 'Análise de exemplo', detail: 'Execução de exemplo com falha', action: { label: 'Ver execução', href: go('analises') } },
+    { id: 'a', proof: 'pending', title: 'Estação Centro', detail: 'Leitura de PM2.5 sem arquivo bruto aberto' },
+    { id: 'b', proof: 'refuted', title: 'Estação Porto', detail: 'Pico de NO₂ refutado pela segunda leitura' },
+    { id: 'c', proof: 'not_disclosed', title: 'Estação Parque', detail: 'Calibração não informada pelo operador' },
+    { id: 'd', proof: 'none', title: 'Dias acima do limite', detail: 'Execução da agregação com falha', action: { label: 'Ver execução', href: go('analises') } },
   ].map((row, index) =>
     row.action ? row : { ...row, action: { label: ['Verificar', 'Revisar', 'Abrir'][index] ?? 'Abrir', onPress: () => setEvidence(row as AttentionItem) } },
   ) as AttentionItem[]
@@ -155,7 +155,7 @@ export function ResearchShellDemo() {
       icon: Plus,
       onPress: () => undefined,
       menu: [
-        { id: 'session', label: 'Nova sessão de busca' },
+        { id: 'session', label: 'Nova sessão de coleta' },
         { id: 'instrument', label: 'Novo instrumento' },
       ],
     },
@@ -171,7 +171,7 @@ export function ResearchShellDemo() {
         navOpen={navOpen}
         onNavOpenChange={setNavOpen}
         brand={<BrandMark size="small" />}
-        context={<RailContextButton scope="EACH/USP" name="Censo de assistentes de IA governamentais" />}
+        context={<RailContextButton scope="Laboratório Exemplo" name="Estudo de qualidade do ar urbano de Vila Aurora" />}
         navigation={<Navigation />}
         account={<Account />}
         dock={<FloatingActionBar anchor="container" edge="bottom" narrowVariant="tabbar" destinations={dockDestinations} contextual={dockContextual} />}
@@ -182,11 +182,11 @@ export function ResearchShellDemo() {
               subtitle={evidence.detail}
               open
               onOpenChange={(open) => !open && setEvidence(null)}
-              proof={{ state: evidence.proof === 'none' ? null : evidence.proof, provedBy: 'Avaliadora de exemplo', rule: 'regra de exemplo' }}
+              proof={{ state: evidence.proof === 'none' ? null : evidence.proof, provedBy: 'Rafael Lima', rule: 'leitura@2' }}
               footer={<Button variant="primary">Salvar e seguir</Button>}
             >
-              <p className="ty-demo-quote" dir="auto">“Trecho citado de exemplo.”</p>
-              <p className="ty-demo-meta">fonte de exemplo</p>
+              <p className="ty-demo-quote" dir="auto">“PM2.5 médio diário de 38 µg/m³ em 14/07.”</p>
+              <p className="ty-demo-meta">rede de monitoramento de Vila Aurora, edição 2026-09 (dados fictícios)</p>
             </EvidencePanel>
           ) : null
         }
@@ -194,8 +194,8 @@ export function ResearchShellDemo() {
         <PageHeader
           variant="editorial"
           title="Visão geral"
-          trail={[{ label: 'EACH/USP', href: go('org') }, { label: 'Censo IA gov', href: go('visao-geral') }, { label: 'Visão geral' }]}
-          lead="Registro mundial de assistentes e agentes de IA de governos, com evidência citada por propriedade."
+          trail={[{ label: 'Laboratório Exemplo', href: go('org') }, { label: 'Ar de Vila Aurora', href: go('visao-geral') }, { label: 'Visão geral' }]}
+          lead="Qualidade do ar em cinco estações de Vila Aurora, com a leitura de origem citada em cada número."
           actions={
             <>
               <Tag tone="neutral" icon={<FlaskConical aria-hidden="true" />}>Dados de exemplo</Tag>
@@ -208,7 +208,7 @@ export function ResearchShellDemo() {
         <div className="ty-demo-stack">
           <StatStrip label="Estado da pesquisa" items={stats} />
           <section aria-labelledby="demo-stages" className="ty-demo-section">
-            <SectionHeading id="demo-stages" title="Da busca ao manuscrito" level={2} />
+            <SectionHeading id="demo-stages" title="Da coleta ao manuscrito" level={2} />
             <StageStrip label="Etapas da pesquisa" stages={stages} />
           </section>
           <div className="ty-demo-columns">
@@ -218,7 +218,7 @@ export function ResearchShellDemo() {
             </section>
             <section aria-labelledby="demo-proof" className="ty-demo-section">
               <SectionHeading id="demo-proof" title="Estado da prova" level={2} subtitle="Proporções de exemplo" />
-              <PhaseBar label="Estado da prova" segments={phases} caption="Frase-achado de exemplo: na plataforma ela vem da execução que a produziu." />
+              <PhaseBar label="Estado da prova" segments={phases} caption="A zona de baixa emissão reduziu os dias acima do limite de PM2.5 (achado fictício)." />
             </section>
           </div>
           <section aria-labelledby="demo-activity" className="ty-demo-section">

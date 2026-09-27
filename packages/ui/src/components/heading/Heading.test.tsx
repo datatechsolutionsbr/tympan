@@ -31,11 +31,11 @@ describe('Heading', () => {
   })
 
   it('renders the eyebrow outside the heading element', () => {
-    render(<Heading eyebrow="Census">Overview</Heading>)
+    render(<Heading eyebrow="Air study">Overview</Heading>)
     const h = screen.getByRole('heading', { name: 'Overview' })
     expect(h).toHaveAccessibleName('Overview')
-    expect(h).not.toHaveTextContent('Census')
-    expect(screen.getByText('Census').closest('h1')).toBeNull()
+    expect(h).not.toHaveTextContent('Air study')
+    expect(screen.getByText('Air study').closest('h1')).toBeNull()
   })
 
   it('renders an h2 from Subheading with no props', () => {

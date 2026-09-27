@@ -28,8 +28,8 @@ describe('Checkbox', () => {
   })
 
   it('uses accessibleLabel as the name when there is no label', () => {
-    render(<Checkbox accessibleLabel="Select TAMM" />)
-    expect(screen.getByRole('checkbox', { name: 'Select TAMM' })).toBeInTheDocument()
+    render(<Checkbox accessibleLabel="Select Centro" />)
+    expect(screen.getByRole('checkbox', { name: 'Select Centro' })).toBeInTheDocument()
   })
 
   it('exposes the mixed state', () => {

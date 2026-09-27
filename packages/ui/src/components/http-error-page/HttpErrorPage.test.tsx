@@ -17,8 +17,8 @@ describe('HttpErrorPage', () => {
   })
 
   it('replaces the message', () => {
-    render(<HttpErrorPage kind="bad-request" message="The census id is malformed." />)
-    expect(screen.getByText('The census id is malformed.')).toBeInTheDocument()
+    render(<HttpErrorPage kind="bad-request" message="The station id is malformed." />)
+    expect(screen.getByText('The station id is malformed.')).toBeInTheDocument()
   })
 
   it('shows the problem type as monospace metadata', () => {

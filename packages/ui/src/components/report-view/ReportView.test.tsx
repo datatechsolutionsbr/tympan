@@ -25,12 +25,12 @@ const full: Report = {
     ],
     rows: [
       { country: 'Brazil', budget: 1234.5, share: 12.5 },
-      { country: 'Estonia', budget: null, share: 3 },
+      { country: 'Park', budget: null, share: 3 },
     ],
   },
   recommendation: 'Verify the 12 pending claims of table 2 first.',
   sections: [
-    { kind: 'narrative', title: 'Summary', text: 'Stages 3 and 4 add up to 37 cases.', actor: { kind: 'agent', name: 'stage-counter' }, durationSeconds: 3.4 },
+    { kind: 'narrative', title: 'Summary', text: 'Stages 3 and 4 add up to 37 cases.', actor: { kind: 'agent', name: 'limit-counter' }, durationSeconds: 3.4 },
     { kind: 'lifecycle', title: 'Steps', steps: [{ label: 'Load', state: 'complete' }, { label: 'Count', state: 'current' }, { label: 'Publish', state: 'upcoming' }] },
     { kind: 'receipt', title: 'Costs', currency: 'BRL', items: [{ description: 'Tokens', quantity: 2, unitPrice: 10 }], total: 20 },
     { kind: 'approval', title: 'Approval', decision: 'approved', by: 'Author', reason: 'Matches the edition.' },

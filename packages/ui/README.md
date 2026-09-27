@@ -77,8 +77,8 @@ export function App() {
             ambient
             navOpen={navOpen}
             onNavOpenChange={setNavOpen}
-            brand="Acme Research"
-            context={<RailContextButton scope="EACH/USP" name="Censo IA gov" />}
+            brand="Laboratório Exemplo"
+            context={<RailContextButton scope="Laboratório Exemplo" name="Ar de Vila Aurora" />}
             navigation={
               <>
                 <RailNavSection>
@@ -102,8 +102,8 @@ export function App() {
               />
             }
           >
-            <PageHeader variant="editorial" title="Visão geral" trail={[{ label: 'EACH/USP', href: '/org' }, { label: 'Visão geral' }]} lead="…" />
-            <StatStrip label="Estado da pesquisa" items={[{ id: 'r', value: 94, label: 'registros', href: '/base' }]} />
+            <PageHeader variant="editorial" title="Visão geral" trail={[{ label: 'Laboratório Exemplo', href: '/org' }, { label: 'Visão geral' }]} lead="…" />
+            <StatStrip label="Estado da pesquisa" items={[{ id: 'r', value: 1460, label: 'leituras', href: '/base' }]} />
           </AppFrame>
         </ToastProvider>
       </ThemeProvider>

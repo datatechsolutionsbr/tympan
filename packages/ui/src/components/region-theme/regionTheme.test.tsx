@@ -170,10 +170,10 @@ describe('CountryProfileData: Brazil', () => {
 
   it('formats an address along the template without doubled separators', () => {
     const lines = formatProfileAddress(
-      { street: 'Rua Arlindo Béttio', number: '1000', complement: '', district: 'Ermelino Matarazzo', city: 'São Paulo', state: 'SP', postalCode: '03828-000' },
+      { street: 'Rua das Estações', number: '1000', complement: '', district: 'Centro', city: 'São Paulo', state: 'SP', postalCode: '01000-000' },
       brazilProfile,
     )
-    expect(lines).toEqual(['Rua Arlindo Béttio, 1000', 'Ermelino Matarazzo', 'São Paulo, SP', '03828-000'])
+    expect(lines).toEqual(['Rua das Estações, 1000', 'Centro', 'São Paulo, SP', '01000-000'])
     expect(lines.join('\n')).not.toMatch(/, ,/)
   })
 

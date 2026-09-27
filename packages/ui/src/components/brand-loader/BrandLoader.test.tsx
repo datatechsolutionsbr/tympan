@@ -10,8 +10,8 @@ const archive: LoaderPreset = { id: 'archive', name: 'Archive', mark: <span data
 
 describe('BrandLoader', () => {
   it('puts the label in a status element', () => {
-    render(<BrandLoader label="Opening the census" />)
-    expect(screen.getByRole('status')).toHaveTextContent('Opening the census')
+    render(<BrandLoader label="Opening the air-quality study" />)
+    expect(screen.getByRole('status')).toHaveTextContent('Opening the air-quality study')
   })
 
   it('uses the localised loading word without a label', () => {

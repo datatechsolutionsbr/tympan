@@ -30,20 +30,20 @@ export function ShellShowcase({ scope }: { scope: string }) {
           variant="editorial"
           headingLevel={3}
           title="Visão geral"
-          trail={[{ label: 'EACH/USP', href: '#/org' }, { label: 'Censo IA gov', href: '#/census' }, { label: 'Visão geral' }]}
-          lead="Registro mundial de assistentes e agentes de IA de governos, com evidência citada por propriedade."
+          trail={[{ label: 'Laboratório Exemplo', href: '#/org' }, { label: 'Ar de Vila Aurora', href: '#/air' }, { label: 'Visão geral' }]}
+          lead="Qualidade do ar em cinco estações de Vila Aurora, com a leitura de origem citada em cada número."
         />
       </Section>
 
       <Section id={id('rail')} title="Rail navigation (RailNavSection, RailNavItem, RailContextButton)">
         <div className="ty-gallery-rail">
-          <RailContextButton scope="EACH/USP" name="Censo de assistentes de IA" />
+          <RailContextButton scope="Laboratório Exemplo" name="Qualidade do ar de Vila Aurora" />
           <nav aria-label={`Rail sample ${scope}`}>
             <RailNavSection>
               <RailNavItem label="Visão geral" icon={Home} href="#/overview" current />
             </RailNavSection>
             <RailNavSection label="Coletar">
-              <RailNavItem label="Fontes e trilha" icon={BookOpen} href="#/sources" />
+              <RailNavItem label="Estações e trilha" icon={BookOpen} href="#/sources" />
               <RailNavItem label="Verificação" icon={CheckSquare} href="#/verify" count={12} />
             </RailNavSection>
           </nav>
@@ -65,7 +65,7 @@ export function ShellShowcase({ scope }: { scope: string }) {
               { id: 'p', label: 'Provenance', icon: Network, href: '#/graph' },
             ]}
             contextual={[
-              { id: 'n', label: 'New session', icon: Plus, onPress: () => undefined, menu: [{ id: 's', label: 'Search session' }, { id: 'i', label: 'Instrument' }] },
+              { id: 'n', label: 'New session', icon: Plus, onPress: () => undefined, menu: [{ id: 's', label: 'Collection session' }, { id: 'i', label: 'Instrument' }] },
               { id: 'me', label: 'Account', icon: User, onPress: () => undefined },
             ]}
           />
@@ -79,9 +79,9 @@ export function ShellShowcase({ scope }: { scope: string }) {
         <StatStrip
           label={`Research state ${scope}`}
           items={[
-            { id: 'r', value: 582, label: 'records', href: '#/base' },
+            { id: 'r', value: 1460, label: 'daily readings', href: '#/base' },
             { id: 'p', value: 60, label: 'proved claims', proof: 'proved' },
-            { id: 'w', value: 30, label: 'pending', detail: 'example' },
+            { id: 'w', value: 30, label: 'pending', detail: 'fictional data' },
             { id: 'x', value: 5, label: 'refuted', proof: 'refuted' },
           ]}
         />
@@ -91,8 +91,8 @@ export function ShellShowcase({ scope }: { scope: string }) {
         <StageStrip
           label={`Stages ${scope}`}
           stages={[
-            { id: 's', label: 'Search', href: '#/sources', status: 'done', figures: ['774 sources'] },
-            { id: 'o', label: 'Organise', href: '#/base', status: 'current', figures: ['582 records'] },
+            { id: 's', label: 'Collect', href: '#/sources', status: 'done', figures: ['5 stations'] },
+            { id: 'o', label: 'Organise', href: '#/base', status: 'current', figures: ['1460 readings'] },
             { id: 'a', label: 'Analyse', href: '#/analyses', status: 'attention', figures: ['1 failed run'] },
             { id: 'p', label: 'Publish', status: 'upcoming' },
             { id: 'm', label: 'Manuscript', status: 'upcoming' },
@@ -104,9 +104,9 @@ export function ShellShowcase({ scope }: { scope: string }) {
         <AttentionList
           label={`Attention ${scope}`}
           items={[
-            { id: 't', proof: 'pending', title: 'Case A', detail: 'Launch year without an open source', action: { label: 'Verify', onPress: () => undefined } },
-            { id: 'b', proof: 'refuted', title: 'Case B', detail: 'Stage refuted by the second coder', action: { label: 'Review', href: '#/base/boti' } },
-            { id: 'k', proof: 'not_disclosed', title: 'Case C', detail: 'Operator not disclosed' },
+            { id: 't', proof: 'pending', title: 'Centro station', detail: 'PM2.5 reading without an opened raw file', action: { label: 'Verify', onPress: () => undefined } },
+            { id: 'b', proof: 'refuted', title: 'Harbour station', detail: 'NO₂ peak refuted by the second reading', action: { label: 'Review', href: '#/base/harbour' } },
+            { id: 'k', proof: 'not_disclosed', title: 'Park station', detail: 'Calibration not disclosed' },
           ]}
           seeAllHref="#/verify"
         />
@@ -122,7 +122,7 @@ export function ShellShowcase({ scope }: { scope: string }) {
             { id: 'r', label: 'refuted', value: 5, tone: 'refuted' },
             { id: 'n', label: 'not disclosed', value: 5, tone: 'not_disclosed' },
           ]}
-          caption="Example finding sentence: on the platform it comes from the run that produced it."
+          caption="The low-emission zone cut the days above the PM2.5 limit (fictional finding)."
         />
       </Section>
 
@@ -131,9 +131,9 @@ export function ShellShowcase({ scope }: { scope: string }) {
           label={`Activity ${scope}`}
           now={now}
           entries={[
-            { id: '1', actor: { kind: 'person', name: 'Natalia Mesquita' }, text: 'verified a value of Case A', at: '2026-09-26T11:54:00Z', meta: 'example-id' },
-            { id: '2', actor: { kind: 'agent', name: 'stage-counter' }, text: 'ran the stage count', at: '2026-09-26T09:00:00Z', meta: 'rule stage-rule-v2' },
-            { id: '3', actor: { kind: 'system', name: 'freeze@2' }, text: 'froze edition 2026-09-20', at: '2026-09-20T03:00:00Z' },
+            { id: '1', actor: { kind: 'person', name: 'Marina Duarte' }, text: 'verified the Centro station reading', at: '2026-09-26T11:54:00Z', meta: 'rd-0714' },
+            { id: '2', actor: { kind: 'agent', name: 'limit-counter' }, text: 'counted the days above the limit', at: '2026-09-26T09:00:00Z', meta: 'rule limit-rule-v2' },
+            { id: '3', actor: { kind: 'system', name: 'freeze@2' }, text: 'froze edition 2026-09', at: '2026-09-20T03:00:00Z' },
           ]}
           moreHref="#/trail"
           moreLabel="See trail"
@@ -151,7 +151,7 @@ export function ShellShowcase({ scope }: { scope: string }) {
             stackBelow={640}
             primary={
               <div className="ty-gallery-stack">
-                <Text>Queue: Case A, Case B, Case C.</Text>
+                <Text>Queue: Centro, Harbour and Park stations.</Text>
                 <Text size="meta" tone="muted">
                   Drag the line or use the arrow keys on it.
                 </Text>
@@ -159,14 +159,14 @@ export function ShellShowcase({ scope }: { scope: string }) {
             }
             secondary={
               <EvidencePanel
-                title="Situation: in operation"
-                subtitle="example-id"
+                title="Station status: operating"
+                subtitle="station-centro-2026"
                 open
                 placement="docked"
                 onOpenChange={() => undefined}
-                proof={{ state: 'proved', provedBy: 'Reviewer B', at: '23 Sep 2026', rule: 'compile@1' }}
+                proof={{ state: 'proved', provedBy: 'Rafael Lima', at: '23 Sep 2026', rule: 'compile@1' }}
               >
-                <Text>“Example quoted passage.”</Text>
+                <Text>“Daily mean PM2.5 of 38 µg/m³ on 14 July.”</Text>
               </EvidencePanel>
             }
           />

@@ -11,8 +11,8 @@ import { renderRtl } from '../../../test/rtl'
 
 type Rec = { id: string; name: string }
 const groups = [
-  { key: 'A', header: 'Proved', items: [{ id: 'a1', name: 'TAMM' }] as Rec[] },
-  { key: 'B', header: 'Pending', items: [{ id: 'b1', name: 'Boti' }] as Rec[] },
+  { key: 'A', header: 'Proved', items: [{ id: 'a1', name: 'Centro' }] as Rec[] },
+  { key: 'B', header: 'Pending', items: [{ id: 'b1', name: 'Harbour' }] as Rec[] },
 ]
 const item = (r: Rec) => <a href={`#/${r.id}`}>{r.name}</a>
 
@@ -21,15 +21,15 @@ describe('GroupedDisclosureList', () => {
     render(<GroupedDisclosureList groups={groups} renderItem={item} getItemKey={(r) => r.id} />)
     expect(screen.getByRole('button', { name: 'Proved' })).toHaveAttribute('aria-expanded', 'true')
     expect(screen.getByRole('button', { name: 'Pending' })).toHaveAttribute('aria-expanded', 'true')
-    expect(screen.getByRole('link', { name: 'TAMM' })).toBeVisible()
-    expect(screen.getByRole('link', { name: 'Boti' })).toBeVisible()
+    expect(screen.getByRole('link', { name: 'Centro' })).toBeVisible()
+    expect(screen.getByRole('link', { name: 'Harbour' })).toBeVisible()
   })
 
   it('removes collapsed items from the accessibility tree and reports the key', async () => {
     const onCollapsedChange = vi.fn()
     render(<GroupedDisclosureList groups={groups} renderItem={item} getItemKey={(r) => r.id} onCollapsedChange={onCollapsedChange} />)
     await userEvent.click(screen.getByRole('button', { name: 'Proved' }))
-    expect(screen.queryByRole('link', { name: 'TAMM' })).toBeNull()
+    expect(screen.queryByRole('link', { name: 'Centro' })).toBeNull()
     expect(onCollapsedChange).toHaveBeenLastCalledWith(['A'])
   })
 

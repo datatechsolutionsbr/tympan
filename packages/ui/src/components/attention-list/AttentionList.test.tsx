@@ -10,10 +10,10 @@ import { AttentionList, type AttentionItem } from './AttentionList'
 
 const verify = vi.fn()
 const items: AttentionItem[] = [
-  { id: 'tamm', proof: 'pending', title: 'TAMM', detail: 'Launch year without a source', action: { label: 'Verify', onPress: verify } },
-  { id: 'boti', proof: 'refuted', title: 'Boti', detail: 'Stage refuted by the second coder', action: { label: 'Review', href: '/base/boti' } },
-  { id: 'burokratt', proof: 'not_disclosed', title: 'Bürokratt', detail: 'Operator not informed' },
-  { id: 'sp156', proof: 'none', title: 'SP156', detail: 'No proof yet' },
+  { id: 'centro', proof: 'pending', title: 'Centro', detail: 'PM2.5 reading without a source', action: { label: 'Verify', onPress: verify } },
+  { id: 'harbour', proof: 'refuted', title: 'Harbour', detail: 'NO₂ peak refuted by the second reading', action: { label: 'Review', href: '/base/harbour' } },
+  { id: 'riverside', proof: 'not_disclosed', title: 'Riverside', detail: 'Calibration not informed' },
+  { id: 'park', proof: 'none', title: 'Park', detail: 'No proof yet' },
 ]
 
 describe('AttentionList', () => {
@@ -23,15 +23,15 @@ describe('AttentionList', () => {
     const rows = within(list).getAllByRole('listitem')
     expect(rows).toHaveLength(2)
     expect(rows[0]).toHaveTextContent('pending')
-    expect(rows[0]).toHaveTextContent('TAMM')
-    expect(rows[0]).toHaveTextContent('Launch year without a source')
+    expect(rows[0]).toHaveTextContent('Centro')
+    expect(rows[0]).toHaveTextContent('PM2.5 reading without a source')
   })
 
   it('names each action with the row title and calls onPress', async () => {
     renderWithProvider(<AttentionList items={items} label="Attention" />, { navigate: vi.fn() })
-    await userEvent.click(screen.getByRole('button', { name: 'Verify: TAMM' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Verify: Centro' }))
     expect(verify).toHaveBeenCalledTimes(1)
-    expect(screen.getByRole('link', { name: 'Review: Boti' })).toHaveAttribute('href', '/base/boti')
+    expect(screen.getByRole('link', { name: 'Review: Harbour' })).toHaveAttribute('href', '/base/harbour')
   })
 
   it('shows the empty text without rows', () => {

@@ -7,7 +7,7 @@ import { cssOf, mediaBlock } from '../../../test/css'
 import { convertFilterValue, DataSourceNodeForm, parseListValue, type DataSourceNodeFormProps } from './DataSourceNodeForm'
 
 const sources = [
-  { id: 'census', name: 'Census edition', dialect: 'PostgreSQL' },
+  { id: 'air', name: 'Monitoring edition', dialect: 'PostgreSQL' },
   { id: 'sheets', name: 'Coding sheets', dialect: 'SQLite' },
 ]
 const columns = [
@@ -19,7 +19,7 @@ const columns = [
 function setup(extra: Partial<DataSourceNodeFormProps> = {}) {
   const props: DataSourceNodeFormProps = {
     open: true,
-    value: { sourceId: 'census', dialect: 'PostgreSQL', table: 'records', columns: ['uf'], filters: [{ column: 'uf', operator: 'eq', value: 'SP' }], outputVariable: 'rows', limit: 100 },
+    value: { sourceId: 'air', dialect: 'PostgreSQL', table: 'records', columns: ['uf'], filters: [{ column: 'uf', operator: 'eq', value: 'SP' }], outputVariable: 'rows', limit: 100 },
     sources,
     loadTables: vi.fn(() => Promise.resolve(['records', 'assertions'])),
     loadColumns: vi.fn(() => Promise.resolve(columns)),
@@ -72,13 +72,13 @@ describe('DataSourceNodeForm', () => {
   })
 
   it('disables save without a selected column', async () => {
-    setup({ value: { sourceId: 'census', table: 'records', columns: [] } })
+    setup({ value: { sourceId: 'air', table: 'records', columns: [] } })
     await screen.findByRole('checkbox', { name: /uf/ })
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
   })
 
   it('converts a legacy variable map into equals filters and drops the legacy key on save', async () => {
-    const { props } = setup({ value: { sourceId: 'census', table: 'records', columns: ['uf'], filterMap: { state: 'uf' } } })
+    const { props } = setup({ value: { sourceId: 'air', table: 'records', columns: ['uf'], filterMap: { state: 'uf' } } })
     await screen.findByRole('checkbox', { name: /uf/ })
     await userEvent.click(screen.getByRole('button', { name: 'Save' }))
     const saved = (props.onSave as ReturnType<typeof vi.fn>).mock.calls[0]![0]
@@ -102,7 +102,7 @@ describe('DataSourceNodeForm', () => {
         </div>
       </TympanProvider>,
     )
-    await userEvent.click(screen.getByRole('radio', { name: /Census edition/ }))
+    await userEvent.click(screen.getByRole('radio', { name: /Monitoring edition/ }))
     expect(screen.getByRole('tab', { name: 'Table' })).toHaveAttribute('aria-selected', 'true')
     rerender(
       <TympanProvider locale="pt-BR">

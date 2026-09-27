@@ -84,8 +84,8 @@ describe('CanvasToolbar and canvas tool items', () => {
             triggerRef={ref}
             onPick={onPick}
             nodes={[
-              { id: 'r115b', label: 'Retrieval r115b', kindLabel: 'retrieval' },
-              { id: 'ae-tamm-4-0', label: 'Record ae-tamm-4-0', kindLabel: 'record' },
+              { id: 'rd-0714', label: 'Retrieval rd-0714', kindLabel: 'retrieval' },
+              { id: 'station-centro-2026', label: 'Record station-centro-2026', kindLabel: 'record' },
             ]}
           />
         </>
@@ -93,9 +93,9 @@ describe('CanvasToolbar and canvas tool items', () => {
     }
     render(<Harness />)
     await userEvent.click(screen.getByText('find'))
-    await userEvent.keyboard('tamm')
-    expect(screen.queryByText('Retrieval r115b')).toBeNull()
+    await userEvent.keyboard('centro')
+    expect(screen.queryByText('Retrieval rd-0714')).toBeNull()
     await userEvent.keyboard('{ArrowDown}{Enter}')
-    expect(onPick).toHaveBeenCalledWith('ae-tamm-4-0')
+    expect(onPick).toHaveBeenCalledWith('station-centro-2026')
   })
 })

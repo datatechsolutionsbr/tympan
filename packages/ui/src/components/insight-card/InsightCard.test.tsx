@@ -8,7 +8,7 @@ import { InsightCard, type InsightCardProps } from './InsightCard'
 
 const base: InsightCardProps = {
   actor: { kind: 'agent', name: 'stage-coder', agentKey: 'ak_12' },
-  title: 'Stage of TAMM AI Assistant',
+  title: 'Days above the limit, Centro station',
   value: '4 Executes services',
   measures: [
     { id: 'conf', label: 'Confidence', value: '82 %', meter: 0.82 },
@@ -51,9 +51,9 @@ describe('InsightCard', () => {
 
   it('replaces the actions with the focused, announced outcome', async () => {
     const { rerender } = render(<InsightCard {...base} />)
-    rerender(<InsightCard {...base} outcome={{ text: 'Accepted by Natália on 23 Sep.' }} />)
+    rerender(<InsightCard {...base} outcome={{ text: 'Accepted by Júlia on 23 Sep.' }} />)
     const outcome = screen.getByRole('status')
-    expect(outcome).toHaveTextContent('Accepted by Natália on 23 Sep.')
+    expect(outcome).toHaveTextContent('Accepted by Júlia on 23 Sep.')
     await waitFor(() => expect(outcome).toHaveFocus())
     expect(screen.queryByRole('button', { name: 'Accept' })).toBeNull()
   })

@@ -9,8 +9,8 @@ const value = {
   kind: 'decision' as const,
   input: { ref: 'assertion.value' },
   options: [
-    { value: 'confirmed_primary', label: 'Confirmed, primary' },
-    { value: 'not_confirmed', label: 'Not confirmed' },
+    { value: 'above_limit', label: 'Above the limit' },
+    { value: 'below_limit', label: 'Not confirmed' },
   ],
   provider: 'p1',
   model: 'm1',
@@ -42,7 +42,7 @@ describe('DecisionNodeForm', () => {
     const second = screen.getByRole('group', { name: 'Option 2' })
     const field = within(second).getByRole('textbox', { name: 'Value' })
     await userEvent.clear(field)
-    await userEvent.type(field, 'confirmed_primary')
+    await userEvent.type(field, 'above_limit')
     expect(screen.getAllByText('This value is already used by another option.')).toHaveLength(2)
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
   })

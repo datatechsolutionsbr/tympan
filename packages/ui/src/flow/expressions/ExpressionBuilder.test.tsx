@@ -48,11 +48,11 @@ describe('ExpressionBuilder', () => {
 
   it('turns an operand into a reference to the first available reference', async () => {
     const onChange = vi.fn()
-    render(<Harness initial={{ operation: 'count', list: { value: null } }} references={['census.cases', 'inputs']} onChange={onChange} />)
+    render(<Harness initial={{ operation: 'count', list: { value: null } }} references={['air.readings', 'inputs']} onChange={onChange} />)
     const slot = screen.getByRole('group', { name: 'list, level 2' })
     await userEvent.click(within(slot).getByRole('radio', { name: 'Reference' }))
-    expect(onChange).toHaveBeenLastCalledWith({ operation: 'count', list: { ref: 'census.cases' } })
-    expect(within(slot).getByRole('button', { name: 'census.cases' })).toHaveAttribute('aria-pressed', 'true')
+    expect(onChange).toHaveBeenLastCalledWith({ operation: 'count', list: { ref: 'air.readings' } })
+    expect(within(slot).getByRole('button', { name: 'air.readings' })).toHaveAttribute('aria-pressed', 'true')
   })
 
   it('offers only boolean-yielding operations in predicate mode', async () => {

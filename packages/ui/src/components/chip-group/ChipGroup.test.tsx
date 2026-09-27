@@ -112,7 +112,7 @@ describe('ChipGroup', () => {
           <ThemeScope key={scheme} scheme={scheme}>
             <ChipGroup
               label={`Languages ${scheme}`}
-              items={[{ id: 'pt', name: 'Portuguese', code: 'pt', marker: 2 }, { id: 'et', name: 'Estonian', code: 'et' }, { id: 'x', name: 'Custom', custom: true }]}
+              items={[{ id: 'pt', name: 'Portuguese', code: 'pt', marker: 2 }, { id: 'es', name: 'Spanish', code: 'es' }, { id: 'x', name: 'Custom', custom: true }]}
               selectedIds={['pt', 'x']}
               onSelectionChange={() => {}}
               allowCustom

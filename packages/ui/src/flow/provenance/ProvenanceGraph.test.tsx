@@ -11,22 +11,22 @@ import { ProvenanceNode } from './ProvenanceNode'
 import { ProvenanceLegend } from './ProvenanceLegend'
 import { defaultProvenanceLabels } from './labels'
 
-const coder: ProvActor = { id: 'coder', kind: 'agent', name: 'coder', agentKey: 'census.coder', model: 'model-x 2026-08' }
+const coder: ProvActor = { id: 'coder', kind: 'agent', name: 'coder', agentKey: 'air.coder', model: 'model-x 2026-08' }
 const ana: ProvActor = { id: 'ana', kind: 'person', name: 'Ana Souza' }
 
 const items: ProvItem[] = [
-  { id: 'q1', kind: 'query', title: 'TAMM assistant', actor: ana, proofState: null, at: '2026-09-10T10:00:00Z' },
-  { id: 'r115b', kind: 'retrieval', title: 'Retrieval r115b', meta: ['sha256 9f2c1a'], actor: { kind: 'system', name: 'fetcher' }, proofState: 'proved' },
-  { id: 'src', kind: 'source', title: 'TAMM official page', actor: ana, proofState: 'proved' },
-  { id: 'as1', kind: 'assertion', title: 'governance.operator_regulatory_position', meta: ['= confirmed_primary'], actor: coder, proofState: 'proved', verifiedBy: 'Ana Souza', rule: 'verify@2' },
+  { id: 'q1', kind: 'query', title: 'Centro PM2.5 readings', actor: ana, proofState: null, at: '2026-09-10T10:00:00Z' },
+  { id: 'rd-0714', kind: 'retrieval', title: 'Retrieval rd-0714', meta: ['sha256 9f2c1a'], actor: { kind: 'system', name: 'fetcher' }, proofState: 'proved' },
+  { id: 'src', kind: 'source', title: 'Centro station file', actor: ana, proofState: 'proved' },
+  { id: 'as1', kind: 'assertion', title: 'air.pm25_days_above_limit', meta: ['= above_limit'], actor: coder, proofState: 'proved', verifiedBy: 'Ana Souza', rule: 'verify@2' },
   { id: 'as2', kind: 'assertion', title: 'model.sovereignty', actor: coder, proofState: 'refuted' },
-  { id: 'rec', kind: 'record', title: 'ae-tamm-4-0', actor: coder, proofState: 'pending' },
+  { id: 'rec', kind: 'record', title: 'station-centro-2026', actor: coder, proofState: 'pending' },
   { id: 'ed', kind: 'edition', title: 'Edition 2026-09-20', actor: ana, proofState: 'proved' },
   { id: 'lonely', kind: 'source', title: 'Unlinked note', proofState: 'not_disclosed' },
 ]
 const statements: ProvStatement[] = [
-  { subject: 'r115b', relation: 'wasGeneratedBy', object: 'q1' },
-  { subject: 'src', relation: 'wasDerivedFrom', object: 'r115b' },
+  { subject: 'rd-0714', relation: 'wasGeneratedBy', object: 'q1' },
+  { subject: 'src', relation: 'wasDerivedFrom', object: 'rd-0714' },
   { subject: 'as1', relation: 'wasDerivedFrom', object: 'src' },
   { subject: 'as2', relation: 'wasDerivedFrom', object: 'src' },
   { subject: 'rec', relation: 'wasDerivedFrom', object: 'as1' },
@@ -45,7 +45,7 @@ function renderGraph(props: Partial<Parameters<typeof ProvenanceGraph>[0]> = {})
 describe('provenance model', () => {
   it('keeps N steps back and M steps forward from the focus', () => {
     expect(ids(view('as1', 1, 0))).toEqual(['as1', 'src'])
-    expect(ids(view('as1', 2, 0))).toEqual(['as1', 'r115b', 'src'])
+    expect(ids(view('as1', 2, 0))).toEqual(['as1', 'rd-0714', 'src'])
     expect(ids(view('as1', 0, 2))).toEqual(['as1', 'ed', 'rec'])
     expect(ids(view('as1', 1, 1))).toEqual(['as1', 'rec', 'src'])
   })
@@ -53,7 +53,7 @@ describe('provenance model', () => {
   it('filters by kind, proof state, actor kind and actor name', () => {
     expect(ids(view(null, 1, 1, { kinds: ['assertion'] }))).toEqual(['as1', 'as2'])
     expect(ids(view(null, 1, 1, { proofStates: ['refuted', 'none'] }))).toEqual(['as2', 'q1'])
-    expect(ids(view(null, 1, 1, { actorKinds: ['system'] }))).toEqual(['r115b'])
+    expect(ids(view(null, 1, 1, { actorKinds: ['system'] }))).toEqual(['rd-0714'])
     expect(ids(view(null, 1, 1, { actorName: 'souza' }))).toEqual(['ed', 'q1', 'src'])
   })
 
@@ -74,7 +74,7 @@ describe('provenance model', () => {
   it('finds the proof path back to the origin and lays bands top to bottom with the path in column 0', () => {
     const v = view('rec', 8, 0)
     const path = proofPath(v, 'rec')
-    expect([...path.nodes].sort()).toEqual(['as1', 'q1', 'r115b', 'rec', 'src'])
+    expect([...path.nodes].sort()).toEqual(['as1', 'q1', 'rd-0714', 'rec', 'src'])
     const full = view(null, 0, 0)
     const bands = bandLayout(full, proofPath(full, 'as1').nodes)
     expect(bands.bands.map((b) => b.key)).toEqual(['search', 'read', 'source', 'assertion', 'base', 'edition'])
@@ -82,7 +82,7 @@ describe('provenance model', () => {
     const as2 = bands.positions.get('as2')!
     expect(as1.y).toBe(as2.y)
     expect(as1.x).toBeLessThan(as2.x)
-    expect(bands.positions.get('q1')!.y).toBeLessThan(bands.positions.get('r115b')!.y)
+    expect(bands.positions.get('q1')!.y).toBeLessThan(bands.positions.get('rd-0714')!.y)
     const mirrored = bandLayout(full, proofPath(full, 'as1').nodes, undefined, true)
     expect(mirrored.positions.get('as1')!.x).toBeGreaterThan(mirrored.positions.get('as2')!.x)
     expect(mirrored.labelX).toBeGreaterThan(0)
@@ -93,8 +93,8 @@ describe('ProvenanceGraph', () => {
   it('names each node with kind, title, proof word and actor kind', async () => {
     const { container } = renderGraph()
     const canvas = screen.getByRole('group', { name: 'Provenance graph' })
-    expect(within(canvas).getByRole('button', { name: 'assertion: governance.operator_regulatory_position, proved, agent coder' })).toBeInTheDocument()
-    expect(within(canvas).getByRole('button', { name: 'source: TAMM official page, proved, person Ana Souza' })).toBeInTheDocument()
+    expect(within(canvas).getByRole('button', { name: 'assertion: air.pm25_days_above_limit, proved, agent coder' })).toBeInTheDocument()
+    expect(within(canvas).getByRole('button', { name: 'source: Centro station file, proved, person Ana Souza' })).toBeInTheDocument()
     await expectNoAxeViolations(container)
   })
 
@@ -151,48 +151,48 @@ describe('ProvenanceGraph', () => {
         ? {
             ...i,
             proofReason: 'Two independent sources agree.',
-            evidence: 'The platform is operated by the Department of Government Enablement.',
+            evidence: 'Daily mean PM2.5 stayed above 25 µg/m³ on 12 days.',
             obligations: [
               { id: 'o1', label: 'Source reread', status: 'ok', detail: 'sha256 9f2c1a' },
               { id: 'o2', label: 'Second source', status: 'pending' },
             ],
           }
-        : i.id === 'r115b'
+        : i.id === 'rd-0714'
           ? { ...i, hashCheck: 'match' }
           : i,
     )
     render(<ProvenanceGraph items={rich} statements={statements} defaultFocusId="as1" defaultSelectedId="as1" onReread={onReread} onRequestVerification={onRequestVerification} />)
     const panel = screen.getByRole('complementary', { name: /^Evidence/ })
     expect(within(panel).getByText('Two independent sources agree.')).toBeInTheDocument()
-    expect(within(panel).getByText(/Department of Government Enablement/).tagName).toBe('BLOCKQUOTE')
+    expect(within(panel).getByText(/stayed above 25/).tagName).toBe('BLOCKQUOTE')
     const obligations = within(panel).getByRole('heading', { name: 'Proof obligations' }).parentElement!
     expect(within(obligations).getByText('met')).toBeInTheDocument()
     expect(within(obligations).getByText('pending')).toBeInTheDocument()
     await userEvent.click(within(panel).getByRole('button', { name: 'Ask for verification' }))
     expect(onRequestVerification).toHaveBeenCalledWith('as1')
-    await userEvent.click(within(panel).getByRole('button', { name: /was derived from source: TAMM official page/ }))
+    await userEvent.click(within(panel).getByRole('button', { name: /was derived from source: Centro station file/ }))
     await userEvent.click(within(screen.getByRole('complementary', { name: /^Evidence/ })).getByRole('button', { name: /was derived from retrieval/ }))
-    const retrievalPanel = screen.getByRole('complementary', { name: 'Evidence: Retrieval r115b' })
+    const retrievalPanel = screen.getByRole('complementary', { name: 'Evidence: Retrieval rd-0714' })
     expect(within(retrievalPanel).getByText('hash matches')).toBeInTheDocument()
     await userEvent.click(within(retrievalPanel).getByRole('button', { name: 'Reread the source now' }))
-    expect(onReread).toHaveBeenCalledWith('r115b')
+    expect(onReread).toHaveBeenCalledWith('rd-0714')
   })
 
   it('selects on the canvas and in the tree, and Enter in the tree focuses the node in the graph', async () => {
     renderGraph()
     const canvas = screen.getByRole('group', { name: 'Provenance graph' })
-    await userEvent.click(within(canvas).getByRole('button', { name: /^source: TAMM official page/ }))
-    expect(screen.getByRole('complementary', { name: 'Evidence: TAMM official page' })).toBeInTheDocument()
+    await userEvent.click(within(canvas).getByRole('button', { name: /^source: Centro station file/ }))
+    expect(screen.getByRole('complementary', { name: 'Evidence: Centro station file' })).toBeInTheDocument()
     await userEvent.click(screen.getByRole('radio', { name: 'Tree' }))
     const tree = screen.getByRole('treegrid', { name: 'Provenance list' })
-    expect(within(tree).getByRole('row', { selected: true })).toHaveTextContent('TAMM official page')
-    expect(screen.getByRole('complementary', { name: 'Evidence: TAMM official page' })).toBeInTheDocument()
+    expect(within(tree).getByRole('row', { selected: true })).toHaveTextContent('Centro station file')
+    expect(screen.getByRole('complementary', { name: 'Evidence: Centro station file' })).toBeInTheDocument()
     const rows = within(tree).getAllByRole('row')
     rows[rows.length - 1]!.focus()
     await userEvent.keyboard('{Enter}')
     const graph = await screen.findByRole('group', { name: 'Provenance graph' })
     await vi.waitFor(() => expect(graph.contains(document.activeElement)).toBe(true))
-    expect(document.activeElement).toHaveAccessibleName(/^retrieval: Retrieval r115b/)
+    expect(document.activeElement).toHaveAccessibleName(/^retrieval: Retrieval rd-0714/)
   })
 
   it('navigates the tree with the keyboard and switches between where it came from and where it was used', async () => {
@@ -211,19 +211,19 @@ describe('ProvenanceGraph', () => {
     expect(rows().length).toBe(1)
     await userEvent.keyboard('{ArrowRight}')
     expect(rows().length).toBe(before)
-    expect(within(tree).queryByText('ae-tamm-4-0')).toBeNull()
+    expect(within(tree).queryByText('station-centro-2026')).toBeNull()
     await userEvent.click(screen.getByRole('radio', { name: 'Where it was used' }))
-    expect(within(screen.getByRole('treegrid')).getByText('ae-tamm-4-0')).toBeInTheDocument()
+    expect(within(screen.getByRole('treegrid')).getByText('station-centro-2026')).toBeInTheDocument()
   })
 
   it('moves between bands along relations with Up and Down and leaves the canvas with Escape', async () => {
     renderGraph()
     const canvas = screen.getByRole('group', { name: 'Provenance graph' })
-    within(canvas).getByRole('button', { name: /^assertion: governance/ }).focus()
+    within(canvas).getByRole('button', { name: /^assertion: air/ }).focus()
     await userEvent.keyboard('{ArrowUp}')
-    expect(document.activeElement).toHaveAccessibleName(/^source: TAMM official page/)
+    expect(document.activeElement).toHaveAccessibleName(/^source: Centro station file/)
     await userEvent.keyboard('{ArrowDown}')
-    expect(document.activeElement).toHaveAccessibleName(/^assertion: governance/)
+    expect(document.activeElement).toHaveAccessibleName(/^assertion: air/)
     await userEvent.keyboard('{Escape}')
     expect(screen.getByRole('group', { name: 'Provenance query' }).contains(document.activeElement)).toBe(true)
   })
@@ -233,8 +233,8 @@ describe('ProvenanceGraph', () => {
     renderGraph({ onFocusChange })
     const input = screen.getByRole('combobox', { name: 'Where did this come from' })
     await userEvent.clear(input)
-    await userEvent.type(input, 'tamm-4')
-    const option = await screen.findByRole('option', { name: /ae-tamm-4-0/ })
+    await userEvent.type(input, 'centro-2026')
+    const option = await screen.findByRole('option', { name: /station-centro-2026/ })
     await userEvent.click(option)
     expect(onFocusChange).toHaveBeenCalledWith('rec')
   })
@@ -245,7 +245,7 @@ describe('ProvenanceGraph', () => {
     await userEvent.selectOptions(screen.getByLabelText('Steps back'), '1')
     expect(onBackChange).toHaveBeenCalledWith(1)
     const canvas = screen.getByRole('group', { name: 'Provenance graph' })
-    expect(canvas.querySelector('[data-ty-node-id="r115b"]')).toBeNull()
+    expect(canvas.querySelector('[data-ty-node-id="rd-0714"]')).toBeNull()
     await userEvent.selectOptions(screen.getByLabelText('Steps forward'), '2')
     expect(canvas.querySelector('[data-ty-node-id="ed"]')).not.toBeNull()
   })
@@ -264,10 +264,10 @@ describe('ProvenanceGraph', () => {
     const onRerun = vi.fn()
     renderGraph({
       certificates: {
-        as1: { claimId: 'as1', claim: 'Operator position is confirmed', verdict: 'proved', verifier: 'proof-verify 0.7.2', ranAt: '2026-09-21T10:00:00Z', inputEdition: '2026-09-20', hash: 'sha256:77a1', obligations: [{ id: 'o1', label: 'Hash matches', status: 'ok' }] },
+        as1: { claimId: 'as1', claim: 'Days above the limit are confirmed', verdict: 'proved', verifier: 'proof-verify 0.7.2', ranAt: '2026-09-21T10:00:00Z', inputEdition: '2026-09-20', hash: 'sha256:77a1', obligations: [{ id: 'o1', label: 'Hash matches', status: 'ok' }] },
       },
       onRerunCertificate: onRerun,
-      comparison: { a: { id: 'e1', label: '2026-08-01' }, b: { id: 'e2', label: '2026-09-20' }, rows: [{ itemId: 'as1', label: 'Operator position', a: 'unclear', b: 'confirmed_primary', change: 'altered' }] },
+      comparison: { a: { id: 'e1', label: '2026-08-01' }, b: { id: 'e2', label: '2026-09-20' }, rows: [{ itemId: 'as1', label: 'Days above the limit', a: 'unclear', b: 'above_limit', change: 'altered' }] },
     })
     await userEvent.click(screen.getByRole('radio', { name: 'Timeline' }))
     expect(screen.getAllByText('Ana Souza').length).toBeGreaterThan(0)
@@ -276,7 +276,7 @@ describe('ProvenanceGraph', () => {
     await userEvent.click(screen.getByRole('button', { name: /Run again/ }))
     expect(onRerun).toHaveBeenCalledWith('as1')
     await userEvent.click(screen.getByRole('radio', { name: 'Compare editions' }))
-    expect(screen.getAllByText('confirmed_primary').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('above_limit').length).toBeGreaterThan(0)
   })
 
   it('says when the focus has no links and warns when the view is deep', () => {
@@ -322,7 +322,7 @@ describe('ProvenanceGraph', () => {
     expect(rows().length).toBe(1)
     await userEvent.keyboard('{ArrowLeft}')
     expect(rows().length).toBe(before)
-    await userEvent.click(within(tree).getByText('TAMM official page'))
+    await userEvent.click(within(tree).getByText('Centro station file'))
     expect(screen.getByRole('complementary')).toBeInTheDocument()
     await userEvent.click(screen.getByRole('radio', { name: 'Graph' }))
     const label = container.querySelector('.ty-prov-band__label') as HTMLElement
@@ -355,7 +355,7 @@ describe('ProvenanceGraph', () => {
     const { rerender } = renderGraph({ selectedId: 'src' })
     const canvas = screen.getByRole('group', { name: 'Provenance graph' })
     expect(canvas.querySelector('[data-ty-node-id="src"] .ty-prov-card')).toHaveAttribute('data-selected', 'true')
-    act(() => rerender(<ProvenanceGraph items={items} statements={statements} defaultFocusId="as1" defaultBack={2} selectedId="r115b" />))
-    expect(canvas.querySelector('[data-ty-node-id="r115b"] .ty-prov-card')).toHaveAttribute('data-selected', 'true')
+    act(() => rerender(<ProvenanceGraph items={items} statements={statements} defaultFocusId="as1" defaultBack={2} selectedId="rd-0714" />))
+    expect(canvas.querySelector('[data-ty-node-id="rd-0714"] .ty-prov-card')).toHaveAttribute('data-selected', 'true')
   })
 })

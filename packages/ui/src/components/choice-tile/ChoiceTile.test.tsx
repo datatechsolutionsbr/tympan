@@ -69,7 +69,7 @@ describe('ChoiceTile', () => {
     const onPress = vi.fn()
     render(
       <ChoiceTile selected onPress={onPress} haptic={false}>
-        Estonia
+        Park station
       </ChoiceTile>,
     )
     expect(screen.getByRole('button')).toHaveAttribute('aria-pressed', 'true')

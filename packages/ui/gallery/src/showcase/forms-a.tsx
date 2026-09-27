@@ -26,8 +26,8 @@ import {
 import { Section } from '../Section'
 
 const startFilters: ActiveFilter[] = [
-  { kind: 'country', value: 'br', label: 'Brazil', tone: 2 },
-  { kind: 'stage', value: '4', label: 'Stage 4' },
+  { kind: 'country', value: 'centro', label: 'Centro station', tone: 2 },
+  { kind: 'stage', value: 'pm25', label: 'PM2.5' },
   { kind: 'year', value: '2024', label: '2024' },
 ]
 
@@ -37,18 +37,18 @@ export function FormsAShowcase({ scope }: { scope: string }) {
   const [active, setActive] = useState(true)
   const [code, setCode] = useState('12')
   const [password, setPassword] = useState('abcdefg1')
-  const [query, setQuery] = useState('case a')
+  const [query, setQuery] = useState('centro')
   const [filters, setFilters] = useState(startFilters)
   const [dialog, setDialog] = useState(false)
   const [filterText, setFilterText] = useState('ana')
-  const [tiles, setTiles] = useState<Set<string>>(new Set(['br']))
+  const [tiles, setTiles] = useState<Set<string>>(new Set(['centro']))
   const [model, setModel] = useState('b')
   const [cardOn, setCardOn] = useState(true)
   const [tile, setTile] = useState('pt')
   const [currency, setCurrency] = useState('BRL')
   const [items, setItems] = useState<ChipItem[]>([
     { id: 'pt', name: 'Portuguese', code: 'pt' },
-    { id: 'et', name: 'Estonian', code: 'et', marker: 3 },
+    { id: 'es', name: 'Spanish', code: 'es', marker: 3 },
     { id: 'en', name: 'English', code: 'en' },
   ])
   const [chips, setChips] = useState(['pt'])
@@ -86,7 +86,7 @@ export function FormsAShowcase({ scope }: { scope: string }) {
 
       <Section id={id('search')} title="SearchBar, FilterField, FilterChips">
         <SearchBar
-          label={`Search cases (${scope})`}
+          label={`Search readings (${scope})`}
           query={query}
           onQueryChange={setQuery}
           filters={filters}
@@ -101,7 +101,7 @@ export function FormsAShowcase({ scope }: { scope: string }) {
             onOpenChange: setDialog,
             activeCount: filters.length,
             onClear: () => setFilters([]),
-            context: { icon: <Globe size={16} />, label: 'Catalogue', countText: '94 cases' },
+            context: { icon: <Globe size={16} />, label: 'Stations', countText: '1460 readings' },
             content: <p>Filter controls supplied by the host.</p>,
           }}
         />
@@ -110,17 +110,17 @@ export function FormsAShowcase({ scope }: { scope: string }) {
       </Section>
 
       <Section id={id('tiles')} title="FilterTile, ChoiceTile">
-        <FilterTileGroupHeading label="Countries" icon={<Globe />} />
-        <FilterTileGrid label={`Country filters (${scope})`}>
-          <FilterTile selected={tiles.has('br')} onToggle={() => toggleTile('br')} label="Brazil" detail="42 records" icon={<Flag />} tone={2} />
-          <FilterTile selected={tiles.has('ee')} onToggle={() => toggleTile('ee')} label="Estonia" detail="7 records" icon={<Flag />} tone={5} />
-          <FilterTile selected={tiles.has('uk')} onToggle={() => toggleTile('uk')} label="United Kingdom" detail="12 records" icon={<Flag />} iconSurface="neutral" />
-          <FilterTile selected={false} onToggle={() => {}} label="Unavailable" detail="0 records" icon={<Flag />} disabled />
+        <FilterTileGroupHeading label="Stations" icon={<Globe />} />
+        <FilterTileGrid label={`Station filters (${scope})`}>
+          <FilterTile selected={tiles.has('centro')} onToggle={() => toggleTile('centro')} label="Centro" detail="365 readings" icon={<Flag />} tone={2} />
+          <FilterTile selected={tiles.has('harbour')} onToggle={() => toggleTile('harbour')} label="Harbour" detail="358 readings" icon={<Flag />} tone={5} />
+          <FilterTile selected={tiles.has('park')} onToggle={() => toggleTile('park')} label="Park" detail="362 readings" icon={<Flag />} iconSurface="neutral" />
+          <FilterTile selected={false} onToggle={() => {}} label="Riverside" detail="0 readings" icon={<Flag />} disabled />
         </FilterTileGrid>
         <div className="ty-gallery-row">
           {[
             ['pt', 'Português'],
-            ['et', 'Eesti'],
+            ['es', 'Español'],
             ['en', 'English'],
           ].map(([key, text]) => (
             <ChoiceTile key={key} shape="pill" selected={tile === key} onPress={() => setTile(key!)}>
@@ -158,8 +158,8 @@ export function FormsAShowcase({ scope }: { scope: string }) {
         <ChipGroup label="Languages" items={items} selectedIds={chips} onSelectionChange={setChips} allowCustom onItemsChange={setItems} />
         <FlagSetPicker
           label="Review rules"
-          labels={{ cite: 'Cite sources', review: 'Require a second reviewer', freeze: 'Freeze on publish' }}
-          descriptions={{ cite: 'Every value links to a retrieval.' }}
+          labels={{ cite: 'Cite readings', review: 'Require a second reviewer', freeze: 'Freeze on publish' }}
+          descriptions={{ cite: 'Every value links to a station reading.' }}
           values={flags}
           onChange={setFlags}
           presets={[

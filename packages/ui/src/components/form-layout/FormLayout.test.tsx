@@ -40,7 +40,7 @@ describe('FormLayout', () => {
         <TextField label="Name" />
       </FramedForm>,
     )
-    await userEvent.type(screen.getByRole('textbox', { name: 'Name' }), 'Boti{Enter}')
+    await userEvent.type(screen.getByRole('textbox', { name: 'Name' }), 'Harbour{Enter}')
     expect(onSubmit).toHaveBeenCalledTimes(1)
     expect(onSubmit.mock.calls[0]![0].defaultPrevented).toBe(true)
   })

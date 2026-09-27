@@ -63,77 +63,77 @@ export function DataBShowcase({ scope }: { scope: string }) {
 
       <Section id={id('metric')} title="MetricTile">
         <div className="ty-gallery-row">
-          <MetricTile title="Records" value={94} subtitle="Edition 2026-09-20" trend={{ value: 10.5, label: 'vs last edition' }} icon={<Scale />} tone="success" />
+          <MetricTile title="Daily readings" value={1460} subtitle="Edition 2026-09" trend={{ value: 10.5, label: 'vs last edition' }} icon={<Scale />} tone="success" />
           <MetricTile title="Refuted" value={7} tone="danger" icon={<CircleAlert />} trend={{ value: -5.2 }} />
           <MetricTile title="Runs" value={3} surface="plain" trend={{ value: 0 }} />
         </div>
       </Section>
 
       <Section id={id('agent-output')} title="AgentOutputCard">
-        <AgentOutputCard agentName="stage-counter" agentKey="ak_91" duration="3.4 s" output="Stages 3 and 4 add up to 37 of the 94 cases; stage 1 fell from 22 to 18. The count used rule stage-rule-v2 on edition 2026-09-20." onOpen={() => toast.info('Full output')} />
-        <AgentOutputCard agentName="linker" duration="0.2 s" outcome="failed" output="The source page returned 404." />
+        <AgentOutputCard agentName="limit-counter" agentKey="ak_91" duration="3.4 s" output="Centro and Harbour stations added up to 37 of the 94 days above the PM2.5 limit; Park fell from 22 to 18. The count used rule limit-rule-v2 on edition 2026-09." onOpen={() => toast.info('Full output')} />
+        <AgentOutputCard agentName="linker" duration="0.2 s" outcome="failed" output="The Riverside station feed returned 404." />
       </Section>
 
       <Section id={id('record')} title="RecordCard">
         <ul className="ty-gallery-stack" style={{ margin: 0, padding: 0 }}>
           <RecordCard
-            title="stage-counter"
+            title="limit-counter"
             secondary="ak_91 · nova-lite"
             leading={<Bot />}
             state
             accent={3}
-            onOpen={() => toast.info('Open stage-counter')}
-            footer={<RecordActions recordTitle="stage-counter" editLabel="Edit" deleteLabel="Delete" onEdit={() => toast.info('Edit')} onDelete={() => void toast.success('Deleted')} confirmDeleteTitle="Delete stage-counter?" />}
+            onOpen={() => toast.info('Open limit-counter')}
+            footer={<RecordActions recordTitle="limit-counter" editLabel="Edit" deleteLabel="Delete" onEdit={() => toast.info('Edit')} onDelete={() => void toast.success('Deleted')} confirmDeleteTitle="Delete limit-counter?" />}
           >
-            Counts records per stage for every frozen edition.
+            Counts the days above the PM2.5 limit per station for every frozen edition.
           </RecordCard>
           <RecordCard title="notary" secondary="Signs editions" state={false} />
         </ul>
       </Section>
 
       <Section id={id('profile')} title="ProfileSummary">
-        <ProfileSummary name="Natália Mesquita" email="natalia@example.org" showEmail role="Owner" />
+        <ProfileSummary name="Marina Duarte" email="marina.duarte@example.org" showEmail role="Owner" />
       </Section>
 
       <Section id={id('contact')} title="ContactCard">
         <ContactSection title="Contact" subtitle="Write to the team that can answer." headingLevel={3}>
-          <ContactChannelCard purposeLabel="Research partnerships" email="research@example.org" phone="+55 11 3091-1000" headingLevel={4} />
-          <ContactOfficeCard city="São Paulo" addressLines={['Rua Arlindo Béttio, 1000', 'Ermelino Matarazzo', '03828-000']} headingLevel={4} />
+          <ContactChannelCard purposeLabel="Research partnerships" email="research@example.org" phone="+55 00 0000-0000" headingLevel={4} />
+          <ContactOfficeCard city="Vila Aurora" addressLines={['Rua das Estações, 100', 'Centro', '00000-000']} headingLevel={4} />
         </ContactSection>
       </Section>
 
       <Section id={id('insight')} title="InsightCard">
         <InsightCard
-          actor={{ kind: 'agent', name: 'stage-coder', agentKey: 'ak_12' }}
-          title="Stage of Case A"
-          value="4 Executes services"
+          actor={{ kind: 'agent', name: 'cleaning-agent', agentKey: 'ak_12' }}
+          title="Days above the limit, Centro station"
+          value="12 days"
           delta={{ value: 1, unit: 'number' }}
           measures={[
             { id: 'c', label: 'Confidence', value: '82 %', meter: 0.82 },
-            { id: 's', label: 'Sources read', value: '6 of 6' },
+            { id: 's', label: 'Readings opened', value: '6 of 6' },
           ]}
           actions={[
             { id: 'accept', label: 'Accept', emphasis: 'secondary' },
             { id: 'dismiss', label: 'Dismiss', emphasis: 'quiet' },
           ]}
-          onAction={(a) => new Promise<void>((r) => setTimeout(r, 900)).then(() => setOutcome(a === 'accept' ? 'Accepted by Natália just now.' : 'Dismissed.'))}
+          onAction={(a) => new Promise<void>((r) => setTimeout(r, 900)).then(() => setOutcome(a === 'accept' ? 'Accepted by Marina just now.' : 'Dismissed.'))}
           outcome={outcome ? { text: outcome } : undefined}
-          footnote={{ text: 'Rule stage-rule-v2 applied', href: '#/rules' }}
+          footnote={{ text: 'Rule limit-rule-v2 applied', href: '#/rules' }}
           proofState="pending"
         />
       </Section>
 
       <Section id={id('ticker')} title="TickerCard">
         <TickerCard
-          title="Transparency, per case"
+          title="Mean PM2.5, per station"
           icon={Landmark}
           entries={[
-            { id: 'ee', name: 'Case C', qualifier: 'Country C', value: '0.81', change: { value: '+0.04', direction: 'up', sentiment: 'positive' } },
-            { id: 'uk', name: 'Case D', qualifier: 'Country D', value: '0.77', change: { value: '−0.02', direction: 'down', sentiment: 'negative' } },
-            { id: 'sp', name: 'Case E', qualifier: 'City E', value: '0.64', change: { value: '0.00', direction: 'flat' } },
+            { id: 'park', name: 'Park station', qualifier: 'Green belt', value: '8.1', change: { value: '−0.4', direction: 'down', sentiment: 'positive' } },
+            { id: 'north', name: 'North station', qualifier: 'North district', value: '17.7', change: { value: '+0.2', direction: 'up', sentiment: 'negative' } },
+            { id: 'riverside', name: 'Riverside station', qualifier: 'River bank', value: '12.4', change: { value: '0.0', direction: 'flat' } },
           ]}
-          asOf="As of edition 2026-09-20"
-          seeAll={{ label: 'See all cases', href: '#/cases' }}
+          asOf="As of edition 2026-09, µg/m³"
+          seeAll={{ label: 'See all stations', href: '#/stations' }}
           onEntryPress={(e) => toast.info(`Open ${e}`)}
         />
       </Section>

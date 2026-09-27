@@ -173,16 +173,16 @@ describe('DecisionNode (B-002)', () => {
     kind: 'decision' as const,
     input: { ref: 'assertion.value' },
     options: [
-      { value: 'confirmed_primary', label: 'Confirmed, primary' },
-      { value: 'confirmed_secondary', label: 'Confirmed, secondary' },
-      { value: 'not_confirmed', label: 'Not confirmed' },
+      { value: 'above_limit', label: 'Above the limit' },
+      { value: 'near_limit', label: 'Confirmed, secondary' },
+      { value: 'below_limit', label: 'Not confirmed' },
     ],
     provider: 'prov',
     model: 'family',
     modelVersion: '2026-06-01',
     threshold: 0.6,
   }
-  const result = { value: 'confirmed_primary', probabilities: { confirmed_primary: 0.82, confirmed_secondary: 0.13, not_confirmed: 0.05 }, provider: 'prov', model: 'family', modelVersion: '2026-06-01' }
+  const result = { value: 'above_limit', probabilities: { above_limit: 0.82, near_limit: 0.13, below_limit: 0.05 }, provider: 'prov', model: 'family', modelVersion: '2026-06-01' }
 
   it('shows input, provider, model and version as text', () => {
     render(<DecisionNode id="d" config={config} />)
@@ -194,9 +194,9 @@ describe('DecisionNode (B-002)', () => {
   it('lists every option probability as text, highest first, and names the chosen value', async () => {
     const { container } = render(<DecisionNode id="d" config={config} result={result} onConfigure={() => {}} />)
     const items = [...container.querySelectorAll('.ty-decision-node__option-text')].map((e) => e.textContent)
-    expect(items).toEqual(['Confirmed, primary: 82%', 'Confirmed, secondary: 13%', 'Not confirmed: 5%'])
-    expect(container.querySelector('[data-chosen="true"]')).toHaveTextContent('Confirmed, primary')
-    expect(document.body).toHaveTextContent(/chosen: Confirmed, primary/)
+    expect(items).toEqual(['Above the limit: 82%', 'Confirmed, secondary: 13%', 'Not confirmed: 5%'])
+    expect(container.querySelector('[data-chosen="true"]')).toHaveTextContent('Above the limit')
+    expect(document.body).toHaveTextContent(/chosen: Above the limit/)
     await expectNoAxeViolations(container)
   })
 

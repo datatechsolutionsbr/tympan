@@ -12,25 +12,25 @@ import { ProvenanceCertificate } from './ProvenanceCertificate'
 import { ProvenanceTimeline } from './ProvenanceTimeline'
 
 const coder = { id: 'agent-coder', kind: 'agent' as const, name: 'coder' }
-const natalia = { id: 'p-nat', kind: 'person' as const, name: 'Natalia Mesquita' }
+const marina = { id: 'p-mar', kind: 'person' as const, name: 'Marina Duarte' }
 const items: ProvItem[] = [
-  { id: 'q1', kind: 'query', title: 'IA gov Emirados', actor: coder, at: '2026-09-02T10:00:00Z', proofState: null },
-  { id: 'r115b', kind: 'retrieval', title: 'r115b', actor: coder, at: '2026-09-02T10:15:00Z', proofState: 'proved', meta: ['sha256:9f2c'] },
-  { id: 'as1', kind: 'assertion', title: 'Posição regulatória', actor: coder, at: '2026-09-03T08:00:00Z', proofState: 'proved' },
-  { id: 'rec', kind: 'record', title: 'ae-tamm-4-0', actor: natalia, at: '2026-09-10T16:30:00Z', proofState: 'proved' },
-  { id: 'loose', kind: 'source', title: 'Sem data', actor: natalia, proofState: 'pending' },
+  { id: 'q1', kind: 'query', title: 'Leituras Centro', actor: coder, at: '2026-09-02T10:00:00Z', proofState: null },
+  { id: 'rd-0714', kind: 'retrieval', title: 'rd-0714', actor: coder, at: '2026-09-02T10:15:00Z', proofState: 'proved', meta: ['sha256:9f2c'] },
+  { id: 'as1', kind: 'assertion', title: 'Dias acima do limite', actor: coder, at: '2026-09-03T08:00:00Z', proofState: 'proved' },
+  { id: 'rec', kind: 'record', title: 'station-centro-2026', actor: marina, at: '2026-09-10T16:30:00Z', proofState: 'proved' },
+  { id: 'loose', kind: 'source', title: 'Sem data', actor: marina, proofState: 'pending' },
 ]
 
 const certificate: ProofCertificate = {
   claimId: 'as1',
-  claim: 'governance.operator_regulatory_position = confirmed_primary',
+  claim: 'air.pm25_days_above_limit = above_limit',
   verdict: 'proved',
   verifier: 'proof-verify 0.7.2',
   ranAt: '2026-09-20T14:02:00Z',
   inputEdition: '2026-09-20',
   hash: 'sha256:5d1e…a0c4',
   obligations: [
-    { id: 'src', label: 'Two independent sources', status: 'ok', detail: 'rule two-source@3', children: [{ id: 'h1', label: 'Hash of r115b matches', status: 'ok', detail: 'sha256:9f2c…41ab' }] },
+    { id: 'src', label: 'Two independent sources', status: 'ok', detail: 'rule two-source@3', children: [{ id: 'h1', label: 'Hash of rd-0714 matches', status: 'ok', detail: 'sha256:9f2c…41ab' }] },
     { id: 'rev', label: 'Human review', status: 'pending' },
     { id: 'fresh', label: 'Source re-read within 30 days', status: 'failed', detail: 'last read 2026-07-01' },
   ],
@@ -40,8 +40,8 @@ const comparison: EditionComparison = {
   a: { id: 'e1', label: '2026-08-15' },
   b: { id: 'e2', label: '2026-09-20' },
   rows: [
-    { itemId: 'ae-tamm-4-0.stage', label: 'Stage', a: '3', b: '4', change: 'altered', who: natalia },
-    { itemId: 'ae-bur-1-0', label: 'Bürokratt record', b: 'created', change: 'new', who: coder },
+    { itemId: 'station-centro-2026.stage', label: 'Stage', a: '3', b: '4', change: 'altered', who: marina },
+    { itemId: 'station-riverside-2026', label: 'Riverside station record', b: 'created', change: 'new', who: coder },
     { itemId: 'ae-old-2-0', label: 'Old record', a: 'kept', change: 'removed' },
   ],
 }
@@ -55,7 +55,7 @@ const passage: TracedPassage = [
       { id: 's', kind: 'manuscript', title: 'Sentence §4', status: 'ok' },
       { id: 'run', kind: 'analysis', title: 'Count by stage', meta: 'run 2026-09-20T14:02', status: 'ok' },
       { id: 'ed', kind: 'edition', title: 'Edition 2026-09-20', meta: 'edition=2026-09-20', status: 'ok' },
-      { id: 'as', kind: 'assertion', title: 'Operator position', status: 'pending' },
+      { id: 'as', kind: 'assertion', title: 'Days above the limit', status: 'pending' },
     ],
   },
   ' of the 94 cases.',
@@ -66,33 +66,33 @@ describe('ProvenanceTimeline', () => {
     render(<ProvenanceTimeline items={items} />)
     const lists = screen.getAllByRole('list')
     const coderLane = lists.find((l) => l.getAttribute('aria-labelledby')?.includes('coder'))!
-    expect(within(coderLane).getAllByRole('button').map((b) => b.getAttribute('aria-label')!.split(',')[0])).toEqual(['query: IA gov Emirados', 'retrieval: r115b', 'assertion: Posição regulatória'])
+    expect(within(coderLane).getAllByRole('button').map((b) => b.getAttribute('aria-label')!.split(',')[0])).toEqual(['query: Leituras Centro', 'retrieval: rd-0714', 'assertion: Dias acima do limite'])
     expect(screen.getByText('Without a date')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /coder, agent, 3 events/ })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /Natalia Mesquita, person, 2 events/ })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Marina Duarte, person, 2 events/ })).toBeInTheDocument()
   })
 
   it('selects an event, shows it in the detail panel and reports it', async () => {
     const onSelect = vi.fn()
     render(<ProvenanceTimeline items={items} onSelect={onSelect} />)
     expect(screen.getByText('Choose an event to see its details.')).toBeInTheDocument()
-    await userEvent.click(screen.getByRole('button', { name: /retrieval: r115b/ }))
-    expect(onSelect).toHaveBeenCalledWith('r115b')
+    await userEvent.click(screen.getByRole('button', { name: /retrieval: rd-0714/ }))
+    expect(onSelect).toHaveBeenCalledWith('rd-0714')
     const detail = screen.getByRole('complementary', { name: 'Selected event' })
-    expect(within(detail).getByRole('heading', { name: 'r115b' })).toBeInTheDocument()
+    expect(within(detail).getByRole('heading', { name: 'rd-0714' })).toBeInTheDocument()
     expect(within(detail).getByText('sha256:9f2c')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /retrieval: r115b/ })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('button', { name: /retrieval: rd-0714/ })).toHaveAttribute('aria-pressed', 'true')
   })
 
   it('moves along a lane with arrows and across lanes with Up and Down', async () => {
     render(<ProvenanceTimeline items={items} />)
-    screen.getByRole('button', { name: /query: IA gov/ }).focus()
+    screen.getByRole('button', { name: /query: Leituras/ }).focus()
     await userEvent.keyboard('{ArrowRight}')
-    expect(screen.getByRole('button', { name: /retrieval: r115b/ })).toHaveFocus()
+    expect(screen.getByRole('button', { name: /retrieval: rd-0714/ })).toHaveFocus()
     await userEvent.keyboard('{End}')
     expect(screen.getByRole('button', { name: /assertion:/ })).toHaveFocus()
     await userEvent.keyboard('{ArrowDown}')
-    expect(screen.getByRole('button', { name: /record: ae-tamm-4-0/ })).toHaveFocus()
+    expect(screen.getByRole('button', { name: /record: station-centro-2026/ })).toHaveFocus()
   })
 
   it('mirrors arrow keys in Arabic and uses Portuguese words in pt-BR', async () => {
@@ -195,7 +195,7 @@ describe('EditionCompare', () => {
     await userEvent.click(screen.getByRole('button', { name: '1 new' }))
     expect(screen.getByRole('button', { name: '1 new' })).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getAllByRole('row')).toHaveLength(2)
-    expect(screen.getByRole('button', { name: 'Bürokratt record' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Riverside station record' })).toBeInTheDocument()
     await userEvent.click(screen.getByRole('button', { name: '1 new' }))
     expect(screen.getAllByRole('row')).toHaveLength(4)
   })
@@ -213,7 +213,7 @@ describe('EditionCompare', () => {
     expect(screen.getByText('Choose a row to compare its values side by side.')).toBeInTheDocument()
     screen.getByRole('button', { name: 'Stage' }).focus()
     await userEvent.keyboard('{Enter}')
-    expect(onSelectItem).toHaveBeenCalledWith('ae-tamm-4-0.stage')
+    expect(onSelectItem).toHaveBeenCalledWith('station-centro-2026.stage')
     const cards = container.querySelectorAll('.ty-diff__card')
     expect(cards).toHaveLength(2)
     expect(cards[0]).toHaveTextContent('Before · 2026-08-15')

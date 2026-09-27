@@ -41,8 +41,8 @@ export function ShowcaseShowcase({ scope }: { scope: string }) {
           <ShowcaseBackdrop />
           <AccentBand />
           <div style={{ position: 'relative' }}>
-            <ShowcaseHeading level={2} kicker="Public research" lead="A world census of government AI assistants, with evidence cited for every property.">
-              Census of government AI
+            <ShowcaseHeading level={2} kicker="Example Lab" lead="Urban air quality at five stations in Vila Aurora, with the source reading cited for every number.">
+              Vila Aurora air-quality study
             </ShowcaseHeading>
           </div>
         </div>
@@ -57,13 +57,13 @@ export function ShowcaseShowcase({ scope }: { scope: string }) {
         <RuledGrid marks>
           <RuledGridRow as="ul" columns={3}>
             <RuledGridCell as="li">
-              <HighlightStat value={94} label="documented cases" reveal source={{ text: 'Edition 2026-09-20', href: '#/g/showcase' }} />
+              <HighlightStat value={94} label="days above the PM2.5 limit" reveal source={{ text: 'Edition 2026-09 (fictional data)', href: '#/g/showcase' }} />
             </RuledGridCell>
             <RuledGridCell as="li">
               <HighlightStat value={512} label="proved assertions" />
             </RuledGridCell>
             <RuledGridCell as="li">
-              <HighlightStat value="31" label="countries" />
+              <HighlightStat value="5" label="stations" />
             </RuledGridCell>
           </RuledGridRow>
           <RuledGridRow columns="2fr 1fr">
@@ -82,11 +82,11 @@ export function ShowcaseShowcase({ scope }: { scope: string }) {
           <FeatureShowcaseCard
             span="wide"
             media={<Capture label="Evidence panel" />}
-            mediaAlt="Capture of the evidence panel beside a record"
+            mediaAlt="Capture of the evidence panel beside a station reading"
             fade={['bottom']}
             kicker="Evidence"
-            title="Every value has a source"
-            description="Select a value to see who proved it, when, and the passage that proves it."
+            title="Every value has a reading"
+            description="Select a value to see who proved it, when, and the station reading behind it."
             href="#/g/showcase"
           />
           <FeatureShowcaseCard
@@ -102,7 +102,7 @@ export function ShowcaseShowcase({ scope }: { scope: string }) {
         <FeatureTileGrid>
           <FeatureTile icon={BadgeCheck} title="Proof states" description="Proved, pending, refuted or not disclosed, always with a word." href="#/g/showcase" />
           <FeatureTile icon={Bot} title="People and agents" description="Agents code, people verify and freeze." />
-          <FeatureTile icon={Map} title="Atlas" description="Every case on the map, by region." surface="raised" />
+          <FeatureTile icon={Map} title="Atlas" description="Every station on the map, by district." surface="raised" />
         </FeatureTileGrid>
       </Section>
     </div>

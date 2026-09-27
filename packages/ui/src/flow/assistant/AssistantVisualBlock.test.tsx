@@ -45,7 +45,7 @@ describe('parseAssistantVisual and envelopeToReport', () => {
   })
 
   it('defaults numeric table columns to the number format', () => {
-    const env = parseAssistantVisual({ type: 'table', title: 'Cases', data: [{ name: 'TAMM', stage: 4 }] })!
+    const env = parseAssistantVisual({ type: 'table', title: 'Cases', data: [{ name: 'Centro', stage: 4 }] })!
     expect(envelopeToReport(env).sections[0]).toMatchObject({ data: { columns: [{ key: 'name' }, { key: 'stage', format: 'number' }] } })
   })
 

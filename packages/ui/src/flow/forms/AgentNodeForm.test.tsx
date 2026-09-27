@@ -5,7 +5,7 @@ import { expectNoAxeViolations } from '../../../test/axe'
 import { AgentNodeForm } from './AgentNodeForm'
 
 const agents = [
-  { id: 'a1', name: 'Census coder', model: 'claude-opus-5-5' },
+  { id: 'a1', name: 'Station coder', model: 'claude-opus-5-5' },
   { id: 'a2', name: 'Reviewer' },
 ]
 
@@ -15,7 +15,7 @@ describe('AgentNodeForm', () => {
     const { container } = render(<AgentNodeForm config={{}} agents={agents} loadAgents={loadAgents} agentsHref="/agents" onSave={() => {}} onCancel={() => {}} />)
     expect(loadAgents).not.toHaveBeenCalled()
     await userEvent.click(screen.getByRole('button', { name: /Saved agent/ }))
-    expect(await screen.findByRole('option', { name: /Census coder/ })).toBeInTheDocument()
+    expect(await screen.findByRole('option', { name: /Station coder/ })).toBeInTheDocument()
     await userEvent.keyboard('{Escape}')
     await expectNoAxeViolations(container)
   })
@@ -44,7 +44,7 @@ describe('AgentNodeForm', () => {
     const onSave = vi.fn()
     render(<AgentNodeForm config={{ model: 'm1', temperature: 0.2 }} agents={agents} agentsHref="/agents" onSave={onSave} onCancel={() => {}} />)
     await userEvent.click(screen.getByRole('button', { name: /Saved agent/ }))
-    await userEvent.click(await screen.findByRole('option', { name: /Census coder/ }))
+    await userEvent.click(await screen.findByRole('option', { name: /Station coder/ }))
     await userEvent.type(screen.getByRole('textbox', { name: /User prompt/ }), 'Summarise {{{{source.text}}')
     await userEvent.click(screen.getByRole('button', { name: 'Save' }))
     expect(onSave).toHaveBeenCalledWith({ kind: 'agent', agentRef: 'a1', userPrompt: 'Summarise {{source.text}}' })

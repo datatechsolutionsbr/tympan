@@ -110,7 +110,7 @@ describe('SearchBar', () => {
           <ThemeScope key={scheme} scheme={scheme}>
             <SearchBar
               label={`Search cases ${scheme}`}
-              query="tamm"
+              query="centro"
               onQueryChange={() => {}}
               filters={[brazil]}
               onRemoveFilter={() => {}}

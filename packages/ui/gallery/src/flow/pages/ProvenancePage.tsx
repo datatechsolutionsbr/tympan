@@ -9,7 +9,7 @@ import { Button, TympanProvider, Tag } from '../../../../src'
 import { NumberTrace, ProvenanceGraph, ProvenanceQuestion, ProvenanceViewSwitch, type ProvenanceViewMode } from '../../../../src/flow'
 import { setHashParam, useHashParams } from '../shell/params'
 import { ResearchShell, useDockTools } from '../shell/ResearchShell'
-import { certificates, comparison, passage, REAL_TIMES, trail, WORDS, type Lang } from './provenance/sampleData'
+import { certificates, comparison, passage, trail, WORDS, type Lang } from './provenance/sampleData'
 import './provenance/provenance-page.css'
 
 type PageView = ProvenanceViewMode | 'number'
@@ -19,7 +19,7 @@ const VIEWS: readonly PageView[] = ['graph', 'tree', 'timeline', 'certificate', 
 const START: Record<ProvenanceViewMode, { focus: string; selected: string; back: number; forward: number }> = {
   graph: { focus: 'as-reg', selected: 'as-reg', back: 3, forward: 4 },
   tree: { focus: 'ms', selected: 'as-reg', back: 8, forward: 0 },
-  timeline: { focus: 'ae-tamm-4-0', selected: 'ver', back: 8, forward: 8 },
+  timeline: { focus: 'station-centro-2026', selected: 'ver', back: 8, forward: 8 },
   certificate: { focus: 'as-2', selected: 'as-2', back: 3, forward: 1 },
   compare: { focus: 'ed', selected: 'ed', back: 3, forward: 1 },
 }
@@ -43,7 +43,7 @@ function EditionButton({ lang }: { lang: Lang }) {
   const w = WORDS[lang]
   return (
     <Button variant="secondary" leadingIcon={<Lock />} trailingIcon={<ChevronDown />} className="ty-prov-page__edition">
-      {w.edition} <span className="ty-prov-page__mono">2026-09-20</span> · {w.frozen}
+      {w.edition} <span className="ty-prov-page__mono">2026-09</span> · {w.frozen}
     </Button>
   )
 }
@@ -84,12 +84,12 @@ function ViewPage({ lang, view }: { lang: Lang; view: ProvenanceViewMode }) {
         <EditionButton lang={lang} />
       </>
     )
-  const formatTime = (t: number, use: 'tick' | 'detail') => (REAL_TIMES.has(t) ? '2026-09-20' : use === 'tick' ? '[data]' : '[data hora]')
+  const formatTime = (t: number, use: 'tick' | 'detail') => new Date(t).toISOString().slice(0, use === 'tick' ? 10 : 16).replace('T', ' ')
   return (
     <ResearchShell
       locale={lang}
       area="provenance"
-      crumbs={view === 'graph' ? 'each-usp / censo-ia-gov' : 'each-usp / censo-ia-gov / proveniência'}
+      crumbs={view === 'graph' ? 'laboratorio-exemplo / ar-vila-aurora' : 'laboratorio-exemplo / ar-vila-aurora / proveniência'}
       title={w.title}
       {...(view === 'certificate' ? { description: w.certText } : {})}
       actions={actions}
@@ -148,7 +148,7 @@ function NumberPage({ lang }: { lang: Lang }) {
     <ResearchShell
       locale={lang}
       area="provenance"
-      crumbs="each-usp / censo-ia-gov / manuscrito"
+      crumbs="laboratorio-exemplo / ar-vila-aurora / manuscrito"
       title={w.numberTitle}
       description={w.numberText}
       actions={
@@ -160,7 +160,7 @@ function NumberPage({ lang }: { lang: Lang }) {
         </>
       }
     >
-      <NumberTrace passage={passage(w)} source={w.file} after={<p>{w.next}</p>} defaultOpenId="n-[n]" onOpenInGraph={() => setHashParam('view', 'graph')} onRerun={() => undefined} />
+      <NumberTrace passage={passage(w)} source={w.file} after={<p>{w.next}</p>} defaultOpenId="n-69" onOpenInGraph={() => setHashParam('view', 'graph')} onRerun={() => undefined} />
     </ResearchShell>
   )
 }

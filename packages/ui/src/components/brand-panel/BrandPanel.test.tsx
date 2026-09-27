@@ -49,7 +49,7 @@ describe('BrandPanel', () => {
       <>
         {(['light', 'dark'] as const).map((s) => (
           <ThemeScope key={s} scheme={s}>
-            <BrandPanel mark={<BrandMark />} title={`Panel ${s}`} subtitle="Sub" figures={figures} footnote="EACH/USP" />
+            <BrandPanel mark={<BrandMark />} title={`Panel ${s}`} subtitle="Sub" figures={figures} footnote="Example Lab" />
           </ThemeScope>
         ))}
       </>,

@@ -31,17 +31,17 @@ type Words = Record<string, string>
 
 const WORDS: Record<string, Words> = {
   'pt-BR': {
-    org: 'EACH/USP', study: 'Censo de assistentes de IA governamentais',
+    org: 'Laboratório Exemplo', study: 'Estudo de qualidade do ar urbano de Vila Aurora',
     research: 'Pesquisa', evidence: 'Evidência', collection: 'Coleta', results: 'Resultados', team: 'Equipe',
-    overview: 'Visão geral', base: 'Base', sources: 'Fontes e trilha', provenance: 'Proveniência', instruments: 'Instrumentos', assignments: 'Atribuições',
+    overview: 'Visão geral', base: 'Base', sources: 'Estações e trilha', provenance: 'Proveniência', instruments: 'Instrumentos', assignments: 'Atribuições',
     analyses: 'Análises', editions: 'Edições', bibliography: 'Bibliografia', people: 'Pessoas e agentes',
     user: 'Autora', role: 'owner · admin', account: 'Conta e segurança (alterna o tema)',
     dock: 'Atalhos', search: 'Buscar', assistant: 'Assistente', alerts: 'Notificações', theme: 'Tema escuro', language: 'Idioma',
   },
   en: {
-    org: 'EACH/USP', study: 'Census of government AI assistants',
+    org: 'Example Lab', study: 'Vila Aurora urban air-quality study',
     research: 'Research', evidence: 'Evidence', collection: 'Collection', results: 'Results', team: 'Team',
-    overview: 'Overview', base: 'Base', sources: 'Sources and trail', provenance: 'Provenance', instruments: 'Instruments', assignments: 'Assignments',
+    overview: 'Overview', base: 'Base', sources: 'Stations and trail', provenance: 'Provenance', instruments: 'Instruments', assignments: 'Assignments',
     analyses: 'Analyses', editions: 'Editions', bibliography: 'Bibliography', people: 'People and agents',
     user: 'Author', role: 'owner · admin', account: 'Account and security (switches the theme)',
     dock: 'Shortcuts', search: 'Search', assistant: 'Assistant', alerts: 'Notifications', theme: 'Dark theme', language: 'Language',

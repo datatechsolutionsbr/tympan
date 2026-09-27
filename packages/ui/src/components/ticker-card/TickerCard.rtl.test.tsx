@@ -6,7 +6,7 @@ import { TickerCard } from './TickerCard'
 describe('TickerCard in right-to-left locales', () => {
   it('renders the rows in a right-to-left context and passes axe', async () => {
     const { container } = inRtl(
-      <TickerCard title="الشفافية" entries={[{ id: 'ee', name: 'Bürokratt', value: '٠٫٨١', change: { value: '+٠٫٠٤', direction: 'up', sentiment: 'positive' } }]} />,
+      <TickerCard title="الشفافية" entries={[{ id: 'ee', name: 'Riverside', value: '٠٫٨١', change: { value: '+٠٫٠٤', direction: 'up', sentiment: 'positive' } }]} />,
     )
     expect(container.querySelectorAll('li')).toHaveLength(1)
     await expectNoAxeViolations(container)

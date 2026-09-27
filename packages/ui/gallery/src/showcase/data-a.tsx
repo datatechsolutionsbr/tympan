@@ -25,23 +25,23 @@ import {
 } from '../../../src'
 import { Section } from '../Section'
 
-const markdown = `# Stage count
+const markdown = `# Days above the limit
 
-The **stage rule** \`v2\` counts cases by what the assistant *does*. See [the protocol](https://www.w3.org/WAI/ARIA/apg/).
+The **limit rule** \`v2\` counts the days whose mean PM2.5 is *above* 25 µg/m³. See [the protocol](https://www.w3.org/WAI/ARIA/apg/).
 
-- Stages 3 and 4 hold 37 of 94 cases
-- Stage 1 fell from 22 to 18
+- Centro and Harbour stations hold 37 of 94 days
+- Park station fell from 22 to 18
 
 \`\`\`sql
-select stage, count(*) from cases group by stage
+select station, count(*) from daily_readings where pm25 > 25 group by station
 \`\`\``
 
 function NotificationDemo() {
   const toast = useToast()
   return (
     <div className="ty-gallery-row">
-      <Button onPress={() => toast.success('Upload finished', { message: 'Three sources were attached.' })}>Raise a success</Button>
-      <Button onPress={() => toast.warning('Rule changed', { message: 'Stage rule v2 is now active.' })}>Raise a warning</Button>
+      <Button onPress={() => toast.success('Upload finished', { message: 'Three station files were attached.' })}>Raise a success</Button>
+      <Button onPress={() => toast.warning('Rule changed', { message: 'Limit rule v2 is now active.' })}>Raise a warning</Button>
       <NotificationCenter />
     </div>
   )
@@ -55,17 +55,17 @@ export function DataAShowcase({ scope }: { scope: string }) {
     <>
       <Section id={id('section-panel')} title="SectionPanel">
         <SectionPanel
-          title="Sources and trail"
+          title="Stations and trail"
           eyebrow="Collect"
-          eyebrowAside={<Tag>14</Tag>}
-          subtitle="Sessions, queries and retrievals behind every assertion."
+          eyebrowAside={<Tag>5</Tag>}
+          subtitle="Station readings, cleaning steps and aggregates behind every assertion."
           icon={<BookOpen />}
           scale="surface"
           headingLevel={3}
           actions={<Button size="compact">New session</Button>}
           accentStripe
         >
-          <p>Two sessions this week.</p>
+          <p>Two imports this week.</p>
         </SectionPanel>
         <SectionPanel title="Collapsible panel" headingLevel={3} scale="surface" elevation="raised" collapsible defaultOpen={false} actions={<Button size="compact">Export</Button>}>
           <p>Folded content.</p>
@@ -85,24 +85,24 @@ export function DataAShowcase({ scope }: { scope: string }) {
           </ListPanelRow>
         </ListPanel>
         <ListPanel as="feed" label={`Recent activity (${scope})`} elevation="raised">
-          <ListPanelRow leading={<ActorChip kind="person" name="Ana Lima" />}>Coded the stage of Case A</ListPanelRow>
-          <ListPanelRow leading={<ActorChip kind="agent" name="stage-counter" />}>Ran the stage count</ListPanelRow>
+          <ListPanelRow leading={<ActorChip kind="person" name="Ana Lima" />}>Checked the Centro station reading</ListPanelRow>
+          <ListPanelRow leading={<ActorChip kind="agent" name="limit-counter" />}>Counted the days above the limit</ListPanelRow>
         </ListPanel>
       </Section>
 
       <Section id={id('rows')} title="SummaryRow, ListRow">
         <SummaryRow
-          title="Census of government AI assistants"
-          subtitle="EACH/USP · Owner"
+          title="Vila Aurora urban air-quality study"
+          subtitle="Example Lab · Owner"
           icon={<BookOpen />}
           iconTone="accent"
           metadata={[
-            { label: 'Edition', value: '2026-09-20' },
-            { label: 'Records', value: 94 },
+            { label: 'Edition', value: '2026-09' },
+            { label: 'Stations', value: 5 },
           ]}
         />
         <ListRow
-          title="Survey A"
+          title="Resident exposure survey"
           subtitle="Questionnaire"
           icon={<FileText />}
           metadata={[{ label: 'Answers', value: 42 }]}
@@ -111,7 +111,7 @@ export function DataAShowcase({ scope }: { scope: string }) {
             { label: 'Remove', onPress: () => {}, tone: 'danger' },
           ]}
         />
-        <ListRow title="Coding form v2" icon={<FileText />} variant="emphasised" actions={[{ label: 'Open', onPress: () => {} }]} />
+        <ListRow title="Reading check form v2" icon={<FileText />} variant="emphasised" actions={[{ label: 'Open', onPress: () => {} }]} />
         <ListRow title="Old draft" variant="compact" actions={[{ label: 'Restore', onPress: () => {}, disabled: true }]} />
       </Section>
 
@@ -128,8 +128,8 @@ export function DataAShowcase({ scope }: { scope: string }) {
           <ProfileAvatar name="Maria Souza" size="sm" />
           <ProfileAvatar email="joao@example.org" size="md" />
           <ProfileAvatar size="lg" />
-          <CopyIdentifier value="case-a-example-9f2c7d1e3b5a" />
-          <CopyIdentifier value="r115b" />
+          <CopyIdentifier value="station-centro-2026-9f2c7d1e3b5a" />
+          <CopyIdentifier value="rd-0714" />
         </div>
       </Section>
 
@@ -143,24 +143,24 @@ export function DataAShowcase({ scope }: { scope: string }) {
               id: `${scope}-h1`,
               start: (
                 <>
-                  <ActorChip kind="person" name="Avaliador" /> 23 Sep
+                  <ActorChip kind="person" name="Rafael Lima" /> 23 Sep
                 </>
               ),
               end: <ProofBadge state="proved" />,
-              summary: 'Verified the launch year against the service page.',
-              details: <p>Source: example.org, retrieved 12 Sep, sha256 9f2c…</p>,
+              summary: 'Verified the daily PM2.5 mean against the raw station file.',
+              details: <p>Source: Centro station, read 12 Sep, sha256 9f2c…</p>,
             },
             {
               id: `${scope}-h2`,
               start: (
                 <>
-                  <ActorChip kind="agent" name="coder-a" /> 22 Sep
+                  <ActorChip kind="agent" name="cleaning-agent" /> 22 Sep
                 </>
               ),
               end: <ProofBadge state="pending" />,
-              details: <p>Coded as stage 4.</p>,
+              details: <p>Cleaned: 38 µg/m³.</p>,
             },
-            { id: `${scope}-h3`, start: 'Edition 2026-09-20 frozen' },
+            { id: `${scope}-h3`, start: 'Edition 2026-09 frozen' },
           ]}
         />
         <HistoryList items={[]} loading loadingLabel="Loading the history" emptyLabel="No history yet" />
@@ -170,8 +170,8 @@ export function DataAShowcase({ scope }: { scope: string }) {
         <GroupedDisclosureList
           headingLevel={3}
           groups={[
-            { key: 'proved', header: <ProofBadge state="proved" detail="2" />, items: ['Case A', 'Case C'] },
-            { key: 'pending', header: <ProofBadge state="pending" detail="1" />, items: ['Case B'] },
+            { key: 'proved', header: <ProofBadge state="proved" detail="2" />, items: ['Centro station', 'Park station'] },
+            { key: 'pending', header: <ProofBadge state="pending" detail="1" />, items: ['Harbour station'] },
           ]}
           defaultCollapsedKeys={['pending']}
           getItemKey={(name) => name}

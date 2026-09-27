@@ -13,9 +13,22 @@ export const THEME_GROUPS: NativeSelectGroup[] = [
   { label: 'Print styles', options: printThemePresets.map((p) => ({ value: p.name, label: p.label ?? p.name })) },
 ]
 
-/** Sibling galleries of the other workspace packages (their dev ports). */
-const SIBLING_GALLERIES = [
-  { label: 'Print gallery', href: import.meta.env.DEV ? 'http://localhost:3330' : '../print/index.html' },
+/**
+ * Pages outside the component categories, listed in the sidebar: the full-screen
+ * research demos, the sibling print gallery (its dev port) and the tools.
+ */
+const EXTRA_GROUPS: { heading: string; links: { label: string; href: string; external?: boolean }[] }[] = [
+  {
+    heading: 'Research',
+    links: [
+      { label: 'Research shell', href: '#/research-shell' },
+      { label: 'Provenance graph', href: '#/flow/provenance' },
+      { label: 'Analysis workflow (DAG)', href: '#/flow/editor' },
+      { label: 'Flow components', href: '#/flow/components' },
+    ],
+  },
+  { heading: 'Print', links: [{ label: 'Print gallery', href: import.meta.env.DEV ? 'http://localhost:3330' : '../print/index.html', external: true }] },
+  { heading: 'Tools', links: [{ label: 'Theme customizer', href: '#/customizer' }] },
 ]
 
 interface ThemeSwatch {
@@ -182,13 +195,7 @@ function BrandMark() {
   )
 }
 
-export function GalleryToolbar({ extra, current }: { extra?: React.ReactNode; current?: 'components' | 'research-shell' | 'flow' | 'customizer' }) {
-  const links = [
-    { id: 'components', label: 'Components', href: '#/g/core' },
-    { id: 'research-shell', label: 'Research shell', href: '#/research-shell' },
-    { id: 'flow', label: 'Flow canvas', href: '#/flow/provenance' },
-    { id: 'customizer', label: 'Customizer', href: '#/customizer' },
-  ]
+export function GalleryToolbar({ extra, current }: { extra?: React.ReactNode; current?: 'components' | 'customizer' }) {
   // The sticky sidebars sit under the toolbar.
   const header = useRef<HTMLElement>(null)
   useEffect(() => {
@@ -206,18 +213,11 @@ export function GalleryToolbar({ extra, current }: { extra?: React.ReactNode; cu
         <BrandMark />
         Tympan
       </a>
-      <nav className="ty-gallery-toolbar__nav" aria-label="Gallery">
-        {links.map((link) => (
-          <a key={link.id} href={link.href} aria-current={current === link.id ? 'page' : undefined}>
-            {link.label}
-          </a>
-        ))}
-        {SIBLING_GALLERIES.map((g) => (
-          <a key={g.href} href={g.href} className="ty-gallery-toolbar__external">
-            {g.label}
-          </a>
-        ))}
-      </nav>
+      {current === 'customizer' ? (
+        <a className="ty-gallery-toolbar__back" href="#/g/core">
+          Components
+        </a>
+      ) : null}
       <div className="ty-gallery-toolbar__controls">
         {extra ?? <ThemePicker />}
         <ModeSwitch />
@@ -292,6 +292,20 @@ export function Gallery({ page = 'core' }: { page?: string }) {
                   <li key={p.id}>
                     <a className="ty-gallery-sidebar__link" href={`#/g/${p.id}`} aria-current={p.id === current.id ? 'page' : undefined}>
                       {p.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+          {EXTRA_GROUPS.map((group) => (
+            <div key={group.heading} className="ty-gallery-sidebar__group">
+              <h2 className="ty-gallery-sidebar__heading">{group.heading}</h2>
+              <ul className="ty-gallery-sidebar__list">
+                {group.links.map((link) => (
+                  <li key={link.href}>
+                    <a className={link.external ? 'ty-gallery-sidebar__link ty-gallery-sidebar__link--external' : 'ty-gallery-sidebar__link'} href={link.href}>
+                      {link.label}
                     </a>
                   </li>
                 ))}

@@ -270,11 +270,11 @@ describe('DataSourceNode', () => {
   const config = { sourceId: 's1', dialect: 'postgresql', table: 'cases', selectedColumns: ['a', 'b', 'c'], filters: [{}, {}], limit: 100 }
 
   it('reads the counts in order and omits zero counts', () => {
-    const { container, rerender } = render(<DataSourceNode id="d" config={config} source={{ name: 'Census' }} />)
+    const { container, rerender } = render(<DataSourceNode id="d" config={config} source={{ name: 'Air study' }} />)
     const text = container.querySelector('.ty-datasource-node__counts')!.textContent!
     expect(text.indexOf('3')).toBeLessThan(text.indexOf('2'))
     expect(text).toMatch(/100/)
-    rerender(<DataSourceNode id="d" config={{ ...config, filters: [] }} source={{ name: 'Census' }} />)
+    rerender(<DataSourceNode id="d" config={{ ...config, filters: [] }} source={{ name: 'Air study' }} />)
     expect(container.querySelector('.ty-datasource-node__counts')!.textContent).not.toMatch(/filter/i)
   })
 

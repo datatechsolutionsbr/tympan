@@ -9,8 +9,8 @@ import { ActivityFeed, relativePhrase, type ActivityEntry } from './ActivityFeed
 
 const now = new Date('2026-09-26T12:00:00Z')
 const entries: ActivityEntry[] = [
-  { id: '1', actor: { kind: 'person', name: 'Natalia Mesquita' }, text: 'verified the launch year of TAMM', at: '2026-09-26T11:55:00Z', meta: 'ae-tamm-4-0' },
-  { id: '2', actor: { kind: 'agent', name: 'stage-counter', agentKey: 'agt_7f' }, text: 'ran the stage count', at: '2026-09-26T09:00:00Z', meta: 'run 2026-09-26' },
+  { id: '1', actor: { kind: 'person', name: 'Marina Duarte' }, text: 'verified the PM2.5 reading of Centro station', at: '2026-09-26T11:55:00Z', meta: 'station-centro-2026' },
+  { id: '2', actor: { kind: 'agent', name: 'limit-counter', agentKey: 'agt_7f' }, text: 'ran the stage count', at: '2026-09-26T09:00:00Z', meta: 'run 2026-09-26' },
   { id: '3', actor: { kind: 'system', name: 'freeze@2' }, text: 'froze edition 2026-09-20', at: '2026-09-20T03:00:00Z' },
 ]
 
@@ -21,7 +21,7 @@ describe('ActivityFeed', () => {
     expect(list.tagName).toBe('OL')
     const items = within(list).getAllByRole('listitem')
     expect(items.map((i) => i.querySelector('.ty-activity__text')!.textContent)).toEqual([
-      'verified the launch year of TAMM',
+      'verified the PM2.5 reading of Centro station',
       'ran the stage count',
       'froze edition 2026-09-20',
     ])
@@ -43,7 +43,7 @@ describe('ActivityFeed', () => {
   it('puts the actor before the time in DOM order', () => {
     render(<ActivityFeed entries={entries} label="Recent activity" now={now} locale="en" />)
     const first = screen.getAllByRole('listitem')[0]!
-    const name = within(first).getByText('Natalia Mesquita')
+    const name = within(first).getByText('Marina Duarte')
     expect(name.compareDocumentPosition(first.querySelector('time')!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 

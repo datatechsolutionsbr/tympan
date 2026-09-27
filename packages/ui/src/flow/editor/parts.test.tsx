@@ -376,7 +376,7 @@ describe('NodePalette', () => {
 describe('FlowPreview', () => {
   const graph = {
     nodes: [
-      { id: 'ds', kind: 'datasource', position: { x: 0, y: 0 }, data: { sourceId: 's', table: 'cases', label: 'Census' } },
+      { id: 'ds', kind: 'datasource', position: { x: 0, y: 0 }, data: { sourceId: 's', table: 'cases', label: 'Air study' } },
       { id: 'ag', kind: 'agent', position: { x: 0, y: 200 }, data: { agentRef: 'a1' } },
       { id: 'g', kind: 'code', position: { x: 0, y: 400 }, data: { label: 'Count' } },
     ],

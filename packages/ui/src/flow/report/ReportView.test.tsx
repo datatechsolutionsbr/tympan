@@ -12,7 +12,7 @@ const spec: ReportSpec = {
   sections: [
     { type: 'figures', title: 'Totals', data: { items: [{ label: 'Cases', value: 94 }, { label: 'Proved', value: 0.62, format: 'percent' }] } },
     { type: 'bar', title: 'By stage', data: { rows: [{ stage: '1', cases: 18, proved: 10 }, { stage: '3', cases: 20, proved: 12 }], x: 'stage', y: ['cases', 'proved'] } },
-    { type: 'table', title: 'Records', data: { rows: [{ id: 'ae-tamm-4-0', stage: 4 }], columns: [{ key: 'id', label: 'Record' }, { key: 'stage', label: 'Stage', format: 'number' }] } },
+    { type: 'table', title: 'Records', data: { rows: [{ id: 'station-centro-2026', stage: 4 }], columns: [{ key: 'id', label: 'Record' }, { key: 'stage', label: 'Stage', format: 'number' }] } },
     { type: 'markdown', data: { body: 'Stages 3 and 4 add up to **37** cases.' } },
     { type: 'note', title: 'Unknown', data: {} },
   ],

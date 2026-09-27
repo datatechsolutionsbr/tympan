@@ -10,13 +10,13 @@ const css = () => cssOf('components/showcase-heading/ShowcaseHeading.css')
 describe('ShowcaseHeading', () => {
   it('level 2: exactly one h2 holds the title and the kicker stays outside it', () => {
     render(
-      <ShowcaseHeading level={2} kicker="Public research" lead="A world census.">
-        Government AI assistants
+      <ShowcaseHeading level={2} kicker="Public research" lead="Air quality, station by station.">
+        Urban air quality
       </ShowcaseHeading>,
     )
     const headings = screen.getAllByRole('heading')
     expect(headings).toHaveLength(1)
-    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('Government AI assistants')
+    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('Urban air quality')
     expect(screen.getByText('Public research').closest('h2')).toBeNull()
   })
 
@@ -67,7 +67,7 @@ describe('ShowcaseHeading', () => {
       <>
         {(['light', 'dark'] as const).map((s) => (
           <ThemeScope key={s} scheme={s}>
-            <ShowcaseHeading level={2} kicker="Census" lead="Evidence first.">
+            <ShowcaseHeading level={2} kicker="Air study" lead="Evidence first.">
               Tympan
             </ShowcaseHeading>
           </ThemeScope>

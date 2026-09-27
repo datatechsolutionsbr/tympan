@@ -28,10 +28,10 @@ import {
 import { Section } from '../Section'
 
 const categories = [
-  { key: 'br', code: 'BR', name: 'BR Brasil', marker: 1 as const },
-  { key: 'ee', code: 'EE', name: 'EE Estonia', marker: 3 as const },
-  { key: 'uk', code: 'UK', name: 'UK United Kingdom', marker: 5 as const },
-  { key: 'ae', code: 'AE', name: 'AE Country A', marker: 7 as const },
+  { key: 'ce', code: 'CE', name: 'CE Centro', marker: 1 as const },
+  { key: 'hb', code: 'HB', name: 'HB Harbour', marker: 3 as const },
+  { key: 'pk', code: 'PK', name: 'PK Park', marker: 5 as const },
+  { key: 'no', code: 'NO', name: 'NO North', marker: 7 as const },
 ]
 const locales = [
   { code: 'pt-BR', nativeName: 'Português', shortCode: 'PT' },
@@ -43,7 +43,7 @@ const hours = Array.from({ length: 24 }, (_, h) => String(h).padStart(2, '0'))
 
 export function FormsBShowcase({ scope }: { scope: string }) {
   const id = (s: string) => `${scope}-fb-${s}`
-  const [category, setCategory] = useState<string | null>('br')
+  const [category, setCategory] = useState<string | null>('ce')
   const [tags, setTags] = useState(['x-request-id', 'accept'])
   const [langs, setLangs] = useState(['pt'])
   const [amount, setAmount] = useState('1500000.5')
@@ -58,10 +58,10 @@ export function FormsBShowcase({ scope }: { scope: string }) {
   return (
     <div className="ty-gallery-showcase">
       <Section id={id('category')} title="CategoryTabs, CategoryLabel">
-        <CategoryTabs label={`Country (${scope})`} items={categories} selected={category} onSelect={setCategory} allowNone />
+        <CategoryTabs label={`Station (${scope})`} items={categories} selected={category} onSelect={setCategory} allowNone />
         <div className="ty-gallery-row">
-          <CategoryLabel code="BR" name="Brasil" marker={1} />
-          <CategoryLabel code="EE" name="Estonia" marker={3} size="small" />
+          <CategoryLabel code="CE" name="Centro" marker={1} />
+          <CategoryLabel code="HB" name="Harbour" marker={3} size="small" />
         </div>
       </Section>
 
@@ -71,8 +71,8 @@ export function FormsBShowcase({ scope }: { scope: string }) {
           label="Languages"
           value={langs}
           onChange={setLangs}
-          suggestions={['pt', 'en', 'es', 'et']}
-          suggestionLabels={{ pt: 'Português', en: 'English', es: 'Español', et: 'Eesti' }}
+          suggestions={['pt', 'en', 'es', 'fr']}
+          suggestionLabels={{ pt: 'Português', en: 'English', es: 'Español', fr: 'Français' }}
           allowFreeText={false}
           tone="accent"
           max={3}
@@ -81,21 +81,21 @@ export function FormsBShowcase({ scope }: { scope: string }) {
       </Section>
 
       <Section id={id('currency')} title="CurrencyField">
-        <CurrencyField label="Budget" value={amount} onValueChange={setAmount} currency="BRL" locale="pt-BR" hint="Total for the edition." />
-        <CurrencyField label="Records" value="94" decimals={0} size="display" />
+        <CurrencyField label="Sensor budget" value={amount} onValueChange={setAmount} currency="BRL" locale="pt-BR" hint="Total for the monitoring network." />
+        <CurrencyField label="Daily readings" value="1460" decimals={0} size="display" />
         <CurrencyField label="Fee" value="" currency="EUR" locale="en-US" error="Enter the fee." size="small" />
       </Section>
 
       <Section id={id('dates')} title="DateField, TimeField, MonthField">
         <FieldGrid>
           <FieldGridItem>
-            <DateField label="Retrieved on" value={date} onChange={setDate} disallowFuture hint="The day the page was opened." />
+            <DateField label="Read on" value={date} onChange={setDate} disallowFuture hint="The day the station file was opened." />
           </FieldGridItem>
           <FieldGridItem>
-            <TimeField label="Retrieved at" value={time} onChange={setTime} referenceDate={date} disallowFuture />
+            <TimeField label="Read at" value={time} onChange={setTime} referenceDate={date} disallowFuture />
           </FieldGridItem>
           <FieldGridItem>
-            <DateField label="Launch" value={null} onChange={() => {}} errorText="Choose a date." />
+            <DateField label="Installed on" value={null} onChange={() => {}} errorText="Choose a date." />
           </FieldGridItem>
           <FieldGridItem>
             <TimeField label="Freeze time" value={null} onChange={() => {}} disabled />
@@ -129,8 +129,8 @@ export function FormsBShowcase({ scope }: { scope: string }) {
 
       <Section id={id('image')} title="ImagePicker">
         <div className="ty-gallery-row">
-          <ImagePicker fallbackText="NM" label="Change profile picture" upload={async () => ({ ok: true, key: 'k1' })} hint="JPEG, PNG or WebP up to 5 MiB." />
-          <ImagePicker fallbackText="EA" shape="rounded" size="md" label="Change organisation logo" upload={async () => ({ ok: false, error: 'Upload refused' })} droppable />
+          <ImagePicker fallbackText="MD" label="Change profile picture" upload={async () => ({ ok: true, key: 'k1' })} hint="JPEG, PNG or WebP up to 5 MiB." />
+          <ImagePicker fallbackText="EL" shape="rounded" size="md" label="Change organisation logo" upload={async () => ({ ok: false, error: 'Upload refused' })} droppable />
           <ImagePicker fallbackText="AG" size="md" label="Change agent picture" upload={async () => ({ ok: true })} disabled />
         </div>
       </Section>
@@ -139,14 +139,14 @@ export function FormsBShowcase({ scope }: { scope: string }) {
         <SchemaRequestForm
           runId="run-2026-09-20"
           request={{
-            stepId: 'verify-launch',
-            prompt: 'Does the source confirm the launch year?',
-            description: 'Case A, example city. Value coded in the edition: 2024.',
+            stepId: 'verify-reading',
+            prompt: 'Does the raw station file confirm the daily PM2.5 mean?',
+            description: 'Centro station, Vila Aurora, 14 July. Value in the edition: 38 µg/m³.',
             fields: [
-              { key: 'verdict', kind: 'choice', label: 'Verdict', required: true, options: [{ value: 'proved', label: 'Yes, proved' }, { value: 'refuted', label: 'No, refuted' }, { value: 'not_disclosed', label: 'The source does not say' }] },
-              { key: 'excerpt', kind: 'longText', label: 'Excerpt that proves it', rows: 2 },
-              { key: 'page', kind: 'number', label: 'Page', min: 1 },
-              { key: 'opened', kind: 'boolean', label: 'I opened the source', required: true },
+              { key: 'verdict', kind: 'choice', label: 'Verdict', required: true, options: [{ value: 'proved', label: 'Yes, proved' }, { value: 'refuted', label: 'No, refuted' }, { value: 'not_disclosed', label: 'The file does not say' }] },
+              { key: 'excerpt', kind: 'longText', label: 'Line that proves it', rows: 2 },
+              { key: 'page', kind: 'number', label: 'Row', min: 1 },
+              { key: 'opened', kind: 'boolean', label: 'I opened the station file', required: true },
             ],
             submitLabel: 'Save and continue',
           }}
@@ -155,23 +155,23 @@ export function FormsBShowcase({ scope }: { scope: string }) {
       </Section>
 
       <Section id={id('layout')} title="FramedForm, FormSection, FieldGrid, InlineRow, FormActions">
-        <FramedForm title="New research session" subtitle="Where the search began." icon={<FileText />} submitLabel="Create session" cancelLabel="Cancel" onCancel={() => {}} onSubmit={() => {}}>
+        <FramedForm title="New collection session" subtitle="Where the collection began." icon={<FileText />} submitLabel="Create session" cancelLabel="Cancel" onCancel={() => {}} onSubmit={() => {}}>
           <FormSection title="Identification" description="How the session appears in the trail.">
             <FieldGrid>
               <FieldGridItem>
-                <TextField label="Name" defaultValue="Government assistants, Gulf" />
+                <TextField label="Name" defaultValue="Winter readings, port district" />
               </FieldGridItem>
               <FieldGridItem>
-                <TextField label="Language of the queries" defaultValue="ar, en" />
+                <TextField label="Stations" defaultValue="Harbour, Riverside" />
               </FieldGridItem>
               <FieldGridItem span="full">
-                <TextField label="Goal" defaultValue="Find the launch pages of every assistant." />
+                <TextField label="Goal" defaultValue="Import the hourly PM2.5 and NO₂ files of every station." />
               </FieldGridItem>
             </FieldGrid>
           </FormSection>
           <FormSection title="Search">
             <InlineRow>
-              <TextField label="First query" defaultValue="government chatbot launch" />
+              <TextField label="First query" defaultValue="pm25 hourly 2026-07" />
               <Button>Try it</Button>
             </InlineRow>
           </FormSection>

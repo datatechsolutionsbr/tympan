@@ -11,8 +11,8 @@ import { renderRtl } from '../../../test/rtl'
 
 const request: InputRequest = {
   stepId: 'verify-1',
-  prompt: 'Does the source confirm the launch year?',
-  description: 'TAMM, Abu Dhabi, 2024',
+  prompt: 'Does the station file confirm the PM2.5 mean?',
+  description: 'Centro, Vila Aurora, 2024',
   fields: [
     { key: 'excerpt', kind: 'text', label: 'Quoted excerpt', required: true },
     { key: 'pages', kind: 'number', label: 'Page', min: 0 },

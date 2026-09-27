@@ -116,15 +116,15 @@ danger). Values are unchanged; this package only reads them.
 
 ## Gallery data
 
-Project rule: no invented research data. The gallery uses neutral
-placeholders (Caso A, Fonte 1, [hash], [trecho citado], [modelo], Opção A,
-Fonte de dados A) under a visible "Dados de exemplo / Sample data" label.
-The only real values are those of the census edition 2026-09-20: record
-`ae-tamm-4-0`, retrieval `r115b`, assertion
-`governance.operator_regulatory_position = confirmed_primary`, original
-coder `deep-research/middle-east-africa`, and the edition manifest (857
-hashes); they are shown without proof ("no proof"), because the verifier
-(G7a) does not exist yet.
+All gallery data is fictional and labelled "Dados de exemplo / Sample data":
+the Vila Aurora urban air-quality study of Example Lab (Laboratório
+Exemplo), with invented monitoring stations (Centro, Harbour, Park, North,
+Riverside), readings (for example retrieval `rd-0714`), the assertion
+`air.pm25_days_above_limit = 12`, record `station-centro-2026`, edition
+2026-09 (a manifest of 312 hashes) and people with `@example.org` addresses.
+Form and expression specimens use neutral placeholders (Fonte de dados A,
+Opção A, [hash]). The provenance items carry no proof state ("no proof"),
+because the verifier (G7a) does not exist yet.
 
 ## Similarity rework, round 2
 

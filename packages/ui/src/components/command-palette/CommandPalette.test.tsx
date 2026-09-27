@@ -27,10 +27,10 @@ function groups(spy: (id: string) => void = () => {}): CommandGroup[] {
       scopeId: 'records',
       items: [
         {
-          id: 'tamm',
-          label: 'TAMM AI Assistant',
-          description: 'United Arab Emirates',
-          onSelect: () => spy('tamm'),
+          id: 'centro',
+          label: 'Centro station',
+          description: 'Downtown',
+          onSelect: () => spy('centro'),
           actions: [
             { id: 'copy', label: 'Copy link', onSelect: () => spy('copy') },
             { id: 'prov', label: 'Open provenance', onSelect: () => spy('prov') },
@@ -95,12 +95,12 @@ describe('CommandPalette', () => {
   it('runs the first secondary action with Right Arrow then Enter, not the primary', async () => {
     const spy = vi.fn()
     render(<Harness spy={spy} />)
-    await userEvent.keyboard('tamm')
+    await userEvent.keyboard('centro')
     await userEvent.keyboard('{ArrowRight}')
-    expect(screen.getByRole('group', { name: 'Actions for TAMM AI Assistant' })).toBeInTheDocument()
+    expect(screen.getByRole('group', { name: 'Actions for Centro station' })).toBeInTheDocument()
     await userEvent.keyboard('{Enter}')
     expect(spy).toHaveBeenCalledWith('copy')
-    expect(spy).not.toHaveBeenCalledWith('tamm')
+    expect(spy).not.toHaveBeenCalledWith('centro')
     await waitFor(() => expect(screen.queryByRole('combobox')).toBeNull())
   })
 

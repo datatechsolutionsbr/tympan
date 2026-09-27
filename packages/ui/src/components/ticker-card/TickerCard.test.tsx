@@ -8,20 +8,20 @@ import { ThemeScope } from '../../internal/ThemeScope'
 import { TickerCard, type TickerEntry } from './TickerCard'
 
 const entries: TickerEntry[] = [
-  { id: 'ee', name: 'Estonia', qualifier: '2026', value: '0.81', change: { value: '+0.04', direction: 'up', sentiment: 'positive' } },
-  { id: 'uk', name: 'United Kingdom of Great Britain and Northern Ireland', qualifier: '2026', value: '0.77', change: { value: '+0.02', direction: 'up', sentiment: 'negative' } },
+  { id: 'ee', name: 'Park', qualifier: '2026', value: '0.81', change: { value: '+0.04', direction: 'up', sentiment: 'positive' } },
+  { id: 'uk', name: 'Riverside station at the old harbour bridge, north bank', qualifier: '2026', value: '0.77', change: { value: '+0.02', direction: 'up', sentiment: 'negative' } },
   { id: 'br', name: 'Brazil', value: '0.64', change: { value: '0.00', direction: 'flat' } },
 ]
 
 describe('TickerCard', () => {
   it('renders the entries in the given order', () => {
-    render(<TickerCard title="TAU index" entries={entries} />)
+    render(<TickerCard title="Mean PM2.5" entries={entries} />)
     const rows = within(screen.getByRole('list')).getAllByRole('listitem')
-    expect(rows.map((r) => r.querySelector('.ty-ticker-card__name')!.textContent)).toEqual(['Estonia', entries[1]!.name, 'Brazil'])
+    expect(rows.map((r) => r.querySelector('.ty-ticker-card__name')!.textContent)).toEqual(['Park', entries[1]!.name, 'Brazil'])
   })
 
   it('keeps direction and sentiment apart: an upward arrow with the negative tone and word', () => {
-    const { container } = render(<TickerCard title="TAU index" entries={entries} />)
+    const { container } = render(<TickerCard title="Mean PM2.5" entries={entries} />)
     const mark = container.querySelectorAll('.ty-delta')[1]!
     expect(mark).toHaveAttribute('data-trend', 'up')
     expect(mark).toHaveAttribute('data-sentiment', 'negative')
@@ -29,20 +29,20 @@ describe('TickerCard', () => {
   })
 
   it('keeps the full name as the accessible name of a truncated row, in reading order', () => {
-    render(<TickerCard title="TAU index" entries={entries} onEntryPress={() => {}} />)
-    const row = screen.getByRole('button', { name: /United Kingdom of Great Britain and Northern Ireland/ })
-    expect(row.textContent).toMatch(/Northern Ireland, 2026, value 0\.77, change up \+0\.02/)
+    render(<TickerCard title="Mean PM2.5" entries={entries} onEntryPress={() => {}} />)
+    const row = screen.getByRole('button', { name: /Riverside station at the old harbour bridge, north bank/ })
+    expect(row.textContent).toMatch(/north bank, 2026, value 0\.77, change up \+0\.02/)
     expect(cssOf('components/ticker-card/TickerCard.css')).toMatch(/\.ty-ticker-card__name\s*\{[^}]*text-overflow:\s*ellipsis/)
   })
 
   it('shows the empty line without entries', () => {
-    render(<TickerCard title="TAU index" entries={[]} />)
+    render(<TickerCard title="Mean PM2.5" entries={[]} />)
     expect(screen.getByText('No entries to show.')).toBeInTheDocument()
   })
 
   it('calls onEntryPress with the id on Enter', async () => {
     const onEntryPress = vi.fn()
-    render(<TickerCard title="TAU index" entries={entries} onEntryPress={onEntryPress} />)
+    render(<TickerCard title="Mean PM2.5" entries={entries} onEntryPress={onEntryPress} />)
     await userEvent.tab()
     await userEvent.keyboard('{Enter}')
     expect(onEntryPress).toHaveBeenCalledWith('ee')

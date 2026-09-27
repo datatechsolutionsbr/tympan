@@ -50,7 +50,7 @@ describe('FilterTile', () => {
             <FilterTileGroupHeading label={`Countries ${scheme}`} icon={<Globe />} />
             <FilterTileGrid label={`Country filters ${scheme}`}>
               <FilterTile selected onToggle={() => {}} label="Brazil" detail="42 records" icon={<Flag />} tone={2} />
-              <FilterTile selected={false} onToggle={() => {}} label="Estonia" icon={<Flag />} iconSurface="neutral" />
+              <FilterTile selected={false} onToggle={() => {}} label="Park" icon={<Flag />} iconSurface="neutral" />
             </FilterTileGrid>
           </ThemeScope>
         ))}

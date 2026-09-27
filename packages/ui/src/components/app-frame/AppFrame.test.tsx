@@ -27,7 +27,7 @@ function Nav() {
 function Frame(props: Partial<AppFrameProps>) {
   const [navOpen, setNavOpen] = useState(false)
   return (
-    <AppFrame navigation={<Nav />} topBar={<span>Census</span>} navOpen={navOpen} onNavOpenChange={setNavOpen} {...props}>
+    <AppFrame navigation={<Nav />} topBar={<span>Air study</span>} navOpen={navOpen} onNavOpenChange={setNavOpen} {...props}>
       {props.children ?? <h1>Catalogue</h1>}
     </AppFrame>
   )

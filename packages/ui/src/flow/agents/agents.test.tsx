@@ -111,7 +111,7 @@ function Wizard(props: Partial<AgentCreationWizardProps>) {
     <AgentCreationWizard
       models={[{ id: 'm1', name: 'Model one' }, { id: 'm2', name: 'Model two' }]}
       connections={[{ id: 'c1', name: 'Research account', provider: 'Alpha cloud' }]}
-      presets={[{ id: 'p-coder', name: 'Census coder', role: 'Codes assertions from sources' }]}
+      presets={[{ id: 'p-coder', name: 'Station coder', role: 'Codes assertions from sources' }]}
       onSubmit={vi.fn(async () => {})}
       onCancel={vi.fn()}
       {...props}
@@ -135,9 +135,9 @@ describe('AgentCreationWizard', () => {
 
   it('pre-fills name and role from a chosen preset', async () => {
     render(<Wizard />)
-    await userEvent.click(screen.getByRole('radio', { name: /Census coder/ }))
+    await userEvent.click(screen.getByRole('radio', { name: /Station coder/ }))
     await userEvent.click(screen.getByRole('button', { name: 'Next' }))
-    expect(screen.getByRole('textbox', { name: /Name/ })).toHaveValue('Census coder')
+    expect(screen.getByRole('textbox', { name: /Name/ })).toHaveValue('Station coder')
     expect(screen.getByRole('textbox', { name: 'Role' })).toHaveValue('Codes assertions from sources')
   })
 

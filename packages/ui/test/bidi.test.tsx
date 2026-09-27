@@ -14,7 +14,7 @@ import { StatStrip } from '../src/components/stat-strip/StatStrip'
 import { cssOf } from './css'
 import { renderWithProvider } from './render'
 
-const pt = 'Registro mundial de assistentes, com evidência citada por propriedade.'
+const pt = 'Qualidade do ar por estação, com a leitura citada em cada número.'
 
 function isolated(text: string) {
   const el = screen.getByText(text)
@@ -26,8 +26,8 @@ describe('bidi isolation of content text in a right-to-left frame', () => {
     renderWithProvider(
       <I18nProvider locale="ar">
         <div dir="rtl" lang="ar">
-          <PageHeader variant="editorial" title="Visão geral." trail={[{ label: 'EACH/USP', href: '/o' }, { label: 'Censo.' }]} lead={pt} />
-          <RailContextButton scope="EACH/USP" name="Censo de assistentes de IA governamentais" />
+          <PageHeader variant="editorial" title="Visão geral." trail={[{ label: 'Example Lab', href: '/o' }, { label: 'Ar.' }]} lead={pt} />
+          <RailContextButton scope="Example Lab" name="Estudo de qualidade do ar urbano de Vila Aurora" />
           <ul>
             <RailNavSection label="Coletar.">
               <RailNavItem label="Fontes e trilha." href="/f" />
@@ -45,15 +45,15 @@ describe('bidi isolation of content text in a right-to-left frame', () => {
       </I18nProvider>,
       { navigate: vi.fn() },
     )
-    for (const text of ['Visão geral.', pt, 'Censo.', 'EACH/USP', 'Censo de assistentes de IA governamentais', 'Coletar.', 'Fontes e trilha.', 'registros.', 'edição 2026-09-20.', 'Da busca ao manuscrito.', 'Busca.', '14 fontes.', 'Caso A.', 'Sem fonte aberta.', 'verificou o caso A.', 'provadas.', 'Legenda em português.', 'Situação.']) {
+    for (const text of ['Visão geral.', pt, 'Ar.', 'Example Lab', 'Estudo de qualidade do ar urbano de Vila Aurora', 'Coletar.', 'Fontes e trilha.', 'registros.', 'edição 2026-09-20.', 'Da busca ao manuscrito.', 'Busca.', '14 fontes.', 'Caso A.', 'Sem fonte aberta.', 'verificou o caso A.', 'provadas.', 'Legenda em português.', 'Situação.']) {
       for (const el of screen.getAllByText(text)) expect(el.closest('[dir="auto"]'), text).not.toBeNull()
     }
-    isolated('Censo de assistentes de IA governamentais')
+    isolated('Estudo de qualidade do ar urbano de Vila Aurora')
   })
 
   it('truncates the context name at the inline end of its own direction', () => {
-    render(<RailContextButton scope="EACH/USP" name="Censo de assistentes de IA governamentais" />)
-    expect(screen.getByText('Censo de assistentes de IA governamentais')).toHaveAttribute('dir', 'auto')
+    render(<RailContextButton scope="Example Lab" name="Estudo de qualidade do ar urbano de Vila Aurora" />)
+    expect(screen.getByText('Estudo de qualidade do ar urbano de Vila Aurora')).toHaveAttribute('dir', 'auto')
     expect(cssOf('components/app-frame/AppFrameRail.css')).toMatch(/\.ty-rail-context__name\s*\{[^}]*text-overflow:\s*ellipsis/)
   })
 })

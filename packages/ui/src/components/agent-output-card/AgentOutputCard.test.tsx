@@ -53,7 +53,7 @@ describe('AgentOutputCard', () => {
       <>
         {(['light', 'dark'] as const).map((s) => (
           <ThemeScope key={s} scheme={s}>
-            <AgentOutputCard agentName="stage-counter" agentKey="ak_91" duration="3.4 s" output={long} />
+            <AgentOutputCard agentName="limit-counter" agentKey="ak_91" duration="3.4 s" output={long} />
             <AgentOutputCard agentName="linker" duration="0.2 s" outcome="failed" output="Timed out." onOpen={() => {}} />
             <AgentOutputCard agentName="notary" duration="…" outcome="pending" output="Waiting." />
           </ThemeScope>

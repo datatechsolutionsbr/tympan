@@ -30,7 +30,7 @@ describe('TextField', () => {
 
   it('clears with Escape in search mode and fires onClear', async () => {
     const onClear = vi.fn()
-    render(<TextField mode="search" label="Search" defaultValue="tamm" onClear={onClear} />)
+    render(<TextField mode="search" label="Search" defaultValue="centro" onClear={onClear} />)
     const input = screen.getByRole('searchbox', { name: 'Search' })
     await userEvent.click(input)
     await userEvent.keyboard('{Escape}')

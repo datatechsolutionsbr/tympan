@@ -29,7 +29,7 @@ describe('PageHeader', () => {
   it('renders eyebrow, title, summary and meta in that order', () => {
     const { container } = render(
       <PageHeader
-        eyebrow="Census"
+        eyebrow="Air study"
         title="Overview"
         summary="Where the research stands."
         meta={[
@@ -50,9 +50,9 @@ describe('PageHeader', () => {
       <PageHeader
         title="Sources"
         breadcrumbs={[
-          { label: 'EACH/USP', href: '/org' },
-          { label: 'Census', href: '/org/census' },
-          { label: 'Sources', href: '/org/census/sources' },
+          { label: 'Example Lab', href: '/org' },
+          { label: 'Air study', href: '/org/air' },
+          { label: 'Sources', href: '/org/air/sources' },
         ]}
       />,
       { navigate: vi.fn() },
@@ -106,11 +106,11 @@ describe('PageHeader', () => {
     const { container } = renderWithProvider(
       <main>
         <PageHeader
-          eyebrow="Census"
+          eyebrow="Air study"
           title="Catalogue"
           summary="94 records in the frozen edition."
           breadcrumbs={[
-            { label: 'Census', href: '/c' },
+            { label: 'Air study', href: '/c' },
             { label: 'Catalogue', href: '/c/cat' },
           ]}
           meta={[{ text: 'edition 2026-09-20' }]}
@@ -123,8 +123,8 @@ describe('PageHeader', () => {
   })
   describe('editorial variant', () => {
     const trail = [
-      { label: 'EACH/USP', href: '/org' },
-      { label: 'Census', href: '/org/census' },
+      { label: 'Example Lab', href: '/org' },
+      { label: 'Air study', href: '/org/air' },
       { label: 'Overview' },
     ]
 
@@ -174,7 +174,7 @@ describe('PageHeader in right-to-left', () => {
     const { container } = renderWithProvider(
       <I18nProvider locale="ar">
         <div dir="rtl" lang="ar">
-          <PageHeader variant="editorial" title="نظرة عامة" trail={[{ label: 'EACH/USP', href: '/o' }, { label: 'نظرة عامة' }]} lead="سجل عالمي." />
+          <PageHeader variant="editorial" title="نظرة عامة" trail={[{ label: 'Example Lab', href: '/o' }, { label: 'نظرة عامة' }]} lead="سجل عالمي." />
         </div>
       </I18nProvider>,
       { navigate: vi.fn() },

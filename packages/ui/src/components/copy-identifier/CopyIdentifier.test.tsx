@@ -95,7 +95,7 @@ describe('CopyIdentifier', () => {
 
 describe('CopyIdentifier in right-to-left (ar)', () => {
   it('renders mirrored where directional and passes axe', async () => {
-    const { container } = renderRtl(<CopyIdentifier value="ae-tamm-4-0-9f2c7d1e3b5a" />)
+    const { container } = renderRtl(<CopyIdentifier value="station-centro-2026-9f2c7d1e3b5a" />)
     // A machine identifier reads left to right inside right-to-left text.
     expect(container.querySelector('[data-elided]')).toHaveAttribute('dir', 'ltr')
     await axeRtl(container)

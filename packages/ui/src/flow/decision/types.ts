@@ -5,7 +5,7 @@
 
 /** One allowed outcome of the decision. */
 export interface DecisionOption {
-  /** Stable value written to the output (for example "confirmed_primary"). */
+  /** Stable value written to the output (for example "above_limit"). */
   value: string
   /** Human label (from the host's i18n). */
   label: string

@@ -30,7 +30,7 @@ Level of subdivision in brackets.
 
 Argentina AR (provinces and the autonomous city) · Australia AU (states and territories) · Brazil BR (states and the federal district) · Canada CA (provinces and territories) · Chile CL (regions) · Colombia CO (departments and the capital district) · Egypt EG (governorates) · France FR (regions) · Germany DE (states) · India IN (states and union territories) · Indonesia ID (provinces) · Italy IT (regions) · Japan JP (prefectures) · Mexico MX (states and the capital) · Netherlands NL (provinces) · New Zealand NZ (regions) · Nigeria NG (states and the capital territory) · Norway NO (counties) · Peru PE (departments) · Philippines PH (provinces) · Poland PL (voivodeships) · Portugal PT (districts and autonomous regions) · South Africa ZA (provinces) · South Korea KR (provinces and metropolitan cities) · Spain ES (provinces) · Sweden SE (counties) · Thailand TH (provinces) · Turkey TR (provinces) · United Kingdom GB (nations) · United States US (states and the district).
 
-Further countries (for example those in the Fakhir census of government AI assistants) are added with the same format; no code change is needed.
+Further countries (for example those a host application needs for its own data) are added with the same format; no code change is needed.
 
 Country-level records (names, languages, locale, currency, address, map geometry) are in CountryProfileData (`country-profile-data.md`).
 

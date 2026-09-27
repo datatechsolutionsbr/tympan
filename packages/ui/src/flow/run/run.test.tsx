@@ -475,7 +475,7 @@ describe('VariableInspector', () => {
 })
 
 describe('VersionHistoryPanel', () => {
-  const versions: FlowVersion[] = [2, 4, 3].map((n) => ({ number: n, publishedAt: '2026-09-20T14:02:00Z', publishedBy: { kind: 'person', name: 'Natalia' }, nodeCount: 7, connectorCount: 6 }))
+  const versions: FlowVersion[] = [2, 4, 3].map((n) => ({ number: n, publishedAt: '2026-09-20T14:02:00Z', publishedBy: { kind: 'person', name: 'Marina' }, nodeCount: 7, connectorCount: 6 }))
   const base = { open: true, onClose: () => {}, flowId: 'f', currentVersion: 4, onPreview: () => {}, onRestore: () => {} }
 
   it('lists versions newest first with the current one marked and not restorable', async () => {
@@ -484,7 +484,7 @@ describe('VersionHistoryPanel', () => {
     expect(items.map((i) => within(i).getByText(/^Version/).textContent)).toEqual(['Version 4', 'Version 3', 'Version 2'])
     expect(within(items[0]!).getByText('current')).toBeInTheDocument()
     expect(within(items[0]!).queryByRole('button', { name: /Restore/ })).toBeNull()
-    expect(within(items[1]!).getByText('Natalia')).toBeInTheDocument()
+    expect(within(items[1]!).getByText('Marina')).toBeInTheDocument()
     expect(within(items[1]!).getByText('7 nodes, 6 connectors')).toBeInTheDocument()
     await expectNoAxeViolations(container)
   })

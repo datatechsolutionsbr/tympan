@@ -21,7 +21,7 @@ const report: TraceReport = {
         label: 'filter',
         args: { order: 'asc', limit: 10 },
         result: [1, 2, 3],
-        children: [{ kind: 'ref', label: 'census.cases', result: Array.from({ length: 12 }, (_, i) => i) }],
+        children: [{ kind: 'ref', label: 'air.readings', result: Array.from({ length: 12 }, (_, i) => i) }],
       },
     ],
   },
@@ -34,7 +34,7 @@ describe('TraceTree', () => {
     render(<TraceTree report={report} />)
     expect(row(/^count/)).toBeInTheDocument()
     expect(row(/^filter/)).toHaveAttribute('aria-expanded', 'false')
-    expect(screen.queryByRole('row', { name: /^census\.cases/ })).toBeNull()
+    expect(screen.queryByRole('row', { name: /^air\.readings/ })).toBeNull()
     expect(row(/^filter/)).toHaveAttribute('aria-level', '2')
   })
 
@@ -44,9 +44,9 @@ describe('TraceTree', () => {
     await userEvent.keyboard('{ArrowDown}')
     expect(row(/^filter/)).toHaveFocus()
     await userEvent.keyboard('{ArrowRight}')
-    expect(row(/^census\.cases/)).toBeInTheDocument()
+    expect(row(/^air\.readings/)).toBeInTheDocument()
     await userEvent.keyboard('{ArrowLeft}')
-    expect(screen.queryByRole('row', { name: /^census\.cases/ })).toBeNull()
+    expect(screen.queryByRole('row', { name: /^air\.readings/ })).toBeNull()
   })
 
   it('mirrors Left and Right in a right-to-left locale', async () => {
@@ -59,7 +59,7 @@ describe('TraceTree', () => {
     )
     await userEvent.tab()
     await userEvent.keyboard('{ArrowDown}{ArrowLeft}')
-    expect(screen.getByRole('row', { name: /^census\.cases/ })).toBeInTheDocument()
+    expect(screen.getByRole('row', { name: /^air\.readings/ })).toBeInTheDocument()
   })
 
   it('shows the full value beneath the row when its preview is activated, and on Enter', async () => {
@@ -82,9 +82,9 @@ describe('TraceTree', () => {
 
   it('labels a reference leaf with the reference tag and summarises a 12-item list', async () => {
     render(<TraceTree report={report} defaultExpandDepth={3} />)
-    const leaf = row(/^census\.cases/)
+    const leaf = row(/^air\.readings/)
     expect(leaf).toHaveTextContent('reference')
-    expect(leaf).toHaveAccessibleName('census.cases, result: list of 12 items')
+    expect(leaf).toHaveAccessibleName('air.readings, result: list of 12 items')
     expect(row(/^filter/)).toHaveTextContent('order: asc, limit: 10')
   })
 
