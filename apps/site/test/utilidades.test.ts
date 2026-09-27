@@ -70,3 +70,21 @@ describe('code and catalogue helpers', () => {
     expect(contarExemplos(undefined)).toBe(0)
   })
 })
+
+describe('history timeline reader', () => {
+  it('reads entries in either shape, sorts by date and picks the text in the active language', async () => {
+    const { lerLinhaDoTempo, textoNoIdioma } = await import('../src/secoes/historia/linhaDoTempo')
+    const e = lerLinhaDoTempo({
+      entries: [
+        { id: 'b', date: '2026-09-20', era: { 'pt-BR': 'Repositório', en: 'Repository' }, title: { en: 'Own repo' }, body: 'x', metrics: { packages: 3 } },
+        { id: 'a', date: '2026-06-01', era: 'Fakhir', title: 'Início', body: { 'pt-BR': 'corpo' }, metrics: ['12 componentes'] },
+      ],
+    })
+    expect(e.map((x) => x.id)).toEqual(['a', 'b'])
+    expect(e[1]!.metricas).toEqual(['packages: 3'])
+    expect(textoNoIdioma(e[1]!.era, 'pt-BR')).toBe('Repositório')
+    expect(textoNoIdioma(e[1]!.titulo, 'ja')).toBe('Own repo')
+    expect(textoNoIdioma(e[0]!.texto, 'fr')).toBe('corpo')
+    expect(lerLinhaDoTempo(undefined)).toEqual([])
+  })
+})

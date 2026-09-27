@@ -6,6 +6,7 @@ import { Busca } from './Busca'
 import { formatarRota, lerRota, segmentos, type Rota } from './rotas'
 
 const Inicio = lazy(() => import('./secoes/inicio/Inicio').then((m) => ({ default: m.Inicio })))
+const Historia = lazy(() => import('./secoes/historia/Historia').then((m) => ({ default: m.Historia })))
 const Componentes = lazy(() => import('./secoes/componentes/Componentes').then((m) => ({ default: m.Componentes })))
 const Temas = lazy(() => import('./secoes/temas/Temas').then((m) => ({ default: m.Temas })))
 const Livro = lazy(() => import('./secoes/livro/Livro').then((m) => ({ default: m.Livro })))
@@ -69,6 +70,7 @@ export function App() {
     <BuscaContext.Provider value={abrirBusca}>
       <Suspense fallback={<div className="ty-site-carregando" role="status">{t('comum.carregando')}</div>}>
         {rota.secao === 'inicio' ? <Inicio /> : null}
+        {rota.secao === 'historia' ? <Historia rota={rota} /> : null}
         {rota.secao === 'componentes' ? <Componentes rota={rota} /> : null}
         {rota.secao === 'temas' ? <Temas rota={rota} ir={navegar} /> : null}
         {rota.secao === 'livro' ? <Livro rota={rota} ir={navegar} /> : null}

@@ -2,6 +2,7 @@
 // segments only, no query string. Every route may start with a locale (#/ja/…); links the site writes
 // always carry the active one.
 //   #/<loc>/                                             Início
+//   #/<loc>/historia/<entrada>                            História (the timeline, when docs/history exists)
 //   #/<loc>/componentes/<página>                          Componentes
 //   #/<loc>/temas/<tema>/<modo>/<tema B>                  Temas
 //   #/<loc>/livro/<estilo>/<gráfico>/<cor|pb>/<modo>/<estilo B>   Livro
@@ -12,8 +13,8 @@
 import { PRINT_PRESET_NAMES, resolvePrintStyleName, type PrintPresetName } from './tokens'
 import { LOCALE_CODES } from './i18n/locales'
 
-export type SecaoId = 'inicio' | 'componentes' | 'temas' | 'livro' | 'video' | 'instalar'
-export const SECAO_IDS: readonly SecaoId[] = ['inicio', 'componentes', 'temas', 'livro', 'video', 'instalar']
+export type SecaoId = 'inicio' | 'historia' | 'componentes' | 'temas' | 'livro' | 'video' | 'instalar'
+export const SECAO_IDS: readonly SecaoId[] = ['inicio', 'historia', 'componentes', 'temas', 'livro', 'video', 'instalar']
 
 /** The four ways of looking at themes and book styles (from the Estúdio's Livro tab). */
 export type Modo = 'um' | 'comparar' | 'antes' | 'galeria' | 'completo'
@@ -31,6 +32,7 @@ export const TODOS_ESTILOS: readonly PrintPresetName[] = PRINT_PRESET_NAMES
 
 export type Rota =
   | { secao: 'inicio' }
+  | { secao: 'historia'; entrada?: string }
   | { secao: 'componentes'; pagina?: string }
   | { secao: 'temas'; tema: string; modo: Modo; b: string }
   | { secao: 'livro'; estilo: PrintPresetName; grafico: Grafico; pb: boolean; modo: Modo; b: PrintPresetName; dupla?: string }
@@ -63,6 +65,8 @@ export function segmentos(hash: string): { locale?: string; partes: string[] } {
 export function lerRota(hash: string): Rota {
   const [secao, a, b, c, d, e] = segmentos(hash).partes
   switch (secao) {
+    case 'historia':
+      return { secao, ...(a ? { entrada: a } : {}) }
     case 'componentes':
       return { secao, ...(a ? { pagina: a } : {}) }
     case 'temas':
@@ -86,6 +90,8 @@ function partesDaRota(r: Rota): string[] {
   switch (r.secao) {
     case 'inicio':
       return []
+    case 'historia':
+      return r.entrada ? ['historia', r.entrada] : ['historia']
     case 'componentes':
       return r.pagina ? ['componentes', r.pagina] : ['componentes']
     case 'temas': {

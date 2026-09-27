@@ -193,6 +193,9 @@ export function Inicio() {
           <header>
             <div className="ty-site-rotulo">{t('inicio.historiaRotulo')}</div>
             <h2 id="historia">{t('inicio.historiaTitulo')}</h2>
+            <a className="ty-site-link" href={href({ secao: 'historia' })}>
+              {t('inicio.historiaCompleta')}
+            </a>
           </header>
           <ol className="ty-site-historia">
             {historia.map(([a, b]) => (

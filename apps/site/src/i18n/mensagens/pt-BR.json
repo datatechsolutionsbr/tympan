@@ -491,5 +491,15 @@
  "tympan.themePalette.densityComfortable": "Confortável",
  "tympan.themePalette.hints.move": "prévia",
  "tympan.themePalette.hints.apply": "aplicar",
- "tympan.themePalette.hints.revert": "desfazer"
+ "tympan.themePalette.hints.revert": "desfazer",
+ "secao.historia": "História",
+ "secao.historiaCurto": "História",
+ "historia.eyebrow": "História · do começo até hoje",
+ "historia.titulo": "A história do Tympan",
+ "historia.lead": "Cada marco com data, contexto e os números daquele momento. Cada entrada tem um endereço próprio para mandar por link.",
+ "historia.eras": "Eras",
+ "historia.metricas": "Números do marco",
+ "historia.copiarLink": "link deste marco",
+ "historia.emPreparo": "A linha do tempo completa está sendo escrita e aparece aqui assim que for publicada.",
+ "inicio.historiaCompleta": "Ver a história completa →"
 }

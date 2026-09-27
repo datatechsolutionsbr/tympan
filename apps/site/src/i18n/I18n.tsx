@@ -10,7 +10,7 @@ import { direcao, escolherLocale, LOCALE_FONTE, urlFontesDoScript } from './loca
 export type Catalogo = Record<string, string>
 export type Chave = keyof typeof fonte
 
-const carregadores = import.meta.glob<Catalogo>('./mensagens/*.json', { import: 'default' })
+const carregadores = import.meta.glob<Catalogo>(['./mensagens/*.json', '!./mensagens/pt-BR.json'], { import: 'default' })
 
 export async function carregarCatalogo(code: string): Promise<Catalogo> {
   if (code === LOCALE_FONTE) return fonte

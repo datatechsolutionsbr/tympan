@@ -1,7 +1,7 @@
 // The site shell: a top bar (brand, section tabs, ⌘K search, appearance and language in one popover), the
 // section's own navigation in a sticky side column (a drawer on a phone) and, on a phone, the sections as
 // fixed tabs at the bottom (after the Estúdio's shell).
-import { BookOpen, Clapperboard, Download, House, Languages, LayoutGrid, Menu, Palette, Search, type LucideIcon } from 'lucide-react'
+import { BookOpen, Clapperboard, Download, History, House, Languages, LayoutGrid, Menu, Palette, Search, type LucideIcon } from 'lucide-react'
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { presets, printThemePresets } from './tokens'
 import { Button, Drawer, Popover, ProductMark, SkipLink, ThemePaletteTrigger, ThemeSwitcher, useMediaQuery, useTheme, type ThemeMode, type ThemePaletteGroup } from '@datatechsolutions/tympan'
@@ -11,6 +11,7 @@ import { formatarRota, lerRota, TEMA_PADRAO, type Rota, type SecaoId } from './r
 
 export const SECOES: Array<{ id: SecaoId; icone: LucideIcon; rota: Rota }> = [
   { id: 'inicio', icone: House, rota: { secao: 'inicio' } },
+  { id: 'historia', icone: History, rota: { secao: 'historia' } },
   { id: 'componentes', icone: LayoutGrid, rota: { secao: 'componentes' } },
   { id: 'temas', icone: Palette, rota: lerRota('#/temas') },
   { id: 'livro', icone: BookOpen, rota: lerRota('#/livro') },
@@ -164,7 +165,7 @@ export function AbasRodape({ atual }: { atual: SecaoId }) {
   const href = useHref()
   return (
     <nav className="ty-site-abas" aria-label={t('shell.secoes')}>
-      {SECOES.map((s) => {
+      {SECOES.filter((s) => s.id !== 'historia').map((s) => {
         const I = s.icone
         return (
           <a key={s.id} href={href(s.rota)} className="ty-site-abas__item" aria-current={s.id === atual ? 'page' : undefined}>
