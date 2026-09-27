@@ -853,3 +853,19 @@
     box-decoration-break: clone;
   }
 }
+
+@layer tympan-print {
+  /* A verdict in a half-width panel: the promise over its state, and each claim over its mark, so neither is
+     squeezed into a column of a few words. */
+  .ty-print-painel:is([data-largura='1'], [data-largura='2'], [data-largura='3']) .ty-print-veredito-topo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2mm;
+  }
+
+  .ty-print-painel:is([data-largura='1'], [data-largura='2'], [data-largura='3']) .ty-print-veredito-itens li {
+    grid-template-columns: 1fr;
+    justify-items: start;
+    gap: 1mm;
+  }
+}
