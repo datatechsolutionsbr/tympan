@@ -112,7 +112,8 @@ export const fakhirPreset: ThemeConfig = {
  * neutrals, an indigo brand (indigo 500 as the accent family, one step darker
  * where text needs 4.5:1 on light grounds), translucent glass surfaces and the
  * rounder corners of that app (12 px controls, about 20 px cards). The call to
- * action is the indigo to purple gradient its primary buttons fill with.
+ * action is the indigo to purple gradient its primary buttons fill with, and
+ * text (headings included) uses the platform's own system fonts.
  */
 export const astrlabePreset: ThemeConfig = {
   name: 'astrlabe',
@@ -179,6 +180,12 @@ export const astrlabePreset: ThemeConfig = {
   ctaPins: {
     light: ['#4f46e5', '#7c3aed', '#9333ea'],
     dark: ['#4f46e5', '#7c3aed', '#9333ea'],
+  },
+  // The platform's own UI fonts, headings included (no web font to fetch).
+  fonts: {
+    display: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Noto Sans', 'Arial', 'sans-serif'],
+    body: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Noto Sans', 'Arial', 'sans-serif'],
+    mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
   },
 }
 

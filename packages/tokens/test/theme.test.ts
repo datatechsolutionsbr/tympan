@@ -234,6 +234,14 @@ describe('astrlabe preset', () => {
     expect(dark.get('--ty-glass-blur-sheet')).toBe('20px')
   })
 
+  it('uses the system font stacks for headings and body, no web font', () => {
+    const light = new Map(themeVariables(resolveTheme(astrlabePreset, 'light')))
+    expect(light.get('--ty-font-sans')).toMatch(/^-apple-system, BlinkMacSystemFont, 'Segoe UI'/)
+    expect(light.get('--ty-font-serif')).toBe(light.get('--ty-font-sans'))
+    expect(light.get('--ty-font-mono')).toMatch(/^ui-monospace/)
+    expect(astrlabePreset.fontsUrl).toBeUndefined()
+  })
+
   it('meets WCAG 2.2 AA in light and dark, default and high contrast', () => {
     for (const mode of MODES) for (const contrast of ['default', 'high'] as const) everyPairPasses(astrlabePreset, mode, contrast)
   })
