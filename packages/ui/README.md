@@ -7,7 +7,7 @@ Tympan is an Astrlabe-family component published by Datatech. Licence: FSL-1.1-A
 Apache 2.0 Future License); see `LICENSE`.
 
 ```sh
-npm run build -w @datatechsolutions/tympan          # dist/index.js, flow.js, styles.css, flow.css and types (builds @datatechsolutions/tympan-tokens first)
+npm run build -w @datatechsolutions/tympan          # dist/index.js, flow.js, avatars.js, flags.js (+ dist/flags/*), styles.css, flow.css and types (builds @datatechsolutions/tympan-tokens and the flag modules first)
 npm run typecheck -w @datatechsolutions/tympan
 npm test -w @datatechsolutions/tympan               # vitest + Testing Library + axe-core
 npm run gallery -w @datatechsolutions/tympan        # http://localhost:3310 (components, theme customizer, flow canvas at #/flow/...)
@@ -237,6 +237,98 @@ gone; its exports are unchanged under the subpath:
 | `from '@datatechsolutions/tympan-flow'` | `from '@datatechsolutions/tympan/flow'` |
 | `import '@datatechsolutions/tympan-flow/styles.css'` | `import '@datatechsolutions/tympan/flow.css'` |
 
+## Generated avatars (`@datatechsolutions/tympan/avatars`)
+
+Deterministic avatars drawn by [DiceBear](https://www.dicebear.com) 9 from a
+seed, in the colours of the active theme. `@dicebear/core` and the style
+packages are optional peer dependencies: install core and only the styles you
+use.
+
+```sh
+npm install @dicebear/core@^9 @dicebear/shapes@^9 @dicebear/notionists@^9
+```
+
+```tsx
+import * as shapes from '@dicebear/shapes'
+import { GeneratedAvatar, avatarSvg, avatarPalette } from '@datatechsolutions/tympan/avatars'
+
+<GeneratedAvatar seed={user.id} avatarStyle={shapes} name={user.name} fallbackText="IC" />
+<GeneratedAvatar seed={agent.key} avatarStyle={shapes} name={agent.name} actorKind="agent" />
+
+avatarSvg({ seed: 'user-42', style: shapes })                      // SVG string, colours as --ty-* custom properties
+avatarSvg({ seed: 'user-42', style: shapes, size: 64, theme: avatarPalette('tympan', 'dark') }) // fixed hex colours
+```
+
+- **Licence gate.** Only styles whose artwork is CC0 1.0 or MIT are accepted:
+  glass, icons (Bootstrap Icons, MIT), identicon, initials, lorelei,
+  lorelei-neutral, notionists, notionists-neutral, open-peeps, pixel-art,
+  pixel-art-neutral, rings, shapes and thumbs. Any other style throws
+  `AvatarStyleError` (the component shows its fallback), `check:provenance`
+  fails on an import of an excluded style, and a test compares the allow-list
+  with the installed LICENSE files. The CC BY 4.0 styles (adventurer,
+  big-ears, big-smile, croodles, dylan, fun-emoji, micah, miniavs, personas,
+  toon-head) and the custom-licensed ones (avataaars, bottts) are left out;
+  so is `@dicebear/collection`, which re-exports all of them. Details:
+  `ALLOWED_AVATAR_STYLES`, `EXCLUDED_AVATAR_STYLES`, THIRD_PARTY_NOTICES.md.
+- **Theme colours.** By default every colour is
+  `var(--ty-avatar-<slot>, <theme expression>)`: soft backgrounds mixed from
+  `--ty-brand` and `--ty-bg`, ink shapes from `--ty-brand`/`--ty-brand-strong`,
+  solid fills from the brand ramp, light paper (brand 100/200) behind the
+  black line art of figure styles. The inline SVG follows all themes and
+  both modes without re-rendering; set a `--ty-avatar-*` property to repaint a
+  slot. Figure styles keep the artist's skin, hair and eye colours.
+  `avatarPalette(theme, mode)` resolves the same recipe to hex for images,
+  e-mail or files.
+- **People and agents.** `actorKind="agent"` keeps Avatar's rounded, dashed
+  frame, draws from the neutral ink instead of the brand, and accepts only the
+  abstract styles (glass, icons, identicon, rings, shapes): an agent never gets
+  a face or initials.
+- **Avatar behaviour kept.** GeneratedAvatar is Avatar with generated
+  `artwork`: a loaded `src` wins, the frame is `role="img"` named by `name` (or
+  `aria-hidden` with `decorative` next to a visible name), `onPress`/`href`
+  make it a control, and when the artwork cannot be drawn the initials (or
+  the agent bot icon) show. Avatars do not mirror in right-to-left layouts.
+- **Determinism.** Same seed, style, kind and palette give the same SVG;
+  internal ids are prefixed per instance so avatars never share a mask.
+- DiceBear 10 (`@dicebear/core` 10 with `@dicebear/styles`) packs styles
+  differently; this subpath targets the 9.x core and per-style packages,
+  whose majors match.
+
+## Flags (`@datatechsolutions/tympan/flags`)
+
+```tsx
+import { Flag, flagName } from '@datatechsolutions/tympan/flags'
+
+<Flag code="JP" />                          // role="img", named "Japan" / "Japão" / "日本" by locale
+<Flag code="gb-sct" aspect="1x1" size="small" />
+<Flag code="eu" aspect="circle" />
+<Flag code="ke" decorative /> {flagName('ke', locale)}
+```
+
+- Artwork: [flag-icons](https://github.com/lipis/flag-icons) 7.5.0 (MIT), 271
+  flags (ISO 3166-1 alpha-2, England, Scotland, Wales, Northern Ireland,
+  Catalonia, Galicia, Basque Country, Ascension, Saint Helena, Tristan da
+  Cunha, the EU, the UN, ASEAN, the Arab League, CEFTA, the EAC, the Pacific
+  Community and an "unknown" flag) in 4:3 and 1:1. `aspect="circle"` clips
+  the square art.
+- Each flag is its own lazily loaded chunk (`dist/flags/<aspect>/<code>-*.js`),
+  generated at build time from the flag-icons SVGs; importing `Flag` does not
+  bundle 271 flags, and hosts need no bundler setup for SVG files. The flag
+  appears once its chunk has loaded; the named frame is there from the first
+  render.
+- Accessible name: `Intl.DisplayNames` in the active locale (from
+  `TympanProvider`/`I18nProvider`), own names in English, Portuguese and
+  Spanish for the flags CLDR has no region for, the code otherwise; `label`
+  overrides it, `decorative` hides the flag next to a visible name. Unknown
+  codes draw the "unknown" flag and keep the code as the name.
+- **Flags stand for countries and regions, never for languages.** Spanish,
+  Arabic, English or Portuguese are spoken in many countries, and many
+  countries have several languages. A language picker lists each language by
+  its own name (English, Español, العربية, 日本語), as the gallery's language
+  menu does; use a flag only where the place itself is meant (an office, a
+  shipping destination, a phone country code).
+- Flags never mirror in right-to-left layouts.
+
 ## Styling rules
 
 - Class names are `ty-` prefixed (BEM-ish); state comes from React Aria data
@@ -264,5 +356,6 @@ and `dir` on `<html>` (or on a subtree).
 ## Records
 
 `CLEAN-ROOM.md` (process and inputs), `PROVENANCE.md` (per component),
-`THIRD_PARTY_NOTICES.md`, `LICENSE`; for the flow canvas,
-`src/flow/CLEAN-ROOM.md` and `src/flow/PROVENANCE.md`.
+`THIRD_PARTY_NOTICES.md` (including the avatar style and flag artwork
+licences), `LICENSE`; for the flow canvas, `src/flow/CLEAN-ROOM.md` and
+`src/flow/PROVENANCE.md`.

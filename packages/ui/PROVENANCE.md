@@ -257,6 +257,15 @@ At the coordinator's request (outside similarity audit), Spinner (now a CSS-only
 - **Totals on `ds/wave-2`**: 1625 tests in the design system (199 files), 25 in the tokens package.
 - **Dependencies added**: `react-aria` (hooks), `@internationalized/date`, `d3-geo` (see THIRD_PARTY_NOTICES.md).
 
+## Avatars and flags (branch `feat/avatars-flags`)
+
+| Piece | Sources | Tests | Decisions |
+|---|---|---|---|
+| Avatar `artwork` slot | existing Avatar spec (wave-1/avatar.md, DD §2.11) | Avatar.test.tsx (artwork replaces initials and bot icon; image wins; null falls back) | Artwork is always decorative; the frame keeps role, name, pressable wrapper and agent shape. |
+| `avatarSvg`, `avatarPalette`, `GeneratedAvatar` (`/avatars`) | DiceBear 9.4.3 public API (`createAvatar`, style `meta`/`schema`, read from the published type definitions and `lib/` of the npm packages), each style's LICENSE file | avatars.test.tsx: determinism, every allowed style over 24 seeds, CSS and resolved theme colours, figure art keeps its colours, id scoping, licence gate (CC BY / custom / unlisted refused), agent restrictions, allow-list against installed LICENSE files, import and package.json scan, fallback, axe, right to left | Colours through sentinel hex values swapped for `var(--ty-avatar-<slot>, color-mix(...))` so inline avatars follow theme and mode; figure styles get only a light paper background; agents use neutral ink and abstract styles; own FNV id prefix instead of DiceBear's `randomizeIds` (which uses `Math.random` and breaks determinism). |
+| Licence allow-list | package LICENSE files and `meta.license` of all 31 DiceBear 9 styles | as above, plus `check:provenance` rule | 14 CC0/MIT styles in, 17 CC BY 4.0 or custom-licensed styles and `@dicebear/collection` out (THIRD_PARTY_NOTICES.md). |
+| `Flag`, `flagName`, `loadFlagSvg` (`/flags`) | flag-icons 7.5.0 SVGs (MIT), `Intl.DisplayNames` (ECMA-402), CLDR region codes | flags.test.tsx: coverage, per-aspect ids, names in en/pt-BR/es/ja/ar, own names for subdivisions, code fallback, label/decorative, 1x1/circle/unknown, axe, right to left | One generated module per flag and aspect, loaded by dynamic import and shown as a data-URI `img` (no id clashes, no injected markup); names from DisplayNames with a small en/pt/es table for flags without a CLDR region; flags never mirror. |
+
 ## Ambiguities resolved (summary)
 
 - **Info tone.** DD §2.3 gives no info colour and forbids the accent as state;
