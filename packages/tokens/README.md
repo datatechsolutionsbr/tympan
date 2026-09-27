@@ -129,10 +129,14 @@ roles, so the product keeps the approved look; every other role is generated.
 
 `printPresets` holds the 39 book diagramming styles used by
 `@datatechsolutions/tympan-print` (`PRINT_PRESET_NAMES` gives the order:
-`dashboard` … `ft`, then `dados-br`, `minard`, `mccandless`, `construtivismo`,
-`bauhaus`, `brutalista`, `divulgacao`, `corbusier`, `schiphol`, `aicher`,
-`vignelli`, `jornal-do-brasil`, `athos-bulcao`, `tropicalia`, `atlas-ibge`,
-`crouwel`, `saul-bass`, `pop-art`, `cientifico`, `art-nouveau`, `memphis`).
+`dashboard` … `papel-salmao`, then `dados-br`, `fluxo-historico`,
+`blocos-coloridos`, `construtivismo`, `bauhaus`, `brutalista`, `divulgacao`,
+`proporcao-modular`, `sinalizacao`, `pictogramas`, `mapa-de-metro`,
+`jornal-1959`, `azulejo-modernista`, `tropicalia`, `atlas-oficial`,
+`grade-holandesa`, `papel-recortado`, `pop-art`, `cientifico`, `art-nouveau`,
+`memphis`). Ids and labels are neutral, descriptive names; the tradition a
+style draws on is named only in its description (`referencia`, "inspirado em
+…").
 Optional fields cover page ornaments (`estrutura.moldura`, `cor.ornamento`),
 columns (`estrutura.barras`), running-head bands and title treatments. Each `PrintStyle` names its fonts (Google Fonts,
 OFL), paper and ink, data and proof-state colours, paper texture, stroke,
@@ -146,6 +150,51 @@ printStyleToCss(printPresets.jornal, { pb: true })          // black and white: 
 printStyleToCss(printPresets.jornal, { overrides: { cor: { destaque: '#8a1c7c' } } })
 ```
 
+### Renamed styles (deprecated ids)
+
+Eighteen styles were renamed so that no id or label uses a trademark, an
+institution or a person's name. The old ids still work: `PRINT_STYLE_ALIASES`
+maps each one to its new id, and `resolvePrintStyleName`, `printPresetById`,
+`resolvePrintStyle` (which also takes an id), `LivroPrint estilo` and the UI
+theme lookup (`print-<old id>`, through `PRINT_THEME_ALIASES` and
+`resolvePrintThemeName`, used by `ThemeProvider` and `themeInitScript`) accept
+them, with a one-time console warning in development builds.
+
+| Old id | New id | Label |
+| --- | --- | --- |
+| `economist` | `semanario` | Semanário de economia |
+| `ft` | `papel-salmao` | Papel salmão |
+| `schiphol` | `sinalizacao` | Sinalização de aeroporto |
+| `jornal-do-brasil` | `jornal-1959` | Jornal modernista (1959) |
+| `atlas-ibge` | `atlas-oficial` | Atlas oficial (cartografia) |
+| `deardata` | `cartao-postal` | Cartão-postal desenhado à mão |
+| `tufte` | `minimo-de-tinta` | Mínimo de tinta |
+| `holmes` | `infografico-ilustrado` | Infográfico ilustrado |
+| `bayer` | `diagrama-modernista` | Diagrama modernista |
+| `dubois` | `graficos-1900` | Gráficos de exposição (1900) |
+| `minard` | `fluxo-historico` | Fluxo histórico (séc. XIX) |
+| `mccandless` | `blocos-coloridos` | Blocos coloridos |
+| `corbusier` | `proporcao-modular` | Proporção modular |
+| `aicher` | `pictogramas` | Pictogramas esportivos |
+| `vignelli` | `mapa-de-metro` | Mapa de metrô |
+| `athos-bulcao` | `azulejo-modernista` | Azulejo modernista |
+| `crouwel` | `grade-holandesa` | Grade holandesa |
+| `saul-bass` | `papel-recortado` | Papel recortado |
+
+The labels of `tropicalia`, `pop-art`, `art-nouveau` and `memphis` no longer
+carry a person's name (the ids are unchanged), and the emblem `'modulor'` is
+now `'figura-modular'` (the old value is still drawn).
+
+**Removal:** the aliases, the `print-<old id>` theme names and the `'modulor'`
+emblem will be removed in the next major version of
+`@datatechsolutions/tympan-tokens` and `@datatechsolutions/tympan-print`.
+Migrate stored data books to the new ids before then.
+
+```ts
+resolvePrintStyle('economist').name   // 'semanario' (warns once in development)
+resolvePrintThemeName('print-tufte')  // 'print-minimo-de-tinta'
+```
+
 Tests hold every preset to WCAG AA for `tinta`, `tinta2` and the six proof
 colours on the paper (in colour and in P&B) and keep every data colour
 (`destaque`, `destaque2`, `contexto`, proof states) at CIEDE2000 ΔE ≥ 10 from
@@ -156,7 +205,7 @@ from the colour module.
 
 `printStyleToTheme(style)` derives a `ThemeConfig` from any `PrintStyle`, and
 `printThemePresets` holds one per book style, named `print-<style>` (for
-example `print-suico`, `print-tufte`). The mapping is data-driven:
+example `print-suico`, `print-minimo-de-tinta`). The mapping is data-driven:
 
 - **Palette**: in the style's own mode (light for paper styles, dark for
   dark-paper styles such as `prancheta`) the paper is `bg`, surfaces step
@@ -177,7 +226,7 @@ example `print-suico`, `print-tufte`). The mapping is data-driven:
 - **Surface**: radius from the print corner radius (mm at 96 dpi); glass,
   a gradient call to action and soft shadows only for the card and wash
   styles (`dashboard`, `aquarela`); flat shadows for the ruled print styles
-  (`suico`, `tufte`, `bauhaus` …); a hard offset shadow for cut-paper and
+  (`suico`, `minimo-de-tinta`, `bauhaus` …); a hard offset shadow for cut-paper and
   poster styles (`brutalista`, `memphis`, `pop-art`, `divulgacao`).
 - **Contrast**: every exact print colour is a pin only while all WCAG 2.2 AA
   pairs hold in that mode; a pin that fails is dropped and the role is

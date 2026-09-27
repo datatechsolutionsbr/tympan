@@ -1,13 +1,16 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { contrastRatio, deltaE2000, parseColor } from '../src/color.ts'
 import {
   ESTADOS_PROVA,
   PRINT_PRESET_NAMES,
+  PRINT_STYLE_ALIASES,
   googleFontsUrl,
   mergePrintStyle,
   printPresets,
+  printPresetById,
   printStyleToCss,
   resolvePrintStyle,
+  resolvePrintStyleName,
   toGrey,
   type PrintStyle,
 } from '../src/print-presets.ts'
@@ -69,11 +72,12 @@ function dataColours(s: PrintStyle): Array<[string, string]> {
 describe('print presets', () => {
   it('has the 39 styles of the contract, keyed by name', () => {
     expect(PRINT_PRESET_NAMES).toEqual([
-      'dashboard', 'dubois', 'deardata', 'caderno', 'isotype', 'cordel', 'riso', 'jornal', 'prancheta',
-      'prancheta-clara', 'aquarela', 'tufte', 'suico', 'concretismo', 'economist', 'holmes', 'bayer', 'ft',
-      'dados-br', 'minard', 'mccandless', 'construtivismo', 'bauhaus', 'brutalista', 'divulgacao', 'corbusier',
-      'schiphol', 'aicher', 'vignelli', 'jornal-do-brasil', 'athos-bulcao', 'tropicalia', 'atlas-ibge', 'crouwel',
-      'saul-bass', 'pop-art', 'cientifico', 'art-nouveau', 'memphis',
+      'dashboard', 'graficos-1900', 'cartao-postal', 'caderno', 'isotype', 'cordel', 'riso', 'jornal', 'prancheta',
+      'prancheta-clara', 'aquarela', 'minimo-de-tinta', 'suico', 'concretismo', 'semanario', 'infografico-ilustrado',
+      'diagrama-modernista', 'papel-salmao', 'dados-br', 'fluxo-historico', 'blocos-coloridos', 'construtivismo',
+      'bauhaus', 'brutalista', 'divulgacao', 'proporcao-modular', 'sinalizacao', 'pictogramas', 'mapa-de-metro',
+      'jornal-1959', 'azulejo-modernista', 'tropicalia', 'atlas-oficial', 'grade-holandesa', 'papel-recortado',
+      'pop-art', 'cientifico', 'art-nouveau', 'memphis',
     ])
     for (const [key, s] of Object.entries(printPresets)) expect(s.name).toBe(key)
   })
@@ -163,5 +167,51 @@ describe('print presets', () => {
   it('generates stable CSS for every preset', () => {
     const all = presets.map((s) => printStyleToCss(s) + printStyleToCss(s, { pb: true, seletor: `[data-ty-print-style="${s.name}"][data-ty-print-pb]` })).join('\n')
     expect(all).toMatchSnapshot()
+  })
+})
+
+/** Words that must not appear in a style id or label: trademarks, institutions and people's names. */
+const NOMES_PROPRIOS = /economist|financial|schiphol|jornal do brasil|ibge|dear data|tufte|holmes|bayer|du ?bois|minard|nightingale|mccandless|corbusier|modulor|aicher|ol[íi]mpic|vignelli|athos|bulc[ãa]o|crouwel|saul|bass|lichtenstein|mucha|sottsass|rog[ée]rio|duarte|amilcar/i
+
+describe('print style names', () => {
+  it.each(presets.map((s) => [s.name, s] as const))('%s: id and label are neutral (the tradition is named only in the description)', (_, s) => {
+    expect(s.name).not.toMatch(NOMES_PROPRIOS)
+    expect(s.label).not.toMatch(NOMES_PROPRIOS)
+    expect(s.name).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/)
+  })
+
+  it('maps every deprecated id to a current style, and resolves it with one development warning', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    try {
+      for (const [old, current] of Object.entries(PRINT_STYLE_ALIASES)) {
+        expect(PRINT_PRESET_NAMES).not.toContain(old)
+        expect(PRINT_PRESET_NAMES).toContain(current)
+        expect(resolvePrintStyleName(old)).toBe(current)
+        expect(printPresetById(old)).toBe(printPresets[current])
+      }
+      expect(resolvePrintStyle('economist').name).toBe('semanario')
+      expect(resolvePrintStyle('economist')).toEqual(resolvePrintStyle(printPresets.semanario))
+      expect(resolvePrintStyle('ft', { pb: true })).toEqual(resolvePrintStyle(printPresets['papel-salmao'], { pb: true }))
+      // One warning per deprecated id, however often it is resolved.
+      const calls = warn.mock.calls.map((c) => String(c[0]))
+      expect(calls.filter((c) => c.includes('"economist"'))).toHaveLength(1)
+      expect(calls.length).toBe(Object.keys(PRINT_STYLE_ALIASES).length)
+      expect(calls[0]).toMatch(/deprecated/)
+    } finally {
+      warn.mockRestore()
+    }
+  })
+
+  it('resolves current names silently and rejects unknown ones', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    try {
+      expect(resolvePrintStyleName('semanario')).toBe('semanario')
+      expect(resolvePrintStyleName('nao-existe')).toBeUndefined()
+      expect(resolvePrintStyleName('toString')).toBeUndefined()
+      expect(() => printPresetById('nao-existe')).toThrow(/unknown print style/)
+      expect(warn).not.toHaveBeenCalled()
+    } finally {
+      warn.mockRestore()
+    }
   })
 })

@@ -11,7 +11,7 @@
 // the style's hue, so identity is kept wherever contrast allows.
 
 import { contrastRatio, deltaE2000, luminance, oklchToRgb, parseColor, rgbToOklch, toCss } from './color.ts'
-import { googleFontsUrl, printPresets, type PrintPresetName, type PrintStyle } from './print-presets.ts'
+import { googleFontsUrl, PRINT_STYLE_ALIASES, printPresets, warnDeprecatedPrintId, type PrintPresetName, type PrintStyle } from './print-presets.ts'
 import {
   DEFAULT_CHART_HUES,
   parseFontStack,
@@ -25,6 +25,28 @@ import {
 
 /** Prefix of every print theme name: `data-ty-theme="print-<style>"`. */
 export const PRINT_THEME_PREFIX = 'print-'
+
+/**
+ * Deprecated print theme names (`print-<old style id>`) and the current theme
+ * each maps to, derived from PRINT_STYLE_ALIASES (for example
+ * `print-economist` -> `print-semanario`). Same removal schedule: dropped in
+ * the next major version.
+ */
+export const PRINT_THEME_ALIASES: Readonly<Record<string, string>> = Object.fromEntries(
+  Object.entries(PRINT_STYLE_ALIASES).map(([old, current]) => [`${PRINT_THEME_PREFIX}${old}`, `${PRINT_THEME_PREFIX}${current}`]),
+)
+
+/**
+ * The current name of a theme: a deprecated `print-<old id>` is mapped to its
+ * `print-<new id>` (with a one-time development warning); any other name is
+ * returned unchanged.
+ */
+export function resolvePrintThemeName(theme: string): string {
+  if (!Object.hasOwn(PRINT_THEME_ALIASES, theme)) return theme
+  const current = PRINT_THEME_ALIASES[theme]!
+  warnDeprecatedPrintId(theme, current, 'theme')
+  return current
+}
 
 /** Chroma under which a colour counts as grey (ink, paper, rules). */
 const CHROMATIC = 0.05

@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import {
   contrastRatio,
   fontStackToCss,
@@ -10,12 +10,15 @@ import {
   parseColor,
   parseFontStack,
   PRINT_PRESET_NAMES,
+  PRINT_STYLE_ALIASES,
+  PRINT_THEME_ALIASES,
   PRINT_THEME_PREFIX,
   printPresets,
   printStyleAccent,
   printStyleToTheme,
   printThemeFontUrls,
   printThemePresets,
+  resolvePrintThemeName,
   resolveTheme,
   rgbToOklch,
   themeToDtcg,
@@ -80,7 +83,7 @@ describe('print themes', () => {
   })
 
   it('keeps flat print styles flat and square, and the card and wash styles soft', () => {
-    for (const name of ['suico', 'tufte', 'bauhaus', 'economist', 'brutalista'] as const) {
+    for (const name of ['suico', 'minimo-de-tinta', 'bauhaus', 'semanario', 'brutalista'] as const) {
       const t = themeOf(printPresets[name])
       expect(t.glass, name).toBe(false)
       expect(t.cta, name).toBe('solid')
@@ -126,23 +129,42 @@ describe('print themes', () => {
   })
 
   it('emits font families as --ty-font-* variables and DTCG fontFamily tokens', () => {
-    const r = resolveTheme(themeOf(printPresets.tufte), 'light')
+    const r = resolveTheme(themeOf(printPresets['minimo-de-tinta']), 'light')
     const vars = new Map(themeVariables(r))
-    expect(vars.get('--ty-font-serif')).toBe(fontStackToCss(themeOf(printPresets.tufte).fonts!.display!))
-    expect(vars.get('--ty-font-sans')).toBe(fontStackToCss(themeOf(printPresets.tufte).fonts!.body!))
+    expect(vars.get('--ty-font-serif')).toBe(fontStackToCss(themeOf(printPresets['minimo-de-tinta']).fonts!.display!))
+    expect(vars.get('--ty-font-sans')).toBe(fontStackToCss(themeOf(printPresets['minimo-de-tinta']).fonts!.body!))
     const tree = themeToDtcg(r) as { fontFamily: Record<string, { $value: string[] }> }
-    expect(tree.fontFamily.sans!.$value).toEqual(themeOf(printPresets.tufte).fonts!.body)
+    expect(tree.fontFamily.sans!.$value).toEqual(themeOf(printPresets['minimo-de-tinta']).fonts!.body)
   })
 
   it('builds an opt-in sheet scoped to each theme attribute, without the preference blocks', () => {
     const css = generatePrintThemesCss(printThemePresets.slice(0, 2))
     expect(css.startsWith('@layer tympan.tokens {')).toBe(true)
     expect(css).toContain('[data-ty-theme="print-dashboard"]')
-    expect(css).toContain('[data-ty-theme="print-dubois"][data-ty-mode="dark"]')
+    expect(css).toContain('[data-ty-theme="print-graficos-1900"][data-ty-mode="dark"]')
     expect(css).toContain('@media (prefers-contrast: more)')
     expect(css).not.toContain('forced-colors')
     expect(css).not.toContain(':root')
     expect(css).toContain('--ty-font-serif:')
+  })
+
+  it('maps each deprecated print theme name to the renamed theme, once with a development warning', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    try {
+      const names = new Set(printThemePresets.map((t) => t.name))
+      expect(Object.keys(PRINT_THEME_ALIASES)).toHaveLength(Object.keys(PRINT_STYLE_ALIASES).length)
+      for (const [old, current] of Object.entries(PRINT_THEME_ALIASES)) {
+        expect(names.has(old)).toBe(false)
+        expect(names.has(current)).toBe(true)
+      }
+      expect(resolvePrintThemeName('print-economist')).toBe('print-semanario')
+      expect(resolvePrintThemeName('print-economist')).toBe('print-semanario')
+      expect(resolvePrintThemeName('print-semanario')).toBe('print-semanario')
+      expect(resolvePrintThemeName('tympan')).toBe('tympan')
+      expect(warn).toHaveBeenCalledTimes(1)
+    } finally {
+      warn.mockRestore()
+    }
   })
 
   const dist = join(__dirname, '..', 'dist')

@@ -74,7 +74,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-4: #e7e7e7;
 }
 
-[data-ty-print-style="dubois"] {
+[data-ty-print-style="graficos-1900"] {
   --ty-print-fonte-titulo: "Rubik Mono One", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-corpo: "Literata", Georgia, "Times New Roman", serif;
   --ty-print-fonte-numero: "Rubik Mono One", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -110,7 +110,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-3: #1d1a16;
   --ty-print-ornamento-4: #dcc690;
 }
-[data-ty-print-style="dubois"][data-ty-print-pb] {
+[data-ty-print-style="graficos-1900"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Rubik Mono One", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-corpo: "Literata", Georgia, "Times New Roman", serif;
   --ty-print-fonte-numero: "Rubik Mono One", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -147,7 +147,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-4: #c8c8c8;
 }
 
-[data-ty-print-style="deardata"] {
+[data-ty-print-style="cartao-postal"] {
   --ty-print-fonte-titulo: "Newsreader", Georgia, "Times New Roman", serif;
   --ty-print-fonte-corpo: "Newsreader", Georgia, "Times New Roman", serif;
   --ty-print-fonte-numero: "Caveat", "Comic Neue", "Segoe Print", cursive;
@@ -183,7 +183,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-3: #24211e;
   --ty-print-ornamento-4: #f1e7c4;
 }
-[data-ty-print-style="deardata"][data-ty-print-pb] {
+[data-ty-print-style="cartao-postal"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Newsreader", Georgia, "Times New Roman", serif;
   --ty-print-fonte-corpo: "Newsreader", Georgia, "Times New Roman", serif;
   --ty-print-fonte-numero: "Caveat", "Comic Neue", "Segoe Print", cursive;
@@ -804,7 +804,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-4: #e0e0e0;
 }
 
-[data-ty-print-style="tufte"] {
+[data-ty-print-style="minimo-de-tinta"] {
   --ty-print-fonte-titulo: "EB Garamond", Georgia, "Times New Roman", serif;
   --ty-print-fonte-corpo: "EB Garamond", Georgia, "Times New Roman", serif;
   --ty-print-fonte-numero: "EB Garamond", Georgia, "Times New Roman", serif;
@@ -840,7 +840,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-3: #111111;
   --ty-print-ornamento-4: #f3efd6;
 }
-[data-ty-print-style="tufte"][data-ty-print-pb] {
+[data-ty-print-style="minimo-de-tinta"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "EB Garamond", Georgia, "Times New Roman", serif;
   --ty-print-fonte-corpo: "EB Garamond", Georgia, "Times New Roman", serif;
   --ty-print-fonte-numero: "EB Garamond", Georgia, "Times New Roman", serif;
@@ -1023,7 +1023,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-4: #dadada;
 }
 
-[data-ty-print-style="economist"] {
+[data-ty-print-style="semanario"] {
   --ty-print-fonte-titulo: "Source Serif 4", Georgia, "Times New Roman", serif;
   --ty-print-fonte-corpo: "Source Serif 4", Georgia, "Times New Roman", serif;
   --ty-print-fonte-numero: "Fira Sans Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -1059,7 +1059,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-3: #121212;
   --ty-print-ornamento-4: #fbdcd8;
 }
-[data-ty-print-style="economist"][data-ty-print-pb] {
+[data-ty-print-style="semanario"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Source Serif 4", Georgia, "Times New Roman", serif;
   --ty-print-fonte-corpo: "Source Serif 4", Georgia, "Times New Roman", serif;
   --ty-print-fonte-numero: "Fira Sans Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -1096,7 +1096,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-4: #e3e3e3;
 }
 
-[data-ty-print-style="holmes"] {
+[data-ty-print-style="infografico-ilustrado"] {
   --ty-print-fonte-titulo: "Rubik", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-corpo: "Nunito Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-numero: "Rubik", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -1132,7 +1132,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-3: #22303c;
   --ty-print-ornamento-4: #f6e1ad;
 }
-[data-ty-print-style="holmes"][data-ty-print-pb] {
+[data-ty-print-style="infografico-ilustrado"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Rubik", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-corpo: "Nunito Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-numero: "Rubik", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -1169,7 +1169,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-4: #e3e3e3;
 }
 
-[data-ty-print-style="bayer"] {
+[data-ty-print-style="diagrama-modernista"] {
   --ty-print-fonte-titulo: "League Spartan", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-corpo: "Jost", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-numero: "League Spartan", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -1205,7 +1205,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-3: #1b1a17;
   --ty-print-ornamento-4: #ecd8a8;
 }
-[data-ty-print-style="bayer"][data-ty-print-pb] {
+[data-ty-print-style="diagrama-modernista"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "League Spartan", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-corpo: "Jost", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-numero: "League Spartan", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -1242,7 +1242,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-4: #dadada;
 }
 
-[data-ty-print-style="ft"] {
+[data-ty-print-style="papel-salmao"] {
   --ty-print-fonte-titulo: "DM Serif Display", Georgia, "Times New Roman", serif;
   --ty-print-fonte-corpo: "Gelasio", Georgia, "Times New Roman", serif;
   --ty-print-fonte-numero: "Hanken Grotesk", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -1278,7 +1278,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-3: #33302e;
   --ty-print-ornamento-4: #f2dfce;
 }
-[data-ty-print-style="ft"][data-ty-print-pb] {
+[data-ty-print-style="papel-salmao"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "DM Serif Display", Georgia, "Times New Roman", serif;
   --ty-print-fonte-corpo: "Gelasio", Georgia, "Times New Roman", serif;
   --ty-print-fonte-numero: "Hanken Grotesk", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -1388,7 +1388,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-4: #efefef;
 }
 
-[data-ty-print-style="minard"] {
+[data-ty-print-style="fluxo-historico"] {
   --ty-print-fonte-titulo: "IM Fell English", Georgia, "Times New Roman", serif;
   --ty-print-fonte-corpo: "Old Standard TT", Georgia, "Times New Roman", serif;
   --ty-print-fonte-numero: "Old Standard TT", Georgia, "Times New Roman", serif;
@@ -1424,7 +1424,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-3: #3b2a1a;
   --ty-print-ornamento-4: #e6d5ae;
 }
-[data-ty-print-style="minard"][data-ty-print-pb] {
+[data-ty-print-style="fluxo-historico"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "IM Fell English", Georgia, "Times New Roman", serif;
   --ty-print-fonte-corpo: "Old Standard TT", Georgia, "Times New Roman", serif;
   --ty-print-fonte-numero: "Old Standard TT", Georgia, "Times New Roman", serif;
@@ -1461,7 +1461,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-4: #d6d6d6;
 }
 
-[data-ty-print-style="mccandless"] {
+[data-ty-print-style="blocos-coloridos"] {
   --ty-print-fonte-titulo: "Montserrat", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-corpo: "Lato", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-numero: "Montserrat", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -1499,7 +1499,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-fundo: #2b2b2b;
   --ty-print-rotulo-tinta: #ffffff;
 }
-[data-ty-print-style="mccandless"][data-ty-print-pb] {
+[data-ty-print-style="blocos-coloridos"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Montserrat", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-corpo: "Lato", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-numero: "Montserrat", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -1842,7 +1842,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-tinta: #fdfdfd;
 }
 
-[data-ty-print-style="corbusier"] {
+[data-ty-print-style="proporcao-modular"] {
   --ty-print-fonte-titulo: "Stardos Stencil", Georgia, "Times New Roman", serif;
   --ty-print-fonte-corpo: "Work Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-numero: "Work Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -1880,7 +1880,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-fundo: #26221d;
   --ty-print-rotulo-tinta: #f7f2e8;
 }
-[data-ty-print-style="corbusier"][data-ty-print-pb] {
+[data-ty-print-style="proporcao-modular"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Stardos Stencil", Georgia, "Times New Roman", serif;
   --ty-print-fonte-corpo: "Work Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-numero: "Work Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -1919,7 +1919,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-tinta: #f2f2f2;
 }
 
-[data-ty-print-style="schiphol"] {
+[data-ty-print-style="sinalizacao"] {
   --ty-print-fonte-titulo: "Hind", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-corpo: "Hind", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-numero: "Hind", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -1957,7 +1957,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-fundo: #121212;
   --ty-print-rotulo-tinta: #fbfbf8;
 }
-[data-ty-print-style="schiphol"][data-ty-print-pb] {
+[data-ty-print-style="sinalizacao"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Hind", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-corpo: "Hind", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-numero: "Hind", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -1996,7 +1996,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-tinta: #fbfbfb;
 }
 
-[data-ty-print-style="aicher"] {
+[data-ty-print-style="pictogramas"] {
   --ty-print-fonte-titulo: "Albert Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-corpo: "Albert Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-numero: "Albert Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -2034,7 +2034,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-fundo: #2f5f45;
   --ty-print-rotulo-tinta: #ffffff;
 }
-[data-ty-print-style="aicher"][data-ty-print-pb] {
+[data-ty-print-style="pictogramas"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Albert Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-corpo: "Albert Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-numero: "Albert Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -2073,7 +2073,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-tinta: #ffffff;
 }
 
-[data-ty-print-style="vignelli"] {
+[data-ty-print-style="mapa-de-metro"] {
   --ty-print-fonte-titulo: "Inter", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-corpo: "Inter", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-numero: "Inter", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -2111,7 +2111,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-fundo: #111111;
   --ty-print-rotulo-tinta: #ffffff;
 }
-[data-ty-print-style="vignelli"][data-ty-print-pb] {
+[data-ty-print-style="mapa-de-metro"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Inter", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-corpo: "Inter", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-numero: "Inter", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -2150,7 +2150,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-tinta: #ffffff;
 }
 
-[data-ty-print-style="jornal-do-brasil"] {
+[data-ty-print-style="jornal-1959"] {
   --ty-print-fonte-titulo: "Libre Bodoni", Georgia, "Times New Roman", serif;
   --ty-print-fonte-corpo: "PT Serif", Georgia, "Times New Roman", serif;
   --ty-print-fonte-numero: "Libre Bodoni", Georgia, "Times New Roman", serif;
@@ -2186,7 +2186,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-3: #111111;
   --ty-print-ornamento-4: #ececea;
 }
-[data-ty-print-style="jornal-do-brasil"][data-ty-print-pb] {
+[data-ty-print-style="jornal-1959"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Libre Bodoni", Georgia, "Times New Roman", serif;
   --ty-print-fonte-corpo: "PT Serif", Georgia, "Times New Roman", serif;
   --ty-print-fonte-numero: "Libre Bodoni", Georgia, "Times New Roman", serif;
@@ -2223,7 +2223,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-4: #ececec;
 }
 
-[data-ty-print-style="athos-bulcao"] {
+[data-ty-print-style="azulejo-modernista"] {
   --ty-print-fonte-titulo: "Jost", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-corpo: "Jost", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-numero: "Jost", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -2261,7 +2261,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-fundo: #3040b0;
   --ty-print-rotulo-tinta: #fbfaf5;
 }
-[data-ty-print-style="athos-bulcao"][data-ty-print-pb] {
+[data-ty-print-style="azulejo-modernista"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Jost", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-corpo: "Jost", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-numero: "Jost", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -2373,7 +2373,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-4: #797979;
 }
 
-[data-ty-print-style="atlas-ibge"] {
+[data-ty-print-style="atlas-oficial"] {
   --ty-print-fonte-titulo: "IBM Plex Sans Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-corpo: "IBM Plex Serif", Georgia, "Times New Roman", serif;
   --ty-print-fonte-numero: "IBM Plex Sans Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -2409,7 +2409,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-3: #23231d;
   --ty-print-ornamento-4: #eee8d3;
 }
-[data-ty-print-style="atlas-ibge"][data-ty-print-pb] {
+[data-ty-print-style="atlas-oficial"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "IBM Plex Sans Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-corpo: "IBM Plex Serif", Georgia, "Times New Roman", serif;
   --ty-print-fonte-numero: "IBM Plex Sans Condensed", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -2446,7 +2446,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-4: #e8e8e8;
 }
 
-[data-ty-print-style="crouwel"] {
+[data-ty-print-style="grade-holandesa"] {
   --ty-print-fonte-titulo: "Major Mono Display", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --ty-print-fonte-corpo: "Hanken Grotesk", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-numero: "Hanken Grotesk", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -2484,7 +2484,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-fundo: #f04e23;
   --ty-print-rotulo-tinta: #ffffff;
 }
-[data-ty-print-style="crouwel"][data-ty-print-pb] {
+[data-ty-print-style="grade-holandesa"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Major Mono Display", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --ty-print-fonte-corpo: "Hanken Grotesk", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-numero: "Hanken Grotesk", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -2523,7 +2523,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-rotulo-tinta: #ffffff;
 }
 
-[data-ty-print-style="saul-bass"] {
+[data-ty-print-style="papel-recortado"] {
   --ty-print-fonte-titulo: "Londrina Solid", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-corpo: "Work Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-numero: "Londrina Solid", system-ui, "Helvetica Neue", Arial, sans-serif;
@@ -2559,7 +2559,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-ornamento-3: #161616;
   --ty-print-ornamento-4: #ecd9b9;
 }
-[data-ty-print-style="saul-bass"][data-ty-print-pb] {
+[data-ty-print-style="papel-recortado"][data-ty-print-pb] {
   --ty-print-fonte-titulo: "Londrina Solid", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-corpo: "Work Sans", system-ui, "Helvetica Neue", Arial, sans-serif;
   --ty-print-fonte-numero: "Londrina Solid", system-ui, "Helvetica Neue", Arial, sans-serif;
