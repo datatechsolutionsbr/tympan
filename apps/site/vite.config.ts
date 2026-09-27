@@ -21,7 +21,15 @@ export default defineConfig({
     },
   ],
   resolve: { conditions: ['tympan-source', ...defaultClientConditions] },
-  build: { outDir: 'dist', emptyOutDir: true, chunkSizeWarningLimit: 2500, assetsInlineLimit: 0 },
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+    chunkSizeWarningLimit: 4500,
+    assetsInlineLimit: 0,
+    // One lazy chunk for all flag artwork instead of ~540 files: the site shows flags on one page, and an
+    // artifact version holds at most 511 files.
+    rolldownOptions: { output: { codeSplitting: { groups: [{ name: 'flags-art', test: /flags[\\/]art[\\/]/ }] } } },
+  },
   server: { host: '127.0.0.1', port: 3410, strictPort: true },
   preview: { host: '127.0.0.1', port: 3411, strictPort: true },
 })
