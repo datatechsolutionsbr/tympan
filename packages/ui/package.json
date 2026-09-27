@@ -1,7 +1,7 @@
 {
   "name": "@datatechsolutions/tympan",
   "version": "0.1.0",
-  "description": "Tympan: accessible React components (React 18.3 or 19) on React Aria Components, styled with --ty-* CSS custom properties in @layer tympan. The flow and provenance canvas (graph viewer, DAG editor, run inspection) ships as the @datatechsolutions/tympan/flow subpath. Generated avatars (DiceBear, CC0/MIT styles only) ship as the /avatars subpath.",
+  "description": "Tympan: accessible React components (React 18.3 or 19) on React Aria Components, styled with --ty-* CSS custom properties in @layer tympan. The flow and provenance canvas (graph viewer, DAG editor, run inspection) ships as the @datatechsolutions/tympan/flow subpath. Generated avatars (DiceBear, CC0/MIT styles only) ship as the /avatars subpath and country and region flags as the /flags subpath.",
   "license": "FSL-1.1-ALv2",
   "author": "Natalia Mesquita",
   "repository": {
@@ -24,7 +24,8 @@
     "provenance",
     "w3c-prov",
     "avatar",
-    "dicebear"
+    "dicebear",
+    "flags"
   ],
   "private": true,
   "type": "module",
@@ -50,6 +51,11 @@
       "types": "./dist/avatars.d.ts",
       "default": "./dist/avatars.js"
     },
+    "./flags": {
+      "tympan-source": "./src/flags/index.ts",
+      "types": "./dist/flags.d.ts",
+      "default": "./dist/flags.js"
+    },
     "./styles.css": "./dist/styles.css",
     "./flow.css": "./dist/flow.css",
     "./package.json": "./package.json"
@@ -60,15 +66,15 @@
     "THIRD_PARTY_NOTICES.md"
   ],
   "scripts": {
-    "prebuild": "npm run build -w @datatechsolutions/tympan-tokens",
-    "build": "tsdown && node scripts/build-css.mjs",
+    "prebuild": "npm run build -w @datatechsolutions/tympan-tokens && node scripts/build-flags.mjs",
+    "build": "tsdown && node scripts/build-css.mjs && node scripts/prune-flag-maps.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest",
-    "gallery": "npm run build -w @datatechsolutions/tympan-tokens && vite --config gallery/vite.config.ts",
-    "gallery:build": "npm run build -w @datatechsolutions/tympan-tokens && vite build --config gallery/vite.config.ts",
-    "pretest": "npm run build -w @datatechsolutions/tympan-tokens",
-    "pretypecheck": "npm run build -w @datatechsolutions/tympan-tokens"
+    "gallery": "npm run build -w @datatechsolutions/tympan-tokens && node scripts/build-flags.mjs && vite --config gallery/vite.config.ts",
+    "gallery:build": "npm run build -w @datatechsolutions/tympan-tokens && node scripts/build-flags.mjs && vite build --config gallery/vite.config.ts",
+    "pretest": "npm run build -w @datatechsolutions/tympan-tokens && node scripts/build-flags.mjs",
+    "pretypecheck": "npm run build -w @datatechsolutions/tympan-tokens && node scripts/build-flags.mjs"
   },
   "peerDependencies": {
     "@dagrejs/dagre": "^3.1.1",
@@ -166,6 +172,7 @@
     "@dicebear/shapes": "^9.4.3",
     "@dicebear/thumbs": "^9.4.3",
     "@types/d3-geo": "^3.1.1",
-    "axe-core": "^4.13.0"
+    "axe-core": "^4.13.0",
+    "flag-icons": "7.5.0"
   }
 }

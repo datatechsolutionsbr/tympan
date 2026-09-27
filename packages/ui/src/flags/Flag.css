@@ -1,0 +1,58 @@
+/* Flag (@datatechsolutions/tympan/flags). Flags never mirror in right-to-left layouts. */
+@layer tympan.components {
+  .ty-flag {
+    --ty-flag-height: var(--ty-space-5);
+    box-sizing: border-box;
+    display: inline-block;
+    flex: none;
+    position: relative;
+    block-size: var(--ty-flag-height);
+    inline-size: calc(var(--ty-flag-height) * 4 / 3);
+    overflow: hidden;
+    border-radius: 2px;
+    background: var(--ty-surface-sunken);
+    vertical-align: middle;
+  }
+  /* A hairline keeps white and pale flags visible on white and pale surfaces. */
+  .ty-flag::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--ty-line);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+  .ty-flag[data-aspect='1x1'],
+  .ty-flag[data-aspect='circle'] {
+    inline-size: var(--ty-flag-height);
+  }
+  .ty-flag[data-aspect='circle'] {
+    border-radius: 50%;
+  }
+
+  .ty-flag[data-size='xsmall'] {
+    --ty-flag-height: var(--ty-space-3);
+  }
+  .ty-flag[data-size='small'] {
+    --ty-flag-height: var(--ty-space-4);
+  }
+  .ty-flag[data-size='large'] {
+    --ty-flag-height: var(--ty-space-6);
+  }
+
+  .ty-flag__image {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  @media (forced-colors: active) {
+    .ty-flag {
+      forced-color-adjust: none;
+    }
+    .ty-flag::after {
+      border-color: CanvasText;
+    }
+  }
+}

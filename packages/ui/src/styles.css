@@ -7,6 +7,7 @@
 @import './components/actor-chip/ActorChip.css';
 @import './components/app-frame/AppFrame.css';
 @import './components/avatar/Avatar.css';
+@import './flags/Flag.css';
 @import './components/breadcrumbs/Breadcrumbs.css';
 @import './components/button/Button.css';
 @import './components/checkbox/Checkbox.css';
