@@ -1,7 +1,7 @@
 // What the site says about a book style: the neutral label and a short neutral description of the look
 // (fonts, palette, chart, corners). The preset's `referencia` (which names publications and people) is
 // never shown on the site.
-import { printPresets, type PrintPresetName, type PrintStyle } from '@datatechsolutions/tympan-tokens'
+import { printPresets, type PrintPresetName, type PrintStyle } from './tokens'
 
 /** First family of a CSS font stack: `"Source Serif 4", Georgia, serif` → `Source Serif 4`. */
 export function familia(pilha: string): string {

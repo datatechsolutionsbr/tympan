@@ -1,7 +1,7 @@
 // ⌘K search over sections, component pages, UI themes and book styles, on Tympan's CommandPalette.
 import { BookOpen, LayoutGrid, Palette } from 'lucide-react'
 import { useMemo } from 'react'
-import { presets, printThemePresets, type PrintPresetName } from '@datatechsolutions/tympan-tokens'
+import { presets, printThemePresets, type PrintPresetName } from './tokens'
 import { CommandPalette, type CommandGroup } from '@datatechsolutions/tympan'
 import type { Navegar } from './App'
 import { GALLERY_PAGES } from './galerias'

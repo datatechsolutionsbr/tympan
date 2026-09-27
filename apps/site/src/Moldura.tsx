@@ -3,7 +3,7 @@
 // fixed tabs at the bottom (after the Estúdio's shell).
 import { BookOpen, Clapperboard, Download, House, LayoutGrid, Menu, Palette, Search, SlidersHorizontal, type LucideIcon } from 'lucide-react'
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
-import { presets, printThemePresets } from '@datatechsolutions/tympan-tokens'
+import { presets, printThemePresets } from './tokens'
 import {
   Button,
   Drawer,

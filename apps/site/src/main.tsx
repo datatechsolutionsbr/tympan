@@ -6,7 +6,7 @@ import '@datatechsolutions/tympan-tokens/print-themes.css'
 // The print components' CSS once; each spread adds only its style's custom properties.
 import '@datatechsolutions/tympan-print/styles.css'
 import './site.css'
-import { printThemeFontUrls } from '@datatechsolutions/tympan-tokens'
+import { printThemeFontUrls } from './tokens'
 import { ThemeProvider, ToastProvider, TympanProvider } from '@datatechsolutions/tympan'
 import { App } from './App'
 import { carregarCatalogo, I18nProvider, localeInicial, useI18n } from './i18n/I18n'

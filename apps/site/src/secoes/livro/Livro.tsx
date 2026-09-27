@@ -2,13 +2,13 @@
 // styles (search, swatches, favourites), the spread on a neutral desk with fit-to-width zoom and fullscreen,
 // ← → to change style, the modes Um / Comparar / Antes × depois / Galeria (from the Estúdio's Livro tab),
 // and the style sheet: fonts, palette, paper, proof states, theme id and snippets. State lives in the hash.
-import { BookOpen, ChevronLeft, ChevronRight, Columns2, Copy, Expand, GalleryHorizontalEnd, Minimize, Minus, PanelRightClose, PanelRightOpen, Plus, Scan, SplitSquareHorizontal, Square, Star } from 'lucide-react'
+import { BookOpen, ChevronLeft, ChevronRight, Columns2, Expand, GalleryHorizontalEnd, Minimize, Minus, PanelRightClose, PanelRightOpen, Plus, Scan, SplitSquareHorizontal, Square, Star } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Button, ListboxSelect, SearchBar, SegmentedControl, useMediaQuery } from '@datatechsolutions/tympan'
-import { ESTADOS_PROVA, printPresets, resolvePrintStyle, type PrintPresetName } from '@datatechsolutions/tympan-tokens'
+import { ESTADOS_PROVA, printPresets, resolvePrintStyle, type PrintPresetName } from '../../tokens'
 import { Cortina } from '../../comum/Cortina'
 import { Encaixe } from '../../comum/Encaixe'
-import { copiar } from '../../comum/copiar'
+import { BotaoCopiar } from '../../comum/BotaoCopiar'
 import { amostra, familia, filtrarEstilos, paleta, temaDoEstilo } from '../../estilos'
 import { useI18n, type Chave } from '../../i18n/I18n'
 import { useFavoritos, useLocal } from '../../local'
@@ -140,25 +140,6 @@ function Linha({ rotulo, children }: { rotulo: string; children: ReactNode }) {
   )
 }
 
-function BotaoCopiar({ texto, rotulo }: { texto: string; rotulo: string }) {
-  const { t } = useI18n()
-  const [feito, setFeito] = useState<null | boolean>(null)
-  return (
-    <Button
-      variant="quiet"
-      size="compact"
-      leadingIcon={<Copy aria-hidden="true" />}
-      onPress={async () => {
-        setFeito(await copiar(texto))
-        window.setTimeout(() => setFeito(null), 1800)
-      }}
-      accessibleLabel={`${t('comum.copiar')}: ${rotulo}`}
-    >
-      <span aria-live="polite">{feito === null ? t('comum.copiar') : feito ? t('comum.copiado') : t('comum.naoCopiou')}</span>
-    </Button>
-  )
-}
-
 function Ficha({ estilo, pb }: { estilo: PrintPresetName; pb: boolean }) {
   const { t } = useI18n()
   const { rotulo, papelDe, rendDe, marcaDe, rotuloProva } = useTextosEstilo()
@@ -169,10 +150,10 @@ function Ficha({ estilo, pb }: { estilo: PrintPresetName; pb: boolean }) {
   const papeis: Array<[Chave, string, string]> = [
     ['livro.fonteTitulo', s.fontes.titulo, t('livro.amostraTitulo')],
     ['livro.fonteCorpo', s.fontes.corpo, t('livro.amostraCorpo')],
-    ['livro.fonteNumero', s.fontes.numero, '132 × 36 · 0123456789'],
+    ['livro.fonteNumero', s.fontes.numero, '41 × 18 · 0123456789'],
     ['livro.fonteRotulo', s.fontes.rotulo, t('livro.amostraRotulo')],
     ['livro.fonteAnotacao', s.fontes.anotacao, t('livro.amostraAnotacao')],
-    ['livro.fonteMono', s.fontes.mono, 'lake 2026-09-25 · sha256'],
+    ['livro.fonteMono', s.fontes.mono, 'consultas/ar/pm25-fronteira.sql'],
   ]
   return (
     <aside className="ty-site-ficha" aria-labelledby="ficha-titulo">

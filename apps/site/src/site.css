@@ -590,6 +590,8 @@ body {
 .ty-site-amostra--p {
   inline-size: 20px;
   block-size: 16px;
+  margin-inline-end: 8px;
+  vertical-align: middle;
 }
 
 /* style sheet */
@@ -812,6 +814,7 @@ body {
   min-inline-size: 0;
 }
 .ty-site-seletor {
+  inline-size: 100%;
   min-inline-size: 0;
   max-inline-size: 360px;
 }

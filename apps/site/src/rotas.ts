@@ -8,7 +8,7 @@
 //   #/<loc>/video/<tema>                                   Vídeo
 //   #/<loc>/instalar                                       Instalar
 // Trailing segments may be left out (their defaults apply). Pure functions, tested in test/rotas.test.ts.
-import { PRINT_PRESET_NAMES, resolvePrintStyleName, type PrintPresetName } from '@datatechsolutions/tympan-tokens'
+import { PRINT_PRESET_NAMES, resolvePrintStyleName, type PrintPresetName } from './tokens'
 import { LOCALE_CODES } from './i18n/locales'
 
 export type SecaoId = 'inicio' | 'componentes' | 'temas' | 'livro' | 'video' | 'instalar'
