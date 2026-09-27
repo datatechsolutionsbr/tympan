@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { PRINT_THEME_ALIASES, resolvePrintThemeName } from '@datatechsolutions/tympan-tokens/print-aliases'
 import { useMediaQuery } from './media.ts'
 
 export type ThemeMode = 'system' | 'light' | 'dark'
@@ -96,7 +97,10 @@ function useControllable<T>(value: T | undefined, initial: T, onChange?: (v: T) 
 export function ThemeProvider(props: ThemeProviderProps) {
   const { target = 'document', storageKey, fonts, className, children } = props
   const stored = useMemo(() => readStored(storageKey), [storageKey])
-  const [theme, setTheme] = useControllable(props.theme, stored.theme ?? props.defaultTheme ?? 'tympan', props.onThemeChange)
+  const [storedTheme, setStoredTheme] = useControllable(props.theme, stored.theme ?? props.defaultTheme ?? 'tympan', props.onThemeChange)
+  // A deprecated print theme name (`print-<old style id>`, see PRINT_THEME_ALIASES) is read as the renamed theme.
+  const theme = resolvePrintThemeName(storedTheme)
+  const setTheme = useCallback((t: string) => setStoredTheme(resolvePrintThemeName(t)), [setStoredTheme])
   const [mode, setMode] = useControllable<ThemeMode>(props.mode, stored.mode ?? props.defaultMode ?? 'system', props.onModeChange)
   const [density, setDensity] = useControllable<ThemeDensity>(
     props.density,
@@ -171,5 +175,7 @@ export function themeInitScript(storageKey = 'ty-theme', defaults: Stored = {}, 
   const fonts = options.fonts && Object.keys(options.fonts).length
     ? `var f=${JSON.stringify(options.fonts).replace(/</g, '\\u003c')}[t];if(f){var l=document.createElement('link');l.rel='stylesheet';l.href=f;l.setAttribute('data-ty-theme-fonts','');document.head.appendChild(l);}`
     : ''
-  return `(function(){try{var d=${d};var s=JSON.parse(localStorage.getItem(${JSON.stringify(storageKey)})||'{}');var e=document.documentElement;var t=s.theme||d.theme;e.setAttribute('data-ty-theme',t);e.setAttribute('data-ty-mode',s.mode||d.mode);e.setAttribute('data-ty-density',s.density||d.density);${fonts}}catch(_){}})();`
+  // Deprecated print theme names map to the renamed theme (PRINT_THEME_ALIASES), as in ThemeProvider.
+  const aliases = JSON.stringify(PRINT_THEME_ALIASES).replace(/</g, '\\u003c')
+  return `(function(){try{var d=${d};var s=JSON.parse(localStorage.getItem(${JSON.stringify(storageKey)})||'{}');var e=document.documentElement;var t=s.theme||d.theme;var a=${aliases};if(Object.prototype.hasOwnProperty.call(a,t))t=a[t];e.setAttribute('data-ty-theme',t);e.setAttribute('data-ty-mode',s.mode||d.mode);e.setAttribute('data-ty-density',s.density||d.density);${fonts}}catch(_){}})();`
 }

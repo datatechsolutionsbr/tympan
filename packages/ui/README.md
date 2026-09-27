@@ -49,6 +49,13 @@ import { printThemeFontUrls } from '@datatechsolutions/tympan-tokens'
 <ThemeProvider theme="print-minimo-de-tinta" fonts={printThemeFontUrls}>…</ThemeProvider>
 ```
 
+Print styles renamed to neutral ids keep their old theme names as deprecated
+aliases: `ThemeProvider` and `themeInitScript` read a stored or passed
+`print-<old id>` (for example `print-tufte`) as the renamed theme
+(`print-minimo-de-tinta`), store the new name and warn once in development.
+See `PRINT_THEME_ALIASES` in the tokens README; the aliases go away in the
+next major version.
+
 ### The research shell (no top bar)
 
 ```tsx

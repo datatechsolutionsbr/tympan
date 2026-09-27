@@ -117,6 +117,47 @@ describe('ThemeProvider', () => {
     window.localStorage.removeItem('ty-fonts')
   })
 
+  it('reads a deprecated print theme name as the renamed theme, and stores the new name', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    try {
+      window.localStorage.setItem('ty-alias', JSON.stringify({ theme: 'print-economist' }))
+      const fonts = { 'print-semanario': 'https://fonts.example/semanario.css' }
+      const { unmount } = render(
+        <ThemeProvider storageKey="ty-alias" fonts={fonts}>
+          <Probe />
+        </ThemeProvider>,
+      )
+      expect(document.documentElement).toHaveAttribute('data-ty-theme', 'print-semanario')
+      expect(screen.getByLabelText('state')).toHaveTextContent('print-semanario|')
+      expect(document.head.querySelector('link[data-ty-theme-fonts]')).toHaveAttribute('href', 'https://fonts.example/semanario.css')
+      expect(JSON.parse(window.localStorage.getItem('ty-alias')!)).toMatchObject({ theme: 'print-semanario' })
+      unmount()
+      const onThemeChange = vi.fn()
+      const { container } = render(
+        <ThemeProvider target="scope" theme="print-tufte" onThemeChange={onThemeChange}>
+          <Probe />
+        </ThemeProvider>,
+      )
+      expect(container.firstElementChild).toHaveAttribute('data-ty-theme', 'print-minimo-de-tinta')
+      expect(warn.mock.calls.filter((c) => String(c[0]).includes('"print-economist"'))).toHaveLength(1)
+    } finally {
+      window.localStorage.removeItem('ty-alias')
+      warn.mockRestore()
+    }
+  })
+
+  it('init script maps a stored deprecated print theme to the renamed one before first paint', () => {
+    window.localStorage.setItem('ty-alias-init', JSON.stringify({ theme: 'print-saul-bass' }))
+    document.head.querySelectorAll('link[data-ty-theme-fonts]').forEach((l) => l.remove())
+    new Function(themeInitScript('ty-alias-init', {}, { fonts: { 'print-papel-recortado': 'https://fonts.example/recortado.css' } }))()
+    expect(document.documentElement).toHaveAttribute('data-ty-theme', 'print-papel-recortado')
+    expect(document.head.querySelector('link[data-ty-theme-fonts]')).toHaveAttribute('href', 'https://fonts.example/recortado.css')
+    window.localStorage.setItem('ty-alias-init', JSON.stringify({ theme: 'toString' }))
+    new Function(themeInitScript('ty-alias-init'))()
+    expect(document.documentElement).toHaveAttribute('data-ty-theme', 'toString')
+    window.localStorage.removeItem('ty-alias-init')
+  })
+
   it('throws a descriptive error outside the provider', () => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {})
     expect(() => render(<Probe />)).toThrow(/ThemeProvider/)
