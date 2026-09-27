@@ -4,7 +4,7 @@
 import { BookOpen, Clapperboard, Download, House, Languages, LayoutGrid, Menu, Palette, Search, type LucideIcon } from 'lucide-react'
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { presets, printThemePresets } from './tokens'
-import { Button, Drawer, Popover, SkipLink, ThemePaletteTrigger, ThemeSwitcher, useMediaQuery, useTheme, type ThemeMode, type ThemePaletteGroup } from '@datatechsolutions/tympan'
+import { Button, Drawer, Popover, ProductMark, SkipLink, ThemePaletteTrigger, ThemeSwitcher, useMediaQuery, useTheme, type ThemeMode, type ThemePaletteGroup } from '@datatechsolutions/tympan'
 import { useI18n, type Chave } from './i18n/I18n'
 import { infoLocale, LOCALES } from './i18n/locales'
 import { formatarRota, lerRota, TEMA_PADRAO, type Rota, type SecaoId } from './rotas'
@@ -41,12 +41,7 @@ export function MarcaTympan() {
   const { t } = useI18n()
   return (
     <a className="ty-site-marca" href={href({ secao: 'inicio' })} aria-label={t('marca.rotulo')}>
-      <svg viewBox="0 0 32 32" aria-hidden="true" className="ty-site-marca__placa">
-        <circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" strokeWidth="1.6" />
-        <circle cx="16" cy="20" r="9" fill="none" stroke="currentColor" strokeWidth="1" />
-        <circle cx="16" cy="22.5" r="5" fill="none" stroke="currentColor" strokeWidth="1" />
-        <line x1="2" y1="16" x2="30" y2="16" stroke="currentColor" strokeWidth="1" />
-      </svg>
+      <ProductMark product="tympan" size={28} decorative className="ty-site-marca__placa" />
       <span>Tympan</span>
     </a>
   )

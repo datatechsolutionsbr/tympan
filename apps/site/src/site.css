@@ -84,9 +84,7 @@ body {
   border-radius: 6px;
 }
 .ty-site-marca__placa {
-  inline-size: 24px;
-  block-size: 24px;
-  color: var(--ty-accent);
+  color: var(--ty-ink);
 }
 .ty-site-marca:focus-visible,
 .ty-site-topo__secao:focus-visible,
