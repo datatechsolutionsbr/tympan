@@ -8723,6 +8723,18 @@
 /* ./components/drawer/Drawer.css */
 /* Drawer (spec: wave-1/drawer.md; design direction §2.4, §2.5, §2.7, §2.8). */
 @layer tympan.components {
+  /* <ty-drawer> locks the page's scroll while open (the element sets the
+     attribute on the root; the last of stacked drawers removes it). */
+  :root[data-ty-drawer-open] {
+    overflow: hidden;
+  }
+
+  /* The anatomy stays mounted while closed; the class's `display: flex`
+     would beat the UA's `[hidden]`. */
+  .ty-drawer__backdrop[hidden] {
+    display: none;
+  }
+
   .ty-drawer__backdrop {
     position: fixed;
     inset: 0;
@@ -9704,6 +9716,18 @@
 /* ./components/modal-dialog/ModalDialog.css */
 /* ModalDialog (spec: wave-1/modal-dialog.md; design direction §2.1, §2.4, §2.5, §2.7). */
 @layer tympan.components {
+  /* <ty-modal> locks the page's scroll while open (the element sets the
+     attribute on the root; the last of stacked modals removes it). */
+  :root[data-ty-modal-open] {
+    overflow: hidden;
+  }
+
+  /* The anatomy stays mounted while closed; the class's `display: flex`
+     would beat the UA's `[hidden]`. */
+  .ty-modal-dialog__backdrop[hidden] {
+    display: none;
+  }
+
   .ty-modal-dialog__backdrop {
     position: fixed;
     inset: 0;
@@ -11105,7 +11129,8 @@
     margin-inline: var(--ty-separator-gap);
   }
 
-  .ty-separator--captioned {
+  .ty-separator--captioned,
+  .ty-separator[data-captioned] {
     display: flex;
     align-items: center;
     gap: var(--ty-space-3);
@@ -11125,7 +11150,7 @@
   }
 
   @media (forced-colors: active) {
-    .ty-separator:not(.ty-separator--captioned),
+    .ty-separator:not(.ty-separator--captioned):not([data-captioned]),
     .ty-separator__line {
       background: CanvasText;
     }
@@ -25058,8 +25083,29 @@
    already cover. The hosts wrap their anatomy without adding a box. */
 @layer tympan.components {
   ty-button,
+  ty-checkbox,
+  ty-drawer,
+  ty-inline-notice,
+  ty-link,
+  ty-modal,
+  ty-native-select,
+  ty-separator,
+  ty-skeleton,
+  ty-spinner,
+  ty-status-pill,
+  ty-surface,
   ty-switch,
+  ty-tag,
+  ty-text-area,
+  ty-text-field,
   ty-theme-palette {
+    display: contents;
+  }
+
+  /* <ty-skeleton>: the aria-hidden content wrapper and the preset container
+     (which the element composes into) add no box of their own. */
+  .ty-skeleton-content,
+  .ty-skeleton-preset {
     display: contents;
   }
 
@@ -25109,6 +25155,70 @@
   .ty-palette__swatch[data-density-swatch] {
     border-radius: 3px;
     background: var(--ty-surface-sunken);
+  }
+
+  /* <ty-tag>: the categorical square takes one of the eight chart hues. */
+  .ty-tag__swatch[data-category='1'] {
+    --ty-tag-category: var(--ty-chart-1);
+  }
+  .ty-tag__swatch[data-category='2'] {
+    --ty-tag-category: var(--ty-chart-2);
+  }
+  .ty-tag__swatch[data-category='3'] {
+    --ty-tag-category: var(--ty-chart-3);
+  }
+  .ty-tag__swatch[data-category='4'] {
+    --ty-tag-category: var(--ty-chart-4);
+  }
+  .ty-tag__swatch[data-category='5'] {
+    --ty-tag-category: var(--ty-chart-5);
+  }
+  .ty-tag__swatch[data-category='6'] {
+    --ty-tag-category: var(--ty-chart-6);
+  }
+  .ty-tag__swatch[data-category='7'] {
+    --ty-tag-category: var(--ty-chart-7);
+  }
+  .ty-tag__swatch[data-category='8'] {
+    --ty-tag-category: var(--ty-chart-8);
+  }
+
+  /* <ty-checkbox>: the indicator always holds both marks; the native
+     :checked / :indeterminate state (or the host attribute before upgrade)
+     picks the visible one, so every renderer shows the right mark. */
+  .ty-checkbox__check,
+  .ty-checkbox__minus {
+    display: none;
+  }
+  .ty-checkbox__row:has(> input:checked) .ty-checkbox__check {
+    display: block;
+  }
+  .ty-checkbox__row:has(> input:indeterminate) .ty-checkbox__check,
+  ty-checkbox[indeterminate] .ty-checkbox__row .ty-checkbox__check {
+    display: none;
+  }
+  .ty-checkbox__row:has(> input:indeterminate) .ty-checkbox__minus,
+  ty-checkbox[indeterminate] .ty-checkbox__minus {
+    display: block;
+  }
+
+  /* <ty-text-field>: parts the element hides dynamically (an empty field's
+     clear action, an over-limit success) — the class display would beat the
+     UA's [hidden]. */
+  .ty-text-field [hidden] {
+    display: none;
+  }
+
+  /* <ty-text-field>: the reveal action holds both icons; its pressed state
+     picks the visible one (like <ty-checkbox>'s indicator). */
+  .ty-text-field__eye-off {
+    display: none;
+  }
+  .ty-text-field__reveal[aria-pressed='true'] .ty-text-field__eye {
+    display: none;
+  }
+  .ty-text-field__reveal[aria-pressed='true'] .ty-text-field__eye-off {
+    display: block;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -25448,6 +25558,9 @@
   .ty-surface:has(> .ty-surface__primary:not([data-rac]):focus-visible) {
     outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
+  }
+  .ty-surface:has(.ty-surface__primary:not([data-rac]):active) {
+    opacity: 0.92;
   }
 
   @media (forced-colors: active) {

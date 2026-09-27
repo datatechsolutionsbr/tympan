@@ -108,10 +108,16 @@ export abstract class TyElement extends ElementBase {
         if (value === undefined) element.removeAttribute(name)
         else if (element.getAttribute(name) !== value) element.setAttribute(name, value)
       }
+      // Same-class siblings (an icon's glyphs) each match their own
+      // counterpart; `used` keeps the second path off the first.
+      const used = new Set<Element>()
       for (const child of node.children ?? []) {
         if (!('tag' in child) || !child.class) continue
-        const match = Array.from(element.children).find((c) => c.classList.contains(firstClass(child)))
-        if (match) visit(child, match)
+        const match = Array.from(element.children).find((c) => !used.has(c) && c.classList.contains(firstClass(child)))
+        if (match) {
+          used.add(match)
+          visit(child, match)
+        }
       }
     }
     const root = this.anatomyRoot()
@@ -132,9 +138,10 @@ export abstract class TyElement extends ElementBase {
         if (element && Array.from(element.childNodes).some(isContent)) filled.add(node.slot)
         return
       }
+      if (!('tag' in node)) return
       for (const child of node.children ?? []) {
         if ('slot' in child) walk(child, element)
-        else if (element && child.class) walk(child, Array.from(element.children).find((c) => c.classList.contains(firstClass(child))) ?? null)
+        else if (element && 'tag' in child && child.class) walk(child, Array.from(element.children).find((c) => c.classList.contains(firstClass(child))) ?? null)
       }
     }
     if (this.definition.anatomy) walk(this.definition.anatomy, this.anatomyRoot())
@@ -160,11 +167,16 @@ export abstract class TyElement extends ElementBase {
   #patch(anatomy: ElementNode): void {
     const props = this.props
     const filled = this.#filledSlots()
-    const render = (node: AnatomyNode, existing: Element | null): Node[] => {
+    const render = (node: AnatomyNode, existing: Element | null, svg: boolean): Node[] => {
       if (!holds(node.when, props, filled)) return []
       if ('slot' in node) return this.#slots.get(node.slot) ?? []
-      const element = existing ?? document.createElement(node.tag)
-      if (!existing && node.class) element.className = node.class
+      if ('text' in node) {
+        const value = props[node.text.prop]
+        return value === undefined || value === false || value === '' ? [] : [document.createTextNode(String(value))]
+      }
+      const inSvg = svg || node.tag === 'svg'
+      const element = existing ?? (inSvg ? document.createElementNS(SVG_NS, node.tag) : document.createElement(node.tag))
+      if (!existing && node.class) element.setAttribute('class', node.class)
       for (const [name, binding] of Object.entries(node.attrs ?? {})) {
         const value = bindingValue(binding, props, filled, this.instanceId)
         // After the first render a control's state is its property: the
@@ -179,13 +191,13 @@ export abstract class TyElement extends ElementBase {
       const used = new Set<Element>()
       const wanted: Node[] = []
       for (const child of node.children ?? []) {
-        if ('slot' in child) {
-          wanted.push(...render(child, null))
+        if ('slot' in child || 'text' in child) {
+          wanted.push(...render(child, null, inSvg))
           continue
         }
         const match = Array.from(element.children).find((c) => !used.has(c) && c.localName === child.tag && c.classList.contains(firstClass(child))) ?? null
         if (match) used.add(match)
-        wanted.push(...render(child, match))
+        wanted.push(...render(child, match, inSvg))
       }
       wanted.forEach((child, index) => {
         if (element.childNodes[index] !== child) element.insertBefore(child, element.childNodes[index] ?? null)
@@ -194,13 +206,16 @@ export abstract class TyElement extends ElementBase {
       return [element]
     }
     const root = this.anatomyRoot()
-    const built = render(anatomy, root)[0]
+    const built = render(anatomy, root, false)[0]
     if (built && built !== root) this.replaceChildren(built)
   }
 }
 
 /** Attributes whose live value is a property (`checked`), not the attribute. */
 const LIVE = new Set(['checked', 'selected'])
+
+/** Anatomy in the SVG namespace (icons): created with `createElementNS` so plain-HTML use renders it. */
+const SVG_NS = 'http://www.w3.org/2000/svg'
 
 const isContent = (node: Node) => node.nodeType !== Node.TEXT_NODE || (node.textContent ?? '').trim() !== ''
 

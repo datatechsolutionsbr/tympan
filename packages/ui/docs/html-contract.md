@@ -188,21 +188,24 @@ read-only and disabled work as for the text field.
 ### Checkbox
 
 ```html
-<div class="ty-checkbox" data-appearance="plain|tile">
+<div class="ty-checkbox" data-appearance="tile|bare">
   <label class="ty-checkbox__row">
     <input type="checkbox" class="ty-visually-hidden">
-    <span class="ty-checkbox__indicator" aria-hidden="true"><!-- check icon when checked --></span>
+    <span class="ty-checkbox__indicator" aria-hidden="true"><!-- check icon when checked, minus when indeterminate --></span>
     <span class="ty-checkbox__text">
       <span class="ty-checkbox__label">Notify me</span>
       <span class="ty-checkbox__description">By email</span>                          <!-- optional -->
     </span>
   </label>
+  <p class="ty-checkbox__error">…</p>                                                  <!-- when invalid -->
 </div>
 ```
 
 The input must be the row's direct child: the checked, focus and disabled
-looks come from `:has(> input:checked)` and friends. Render the check icon
-(`<svg class="ty-icon">`) inside the indicator while checked.
+looks come from `:has(> input:checked)` and friends. `<ty-checkbox>` renders
+both marks (check and minus) inside the indicator and CSS shows the one the
+native `:checked` / `:indeterminate` state picks; without the element, render
+the matching `<svg class="ty-icon">` yourself.
 
 ### Switch
 
@@ -551,8 +554,12 @@ viewport.
 ### Spinner, progress and skeleton
 
 ```html
-<span class="ty-spinner" data-size="small|regular|large" data-tone="accent|neutral|on-accent" role="progressbar" aria-label="Loading">
-  <span class="ty-spinner__ring" aria-hidden="true"></span>
+<span class="ty-spinner" data-size="small|medium|large" data-shape="ring|dots" data-tone="inherit|accent|neutral|on-accent" role="progressbar" aria-label="Loading">
+  <span class="ty-spinner__ring" aria-hidden="true"></span>                    <!-- data-shape="ring" -->
+  <span class="ty-spinner__dots" aria-hidden="true">                           <!-- data-shape="dots" -->
+    <span class="ty-spinner__dot"></span><span class="ty-spinner__dot"></span><span class="ty-spinner__dot"></span>
+  </span>
+  <span class="ty-spinner__label" aria-hidden="true">Loading</span>            <!-- optional visible label -->
 </span>
 
 <div class="ty-progress" data-tone="neutral|success|warning|danger" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
@@ -564,6 +571,25 @@ viewport.
 ```
 
 `data-indeterminate=""` on `.ty-progress` animates an unknown amount.
+
+Only one spinner glyph (`__ring` or `__dots`) is rendered, matching
+`data-shape`. The visible label is decorative; the progressbar is named by
+`aria-label`. Under reduced motion the animation stops and the label is shown
+as text (the React component and the `<ty-spinner>` element add it; the
+element also sets `data-reduced-motion` on the `.ty-spinner`). A blocking
+overlay over a region is a composition the host renders:
+
+```html
+<div class="ty-spinner-region" aria-busy="true">
+  <div class="ty-spinner-region__content" inert>…the covered region…</div>
+  <div class="ty-spinner-overlay">
+    <div class="ty-spinner-overlay__card">
+      <span class="ty-spinner" aria-hidden="true" data-size="medium" data-shape="ring" data-tone="inherit">…glyph…</span>
+      <span class="ty-spinner__label" role="status" aria-live="polite">Saving</span>
+    </div>
+  </div>
+</div>
+```
 
 ### Avatar
 

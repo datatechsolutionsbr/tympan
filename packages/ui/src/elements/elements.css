@@ -2,8 +2,29 @@
    already cover. The hosts wrap their anatomy without adding a box. */
 @layer tympan.components {
   ty-button,
+  ty-checkbox,
+  ty-drawer,
+  ty-inline-notice,
+  ty-link,
+  ty-modal,
+  ty-native-select,
+  ty-separator,
+  ty-skeleton,
+  ty-spinner,
+  ty-status-pill,
+  ty-surface,
   ty-switch,
+  ty-tag,
+  ty-text-area,
+  ty-text-field,
   ty-theme-palette {
+    display: contents;
+  }
+
+  /* <ty-skeleton>: the aria-hidden content wrapper and the preset container
+     (which the element composes into) add no box of their own. */
+  .ty-skeleton-content,
+  .ty-skeleton-preset {
     display: contents;
   }
 
@@ -53,6 +74,70 @@
   .ty-palette__swatch[data-density-swatch] {
     border-radius: 3px;
     background: var(--ty-surface-sunken);
+  }
+
+  /* <ty-tag>: the categorical square takes one of the eight chart hues. */
+  .ty-tag__swatch[data-category='1'] {
+    --ty-tag-category: var(--ty-chart-1);
+  }
+  .ty-tag__swatch[data-category='2'] {
+    --ty-tag-category: var(--ty-chart-2);
+  }
+  .ty-tag__swatch[data-category='3'] {
+    --ty-tag-category: var(--ty-chart-3);
+  }
+  .ty-tag__swatch[data-category='4'] {
+    --ty-tag-category: var(--ty-chart-4);
+  }
+  .ty-tag__swatch[data-category='5'] {
+    --ty-tag-category: var(--ty-chart-5);
+  }
+  .ty-tag__swatch[data-category='6'] {
+    --ty-tag-category: var(--ty-chart-6);
+  }
+  .ty-tag__swatch[data-category='7'] {
+    --ty-tag-category: var(--ty-chart-7);
+  }
+  .ty-tag__swatch[data-category='8'] {
+    --ty-tag-category: var(--ty-chart-8);
+  }
+
+  /* <ty-checkbox>: the indicator always holds both marks; the native
+     :checked / :indeterminate state (or the host attribute before upgrade)
+     picks the visible one, so every renderer shows the right mark. */
+  .ty-checkbox__check,
+  .ty-checkbox__minus {
+    display: none;
+  }
+  .ty-checkbox__row:has(> input:checked) .ty-checkbox__check {
+    display: block;
+  }
+  .ty-checkbox__row:has(> input:indeterminate) .ty-checkbox__check,
+  ty-checkbox[indeterminate] .ty-checkbox__row .ty-checkbox__check {
+    display: none;
+  }
+  .ty-checkbox__row:has(> input:indeterminate) .ty-checkbox__minus,
+  ty-checkbox[indeterminate] .ty-checkbox__minus {
+    display: block;
+  }
+
+  /* <ty-text-field>: parts the element hides dynamically (an empty field's
+     clear action, an over-limit success) — the class display would beat the
+     UA's [hidden]. */
+  .ty-text-field [hidden] {
+    display: none;
+  }
+
+  /* <ty-text-field>: the reveal action holds both icons; its pressed state
+     picks the visible one (like <ty-checkbox>'s indicator). */
+  .ty-text-field__eye-off {
+    display: none;
+  }
+  .ty-text-field__reveal[aria-pressed='true'] .ty-text-field__eye {
+    display: none;
+  }
+  .ty-text-field__reveal[aria-pressed='true'] .ty-text-field__eye-off {
+    display: block;
   }
 
   @media (prefers-reduced-motion: reduce) {

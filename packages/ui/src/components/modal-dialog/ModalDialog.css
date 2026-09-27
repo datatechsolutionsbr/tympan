@@ -1,5 +1,17 @@
 /* ModalDialog (spec: wave-1/modal-dialog.md; design direction §2.1, §2.4, §2.5, §2.7). */
 @layer tympan.components {
+  /* <ty-modal> locks the page's scroll while open (the element sets the
+     attribute on the root; the last of stacked modals removes it). */
+  :root[data-ty-modal-open] {
+    overflow: hidden;
+  }
+
+  /* The anatomy stays mounted while closed; the class's `display: flex`
+     would beat the UA's `[hidden]`. */
+  .ty-modal-dialog__backdrop[hidden] {
+    display: none;
+  }
+
   .ty-modal-dialog__backdrop {
     position: fixed;
     inset: 0;

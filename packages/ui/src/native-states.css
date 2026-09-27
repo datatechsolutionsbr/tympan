@@ -322,6 +322,9 @@
     outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
+  .ty-surface:has(.ty-surface__primary:not([data-rac]):active) {
+    opacity: 0.92;
+  }
 
   @media (forced-colors: active) {
     .ty-button:not([data-rac]):focus-visible,

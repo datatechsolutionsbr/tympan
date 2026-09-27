@@ -22,6 +22,10 @@ export function renderAnatomy(def: ElementDefinition, props: Props, slots: Recor
   const render = (node: AnatomyNode): string => {
     if (!holds(node.when, resolved, filled)) return ''
     if ('slot' in node) return slots[node.slot] ?? ''
+    if ('text' in node) {
+      const v = resolved[node.text.prop]
+      return v === undefined || v === false || v === '' ? '' : escapeHtml(String(v))
+    }
     const attrs: string[] = []
     if (node.class) attrs.push(`class="${escapeHtml(node.class)}"`)
     for (const [name, binding] of Object.entries(node.attrs ?? {})) {

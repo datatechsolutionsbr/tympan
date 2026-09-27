@@ -92,7 +92,35 @@ export const TyThemePalette = forwardRef<HTMLElement, TyThemePaletteProps>(funct
     for (const [type, listener] of listeners) element.addEventListener(type, listener)
     return () => { for (const [type, listener] of listeners) element.removeEventListener(type, listener) }
   }, [])
-  const p: Record<string, unknown> = { ...DEFAULTS }
-  for (const [key, value] of Object.entries(props)) if (value !== undefined) p[key] = value
+  const p = {
+    open: props.open,
+    apply: props.apply,
+    storageKey: props.storageKey ?? DEFAULTS.storageKey,
+    defaultTheme: props.defaultTheme ?? DEFAULTS.defaultTheme,
+    defaultMode: props.defaultMode ?? DEFAULTS.defaultMode,
+    defaultDensity: props.defaultDensity ?? DEFAULTS.defaultDensity,
+    themes: props.themes,
+    printStylesheet: props.printStylesheet,
+    loadFonts: props.loadFonts,
+    themeLabels: props.themeLabels,
+    label: props.label ?? DEFAULTS.label,
+    placeholder: props.placeholder ?? DEFAULTS.placeholder,
+    emptyLabel: props.emptyLabel ?? DEFAULTS.emptyLabel,
+    resultsLabel: props.resultsLabel ?? DEFAULTS.resultsLabel,
+    groupPresets: props.groupPresets ?? DEFAULTS.groupPresets,
+    groupPrint: props.groupPrint ?? DEFAULTS.groupPrint,
+    groupMode: props.groupMode ?? DEFAULTS.groupMode,
+    groupDensity: props.groupDensity ?? DEFAULTS.groupDensity,
+    modeSystem: props.modeSystem ?? DEFAULTS.modeSystem,
+    modeLight: props.modeLight ?? DEFAULTS.modeLight,
+    modeDark: props.modeDark ?? DEFAULTS.modeDark,
+    densityCompact: props.densityCompact ?? DEFAULTS.densityCompact,
+    densityDefault: props.densityDefault ?? DEFAULTS.densityDefault,
+    densityComfortable: props.densityComfortable ?? DEFAULTS.densityComfortable,
+    currentLabel: props.currentLabel ?? DEFAULTS.currentLabel,
+    hintNavigate: props.hintNavigate ?? DEFAULTS.hintNavigate,
+    hintSelect: props.hintSelect ?? DEFAULTS.hintSelect,
+    hintClose: props.hintClose ?? DEFAULTS.hintClose,
+  }
   return createElement("ty-theme-palette", { ref: host, id: props.id, className: props.className, 'data-ty-instance': instance, "open": truthy(p.open) ? true : undefined, "apply": truthy(p.apply) ? true : undefined, "storage-key": text(p.storageKey), "default-theme": text(p.defaultTheme), "default-mode": text(p.defaultMode), "default-density": text(p.defaultDensity), "themes": text(p.themes), "print-stylesheet": text(p.printStylesheet), "load-fonts": truthy(p.loadFonts) ? true : undefined, "theme-labels": text(p.themeLabels), "label": text(p.label), "placeholder": text(p.placeholder), "empty-label": text(p.emptyLabel), "results-label": text(p.resultsLabel), "group-presets": text(p.groupPresets), "group-print": text(p.groupPrint), "group-mode": text(p.groupMode), "group-density": text(p.groupDensity), "mode-system": text(p.modeSystem), "mode-light": text(p.modeLight), "mode-dark": text(p.modeDark), "density-compact": text(p.densityCompact), "density-default": text(p.densityDefault), "density-comfortable": text(p.densityComfortable), "current-label": text(p.currentLabel), "hint-navigate": text(p.hintNavigate), "hint-select": text(p.hintSelect), "hint-close": text(p.hintClose) })
 })

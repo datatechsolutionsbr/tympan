@@ -17,8 +17,9 @@ export interface PropDef {
 }
 
 /**
- * A condition on the rendered instance: `prop`, `!prop`, `slot:name` or
- * `!slot:name`; alternatives joined with `|` (`slot:default|slot:description`).
+ * A condition on the rendered instance: `prop`, `!prop`, `prop:value`
+ * (equality, for enum-valued props), `slot:name` or `!slot:name`;
+ * alternatives joined with `|` (`slot:default|slot:description`).
  * All listed conditions must hold.
  */
 export type Condition = string
@@ -35,8 +36,20 @@ export type AttrBinding = (
   | { prop: string; kind: 'bool' }
   /** A native boolean attribute (`disabled`, `checked`). */
   | { prop: string; kind: 'boolean-attr' }
-  /** An id unique to the instance: `<instance id>-<suffix>`. */
-  | { idref: string }
+  /**
+   * The prop's value mapped through `values` (`role` from `urgency`); a
+   * value the map does not cover leaves the attribute out. When the prop is
+   * unset, `fallback` (another prop's map) decides.
+   */
+  | { prop: string; kind: 'map'; values: Record<string, string>; fallback?: { prop: string; values: Record<string, string> } }
+  /** An id unique to the instance: `<instance id>-<suffix>`; a non-empty `prop` value wins (a surrounding field's control id). */
+  | { idref: string; prop?: string }
+  /**
+   * Space-joined ids (`aria-describedby`): each `{ id, when }` contributes
+   * `<instance id>-<id>` while its conditions hold, each `{ prop }` the
+   * property's raw value while non-empty. Left out when nothing contributes.
+   */
+  | { idrefs: ReadonlyArray<{ id: string; when?: Condition[] } | { prop: string }> }
 ) & { when?: Condition[] }
 
 export interface ElementNode {
@@ -53,7 +66,13 @@ export interface SlotNode {
   when?: Condition[]
 }
 
-export type AnatomyNode = ElementNode | SlotNode
+/** Text taken from a prop's value (escaped at render), e.g. the notice's tone word. */
+export interface TextNode {
+  text: { prop: string }
+  when?: Condition[]
+}
+
+export type AnatomyNode = ElementNode | SlotNode | TextNode
 
 export interface EventDef {
   /** DOM event type (`click`, `change`, `ty-theme-change`). */
@@ -114,7 +133,12 @@ export function holds(conditions: Condition[] | undefined, props: Props, slots: 
   const one = (c: string) => {
     const negated = c.startsWith('!')
     const body = negated ? c.slice(1) : c
-    const value = body.startsWith('slot:') ? slots.has(body.slice(5)) : truthy(props[body])
+    let value: boolean
+    if (body.startsWith('slot:')) value = slots.has(body.slice(5))
+    else if (body.includes(':')) {
+      const cut = body.indexOf(':')
+      value = String(props[body.slice(0, cut)]) === body.slice(cut + 1)
+    } else value = truthy(props[body])
     return negated ? !value : value
   }
   return conditions.every((c) => c.split('|').some(one))
@@ -127,7 +151,23 @@ export function holds(conditions: Condition[] | undefined, props: Props, slots: 
 export function bindingValue(binding: AttrBinding, props: Props, slots: ReadonlySet<string>, instanceId: string): string | undefined {
   if (!holds(binding.when, props, slots)) return undefined
   if ('value' in binding) return binding.value
-  if ('idref' in binding) return `${instanceId}-${binding.idref}`
+  if ('idref' in binding) {
+    const override = binding.prop !== undefined ? props[binding.prop] : undefined
+    if (truthy(override)) return String(override)
+    return `${instanceId}-${binding.idref}`
+  }
+  if ('idrefs' in binding) {
+    const ids: string[] = []
+    for (const entry of binding.idrefs) {
+      if ('id' in entry) {
+        if (holds(entry.when, props, slots)) ids.push(`${instanceId}-${entry.id}`)
+      } else {
+        const raw = props[entry.prop]
+        if (truthy(raw)) ids.push(String(raw))
+      }
+    }
+    return ids.length ? ids.join(' ') : undefined
+  }
   const v = props[binding.prop]
   if (!('kind' in binding)) return truthy(v) ? String(v) : undefined
   switch (binding.kind) {
@@ -136,6 +176,14 @@ export function bindingValue(binding: AttrBinding, props: Props, slots: Readonly
       return truthy(v) ? '' : undefined
     case 'bool':
       return truthy(v) ? 'true' : undefined
+    case 'map': {
+      if (truthy(v)) return binding.values[String(v)]
+      if (binding.fallback) {
+        const fv = props[binding.fallback.prop]
+        if (truthy(fv)) return binding.fallback.values[String(fv)]
+      }
+      return undefined
+    }
   }
 }
 

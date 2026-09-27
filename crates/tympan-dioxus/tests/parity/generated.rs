@@ -75,6 +75,494 @@ fn button_toggle() {
 }
 
 #[test]
+fn checkbox_off() {
+    fn app() -> Element {
+        rsx! { TyCheckbox { instance: "i", "Notify me" } }
+    }
+    common::assert_matches_fixture(app, "ty-checkbox/off.html");
+}
+
+#[test]
+fn checkbox_on_with_description() {
+    fn app() -> Element {
+        rsx! { TyCheckbox { checked: true, name: "notify", value: "email", instance: "i", description: rsx! { "By email" }, "Notify me" } }
+    }
+    common::assert_matches_fixture(app, "ty-checkbox/on-with-description.html");
+}
+
+#[test]
+fn checkbox_bare() {
+    fn app() -> Element {
+        rsx! { TyCheckbox { appearance: CheckboxAppearance::Bare, test_id: "newsletter", instance: "i", "Newsletter" } }
+    }
+    common::assert_matches_fixture(app, "ty-checkbox/bare.html");
+}
+
+#[test]
+fn checkbox_indeterminate() {
+    fn app() -> Element {
+        rsx! { TyCheckbox { indeterminate: true, instance: "i", "Select all" } }
+    }
+    common::assert_matches_fixture(app, "ty-checkbox/indeterminate.html");
+}
+
+#[test]
+fn checkbox_invalid_required() {
+    fn app() -> Element {
+        rsx! { TyCheckbox { required: true, instance: "i", error: rsx! { "Required" }, "I accept the terms" } }
+    }
+    common::assert_matches_fixture(app, "ty-checkbox/invalid-required.html");
+}
+
+#[test]
+fn checkbox_disabled_unlabelled() {
+    fn app() -> Element {
+        rsx! { TyCheckbox { disabled: true, accessible_label: "Notifications", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-checkbox/disabled-unlabelled.html");
+}
+
+#[test]
+fn drawer_closed() {
+    fn app() -> Element {
+        rsx! { TyDrawer { instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-drawer/closed.html");
+}
+
+#[test]
+fn drawer_bottom() {
+    fn app() -> Element {
+        rsx! { TyDrawer { open: true, instance: "i", title: rsx! { "Language" }, "Pick a locale." } }
+    }
+    common::assert_matches_fixture(app, "ty-drawer/bottom.html");
+}
+
+#[test]
+fn drawer_end_wide() {
+    fn app() -> Element {
+        rsx! { TyDrawer { open: true, placement: DrawerPlacement::End, width: DrawerWidth::Wide, instance: "i", title: rsx! { "Run details" }, "Timeline." } }
+    }
+    common::assert_matches_fixture(app, "ty-drawer/end-wide.html");
+}
+
+#[test]
+fn drawer_no_handle() {
+    fn app() -> Element {
+        rsx! { TyDrawer { open: true, show_handle: "false", instance: "i", title: rsx! { "Filters" }, "Filter rows." } }
+    }
+    common::assert_matches_fixture(app, "ty-drawer/no-handle.html");
+}
+
+#[test]
+fn drawer_not_dismissible() {
+    fn app() -> Element {
+        rsx! { TyDrawer { open: true, dismissible: "false", instance: "i", title: rsx! { "Required step" }, "Finish the form." } }
+    }
+    common::assert_matches_fixture(app, "ty-drawer/not-dismissible.html");
+}
+
+#[test]
+fn drawer_max_height() {
+    fn app() -> Element {
+        rsx! { TyDrawer { open: true, max_height: "60dvh", instance: "i", title: rsx! { "Shortcuts" }, "Keys." } }
+    }
+    common::assert_matches_fixture(app, "ty-drawer/max-height.html");
+}
+
+#[test]
+fn inline_notice_info() {
+    fn app() -> Element {
+        rsx! { TyInlineNotice { instance: "i", "Unseal the vault to run workflows that use credentials." } }
+    }
+    common::assert_matches_fixture(app, "ty-inline-notice/info.html");
+}
+
+#[test]
+fn inline_notice_danger_title() {
+    fn app() -> Element {
+        rsx! { TyInlineNotice { tone: InlineNoticeTone::Danger, instance: "i", title: rsx! { "Vault sealed" }, "Unseal it to run workflows that use credentials." } }
+    }
+    common::assert_matches_fixture(app, "ty-inline-notice/danger-title.html");
+}
+
+#[test]
+fn inline_notice_warning_heading() {
+    fn app() -> Element {
+        rsx! { TyInlineNotice { tone: InlineNoticeTone::Warning, title_as: InlineNoticeTitleAs::H3, instance: "i", title: rsx! { "Two sources unavailable" }, "Results may be incomplete." } }
+    }
+    common::assert_matches_fixture(app, "ty-inline-notice/warning-heading.html");
+}
+
+#[test]
+fn inline_notice_success_dismissible() {
+    fn app() -> Element {
+        rsx! { TyInlineNotice { tone: InlineNoticeTone::Success, dismissible: true, instance: "i", "Version 12 is live." } }
+    }
+    common::assert_matches_fixture(app, "ty-inline-notice/success-dismissible.html");
+}
+
+#[test]
+fn inline_notice_centred_actions() {
+    fn app() -> Element {
+        rsx! { TyInlineNotice { align: InlineNoticeAlign::Centre, urgency: InlineNoticeUrgency::None, instance: "i", actions: rsx! { "Help" }, "Nothing to review." } }
+    }
+    common::assert_matches_fixture(app, "ty-inline-notice/centred-actions.html");
+}
+
+#[test]
+fn inline_notice_custom_icon() {
+    fn app() -> Element {
+        rsx! { TyInlineNotice { instance: "i", icon: rsx! { "★" }, "Starred runs appear first." } }
+    }
+    common::assert_matches_fixture(app, "ty-inline-notice/custom-icon.html");
+}
+
+#[test]
+fn link_inline() {
+    fn app() -> Element {
+        rsx! { TyLink { href: "/runs", instance: "i", "Runs" } }
+    }
+    common::assert_matches_fixture(app, "ty-link/inline.html");
+}
+
+#[test]
+fn link_subtle_standalone() {
+    fn app() -> Element {
+        rsx! { TyLink { href: "/runs/01HX", emphasis: LinkEmphasis::Subtle, standalone: true, instance: "i", "Details" } }
+    }
+    common::assert_matches_fixture(app, "ty-link/subtle-standalone.html");
+}
+
+#[test]
+fn link_external() {
+    fn app() -> Element {
+        rsx! { TyLink { href: "https://example.org/report", external: true, instance: "i", "Report" } }
+    }
+    common::assert_matches_fixture(app, "ty-link/external.html");
+}
+
+#[test]
+fn link_current() {
+    fn app() -> Element {
+        rsx! { TyLink { href: "/overview", current: true, instance: "i", "Overview" } }
+    }
+    common::assert_matches_fixture(app, "ty-link/current.html");
+}
+
+#[test]
+fn link_translated_hint() {
+    fn app() -> Element {
+        rsx! { TyLink { href: "https://example.org/relatorio", external: true, new_tab_label: "(abre em nova aba)", described_by: "report-hint", instance: "i", "Relatório" } }
+    }
+    common::assert_matches_fixture(app, "ty-link/translated-hint.html");
+}
+
+#[test]
+fn modal_closed() {
+    fn app() -> Element {
+        rsx! { TyModal { instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-modal/closed.html");
+}
+
+#[test]
+fn modal_open() {
+    fn app() -> Element {
+        rsx! { TyModal { is_open: true, instance: "i", title: rsx! { "Delete file?" }, actions: rsx! { "Delete" }, "This cannot be undone." } }
+    }
+    common::assert_matches_fixture(app, "ty-modal/open.html");
+}
+
+#[test]
+fn modal_open_description() {
+    fn app() -> Element {
+        rsx! { TyModal { is_open: true, instance: "i", title: rsx! { "Invite member" }, description: rsx! { "They get an email with a link." }, actions: rsx! { "Invite" }, "Form fields" } }
+    }
+    common::assert_matches_fixture(app, "ty-modal/open-description.html");
+}
+
+#[test]
+fn modal_alertdialog() {
+    fn app() -> Element {
+        rsx! { TyModal { is_open: true, role: ModalRole::Alertdialog, instance: "i", title: rsx! { "Discard changes?" }, actions: rsx! { "Discard" }, "Your edits are not saved." } }
+    }
+    common::assert_matches_fixture(app, "ty-modal/alertdialog.html");
+}
+
+#[test]
+fn modal_wide_busy() {
+    fn app() -> Element {
+        rsx! { TyModal { is_open: true, width: ModalWidth::Wide, busy: true, instance: "i", title: rsx! { "Publishing" }, "Uploading the bundle." } }
+    }
+    common::assert_matches_fixture(app, "ty-modal/wide-busy.html");
+}
+
+#[test]
+fn modal_no_close_button() {
+    fn app() -> Element {
+        rsx! { TyModal { is_open: true, show_close_button: "false", instance: "i", title: rsx! { "Terms of service" }, actions: rsx! { "Accept" }, "Scroll to the end." } }
+    }
+    common::assert_matches_fixture(app, "ty-modal/no-close-button.html");
+}
+
+#[test]
+fn native_select_labelled_placeholder() {
+    fn app() -> Element {
+        rsx! { TyNativeSelect { name: "region", placeholder: "Choose a region…", instance: "i", label: rsx! { "Region" }, "us-east-1" } }
+    }
+    common::assert_matches_fixture(app, "ty-native-select/labelled-placeholder.html");
+}
+
+#[test]
+fn native_select_hint_required_value() {
+    fn app() -> Element {
+        rsx! { TyNativeSelect { name: "region", required: true, value: "us-east-1", instance: "i", label: rsx! { "Region" }, hint: rsx! { "Where the workflow runs" }, "us-east-1" } }
+    }
+    common::assert_matches_fixture(app, "ty-native-select/hint-required-value.html");
+}
+
+#[test]
+fn native_select_invalid_error() {
+    fn app() -> Element {
+        rsx! { TyNativeSelect { name: "region", instance: "i", label: rsx! { "Region" }, error: rsx! { "Pick a region" }, "us-east-1" } }
+    }
+    common::assert_matches_fixture(app, "ty-native-select/invalid-error.html");
+}
+
+#[test]
+fn native_select_field_wired() {
+    fn app() -> Element {
+        rsx! { TyNativeSelect { control_id: "field-3-control", described_by: "field-3-description field-3-error", invalid: true, required: true, name: "region", test_id: "region", accessible_label: "Region", instance: "i", error: rsx! { "Required" }, "us-east-1" } }
+    }
+    common::assert_matches_fixture(app, "ty-native-select/field-wired.html");
+}
+
+#[test]
+fn native_select_disabled_unlabelled() {
+    fn app() -> Element {
+        rsx! { TyNativeSelect { disabled: true, accessible_label: "Region", instance: "i", "us-east-1" } }
+    }
+    common::assert_matches_fixture(app, "ty-native-select/disabled-unlabelled.html");
+}
+
+#[test]
+fn separator_decorative() {
+    fn app() -> Element {
+        rsx! { TySeparator { instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-separator/decorative.html");
+}
+
+#[test]
+fn separator_semantic() {
+    fn app() -> Element {
+        rsx! { TySeparator { semantic: true, instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-separator/semantic.html");
+}
+
+#[test]
+fn separator_semantic_vertical() {
+    fn app() -> Element {
+        rsx! { TySeparator { semantic: true, orientation: SeparatorOrientation::Vertical, instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-separator/semantic-vertical.html");
+}
+
+#[test]
+fn separator_soft_roomy() {
+    fn app() -> Element {
+        rsx! { TySeparator { emphasis: SeparatorEmphasis::Soft, spacing: SeparatorSpacing::Roomy, instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-separator/soft-roomy.html");
+}
+
+#[test]
+fn separator_caption() {
+    fn app() -> Element {
+        rsx! { TySeparator { instance: "i", caption: rsx! { "or" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-separator/caption.html");
+}
+
+#[test]
+fn skeleton_line() {
+    fn app() -> Element {
+        rsx! { TySkeleton { instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-skeleton/line.html");
+}
+
+#[test]
+fn skeleton_heading_short() {
+    fn app() -> Element {
+        rsx! { TySkeleton { shape: SkeletonShape::Heading, width: "short", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-skeleton/heading-short.html");
+}
+
+#[test]
+fn skeleton_circle() {
+    fn app() -> Element {
+        rsx! { TySkeleton { shape: SkeletonShape::Circle, instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-skeleton/circle.html");
+}
+
+#[test]
+fn skeleton_rect_medium() {
+    fn app() -> Element {
+        rsx! { TySkeleton { shape: SkeletonShape::Rect, width: "medium", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-skeleton/rect-medium.html");
+}
+
+#[test]
+fn skeleton_announced() {
+    fn app() -> Element {
+        rsx! { TySkeleton { label: "Loading the catalogue", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-skeleton/announced.html");
+}
+
+#[test]
+fn spinner_ring() {
+    fn app() -> Element {
+        rsx! { TySpinner { instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-spinner/ring.html");
+}
+
+#[test]
+fn spinner_dots_labelled() {
+    fn app() -> Element {
+        rsx! { TySpinner { shape: SpinnerShape::Dots, label: "Saving", instance: "i", "Saving" } }
+    }
+    common::assert_matches_fixture(app, "ty-spinner/dots-labelled.html");
+}
+
+#[test]
+fn spinner_large_accent() {
+    fn app() -> Element {
+        rsx! { TySpinner { size: SpinnerSize::Large, tone: SpinnerTone::Accent, label: "Indexing", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-spinner/large-accent.html");
+}
+
+#[test]
+fn spinner_small_on_accent() {
+    fn app() -> Element {
+        rsx! { TySpinner { size: SpinnerSize::Small, tone: SpinnerTone::OnAccent, label: "Uploading", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-spinner/small-on-accent.html");
+}
+
+#[test]
+fn spinner_dots_neutral() {
+    fn app() -> Element {
+        rsx! { TySpinner { shape: SpinnerShape::Dots, tone: SpinnerTone::Neutral, instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-spinner/dots-neutral.html");
+}
+
+#[test]
+fn status_pill_success() {
+    fn app() -> Element {
+        rsx! { TyStatusPill { status: "active", tone: StatusPillTone::Success, instance: "i", icon: rsx! { "✓" }, "Active" } }
+    }
+    common::assert_matches_fixture(app, "ty-status-pill/success.html");
+}
+
+#[test]
+fn status_pill_busy_info() {
+    fn app() -> Element {
+        rsx! { TyStatusPill { status: "processing", tone: StatusPillTone::Info, busy: true, instance: "i", icon: rsx! { "↻" }, "Processing" } }
+    }
+    common::assert_matches_fixture(app, "ty-status-pill/busy-info.html");
+}
+
+#[test]
+fn status_pill_small_warning() {
+    fn app() -> Element {
+        rsx! { TyStatusPill { status: "pending", tone: StatusPillTone::Warning, size: StatusPillSize::Small, instance: "i", "Pending" } }
+    }
+    common::assert_matches_fixture(app, "ty-status-pill/small-warning.html");
+}
+
+#[test]
+fn status_pill_announced_danger() {
+    fn app() -> Element {
+        rsx! { TyStatusPill { status: "error", tone: StatusPillTone::Danger, announce: true, accessible_label: "Status: Error", test_id: "status-badge-error", instance: "i", "Error" } }
+    }
+    common::assert_matches_fixture(app, "ty-status-pill/announced-danger.html");
+}
+
+#[test]
+fn status_pill_unknown_neutral() {
+    fn app() -> Element {
+        rsx! { TyStatusPill { status: "archived", instance: "i", "archived" } }
+    }
+    common::assert_matches_fixture(app, "ty-status-pill/unknown-neutral.html");
+}
+
+#[test]
+fn surface_sheet() {
+    fn app() -> Element {
+        rsx! { TySurface { instance: "i", title: rsx! { "Runs" }, description: rsx! { "Last 24 hours" }, "Body" } }
+    }
+    common::assert_matches_fixture(app, "ty-surface/sheet.html");
+}
+
+#[test]
+fn surface_raised_roomy() {
+    fn app() -> Element {
+        rsx! { TySurface { elevation: SurfaceElevation::Raised, padding: SurfacePadding::Roomy, instance: "i", "Body" } }
+    }
+    common::assert_matches_fixture(app, "ty-surface/raised-roomy.html");
+}
+
+#[test]
+fn surface_flat_none_footer() {
+    fn app() -> Element {
+        rsx! { TySurface { elevation: SurfaceElevation::Flat, padding: SurfacePadding::None, instance: "i", footer: rsx! { "Actions" }, "Body" } }
+    }
+    common::assert_matches_fixture(app, "ty-surface/flat-none-footer.html");
+}
+
+#[test]
+fn surface_pressable() {
+    fn app() -> Element {
+        rsx! { TySurface { pressable: true, instance: "i", title: rsx! { "Open workflow" }, "Body" } }
+    }
+    common::assert_matches_fixture(app, "ty-surface/pressable.html");
+}
+
+#[test]
+fn surface_link_selected() {
+    fn app() -> Element {
+        rsx! { TySurface { href: "/runs/1", selected: true, instance: "i", title: rsx! { "Nightly sync" }, "Body" } }
+    }
+    common::assert_matches_fixture(app, "ty-surface/link-selected.html");
+}
+
+#[test]
+fn surface_pressable_disabled() {
+    fn app() -> Element {
+        rsx! { TySurface { pressable: true, disabled: true, instance: "i", title: rsx! { "Archived" }, "Body" } }
+    }
+    common::assert_matches_fixture(app, "ty-surface/pressable-disabled.html");
+}
+
+#[test]
+fn surface_title_level() {
+    fn app() -> Element {
+        rsx! { TySurface { title_level: SurfaceTitleLevel::H2, instance: "i", title: rsx! { "Settings" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-surface/title-level.html");
+}
+
+#[test]
 fn switch_off() {
     fn app() -> Element {
         rsx! { TySwitch { instance: "i", "Autosave" } }
@@ -112,4 +600,172 @@ fn switch_disabled_unlabelled() {
         rsx! { TySwitch { disabled: true, accessible_label: "Dark mode", instance: "i", } }
     }
     common::assert_matches_fixture(app, "ty-switch/disabled-unlabelled.html");
+}
+
+#[test]
+fn tag_neutral() {
+    fn app() -> Element {
+        rsx! { TyTag { instance: "i", "postgres" } }
+    }
+    common::assert_matches_fixture(app, "ty-tag/neutral.html");
+}
+
+#[test]
+fn tag_accent_small_icon() {
+    fn app() -> Element {
+        rsx! { TyTag { tone: TagTone::Accent, size: TagSize::Small, test_id: "env", instance: "i", icon: rsx! { "◆" }, "production" } }
+    }
+    common::assert_matches_fixture(app, "ty-tag/accent-small-icon.html");
+}
+
+#[test]
+fn tag_category() {
+    fn app() -> Element {
+        rsx! { TyTag { category_index: 3.0f64, instance: "i", "Stage 3" } }
+    }
+    common::assert_matches_fixture(app, "ty-tag/category.html");
+}
+
+#[test]
+fn tag_removable() {
+    fn app() -> Element {
+        rsx! { TyTag { removable: true, remove_label: "Remove São Paulo", instance: "i", "São Paulo" } }
+    }
+    common::assert_matches_fixture(app, "ty-tag/removable.html");
+}
+
+#[test]
+fn tag_live_large() {
+    fn app() -> Element {
+        rsx! { TyTag { live: true, size: TagSize::Large, instance: "i", "Running" } }
+    }
+    common::assert_matches_fixture(app, "ty-tag/live-large.html");
+}
+
+#[test]
+fn text_area_labelled() {
+    fn app() -> Element {
+        rsx! { TyTextArea { instance: "i", label: rsx! { "Notes" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-text-area/labelled.html");
+}
+
+#[test]
+fn text_area_hint_and_placeholder() {
+    fn app() -> Element {
+        rsx! { TyTextArea { name: "notes", placeholder: "Write a summary", instance: "i", label: rsx! { "Notes" }, hint: rsx! { "Shown on the canvas" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-text-area/hint-and-placeholder.html");
+}
+
+#[test]
+fn text_area_error() {
+    fn app() -> Element {
+        rsx! { TyTextArea { value: "Draft", instance: "i", label: rsx! { "Abstract" }, error: rsx! { "Required" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-text-area/error.html");
+}
+
+#[test]
+fn text_area_counter() {
+    fn app() -> Element {
+        rsx! { TyTextArea { value: "Hello", max_length: 500.0f64, show_counter: true, instance: "i", label: rsx! { "Bio" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-text-area/counter.html");
+}
+
+#[test]
+fn text_area_monospace_read_only() {
+    fn app() -> Element {
+        rsx! { TyTextArea { monospace: true, resize: TextAreaResize::None, read_only: true, value: "{{ \"a\": 1 }}", instance: "i", label: rsx! { "JSON" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-text-area/monospace-read-only.html");
+}
+
+#[test]
+fn text_area_auto_grow() {
+    fn app() -> Element {
+        rsx! { TyTextArea { auto_grow: true, max_rows: 6.0f64, rows: 2.0f64, instance: "i", label: rsx! { "Log" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-text-area/auto-grow.html");
+}
+
+#[test]
+fn text_area_disabled_unlabelled() {
+    fn app() -> Element {
+        rsx! { TyTextArea { disabled: true, accessible_label: "Notes", described_by: "external-hint", test_id: "notes", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-text-area/disabled-unlabelled.html");
+}
+
+#[test]
+fn text_field_labelled() {
+    fn app() -> Element {
+        rsx! { TyTextField { instance: "i", label: rsx! { "Name" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-text-field/labelled.html");
+}
+
+#[test]
+fn text_field_hint_and_placeholder() {
+    fn app() -> Element {
+        rsx! { TyTextField { name: "name", placeholder: "Ada Lovelace", auto_complete: "name", instance: "i", label: rsx! { "Name" }, hint: rsx! { "As on your badge" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-text-field/hint-and-placeholder.html");
+}
+
+#[test]
+fn text_field_email_filled_leading() {
+    fn app() -> Element {
+        rsx! { TyTextField { input_type: TextFieldInputType::Email, appearance: TextFieldAppearance::Filled, name: "email", auto_complete: "email", instance: "i", label: rsx! { "Email" }, leading: rsx! { "✉" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-text-field/email-filled-leading.html");
+}
+
+#[test]
+fn text_field_search() {
+    fn app() -> Element {
+        rsx! { TyTextField { mode: TextFieldMode::Search, name: "q", value: "brazil", placeholder: "Search states", instance: "i", label: rsx! { "Search" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-text-field/search.html");
+}
+
+#[test]
+fn text_field_password() {
+    fn app() -> Element {
+        rsx! { TyTextField { mode: TextFieldMode::Password, name: "password", auto_complete: "current-password", required: true, instance: "i", label: rsx! { "Password" }, hint: rsx! { "At least 12 characters" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-text-field/password.html");
+}
+
+#[test]
+fn text_field_error() {
+    fn app() -> Element {
+        rsx! { TyTextField { value: "ab", required: true, instance: "i", label: rsx! { "Code" }, error: rsx! { "Too short" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-text-field/error.html");
+}
+
+#[test]
+fn text_field_counter() {
+    fn app() -> Element {
+        rsx! { TyTextField { value: "Hello", max_length: 20.0f64, show_counter: true, instance: "i", label: rsx! { "Title" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-text-field/counter.html");
+}
+
+#[test]
+fn text_field_success() {
+    fn app() -> Element {
+        rsx! { TyTextField { input_type: TextFieldInputType::Email, value: "ada@example.org", instance: "i", label: rsx! { "Email" }, success: rsx! { "Looks right" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-text-field/success.html");
+}
+
+#[test]
+fn text_field_disabled_unlabelled() {
+    fn app() -> Element {
+        rsx! { TyTextField { disabled: true, accessible_label: "Name", described_by: "external-hint", test_id: "name", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-text-field/disabled-unlabelled.html");
 }
