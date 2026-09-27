@@ -359,5 +359,21 @@
  "video.veredito1": "A zona reduziu os dias de ar ruim no centro",
  "video.veredito2": "As multas explicam a queda",
  "video.veredito3": "O efeito continua fora do inverno",
- "video.fonte": "Fonte: Rede de monitoramento de Vila Aurora (fictícia) · edição 2026-09"
+ "video.fonte": "Fonte: Rede de monitoramento de Vila Aurora (fictícia) · edição 2026-09",
+ "instalar.eyebrow": "Instalar · pacotes privados no npm",
+ "instalar.titulo": "Instalar e usar o Tympan",
+ "instalar.lead": "Três pacotes: tokens para qualquer tecnologia, componentes React e componentes de impressão. Todos com a licença FSL-1.1-ALv2.",
+ "instalar.nestaPagina": "Nesta página",
+ "instalar.npmTitulo": "Acesso e instalação",
+ "instalar.npmTexto": "Os pacotes são privados no npm. O token é só de leitura e vem de uma variável de ambiente, nunca do repositório.",
+ "instalar.reactTitulo": "Componentes React",
+ "instalar.reactTexto": "Importe a folha de estilos uma vez e envolva o app no TympanProvider (idioma e rotas) e no ThemeProvider (tema, modo e densidade guardados no navegador).",
+ "instalar.semPiscarTitulo": "Tema sem piscar",
+ "instalar.semPiscarTexto": "O script de início aplica o tema guardado antes da primeira pintura, então a página não abre no tema errado.",
+ "instalar.paletaTitulo": "Seletor de temas",
+ "instalar.paletaTexto": "O ThemePalette é o mesmo seletor deste site: busca aproximada entre os 43 temas, prévia ao vivo com as setas, Enter aplica e Esc desfaz. Para os estilos de livro, importe também as folhas dos temas de impressão.",
+ "instalar.livroTitulo": "Livros de dados em PDF e EPUB",
+ "instalar.livroTexto": "O pacote de impressão renderiza no servidor, sem window nem document, e o resultado é determinístico: o mesmo conteúdo gera o mesmo PDF.",
+ "instalar.tokensTitulo": "Tokens em qualquer tecnologia",
+ "instalar.tokensTexto": "Sem React, use as variáveis CSS e os atributos data-ty-theme, data-ty-mode e data-ty-density. É assim que a interface em Rust do Astrlabe usa o Tympan."
 }

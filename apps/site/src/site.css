@@ -1300,3 +1300,67 @@ body {
   margin-inline-end: 8px;
   vertical-align: middle;
 }
+
+/* syntax colours (from the theme's own palette) */
+.ty-site-hl--comentario {
+  color: var(--ty-ink-3);
+  font-style: italic;
+}
+.ty-site-hl--texto {
+  color: color-mix(in oklab, var(--ty-success) 85%, var(--ty-ink));
+}
+.ty-site-hl--palavra {
+  color: var(--ty-accent);
+  font-weight: 600;
+}
+.ty-site-hl--tag {
+  color: color-mix(in oklab, var(--ty-info, var(--ty-accent)) 80%, var(--ty-ink));
+}
+.ty-site-hl--atributo {
+  color: color-mix(in oklab, var(--ty-warning) 80%, var(--ty-ink));
+}
+.ty-site-hl--numero {
+  color: color-mix(in oklab, var(--ty-danger) 80%, var(--ty-ink));
+}
+
+/* ------------------------------------------------------------------ Instalar */
+.ty-site-leitura {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ty-space-6);
+  inline-size: 100%;
+  max-inline-size: 860px;
+}
+.ty-site-passo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ty-space-3);
+  scroll-margin-block-start: calc(var(--ty-site-topo) + 16px);
+}
+.ty-site-passo__titulo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-family: var(--ty-font-serif);
+  font-size: 1.4rem;
+  font-weight: var(--ty-font-weight-semibold);
+}
+.ty-site-passo__numero {
+  display: grid;
+  place-items: center;
+  inline-size: 30px;
+  block-size: 30px;
+  border: 1px solid var(--ty-accent);
+  border-radius: 50%;
+  color: var(--ty-accent);
+  font-family: var(--ty-site-mono);
+  font-size: 13px;
+}
+.ty-site-estilo--texto {
+  grid-template-columns: minmax(0, 1fr);
+}
+.ty-site-passo .ty-site-codigo__pre {
+  font-size: 13px;
+  padding: 14px 16px;
+}
