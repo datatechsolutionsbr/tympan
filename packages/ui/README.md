@@ -35,6 +35,20 @@ theme customizer, which exports DTCG and CSS) and load it after the
 stylesheet; then select it with `ThemeProvider theme="<name>"`. Hosts that use
 the tokens without components can import `@datatechsolutions/tympan-tokens/tokens.css` alone.
 
+**Print styles as themes (opt-in).** Every book style of
+`@datatechsolutions/tympan-print` is also a UI theme named `print-<style>`
+(palette, typography, radius and surface treatment of the style, light and
+dark, WCAG AA). They are not in `styles.css`; load them after it and pass the
+font map so the style's families load with the theme:
+
+```tsx
+import '@datatechsolutions/tympan/styles.css'
+import '@datatechsolutions/tympan-tokens/print-themes.css'   // or print-themes/print-<style>.css for one
+import { printThemeFontUrls } from '@datatechsolutions/tympan-tokens'
+
+<ThemeProvider theme="print-tufte" fonts={printThemeFontUrls}>…</ThemeProvider>
+```
+
 ### The research shell (no top bar)
 
 ```tsx
@@ -116,13 +130,16 @@ export function App() {
   hard-coded copy. `I18nAdapterProvider` and `RoutingProvider` (wave 2)
   plug a host i18n library or router in without TympanProvider.
 - **`ThemeProvider` / `useTheme`**: sets `data-ty-theme` (`tympan` by default,
-  `fakhir`, `neutral`, `high-contrast` or a generated theme), `data-ty-mode` (`system`, `light`,
+  `fakhir`, `neutral`, `high-contrast`, an opt-in `print-*` theme or a generated theme), `data-ty-mode` (`system`, `light`,
   `dark`) and `data-ty-density` (`compact`, `default`, `comfortable`) on
   `<html>` (or on a wrapper with `target="scope"`). Persistence belongs to the
   host: pass controlled values and callbacks, or `storageKey` for localStorage.
+  `fonts` (theme name to stylesheet URL, e.g. `printThemeFontUrls`) adds the
+  font link of the current theme.
 - **No flash of the wrong theme (SPA)**: put the output of
   `themeInitScript('ty-theme')` in an inline `<script>` in `<head>`, before the
-  stylesheet; it sets the three attributes from storage before first paint.
+  stylesheet; it sets the three attributes from storage before first paint
+  (`themeInitScript(key, defaults, { fonts })` also adds the theme's font link).
   The gallery's `vite.config.ts` shows it with a `transformIndexHtml` hook.
 - **`ThemeScope`**: applies a theme/mode/density to a subtree (previews).
 - **`variants()`**: variants declared as data; returns `data-*` attributes the
