@@ -1,22 +1,14 @@
 // The plate of the home page: horizon, almucantars (circles of equal altitude) and azimuth lines,
-// projected stereographically for latitude 23.53° S, as on a real tympan. Drawn from the same geometry
-// as the approved landing page, in theme colours.
+// projected stereographically for latitude 23.53° S, as on a real tympan. The geometry is the library's
+// plateGeometry, the same one that draws the Tympan mark, in theme colours.
 import { useId } from 'react'
+import { plateGeometry } from '@datatechsolutions/tympan'
 
-const C = 200
-const R = 180
-const PHI = (-23.53 * Math.PI) / 180
-const K = R * Math.tan(Math.PI / 4 - (23.44 * Math.PI) / 180 / 2) // equator radius in plate units
-
-/** Almucantar of altitude h (radians): centre y and radius on the meridian. */
-function almucantar(h: number) {
-  const lat = Math.abs(PHI)
-  const y1 = K * Math.tan((Math.PI / 2 - (lat + (Math.PI / 2 - h))) / 2)
-  const y2 = K * Math.tan((Math.PI / 2 - (lat - (Math.PI / 2 - h))) / 2)
-  const top = -y2
-  const bot = -y1
-  return { cy: C + (top + bot) / 2, r: Math.abs(top - bot) / 2 }
-}
+const G = plateGeometry()
+const C = G.c
+const R = G.r
+const K = G.equator
+const almucantar = (h: number) => G.almucantar((h * 180) / Math.PI)
 
 export function Placa({ rotulo }: { rotulo: string }) {
   const id = useId().replace(/:/g, '')
