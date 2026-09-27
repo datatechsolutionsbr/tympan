@@ -321,8 +321,15 @@ body {
   }
   .ty-site-busca__texto,
   .ty-site-busca__atalho,
-  .ty-site-topo__rotulo-largo {
+  .ty-site-topo__rotulo-largo,
+  .ty-site-topo__idioma {
     display: none;
+  }
+  .ty-site-topo__acoes {
+    gap: 2px;
+  }
+  .ty-site-marca {
+    font-size: 1.05rem;
   }
   .ty-site-busca {
     block-size: 40px;
