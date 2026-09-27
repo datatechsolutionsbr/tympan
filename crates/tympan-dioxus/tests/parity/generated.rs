@@ -347,6 +347,46 @@ fn native_select_disabled_unlabelled() {
 }
 
 #[test]
+fn popover_closed() {
+    fn app() -> Element {
+        rsx! { TyPopover { trigger_label: "Details", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-popover/closed.html");
+}
+
+#[test]
+fn popover_info_open() {
+    fn app() -> Element {
+        rsx! { TyPopover { open: true, trigger_label: "About this", title: "What this means", instance: "i", "A short explanation." } }
+    }
+    common::assert_matches_fixture(app, "ty-popover/info-open.html");
+}
+
+#[test]
+fn popover_own_trigger() {
+    fn app() -> Element {
+        rsx! { TyPopover { open: true, placement: PopoverPlacement::Top, align: PopoverAlign::Start, instance: "i", trigger: rsx! { "Open" }, "Anchored above, aligned to the start." } }
+    }
+    common::assert_matches_fixture(app, "ty-popover/own-trigger.html");
+}
+
+#[test]
+fn popover_no_arrow() {
+    fn app() -> Element {
+        rsx! { TyPopover { open: true, trigger_label: "Where", title: "Somewhere", show_arrow: "false", instance: "i", "Without a pointer." } }
+    }
+    common::assert_matches_fixture(app, "ty-popover/no-arrow.html");
+}
+
+#[test]
+fn popover_offset_4() {
+    fn app() -> Element {
+        rsx! { TyPopover { open: true, trigger_label: "Gap", title: "Further away", offset: "4", instance: "i", "A wider gap." } }
+    }
+    common::assert_matches_fixture(app, "ty-popover/offset-4.html");
+}
+
+#[test]
 fn separator_decorative() {
     fn app() -> Element {
         rsx! { TySeparator { instance: "i", } }

@@ -19,6 +19,7 @@ import { inlineNoticeDefinition } from '../../packages/ui/src/elements/inline-no
 import { linkDefinition } from '../../packages/ui/src/elements/link/definition.ts'
 import { modalDefinition } from '../../packages/ui/src/elements/modal/definition.ts'
 import { nativeSelectDefinition } from '../../packages/ui/src/elements/native-select/definition.ts'
+import { popoverDefinition } from '../../packages/ui/src/elements/popover/definition.ts'
 import { separatorDefinition } from '../../packages/ui/src/elements/separator/definition.ts'
 import { skeletonDefinition } from '../../packages/ui/src/elements/skeleton/definition.ts'
 import { spinnerDefinition } from '../../packages/ui/src/elements/spinner/definition.ts'
@@ -42,6 +43,7 @@ const DEFINITIONS = [
   [linkDefinition, 'packages/ui/src/elements/link/definition.ts'],
   [modalDefinition, 'packages/ui/src/elements/modal/definition.ts'],
   [nativeSelectDefinition, 'packages/ui/src/elements/native-select/definition.ts'],
+  [popoverDefinition, 'packages/ui/src/elements/popover/definition.ts'],
   [separatorDefinition, 'packages/ui/src/elements/separator/definition.ts'],
   [skeletonDefinition, 'packages/ui/src/elements/skeleton/definition.ts'],
   [spinnerDefinition, 'packages/ui/src/elements/spinner/definition.ts'],

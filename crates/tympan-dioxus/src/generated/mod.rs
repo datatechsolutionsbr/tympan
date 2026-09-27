@@ -14,6 +14,8 @@ pub mod modal;
 pub use modal::*;
 pub mod native_select;
 pub use native_select::*;
+pub mod popover;
+pub use popover::*;
 pub mod separator;
 pub use separator::*;
 pub mod skeleton;

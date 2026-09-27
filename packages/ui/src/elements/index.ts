@@ -9,6 +9,7 @@ import { TyDrawerElement } from './drawer/element.ts'
 import { TyInlineNoticeElement } from './inline-notice/element.ts'
 import { TyLinkElement } from './link/element.ts'
 import { TyModalElement } from './modal/element.ts'
+import { TyPopoverElement } from './popover/element.ts'
 import { TyNativeSelectElement } from './native-select/element.ts'
 import { TySeparatorElement } from './separator/element.ts'
 import { TySkeletonElement } from './skeleton/element.ts'
@@ -28,6 +29,7 @@ export { TyDrawerElement } from './drawer/element.ts'
 export { TyInlineNoticeElement } from './inline-notice/element.ts'
 export { TyLinkElement } from './link/element.ts'
 export { TyModalElement } from './modal/element.ts'
+export { TyPopoverElement } from './popover/element.ts'
 export { TyNativeSelectElement } from './native-select/element.ts'
 export { TySeparatorElement } from './separator/element.ts'
 export { TySkeletonElement } from './skeleton/element.ts'
@@ -68,6 +70,7 @@ export function defineTympanElements(): void {
   defineTympanElement(TyInlineNoticeElement)
   defineTympanElement(TyLinkElement)
   defineTympanElement(TyModalElement)
+  defineTympanElement(TyPopoverElement)
   defineTympanElement(TyNativeSelectElement)
   defineTympanElement(TySeparatorElement)
   defineTympanElement(TySkeletonElement)
