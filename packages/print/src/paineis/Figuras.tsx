@@ -80,12 +80,24 @@ export function Figuras({ arranjo = 'auto', pesos, manchete, className, children
       </div>
     )
   }
+  // Under the multiples, what the style's study writes there: the scientific caption ("Fig. | A … B …") and the
+  // caderno's hand note when each small multiple has its own scale.
+  const specs = filhos.map(specDe)
+  const escalas = new Set(specs.map((sp) => (sp && 'escala' in sp && Array.isArray(sp.escala) ? String(sp.escala[1]) : '')))
+  const rodape = e.letraMultiplo ? (
+    <p className="ty-print-figuras-legenda">
+      <strong>Fig. {manchete ? `| ${manchete}.` : '|'}</strong>{' '}
+      {specs.map((sp, i) => (sp?.titulo ? `${String.fromCharCode(65 + i)}. ${sp.titulo}. ` : '')).join('')}
+    </p>
+  ) : e.chamadas === 'manuscritas' && escalas.size > 1 ? (
+    <p className="ty-print-figuras-aviso">atenção: cada quadro, sua escala!</p>
+  ) : null
   const p = filhos.map((f, i) => pesos?.[i] ?? pesoDe(f))
   const soma = p.reduce((a, b) => a + b, 0) || 1
   const util = total - VAO * (filhos.length - 1)
-  return (
+  const grade = (
     <div
-      className={cx('ty-print-figuras', className)}
+      className={cx('ty-print-figuras', rodape ? undefined : className)}
       data-arranjo="lado"
       data-cabeca={e.cabecaMultiplo}
       style={{ gridTemplateColumns: p.map((x) => `${Math.max(0.5, x)}fr`).join(' ') }}
@@ -98,6 +110,28 @@ export function Figuras({ arranjo = 'auto', pesos, manchete, className, children
       ))}
     </div>
   )
+  return rodape ? (
+    <div className={cx('ty-print-figuras-bloco', className)}>
+      {grade}
+      {rodape}
+    </div>
+  ) : (
+    grade
+  )
+}
+
+interface SpecResumo {
+  titulo?: string
+  escala?: [number, number]
+  linhas?: unknown[]
+  barras?: unknown[]
+  grupos?: unknown[]
+}
+
+/** The chart spec of a figure element (a GraficoMetodo, or a content node that renders one). */
+function specDe(f: ReactNode): SpecResumo | undefined {
+  if (!isValidElement<{ spec?: SpecResumo; no?: { props?: { spec?: SpecResumo } } }>(f)) return undefined
+  return f.props.spec ?? f.props.no?.props?.spec
 }
 
 /** A figure's share: its rows (spec.linhas, spec.barras or spec.grupos), at least 2. */

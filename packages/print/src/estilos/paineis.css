@@ -837,3 +837,19 @@
     gap: 2mm;
   }
 }
+
+@layer tympan-print {
+  /* The key phrase of a block (==text== in the content). */
+  .ty-print-marca {
+    background: none;
+    color: inherit;
+    font-weight: 600;
+  }
+
+  .ty-print-livro:is([data-ty-print-tremor], [data-ty-print-numeros-marcados]) .ty-print-marca {
+    font-weight: inherit;
+    background: linear-gradient(transparent 12%, var(--ty-print-marca-texto) 12%, var(--ty-print-marca-texto) 88%, transparent 88%);
+    padding-inline: 0.4mm;
+    box-decoration-break: clone;
+  }
+}

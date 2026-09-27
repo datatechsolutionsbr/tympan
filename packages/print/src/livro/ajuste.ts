@@ -60,7 +60,8 @@ export function ajustarPaginas(raiz: ParentNode = document, opcoes: AjusteOpcoes
     }
     const inicio = natural()
     const razao = inicio.conteudo / inicio.mancha
-    const cresce = !respiro && comMolde && maximo > 1 && razao < alvo
+    const maximoPagina = Number(pg.getAttribute('data-maximo')) || maximo
+    const cresce = !respiro && comMolde && maximoPagina > 1 && razao < alvo
     if (!cresce && inicio.conteudo - inicio.mancha <= 0.3) continue
     const original = m.style.cssText
     const pr = pg.getBoundingClientRect()
@@ -82,7 +83,7 @@ export function ajustarPaginas(raiz: ParentNode = document, opcoes: AjusteOpcoes
       })
     let escala = 1
     if (cresce) {
-      escala = Math.max(1, Math.floor(Math.min(maximo, alvo / razao) / passo) * passo)
+      escala = Math.max(1, Math.floor(Math.min(maximoPagina, alvo / razao) / passo) * passo)
       escala = Math.round(escala * 1000) / 1000
       aplicar(escala)
     }

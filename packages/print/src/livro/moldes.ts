@@ -28,6 +28,11 @@ export interface Molde {
   descricao: string
   /** Pages with deliberate white (respiro, part openings): the fill check does not apply. */
   respiro?: boolean
+  /**
+   * Largest copyfitting scale for a sparse page of this molde (livro/ajuste.ts; default 1.3). Reading pages
+   * (running text, few blocks) may set their text larger rather than leave half the page blank.
+   */
+  maximo?: number
   par: LinhaMolde[]
   impar: LinhaMolde[]
 }
@@ -51,12 +56,14 @@ export const MOLDES: Record<string, Molde> = {
   },
   // Storyboard dupla 1: the promise (a) and the scoreboard (b, c, c′).
   'promessa-placar': {
+    maximo: 1.45,
     descricao: 'A promessa e o placar: título, manchete, a | b, c (mapa) + legenda, c′, fonte',
     par: [cheia('titulo'), cheia('manchete'), cheia('a', { cresce: true }), cheia('costura', { pe: true })],
-    impar: [cheia('titulo'), cheia('b'), L([['c', 4], ['c2', 2]], { cresce: true }), cheia('c3'), cheia('fonte', { pe: true })],
+    impar: [cheia('titulo'), cheia('b'), cheia('c', { cresce: true }), cheia('c3'), cheia('c2', { pe: true }), cheia('fonte', { pe: true })],
   },
   // The same, with the map and the second scoreboard figure side by side (Código Florestal, storyboard [111]).
   'promessa-placar-lado': {
+    maximo: 1.45,
     descricao: 'A promessa e o placar, com o mapa (c) e a figura c′ lado a lado',
     par: [cheia('titulo'), cheia('manchete'), cheia('a', { cresce: true }), cheia('costura', { pe: true })],
     impar: [cheia('titulo'), cheia('b'), L([['c', 3], ['c3', 3]], { cresce: true }), cheia('fonte', { pe: true })],
@@ -64,17 +71,20 @@ export const MOLDES: Record<string, Molde> = {
   // Storyboard dupla 2: running text in four columns and notes in two (respiro), one small figure.
   virada: {
     descricao: 'A virada (respiro): texto corrido em 4 colunas + notas em 2 | texto, figura pequena, frase',
+    maximo: 1.6,
     par: [L([['texto', 4], ['notas', 2]], { cresce: true })],
     impar: [L([['texto', 4], ['notas', 2]]), L([['fig', 4], ['notas', 2]], { cresce: true }), cheia('frase'), cheia('fonte', { pe: true })],
   },
   // The tests of a method: three tests, the medians they rest on, what is missing | the trace and your city.
   testes: {
+    maximo: 1.45,
     descricao: 'Os testes e o rastro: testes, gráficos de apoio lado a lado, texto, quando o dado chegar | h + índice',
     par: [cheia('titulo'), cheia('d3'), L([['d4', 3], ['d5', 3]], { cresce: true }), cheia('texto'), L([['q', 4], ['notas', 2]], { pe: true }), cheia('fonte', { pe: true })],
     impar: [cheia('titulo2'), L([['g', 3], ['h', 3]], { cresce: true }), cheia('g2'), cheia('fonte', { pe: true })],
   },
   // Storyboard dupla 4: the verdict (e, f) | the trace (g), your city (h), the index of numbers (g′).
   veredito: {
+    maximo: 1.45,
     descricao: 'O veredito: e grande, f | g + h lado a lado, índice g′, fonte',
     par: [cheia('titulo'), cheia('e', { cresce: true }), cheia('f', { pe: true })],
     impar: [cheia('titulo2'), L([['g', 3], ['h', 3]], { cresce: true }), cheia('g2'), cheia('prox'), cheia('fonte', { pe: true })],
@@ -83,11 +93,13 @@ export const MOLDES: Record<string, Molde> = {
   // in the two-column margin, the rule of thumb at the foot (storyboard dupla 2, one page of it).
   leitura: {
     descricao: 'Página de leitura (respiro): texto em 4 colunas + números e ressalvas na margem de 2, regra de bolso no pé',
+    maximo: 1.6,
     par: [L([['texto', 4], ['notas', 2]], { cresce: true }), cheia('frase', { pe: true })],
     impar: [L([['texto', 4], ['notas', 2]], { cresce: true }), cheia('frase', { pe: true })],
   },
   // A chapter without the promise spread: the method chart on the left, the reading on the right.
   grafico: {
+    maximo: 1.45,
     descricao: 'Gráfico do método: título, d grande, fonte | d′ (figuras de apoio ou testes), leitura, texto, fonte',
     par: [cheia('titulo'), cheia('d', { cresce: true }), cheia('fonte', { pe: true })],
     impar: [cheia('d2'), cheia('titulo2'), cheia('fig', { cresce: true }), cheia('texto'), L([['q', 4], ['notas', 2]]), cheia('b'), cheia('f'), cheia('frase'), cheia('fonte', { pe: true })],
@@ -95,47 +107,55 @@ export const MOLDES: Record<string, Molde> = {
 
   // Pending verdict (Kandir, FUNDEB, fiscal framework): numbers, the claim under test | the design published first.
   pendente: {
+    maximo: 1.45,
     descricao: 'Veredito pendente: b, e, f | desenho publicado antes, g + h',
     par: [cheia('titulo'), cheia('b'), L([['fig', 4], ['nota', 2]]), cheia('e', { cresce: true }), cheia('f', { pe: true })],
     impar: [cheia('desenho'), L([['g', 3], ['h', 3]], { cresce: true })],
   },
   // Storyboard dupla 5: for whom the rule works, and what the chapter leaves for the next.
   fechamento: {
+    maximo: 1.45,
     descricao: 'Para quem: título, figura grande, fonte | título, veredito curto, texto, quando o dado chegar, próximo capítulo',
     par: [cheia('titulo'), cheia('fig', { cresce: true }), cheia('q'), cheia('fonte', { pe: true })],
-    impar: [cheia('titulo2'), cheia('e'), cheia('texto', { cresce: true }), cheia('q'), cheia('prox', { pe: true })],
+    impar: [cheia('titulo2'), L([['e', 3], ['e2', 3]], { cresce: true }), cheia('texto'), cheia('q'), cheia('prox', { pe: true })],
   },
   // Front matter.
   'como-ler': {
+    maximo: 1.45,
     descricao: 'Como ler: título e espécime com as letras | estados de prova, seguir um número, selos, dados, cabeço, sua cidade',
     par: [cheia('titulo'), cheia('especime', { cresce: true }), cheia('letras', { pe: true })],
     impar: [cheia('estados', { cresce: true }), L([['k1', 3], ['k2', 3]]), cheia('dados'), L([['k3', 3], ['k4', 3]], { pe: true })],
   },
 
   'linha-do-tempo': {
+    maximo: 1.45,
     descricao: 'Linha do tempo das leis em duas páginas',
     par: [cheia('titulo'), cheia('linha', { cresce: true })],
     impar: [cheia('linha', { cresce: true }), cheia('nota', { pe: true })],
   },
   'abertura-parte': {
+    maximo: 1.45,
     descricao: 'Abertura de parte (respiro): número, título, pergunta, nesta parte | prancha com uma figura',
     par: [cheia('abertura', { cresce: true })],
     impar: [cheia('fig', { cresce: true }), cheia('fonte', { pe: true })],
   },
   // Toolbox: one spread per method.
   ferramenta: {
+    maximo: 1.45,
     descricao: 'Caixa de ferramentas: o desenho, a hipótese, o sinal | receita, consulta, testes, onde aparece',
     par: [cheia('titulo'), cheia('d', { cresce: true }), L([['t1', 3], ['t2', 3]], { pe: true })],
     impar: [L([['receita', 3], ['consulta', 3]]), cheia('testes'), L([['onde', 3], ['leitura', 3]], { cresce: true }), cheia('frase', { pe: true })],
   },
   // Atlas plate: a bled map on the left, legend and regional cut-outs on the right.
   atlas: {
+    maximo: 1.45,
     descricao: 'Prancha de atlas: mapa sangrado | recortes regionais e legenda, fonte',
     par: [cheia('mapa', { cresce: true })],
     impar: [cheia('titulo'), cheia('recortes', { cresce: true }), cheia('fonte', { pe: true })],
   },
 
   creditos: {
+    maximo: 1.45,
     descricao: 'Reprodução e créditos: tabela de consultas, passos | ficha, marcas (colofão: branco intencional)',
     par: [cheia('titulo'), cheia('tabela', { cresce: true }), L([['passos', 3], ['local', 3]], { pe: true }), cheia('assina', { pe: true })],
     impar: [cheia('titulo2'), cheia('ficha', { cresce: true }), L([['marca', 2], ['marca-texto', 4]], { pe: true }), L([['editora', 2], ['editora-texto', 4]], { pe: true })],

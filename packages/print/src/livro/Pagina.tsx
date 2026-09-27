@@ -68,6 +68,7 @@ export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero
       data-molde={grade ? nomeMolde : undefined}
       data-respiro={m?.respiro ? '' : undefined}
       data-campo={cc ? '' : undefined}
+      data-maximo={m?.maximo}
       style={estiloPagina}
       aria-label={textoFolio ? `Página ${textoFolio}` : lado === 'par' ? 'Página par' : 'Página ímpar'}
     >

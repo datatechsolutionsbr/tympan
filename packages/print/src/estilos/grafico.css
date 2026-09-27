@@ -285,3 +285,18 @@
     background: color-mix(in srgb, var(--ty-print-destaque-2) 22%, var(--ty-print-papel));
   }
 }
+
+@layer tympan-print {
+  .ty-print-figuras-legenda {
+    margin-block-start: 1.6mm;
+    font: 400 6.8pt/1.4 var(--ty-print-fonte-corpo);
+    color: var(--ty-print-tinta-2);
+  }
+
+  .ty-print-figuras-aviso {
+    margin-block-start: 1mm;
+    text-align: end;
+    font: 400 8pt/1.2 var(--ty-print-fonte-anotacao);
+    color: var(--ty-print-destaque);
+  }
+}
