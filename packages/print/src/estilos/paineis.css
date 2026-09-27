@@ -816,3 +816,24 @@
     font-size: 12.5pt;
   }
 }
+
+@layer tympan-print {
+  /* Headline in a boxed style: the style's box (hand-drawn in the caderno) instead of the newspaper band. */
+  .ty-print-manchete {
+    position: relative;
+  }
+
+  .ty-print-livro:is([data-ty-print-painel='caixa'], [data-ty-print-painel='caixa-grossa'], [data-ty-print-painel='prancha'], [data-ty-print-painel='cartao'], [data-ty-print-painel='placa'], [data-ty-print-painel='dossie']) .ty-print-manchete {
+    border: max(0.2mm, var(--ty-print-traco)) solid var(--ty-print-linha);
+    background: none;
+  }
+
+  .ty-print-manchete[data-mao] {
+    border-color: transparent !important;
+  }
+
+  /* A block the page wraps in the style's panel (a bare chart, a list of tests, a recipe): no heading row. */
+  .ty-print-painel[data-auto] > .ty-print-painel-corpo {
+    gap: 2mm;
+  }
+}

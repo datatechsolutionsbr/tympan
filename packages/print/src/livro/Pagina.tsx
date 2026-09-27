@@ -1,5 +1,5 @@
 import { Children, isValidElement, type CSSProperties, type ReactNode } from 'react'
-import { papelEscuro } from '@datatechsolutions/tympan-tokens'
+import { contrastRatio, luminance, papelEscuro, parseColor, toGrey } from '@datatechsolutions/tympan-tokens'
 import { FundoEscuroProvider, LadoProvider, MoldeProvider, useDupla, usePrint } from '../contexto.tsx'
 import { cx } from '../util.ts'
 import { Area } from './Area.tsx'
@@ -19,6 +19,11 @@ export interface PaginaProps {
   numero?: string
   /** Template of this page (defaults to the spread's `molde`); see livro/moldes.ts. */
   molde?: string
+  /**
+   * Cover pages: the volume's colour as the field (collection cover system, L6), with cream type. One-ink
+   * styles (logo 'mono' on light paper) print the volume's colour as their single ink on the paper instead.
+   */
+  campo?: string
   className?: string
   children?: ReactNode
 }
@@ -28,9 +33,21 @@ export interface PaginaProps {
  * panels span columns with `largura` and flow down; with a molde, each `Area`
  * sits where the molde puts it and one row grows to the foot of the page.
  */
-export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero, molde, className, children }: PaginaProps) {
+const CREME = '#fdf8f1'
+
+/** Field and type colours of a cover page, and whether the field is dark (logos pick their version by it). */
+function coresCapa(campo: string, estilo: ReturnType<typeof usePrint>['estilo'], pb: boolean) {
+  const cinza = (c: string) => (pb ? toGrey(c) : c)
+  const mono = estilo.logo === 'mono' && !papelEscuro(estilo)
+  if (mono) return { fundo: estilo.cor.papel, texto: cinza(campo), escuro: false }
+  const f = cinza(campo)
+  const texto = [CREME, estilo.cor.papel, '#ffffff', estilo.cor.tinta].sort((a, b) => contrastRatio(parseColor(b), parseColor(f)) - contrastRatio(parseColor(a), parseColor(f)))[0]!
+  return { fundo: f, texto, escuro: luminance(parseColor(f)) < 0.2 }
+}
+
+export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero, molde, campo, className, children }: PaginaProps) {
   const dupla = useDupla()
-  const { estilo } = usePrint()
+  const { estilo, pb } = usePrint()
   const semCabeco = variante !== 'normal'
   const textoCabeco = semCabeco ? undefined : (cabeco ?? (lado === 'par' ? dupla?.parte : dupla?.capitulo))
   const textoFolio = numero ?? (dupla ? dupla.folios[lado === 'par' ? 0 : 1] : '')
@@ -39,7 +56,10 @@ export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero
   const m = moldePorNome(nomeMolde)
   const grade = m ? gradeDoMolde(linhasUsadas(linhasDoMolde(m, lado, estilo), areasDosFilhos(children))) : null
   const estiloMancha: CSSProperties | undefined = grade ? { gridTemplateAreas: grade.areas, gridTemplateRows: grade.linhas } : undefined
-  const corpo = variante === 'capa' ? <FundoEscuroProvider value={!papelEscuro(estilo)}>{children}</FundoEscuroProvider> : children
+  const cc = variante === 'capa' && campo ? coresCapa(campo, estilo, pb) : null
+  const corpo = variante === 'capa' ? <FundoEscuroProvider value={cc ? cc.escuro : !papelEscuro(estilo)}>{children}</FundoEscuroProvider> : children
+  // The cover prints `--ty-print-tinta` as its field and `--ty-print-papel` as its type (base.css).
+  const estiloPagina = cc ? ({ '--ty-print-tinta': cc.fundo, '--ty-print-papel': cc.texto } as CSSProperties) : undefined
   return (
     <section
       className={cx('ty-print-pagina', className)}
@@ -47,10 +67,12 @@ export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero
       data-variante={variante}
       data-molde={grade ? nomeMolde : undefined}
       data-respiro={m?.respiro ? '' : undefined}
+      data-campo={cc ? '' : undefined}
+      style={estiloPagina}
       aria-label={textoFolio ? `Página ${textoFolio}` : lado === 'par' ? 'Página par' : 'Página ímpar'}
     >
       <Textura lado={lado} />
-      {variante === 'normal' ? <Ornamento lado={lado} /> : null}
+      {variante !== 'prancha' ? <Ornamento lado={lado} /> : null}
       {textoCabeco ? <p className="ty-print-cabeco">{textoCabeco}</p> : null}
       <div className="ty-print-mancha" style={estiloMancha}>
         <LadoProvider value={lado}>{grade ? <MoldeProvider value={grade.info}>{corpo}</MoldeProvider> : corpo}</LadoProvider>

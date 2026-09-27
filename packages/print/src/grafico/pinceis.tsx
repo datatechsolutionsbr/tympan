@@ -274,15 +274,19 @@ const mao: Pincel = {
   barra: (c, b) => {
     const cruzada = c.estilo.traco.hachura === 'cruzada'
     const fillStyle = b.enchimento === 'hachura' ? 'hachure' : cruzada ? 'cross-hatch' : 'solid'
+    // Pencil hatching (caderno): light grey strokes, one direction for the first series and crossed for the
+    // second; the series is told by the hatch, the highlight by the circled value, as in the study.
+    const lapis = cruzada && b.enchimento !== 'vazio'
     return (
       <Caminhos
         tracos={tracar({ k: 'retangulo', x: 0, y: 0, w: b.w, h: b.h }, b.chave, {
           ...opcoesMao(c),
-          stroke: 'var(--ty-print-tinta)',
-          fill: b.enchimento === 'vazio' ? undefined : cssCor(b.cor),
+          stroke: lapis ? 'var(--ty-print-tinta-2)' : 'var(--ty-print-tinta)',
+          fill: b.enchimento === 'vazio' ? undefined : lapis ? 'var(--ty-print-tinta-3)' : cssCor(b.cor),
           fillStyle,
+          ...(lapis ? { fillWeight: 0.1 } : {}),
           hachureAngle: b.enchimento === 'hachura' ? -41 : -48,
-          hachureGap: b.enchimento === 'hachura' ? 0.85 : 0.62,
+          hachureGap: lapis ? (b.enchimento === 'hachura' ? 1.05 : 0.95) : b.enchimento === 'hachura' ? 0.85 : 0.62,
         })}
       />
     )

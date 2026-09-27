@@ -17,6 +17,8 @@ export interface PainelProps {
   variante?: VariantePainel
   /** Heading level of the panel title (default 2, so a page can go from its h1 straight to panels). */
   nivel?: 2 | 3 | 4
+  /** Wrapped by the page (conteudo.tsx) around a bare block, so it wears the style's frame. */
+  auto?: boolean
   className?: string
   style?: CSSProperties
   children?: ReactNode
@@ -40,7 +42,10 @@ export function larguraUtil(largura: number | undefined, moldura: string, varian
 }
 
 /** A lettered dashboard panel; its frame follows the style (rule, box, card, band, drafting board). */
-export function Painel({ letra, titulo, eyebrow, largura: larguraPedida, variante = 'normal', nivel = 2, className, style, children }: PainelProps) {
+/** Frames that draw a box around the panel: in these styles every panel is boxed, as in their studies. */
+export const MOLDURAS_CAIXA = new Set(['caixa', 'caixa-grossa', 'prancha', 'cartao', 'bloco', 'dossie', 'placa'])
+
+export function Painel({ letra, titulo, eyebrow, largura: larguraPedida, variante: variantePedida = 'normal', nivel = 2, auto = false, className, style, children }: PainelProps) {
   // Inside a molde area, the area's span is the panel's width (a `largura` wider than the area cannot apply).
   const daArea = useColunasDaArea()
   const largura = daArea ? Math.min(daArea, larguraPedida ?? daArea) : larguraPedida
@@ -48,6 +53,9 @@ export function Painel({ letra, titulo, eyebrow, largura: larguraPedida, variant
   const { estilo } = usePrint()
   const id = useIdSeguro('ty-print-painel')
   const moldura = estilo.estrutura.painel
+  // A content "rule" variant is the rule styles' idiom; a boxed style keeps its own box (hand-drawn, woodcut,
+  // card, board), so a panel never drops the style's language because the content asked for a rule.
+  const variante: VariantePainel = (variantePedida === 'filete' || variantePedida === 'filete-forte') && MOLDURAS_CAIXA.has(moldura) ? 'normal' : variantePedida
   const mao = estilo.traco.tremor > 0 && (moldura === 'caixa' || moldura === 'caixa-grossa') && variante !== 'pilha' && variante !== 'filete' && variante !== 'filete-forte'
   const temCabeca = Boolean(letra || titulo)
   return (
@@ -55,10 +63,11 @@ export function Painel({ letra, titulo, eyebrow, largura: larguraPedida, variant
       className={cx('ty-print-painel', className)}
       data-variante={variante}
       data-largura={largura ?? 6}
+      data-auto={auto ? '' : undefined}
       aria-labelledby={temCabeca ? `${id}-t` : undefined}
       style={{ ...(daArea ? undefined : larguraColunas(largura)), ...style }}
     >
-      {mao ? <BordaMao chave={`painel-${letra ?? ''}-${typeof titulo === 'string' ? titulo : ''}`} grossa={moldura === 'caixa-grossa'} dupla={moldura === 'caixa-grossa'} /> : null}
+      {mao ? <BordaMao chave={`painel-${letra ?? ''}-${typeof titulo === 'string' ? titulo : ''}${letra || titulo ? '' : id}`} grossa={moldura === 'caixa-grossa'} dupla={moldura === 'caixa-grossa'} /> : null}
       {eyebrow ? <p className="ty-print-sobretitulo">{eyebrow}</p> : null}
       {temCabeca ? (
         <H className="ty-print-painel-titulo" id={`${id}-t`}>

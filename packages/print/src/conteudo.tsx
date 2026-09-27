@@ -50,6 +50,8 @@ export interface PaginaJson {
   folio?: boolean
   /** Template of this page, when it differs from the spread's. */
   molde?: string
+  /** Cover pages: the volume's colour field (collection cover system, L6). */
+  campo?: string
   paineis: NoJson[]
 }
 
@@ -112,7 +114,7 @@ const ITENS_SPEC: Record<string, string[]> = {
   pontos: ['x', 'y', 'rotulo', 'chamada'],
   eventos: ['x', 'rotulo', 'nota'],
   faixas: ['de', 'ate', 'rotulo'],
-  anotacoes: ['linha', 'texto'],
+  anotacoes: ['linha', 'texto', 'curta'],
   referencias: ['valor', 'rotulo'],
 }
 
@@ -125,7 +127,7 @@ export const COMPONENTES: Record<string, Registro> = {
   Anotacao: { componente: Anotacao, props: ['alvo', 'texto', 'className'] },
   Promessa: { componente: Promessa, props: ['citacao', 'norma', 'data', 'resumo', 'urn', 'detalhes', 'genealogia', 'className'] },
   Numeros: { componente: Numeros, props: ['itens', 'exemplo', 'className'] },
-  GraficoMetodo: { componente: GraficoMetodo, props: ['spec', 'renderizador', 'alt', 'tabela', 'local', 'largura', 'letra', 'className'] },
+  GraficoMetodo: { componente: GraficoMetodo, props: ['spec', 'renderizador', 'alt', 'tabela', 'local', 'largura', 'letra', 'altura', 'className'] },
   TabelaDados: { componente: TabelaDados, props: ['titulo', 'colunas', 'linhas', 'nota', 'className'] },
   Veredito: { componente: Veredito, props: ['promessa', 'texto', 'estado', 'itens', 'medicaoMarcada', 'proposto', 'className'] },
   MarcaProva: { componente: MarcaProva, props: ['estado', 'grande', 'forma', 'className'] },
@@ -141,7 +143,7 @@ export const COMPONENTES: Record<string, Registro> = {
   AberturaParte: { componente: AberturaParte, props: ['numero', 'titulo', 'pergunta', 'partes', 'nestaParte', 'ondeIssoVolta', 'className'] },
   Capa: {
     componente: Capa,
-    props: ['face', 'eyebrow', 'titulo', 'subtitulo', 'autora', 'chamada', 'paragrafos', 'destaque', 'cortes', 'legendaGrafismo', 'selo', 'isbn', 'editora', 'className'],
+    props: ['face', 'eyebrow', 'titulo', 'subtitulo', 'autora', 'chamada', 'paragrafos', 'destaque', 'cortes', 'legendaGrafismo', 'selo', 'isbn', 'editora', 'colecao', 'numeral', 'rotulo', 'ilustracao', 'leis', 'perguntas', 'className'],
   },
   ComoLer: { componente: ComoLer, props: ['secao', 'titulo', 'letras', 'estados', 'itens', 'regra', 'className'] },
   Mapa: {
@@ -225,17 +227,36 @@ export function agruparPorArea(paineis: NoJson[]): Array<{ area: string | undefi
   return grupos
 }
 
+/**
+ * Areas that are headings, running text or furniture: they never get a panel frame. Every other area whose
+ * blocks carry no Painel of their own (a bare chart, the tests, a recipe, the "when the data arrives" box) is
+ * wrapped in an unlettered panel, so it wears the style's frame like the lettered panels of the same page.
+ */
+const SEM_MOLDURA = /^(titulo|manchete|lead|costura|frase|fonte|prox|assina|marca|editora|abertura|mapa|texto|notas|nota|especime|linha|dados|c2)/
+const JA_EMOLDURADOS = new Set(['Painel', 'Figuras', 'QuandoODadoChegar', 'ManchetaIlustrativa', 'LogoLakebrasil', 'LogoDatatech', 'Fonte', 'ProximoCapitulo', 'Margem', 'AberturaParte', 'Capa'])
+
+function emoldurar(area: string | undefined, nos: NoJson[]): boolean {
+  if (!area || SEM_MOLDURA.test(area)) return false
+  return !nos.some((no) => JA_EMOLDURADOS.has(no.tipo))
+}
+
 export function PaginaConteudo({ pagina }: { pagina: PaginaJson }) {
   const comAreas = pagina.paineis.some((no) => no.area)
   return (
-    <Pagina lado={pagina.lado} variante={pagina.variante} cabeco={pagina.cabeco} folio={pagina.folio ?? true} molde={pagina.molde}>
+    <Pagina lado={pagina.lado} variante={pagina.variante} cabeco={pagina.cabeco} folio={pagina.folio ?? true} molde={pagina.molde} campo={pagina.campo}>
       {comAreas
         ? agruparPorArea(pagina.paineis).map((g, i) =>
             g.area ? (
               <Area key={`${g.area}-${i}`} nome={g.area}>
-                {g.nos.map((no, j) => (
-                  <NoConteudo key={j} no={no} />
-                ))}
+                {emoldurar(g.area, g.nos) ? (
+                  <Painel variante="normal" auto>
+                    {g.nos.map((no, j) => (
+                      <NoConteudo key={j} no={no} />
+                    ))}
+                  </Painel>
+                ) : (
+                  g.nos.map((no, j) => <NoConteudo key={j} no={no} />)
+                )}
               </Area>
             ) : (
               g.nos.map((no, j) => <NoConteudo key={`${i}-${j}`} no={no} />)

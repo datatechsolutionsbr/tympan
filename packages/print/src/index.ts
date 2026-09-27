@@ -56,6 +56,7 @@ export {
   type LinhaDoTempoProps,
   type StatusLei,
 } from './paineis/Aberturas.tsx'
+export { IlustracaoCapa, DESCRICAO_MOTIVO, type MotivoCapa } from './paineis/IlustracaoCapa.tsx'
 export { Mapa, type MapaProps } from './mapa/Mapa.tsx'
 export { ALBERS_BRASIL, REGIOES, projecaoBrasil, municipios, ufs, ufsDoRecorte, type NivelMapa, type Recorte, type Regiao } from './mapa/malha.ts'
 export { quantis, classeDe, rotulosLimites } from './mapa/classes.ts'

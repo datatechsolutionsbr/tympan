@@ -39,12 +39,35 @@ export interface GraficoMetodoProps {
   largura?: number
   /** Letter of a small multiple (A, B…), printed large before the title (scientific figure). */
   letra?: string
+  /**
+   * Plot height in mm for a figure that takes a whole plate or a tall cell: comparison charts are then drawn as
+   * columns of that height (lengths still from one linear scale), series charts at that height.
+   */
+  altura?: number
   className?: string
 }
 
 /** The style's shape for comparison charts (estrutura.forma; 'colunas' when bars are vertical). */
 export function formaDoEstilo(estilo: PrintStyle): FormaGrafico {
   return estilo.estrutura.forma ?? (estilo.estrutura.barras === 'vertical' ? 'colunas' : 'barras')
+}
+
+/**
+ * Rows keep their series colours unless the style highlights one row against the others (`realce: 'linha'`,
+ * NYT Upshot and Tufte): the studies of every other style colour both series in every row.
+ */
+function semRealce<S extends GraficoSpec>(spec: S, estilo: PrintStyle): S {
+  if (spec.tipo !== 'halteres' && spec.tipo !== 'barras' && spec.tipo !== 'contagem') return spec
+  const s = spec as SpecHalteres | SpecBarras | SpecContagem
+  // Highlighting one row needs others to stand against: a figure whose rows are all highlighted keeps its series colours.
+  const linhas: Array<{ destaque?: boolean }> = s.linhas ?? ('barras' in s ? s.barras : undefined) ?? ('grupos' in s ? s.grupos : undefined) ?? []
+  if (estilo.estrutura.realce === 'linha' && linhas.some((l) => !l.destaque)) return spec
+  return {
+    ...s,
+    linhas: s.linhas?.map((l) => ({ ...l, destaque: false })),
+    ...('barras' in s && s.barras ? { barras: s.barras.map((b) => ({ ...b, destaque: false })) } : {}),
+    ...('grupos' in s && s.grupos ? { grupos: s.grupos.map((b) => ({ ...b, destaque: false })) } : {}),
+  } as S
 }
 
 /**
@@ -228,23 +251,24 @@ function Janelas({ x, base, w, h }: { x: number; base: number; w: number; h: num
   )
 }
 
-function Colunas({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: number }) {
+function Colunas({ c, spec, largura, altura }: { c: Ctx; spec: SpecBarras; largura: number; altura?: number }) {
   const e = c.estilo.estrutura
   const predios = e.forma === 'predios'
   const corte = e.linhaCorte
   const estiloChamada = e.chamadas && e.chamadas !== 'numeradas' && spec.anotacoes?.length ? e.chamadas : null
-  const alturaPlot = e.colunasFinas ? 20 : 32
-  const L0 = layoutColunas(spec, largura, alturaPlot, { finas: e.colunasFinas, vao: corte ? 2.6 : undefined })
+  const alturaPlot = altura ?? (e.colunasFinas ? 20 : 32)
+  const bwMax = altura ? largura / 5 : undefined
+  const L0 = layoutColunas(spec, largura, alturaPlot, { finas: e.colunasFinas && !altura, vao: corte ? 2.6 : undefined, bwMax })
   // Callouts inside the chart: the notes get a band above the plot, pointing at the value they explain.
   const alvosDe = (lay: typeof L0) =>
     (spec.anotacoes ?? []).flatMap((a) => {
       const g = lay.grupos[a.linha]
       const col = g?.colunas[g.colunas.length - 1]
       if (!col) return []
-      return [{ x: n(col.x + col.w / 2), y: n(col.rotulo.y - TEXTO * 0.95), texto: a.texto, valor: { x: col.rotulo.x, y: col.rotulo.y, texto: numeroBr(col.valor) } }]
+      return [{ x: n(col.x + col.w / 2), y: n(col.rotulo.y - TEXTO * 0.95), texto: a.curta ?? a.texto, marca: g.marca?.texto, valor: { x: col.rotulo.x, y: col.rotulo.y, texto: numeroBr(col.valor) } }]
     })
   const banda = estiloChamada ? posicionarChamadas(alvosDe(L0), largura, estiloChamada) : null
-  const L = banda ? layoutColunas(spec, largura, alturaPlot, { finas: e.colunasFinas, vao: corte ? 2.6 : undefined, topo: banda.altura, notasEmbaixo: false }) : L0
+  const L = banda ? layoutColunas(spec, largura, alturaPlot, { finas: e.colunasFinas && !altura, vao: corte ? 2.6 : undefined, topo: banda.altura, notasEmbaixo: false, bwMax }) : L0
   // Buildings are solid blocks with windows: a renderer that builds bars from icons or dots would hide them.
   const pBarra = predios && (c.p.nome === 'isotype' || c.p.nome === 'pontos') ? PINCEIS.limpo : c.p
   const notas = banda && estiloChamada ? posicionarChamadas(alvosDe(L), largura, estiloChamada).notas : []
@@ -402,8 +426,8 @@ function Contagem({ c, spec, largura }: { c: Ctx; spec: SpecContagem; largura: n
   }
 }
 
-function Serie({ c, spec, largura }: { c: Ctx; spec: SpecSerie; largura: number }) {
-  const L = layoutSerie(spec, largura)
+function Serie({ c, spec, largura, altura }: { c: Ctx; spec: SpecSerie; largura: number; altura?: number }) {
+  const L = layoutSerie(spec, largura, altura)
   const { x0, x1, y0, y1 } = L.area
   return {
     L,
@@ -572,7 +596,7 @@ function Esquema({ c, spec, largura }: { c: Ctx; spec: SpecEsquema; largura: num
  * washed, grained, pictorial). Every figure has an accessible name that
  * states the finding and a data table (visible, or for assistive technology).
  */
-export function GraficoMetodo({ spec: specOriginal, renderizador, alt, tabela, local = false, largura: larguraProp, letra, className }: GraficoMetodoProps) {
+export function GraficoMetodo({ spec: specOriginal, renderizador, alt, tabela, local = false, largura: larguraProp, letra, altura, className }: GraficoMetodoProps) {
   const { estilo } = usePrint()
   const disponivel = useLarguraDisponivel()
   const largura = larguraProp ?? Math.min(132, disponivel ?? 128)
@@ -581,16 +605,20 @@ export function GraficoMetodo({ spec: specOriginal, renderizador, alt, tabela, l
   const p = PINCEIS[nome]
   const c: Ctx = { id, estilo, p }
   const forma = formaDoEstilo(estilo)
-  const spec: GraficoSpec =
-    specOriginal.tipo === 'halteres' && estilo.estrutura.forma && estilo.estrutura.forma !== 'barras' && specOriginal.escala[0] === 0 && !specOriginal.referencias?.length && !specOriginal.eixoNaoComecaNoZero
+  // A dumbbell is drawn as such only by the style whose study draws dumbbells (forma 'halteres'); every other
+  // style redraws it in its own comparison shape, when nothing would be lost (zero-based axis, no references).
+  const spec: GraficoSpec = semRealce(
+    specOriginal.tipo === 'halteres' && (forma !== 'halteres' || altura) && specOriginal.escala[0] === 0 && !specOriginal.referencias?.length && !specOriginal.eixoNaoComecaNoZero
       ? comoBarras(specOriginal)
-      : specOriginal
+      : specOriginal,
+    estilo,
+  )
   const r =
     spec.tipo === 'halteres'
       ? Halteres({ c, spec, largura })
       : spec.tipo === 'barras'
-        ? forma === 'colunas' || forma === 'predios'
-          ? Colunas({ c, spec, largura })
+        ? forma === 'colunas' || forma === 'predios' || (altura && (forma === 'barras' || forma === 'halteres'))
+          ? Colunas({ c, spec, largura, altura })
           : forma === 'eixo-central'
             ? EixoCentral({ c, spec, largura })
             : forma === 'ziguezague'
@@ -603,7 +631,7 @@ export function GraficoMetodo({ spec: specOriginal, renderizador, alt, tabela, l
         : spec.tipo === 'contagem'
           ? Contagem({ c, spec, largura })
           : spec.tipo === 'serie'
-            ? Serie({ c, spec, largura })
+            ? Serie({ c, spec, largura, altura })
             : spec.tipo === 'dispersao'
               ? Dispersao({ c, spec, largura })
               : spec.tipo === 'simpson'

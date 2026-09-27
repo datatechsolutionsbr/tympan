@@ -71,10 +71,12 @@ export function Figuras({ arranjo = 'auto', pesos, manchete, className, children
   }
   const padrao = e.multiplos ? e.multiplos === 'lado-a-lado' : e.figura === 'barra-topo' || e.barras === 'vertical'
   const lado = arranjo === 'lado' || (arranjo === 'auto' && filhos.length > 1 && padrao)
+  // Multiples on tinted cards (Le Corbusier, Bayer) lose the card's padding.
+  const recuo = e.cabecaMultiplo === 'caixa-cor' ? 5.2 : 0
   if (!lado) {
     return (
-      <div className={cx('ty-print-figuras', className)} data-arranjo="pilha">
-        {filhos}
+      <div className={cx('ty-print-figuras', className)} data-arranjo="pilha" data-cabeca={e.cabecaMultiplo}>
+        {recuo ? <LarguraProvider value={total - recuo}>{filhos}</LarguraProvider> : filhos}
       </div>
     )
   }
@@ -85,12 +87,13 @@ export function Figuras({ arranjo = 'auto', pesos, manchete, className, children
     <div
       className={cx('ty-print-figuras', className)}
       data-arranjo="lado"
+      data-cabeca={e.cabecaMultiplo}
       style={{ gridTemplateColumns: p.map((x) => `${Math.max(0.5, x)}fr`).join(' ') }}
     >
       {filhos.map((f, i) => (
         <div key={i} className="ty-print-figuras-item">
           {e.letraMultiplo ? <p className="ty-print-figuras-letra">{String.fromCharCode(65 + i)}</p> : null}
-          <LarguraProvider value={Math.round(((util * (p[i] ?? 1)) / soma) * 10) / 10}>{f}</LarguraProvider>
+          <LarguraProvider value={Math.round(((util * (p[i] ?? 1)) / soma - recuo) * 10) / 10}>{f}</LarguraProvider>
         </div>
       ))}
     </div>

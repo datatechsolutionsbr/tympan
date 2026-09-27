@@ -64,7 +64,6 @@ export const MOLDES: Record<string, Molde> = {
   // Storyboard dupla 2: running text in four columns and notes in two (respiro), one small figure.
   virada: {
     descricao: 'A virada (respiro): texto corrido em 4 colunas + notas em 2 | texto, figura pequena, frase',
-    respiro: true,
     par: [L([['texto', 4], ['notas', 2]], { cresce: true })],
     impar: [L([['texto', 4], ['notas', 2]]), L([['fig', 4], ['notas', 2]], { cresce: true }), cheia('frase'), cheia('fonte', { pe: true })],
   },
@@ -84,7 +83,6 @@ export const MOLDES: Record<string, Molde> = {
   // in the two-column margin, the rule of thumb at the foot (storyboard dupla 2, one page of it).
   leitura: {
     descricao: 'Página de leitura (respiro): texto em 4 colunas + números e ressalvas na margem de 2, regra de bolso no pé',
-    respiro: true,
     par: [L([['texto', 4], ['notas', 2]], { cresce: true }), cheia('frase', { pe: true })],
     impar: [L([['texto', 4], ['notas', 2]], { cresce: true }), cheia('frase', { pe: true })],
   },
@@ -121,7 +119,6 @@ export const MOLDES: Record<string, Molde> = {
   },
   'abertura-parte': {
     descricao: 'Abertura de parte (respiro): número, título, pergunta, nesta parte | prancha com uma figura',
-    respiro: true,
     par: [cheia('abertura', { cresce: true })],
     impar: [cheia('fig', { cresce: true }), cheia('fonte', { pe: true })],
   },
@@ -134,14 +131,12 @@ export const MOLDES: Record<string, Molde> = {
   // Atlas plate: a bled map on the left, legend and regional cut-outs on the right.
   atlas: {
     descricao: 'Prancha de atlas: mapa sangrado | recortes regionais e legenda, fonte',
-    respiro: true,
     par: [cheia('mapa', { cresce: true })],
     impar: [cheia('titulo'), cheia('recortes', { cresce: true }), cheia('fonte', { pe: true })],
   },
 
   creditos: {
     descricao: 'Reprodução e créditos: tabela de consultas, passos | ficha, marcas (colofão: branco intencional)',
-    respiro: true,
     par: [cheia('titulo'), cheia('tabela', { cresce: true }), L([['passos', 3], ['local', 3]], { pe: true }), cheia('assina', { pe: true })],
     impar: [cheia('titulo2'), cheia('ficha', { cresce: true }), L([['marca', 2], ['marca-texto', 4]], { pe: true }), L([['editora', 2], ['editora-texto', 4]], { pe: true })],
   },
@@ -182,36 +177,76 @@ const MARGEM: Record<string, LinhaMolde[]> = {
 
 /**
  * A molde is a superset: rows whose areas the page does not use are dropped, and a cell of an unused area
- * in a row is given to its neighbour on the left (or right), so no column is left empty by accident.
+ * in a row is given to its neighbour on the left (or right), so no column is left empty by accident. A cell
+ * is given only when the neighbour stays a rectangle on the grid (an area that spans two rows keeps one
+ * width); otherwise it stays empty ('.'), because an L-shaped area would void the whole grid.
  */
 export function linhasUsadas(linhas: LinhaMolde[], usadas: Set<string> | null): LinhaMolde[] {
   if (!usadas) return linhas
-  const out: LinhaMolde[] = []
-  for (const l of linhas) {
-    if (!l.areas.some(([a]) => usadas.has(a))) continue
-    const areas: Array<[string, number]> = []
-    let pendente = 0
-    for (const [a, n] of l.areas) {
-      if (usadas.has(a)) {
-        areas.push([a, n + pendente])
-        pendente = 0
-      } else if (areas.length) {
-        const ult = areas[areas.length - 1]!
-        ult[1] += n
-      } else pendente += n
-    }
-    out.push({ ...l, areas })
+  const kept = linhas.filter((l) => l.areas.some(([a]) => usadas.has(a)))
+  // Cell matrix: the name of each of the six columns, and whether it was lent from an unused area.
+  const grade = kept.map((l) => l.areas.flatMap(([a, n]) => Array.from({ length: n }, () => (usadas.has(a) ? a : null)) as Array<string | null>))
+  const emprestado = grade.map((r) => r.map((c) => c === null))
+  for (const r of grade) {
+    for (let i = 0; i < 6; i++) if (r[i] === null && i > 0 && r[i - 1] !== null) r[i] = r[i - 1]!
+    for (let i = 5; i >= 0; i--) if (r[i] === null && i < 5 && r[i + 1] !== null) r[i] = r[i + 1]!
   }
+  // Undo loans that break an area's rectangle, until every area is one.
+  for (let volta = 0; volta < 12; volta++) {
+    const ruim = areaNaoRetangular(grade)
+    if (!ruim) break
+    let mudou = false
+    grade.forEach((r, y) => r.forEach((c, x) => {
+      if (c === ruim && emprestado[y]![x]) {
+        // Lend the cell to the area above it instead (a column that grows down), or leave it empty.
+        const acima = y > 0 ? grade[y - 1]![x] : null
+        r[x] = acima && acima !== '.' && acima !== ruim ? acima : '.'
+        mudou = true
+      }
+    }))
+    if (!mudou) break
+  }
+  // A vertical loan that still breaks a rectangle falls back to an empty cell.
+  for (let volta = 0; volta < 12; volta++) {
+    const ruim = areaNaoRetangular(grade)
+    if (!ruim) break
+    grade.forEach((r, y) => r.forEach((c, x) => {
+      if (c === ruim && emprestado[y]![x]) r[x] = '.'
+    }))
+  }
+  const out: LinhaMolde[] = grade.map((r, y) => {
+    const areas: Array<[string, number]> = []
+    for (const c of r) {
+      const nome = c ?? '.'
+      const ult = areas[areas.length - 1]
+      if (ult && ult[0] === nome) ult[1] += 1
+      else areas.push([nome, 1])
+    }
+    return { ...kept[y]!, areas }
+  })
   // The growing row may have been dropped: the last content row (not a heading, not the foot) grows instead.
   if (!out.some((l) => l.cresce)) {
     for (let i = out.length - 1; i >= 0; i--) {
       const l = out[i]!
-      if (l.pe || l.fixa || l.areas.every(([a]) => FIXAS.test(a))) continue
+      if (l.pe || l.fixa || l.areas.every(([a]) => FIXAS.test(a) || a === '.')) continue
       out[i] = { ...l, cresce: true }
       break
     }
   }
   return out
+}
+
+/** First area of the cell matrix that is not a rectangle (CSS grid areas must be), or null. */
+function areaNaoRetangular(grade: Array<Array<string | null>>): string | null {
+  const caixas = new Map<string, { x0: number; x1: number; y0: number; y1: number; n: number }>()
+  grade.forEach((r, y) => r.forEach((c, x) => {
+    if (!c || c === '.') return
+    const b = caixas.get(c)
+    if (!b) caixas.set(c, { x0: x, x1: x, y0: y, y1: y, n: 1 })
+    else Object.assign(b, { x0: Math.min(b.x0, x), x1: Math.max(b.x1, x), y0: Math.min(b.y0, y), y1: Math.max(b.y1, y), n: b.n + 1 })
+  }))
+  for (const [nome, b] of caixas) if ((b.x1 - b.x0 + 1) * (b.y1 - b.y0 + 1) !== b.n) return nome
+  return null
 }
 
 /** CSS grid of a page: `grid-template-areas` and `grid-template-rows`, and each area's column span. */
@@ -227,6 +262,10 @@ export function gradeDoMolde(linhas: LinhaMolde[]): { areas: string; linhas: str
     .map((l) => {
       const celulas: string[] = []
       for (const [a, n] of l.areas) {
+        if (a === '.') {
+          for (let i = 0; i < n; i++) celulas.push('.')
+          continue
+        }
         const antes = info.get(a)
         const cresce = !l.pe && !l.fixa && !FIXAS.test(a)
         info.set(a, { colunas: Math.max(antes?.colunas ?? 0, n), cresce: Boolean(antes?.cresce || cresce), pe: Boolean(antes?.pe || l.pe) })

@@ -1,8 +1,11 @@
 import type { EstadoProva } from '@datatechsolutions/tympan-tokens'
 import type { ReactNode } from 'react'
+import { usePrint } from '../contexto.tsx'
+import { Emblema } from '../marca/Emblema.tsx'
 import { LogoDatatech } from '../marca/LogoDatatech.tsx'
 import { cx, formatarNumero, useIdSeguro } from '../util.ts'
-import { comColchetes, NumeroChamada } from './comum.tsx'
+import { BordaMao, comColchetes, NumeroChamada } from './comum.tsx'
+import { IlustracaoCapa, type MotivoCapa } from './IlustracaoCapa.tsx'
 import { MarcaProva } from './MarcaProva.tsx'
 
 // ---------------------------------------------------------------------------
@@ -29,7 +32,51 @@ export interface CapaProps {
   isbn?: string
   /** Print the publisher's mark (Datatech Solutions), small; off by default because content places LogoDatatech itself. */
   editora?: boolean
+  /**
+   * Cover system of the collection (board L6): the collection name, the volume numeral as the mark ("0", "I"…),
+   * the period or "guia de leitura", and one illustration per volume, tone on tone. With `numeral`, the front
+   * cover is laid out as L6 in the style's type, frames, renderer and title treatment.
+   */
+  colecao?: string
+  numeral?: string
+  rotulo?: string
+  ilustracao?: MotivoCapa
+  /** Back cover: the volume's laws, listed under the synopsis (L6: "as leis do volume"). */
+  leis?: string[]
+  /** Back cover: questions of the volume (L6: "a pergunta central"). */
+  perguntas?: string[]
   className?: string
+}
+
+/** A frame around a cover block in the style's panel language (hand-drawn, woodcut box, rule, card). */
+function MolduraCapa({ chave, children, className }: { chave: string; children: ReactNode; className?: string }) {
+  const { estilo } = usePrint()
+  const painel = estilo.estrutura.painel
+  const mao = estilo.traco.tremor > 0 && (painel === 'caixa' || painel === 'caixa-grossa')
+  return (
+    <div className={cx('ty-print-capa-moldura', className)} data-painel={painel} data-mao={mao ? '' : undefined}>
+      {mao ? <BordaMao chave={chave} grossa={painel === 'caixa-grossa'} dupla={painel === 'caixa-grossa'} /> : null}
+      {children}
+    </div>
+  )
+}
+
+function TituloCapa({ titulo }: { titulo: string }) {
+  const { estilo } = usePrint()
+  const recorte = estilo.estrutura.tituloEstilo === 'recorte'
+  return (
+    <div className="ty-print-texto ty-print-capa-titulo-bloco" data-nivel={1}>
+      <h1 className="ty-print-titulo ty-print-capa-titulo">
+        {recorte
+          ? titulo.split(/\s+/).map((p, i) => (
+              <span key={i} className="ty-print-palavra">
+                {comColchetes(p)}
+              </span>
+            ))
+          : comColchetes(titulo)}
+      </h1>
+    </div>
+  )
 }
 
 function Grafismo({ cortes, legenda }: { cortes: number[]; legenda?: string }) {
@@ -65,8 +112,92 @@ function Grafismo({ cortes, legenda }: { cortes: number[]; legenda?: string }) {
   )
 }
 
-/** Front or back cover, printed on the ink colour (inverted). */
-export function Capa({ face = 'primeira', eyebrow, titulo, subtitulo, autora, chamada, paragrafos, destaque, cortes, legendaGrafismo, selo, isbn, editora = false, className }: CapaProps) {
+/** Front or back cover, printed on the volume's colour field (or the ink colour), in the style. */
+export function Capa({ face = 'primeira', eyebrow, titulo, subtitulo, autora, chamada, paragrafos, destaque, cortes, legendaGrafismo, selo, isbn, editora = false, colecao, numeral, rotulo, ilustracao, leis, perguntas, className }: CapaProps) {
+  if (face === 'primeira' && numeral) {
+    return (
+      <div className={cx('ty-print-capa', className)} data-face={face} data-l6="">
+        <header className="ty-print-capa-topo">
+          <div className="ty-print-capa-topo-texto">
+            <p className="ty-print-capa-colecao">{comColchetes(colecao ?? 'Brasil Real')}</p>
+            {rotulo ? <p className="ty-print-capa-rotulo">{comColchetes(rotulo)}</p> : null}
+          </div>
+          <Emblema escala={0.9} />
+          <p className="ty-print-capa-numeral" aria-label={`Volume ${numeral}`}>
+            {numeral}
+          </p>
+        </header>
+        {ilustracao ? (
+          <MolduraCapa chave="capa-arte" className="ty-print-capa-arte">
+            <IlustracaoCapa motivo={ilustracao} />
+          </MolduraCapa>
+        ) : cortes?.length ? (
+          <Grafismo cortes={cortes} legenda={legendaGrafismo} />
+        ) : null}
+        {titulo ? <TituloCapa titulo={titulo} /> : null}
+        {subtitulo ? <p className="ty-print-capa-subtitulo">{comColchetes(subtitulo)}</p> : null}
+        {autora ? <p className="ty-print-capa-autora">{comColchetes(autora)}</p> : null}
+      </div>
+    )
+  }
+  if (face === 'quarta' && (numeral || leis?.length || perguntas?.length)) {
+    return (
+      <div className={cx('ty-print-capa', className)} data-face={face} data-l6="">
+        {eyebrow ? <p className="ty-print-capa-colecao">{comColchetes(eyebrow)}</p> : null}
+        {chamada ? <p className="ty-print-capa-chamada ty-print-titulo">{comColchetes(chamada)}</p> : null}
+        {paragrafos?.map((p, i) => (
+          <p key={i} className="ty-print-capa-texto">
+            {comColchetes(p)}
+          </p>
+        ))}
+        {destaque ? (
+          <MolduraCapa chave="capa-destaque" className="ty-print-capa-destaque">
+            <p className="ty-print-sobretitulo">{comColchetes(destaque.eyebrow)}</p>
+            <p className="ty-print-capa-destaque-texto">{comColchetes(destaque.texto)}</p>
+            <p className="ty-print-capa-destaque-fonte">{comColchetes(destaque.fonte)}</p>
+          </MolduraCapa>
+        ) : null}
+        {perguntas?.length ? (
+          <div className="ty-print-capa-perguntas">
+            <p className="ty-print-capa-sobre">Perguntas deste volume</p>
+            <ol>
+              {perguntas.map((q, i) => (
+                <li key={i}>{comColchetes(q)}</li>
+              ))}
+            </ol>
+          </div>
+        ) : null}
+        {leis?.length ? (
+          <p className="ty-print-capa-leis">
+            <span className="ty-print-capa-sobre">As leis: </span>
+            {leis.map((l, i) => (
+              <span key={i}>
+                {i ? ' · ' : ''}
+                {comColchetes(l)}
+              </span>
+            ))}
+          </p>
+        ) : null}
+        <div className="ty-print-capa-pe">
+          {selo?.length ? (
+            <ul className="ty-print-capa-selo">
+              {selo.map((s, i) => (
+                <li key={i}>{comColchetes(s)}</li>
+              ))}
+            </ul>
+          ) : null}
+          {isbn ? (
+            <div className="ty-print-capa-barras">
+              <div className="ty-print-capa-barras-caixa" aria-hidden="true">
+                [EAN-13 do ISBN]
+              </div>
+              <p className="ty-print-capa-isbn">ISBN {comColchetes(isbn)}</p>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    )
+  }
   return (
     <div className={cx('ty-print-capa', className)} data-face={face}>
       {eyebrow ? <p className="ty-print-capa-eyebrow">{comColchetes(eyebrow)}</p> : null}
@@ -124,6 +255,9 @@ export function AberturaParte({ numero, titulo, pergunta, partes, nestaParte, on
     <header className={cx('ty-print-abertura', className)}>
       <p className="ty-print-abertura-numero">
         Parte <span className="ty-print-abertura-romano">{numero}</span>
+      </p>
+      <p className="ty-print-abertura-grande" aria-hidden="true">
+        {numero}
       </p>
       <h1 className="ty-print-abertura-titulo">{comColchetes(titulo)}</h1>
       <p className="ty-print-abertura-pergunta">{comColchetes(pergunta)}</p>

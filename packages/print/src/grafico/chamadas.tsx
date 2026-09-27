@@ -20,6 +20,8 @@ export interface AlvoChamada {
   x: number
   y: number
   texto: string
+  /** Number of the row's callout ("1", "2"…), circled at the end of the note's first line. */
+  marca?: string
   /** The value label under the arrow, circled in handwritten notes. */
   valor?: { x: number; y: number; texto: string }
 }
@@ -29,6 +31,8 @@ const TAM = TEXTO * 1.02
 const ENTRELINHA = TAM * 1.3
 /** Room between the notes and the plot for the arrow or the balloon's tail. */
 const PONTA = 4.2
+/** Room for the circled callout number after the first line of a note. */
+const MARCA_W = 4
 
 function larguraNota(largura: number) {
   return Math.min(largura * 0.48, 58)
@@ -53,7 +57,8 @@ export function posicionarChamadas(alvos: AlvoChamada[], largura: number, estilo
   const niveis: Array<{ fim: number; altura: number }> = []
   for (const a of [...alvos].sort((p, q) => p.x - q.x)) {
     const linhas = quebrar(a.texto, (wMax - 2 * pad) * FOLGA_ANOTACAO, TAM)
-    const w = Math.min(wMax, Math.max(...linhas.map((l) => larguraTexto(l, TAM))) / FOLGA_ANOTACAO + 2 * pad)
+    const extra = a.marca && estilo !== 'baloes' ? MARCA_W : 0
+    const w = Math.min(wMax, Math.max(...linhas.map((l) => larguraTexto(l, TAM))) / FOLGA_ANOTACAO + 2 * pad + extra)
     const h = linhas.length * ENTRELINHA + 2 * pad
     let x = Math.min(largura - w, Math.max(0, estilo === 'guia' ? a.x - w : a.x - w / 2))
     let nivel = niveis.findIndex((nv) => nv.fim + 1.5 <= x)
@@ -169,6 +174,14 @@ export function Chamadas({ c, estilo, notas, topo, cor }: { c: Ctx; estilo: Esti
                   largura: 0.3,
                 })}
                 {ponta(destino.x, n3(destino.y - 0.2), destino.x - ((xAncora + destino.x) / 2 + (destino.x >= xAncora ? 2.4 : -2.4)), destino.y - (baseNota + destino.y) / 2, cor, 0.3)}
+                {alvo.marca ? (
+                  <g className="ty-print-g-chamada" transform={`translate(${n3(Math.min(x + nt.w - 1.5, x + larguraTexto(nt.linhas[0] ?? '', TAM) / FOLGA_ANOTACAO + 2.2))} ${n3(y + TAM * 0.55)})`}>
+                    <circle r={1.45} />
+                    <text y={0.72} textAnchor="middle">
+                      {alvo.marca}
+                    </text>
+                  </g>
+                ) : null}
                 {alvo.valor ? elipse(c, `circ-${k}`, alvo.valor.x, n3(alvo.valor.y - TEXTO * 0.35), larguraTexto(alvo.valor.texto) / 2 + 1.4, TEXTO * 0.78, cor, 0.3) : null}
               </>
             )}

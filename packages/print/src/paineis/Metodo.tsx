@@ -1,7 +1,9 @@
 import type { EstadoProva } from '@datatechsolutions/tympan-tokens'
 import { LogoLakebrasil, SeloLakebrasil } from '../marca/LogoLakebrasil.tsx'
+import { usePrint } from '../contexto.tsx'
 import { cx, formatarNumero } from '../util.ts'
-import { comColchetes } from './comum.tsx'
+import { BordaMao, comColchetes } from './comum.tsx'
+import { MOLDURAS_CAIXA } from './Painel.tsx'
 import { MarcaProva } from './MarcaProva.tsx'
 
 // ---------------------------------------------------------------------------
@@ -479,8 +481,11 @@ export interface ManchetaIlustrativaProps {
 
 /** An illustrative headline (not a real clipping), always tagged as such. */
 export function ManchetaIlustrativa({ texto, className }: ManchetaIlustrativaProps) {
+  const { estilo } = usePrint()
+  const mao = estilo.traco.tremor > 0 && MOLDURAS_CAIXA.has(estilo.estrutura.painel)
   return (
-    <figure className={cx('ty-print-manchete', className)}>
+    <figure className={cx('ty-print-manchete', className)} data-mao={mao ? '' : undefined}>
+      {mao ? <BordaMao chave={`manchete-${texto.slice(0, 24)}`} /> : null}
       <p className="ty-print-manchete-texto">{comColchetes(texto.replace(/^\[Manchete ilustrativa:\s*/i, '').replace(/\]$/, ''))}</p>
       <figcaption className="ty-print-selo-exemplo">Manchete ilustrativa</figcaption>
     </figure>

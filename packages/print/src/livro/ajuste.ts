@@ -7,7 +7,7 @@ export interface AjusteOpcoes {
   minimo?: number
   /** Largest scale for a sparse page (default 1.3); 1 turns growing off. */
   maximo?: number
-  /** Pages whose natural content fills less than this share of the type area grow (default 0.86). */
+  /** Pages whose natural content fills less than this share of the type area grow (default 0.93). */
   alvo?: number
   /** Scale step (default 0.02). */
   passo?: number
@@ -33,7 +33,7 @@ export interface AjustePagina {
 export function ajustarPaginas(raiz: ParentNode = document, opcoes: AjusteOpcoes = {}): AjustePagina[] {
   const minimo = opcoes.minimo ?? 0.84
   const maximo = opcoes.maximo ?? 1.3
-  const alvo = opcoes.alvo ?? 0.86
+  const alvo = opcoes.alvo ?? 0.93
   const passo = opcoes.passo ?? 0.02
   const MM = 96 / 25.4
   const out: AjustePagina[] = []
