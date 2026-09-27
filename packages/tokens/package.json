@@ -45,6 +45,7 @@
     "./print-themes/*": "./dist/print-themes/*",
     "./print-themes.json": "./dist/print-themes.json",
     "./tokens.json": "./dist/tokens.json",
+    "./themes.json": "./dist/themes.json",
     "./dtcg/*": "./dist/dtcg/*",
     "./package.json": "./package.json"
   },
