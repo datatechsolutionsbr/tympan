@@ -141,7 +141,7 @@ function Topo({ atual, aoAbrirLateral, rotuloLateral }: { atual: SecaoId; aoAbri
         <button type="button" className="ty-site-busca" onClick={abrirBusca} aria-keyshortcuts={mac ? 'Meta+K' : 'Control+K'}>
           <Search aria-hidden="true" className="ty-icon" />
           <span className="ty-site-busca__texto">{t('busca.botao')}</span>
-          <kbd className="ty-site-busca__atalho" aria-hidden="true">
+          <kbd className="ty-site-busca__atalho" aria-hidden="true" dir="ltr">
             {mac ? '⌘K' : 'Ctrl K'}
           </kbd>
         </button>

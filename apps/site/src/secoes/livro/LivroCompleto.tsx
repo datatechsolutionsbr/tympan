@@ -132,8 +132,10 @@ export const DUPLAS: DuplaDoLivro[] = [
 export const DuplaDoLivroNoEstilo = memo(function DuplaDoLivroNoEstilo({ id, estilo, grafico, pb }: { id: string; estilo: PrintPresetName; grafico: Grafico; pb: boolean }) {
   const d = DUPLAS.find((x) => x.id === id) ?? DUPLAS[0]!
   return (
-    <LivroPrint estilo={estilo} pb={pb} incluirCss={false} className="ty-site-livro">
-      {d.render(estilo, grafico)}
-    </LivroPrint>
+    <div dir="ltr" className="ty-site-livro-direcao">
+      <LivroPrint estilo={estilo} pb={pb} incluirCss={false} className="ty-site-livro">
+        {d.render(estilo, grafico)}
+      </LivroPrint>
+    </div>
   )
 })

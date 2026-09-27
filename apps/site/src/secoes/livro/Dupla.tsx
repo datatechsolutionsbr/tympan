@@ -18,9 +18,12 @@ export interface DuplaEstiloProps {
 export const DuplaEstilo = memo(function DuplaEstilo({ estilo, grafico, pb }: DuplaEstiloProps) {
   return (
     // The component CSS is imported once (main.tsx); each spread adds only its style's custom properties.
-    <LivroPrint estilo={estilo} pb={pb} incluirCss={false} className="ty-site-livro">
-      {grafico === 'mapa' ? <DuplaMapas /> : <DuplaEstudo grafico={tipoDoGrafico(estilo, grafico)} />}
-    </LivroPrint>
+    // The sample book is written in Portuguese, so it keeps its own direction in right-to-left interfaces.
+    <div dir="ltr" className="ty-site-livro-direcao">
+      <LivroPrint estilo={estilo} pb={pb} incluirCss={false} className="ty-site-livro">
+        {grafico === 'mapa' ? <DuplaMapas /> : <DuplaEstudo grafico={tipoDoGrafico(estilo, grafico)} />}
+      </LivroPrint>
+    </div>
   )
 })
 

@@ -1503,3 +1503,6 @@ body {
 .ty-site-passos:has(.ty-site-completo__pos) {
   border: 0;
 }
+.ty-site-livro-direcao {
+  inline-size: max-content;
+}
