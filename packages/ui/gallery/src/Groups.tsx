@@ -7,15 +7,16 @@ import { DataAShowcase } from './showcase/data-a'
 import { DataBShowcase } from './showcase/data-b'
 import { FormsAShowcase } from './showcase/forms-a'
 import { FormsBShowcase } from './showcase/forms-b'
+import { IdentityShowcase } from './showcase/identity'
 import { OverlaysNavShowcase } from './showcase/overlays-nav'
 import { PlatformShowcase } from './showcase/platform'
 import { ShellShowcase } from './showcase/shell'
 import { ShowcaseShowcase } from './showcase/showcase'
 import { Showcase } from './Showcase'
 
-export type GalleryCategory = 'Foundations' | 'Application UI' | 'Data display' | 'Marketing'
+export type GalleryCategory = 'Foundations' | 'Application UI' | 'Data display' | 'Identity' | 'Marketing'
 
-export const GALLERY_CATEGORIES: GalleryCategory[] = ['Foundations', 'Application UI', 'Data display', 'Marketing']
+export const GALLERY_CATEGORIES: GalleryCategory[] = ['Foundations', 'Application UI', 'Data display', 'Identity', 'Marketing']
 
 export interface GalleryPage {
   id: string
@@ -88,6 +89,13 @@ export const GALLERY_PAGES: GalleryPage[] = [
     category: 'Data display',
     description: 'Charts with a table view, report views, region maps and the Brazilian region theme registry.',
     Component: ChartsGeoShowcase,
+  },
+  {
+    id: 'identity',
+    title: 'Avatars and flags',
+    category: 'Identity',
+    description: 'Generated avatars in the theme colours (@datatechsolutions/tympan/avatars) and country and region flags (@datatechsolutions/tympan/flags).',
+    Component: IdentityShowcase,
   },
   {
     id: 'auth-brand',

@@ -311,6 +311,34 @@
     flex-direction: column;
     gap: var(--ty-space-4);
   }
+  .ty-gallery-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  /* Avatars and flags page: one tile per avatar style. */
+  .ty-gallery-tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+    gap: var(--ty-space-4);
+  }
+  .ty-gallery-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--ty-space-2);
+    margin: 0;
+    text-align: center;
+  }
+  .ty-gallery-tile figcaption {
+    display: flex;
+    flex-direction: column;
+    font-size: var(--ty-font-size-label);
+  }
+  .ty-gallery-tile__meta {
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+  }
   .ty-gallery-row {
     display: flex;
     flex-wrap: wrap;
