@@ -1,24 +1,12 @@
 // The site shell: a top bar (brand, section tabs, ⌘K search, appearance and language in one popover), the
 // section's own navigation in a sticky side column (a drawer on a phone) and, on a phone, the sections as
 // fixed tabs at the bottom (after the Estúdio's shell).
-import { BookOpen, Clapperboard, Download, House, LayoutGrid, Menu, Palette, Search, SlidersHorizontal, type LucideIcon } from 'lucide-react'
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import { BookOpen, Clapperboard, Download, House, Languages, LayoutGrid, Menu, Palette, Search, type LucideIcon } from 'lucide-react'
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { presets, printThemePresets } from './tokens'
-import {
-  Button,
-  Drawer,
-  ListboxSelect,
-  Popover,
-  SegmentedControl,
-  SkipLink,
-  ThemeSwitcher,
-  useMediaQuery,
-  useTheme,
-  type ThemeDensity,
-  type ThemeMode,
-} from '@datatechsolutions/tympan'
+import { Button, Drawer, Popover, SkipLink, ThemePaletteTrigger, ThemeSwitcher, useMediaQuery, useTheme, type ThemeMode, type ThemePaletteGroup } from '@datatechsolutions/tympan'
 import { useI18n, type Chave } from './i18n/I18n'
-import { LOCALES } from './i18n/locales'
+import { infoLocale, LOCALES } from './i18n/locales'
 import { formatarRota, lerRota, TEMA_PADRAO, type Rota, type SecaoId } from './rotas'
 
 export const SECOES: Array<{ id: SecaoId; icone: LucideIcon; rota: Rota }> = [
@@ -64,54 +52,63 @@ export function MarcaTympan() {
   )
 }
 
-/** Theme, mode, density and language of the whole site, in one popover. */
-export function Aparencia() {
-  const th = useTheme()
-  const { t, locale, setLocale } = useI18n()
+/** Theme groups of the palette with localised headings and names. */
+export function useGruposTema(): ThemePaletteGroup[] {
+  const { t } = useI18n()
   const nomeTema = useNomeTema()
-  const secoesTema = [
-    { title: t('aparencia.grupoInterface'), options: presets.map((p) => ({ value: p.name, label: nomeTema(p.name) })) },
-    { title: t('aparencia.grupoLivro'), options: printThemePresets.map((p) => ({ value: p.name, label: nomeTema(p.name) })) },
-  ]
+  return useMemo(
+    () => [
+      { id: 'interface', heading: t('aparencia.grupoInterface'), themes: presets.map((p) => ({ id: p.name, label: nomeTema(p.name), keywords: [p.name, p.label ?? ''] })) },
+      { id: 'print', heading: t('aparencia.grupoLivro'), themes: printThemePresets.map((p) => ({ id: p.name, label: nomeTema(p.name), keywords: [p.name, p.label ?? ''] })) },
+    ],
+    [t, nomeTema],
+  )
+}
+
+/** The site's theme picker: Tympan's ThemePalette (live preview, Enter applies, Esc reverts). */
+export function SeletorTema({ compacto }: { compacto?: boolean }) {
+  const grupos = useGruposTema()
+  const nomeTema = useNomeTema()
+  return <ThemePaletteTrigger groups={grupos} labelFor={nomeTema} recentKey="ty-site:temas-recentes" compact={compacto} className="ty-site-topo__tema" />
+}
+
+/** Language of the site: native names, one press. */
+export function Idioma() {
+  const { t, locale, setLocale } = useI18n()
+  const [aberto, setAberto] = useState(false)
   return (
     <Popover
-      title={t('aparencia.titulo')}
+      title={t('aparencia.idioma')}
       placement="bottom"
       align="end"
+      open={aberto}
+      onOpenChange={setAberto}
       trigger={
-        <Button variant="quiet" size="compact" leadingIcon={<SlidersHorizontal aria-hidden="true" />} className="ty-site-topo__aparencia">
-          <span className="ty-site-topo__rotulo-largo">{t('aparencia.botao')}</span>
+        <Button variant="quiet" size="compact" leadingIcon={<Languages aria-hidden="true" />} accessibleLabel={`${t('aparencia.idioma')}: ${infoLocale(locale).nativeName}`}>
+          <span className="ty-site-topo__idioma">{locale}</span>
         </Button>
       }
     >
-      <div className="ty-site-aparencia">
-        <ListboxSelect label={t('aparencia.idioma')} options={LOCALES.map((l) => ({ value: l.code, label: l.nativeName }))} value={locale} onChange={setLocale} />
-        <ListboxSelect label={t('aparencia.tema')} sections={secoesTema} value={th.theme} onChange={th.setTheme} />
-        <SegmentedControl
-          label={t('aparencia.modo')}
-          size="compact"
-          fullWidth
-          value={th.mode}
-          onChange={(m) => th.setMode(m as ThemeMode)}
-          options={[
-            { value: 'system', label: t('aparencia.modoSistema') },
-            { value: 'light', label: t('aparencia.modoClaro') },
-            { value: 'dark', label: t('aparencia.modoEscuro') },
-          ]}
-        />
-        <SegmentedControl
-          label={t('aparencia.densidade')}
-          size="compact"
-          fullWidth
-          value={th.density}
-          onChange={(d) => th.setDensity(d as ThemeDensity)}
-          options={[
-            { value: 'compact', label: t('aparencia.densidadeCompacta') },
-            { value: 'default', label: t('aparencia.densidadePadrao') },
-            { value: 'comfortable', label: t('aparencia.densidadeConfortavel') },
-          ]}
-        />
-      </div>
+      <ul className="ty-site-idiomas">
+        {LOCALES.map((l) => (
+          <li key={l.code}>
+            <button
+              type="button"
+              className="ty-site-idiomas__item"
+              lang={l.code}
+              dir={l.rtl ? 'rtl' : 'ltr'}
+              aria-pressed={l.code === locale}
+              onClick={() => {
+                setLocale(l.code)
+                setAberto(false)
+              }}
+            >
+              <span>{l.nativeName}</span>
+              <code>{l.code}</code>
+            </button>
+          </li>
+        ))}
+      </ul>
     </Popover>
   )
 }
@@ -121,6 +118,7 @@ function Topo({ atual, aoAbrirLateral, rotuloLateral }: { atual: SecaoId; aoAbri
   const th = useTheme()
   const href = useHref()
   const abrirBusca = useContext(BuscaContext)
+  const estreitoTopo = useMediaQuery('(max-width: 1279.98px)')
   const mac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform)
   return (
     <header className="ty-site-topo">
@@ -151,7 +149,8 @@ function Topo({ atual, aoAbrirLateral, rotuloLateral }: { atual: SecaoId; aoAbri
             {mac ? '⌘K' : 'Ctrl K'}
           </kbd>
         </button>
-        <Aparencia />
+        <SeletorTema compacto={estreitoTopo} />
+        <Idioma />
         <ThemeSwitcher
           mode={th.resolvedMode}
           onModeChange={(m) => th.setMode(m as ThemeMode)}

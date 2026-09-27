@@ -1043,3 +1043,51 @@ body {
   padding-inline-end: 4px;
   border-inline-end: 1px solid var(--ty-line);
 }
+
+/* top bar: theme and language */
+.ty-site-topo__idioma {
+  font-family: var(--ty-site-mono);
+  font-size: 12px;
+}
+.ty-site-idiomas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px;
+  inline-size: min(360px, 80vw);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ty-site-idiomas__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  inline-size: 100%;
+  min-block-size: 36px;
+  padding: 4px 10px;
+  border: 0;
+  border-radius: var(--ty-radius-control);
+  background: none;
+  color: var(--ty-ink);
+  font: inherit;
+  font-size: 0.875rem;
+  text-align: start;
+  cursor: pointer;
+}
+.ty-site-idiomas__item:hover {
+  background: var(--ty-surface-sunken);
+}
+.ty-site-idiomas__item[aria-pressed='true'] {
+  background: var(--ty-accent-soft);
+  font-weight: var(--ty-font-weight-semibold);
+}
+.ty-site-idiomas__item:focus-visible {
+  outline: var(--ty-focus-width, 2px) solid var(--ty-focus-ring);
+  outline-offset: -2px;
+}
+.ty-site-idiomas__item code {
+  font-family: var(--ty-site-mono);
+  font-size: 11px;
+  color: var(--ty-ink-3);
+}
