@@ -21,7 +21,7 @@ export interface CapaProps {
   paragrafos?: string[]
   /** Back cover: one number from the book, with its source. */
   destaque?: { eyebrow: string; texto: string; fonte: string }
-  /** Values drawn as the cover graphic (e.g. the 17 FPM population cuts), on a log scale. */
+  /** Values drawn as the cover graphic (e.g. the thresholds of a rule), on a log scale. */
   cortes?: number[]
   legendaGrafismo?: string
   /** Back cover seal lines. */

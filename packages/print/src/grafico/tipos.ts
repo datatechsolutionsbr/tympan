@@ -1,10 +1,10 @@
 import type { RenderizadorGrafico } from '@datatechsolutions/tympan-tokens'
 import type { SpecCorrelacao } from './tiposCorrelacao.ts'
 
-/** One compared pair: `a` (e.g. "até 3% abaixo") against `b` (e.g. "até 3% acima"). */
+/** One compared pair: `a` (e.g. "logo fora da zona") against `b` (e.g. "logo dentro da zona"). */
 export interface LinhaPar {
   rotulo: string
-  /** Second line under the label (e.g. "Censo 2022"). */
+  /** Second line under the label (e.g. "edição 2026-09"). */
   nota?: string
   a: number
   b: number
@@ -87,7 +87,7 @@ export interface SpecContagem extends Base {
   linhas?: LinhaPar[]
   rotuloA?: string
   rotuloB?: string
-  /** What one icon stands for, for the key ("municípios"). */
+  /** What one icon stands for, for the key ("dias"). */
   rotuloUnidade?: string
   icone?: 'casa' | 'pessoa' | 'quadrado'
 }

@@ -39,10 +39,10 @@ import {
   tintasDoEstilo,
 } from '../src/index.ts'
 import { Emblema } from '../src/marca/Emblema.tsx'
-import { DuplaFpm, specsFpm } from '../gallery/src/fpm.tsx'
+import { DuplaEstudo, specsEstudo } from '../gallery/src/estudo.tsx'
 
 const AMOSTRAS: Record<string, ReactElement> = {
-  Dupla: <DuplaFpm />,
+  Dupla: <DuplaEstudo />,
   Pagina: (
     <Dupla numero="24-25" parte="Parte I">
       <Pagina lado="par" variante="prancha" />
@@ -53,21 +53,21 @@ const AMOSTRAS: Record<string, ReactElement> = {
   Texto: <Texto eyebrow="E" titulo="T" nivel={1} variante="codigo" paragrafos={['SELECT 1']} lista={{ ordenada: true, itens: ['um'] }} />,
   Margem: <Margem titulo="Onde isso volta" texto="Volume I" />,
   Anotacao: <Anotacao alvo="1" texto="nota" />,
-  Promessa: <Promessa citacao="c" norma="n" data="1981-08-27" resumo="r" urn="urn:lex" detalhes={[{ termo: 't', definicao: 'd' }]} genealogia={[{ ano: '1966', texto: 'CTN' }, { ano: '1981', texto: 'DL', atual: true }]} />,
-  Numeros: <Numeros exemplo itens={[{ valor: '1.843', unidade: 'R$', comparado: 'abaixo: R$ 1.724', rotulo: 'FPM', meta: '2024', ref: '#k3' }, { valor: 12374, unidade: 'km²', rotulo: 'x', ref: '#k1' }]} />,
+  Promessa: <Promessa citacao="c" norma="n" data="2020-03-03" resumo="r" urn="urn:lex" detalhes={[{ termo: 't', definicao: 'd' }]} genealogia={[{ ano: '2012', texto: 'Plano de mobilidade' }, { ano: '2020', texto: 'Decreto', atual: true }]} />,
+  Numeros: <Numeros exemplo itens={[{ valor: '1.843', unidade: 'R$', comparado: 'abaixo: R$ 1.724', rotulo: 'custo por estação', meta: '2024', ref: '#k3' }, { valor: 12374, unidade: 'km²', rotulo: 'x', ref: '#k1' }]} />,
   TabelaDados: <TabelaDados titulo="t" colunas={['a', { rotulo: 'b', numerica: true }, { rotulo: 'c', mono: true }]} linhas={[['x', 1, 'y']]} nota="n" />,
   Veredito: <Veredito promessa="p" texto="t" estado="pendente" medicaoMarcada="[data]" proposto itens={ESTADOS_PROVA.map((e) => ({ afirmacao: e, base: 'b', estado: e }))} />,
   MarcaProva: <>{ESTADOS_PROVA.map((e) => <MarcaProva key={e} estado={e} grande />)}</>,
   Testes: <Testes titulo="t" itens={[{ pergunta: 'p', estado: 'refutada', texto: 't', proposto: true }]} />,
   NaoDaParaAfirmar: <NaoDaParaAfirmar itens={[{ titulo: 't', texto: 'x', remete: 'dupla 5' }]} />,
   QuandoODadoChegar: <QuandoODadoChegar texto="t" itens={[{ titulo: 't', texto: 'x', estado: 'sem-dado' }]} />,
-  Rastro: <Rastro referencia="#k5" numero="132" consulta="q.sql" sha256="d6e9215232af7991e752270d123ab974" tabela="municipios" fonteOficial="IBGE" versao="lake 2026-09-25" />,
-  Fonte: <Fonte texto="IBGE" versaoLake="2026-09-25" rodape />,
+  Rastro: <Rastro referencia="#k5" numero="127" consulta="q.sql" sha256="3f1c0a9b7e2d4c6a8b0e1f2a3b4c5d6e" tabela="medicoes" fonteOficial="Rede de monitoramento de Vila Aurora (dados fictícios)" versao="edição 2026-09-25" />,
+  Fonte: <Fonte texto="Rede de monitoramento de Vila Aurora (dados fictícios)" versaoLake="2026-09-25" rodape />,
   Ficha: <Ficha titulo="Créditos" itens={[{ termo: 'ISBN', definicao: '[ISBN]' }]} />,
   DesenhoPublicado: <DesenhoPublicado titulo="t" itens={[{ rotulo: 'Promessa', texto: 'x' }]} />,
-  NaSuaCidade: <NaSuaCidade titulo="t" campos={['Município']} nota="n" url="lakebrasil.dev/livros" versaoLake="2026-09-25" />,
+  NaSuaCidade: <NaSuaCidade titulo="t" campos={['Bairro']} nota="n" url="exemplo.org/vila-aurora" versaoLake="2026-09-25" />,
   ManchetaIlustrativa: <ManchetaIlustrativa texto="[Manchete ilustrativa: x]" />,
-  ProximoCapitulo: <ProximoCapitulo titulo="Lei Kandir" texto="x" />,
+  ProximoCapitulo: <ProximoCapitulo titulo="O ar nos bairros vizinhos" texto="x" />,
   LogoLakebrasil: (
     <>
       {(['cor', 'cor-fundo-escuro', 'mono-escuro', 'mono-claro', 'simbolo'] as const).map((v) => (
@@ -82,14 +82,14 @@ const AMOSTRAS: Record<string, ReactElement> = {
       ))}
     </>
   ),
-  AberturaParte: <AberturaParte numero="I" titulo="Dinheiro e regra" pergunta="?" partes={[{ numero: 'I', titulo: 'a' }, { numero: 'II', titulo: 'b' }]} nestaParte={[{ cap: 'cap. 1', titulo: 't' }]} ondeIssoVolta="x" />,
+  AberturaParte: <AberturaParte numero="I" titulo="Ar e cidade" pergunta="?" partes={[{ numero: 'I', titulo: 'a' }, { numero: 'II', titulo: 'b' }]} nestaParte={[{ cap: 'cap. 1', titulo: 't' }]} ondeIssoVolta="x" />,
   Capa: (
     <Dupla numero="capa">
       <Pagina lado="par" variante="capa">
         <Capa face="quarta" chamada="c" paragrafos={['p']} destaque={{ eyebrow: 'e', texto: 't', fonte: 'f' }} selo={['s']} isbn="[ISBN]" />
       </Pagina>
       <Pagina lado="impar" variante="capa">
-        <Capa face="primeira" eyebrow="Brasil Real" titulo="Como medir" subtitulo="s" autora="[AUTORA]" cortes={[10188, 13584, 156216]} legendaGrafismo="As linhas" />
+        <Capa face="primeira" eyebrow="Laboratório Exemplo" titulo="Como medir" subtitulo="s" autora="[AUTORA]" cortes={[15, 25, 50]} legendaGrafismo="As linhas" />
       </Pagina>
     </Dupla>
   ),
@@ -101,8 +101,8 @@ const AMOSTRAS: Record<string, ReactElement> = {
       alt="Linha do tempo"
       volumes={[{ volume: 'III', titulo: 'A virada', de: 2011, ate: 2016 }]}
       eventos={[
-        { ano: 2012, norma: 'Lei 12.651/2012', fio: 'II', onde: 'Vol. 0', status: 'medida-neste-volume' },
-        { ano: 2023, norma: 'LC 200', fio: null, onde: 'x', status: 'a-confirmar' },
+        { ano: 2020, norma: 'Decreto 1.234/2020 (fictício)', fio: 'II', onde: 'Vol. 0', status: 'medida-neste-volume' },
+        { ano: 2023, norma: 'Plano de ar limpo', fio: null, onde: 'x', status: 'a-confirmar' },
       ]}
       herdadas="h"
       nota="n"
@@ -111,7 +111,7 @@ const AMOSTRAS: Record<string, ReactElement> = {
   Mapa: <Mapa titulo="Mapa" alt="Mapa esquemático" exemplo legenda={['baixa', 'média', 'alta']} comoLer="c" naoMostra="n" sangria />,
   GraficoMetodo: (
     <>
-      {(['halteres', 'barras', 'contagem'] as const).flatMap((t) => specsFpm(t)).map((s, i) => (
+      {(['halteres', 'barras', 'contagem'] as const).flatMap((t) => specsEstudo(t)).map((s, i) => (
         <GraficoMetodo key={i} spec={s} />
       ))}
       <GraficoMetodo
@@ -126,7 +126,7 @@ const AMOSTRAS: Record<string, ReactElement> = {
             { x: 2008, y: 12374, rotulo: '12.374', chamada: 1 },
             { x: 2011, y: 5393 },
           ],
-          eventos: [{ x: 2012, rotulo: 'Lei', nota: '25/05/2012' }],
+          eventos: [{ x: 2012, rotulo: 'Decreto', nota: '03/03/2012' }],
           faixas: [{ de: 2008, ate: 2011, rotulo: 'antes' }],
         }}
       />

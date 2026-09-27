@@ -16,10 +16,10 @@ import {
   type SpecSerie,
 } from '../src/index.ts'
 import { FOLGA_ANOTACAO, TEXTO, larguraTexto, type AnotacaoPosta } from '../src/grafico/geometria.ts'
-import { specsFpm } from '../gallery/src/fpm.tsx'
+import { specsEstudo } from '../gallery/src/estudo.tsx'
 
 const LONGA =
-  'Com a estimativa de 2025, 60 contra 43. A régua que distribui o FPM é a estimativa [conferir com o TCU], e uma nota longa o bastante para quebrar em várias linhas.'
+  'Com a estimativa de 2025, 318 contra 241. A estimativa da rede de monitoramento usa menos estações [conferir com a rede], e uma nota longa o bastante para quebrar em várias linhas.'
 
 function dentro(postas: AnotacaoPosta[], largura: number, altura: number) {
   for (const a of postas) {
@@ -39,8 +39,8 @@ describe('annotations never leave the viewBox', () => {
   for (const largura of [60, 92, 100, 130]) {
     for (const k of [1, 3]) {
       it(`halteres ${largura} mm, ${k} nota(s)`, () => {
-        for (const base of specsFpm('halteres') as SpecHalteres[]) {
-          const spec = comNotas({ ...base, unidade: 'municípios', referencias: [{ valor: 50, rotulo: 'metade' }] }, k)
+        for (const base of specsEstudo('halteres') as SpecHalteres[]) {
+          const spec = comNotas({ ...base, unidade: 'dias', referencias: [{ valor: 50, rotulo: 'metade' }] }, k)
           const L = layoutHalteres(spec, largura)
           dentro(L.anotacoes, largura, L.altura)
           // Unit label under the axis (baseline at eixo.y + 5.6).
@@ -52,14 +52,14 @@ describe('annotations never leave the viewBox', () => {
         }
       })
       it(`barras e colunas ${largura} mm, ${k} nota(s)`, () => {
-        const spec = comNotas(specsFpm('barras')[0] as SpecBarras, k)
+        const spec = comNotas(specsEstudo('barras')[0] as SpecBarras, k)
         const L = layoutBarras(spec, largura)
         dentro(L.anotacoes, largura, L.altura)
         const C = layoutColunas(spec, largura)
         dentro(C.anotacoes, largura, C.altura)
       })
       it(`contagem ${largura} mm, ${k} nota(s)`, () => {
-        const spec = comNotas(specsFpm('contagem')[0] as SpecContagem, k)
+        const spec = comNotas(specsEstudo('contagem')[0] as SpecContagem, k)
         const L = layoutContagem(spec, largura)
         dentro(L.anotacoes, largura, L.altura)
       })
@@ -95,9 +95,9 @@ describe('column group labels wrap inside their group', () => {
       titulo: 't',
       escala: [0, 100],
       barras: [
-        { rotulo: '10 municípios que mais desmataram', valor: 22.8 },
-        { rotulo: '10 microrregiões que mais desmataram', valor: 51.9 },
-        { rotulo: 'Pará e Mato Grosso', valor: 58.2 },
+        { rotulo: '10 estações que mais passaram do limite', valor: 22.8 },
+        { rotulo: '10 subprefeituras que mais passaram do limite', valor: 51.9 },
+        { rotulo: 'Centro e zona norte', valor: 58.2 },
       ],
     }
     for (const largura of [60, 92, 128]) {

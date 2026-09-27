@@ -39,7 +39,7 @@ export interface MapaProps {
   nivel?: NivelMapa
   /** Values by code (7-digit IBGE code; for `uf`, the abbreviation or the 2-digit code). Classed by `limites` or by quantiles. `null` or absent: no data. */
   valores?: Record<string, number | null>
-  /** Class index (0 = lowest) by code, when the classes come ready (e.g. FPM bands). Takes precedence over `valores`. */
+  /** Class index (0 = lowest) by code, when the classes come ready (e.g. bands of a rule). Takes precedence over `valores`. */
   classes?: Record<string, number | null>
   /** Ascending class breaks for `valores` (n − 1 breaks → n classes). Without them, quantiles. */
   limites?: number[]

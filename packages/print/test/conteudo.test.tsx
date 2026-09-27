@@ -1,5 +1,5 @@
 // @vitest-environment node
-// The book's real content (brasil-real/conteudo/): every panel of every
+// A real book's content folder (livro.json + capitulos/): every panel of every
 // chapter renders in every preset, and no prop of the JSON is ignored.
 // Set BRASIL_REAL_CONTEUDO to the absolute path of the conteudo folder; the
 // suite is skipped without it (CI has no access to the book repository).

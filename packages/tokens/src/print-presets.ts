@@ -1,7 +1,7 @@
 // Book-style presets for @datatechsolutions/tympan-print: fonts, paper and ink,
 // data and proof-state colours, texture, stroke and the chart renderer of each
-// diagramming style. The first eleven reproduce the visual studies of the
-// Brasil Real volume 0 (diagramacao/estilos/); the rest are new
+// diagramming style. The first eleven reproduce the author's earlier visual
+// studies (diagramacao/estilos/); the rest are new
 // interpretations of published design traditions. Style ids and labels are
 // neutral, descriptive names; the tradition a style draws on is named only in
 // its `referencia` ("inspirado em …"). Renamed ids stay accepted as deprecated

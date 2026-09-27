@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { PRINT_PRESET_NAMES, printPresets, resolvePrintStyleName, type PrintPresetName } from '@datatechsolutions/tympan-tokens'
 import { LivroPrint } from '../../src/index.ts'
-import { DuplaFpm, GRAFICO_DO_ESTUDO, type TipoGraficoFpm } from './fpm.tsx'
+import { DuplaEstudo, GRAFICO_DO_ESTUDO, type TipoGraficoEstudo } from './estudo.tsx'
 import { DuplaMapas } from './mapas.tsx'
 
-type Grafico = 'estudo' | 'mapa' | TipoGraficoFpm
+type Grafico = 'estudo' | 'mapa' | TipoGraficoEstudo
 
 function lerUrl() {
   const q = new URLSearchParams(window.location.search)
@@ -19,7 +19,7 @@ function lerUrl() {
 }
 
 /**
- * The FPM method spread (or, with `?grafico=mapa`, the map spread) in each
+ * The method spread of the example study (or, with `?grafico=mapa`, the map spread) in each
  * of the book styles, with P&B. `?foto=1`
  * renders only the spread (used by scripts/gallery-shots.mjs).
  */
@@ -34,10 +34,10 @@ export function Galeria() {
     window.history.replaceState(null, '', `?${q.toString()}`)
   }, [estilo, pb, grafico, inicial.foto])
 
-  const tipo: TipoGraficoFpm = grafico === 'estudo' || grafico === 'mapa' ? (GRAFICO_DO_ESTUDO[estilo] ?? 'halteres') : grafico
+  const tipo: TipoGraficoEstudo = grafico === 'estudo' || grafico === 'mapa' ? (GRAFICO_DO_ESTUDO[estilo] ?? 'halteres') : grafico
   const livro = (
     <LivroPrint estilo={estilo} pb={pb}>
-      {grafico === 'mapa' ? <DuplaMapas /> : <DuplaFpm grafico={tipo} />}
+      {grafico === 'mapa' ? <DuplaMapas /> : <DuplaEstudo grafico={tipo} />}
     </LivroPrint>
   )
   if (inicial.foto) return <main className="ty-print-galeria-foto">{livro}</main>
@@ -63,13 +63,12 @@ export function Galeria() {
             <option value="halteres">halteres</option>
             <option value="barras">barras</option>
             <option value="contagem">contagem</option>
-            <option value="mapa">mapas (malha IBGE)</option>
+            <option value="mapa">mapas (valores de exemplo)</option>
           </select>
         </label>
         <label>
           <input type="checkbox" checked={pb} onChange={(e) => setPb(e.target.checked)} /> P&amp;B
         </label>
-        <p className="ty-print-galeria-ref">{printPresets[estilo].referencia}</p>
       </header>
       <main>{livro}</main>
     </div>

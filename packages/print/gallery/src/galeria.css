@@ -30,13 +30,6 @@ body {
   align-items: center;
 }
 
-.ty-print-galeria-ref {
-  flex-basis: 100%;
-  margin: 0;
-  color: #bdb5a8;
-  font-size: 12px;
-}
-
 .ty-print-galeria main {
   padding: 24px;
 }

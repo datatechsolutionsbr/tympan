@@ -319,11 +319,11 @@ export interface RastroProps {
   consulta: string
   sha256: string
   tabela: string
-  /** Coverage of the table (e.g. "5.570 municípios"). */
+  /** Coverage of the table (e.g. "12 estações"). */
   cobertura?: string
   fonteOficial: string
   licenca?: string
-  /** Lake version ("lake 2026-09-25"). */
+  /** Data version ("edição 2026-09"); a full date (AAAA-MM-DD) in it adds the lake seal. */
   versao: string
   /** Edition date. */
   edicao?: string

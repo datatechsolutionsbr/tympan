@@ -2,11 +2,11 @@
 // map renderers are the slow part of the page, so a spread only re-renders when its style, P&B or chart change.
 import { memo, useEffect, useRef, useState } from 'react'
 import { LivroPrint } from '@datatechsolutions/tympan-print'
-import type { PrintPresetName } from '@datatechsolutions/tympan-tokens'
-import { DuplaFpm, DuplaMapas, GRAFICO_DO_ESTUDO, type TipoGraficoFpm } from '../../galerias'
+import type { PrintPresetName } from '../../tokens'
+import { DuplaEstudo, DuplaMapas, GRAFICO_DO_ESTUDO, type TipoGraficoEstudo } from '../../galerias'
 import type { Grafico } from '../../rotas'
 
-export const tipoDoGrafico = (estilo: string, grafico: Grafico): TipoGraficoFpm =>
+export const tipoDoGrafico = (estilo: string, grafico: Grafico): TipoGraficoEstudo =>
   grafico === 'estudo' || grafico === 'mapa' ? (GRAFICO_DO_ESTUDO[estilo] ?? 'halteres') : grafico
 
 export interface DuplaEstiloProps {
@@ -19,7 +19,7 @@ export const DuplaEstilo = memo(function DuplaEstilo({ estilo, grafico, pb }: Du
   return (
     // The component CSS is imported once (main.tsx); each spread adds only its style's custom properties.
     <LivroPrint estilo={estilo} pb={pb} incluirCss={false} className="ty-site-livro">
-      {grafico === 'mapa' ? <DuplaMapas /> : <DuplaFpm grafico={tipoDoGrafico(estilo, grafico)} />}
+      {grafico === 'mapa' ? <DuplaMapas /> : <DuplaEstudo grafico={tipoDoGrafico(estilo, grafico)} />}
     </LivroPrint>
   )
 })

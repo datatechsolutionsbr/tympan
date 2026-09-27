@@ -1,67 +1,59 @@
-// A spread of real maps for the gallery and the tests. The values come from
-// the mesh itself (area of each municipality, municipalities per UF), so no
-// dataset ships with the gallery; the recortes use example data.
-import { geoArea } from 'd3-geo'
-import { Dupla, Fonte, Mapa, municipios, Pagina, Painel, Texto } from '../../src/index.ts'
+// A spread of example maps for the gallery and the tests. The Mapa component
+// draws the bundled mesh; every value on these maps is example data (either
+// the component's own `exemplo` data or the deterministic values below), so no
+// dataset ships with the gallery and no map states a finding.
+import { Dupla, Fonte, Mapa, Pagina, Painel, Texto, ufs } from '../../src/index.ts'
 
-/** Earth radius (km) of the authalic sphere of GRS 80. */
-const R = 6371.007
-
-let cacheArea: Record<string, number> | null = null
-/** Area of each municipality on the simplified mesh (km²), rounded. */
-export function areasKm2(): Record<string, number> {
-  cacheArea ??= Object.fromEntries(municipios().map((f) => [f.properties.code, Math.round(geoArea(f) * R * R)]))
-  return cacheArea
-}
-
-export function municipiosPorUf(): Record<string, number> {
-  const out: Record<string, number> = {}
-  for (const f of municipios()) {
-    const k = f.properties.code.slice(0, 2)
-    out[k] = (out[k] ?? 0) + 1
-  }
-  return out
+let cacheUf: Record<string, number> | null = null
+/**
+ * Example values by UF: as if the Laboratório Exemplo repeated the Vila Aurora
+ * air-quality count in each UF. Invented, deterministic (UF order only).
+ */
+export function valoresExemploPorUf(): Record<string, number> {
+  cacheUf ??= Object.fromEntries(ufs().map((f, i) => [f.properties.code, 8 + ((i * 37) % 91)]))
+  return cacheUf
 }
 
 export function DuplaMapas() {
   return (
     <Dupla numero="M" capitulo="Mapas" parte="Galeria">
       <Pagina lado="par">
-        <Texto eyebrow="Malha IBGE 2022" titulo="O tamanho dos municípios" nivel={2} />
-        <Painel letra="a" titulo="Área de cada município, em quintis">
+        <Texto eyebrow="Exemplo de mapa" titulo="Mapas coropléticos com valores de exemplo" nivel={2} />
+        <Painel letra="a" titulo="Exemplo de mapa coroplético na malha fina, em quintis">
           <Mapa
-            titulo="Área territorial dos 5.570 municípios (km²), quintis"
-            alt="Os municípios grandes se concentram no Norte e no Centro-Oeste; os pequenos, no Sul, no Sudeste e no litoral do Nordeste."
-            valores={areasKm2()}
-            unidade="km²"
-            destaques={['3550308', 'Brasília/DF', 'Altamira/PA']}
-            comoLer="Cada área é um município, na projeção cônica equivalente de Albers usada pelo IBGE. Quanto mais escuro, maior o município."
-            naoMostra="Quantas pessoas moram em cada um: área não é população."
+            titulo="Valores de exemplo na malha fina, quintis"
+            alt="Mapa do Brasil na malha mais fina, com valores de exemplo em cinco classes; não representa nenhum dado real."
+            exemplo
+            legenda={['muito baixo', 'baixo', 'médio', 'alto', 'muito alto']}
+            destaques={['Brasília/DF']}
+            comoLer="Cada área é uma unidade da malha, na projeção cônica equivalente de Albers. Quanto mais escuro, maior o valor de exemplo."
+            naoMostra="Nenhum dado real: os valores existem só para mostrar o mapa."
           />
         </Painel>
-        <Fonte rodape texto="IBGE, Malha Municipal 2022, simplificada (tympan-print). Área calculada sobre a malha simplificada." />
+        <Fonte rodape texto="Valores de exemplo (fictícios). Malha: IBGE, Malha Municipal 2022, simplificada (tympan-print)." />
       </Pagina>
       <Pagina lado="impar">
-        <Painel letra="b" titulo="Municípios por UF" largura={3}>
+        <Painel letra="b" titulo="Exemplo por UF, com limites fixos" largura={3}>
           <Mapa
             nivel="uf"
-            titulo="Quantos municípios cada UF tem"
-            alt="Minas Gerais tem mais municípios que qualquer outra UF; Roraima e o Amapá, os menos."
-            valores={municipiosPorUf()}
-            limites={[50, 150, 300, 500]}
-            legenda={['menos de 50', '50 a 149', '150 a 299', '300 a 499', '500 ou mais']}
+            titulo="Exemplo de mapa coroplético: valores de exemplo por UF"
+            alt="Mapa por UF com valores de exemplo em cinco classes de dias acima do limite; os valores são fictícios."
+            valores={valoresExemploPorUf()}
+            unidade="dias"
+            limites={[20, 40, 60, 80]}
+            legenda={['menos de 20 dias', '20 a 39', '40 a 59', '60 a 79', '80 ou mais']}
           />
         </Painel>
         <Painel letra="c" titulo="Recorte Sudeste" largura={3}>
-          <Mapa titulo="Sudeste, dados de exemplo" alt="Recorte Sudeste com dados de exemplo e municípios sem dado." recorte="Sudeste" exemplo legenda={['baixa', 'média-baixa', 'média', 'média-alta', 'alta']} destaques={['São Paulo/SP']} />
+          <Mapa titulo="Sudeste, dados de exemplo" alt="Recorte Sudeste com dados de exemplo e áreas sem dado." recorte="Sudeste" exemplo legenda={['baixa', 'média-baixa', 'média', 'média-alta', 'alta']} destaques={['São Paulo/SP']} />
         </Painel>
         <Painel letra="d" titulo="Pequenos múltiplos: as cinco regiões, escala divergente">
           <Mapa
-            titulo="Distância a um corte, por região (exemplo)"
+            titulo="Distância a um limite, por região (exemplo)"
             alt="Seis mapas pequenos com dados de exemplo: Brasil e as cinco regiões, com legenda única."
             exemplo
             escala="divergente"
-            legenda={['muito abaixo', 'abaixo', 'perto do corte', 'acima', 'muito acima']}
+            legenda={['muito abaixo', 'abaixo', 'perto do limite', 'acima', 'muito acima']}
             multiplos={[
               { titulo: 'Brasil' },
               { titulo: 'Norte', recorte: 'Norte' },

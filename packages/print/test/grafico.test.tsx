@@ -4,7 +4,7 @@ import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import type { RenderizadorGrafico } from '@datatechsolutions/tympan-tokens'
 import { GraficoMetodo, LivroPrint, layoutBarras, layoutColunas, layoutHalteres, marcasEixo, type SpecBarras, type SpecHalteres } from '../src/index.ts'
-import { PRIMEIRO, SOMADOS, specsFpm } from '../gallery/src/fpm.tsx'
+import { PRIMEIRO, SOMADOS, specsEstudo } from '../gallery/src/estudo.tsx'
 
 const RENDERIZADORES: RenderizadorGrafico[] = ['limpo', 'mao', 'isotype', 'gravura', 'prancheta', 'aquarela', 'riso', 'pontos']
 
@@ -15,7 +15,7 @@ function translate(el: Element): [number, number] {
 }
 
 describe('halteres: points sit on the data in every renderer', () => {
-  const specs = specsFpm('halteres') as [SpecHalteres, SpecHalteres]
+  const specs = specsEstudo('halteres') as [SpecHalteres, SpecHalteres]
   for (const r of RENDERIZADORES) {
     it(r, () => {
       for (const spec of specs) {
@@ -59,7 +59,7 @@ describe('halteres: points sit on the data in every renderer', () => {
   }
 
   it('the layout agrees with the linear scale', () => {
-    const spec = specsFpm('halteres')[1] as SpecHalteres
+    const spec = specsEstudo('halteres')[1] as SpecHalteres
     const L = layoutHalteres(spec, 130)
     const k = (L.eixo.x1 - L.eixo.x0) / (spec.escala[1] - spec.escala[0])
     SOMADOS.forEach((l, i) => {
@@ -72,7 +72,7 @@ describe('halteres: points sit on the data in every renderer', () => {
 })
 
 describe('barras: bar lengths come from the data in every renderer', () => {
-  const spec = specsFpm('barras')[0] as SpecBarras
+  const spec = specsEstudo('barras')[0] as SpecBarras
   for (const r of RENDERIZADORES) {
     it(r, () => {
       const { container } = render(
@@ -94,7 +94,7 @@ describe('barras: bar lengths come from the data in every renderer', () => {
 })
 
 describe('colunas (vertical bars): heights come from the data in every renderer', () => {
-  const spec = specsFpm('barras')[1] as SpecBarras
+  const spec = specsEstudo('barras')[1] as SpecBarras
   for (const r of RENDERIZADORES) {
     it(r, () => {
       const { container } = render(
@@ -123,16 +123,16 @@ describe('colunas (vertical bars): heights come from the data in every renderer'
 
 describe('accessible figure', () => {
   it('names the finding, keeps a data table and tags local-lake numbers', () => {
-    const spec = specsFpm('halteres')[0]
+    const spec = specsEstudo('halteres')[0]
     const { container, getByRole } = render(
       <LivroPrint estilo="semanario">
-        <GraficoMetodo spec={spec} alt="Censo 2022: 132 acima, 36 abaixo." local />
+        <GraficoMetodo spec={spec} alt="Inverno 2022: 127 fora, 54 dentro." local />
       </LivroPrint>,
     )
-    expect(getByRole('img', { name: 'Censo 2022: 132 acima, 36 abaixo.' })).toBeInTheDocument()
+    expect(getByRole('img', { name: 'Inverno 2022: 127 fora, 54 dentro.' })).toBeInTheDocument()
     const tabela = container.querySelector('.ty-print-sr table')!
-    expect(tabela.textContent).toContain('132')
-    expect(tabela.textContent).toContain('Contagem 2007')
+    expect(tabela.textContent).toContain('127')
+    expect(tabela.textContent).toContain('Inverno 2016')
     expect(container.textContent).toContain('lake local, não publicado')
   })
 })

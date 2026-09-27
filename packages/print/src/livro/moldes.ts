@@ -38,7 +38,7 @@ const cheia = (area: string, extra: Omit<LinhaMolde, 'areas'> = {}) => L([[area,
 /**
  * The spreads of the Volume 0 storyboard (diagramacao/dashboards.html) and of
  * the style studies (diagramacao/estilos/estilo-*.html, the method spread of
- * the FPM chapter, pp. [22]–[23]).
+ * a chapter, pp. [22]–[23]).
  */
 export const MOLDES: Record<string, Molde> = {
   // Study pp. [22]–[23]: heading; a + b side by side; linking text; d (chart + data table) as large as the
@@ -95,7 +95,7 @@ export const MOLDES: Record<string, Molde> = {
     impar: [cheia('d2'), cheia('titulo2'), cheia('fig', { cresce: true }), cheia('texto'), L([['q', 4], ['notas', 2]]), cheia('b'), cheia('f'), cheia('frase'), cheia('fonte', { pe: true })],
   },
 
-  // Pending verdict (Kandir, FUNDEB, fiscal framework): numbers, the claim under test | the design published first.
+  // Pending verdict (a claim still waiting for its data): numbers, the claim under test | the design published first.
   pendente: {
     descricao: 'Veredito pendente: b, e, f | desenho publicado antes, g + h',
     par: [cheia('titulo'), cheia('b'), L([['fig', 4], ['nota', 2]]), cheia('e', { cresce: true }), cheia('f', { pe: true })],

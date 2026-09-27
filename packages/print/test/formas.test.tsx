@@ -6,12 +6,12 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 import type { FormaGrafico, PrintStyleOverrides, RenderizadorGrafico } from '@datatechsolutions/tympan-tokens'
 import { GraficoMetodo, LivroPrint, type SpecBarras, type SpecHalteres } from '../src/index.ts'
-import { PRIMEIRO, SOMADOS, specsFpm } from '../gallery/src/fpm.tsx'
+import { PRIMEIRO, SOMADOS, specsEstudo } from '../gallery/src/estudo.tsx'
 
 const RENDERIZADORES: RenderizadorGrafico[] = ['limpo', 'mao', 'isotype', 'gravura', 'prancheta', 'aquarela', 'riso', 'pontos']
 const FORMAS: FormaGrafico[] = ['barras', 'colunas', 'eixo-central', 'ziguezague', 'fluxo', 'predios', 'cartoes']
 
-const [PRIM, SOMA] = specsFpm('barras') as [SpecBarras, SpecBarras]
+const [PRIM, SOMA] = specsEstudo('barras') as [SpecBarras, SpecBarras]
 
 function desenhar(spec: SpecBarras, forma: FormaGrafico, renderizador: RenderizadorGrafico, extra: PrintStyleOverrides['estrutura'] = {}) {
   return render(
@@ -79,7 +79,7 @@ describe('every shape draws every value in every renderer', () => {
 })
 
 describe('the folding bar keeps one line = dobra in both figures (same scale, as in the graficos-1900 study)', () => {
-  it('mm per unit is the same for the first cut and the 17 cuts', () => {
+  it('mm per unit is the same for the north segment and the 12 segments summed', () => {
     const ks = [PRIM, SOMA].map((spec) => {
       const { container, unmount } = desenhar(spec, 'ziguezague', 'limpo')
       const b = [...container.querySelectorAll('g.ty-print-barra')].find((x) => num(x, 'valor') > 0)!
@@ -142,7 +142,7 @@ describe('callouts inside the chart point at their value and stay in the figure'
 })
 
 describe('a dumbbell takes the style shape only when nothing is lost', () => {
-  const halteres = specsFpm('halteres')[0] as SpecHalteres
+  const halteres = specsEstudo('halteres')[0] as SpecHalteres
   it('converted when the style declares a shape and the axis starts at zero', () => {
     const { container } = render(
       <LivroPrint estilo="jornal" tokens={{ estrutura: { forma: 'colunas' } }}>

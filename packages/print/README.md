@@ -17,12 +17,12 @@ FSL-1.1-ALv2; see `LICENSE`.
 npm run build -w @datatechsolutions/tympan-print         # dist/index.js, index.d.ts, styles.css
 npm run typecheck -w @datatechsolutions/tympan-print
 npm test -w @datatechsolutions/tympan-print              # vitest + Testing Library + axe-core
-npm run gallery -w @datatechsolutions/tympan-print       # http://localhost:3330 (FPM method spread, every preset, P&B)
+npm run gallery -w @datatechsolutions/tympan-print       # http://localhost:3330 (example method spread, every preset, P&B)
 npm run gallery:shots -w @datatechsolutions/tympan-print # gallery/shots/<preset>.png via headless Chrome
 ```
 
-`BRASIL_REAL_CONTEUDO=/abs/path/brasil-real/conteudo npm test -w @datatechsolutions/tympan-print`
-also renders every panel of the book's real content in every preset and
+`BRASIL_REAL_CONTEUDO=/abs/path/to/conteudo npm test -w @datatechsolutions/tympan-print`
+also renders every panel of a real book's content folder in every preset and
 fails on any prop the components would ignore.
 
 ## Use
@@ -33,12 +33,12 @@ import { LivroPrint, Dupla, Pagina, Painel, GraficoMetodo, Veredito, Fonte } fro
 
 const html = renderToStaticMarkup(
   <LivroPrint estilo="jornal" pb={false} tokens={{ cor: { destaque: '#8a1c7c' } }}>
-    <Dupla numero="22-23" parte="Parte I · Dinheiro e regra" capitulo="As faixas do FPM" abreCapitulo>
+    <Dupla numero="22-23" parte="Parte I · Ar e cidade" capitulo="A zona de baixa emissão" abreCapitulo>
       <Pagina lado="par">
         <Painel letra="d" titulo="O gráfico do método">
-          <GraficoMetodo spec={spec} alt="Censo 2022: 132 acima, 36 abaixo do corte." />
+          <GraficoMetodo spec={spec} alt="Inverno 2022: 127 dias acima do limite fora da zona, 54 dentro." />
         </Painel>
-        <Fonte texto="IBGE, Censo 2022" versaoLake="2026-09-25" rodape />
+        <Fonte texto="Rede de monitoramento de Vila Aurora (dados fictícios)" rodape />
       </Pagina>
       <Pagina lado="impar">…</Pagina>
     </Dupla>
