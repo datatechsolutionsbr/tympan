@@ -9,6 +9,30 @@ const es = speaker('es')
 
 export interface FormsAMessages {
   themeSwitcher: { label: string; toLight: string; toDark: string }
+  /** ThemePalette: `results` {0} = count; `noResults` {0} = query; `applied` / `trigger` {0} = theme name; `count` {0} = themes in a group. */
+  themePalette: {
+    label: string
+    placeholder: string
+    groupInterface: string
+    groupPrint: string
+    recent: string
+    noResults: (query: string) => string
+    results: (n: number) => string
+    count: (n: number) => string
+    applied: (name: string) => string
+    trigger: (name: string) => string
+    preview: string
+    sample: string
+    mode: string
+    modeSystem: string
+    modeLight: string
+    modeDark: string
+    density: string
+    densityCompact: string
+    densityDefault: string
+    densityComfortable: string
+    hints: { move: string; apply: string; revert: string }
+  }
   stateSwitch: { off: string; on: string }
   /** `box`: {0} = 1-based position, {1} = total boxes. */
   oneTimeCode: { label: string; box: (position: number, total: number) => string }
@@ -60,6 +84,29 @@ export interface FormsAMessages {
 
 export const formsAEn: FormsAMessages = {
   themeSwitcher: { label: 'Dark mode', toLight: 'Switch to light mode', toDark: 'Switch to dark mode' },
+  themePalette: {
+    label: 'Choose a theme',
+    placeholder: 'Search themes',
+    groupInterface: 'Interface',
+    groupPrint: 'Book styles',
+    recent: 'Recent',
+    noResults: (q) => `No theme matches “${q}”.`,
+    results: (n) => `${en.n(n)} ${en.word(n, { one: 'theme', other: 'themes' })}`,
+    count: (n) => en.n(n),
+    applied: (name) => `Theme applied: ${name}`,
+    trigger: (name) => `Theme: ${name}`,
+    preview: 'Preview',
+    sample: 'The same content, another engraving.',
+    mode: 'Mode',
+    modeSystem: 'System',
+    modeLight: 'Light',
+    modeDark: 'Dark',
+    density: 'Density',
+    densityCompact: 'Compact',
+    densityDefault: 'Default',
+    densityComfortable: 'Comfortable',
+    hints: { move: 'preview', apply: 'apply', revert: 'revert' },
+  },
   stateSwitch: { off: 'Inactive', on: 'Active' },
   oneTimeCode: { label: 'Verification code', box: (n, total) => `Character ${en.n(n)} of ${en.n(total)}` },
   passwordStrength: {
@@ -112,6 +159,29 @@ export const formsAEn: FormsAMessages = {
 
 export const formsAPtBR: FormsAMessages = {
   themeSwitcher: { label: 'Modo escuro', toLight: 'Mudar para o modo claro', toDark: 'Mudar para o modo escuro' },
+  themePalette: {
+    label: 'Escolher o tema',
+    placeholder: 'Buscar tema',
+    groupInterface: 'Interface',
+    groupPrint: 'Estilos de livro',
+    recent: 'Recentes',
+    noResults: (q) => `Nenhum tema corresponde a “${q}”.`,
+    results: (n) => `${pt.n(n)} ${pt.word(n, { one: 'tema', other: 'temas' })}`,
+    count: (n) => pt.n(n),
+    applied: (name) => `Tema aplicado: ${name}`,
+    trigger: (name) => `Tema: ${name}`,
+    preview: 'Prévia',
+    sample: 'O mesmo conteúdo, outra gravação.',
+    mode: 'Modo',
+    modeSystem: 'Sistema',
+    modeLight: 'Claro',
+    modeDark: 'Escuro',
+    density: 'Densidade',
+    densityCompact: 'Compacta',
+    densityDefault: 'Padrão',
+    densityComfortable: 'Confortável',
+    hints: { move: 'prévia', apply: 'aplicar', revert: 'desfazer' },
+  },
   stateSwitch: { off: 'Inativo', on: 'Ativo' },
   oneTimeCode: { label: 'Código de verificação', box: (n, total) => `Caractere ${pt.n(n)} de ${pt.n(total)}` },
   passwordStrength: {
@@ -165,6 +235,29 @@ export const formsAPtBR: FormsAMessages = {
 /** Spanish (neutral Latin-American). */
 export const formsAEs: FormsAMessages = {
   themeSwitcher: { label: 'Modo oscuro', toLight: 'Cambiar al modo claro', toDark: 'Cambiar al modo oscuro' },
+  themePalette: {
+    label: 'Elegir el tema',
+    placeholder: 'Buscar tema',
+    groupInterface: 'Interfaz',
+    groupPrint: 'Estilos de libro',
+    recent: 'Recientes',
+    noResults: (q) => `Ningún tema coincide con «${q}».`,
+    results: (n) => `${es.n(n)} ${es.word(n, { one: 'tema', other: 'temas' })}`,
+    count: (n) => es.n(n),
+    applied: (name) => `Tema aplicado: ${name}`,
+    trigger: (name) => `Tema: ${name}`,
+    preview: 'Vista previa',
+    sample: 'El mismo contenido, otro grabado.',
+    mode: 'Modo',
+    modeSystem: 'Sistema',
+    modeLight: 'Claro',
+    modeDark: 'Oscuro',
+    density: 'Densidad',
+    densityCompact: 'Compacta',
+    densityDefault: 'Normal',
+    densityComfortable: 'Cómoda',
+    hints: { move: 'vista previa', apply: 'aplicar', revert: 'deshacer' },
+  },
   stateSwitch: { off: 'Inactivo', on: 'Activo' },
   oneTimeCode: { label: 'Código de verificación', box: (n, total) => `Carácter ${es.n(n)} de ${es.n(total)}` },
   passwordStrength: {
