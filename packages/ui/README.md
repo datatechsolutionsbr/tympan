@@ -7,10 +7,10 @@ Tympan is an Astrlabe-family component published by Datatech. Licence: FSL-1.1-A
 Apache 2.0 Future License); see `LICENSE`.
 
 ```sh
-npm run build -w @datatechsolutions/tympan          # dist/index.js, index.d.ts, styles.css (builds @datatechsolutions/tympan-tokens first)
+npm run build -w @datatechsolutions/tympan          # dist/index.js, flow.js, styles.css, flow.css and types (builds @datatechsolutions/tympan-tokens first)
 npm run typecheck -w @datatechsolutions/tympan
 npm test -w @datatechsolutions/tympan               # vitest + Testing Library + axe-core
-npm run gallery -w @datatechsolutions/tympan        # http://localhost:3310 (components, theme customizer)
+npm run gallery -w @datatechsolutions/tympan        # http://localhost:3310 (components, theme customizer, flow canvas at #/flow/...)
 npm run gallery:build -w @datatechsolutions/tympan  # static gallery in dist-gallery/
 ```
 
@@ -202,8 +202,40 @@ specs), grouped as in the gallery:
   ShowcaseBackdrop and AccentBand, FeatureShowcaseCard, RuledGrid,
   HighlightStat, FeatureTile.
 
-The canvas specs (wave 3 and the five canvas items of wave 4) live in a
-separate package.
+The canvas specs (wave 3 and the five canvas items of wave 4) are the flow
+canvas, a separate entry point of this package (below).
+
+## Flow and provenance canvas (`@datatechsolutions/tympan/flow`)
+
+A W3C PROV provenance graph viewer, a DAG workflow editor, run inspection and
+the forms and dialogs around them ship as the `/flow` subpath, with their own
+stylesheet. The main entry does not re-export them, so hosts that only use
+the components never load the canvas. The canvas lays graphs out with
+`@dagrejs/dagre`, an optional peer dependency: install it when you import
+`/flow`.
+
+```sh
+npm install @datatechsolutions/tympan @dagrejs/dagre
+```
+
+```tsx
+import '@datatechsolutions/tympan/styles.css'
+import '@datatechsolutions/tympan/flow.css'   // after styles.css
+import { TympanProvider } from '@datatechsolutions/tympan'
+import { ProvenanceGraph, FlowEditor } from '@datatechsolutions/tympan/flow'
+```
+
+What is inside, canvas tools, languages and accessibility: `src/flow/README.md`;
+records: `src/flow/CLEAN-ROOM.md` and `src/flow/PROVENANCE.md`.
+
+**Migrating from `@datatechsolutions/tympan-flow`.** The separate package is
+gone; its exports are unchanged under the subpath:
+
+| Before | After |
+|---|---|
+| `npm install @datatechsolutions/tympan-flow` | `npm install @dagrejs/dagre` (next to `@datatechsolutions/tympan`) |
+| `from '@datatechsolutions/tympan-flow'` | `from '@datatechsolutions/tympan/flow'` |
+| `import '@datatechsolutions/tympan-flow/styles.css'` | `import '@datatechsolutions/tympan/flow.css'` |
 
 ## Styling rules
 
@@ -232,4 +264,5 @@ and `dir` on `<html>` (or on a subtree).
 ## Records
 
 `CLEAN-ROOM.md` (process and inputs), `PROVENANCE.md` (per component),
-`THIRD_PARTY_NOTICES.md`, `LICENSE`.
+`THIRD_PARTY_NOTICES.md`, `LICENSE`; for the flow canvas,
+`src/flow/CLEAN-ROOM.md` and `src/flow/PROVENANCE.md`.

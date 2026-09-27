@@ -1,7 +1,7 @@
 # Provenance similarity check (run outside the clean room)
 
-The clean-room packages (`packages/tokens`, `packages/ui`,
-`packages/flow`) were written without access to the forked component
+The clean-room packages (`packages/tokens`, `packages/ui` with the flow
+canvas in `packages/ui/src/flow`, formerly `packages/flow`) were written without access to the forked component
 library. Two layers guard that:
 
 1. **In-repo guardrails** (run by `npm run check`):

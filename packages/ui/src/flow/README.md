@@ -1,29 +1,34 @@
-# @datatechsolutions/tympan-flow
+# @datatechsolutions/tympan/flow
 
-Tympan's accessible React 19 canvases for research platforms: a **W3C PROV
+Tympan's accessible React canvases for research platforms: a **W3C PROV
 provenance graph viewer** with a synced keyboard list, a **DAG workflow
 editor** for analyses (including a generic decision step), run inspection
 (panel and drawer, timeline, trace, replay and rewind), and the forms and
-dialogs around them. Built on `@datatechsolutions/tympan` and React Aria
-Components, styled with plain CSS in `@layer tympan.components`.
-Licence: FSL-1.1-ALv2 (Functional Source License, Version 1.1, Apache 2.0
-Future License), Copyright 2026 Natalia Mesquita; see `LICENSE`.
+dialogs around them. Built on the `@datatechsolutions/tympan` components and
+React Aria Components, styled with plain CSS in `@layer tympan.components`.
+Part of `@datatechsolutions/tympan` (this folder was the separate
+`@datatechsolutions/tympan-flow` package until 2026-09-26). Licence:
+FSL-1.1-ALv2 (Functional Source License, Version 1.1, Apache 2.0 Future
+License), Copyright 2026 Natalia Mesquita; see `LICENSE` of the package.
+
+Built, tested and shown with the package:
 
 ```sh
-npm run build -w @datatechsolutions/tympan-flow          # dist/index.js, index.d.ts, styles.css
-npm run typecheck -w @datatechsolutions/tympan-flow
-npm test -w @datatechsolutions/tympan-flow               # vitest + Testing Library + axe-core
-npm run gallery -w @datatechsolutions/tympan-flow        # http://localhost:3320 (provenance, DAG editor, components)
-npm run gallery:build -w @datatechsolutions/tympan-flow  # static gallery in dist-gallery/
+npm run build -w @datatechsolutions/tympan     # dist/flow.js, flow.d.ts, flow.css (next to index.js, styles.css)
+npm test -w @datatechsolutions/tympan          # vitest + Testing Library + axe-core
+npm run gallery -w @datatechsolutions/tympan   # http://localhost:3310/#/flow/provenance (also #/flow/editor, #/flow/components)
 ```
 
 ## Usage
 
+`@dagrejs/dagre` (behind `autoLayout`) is an optional peer dependency of
+`@datatechsolutions/tympan`: install it when you use this entry.
+
 ```tsx
 import '@datatechsolutions/tympan/styles.css'
-import '@datatechsolutions/tympan-flow/styles.css'
+import '@datatechsolutions/tympan/flow.css'
 import { TympanProvider } from '@datatechsolutions/tympan'
-import { ProvenanceGraph, FlowEditor } from '@datatechsolutions/tympan-flow'
+import { ProvenanceGraph, FlowEditor } from '@datatechsolutions/tympan/flow'
 
 <TympanProvider locale="pt-BR">
   <ProvenanceGraph items={items} statements={statements} defaultFocusId="as-reg-position" defaultHops={3} />
@@ -108,5 +113,5 @@ reduced transparency and forced colours are handled in every stylesheet.
 
 ## Records
 
-`CLEAN-ROOM.md` (process and inputs), `PROVENANCE.md` (per component),
-`THIRD_PARTY_NOTICES.md`, `LICENSE`.
+`CLEAN-ROOM.md` (process and inputs), `PROVENANCE.md` (per component) in
+this folder; `THIRD_PARTY_NOTICES.md` and `LICENSE` of the package.

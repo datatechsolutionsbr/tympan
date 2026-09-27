@@ -70,8 +70,8 @@ heights, weights and tracking (§2.2), prose measures, durations and easings
 `--ty-control-height`, `--ty-control-height-touch`, `--ty-control-height-compact`
 and `--ty-density`. The 44 px hit area never changes.
 
-**Canvas component tokens (`src/flow.ts`, `--ty-flow-*`)**, used by
-`@datatechsolutions/tympan-flow`: kind tones `tone-{categorical-1..8,neutral}` with
+**Canvas component tokens (`src/flow.ts`, `--ty-flow-*`)**, used by the
+flow canvas (`@datatechsolutions/tympan/flow`): kind tones `tone-{categorical-1..8,neutral}` with
 `-ink`, `-soft` (a 14 % oklab mix) and `-text`, and the `[data-tone]` mapping
 that sets `--ty-flow-tone`, `-ink`, `-soft`, `-text` on any element;
 connectors (`connector`, `-active`, `-true`, `-false`, `-rule`, `-width`,

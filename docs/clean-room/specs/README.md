@@ -24,6 +24,13 @@
 > the Fakhir look is the `fakhir` theme preset. This record is otherwise kept
 > as written.
 
+> **Merge note (2026-09-26).** `packages/flow`
+> (`@datatechsolutions/tympan-flow`) was later folded into `packages/ui`: its
+> sources are in `packages/ui/src/flow` and it ships as the
+> `@datatechsolutions/tympan/flow` subpath with the
+> `@datatechsolutions/tympan/flow.css` stylesheet. Paths under
+> `packages/flow` named here are now under `packages/ui/src/flow`.
+
 Date: 2026-09-26. Branch: `ds/clean-room` (waves 1 to 3); wave 4 on
 `ds/specs-extra`.
 
