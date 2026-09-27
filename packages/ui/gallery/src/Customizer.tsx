@@ -114,7 +114,7 @@ export function Customizer() {
     <div className="ty-gallery">
       <style data-ty-customizer>{css}</style>
       {effective.fontsUrl ? <link rel="stylesheet" href={effective.fontsUrl} /> : null}
-      <GalleryToolbar extra={<span className="ty-gallery-toolbar__note">Theme: custom</span>} />
+      <GalleryToolbar current="customizer" extra={<span className="ty-gallery-toolbar__note">Theme: custom</span>} />
       <div className="ty-gallery-customizer">
         <aside className="ty-gallery-customizer__panel" aria-labelledby="customizer-title">
           <h1 id="customizer-title" className="ty-gallery-customizer__title">
