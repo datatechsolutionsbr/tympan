@@ -121,6 +121,24 @@ work is split in two roles:
   `wave-2/floating-action-bar.md` and `wave-3/data-source-node.md`. Build
   from their wave-4 versions.
 
+- `wave-5-general/` and `wave-5-commerce/`: the coverage wave (2026-09-26,
+  branch `docs/clean-room-wave-5`), written by two spec-writer sessions that
+  do not implement. Sources, read by the spec writers only and kept outside
+  every repository:
+  - `wave-5-general/`: shadcn/ui (MIT), its full component source.
+    `COVERAGE.md` maps each of its 65 components to Tympan (26 covered,
+    21 partial, 18 missing); one spec per missing component (25, including
+    the chat set: Message, MessageList, ChatBubble, Attachment,
+    ConversationMarker, QuestionFlow); `gap-patches.md` lists additions to
+    existing components.
+  - `wave-5-commerce/`: a commercial e-commerce kit (source withheld; its
+    licence forbids publishing derivatives). 14 component-family specs, the
+    shared `commerce-primitives.md`, `page-compositions.md` (7 page types)
+    and its own `INVENTORY.md`.
+  The implementer of wave 5 builds from these files only and must not open
+  either source. `INVENTORY.md` in this folder is not yet updated with the
+  wave-5 names.
+
 Additional rules for wave 4:
 
 - Showcase pieces never use the CTA gradient, never add hues beyond the
