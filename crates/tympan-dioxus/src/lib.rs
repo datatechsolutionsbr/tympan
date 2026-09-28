@@ -15,6 +15,7 @@
 
 #[rustfmt::skip]
 mod generated;
+pub mod elements;
 pub mod runtime;
 
 pub use generated::*;
