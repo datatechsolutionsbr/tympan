@@ -115,14 +115,14 @@
   }
 
   .ty-popover[data-side='top'] .ty-popover__arrow {
-    right: var(--ty-space-4);
+    inset-inline-end: var(--ty-space-4);
     bottom: -6px;
     border-top: none;
     border-inline-start: none;
   }
 
   .ty-popover[data-side='bottom'] .ty-popover__arrow {
-    right: var(--ty-space-4);
+    inset-inline-end: var(--ty-space-4);
     top: -6px;
     border-bottom: none;
     border-inline-end: none;

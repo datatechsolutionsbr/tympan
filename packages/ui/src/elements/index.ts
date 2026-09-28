@@ -3,6 +3,24 @@
 // tympan-dioxus crate) and by plain HTML. See docs/design/single-source-components.md.
 
 import { defineTympanElement } from './base.ts'
+import { TyWheelPickerElement } from './wheel-picker/element.ts'
+import { TyToastElement } from './toast/element.ts'
+import { TyTagFieldElement } from './tag-field/element.ts'
+import { TyTabsElement } from './tabs/element.ts'
+import { TySkipLinkElement } from './skip-link/element.ts'
+import { TySegmentedControlElement } from './segmented-control/element.ts'
+import { TySectionHeadingElement } from './section-heading/element.ts'
+import { TyProgressBarElement } from './progress-bar/element.ts'
+import { TyPageHeaderElement } from './page-header/element.ts'
+import { TyNotificationCenterElement } from './notification-center/element.ts'
+import { TyMarkdownViewElement } from './markdown-view/element.ts'
+import { TyHeadingElement } from './heading/element.ts'
+import { TyDataTableElement } from './data-table/element.ts'
+import { TyCurrencyFieldElement } from './currency-field/element.ts'
+import { TyCommandPaletteElement } from './command-palette/element.ts'
+import { TyBreadcrumbsElement } from './breadcrumbs/element.ts'
+import { TyAvatarElement } from './avatar/element.ts'
+import { TyActionMenuElement } from './action-menu/element.ts'
 import { TyButtonElement } from './button/element.ts'
 import { TyCheckboxElement } from './checkbox/element.ts'
 import { TyDrawerElement } from './drawer/element.ts'
@@ -23,6 +41,24 @@ import { TyTextFieldElement } from './text-field/element.ts'
 import { TyThemePaletteElement } from './theme-palette/element.ts'
 
 export { TyElement, defineTympanElement } from './base.ts'
+export { TyActionMenuElement } from './action-menu/element.ts'
+export { TyAvatarElement } from './avatar/element.ts'
+export { TyBreadcrumbsElement } from './breadcrumbs/element.ts'
+export { TyCommandPaletteElement } from './command-palette/element.ts'
+export { TyCurrencyFieldElement } from './currency-field/element.ts'
+export { TyDataTableElement } from './data-table/element.ts'
+export { TyHeadingElement } from './heading/element.ts'
+export { TyMarkdownViewElement } from './markdown-view/element.ts'
+export { TyNotificationCenterElement } from './notification-center/element.ts'
+export { TyPageHeaderElement } from './page-header/element.ts'
+export { TyProgressBarElement } from './progress-bar/element.ts'
+export { TySectionHeadingElement } from './section-heading/element.ts'
+export { TySegmentedControlElement } from './segmented-control/element.ts'
+export { TySkipLinkElement } from './skip-link/element.ts'
+export { TyTabsElement } from './tabs/element.ts'
+export { TyTagFieldElement } from './tag-field/element.ts'
+export { TyToastElement } from './toast/element.ts'
+export { TyWheelPickerElement } from './wheel-picker/element.ts'
 export { TyButtonElement } from './button/element.ts'
 export { TyCheckboxElement } from './checkbox/element.ts'
 export { TyDrawerElement } from './drawer/element.ts'
@@ -64,6 +100,24 @@ export type { Appearance, Mode as ThemeMode, Density as ThemeDensity } from './t
 
 /** Register every Tympan custom element (idempotent; a no-op outside a browser). */
 export function defineTympanElements(): void {
+  defineTympanElement(TyActionMenuElement)
+  defineTympanElement(TyAvatarElement)
+  defineTympanElement(TyBreadcrumbsElement)
+  defineTympanElement(TyCommandPaletteElement)
+  defineTympanElement(TyCurrencyFieldElement)
+  defineTympanElement(TyDataTableElement)
+  defineTympanElement(TyHeadingElement)
+  defineTympanElement(TyMarkdownViewElement)
+  defineTympanElement(TyNotificationCenterElement)
+  defineTympanElement(TyPageHeaderElement)
+  defineTympanElement(TyProgressBarElement)
+  defineTympanElement(TySectionHeadingElement)
+  defineTympanElement(TySegmentedControlElement)
+  defineTympanElement(TySkipLinkElement)
+  defineTympanElement(TyTabsElement)
+  defineTympanElement(TyTagFieldElement)
+  defineTympanElement(TyToastElement)
+  defineTympanElement(TyWheelPickerElement)
   defineTympanElement(TyButtonElement)
   defineTympanElement(TyCheckboxElement)
   defineTympanElement(TyDrawerElement)

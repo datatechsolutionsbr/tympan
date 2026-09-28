@@ -11,6 +11,454 @@ use tympan_dioxus::*;
 use super::common;
 
 #[test]
+fn action_menu_closed() {
+    fn app() -> Element {
+        rsx! { TyActionMenu { label: "Item actions", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-action-menu/closed.html");
+}
+
+#[test]
+fn action_menu_own_trigger() {
+    fn app() -> Element {
+        rsx! { TyActionMenu { label: "Run actions", instance: "i", trigger: rsx! { "More" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-action-menu/own-trigger.html");
+}
+
+#[test]
+fn action_menu_context() {
+    fn app() -> Element {
+        rsx! { TyActionMenu { mode: ActionMenuMode::Context, label: "File actions", instance: "i", trigger: rsx! { "report.csv" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-action-menu/context.html");
+}
+
+#[test]
+fn action_menu_translated() {
+    fn app() -> Element {
+        rsx! { TyActionMenu { label: "Ações do item", trigger_label: "Mais ações", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-action-menu/translated.html");
+}
+
+#[test]
+fn avatar_initials() {
+    fn app() -> Element {
+        rsx! { TyAvatar { name: "Natália Mesquita", fallback_text: "NM", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-avatar/initials.html");
+}
+
+#[test]
+fn avatar_image() {
+    fn app() -> Element {
+        rsx! { TyAvatar { src: "/avatars/natalia.png", name: "Natália Mesquita", fallback_text: "NM", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-avatar/image.html");
+}
+
+#[test]
+fn avatar_agent() {
+    fn app() -> Element {
+        rsx! { TyAvatar { actor_kind: AvatarActorKind::Agent, name: "stage-counter", size: AvatarSize::Small, instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-avatar/agent.html");
+}
+
+#[test]
+fn avatar_decorative_neutral() {
+    fn app() -> Element {
+        rsx! { TyAvatar { decorative: true, fallback_text: "NM", tint: AvatarTint::Neutral, instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-avatar/decorative-neutral.html");
+}
+
+#[test]
+fn avatar_pressable() {
+    fn app() -> Element {
+        rsx! { TyAvatar { pressable: true, name: "Natália Mesquita", fallback_text: "NM", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-avatar/pressable.html");
+}
+
+#[test]
+fn avatar_link() {
+    fn app() -> Element {
+        rsx! { TyAvatar { href: "/users/natalia", name: "Natália Mesquita", src: "/avatars/natalia.png", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-avatar/link.html");
+}
+
+#[test]
+fn avatar_translated_action() {
+    fn app() -> Element {
+        rsx! { TyAvatar { pressable: true, name: "Natália Mesquita", fallback_text: "NM", action_label: "Abrir perfil de {{name}}", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-avatar/translated-action.html");
+}
+
+#[test]
+fn breadcrumbs_auto_empty() {
+    fn app() -> Element {
+        rsx! { TyBreadcrumbs { instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-breadcrumbs/auto-empty.html");
+}
+
+#[test]
+fn breadcrumbs_trail_empty() {
+    fn app() -> Element {
+        rsx! { TyBreadcrumbs { mode: BreadcrumbsMode::Trail, instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-breadcrumbs/trail-empty.html");
+}
+
+#[test]
+fn breadcrumbs_compact_bar() {
+    fn app() -> Element {
+        rsx! { TyBreadcrumbs { mode: BreadcrumbsMode::Compact, instance: "i", center: rsx! { "Sources" }, actions: rsx! { "Share" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-breadcrumbs/compact-bar.html");
+}
+
+#[test]
+fn currency_field_count() {
+    fn app() -> Element {
+        rsx! { TyCurrencyField { decimals: 0.0f64, locale: "pt-BR", value: "3000", name: "seats", instance: "i", label: rsx! { "Vagas" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-currency-field/count.html");
+}
+
+#[test]
+fn currency_field_brl() {
+    fn app() -> Element {
+        rsx! { TyCurrencyField { currency: "BRL", locale: "pt-BR", value: "1500000.5", name: "price", placeholder: "0,00", instance: "i", label: rsx! { "Preço" }, hint: rsx! { "Em reais" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-currency-field/brl.html");
+}
+
+#[test]
+fn currency_field_usd() {
+    fn app() -> Element {
+        rsx! { TyCurrencyField { currency: "USD", locale: "en-US", value: "1500000.5", name: "amount", instance: "i", label: rsx! { "Amount" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-currency-field/usd.html");
+}
+
+#[test]
+fn currency_field_display() {
+    fn app() -> Element {
+        rsx! { TyCurrencyField { size: CurrencyFieldSize::Display, currency: "BRL", locale: "pt-BR", value: "99.9", instance: "i", label: rsx! { "Total" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-currency-field/display.html");
+}
+
+#[test]
+fn currency_field_error() {
+    fn app() -> Element {
+        rsx! { TyCurrencyField { value: "12", required: true, instance: "i", label: rsx! { "Amount" }, error: rsx! { "Required" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-currency-field/error.html");
+}
+
+#[test]
+fn currency_field_disabled_unlabelled() {
+    fn app() -> Element {
+        rsx! { TyCurrencyField { disabled: true, accessible_label: "Amount", test_id: "amount", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-currency-field/disabled-unlabelled.html");
+}
+
+#[test]
+fn heading_page_title() {
+    fn app() -> Element {
+        rsx! { TyHeading { instance: "i", "Sources" } }
+    }
+    common::assert_matches_fixture(app, "ty-heading/page-title.html");
+}
+
+#[test]
+fn heading_level_3() {
+    fn app() -> Element {
+        rsx! { TyHeading { level: HeadingLevel::V3, instance: "i", "Field mapping" } }
+    }
+    common::assert_matches_fixture(app, "ty-heading/level-3.html");
+}
+
+#[test]
+fn heading_small_level_big_step() {
+    fn app() -> Element {
+        rsx! { TyHeading { level: HeadingLevel::V2, appearance: HeadingAppearance::H1, instance: "i", "Workspace" } }
+    }
+    common::assert_matches_fixture(app, "ty-heading/small-level-big-step.html");
+}
+
+#[test]
+fn heading_eyebrow() {
+    fn app() -> Element {
+        rsx! { TyHeading { level: HeadingLevel::V2, eyebrow: "Datasets", instance: "i", "Revenue by state" } }
+    }
+    common::assert_matches_fixture(app, "ty-heading/eyebrow.html");
+}
+
+#[test]
+fn heading_label_step() {
+    fn app() -> Element {
+        rsx! { TyHeading { level: HeadingLevel::V4, appearance: HeadingAppearance::Label, instance: "i", "Owner" } }
+    }
+    common::assert_matches_fixture(app, "ty-heading/label-step.html");
+}
+
+#[test]
+fn heading_subheading() {
+    fn app() -> Element {
+        rsx! { TyHeading { level: HeadingLevel::V2, appearance: HeadingAppearance::H3, instance: "i", "Recent runs" } }
+    }
+    common::assert_matches_fixture(app, "ty-heading/subheading.html");
+}
+
+#[test]
+fn notification_center_closed() {
+    fn app() -> Element {
+        rsx! { TyNotificationCenter { instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-notification-center/closed.html");
+}
+
+#[test]
+fn notification_center_open_empty() {
+    fn app() -> Element {
+        rsx! { TyNotificationCenter { open: true, instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-notification-center/open-empty.html");
+}
+
+#[test]
+fn notification_center_translated() {
+    fn app() -> Element {
+        rsx! { TyNotificationCenter { open: true, bell_label: "Notificações", title_label: "Notificações", clear_all_label: "Limpar tudo", close_label: "Fechar", empty_label: "Não há notificações nesta sessão.", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-notification-center/translated.html");
+}
+
+#[test]
+fn page_header_minimal() {
+    fn app() -> Element {
+        rsx! { TyPageHeader { title: "Sources", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-page-header/minimal.html");
+}
+
+#[test]
+fn page_header_reading_summary() {
+    fn app() -> Element {
+        rsx! { TyPageHeader { title: "Sources", eyebrow: "Datasets", summary: "Every dataset this workspace reads, and when each was last synced.", instance: "i", meta: rsx! { "Owner: Data team" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-page-header/reading-summary.html");
+}
+
+#[test]
+fn page_header_breadcrumbs_actions() {
+    fn app() -> Element {
+        rsx! { TyPageHeader { title: "Sources", instance: "i", breadcrumbs: rsx! { "Datasets" }, actions: rsx! { "Add source" }, icon: rsx! { "◈" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-page-header/breadcrumbs-actions.html");
+}
+
+#[test]
+fn page_header_section_scale() {
+    fn app() -> Element {
+        rsx! { TyPageHeader { title: "Connection", heading_level: PageHeaderHeadingLevel::V2, scale: PageHeaderScale::Section, instance: "i", "Status: connected" } }
+    }
+    common::assert_matches_fixture(app, "ty-page-header/section-scale.html");
+}
+
+#[test]
+fn page_header_display() {
+    fn app() -> Element {
+        rsx! { TyPageHeader { title: "Welcome to Alidade", scale: PageHeaderScale::Display, summary: "Sign in to continue.", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-page-header/display.html");
+}
+
+#[test]
+fn page_header_editable() {
+    fn app() -> Element {
+        rsx! { TyPageHeader { editable: true, value: "Untitled report", title_placeholder: "Name the report", title_label: "Report title", instance: "i", actions: rsx! { "Share" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-page-header/editable.html");
+}
+
+#[test]
+fn page_header_editable_error() {
+    fn app() -> Element {
+        rsx! { TyPageHeader { editable: true, title_placeholder: "Name the report", title_label: "Report title", instance: "i", error: rsx! { "A name is required." }, } }
+    }
+    common::assert_matches_fixture(app, "ty-page-header/editable-error.html");
+}
+
+#[test]
+fn progress_bar_determinate() {
+    fn app() -> Element {
+        rsx! { TyProgressBar { value: 40.0f64, label: "Upload", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-progress-bar/determinate.html");
+}
+
+#[test]
+fn progress_bar_custom_value_label() {
+    fn app() -> Element {
+        rsx! { TyProgressBar { value: 3.0f64, max_value: 8.0f64, value_label: "3 of 8 steps", label: "Setup", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-progress-bar/custom-value-label.html");
+}
+
+#[test]
+fn progress_bar_indeterminate() {
+    fn app() -> Element {
+        rsx! { TyProgressBar { indeterminate: true, label: "Import", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-progress-bar/indeterminate.html");
+}
+
+#[test]
+fn progress_bar_complete_success_thin() {
+    fn app() -> Element {
+        rsx! { TyProgressBar { value: 100.0f64, label: "Upload", tone: ProgressBarTone::Success, size: ProgressBarSize::Thin, instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-progress-bar/complete-success-thin.html");
+}
+
+#[test]
+fn progress_bar_unlabelled_hidden_value() {
+    fn app() -> Element {
+        rsx! { TyProgressBar { value: 20.0f64, accessible_label: "Storage used", show_value: "false", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-progress-bar/unlabelled-hidden-value.html");
+}
+
+#[test]
+fn section_heading_title() {
+    fn app() -> Element {
+        rsx! { TySectionHeading { title: "Members", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-section-heading/title.html");
+}
+
+#[test]
+fn section_heading_level_3_subtitle() {
+    fn app() -> Element {
+        rsx! { TySectionHeading { title: "API keys", level: SectionHeadingLevel::V3, subtitle: "Keys of every integration", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-section-heading/level-3-subtitle.html");
+}
+
+#[test]
+fn section_heading_icon_trailing() {
+    fn app() -> Element {
+        rsx! { TySectionHeading { title: "Webhooks", instance: "i", icon: rsx! { "⚡" }, trailing: rsx! { "Add" }, } }
+    }
+    common::assert_matches_fixture(app, "ty-section-heading/icon-trailing.html");
+}
+
+#[test]
+fn section_heading_truncate() {
+    fn app() -> Element {
+        rsx! { TySectionHeading { title: "A section name that runs well past the width of its container", truncate: true, instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-section-heading/truncate.html");
+}
+
+#[test]
+fn section_heading_extra() {
+    fn app() -> Element {
+        rsx! { TySectionHeading { title: "Filters", instance: "i", trailing: rsx! { "Clear all" }, "Status: active" } }
+    }
+    common::assert_matches_fixture(app, "ty-section-heading/extra.html");
+}
+
+#[test]
+fn segmented_control_period_week() {
+    fn app() -> Element {
+        rsx! { TySegmentedControl { label: "Period", options: "[\"Day\",\"Week\",\"Month\"]", value: "Week", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-segmented-control/period-week.html");
+}
+
+#[test]
+fn segmented_control_objects_compact() {
+    fn app() -> Element {
+        rsx! { TySegmentedControl { label: "View", size: SegmentedControlSize::Compact, default_value: "chart", options: "[{{\"value\":\"table\",\"label\":\"Table\"}},{{\"value\":\"chart\",\"label\":\"Chart\"}}]", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-segmented-control/objects-compact.html");
+}
+
+#[test]
+fn segmented_control_full_width_large() {
+    fn app() -> Element {
+        rsx! { TySegmentedControl { label: "Mode", size: SegmentedControlSize::Large, full_width: true, options: "[\"Preview\",\"Code\"]", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-segmented-control/full-width-large.html");
+}
+
+#[test]
+fn segmented_control_disabled() {
+    fn app() -> Element {
+        rsx! { TySegmentedControl { label: "Period", disabled: true, value: "Day", options: "[\"Day\",\"Week\"]", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-segmented-control/disabled.html");
+}
+
+#[test]
+fn segmented_control_icon_only() {
+    fn app() -> Element {
+        rsx! { TySegmentedControl { label: "Layout", icon_only: true, value: "grid", options: "[{{\"value\":\"list\",\"label\":\"List\",\"icon\":\"M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01\"}},{{\"value\":\"grid\",\"label\":\"Grid\",\"icon\":\"M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z\"}}]", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-segmented-control/icon-only.html");
+}
+
+#[test]
+fn skip_link_default() {
+    fn app() -> Element {
+        rsx! { TySkipLink { instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-skip-link/default.html");
+}
+
+#[test]
+fn skip_link_translated() {
+    fn app() -> Element {
+        rsx! { TySkipLink { target_id: "conteudo", label: "Ir para o conteúdo", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-skip-link/translated.html");
+}
+
+#[test]
+fn tabs_horizontal() {
+    fn app() -> Element {
+        rsx! { TyTabs { label: "Run sections", instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-tabs/horizontal.html");
+}
+
+#[test]
+fn tabs_vertical() {
+    fn app() -> Element {
+        rsx! { TyTabs { label: "Run sections", orientation: TabsOrientation::Vertical, instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-tabs/vertical.html");
+}
+
+#[test]
+fn tabs_manual() {
+    fn app() -> Element {
+        rsx! { TyTabs { label: "Run sections", activation: TabsActivation::Manual, instance: "i", } }
+    }
+    common::assert_matches_fixture(app, "ty-tabs/manual.html");
+}
+
+#[test]
 fn button_secondary() {
     fn app() -> Element {
         rsx! { TyButton { instance: "i", "Cancel" } }

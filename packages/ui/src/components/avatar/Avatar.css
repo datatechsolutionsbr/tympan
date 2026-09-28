@@ -1,5 +1,15 @@
 /* Avatar (spec: wave-1/avatar.md; design direction §2.3, §2.11). */
 @layer tympan.components {
+  /* <ty-avatar>'s anatomy root and its fallback wrapper add no box: the
+     frame or the control is the layout child. */
+  .ty-avatar-root,
+  .ty-avatar__fallback {
+    display: contents;
+  }
+  .ty-avatar__fallback[hidden] {
+    display: none;
+  }
+
   .ty-avatar {
     --ty-avatar-size: calc(var(--ty-space-6) + var(--ty-space-2));
     box-sizing: border-box;
@@ -79,15 +89,20 @@
     block-size: max(100%, var(--ty-control-target));
     transform: translate(-50%, -50%);
   }
-  .ty-avatar-control[data-hovered] .ty-avatar {
+  /* The data-* states are the React (react-aria) rendering; the custom
+     element's native <a>/<button> uses the platform pseudo-classes. */
+  .ty-avatar-control[data-hovered] .ty-avatar,
+  .ty-avatar-control:hover .ty-avatar {
     background: var(--ty-accent-soft);
     border-color: var(--ty-accent);
   }
-  .ty-avatar-control[data-focus-visible] {
+  .ty-avatar-control[data-focus-visible],
+  .ty-avatar-control:focus-visible {
     outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
-  .ty-avatar-control[data-pressed] .ty-avatar {
+  .ty-avatar-control[data-pressed] .ty-avatar,
+  .ty-avatar-control:active .ty-avatar {
     opacity: 0.85;
   }
 
@@ -101,7 +116,8 @@
     .ty-avatar[data-kind='agent'] {
       border-style: dashed;
     }
-    .ty-avatar-control[data-focus-visible] {
+    .ty-avatar-control[data-focus-visible],
+    .ty-avatar-control:focus-visible {
       outline: 2px solid Highlight;
     }
   }

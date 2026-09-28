@@ -71,6 +71,64 @@
     gap: var(--ty-space-1);
   }
 
+  /* <ty-breadcrumbs> resolves `mode="auto"` by hiding the unused container;
+     the class display would beat the UA's [hidden]. */
+  .ty-breadcrumbs__list[hidden],
+  .ty-breadcrumbs__bar[hidden] {
+    display: none;
+  }
+
+  /* <ty-breadcrumbs>: the overflow of collapsed middle levels — a native
+     disclosure whose toggle shows an ellipsis. */
+  .ty-breadcrumbs__overflow {
+    position: relative;
+    display: inline-flex;
+  }
+  .ty-breadcrumbs__overflow-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--ty-space-7, 1.75rem);
+    min-block-size: 1.75rem;
+    padding-inline: var(--ty-space-1);
+    border-radius: var(--ty-radius-control);
+    color: var(--ty-ink-3);
+    cursor: pointer;
+    list-style: none;
+  }
+  .ty-breadcrumbs__overflow-toggle::-webkit-details-marker {
+    display: none;
+  }
+  .ty-breadcrumbs__overflow-toggle:hover {
+    color: var(--ty-ink);
+    background: var(--ty-surface-sunken);
+  }
+  .ty-breadcrumbs__overflow-toggle:focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 2px;
+  }
+  .ty-breadcrumbs__overflow[open] .ty-breadcrumbs__overflow-toggle {
+    color: var(--ty-ink);
+    background: var(--ty-surface-sunken);
+  }
+  .ty-breadcrumbs__overflow-list {
+    position: absolute;
+    inset-block-start: calc(100% + var(--ty-space-1));
+    inset-inline-start: 0;
+    z-index: var(--ty-z-popover);
+    display: flex;
+    flex-direction: column;
+    gap: var(--ty-space-1);
+    min-inline-size: 10rem;
+    margin: 0;
+    padding: var(--ty-space-2);
+    list-style: none;
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-surface-raised-solid);
+    box-shadow: var(--ty-shadow-floating);
+  }
+
   /* Touch: every link keeps a 44 px hit height. */
   @media (max-width: 1023.98px) {
     .ty-breadcrumbs__link::before {

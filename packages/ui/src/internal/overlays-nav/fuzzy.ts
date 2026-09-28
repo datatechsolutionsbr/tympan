@@ -92,8 +92,11 @@ export function fuzzyHit(query: string, text: string, locale?: string): FuzzyHit
   picked.forEach((pos, k) => {
     const prev = picked[k - 1]
     score += 4
-    if (prev !== undefined && pos === prev + 1) score += 10
-    if (t[pos]!.wordStart) score += 8
+    // A tight match outranks scattered word initials (the fzf/VS Code
+    // rule): adjacency is worth more than a word start, so "S…rc" in
+    // "Sources" beats "s… r… c…" across "Shared records catalog".
+    if (prev !== undefined && pos === prev + 1) score += 16
+    if (t[pos]!.wordStart) score += 6
   })
   return { score: score - (picked[0] ?? 0), at: covered(t, picked) }
 }

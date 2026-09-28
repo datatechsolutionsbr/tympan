@@ -12,6 +12,24 @@ import { mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync, rmSync
 import { dirname, join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import { actionMenuDefinition } from '../../packages/ui/src/elements/action-menu/definition.ts'
+import { avatarDefinition } from '../../packages/ui/src/elements/avatar/definition.ts'
+import { breadcrumbsDefinition } from '../../packages/ui/src/elements/breadcrumbs/definition.ts'
+import { commandPaletteDefinition } from '../../packages/ui/src/elements/command-palette/definition.ts'
+import { currencyFieldDefinition } from '../../packages/ui/src/elements/currency-field/definition.ts'
+import { dataTableDefinition } from '../../packages/ui/src/elements/data-table/definition.ts'
+import { headingDefinition } from '../../packages/ui/src/elements/heading/definition.ts'
+import { markdownViewDefinition } from '../../packages/ui/src/elements/markdown-view/definition.ts'
+import { notificationCenterDefinition } from '../../packages/ui/src/elements/notification-center/definition.ts'
+import { pageHeaderDefinition } from '../../packages/ui/src/elements/page-header/definition.ts'
+import { progressBarDefinition } from '../../packages/ui/src/elements/progress-bar/definition.ts'
+import { sectionHeadingDefinition } from '../../packages/ui/src/elements/section-heading/definition.ts'
+import { segmentedControlDefinition } from '../../packages/ui/src/elements/segmented-control/definition.ts'
+import { skipLinkDefinition } from '../../packages/ui/src/elements/skip-link/definition.ts'
+import { tabsDefinition } from '../../packages/ui/src/elements/tabs/definition.ts'
+import { tagFieldDefinition } from '../../packages/ui/src/elements/tag-field/definition.ts'
+import { toastDefinition } from '../../packages/ui/src/elements/toast/definition.ts'
+import { wheelPickerDefinition } from '../../packages/ui/src/elements/wheel-picker/definition.ts'
 import { buttonDefinition } from '../../packages/ui/src/elements/button/definition.ts'
 import { checkboxDefinition } from '../../packages/ui/src/elements/checkbox/definition.ts'
 import { drawerDefinition } from '../../packages/ui/src/elements/drawer/definition.ts'
@@ -36,6 +54,24 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..')
 const check = process.argv.includes('--check')
 
 const DEFINITIONS = [
+  [actionMenuDefinition, 'packages/ui/src/elements/action-menu/definition.ts'],
+  [avatarDefinition, 'packages/ui/src/elements/avatar/definition.ts'],
+  [breadcrumbsDefinition, 'packages/ui/src/elements/breadcrumbs/definition.ts'],
+  [commandPaletteDefinition, 'packages/ui/src/elements/command-palette/definition.ts'],
+  [currencyFieldDefinition, 'packages/ui/src/elements/currency-field/definition.ts'],
+  [dataTableDefinition, 'packages/ui/src/elements/data-table/definition.ts'],
+  [headingDefinition, 'packages/ui/src/elements/heading/definition.ts'],
+  [markdownViewDefinition, 'packages/ui/src/elements/markdown-view/definition.ts'],
+  [notificationCenterDefinition, 'packages/ui/src/elements/notification-center/definition.ts'],
+  [pageHeaderDefinition, 'packages/ui/src/elements/page-header/definition.ts'],
+  [progressBarDefinition, 'packages/ui/src/elements/progress-bar/definition.ts'],
+  [sectionHeadingDefinition, 'packages/ui/src/elements/section-heading/definition.ts'],
+  [segmentedControlDefinition, 'packages/ui/src/elements/segmented-control/definition.ts'],
+  [skipLinkDefinition, 'packages/ui/src/elements/skip-link/definition.ts'],
+  [tabsDefinition, 'packages/ui/src/elements/tabs/definition.ts'],
+  [tagFieldDefinition, 'packages/ui/src/elements/tag-field/definition.ts'],
+  [toastDefinition, 'packages/ui/src/elements/toast/definition.ts'],
+  [wheelPickerDefinition, 'packages/ui/src/elements/wheel-picker/definition.ts'],
   [buttonDefinition, 'packages/ui/src/elements/button/definition.ts'],
   [checkboxDefinition, 'packages/ui/src/elements/checkbox/definition.ts'],
   [drawerDefinition, 'packages/ui/src/elements/drawer/definition.ts'],
@@ -60,6 +96,8 @@ const DEFINITIONS = [
 const FIXTURE_INSTANCE = 'i'
 
 const pascal = (s) => s.replace(/(^|[-_ ])([a-z0-9])/g, (_, __, c) => c.toUpperCase())
+/** A Rust enum variant cannot start with a digit: `1` becomes `V1` (and stays unique). */
+const variant = (v) => /^[0-9]/.test(v) ? `V${v}` : pascal(v)
 const camel = (s) => s.replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase())
 const snake = (s) => s.replace(/-/g, '_').replace(/([a-z0-9])([A-Z])/g, '$1_$2').toLowerCase()
 const RUST_KEYWORDS = new Set(['type', 'loop', 'match', 'move', 'ref', 'self', 'static', 'struct', 'trait', 'use', 'where', 'async', 'await', 'dyn', 'box', 'crate', 'enum', 'fn', 'for', 'if', 'impl', 'in', 'let', 'mod', 'mut', 'pub', 'return', 'super', 'true', 'false', 'unsafe', 'while', 'yield', 'abstract', 'final', 'override', 'virtual'])
@@ -303,7 +341,7 @@ function rustCondition(def, condition) {
       const prop = def.props[name]
       if (!prop) throw new Error(`${def.tag}: unknown prop ${name}`)
       const id = rustIdent(snake(name))
-      if (prop.type === 'enum') expr = `${id} == ${rustEnum(def, name)}::${pascal(value)}`
+      if (prop.type === 'enum') expr = `${id} == ${rustEnum(def, name)}::${variant(value)}`
       else if (prop.type === 'number') expr = prop.default !== undefined ? `${id} == ${f64lit(value)}` : `${id} == Some(${f64lit(value)})`
       else expr = prop.default !== undefined ? `${id} == ${JSON.stringify(value)}` : `${id}.as_deref() == Some(${JSON.stringify(value)})`
     } else expr = rustTruthy(def, body)
@@ -333,7 +371,7 @@ function rustMapExpr(def, propName, values, onUnset) {
   const en = rustEnum(def, propName)
   const id = rustIdent(snake(propName))
   const optional = prop.default === undefined
-  const arms = Object.entries(values).map(([v, out]) => `${optional ? `Some(${en}::${pascal(v)})` : `${en}::${pascal(v)}`} => Some(${JSON.stringify(out)})`)
+  const arms = Object.entries(values).map(([v, out]) => `${optional ? `Some(${en}::${variant(v)})` : `${en}::${variant(v)}`} => Some(${JSON.stringify(out)})`)
   if (!prop.values.every((v) => values[v] !== undefined)) arms.push(optional ? 'Some(_) => None' : '_ => None')
   if (optional) arms.push(`None => ${onUnset}`)
   return `match ${id} { ${arms.join(', ')} }`
@@ -440,14 +478,14 @@ function rustBindingFile(def, source) {
     lines.push(`pub enum ${en} {`)
     for (const value of prop.values) {
       if (value === prop.default) lines.push('    #[default]')
-      lines.push(`    ${pascal(value)},`)
+      lines.push(`    ${variant(value)},`)
     }
     lines.push('}', '')
     lines.push(`impl ${en} {`)
-    lines.push(`    pub const ALL: [${en}; ${prop.values.length}] = [${prop.values.map((v) => `${en}::${pascal(v)}`).join(', ')}];`, '')
+    lines.push(`    pub const ALL: [${en}; ${prop.values.length}] = [${prop.values.map((v) => `${en}::${variant(v)}`).join(', ')}];`, '')
     lines.push(`    /// The attribute value.`)
     lines.push(`    pub const fn as_str(self) -> &'static str {`, '        match self {')
-    for (const value of prop.values) lines.push(`            ${en}::${pascal(value)} => ${JSON.stringify(value)},`)
+    for (const value of prop.values) lines.push(`            ${en}::${variant(value)} => ${JSON.stringify(value)},`)
     lines.push('        }', '    }', '')
     lines.push(`    /// The variant for an attribute value.`)
     lines.push(`    pub fn parse(value: &str) -> Option<${en}> {`, `        ${en}::ALL.into_iter().find(|v| v.as_str() == value)`, '    }', '}', '')
@@ -527,7 +565,7 @@ function rustExampleCall(def, example) {
   for (const [name, value] of Object.entries(example.props)) {
     const prop = def.props[name]
     const id = rustIdent(snake(name))
-    if (prop.type === 'enum') args.push(`${id}: ${rustEnum(def, name)}::${pascal(value)}`)
+    if (prop.type === 'enum') args.push(`${id}: ${rustEnum(def, name)}::${variant(value)}`)
     else if (prop.type === 'boolean') args.push(`${id}: ${value}`)
     else if (prop.type === 'number') args.push(`${id}: ${f64lit(value)}`)
     else args.push(`${id}: ${rsxText(value)}`)

@@ -62,7 +62,8 @@
     font-family: var(--ty-font-serif);
     font-weight: var(--ty-font-weight-semibold);
   }
-  .ty-currency-field__input[data-disabled] {
+  .ty-currency-field__input[data-disabled],
+  .ty-currency-field__input:disabled {
     cursor: not-allowed;
     opacity: 0.55;
   }
