@@ -9,12 +9,16 @@ const TRIGGER_OFFSET = 8
 /** Touch: a press held this long over the target is a context request (ActionMenu.tsx's LONG_PRESS_MS). */
 const LONG_PRESS_MS = 500
 
-/** One actionable entry of the `items` JSON (ActionMenuItem, with the icon reduced to a text glyph). */
+const SVG = 'http://www.w3.org/2000/svg'
+
+/** One actionable entry of the `items` JSON (ActionMenuItem: `icon` a text glyph, `iconPath` SVG path data). */
 interface Item {
   type?: 'item'
   id: string
   label: string
   icon?: string
+  /** SVG path data (24×24, subpaths separated by " | "); wins over `icon`. */
+  iconPath?: string
   tone?: 'default' | 'danger'
   disabled?: boolean
   shortcut?: string
@@ -57,6 +61,30 @@ function parseItems(raw: string): Entry[] {
     console.warn('ty-action-menu: `items` is not valid JSON.')
     return []
   }
+}
+
+/**
+ * An item's `iconPath` as the standard icon frame: one `<path>` per
+ * " | "-separated subpath, the `d` always set as an attribute so the JSON
+ * stays inert data (never parsed as markup).
+ */
+function iconSvg(iconPath: string): SVGSVGElement {
+  const svg = document.createElementNS(SVG, 'svg')
+  svg.setAttribute('class', 'ty-icon')
+  svg.setAttribute('viewBox', '0 0 24 24')
+  svg.setAttribute('fill', 'none')
+  svg.setAttribute('stroke', 'currentColor')
+  svg.setAttribute('stroke-width', '2')
+  svg.setAttribute('stroke-linecap', 'round')
+  svg.setAttribute('stroke-linejoin', 'round')
+  svg.setAttribute('aria-hidden', 'true')
+  svg.setAttribute('focusable', 'false')
+  for (const d of iconPath.split(' | ')) {
+    const path = document.createElementNS(SVG, 'path')
+    path.setAttribute('d', d)
+    svg.append(path)
+  }
+  return svg
 }
 
 /**
@@ -216,7 +244,7 @@ export class TyActionMenuElement extends TyElement {
     this.#renderedKey = raw
   }
 
-  /** One item row: role menuitem, tone and disabled as data/aria, icon glyph, label, shortcut hint. */
+  /** One item row: role menuitem, tone and disabled as data/aria, the icon (SVG from `iconPath`, else the text glyph), label, shortcut hint. */
   #row(item: Item, rendered: Rendered[]): HTMLElement {
     const row = el('div', 'ty-action-menu__item', { role: 'menuitem', tabindex: '-1' })
     row.setAttribute('data-tone', item.tone ?? 'default')
@@ -225,7 +253,11 @@ export class TyActionMenuElement extends TyElement {
       row.setAttribute('aria-disabled', 'true')
       row.setAttribute('data-disabled', '')
     }
-    if (item.icon) {
+    if (item.iconPath) {
+      const icon = el('span', 'ty-action-menu__icon', { 'aria-hidden': 'true' })
+      icon.append(iconSvg(item.iconPath))
+      row.append(icon)
+    } else if (item.icon) {
       const icon = el('span', 'ty-action-menu__icon', { 'aria-hidden': 'true' })
       icon.textContent = item.icon
       row.append(icon)

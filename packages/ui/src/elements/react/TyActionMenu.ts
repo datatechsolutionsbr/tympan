@@ -18,7 +18,7 @@ export interface TyActionMenuProps {
   label?: string
   /** Accessible name of the built-in icon-only trigger (the React messages.moreActions default), used in trigger mode when the trigger slot is empty. Default: `More actions`. */
   triggerLabel?: string
-  /** JSON array of entries in order: an item `{ id, label, icon?, tone?, disabled?, shortcut? }` (`icon` a decorative text glyph, `tone` "danger" marks a destructive command, `shortcut` a displayed hint only), `{ "type": "separator" }`, or `{ "type": "section", "id", "title", "items": [...] }`. The element composes the rows on upgrade. */
+  /** JSON array of entries in order: an item `{ id, label, icon?, iconPath?, tone?, disabled?, shortcut? }` (`icon` a decorative text glyph; `iconPath` an SVG icon as 24×24 path data rendered in the standard icon frame — when both are present `iconPath` wins, and subpaths separated by " | " become one `<path>` each; `tone` "danger" marks a destructive command, `shortcut` a displayed hint only), `{ "type": "separator" }`, or `{ "type": "section", "id", "title", "items": [...] }`. The element composes the rows on upgrade. */
   items?: string
   /** Context mode: the viewport point the menu opens at, "x,y" in CSS pixels (controlled); the last context-request point when unset. Clamped so the menu stays inside the viewport. */
   position?: string

@@ -28,7 +28,7 @@ pub struct CommandPaletteScopeChange {
 pub fn TyCommandPalette(
     /// Shown (a modal dialog in the top layer). The element closes itself after a choice or the stepped-back Escape — removing the attribute and asking the host with `ty-close` — so a controlled host follows the attribute.
     #[props(default)] open: bool,
-    /// JSON array of groups: `{ id, heading, scopeId?, items: [{ id, label, description?, icon?, keywords?, hint?, shortcut?, scopeId?, actions?: [{ id, label, icon?, shortcut? }] }] }`. `keywords` are matched but not shown; `icon` is a text glyph. Unparseable or missing: no groups.
+    /// JSON array of groups: `{ id, heading, scopeId?, items: [{ id, label, description?, icon?, iconPath?, keywords?, hint?, shortcut?, scopeId?, actions?: [{ id, label, icon?, iconPath?, shortcut? }] }] }`. `keywords` are matched but not shown; `icon` is a text glyph; `iconPath` is an SVG icon as 24×24 path data rendered in the standard icon frame — when both are present `iconPath` wins, and subpaths separated by " | " become one `<path>` each. Unparseable or missing: no groups.
     #[props(into)] groups: Option<String>,
     /// JSON array of scopes: `[{ id, label, icon? }]`; empty means no scoping (no scope column, no scope keys).
     #[props(into)] scopes: Option<String>,
@@ -36,7 +36,7 @@ pub fn TyCommandPalette(
     #[props(into)] active_scope: Option<String>,
     /// Shows skeleton rows and announces the loading label instead of results.
     #[props(default)] loading: bool,
-    /// JSON array of actions offered when the query matches nothing: `[{ id, label, icon?, shortcut? }]`; `{query}` in a label is replaced by the query.
+    /// JSON array of actions offered when the query matches nothing: `[{ id, label, icon?, iconPath?, shortcut? }]`; `{query}` in a label is replaced by the query. `iconPath` is as in `groups` (an SVG icon wins over the `icon` text glyph).
     #[props(into)] fallback_actions: Option<String>,
     /// Browser-storage key of the recent store; enables it. Records the chosen item id with a count and a time, tolerant of storage being unavailable.
     #[props(into)] recent_key: Option<String>,

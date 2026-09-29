@@ -46,7 +46,7 @@ const groups = [
 ]
 
 /** Mounts the element from plain HTML, with data passed as JSON attributes. */
-const mount = (attrs: Record<string, string> = {}, content = groups) => {
+const mount = (attrs: Record<string, string> = {}, content: unknown = groups) => {
   const host = html('<ty-command-palette></ty-command-palette>').querySelector('ty-command-palette')!
   host.setAttribute('groups', JSON.stringify(content))
   for (const [name, value] of Object.entries(attrs)) host.setAttribute(name, value)
@@ -212,6 +212,46 @@ describe('<ty-command-palette>', () => {
     await userEvent.keyboard('{Enter}')
     expect(selected).toEqual([{ id: 'create', kind: 'fallback', itemId: '' }])
     expect(screen.queryByRole('combobox')).toBeNull()
+  })
+
+  it('renders an SVG icon from iconPath: single and " | "-separated paths, winning over the text glyph, kept inert as data', async () => {
+    const host = mount({}, [
+      {
+        id: 'records',
+        heading: 'Records',
+        items: [
+          { id: 'edit', label: 'Edit', icon: '✎', iconPath: 'M12 20h9' },
+          { id: 'split', label: 'Split', iconPath: 'M18 6 6 18 | m6 6 12 12' },
+          { id: 'plain', label: 'Plain' },
+          { id: 'evil', label: 'Evil', iconPath: 'M1 1"><script>alert(1)</script>' },
+        ],
+      },
+    ])
+    open(host)
+    // iconPath wins over icon: the frame holds an SVG, never the glyph text.
+    const editFrame = screen.getByRole('option', { name: 'Edit' }).querySelector('.ty-palette__icon')!
+    expect(editFrame).toHaveAttribute('aria-hidden', 'true')
+    expect(editFrame.textContent).toBe('')
+    const svg = editFrame.querySelector('svg.ty-icon')!
+    expect(svg).toHaveAttribute('viewBox', '0 0 24 24')
+    expect(svg).toHaveAttribute('fill', 'none')
+    expect(svg).toHaveAttribute('stroke', 'currentColor')
+    expect(svg).toHaveAttribute('aria-hidden', 'true')
+    const paths = svg.querySelectorAll('path')
+    expect(paths).toHaveLength(1)
+    expect(paths[0]).toHaveAttribute('d', 'M12 20h9')
+    // " | " separates subpaths into one <path> child each.
+    const splitPaths = screen.getByRole('option', { name: 'Split' }).querySelectorAll('.ty-palette__icon svg path')
+    expect(Array.from(splitPaths).map((path) => path.getAttribute('d'))).toEqual(['M18 6 6 18', 'm6 6 12 12'])
+    // Neither icon field: no icon frame.
+    expect(screen.getByRole('option', { name: 'Plain' }).querySelector('.ty-palette__icon')).toBeNull()
+    // Markup in iconPath is only ever an attribute string — the JSON stays inert data.
+    const evil = screen.getByRole('option', { name: 'Evil' })
+    expect(evil.querySelector('script')).toBeNull()
+    const evilPaths = evil.querySelectorAll('.ty-palette__icon svg path')
+    expect(evilPaths).toHaveLength(1)
+    expect(evilPaths[0]).toHaveAttribute('d', 'M1 1"><script>alert(1)</script>')
+    await expectNoAxeViolations(document.body, ['region'])
   })
 
   it('announces "no results" when nothing matches and there is no fallback', async () => {

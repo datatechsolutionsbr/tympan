@@ -10,6 +10,8 @@ export interface CommandActionData {
   id: string
   label: string
   icon?: string
+  /** SVG path data (24×24, subpaths separated by " | "); wins over `icon`. */
+  iconPath?: string
   shortcut?: string
 }
 
@@ -18,8 +20,10 @@ export interface CommandItemData {
   id: string
   label: string
   description?: string
-  /** A text glyph (the React component's node icons have no attribute form). */
+  /** A text glyph. */
   icon?: string
+  /** SVG path data (24×24, subpaths separated by " | "); wins over `icon`. */
+  iconPath?: string
   /** Matched but not shown. */
   keywords?: string[]
   hint?: string
@@ -56,6 +60,7 @@ interface Row {
   label: string
   description?: string
   icon?: string
+  iconPath?: string
   hint?: string
   shortcut?: string
   /** Matched label indices to mark. */
@@ -429,6 +434,7 @@ export class TyCommandPaletteElement extends TyElement {
       label: item.label,
       description: item.description,
       icon: item.icon,
+      iconPath: item.iconPath,
       hint: item.hint,
       shortcut: item.shortcut,
       marks,
@@ -440,7 +446,7 @@ export class TyCommandPaletteElement extends TyElement {
         {
           key: 'sub',
           heading: tpl(p.actionsForLabel, '{label}', sub.label),
-          rows: (sub.actions ?? []).map((a) => ({ key: `action-${a.id}`, kind: 'action' as const, id: a.id, itemId: sub.id, label: a.label, icon: a.icon, shortcut: a.shortcut, marks: [] })),
+          rows: (sub.actions ?? []).map((a) => ({ key: `action-${a.id}`, kind: 'action' as const, id: a.id, itemId: sub.id, label: a.label, icon: a.icon, iconPath: a.iconPath, shortcut: a.shortcut, marks: [] })),
         },
       ]
     }
@@ -471,7 +477,7 @@ export class TyCommandPaletteElement extends TyElement {
           .filter((it) => inScope(g, it))
           .map((it) => ({ it, g, hit: scoreItem(q, it, g.heading, locale) })),
       )
-      .filter((x): x is { it: CommandItemData; g: GroupData; hit: { score: number; marks: number[] } } => x.hit !== null)
+      .filter((x): x is { it: CommandItemData; g: CommandGroupData; hit: { score: number; marks: number[] } } => x.hit !== null)
       .sort((a, b) => b.hit.score - a.hit.score)
     for (const x of scored) {
       const last = sections[sections.length - 1]
@@ -484,7 +490,7 @@ export class TyCommandPaletteElement extends TyElement {
         sections.push({
           key: 'fallback',
           heading: String(p.fallbackLabel),
-          rows: fallback.map((a) => ({ key: `fallback-${a.id}`, kind: 'fallback' as const, id: a.id, itemId: '', label: a.label.split('{query}').join(q), icon: a.icon, shortcut: a.shortcut, marks: [] })),
+          rows: fallback.map((a) => ({ key: `fallback-${a.id}`, kind: 'fallback' as const, id: a.id, itemId: '', label: a.label.split('{query}').join(q), icon: a.icon, iconPath: a.iconPath, shortcut: a.shortcut, marks: [] })),
         })
       }
     }
@@ -526,7 +532,11 @@ export class TyCommandPaletteElement extends TyElement {
             'data-kind': row.kind,
           })
           if (on) option.setAttribute('data-highlighted', '')
-          if (row.icon) {
+          if (row.iconPath) {
+            const icon = el('span', 'ty-palette__icon', { 'aria-hidden': 'true' })
+            icon.append(svgIcon('ty-icon', row.iconPath.split(' | ')))
+            option.append(icon)
+          } else if (row.icon) {
             const icon = el('span', 'ty-palette__icon', { 'aria-hidden': 'true' })
             icon.textContent = row.icon
             option.append(icon)

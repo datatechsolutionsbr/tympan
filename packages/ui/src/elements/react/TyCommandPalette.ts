@@ -11,7 +11,7 @@ const text = (v: unknown) => (truthy(v) ? String(v) : undefined)
 export interface TyCommandPaletteProps {
   /** Shown (a modal dialog in the top layer). The element closes itself after a choice or the stepped-back Escape — removing the attribute and asking the host with `ty-close` — so a controlled host follows the attribute. */
   open?: boolean
-  /** JSON array of groups: `{ id, heading, scopeId?, items: [{ id, label, description?, icon?, keywords?, hint?, shortcut?, scopeId?, actions?: [{ id, label, icon?, shortcut? }] }] }`. `keywords` are matched but not shown; `icon` is a text glyph. Unparseable or missing: no groups. */
+  /** JSON array of groups: `{ id, heading, scopeId?, items: [{ id, label, description?, icon?, iconPath?, keywords?, hint?, shortcut?, scopeId?, actions?: [{ id, label, icon?, iconPath?, shortcut? }] }] }`. `keywords` are matched but not shown; `icon` is a text glyph; `iconPath` is an SVG icon as 24×24 path data rendered in the standard icon frame — when both are present `iconPath` wins, and subpaths separated by " | " become one `<path>` each. Unparseable or missing: no groups. */
   groups?: string
   /** JSON array of scopes: `[{ id, label, icon? }]`; empty means no scoping (no scope column, no scope keys). */
   scopes?: string
@@ -19,7 +19,7 @@ export interface TyCommandPaletteProps {
   activeScope?: string
   /** Shows skeleton rows and announces the loading label instead of results. */
   loading?: boolean
-  /** JSON array of actions offered when the query matches nothing: `[{ id, label, icon?, shortcut? }]`; `{query}` in a label is replaced by the query. */
+  /** JSON array of actions offered when the query matches nothing: `[{ id, label, icon?, iconPath?, shortcut? }]`; `{query}` in a label is replaced by the query. `iconPath` is as in `groups` (an SVG icon wins over the `icon` text glyph). */
   fallbackActions?: string
   /** Browser-storage key of the recent store; enables it. Records the chosen item id with a count and a time, tolerant of storage being unavailable. */
   recentKey?: string

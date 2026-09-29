@@ -52,6 +52,8 @@ struct CommandAction {
     id: String,
     label: String,
     icon: Option<String>,
+    /// SVG path data (24×24, subpaths separated by " | "); wins over `icon`.
+    icon_path: Option<String>,
     shortcut: Option<String>,
 }
 
@@ -62,6 +64,8 @@ struct CommandItem {
     label: String,
     description: Option<String>,
     icon: Option<String>,
+    /// SVG path data (24×24, subpaths separated by " | "); wins over `icon`.
+    icon_path: Option<String>,
     keywords: Vec<String>,
     hint: Option<String>,
     shortcut: Option<String>,
@@ -140,6 +144,8 @@ struct Row {
     pieces: Vec<(String, bool)>,
     description: Option<String>,
     icon: Option<String>,
+    /// SVG path data (24×24, subpaths separated by " | "); wins over `icon`.
+    icon_path: Option<String>,
     hint: Option<String>,
     shortcut: Option<String>,
     /// The item behind an `item` row (its actions open the sub-list).
@@ -194,6 +200,7 @@ fn build_sections(
         pieces,
         description: item.description.clone(),
         icon: item.icon.clone(),
+        icon_path: item.icon_path.clone(),
         hint: item.hint.clone(),
         shortcut: item.shortcut.clone(),
         item: Some(item.clone()),
@@ -215,6 +222,7 @@ fn build_sections(
                     pieces: Vec::new(),
                     description: None,
                     icon: action.icon.clone(),
+                    icon_path: action.icon_path.clone(),
                     hint: None,
                     shortcut: action.shortcut.clone(),
                     item: None,
@@ -309,6 +317,7 @@ fn build_sections(
                     pieces: Vec::new(),
                     description: None,
                     icon: action.icon.clone(),
+                    icon_path: action.icon_path.clone(),
                     hint: None,
                     shortcut: action.shortcut.clone(),
                     item: None,
@@ -497,6 +506,7 @@ fn parse_item(entry: &Json) -> Option<CommandItem> {
         label: text_field(fields, "label")?,
         description: text_field(fields, "description"),
         icon: text_field(fields, "icon"),
+        icon_path: text_field(fields, "iconPath"),
         keywords: match field(fields, "keywords") {
             Some(Json::Array(words)) => words
                 .iter()
@@ -549,6 +559,7 @@ fn parse_action(entry: &Json) -> Option<CommandAction> {
         id: text_field(fields, "id")?,
         label: text_field(fields, "label")?,
         icon: text_field(fields, "icon"),
+        icon_path: text_field(fields, "iconPath"),
         shortcut: text_field(fields, "shortcut"),
     })
 }
@@ -839,7 +850,7 @@ pub fn TyCommandPalette(
     /// Shown (a modal dialog in the top layer). The element closes itself after a choice or the stepped-back Escape — removing the attribute and asking the host with `ty-close` — so a controlled host follows the attribute.
     #[props(default)]
     open: bool,
-    /// JSON array of groups: `{ id, heading, scopeId?, items: [{ id, label, description?, icon?, keywords?, hint?, shortcut?, scopeId?, actions?: [{ id, label, icon?, shortcut? }] }] }`. `keywords` are matched but not shown; `icon` is a text glyph. Unparseable or missing: no groups.
+    /// JSON array of groups: `{ id, heading, scopeId?, items: [{ id, label, description?, icon?, iconPath?, keywords?, hint?, shortcut?, scopeId?, actions?: [{ id, label, icon?, iconPath?, shortcut? }] }] }`. `keywords` are matched but not shown; `icon` is a text glyph; `iconPath` is an SVG icon as 24×24 path data rendered in the standard icon frame — when both are present `iconPath` wins, and subpaths separated by " | " become one `<path>` each. Unparseable or missing: no groups.
     #[props(into)]
     groups: Option<String>,
     /// JSON array of scopes: `[{ id, label, icon? }]`; empty means no scoping (no scope column, no scope keys).
@@ -851,7 +862,7 @@ pub fn TyCommandPalette(
     /// Shows skeleton rows and announces the loading label instead of results.
     #[props(default)]
     loading: bool,
-    /// JSON array of actions offered when the query matches nothing: `[{ id, label, icon?, shortcut? }]`; `{query}` in a label is replaced by the query.
+    /// JSON array of actions offered when the query matches nothing: `[{ id, label, icon?, iconPath?, shortcut? }]`; `{query}` in a label is replaced by the query. `iconPath` is as in `groups` (an SVG icon wins over the `icon` text glyph).
     #[props(into)]
     fallback_actions: Option<String>,
     /// Browser-storage key of the recent store; enables it. Records the chosen item id with a count and a time, tolerant of storage being unavailable.
@@ -1382,6 +1393,20 @@ pub fn TyCommandPalette(
                                                 {
                                                     let index = row.index;
                                                     let choice = rows[row.index].clone();
+                                                    // The icon frame: `iconPath` (one `<path>` per
+                                                    // " | "-separated subpath, bound as an attribute so
+                                                    // the JSON stays inert data) wins over the `icon`
+                                                    // text glyph.
+                                                    let icon_paths: Vec<String> = row
+                                                        .icon_path
+                                                        .as_deref()
+                                                        .map(|path| path.split(" | ").map(str::to_string).collect())
+                                                        .unwrap_or_default();
+                                                    let icon_glyph = if icon_paths.is_empty() {
+                                                        row.icon.clone()
+                                                    } else {
+                                                        None
+                                                    };
                                                     rsx! {
                                                         div {
                                                             key: "{row.key}",
@@ -1401,7 +1426,27 @@ pub fn TyCommandPalette(
                                                                 let run_row = run_row.clone();
                                                                 move |_| run_row(choice.clone())
                                                             },
-                                                            if let Some(icon) = row.icon.clone() {
+                                                            if !icon_paths.is_empty() {
+                                                                span {
+                                                                    class: "ty-palette__icon",
+                                                                    "aria-hidden": Some("true"),
+                                                                    svg {
+                                                                        class: "ty-icon",
+                                                                        "viewBox": Some("0 0 24 24"),
+                                                                        "fill": Some("none"),
+                                                                        "stroke": Some("currentColor"),
+                                                                        "stroke-width": Some("2"),
+                                                                        "stroke-linecap": Some("round"),
+                                                                        "stroke-linejoin": Some("round"),
+                                                                        "aria-hidden": Some("true"),
+                                                                        "focusable": Some("false"),
+                                                                        for d in &icon_paths {
+                                                                            path { "d": Some(d.clone()) }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            if let Some(icon) = icon_glyph.clone() {
                                                                 span {
                                                                     class: "ty-palette__icon",
                                                                     "aria-hidden": Some("true"),

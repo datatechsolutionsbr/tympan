@@ -62,13 +62,15 @@ pub struct ActionMenuOpenChange {
     pub open: bool,
 }
 
-/// One actionable entry of the `items` JSON (the element's `Item`, with the
-/// icon reduced to a text glyph).
+/// One actionable entry of the `items` JSON (the element's `Item`: `icon` a
+/// text glyph, `iconPath` SVG path data).
 #[derive(Clone, Debug, PartialEq)]
 struct Item {
     id: String,
     label: String,
     icon: Option<String>,
+    /// SVG path data (24×24, subpaths separated by " | "); wins over `icon`.
+    icon_path: Option<String>,
     tone: String,
     disabled: bool,
     shortcut: Option<String>,
@@ -172,7 +174,7 @@ pub fn TyActionMenu(
     #[props(into)] label: Option<String>,
     /// Accessible name of the built-in icon-only trigger (the React messages.moreActions default), used in trigger mode when the trigger slot is empty.
     #[props(into, default = String::from("More actions"))] trigger_label: String,
-    /// JSON array of entries in order: an item `{ id, label, icon?, tone?, disabled?, shortcut? }` (`icon` a decorative text glyph, `tone` "danger" marks a destructive command, `shortcut` a displayed hint only), `{ "type": "separator" }`, or `{ "type": "section", "id", "title", "items": [...] }`. The element composes the rows on upgrade.
+    /// JSON array of entries in order: an item `{ id, label, icon?, iconPath?, tone?, disabled?, shortcut? }` (`icon` a decorative text glyph; `iconPath` an SVG icon as 24×24 path data rendered in the standard icon frame — when both are present `iconPath` wins, and subpaths separated by " | " become one `<path>` each; `tone` "danger" marks a destructive command, `shortcut` a displayed hint only), `{ "type": "separator" }`, or `{ "type": "section", "id", "title", "items": [...] }`. The element composes the rows on upgrade.
     #[props(into)] items: Option<String>,
     /// Context mode: the viewport point the menu opens at, "x,y" in CSS pixels (controlled); the last context-request point when unset. Clamped so the menu stays inside the viewport.
     #[props(into)] position: Option<String>,
@@ -568,8 +570,9 @@ fn render_row(ctx: &RowCtx, instance: &str, row: &Row) -> Element {
 }
 
 /// One item row (the element's `#row`): role menuitem, tone and disabled as
-/// data/aria, the icon glyph, the label and the decorative shortcut hint,
-/// plus the hover/press/focus state markers the stylesheet keys on.
+/// data/aria, the icon (an SVG from `iconPath`, else the text glyph), the
+/// label and the decorative shortcut hint, plus the hover/press/focus state
+/// markers the stylesheet keys on.
 fn item_row(ctx: &RowCtx, index: usize, item: &Item) -> Element {
     let mut focused = ctx.focused;
     let mut hovered = ctx.hovered;
@@ -580,6 +583,19 @@ fn item_row(ctx: &RowCtx, index: usize, item: &Item) -> Element {
     let on_open_change = ctx.on_open_change;
     let id = item.id.clone();
     let disabled = item.disabled;
+    // The icon frame: `iconPath` (one `<path>` per " | "-separated subpath,
+    // bound as an attribute so the JSON stays inert data) wins over the
+    // `icon` text glyph.
+    let icon_paths: Vec<String> = item
+        .icon_path
+        .as_deref()
+        .map(|path| path.split(" | ").map(str::to_string).collect())
+        .unwrap_or_default();
+    let icon_glyph = if icon_paths.is_empty() {
+        item.icon.clone()
+    } else {
+        None
+    };
     rsx! {
         div {
             class: "ty-action-menu__item",
@@ -619,7 +635,27 @@ fn item_row(ctx: &RowCtx, index: usize, item: &Item) -> Element {
                 }
             },
             onpointerdown: move |_| pressed.set(Some(index)),
-            if let Some(icon) = item.icon.clone() {
+            if !icon_paths.is_empty() {
+                span {
+                    class: "ty-action-menu__icon",
+                    "aria-hidden": Some("true"),
+                    svg {
+                        class: "ty-icon",
+                        "viewBox": Some("0 0 24 24"),
+                        "fill": Some("none"),
+                        "stroke": Some("currentColor"),
+                        "stroke-width": Some("2"),
+                        "stroke-linecap": Some("round"),
+                        "stroke-linejoin": Some("round"),
+                        "aria-hidden": Some("true"),
+                        "focusable": Some("false"),
+                        for d in &icon_paths {
+                            path { "d": Some(d.clone()) }
+                        }
+                    }
+                }
+            }
+            if let Some(icon) = icon_glyph.clone() {
                 span {
                     class: "ty-action-menu__icon",
                     "aria-hidden": Some("true"),
@@ -695,6 +731,7 @@ fn item(json: &Json) -> Option<Item> {
         id: json_text(field("id")),
         label: json_text(field("label")),
         icon: json_text_opt(field("icon")),
+        icon_path: json_text_opt(field("iconPath")),
         tone: match field("tone") {
             Some(Json::String(tone)) if !tone.is_empty() => tone.clone(),
             _ => String::from("default"),

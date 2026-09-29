@@ -111,7 +111,7 @@ describe('<ty-currency-field>', () => {
 
   it('mirrors the value attribute in without disturbing what was typed, and a locale change only re-formats', async () => {
     const host = html('<ty-currency-field locale="pt-BR" value=""><span slot="label">Preço</span></ty-currency-field>').querySelector('ty-currency-field')!
-    const field = screen.getByRole('textbox', { name: 'Preço' })
+    const field = screen.getByRole('textbox', { name: 'Preço' }) as HTMLInputElement
     await userEvent.type(field, '12,')
     expect(field).toHaveValue('12,')
     // The controlled echo keeps the trailing decimal mark and the caret.

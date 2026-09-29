@@ -15,8 +15,8 @@ const text = (attribute: string, fallback: string, doc: string) => ({ type: 'str
  * in the top layer holds the palette and the element composes the rows. Rows
  * carry ids, never callbacks (the same source can be rebuilt from any
  * catalogue); a choice is reported as `ty-select` and the host decides what
- * the id means. Icons are text glyphs in the JSON form (the React component's
- * node icons have no attribute representation). Examples stay empty: the
+ * the id means. Row icons are text glyphs in the JSON form (`icon`) or 24×24
+ * SVG path data (`iconPath`, which wins). Examples stay empty: the
  * parity renderers could not produce the composed rows.
  */
 export const commandPaletteDefinition = {
@@ -26,11 +26,11 @@ export const commandPaletteDefinition = {
   doc: 'Global search-and-commands dialog in the top layer: a combobox field over grouped, fuzzy-matched results with scopes, per-item actions, fallback actions and recents. The query, the highlight and the actions sub-list reset on each open.',
   props: {
     open: { type: 'boolean', attribute: 'open', doc: 'Shown (a modal dialog in the top layer). The element closes itself after a choice or the stepped-back Escape — removing the attribute and asking the host with `ty-close` — so a controlled host follows the attribute.' },
-    groups: { type: 'string', attribute: 'groups', doc: 'JSON array of groups: `{ id, heading, scopeId?, items: [{ id, label, description?, icon?, keywords?, hint?, shortcut?, scopeId?, actions?: [{ id, label, icon?, shortcut? }] }] }`. `keywords` are matched but not shown; `icon` is a text glyph. Unparseable or missing: no groups.' },
+    groups: { type: 'string', attribute: 'groups', doc: 'JSON array of groups: `{ id, heading, scopeId?, items: [{ id, label, description?, icon?, iconPath?, keywords?, hint?, shortcut?, scopeId?, actions?: [{ id, label, icon?, iconPath?, shortcut? }] }] }`. `keywords` are matched but not shown; `icon` is a text glyph; `iconPath` is an SVG icon as 24×24 path data rendered in the standard icon frame — when both are present `iconPath` wins, and subpaths separated by " | " become one `<path>` each. Unparseable or missing: no groups.' },
     scopes: { type: 'string', attribute: 'scopes', doc: 'JSON array of scopes: `[{ id, label, icon? }]`; empty means no scoping (no scope column, no scope keys).' },
     activeScope: { type: 'string', attribute: 'active-scope', doc: 'The active scope id; unset: everything. The element reflects user changes back to this attribute and reports them with `ty-scope-change`.' },
     loading: { type: 'boolean', attribute: 'loading', doc: 'Shows skeleton rows and announces the loading label instead of results.' },
-    fallbackActions: { type: 'string', attribute: 'fallback-actions', doc: 'JSON array of actions offered when the query matches nothing: `[{ id, label, icon?, shortcut? }]`; `{query}` in a label is replaced by the query.' },
+    fallbackActions: { type: 'string', attribute: 'fallback-actions', doc: 'JSON array of actions offered when the query matches nothing: `[{ id, label, icon?, iconPath?, shortcut? }]`; `{query}` in a label is replaced by the query. `iconPath` is as in `groups` (an SVG icon wins over the `icon` text glyph).' },
     recentKey: { type: 'string', attribute: 'recent-key', doc: 'Browser-storage key of the recent store; enables it. Records the chosen item id with a count and a time, tolerant of storage being unavailable.' },
     recentVisible: { type: 'number', default: 5, attribute: 'recent-visible', doc: 'Recents shown when the query is empty, most chosen first (ties: most recent).' },
     recentKeep: { type: 'number', default: 12, attribute: 'recent-keep', doc: 'Most recent ids the store keeps.' },
