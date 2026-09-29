@@ -10,8 +10,10 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 import { renderAnatomy, renderElement } from '../../src/elements/anatomy'
 import { buttonDefinition } from '../../src/elements/button/definition'
+import { brandWordmarkDefinition } from '../../src/elements/brand-wordmark/definition'
 import { checkboxDefinition } from '../../src/elements/checkbox/definition'
 import { drawerDefinition } from '../../src/elements/drawer/definition'
+import { gradientMarkDefinition } from '../../src/elements/gradient-mark/definition'
 import { inlineNoticeDefinition } from '../../src/elements/inline-notice/definition'
 import { linkDefinition } from '../../src/elements/link/definition'
 import { modalDefinition } from '../../src/elements/modal/definition'
@@ -27,7 +29,7 @@ import { textAreaDefinition } from '../../src/elements/text-area/definition'
 import { textFieldDefinition } from '../../src/elements/text-field/definition'
 import type { ElementDefinition } from '../../src/elements/definition'
 import { defineTympanElements } from '../../src/elements'
-import { TyButton, TyCheckbox, TyDrawer, TyInlineNotice, TyLink, TyModal, TyNativeSelect, TySeparator, TySkeleton, TySpinner, TyStatusPill, TySurface, TySwitch, TyTag, TyTextArea, TyTextField } from '../../src/elements/react'
+import { TyButton, TyBrandWordmark, TyCheckbox, TyDrawer, TyGradientMark, TyInlineNotice, TyLink, TyModal, TyNativeSelect, TySeparator, TySkeleton, TySpinner, TyStatusPill, TySurface, TySwitch, TyTag, TyTextArea, TyTextField } from '../../src/elements/react'
 import { canon, canonElement } from './canon'
 
 const repo = join(__dirname, '..', '..', '..', '..')
@@ -36,8 +38,10 @@ const camel = (s: string) => s.replace(/-([a-z0-9])/g, (_, c: string) => c.toUpp
 
 const CASES: Array<[ElementDefinition, ComponentType<Record<string, unknown>>]> = [
   [buttonDefinition, TyButton as unknown as ComponentType<Record<string, unknown>>],
+  [brandWordmarkDefinition, TyBrandWordmark as unknown as ComponentType<Record<string, unknown>>],
   [checkboxDefinition, TyCheckbox as unknown as ComponentType<Record<string, unknown>>],
   [drawerDefinition, TyDrawer as unknown as ComponentType<Record<string, unknown>>],
+  [gradientMarkDefinition, TyGradientMark as unknown as ComponentType<Record<string, unknown>>],
   [inlineNoticeDefinition, TyInlineNotice as unknown as ComponentType<Record<string, unknown>>],
   [linkDefinition, TyLink as unknown as ComponentType<Record<string, unknown>>],
   [modalDefinition, TyModal as unknown as ComponentType<Record<string, unknown>>],

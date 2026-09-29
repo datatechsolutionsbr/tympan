@@ -100,6 +100,14 @@ fixtures), the React wrapper (`renderToStaticMarkup`) and the element built
 from plain HTML (jsdom), all compared on a canonical tree (sorted
 attributes, boolean attributes as presence).
 
+Elements with no React Aria predecessor (element-first; the element *is* the
+component):
+
+| Element | Tag | React wrapper |
+|---|---|---|
+| Gradient mark | `<ty-gradient-mark>` | `TyGradientMark` |
+| Brand wordmark | `<ty-brand-wordmark>` | `TyBrandWordmark` |
+
 ### Form association
 
 Enhancing elements keep a native control in the light DOM, so it is the

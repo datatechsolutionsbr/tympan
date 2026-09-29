@@ -5,8 +5,10 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { renderElement } from '../../src/elements/anatomy'
 import { buttonDefinition } from '../../src/elements/button/definition'
+import { brandWordmarkDefinition } from '../../src/elements/brand-wordmark/definition'
 import { checkboxDefinition } from '../../src/elements/checkbox/definition'
 import { drawerDefinition } from '../../src/elements/drawer/definition'
+import { gradientMarkDefinition } from '../../src/elements/gradient-mark/definition'
 import { inlineNoticeDefinition } from '../../src/elements/inline-notice/definition'
 import { linkDefinition } from '../../src/elements/link/definition'
 import { modalDefinition } from '../../src/elements/modal/definition'
@@ -25,9 +27,11 @@ import type { ElementDefinition } from '../../src/elements/definition'
 import { expectNoAxeViolations } from '../axe'
 
 const DEFINITIONS: ElementDefinition[] = [
+  brandWordmarkDefinition,
   buttonDefinition,
   checkboxDefinition,
   drawerDefinition,
+  gradientMarkDefinition,
   inlineNoticeDefinition,
   linkDefinition,
   modalDefinition,

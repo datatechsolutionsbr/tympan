@@ -1,9 +1,11 @@
 /* Custom elements (src/elements): what the ty-* component rules do not
    already cover. The hosts wrap their anatomy without adding a box. */
 @layer tympan.components {
+  ty-brand-wordmark,
   ty-button,
   ty-checkbox,
   ty-drawer,
+  ty-gradient-mark,
   ty-inline-notice,
   ty-link,
   ty-modal,

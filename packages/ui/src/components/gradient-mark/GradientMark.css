@@ -1,0 +1,45 @@
+/* GradientMark (element-first: <ty-gradient-mark>; docs/design/single-source-components.md). */
+@layer tympan.components {
+  .ty-gradient-mark {
+    --ty-gradient-mark-unit: var(--ty-space-6);
+    --ty-gradient-mark-radius: calc(var(--ty-gradient-mark-unit) * 0.3);
+    --ty-gradient-mark-gradient: linear-gradient(135deg, var(--ty-info), var(--ty-brand) 55%, var(--ty-brand-strong));
+    display: inline-grid;
+    place-items: center;
+    inline-size: var(--ty-gradient-mark-unit);
+    block-size: var(--ty-gradient-mark-unit);
+    border-radius: var(--ty-gradient-mark-radius);
+    background-image: var(--ty-gradient-mark-gradient);
+    color: var(--ty-on-brand);
+    font-weight: var(--ty-font-weight-semibold);
+    line-height: 1;
+  }
+  .ty-gradient-mark[data-size='small'] {
+    --ty-gradient-mark-unit: var(--ty-space-5);
+  }
+  .ty-gradient-mark[data-size='large'] {
+    --ty-gradient-mark-unit: var(--ty-space-7);
+  }
+
+  /* The glyph (icon or initial) scales with the badge and inherits its ink. */
+  .ty-gradient-mark__glyph {
+    display: inline-grid;
+    place-items: center;
+    inline-size: 62%;
+    block-size: 62%;
+    font-size: calc(var(--ty-gradient-mark-unit) * 0.45);
+  }
+  .ty-gradient-mark__glyph > svg {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  @media (forced-colors: active) {
+    .ty-gradient-mark {
+      outline: 1px solid CanvasText;
+      background: Canvas;
+      color: CanvasText;
+      forced-color-adjust: none;
+    }
+  }
+}

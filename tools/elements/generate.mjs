@@ -12,6 +12,7 @@ import { fileURLToPath } from 'node:url'
 
 import { actionMenuDefinition } from '../../packages/ui/src/elements/action-menu/definition.ts'
 import { avatarDefinition } from '../../packages/ui/src/elements/avatar/definition.ts'
+import { brandWordmarkDefinition } from '../../packages/ui/src/elements/brand-wordmark/definition.ts'
 import { breadcrumbsDefinition } from '../../packages/ui/src/elements/breadcrumbs/definition.ts'
 import { commandPaletteDefinition } from '../../packages/ui/src/elements/command-palette/definition.ts'
 import { currencyFieldDefinition } from '../../packages/ui/src/elements/currency-field/definition.ts'
@@ -31,6 +32,7 @@ import { wheelPickerDefinition } from '../../packages/ui/src/elements/wheel-pick
 import { buttonDefinition } from '../../packages/ui/src/elements/button/definition.ts'
 import { checkboxDefinition } from '../../packages/ui/src/elements/checkbox/definition.ts'
 import { drawerDefinition } from '../../packages/ui/src/elements/drawer/definition.ts'
+import { gradientMarkDefinition } from '../../packages/ui/src/elements/gradient-mark/definition.ts'
 import { inlineNoticeDefinition } from '../../packages/ui/src/elements/inline-notice/definition.ts'
 import { linkDefinition } from '../../packages/ui/src/elements/link/definition.ts'
 import { modalDefinition } from '../../packages/ui/src/elements/modal/definition.ts'
@@ -54,6 +56,7 @@ const check = process.argv.includes('--check')
 const DEFINITIONS = [
   [actionMenuDefinition, 'packages/ui/src/elements/action-menu/definition.ts'],
   [avatarDefinition, 'packages/ui/src/elements/avatar/definition.ts'],
+  [brandWordmarkDefinition, 'packages/ui/src/elements/brand-wordmark/definition.ts'],
   [breadcrumbsDefinition, 'packages/ui/src/elements/breadcrumbs/definition.ts'],
   [commandPaletteDefinition, 'packages/ui/src/elements/command-palette/definition.ts'],
   [currencyFieldDefinition, 'packages/ui/src/elements/currency-field/definition.ts'],
@@ -73,6 +76,7 @@ const DEFINITIONS = [
   [buttonDefinition, 'packages/ui/src/elements/button/definition.ts'],
   [checkboxDefinition, 'packages/ui/src/elements/checkbox/definition.ts'],
   [drawerDefinition, 'packages/ui/src/elements/drawer/definition.ts'],
+  [gradientMarkDefinition, 'packages/ui/src/elements/gradient-mark/definition.ts'],
   [inlineNoticeDefinition, 'packages/ui/src/elements/inline-notice/definition.ts'],
   [linkDefinition, 'packages/ui/src/elements/link/definition.ts'],
   [modalDefinition, 'packages/ui/src/elements/modal/definition.ts'],

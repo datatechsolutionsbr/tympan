@@ -18,11 +18,13 @@ import { TyDataTableElement } from './data-table/element.ts'
 import { TyCurrencyFieldElement } from './currency-field/element.ts'
 import { TyCommandPaletteElement } from './command-palette/element.ts'
 import { TyBreadcrumbsElement } from './breadcrumbs/element.ts'
+import { TyBrandWordmarkElement } from './brand-wordmark/element.ts'
 import { TyAvatarElement } from './avatar/element.ts'
 import { TyActionMenuElement } from './action-menu/element.ts'
 import { TyButtonElement } from './button/element.ts'
 import { TyCheckboxElement } from './checkbox/element.ts'
 import { TyDrawerElement } from './drawer/element.ts'
+import { TyGradientMarkElement } from './gradient-mark/element.ts'
 import { TyInlineNoticeElement } from './inline-notice/element.ts'
 import { TyLinkElement } from './link/element.ts'
 import { TyModalElement } from './modal/element.ts'
@@ -42,6 +44,7 @@ import { TyThemePaletteElement } from './theme-palette/element.ts'
 export { TyElement, defineTympanElement } from './base.ts'
 export { TyActionMenuElement } from './action-menu/element.ts'
 export { TyAvatarElement } from './avatar/element.ts'
+export { TyBrandWordmarkElement } from './brand-wordmark/element.ts'
 export { TyBreadcrumbsElement } from './breadcrumbs/element.ts'
 export { TyCommandPaletteElement } from './command-palette/element.ts'
 export { TyCurrencyFieldElement } from './currency-field/element.ts'
@@ -61,6 +64,7 @@ export { TyWheelPickerElement } from './wheel-picker/element.ts'
 export { TyButtonElement } from './button/element.ts'
 export { TyCheckboxElement } from './checkbox/element.ts'
 export { TyDrawerElement } from './drawer/element.ts'
+export { TyGradientMarkElement } from './gradient-mark/element.ts'
 export { TyInlineNoticeElement } from './inline-notice/element.ts'
 export { TyLinkElement } from './link/element.ts'
 export { TyModalElement } from './modal/element.ts'
@@ -76,9 +80,11 @@ export { TyTagElement } from './tag/element.ts'
 export { TyTextAreaElement } from './text-area/element.ts'
 export { TyTextFieldElement } from './text-field/element.ts'
 export { TyThemePaletteElement } from './theme-palette/element.ts'
+export { brandWordmarkDefinition } from './brand-wordmark/definition.ts'
 export { buttonDefinition } from './button/definition.ts'
 export { checkboxDefinition } from './checkbox/definition.ts'
 export { drawerDefinition } from './drawer/definition.ts'
+export { gradientMarkDefinition } from './gradient-mark/definition.ts'
 export { inlineNoticeDefinition } from './inline-notice/definition.ts'
 export { linkDefinition } from './link/definition.ts'
 export { modalDefinition } from './modal/definition.ts'
@@ -101,6 +107,7 @@ export type { Appearance, Mode as ThemeMode, Density as ThemeDensity } from './t
 export function defineTympanElements(): void {
   defineTympanElement(TyActionMenuElement)
   defineTympanElement(TyAvatarElement)
+  defineTympanElement(TyBrandWordmarkElement)
   defineTympanElement(TyBreadcrumbsElement)
   defineTympanElement(TyCommandPaletteElement)
   defineTympanElement(TyCurrencyFieldElement)
@@ -120,6 +127,7 @@ export function defineTympanElements(): void {
   defineTympanElement(TyButtonElement)
   defineTympanElement(TyCheckboxElement)
   defineTympanElement(TyDrawerElement)
+  defineTympanElement(TyGradientMarkElement)
   defineTympanElement(TyInlineNoticeElement)
   defineTympanElement(TyLinkElement)
   defineTympanElement(TyModalElement)
