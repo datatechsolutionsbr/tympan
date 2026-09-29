@@ -29,8 +29,17 @@ use dioxus::prelude::*;
 /// in the order this renders relative to the host's own head elements, so a
 /// host that declares its `@layer` order in its own stylesheet renders that
 /// first.
+///
+/// `script: false` omits the custom-element bundle — the choice of a host
+/// whose markup comes entirely from [`elements`] (the native Dioxus ports):
+/// loading the script over native-rendered `<ty-*>` hosts would upgrade
+/// them and run the behaviour twice.
 #[component]
-pub fn TympanHead(#[props(into)] base: String, #[props(into, default)] version: String) -> Element {
+pub fn TympanHead(
+    #[props(into)] base: String,
+    #[props(into, default)] version: String,
+    #[props(default = true)] script: bool,
+) -> Element {
     let query = if version.is_empty() {
         String::new()
     } else {
@@ -38,6 +47,8 @@ pub fn TympanHead(#[props(into)] base: String, #[props(into, default)] version: 
     };
     rsx! {
         document::Stylesheet { href: "{base}/styles.css{query}" }
-        document::Script { r#type: "module", src: "{base}/elements.js{query}" }
+        if script {
+            document::Script { r#type: "module", src: "{base}/elements.js{query}" }
+        }
     }
 }

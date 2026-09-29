@@ -29,12 +29,25 @@ pub enum SegmentedControlSize {
 }
 
 impl SegmentedControlSize {
+    pub const ALL: [SegmentedControlSize; 3] = [
+        SegmentedControlSize::Compact,
+        SegmentedControlSize::Regular,
+        SegmentedControlSize::Large,
+    ];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             SegmentedControlSize::Compact => "compact",
             SegmentedControlSize::Regular => "regular",
             SegmentedControlSize::Large => "large",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<SegmentedControlSize> {
+        SegmentedControlSize::ALL
+            .into_iter()
+            .find(|v| v.as_str() == value)
     }
 }
 

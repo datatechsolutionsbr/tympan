@@ -1265,7 +1265,7 @@ mod wasm {
             let closure = Closure::<dyn FnMut(web_sys::Event)>::new(move |event: web_sys::Event| {
                 let Some(rc) = weak.upgrade() else { return };
                 let inner = rc.borrow_mut();
-                let (Some(host), Some(signals)) = (inner.host.clone(), inner.signals) else {
+                let (Some(host), Some(mut signals)) = (inner.host.clone(), inner.signals) else {
                     return;
                 };
                 let inside = event
