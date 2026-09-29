@@ -35,6 +35,8 @@ pub enum CurrencyFieldSize {
 }
 
 impl CurrencyFieldSize {
+    pub const ALL: [CurrencyFieldSize; 4] = [CurrencyFieldSize::Small, CurrencyFieldSize::Medium, CurrencyFieldSize::Large, CurrencyFieldSize::Display];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             CurrencyFieldSize::Small => "small",
@@ -42,6 +44,11 @@ impl CurrencyFieldSize {
             CurrencyFieldSize::Large => "large",
             CurrencyFieldSize::Display => "display",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<CurrencyFieldSize> {
+        CurrencyFieldSize::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

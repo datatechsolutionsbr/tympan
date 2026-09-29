@@ -27,6 +27,8 @@ pub enum ProgressBarTone {
 }
 
 impl ProgressBarTone {
+    pub const ALL: [ProgressBarTone; 4] = [ProgressBarTone::Accent, ProgressBarTone::Success, ProgressBarTone::Warning, ProgressBarTone::Danger];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
@@ -35,6 +37,11 @@ impl ProgressBarTone {
             ProgressBarTone::Warning => "warning",
             ProgressBarTone::Danger => "danger",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<ProgressBarTone> {
+        ProgressBarTone::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -47,12 +54,19 @@ pub enum ProgressBarSize {
 }
 
 impl ProgressBarSize {
+    pub const ALL: [ProgressBarSize; 2] = [ProgressBarSize::Thin, ProgressBarSize::Regular];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
             ProgressBarSize::Thin => "thin",
             ProgressBarSize::Regular => "regular",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<ProgressBarSize> {
+        ProgressBarSize::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

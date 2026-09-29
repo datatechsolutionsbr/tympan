@@ -24,6 +24,8 @@ pub enum InlineNoticeTone {
 }
 
 impl InlineNoticeTone {
+    pub const ALL: [InlineNoticeTone; 4] = [InlineNoticeTone::Danger, InlineNoticeTone::Warning, InlineNoticeTone::Info, InlineNoticeTone::Success];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             InlineNoticeTone::Danger => "danger",
@@ -31,6 +33,11 @@ impl InlineNoticeTone {
             InlineNoticeTone::Info => "info",
             InlineNoticeTone::Success => "success",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<InlineNoticeTone> {
+        InlineNoticeTone::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -43,11 +50,18 @@ pub enum InlineNoticeAlign {
 }
 
 impl InlineNoticeAlign {
+    pub const ALL: [InlineNoticeAlign; 2] = [InlineNoticeAlign::Start, InlineNoticeAlign::Centre];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             InlineNoticeAlign::Start => "start",
             InlineNoticeAlign::Centre => "centre",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<InlineNoticeAlign> {
+        InlineNoticeAlign::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -60,12 +74,19 @@ pub enum InlineNoticeUrgency {
 }
 
 impl InlineNoticeUrgency {
+    pub const ALL: [InlineNoticeUrgency; 3] = [InlineNoticeUrgency::Polite, InlineNoticeUrgency::Assertive, InlineNoticeUrgency::None];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             InlineNoticeUrgency::Polite => "polite",
             InlineNoticeUrgency::Assertive => "assertive",
             InlineNoticeUrgency::None => "none",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<InlineNoticeUrgency> {
+        InlineNoticeUrgency::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -80,6 +101,8 @@ pub enum InlineNoticeTitleAs {
 }
 
 impl InlineNoticeTitleAs {
+    pub const ALL: [InlineNoticeTitleAs; 4] = [InlineNoticeTitleAs::P, InlineNoticeTitleAs::H2, InlineNoticeTitleAs::H3, InlineNoticeTitleAs::H4];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             InlineNoticeTitleAs::P => "p",
@@ -87,6 +110,11 @@ impl InlineNoticeTitleAs {
             InlineNoticeTitleAs::H3 => "h3",
             InlineNoticeTitleAs::H4 => "h4",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<InlineNoticeTitleAs> {
+        InlineNoticeTitleAs::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

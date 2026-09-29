@@ -29,12 +29,19 @@ pub enum TextFieldMode {
 }
 
 impl TextFieldMode {
+    pub const ALL: [TextFieldMode; 3] = [TextFieldMode::Text, TextFieldMode::Search, TextFieldMode::Password];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             TextFieldMode::Text => "text",
             TextFieldMode::Search => "search",
             TextFieldMode::Password => "password",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<TextFieldMode> {
+        TextFieldMode::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -49,6 +56,8 @@ pub enum TextFieldInputType {
 }
 
 impl TextFieldInputType {
+    pub const ALL: [TextFieldInputType; 5] = [TextFieldInputType::Text, TextFieldInputType::Email, TextFieldInputType::Url, TextFieldInputType::Tel, TextFieldInputType::Number];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             TextFieldInputType::Text => "text",
@@ -57,6 +66,11 @@ impl TextFieldInputType {
             TextFieldInputType::Tel => "tel",
             TextFieldInputType::Number => "number",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<TextFieldInputType> {
+        TextFieldInputType::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -69,11 +83,18 @@ pub enum TextFieldAppearance {
 }
 
 impl TextFieldAppearance {
+    pub const ALL: [TextFieldAppearance; 2] = [TextFieldAppearance::Outlined, TextFieldAppearance::Filled];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             TextFieldAppearance::Outlined => "outlined",
             TextFieldAppearance::Filled => "filled",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<TextFieldAppearance> {
+        TextFieldAppearance::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

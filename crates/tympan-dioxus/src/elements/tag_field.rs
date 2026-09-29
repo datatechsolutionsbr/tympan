@@ -44,12 +44,19 @@ pub enum TagFieldTone {
 }
 
 impl TagFieldTone {
+    pub const ALL: [TagFieldTone; 2] = [TagFieldTone::Neutral, TagFieldTone::Accent];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
             TagFieldTone::Neutral => "neutral",
             TagFieldTone::Accent => "accent",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<TagFieldTone> {
+        TagFieldTone::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

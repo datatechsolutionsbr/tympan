@@ -23,12 +23,19 @@ pub enum SwitchSize {
 }
 
 impl SwitchSize {
+    pub const ALL: [SwitchSize; 3] = [SwitchSize::Small, SwitchSize::Regular, SwitchSize::Large];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             SwitchSize::Small => "small",
             SwitchSize::Regular => "regular",
             SwitchSize::Large => "large",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<SwitchSize> {
+        SwitchSize::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -41,11 +48,18 @@ pub enum SwitchLayout {
 }
 
 impl SwitchLayout {
+    pub const ALL: [SwitchLayout; 2] = [SwitchLayout::Inline, SwitchLayout::Tile];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             SwitchLayout::Inline => "inline",
             SwitchLayout::Tile => "tile",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<SwitchLayout> {
+        SwitchLayout::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

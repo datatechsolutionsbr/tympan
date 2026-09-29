@@ -30,12 +30,19 @@ pub enum TabsOrientation {
 }
 
 impl TabsOrientation {
+    pub const ALL: [TabsOrientation; 2] = [TabsOrientation::Horizontal, TabsOrientation::Vertical];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
             TabsOrientation::Horizontal => "horizontal",
             TabsOrientation::Vertical => "vertical",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<TabsOrientation> {
+        TabsOrientation::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -48,12 +55,19 @@ pub enum TabsActivation {
 }
 
 impl TabsActivation {
+    pub const ALL: [TabsActivation; 2] = [TabsActivation::Automatic, TabsActivation::Manual];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
             TabsActivation::Automatic => "automatic",
             TabsActivation::Manual => "manual",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<TabsActivation> {
+        TabsActivation::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

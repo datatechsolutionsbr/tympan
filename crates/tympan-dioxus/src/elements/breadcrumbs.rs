@@ -30,6 +30,8 @@ pub enum BreadcrumbsMode {
 }
 
 impl BreadcrumbsMode {
+    pub const ALL: [BreadcrumbsMode; 3] = [BreadcrumbsMode::Trail, BreadcrumbsMode::Compact, BreadcrumbsMode::Auto];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
@@ -37,6 +39,11 @@ impl BreadcrumbsMode {
             BreadcrumbsMode::Compact => "compact",
             BreadcrumbsMode::Auto => "auto",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<BreadcrumbsMode> {
+        BreadcrumbsMode::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

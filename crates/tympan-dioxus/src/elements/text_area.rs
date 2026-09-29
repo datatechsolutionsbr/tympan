@@ -26,11 +26,18 @@ pub enum TextAreaResize {
 }
 
 impl TextAreaResize {
+    pub const ALL: [TextAreaResize; 2] = [TextAreaResize::Vertical, TextAreaResize::None];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             TextAreaResize::Vertical => "vertical",
             TextAreaResize::None => "none",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<TextAreaResize> {
+        TextAreaResize::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

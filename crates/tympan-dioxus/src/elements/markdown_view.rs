@@ -28,12 +28,19 @@ pub enum MarkdownViewDensity {
 }
 
 impl MarkdownViewDensity {
+    pub const ALL: [MarkdownViewDensity; 2] = [MarkdownViewDensity::Regular, MarkdownViewDensity::Compact];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
             MarkdownViewDensity::Regular => "regular",
             MarkdownViewDensity::Compact => "compact",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<MarkdownViewDensity> {
+        MarkdownViewDensity::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

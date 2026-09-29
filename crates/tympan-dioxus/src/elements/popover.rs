@@ -29,6 +29,8 @@ pub enum PopoverPlacement {
 }
 
 impl PopoverPlacement {
+    pub const ALL: [PopoverPlacement; 4] = [PopoverPlacement::Top, PopoverPlacement::End, PopoverPlacement::Bottom, PopoverPlacement::Start];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
@@ -37,6 +39,11 @@ impl PopoverPlacement {
             PopoverPlacement::Bottom => "bottom",
             PopoverPlacement::Start => "start",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<PopoverPlacement> {
+        PopoverPlacement::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -50,6 +57,8 @@ pub enum PopoverAlign {
 }
 
 impl PopoverAlign {
+    pub const ALL: [PopoverAlign; 3] = [PopoverAlign::Start, PopoverAlign::Center, PopoverAlign::End];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
@@ -57,6 +66,11 @@ impl PopoverAlign {
             PopoverAlign::Center => "center",
             PopoverAlign::End => "end",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<PopoverAlign> {
+        PopoverAlign::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

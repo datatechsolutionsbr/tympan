@@ -34,12 +34,19 @@ pub enum ActionMenuMode {
 }
 
 impl ActionMenuMode {
+    pub const ALL: [ActionMenuMode; 2] = [ActionMenuMode::Trigger, ActionMenuMode::Context];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
             ActionMenuMode::Trigger => "trigger",
             ActionMenuMode::Context => "context",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<ActionMenuMode> {
+        ActionMenuMode::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

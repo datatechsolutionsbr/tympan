@@ -31,6 +31,8 @@ pub enum ModalWidth {
 }
 
 impl ModalWidth {
+    pub const ALL: [ModalWidth; 4] = [ModalWidth::Narrow, ModalWidth::Regular, ModalWidth::Wide, ModalWidth::Xwide];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
@@ -39,6 +41,11 @@ impl ModalWidth {
             ModalWidth::Wide => "wide",
             ModalWidth::Xwide => "xwide",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<ModalWidth> {
+        ModalWidth::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -51,12 +58,19 @@ pub enum ModalRole {
 }
 
 impl ModalRole {
+    pub const ALL: [ModalRole; 2] = [ModalRole::Dialog, ModalRole::Alertdialog];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
             ModalRole::Dialog => "dialog",
             ModalRole::Alertdialog => "alertdialog",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<ModalRole> {
+        ModalRole::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -69,12 +83,19 @@ pub enum ModalInitialFocus {
 }
 
 impl ModalInitialFocus {
+    pub const ALL: [ModalInitialFocus; 2] = [ModalInitialFocus::First, ModalInitialFocus::Title];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
             ModalInitialFocus::First => "first",
             ModalInitialFocus::Title => "title",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<ModalInitialFocus> {
+        ModalInitialFocus::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

@@ -26,12 +26,19 @@ pub enum AvatarActorKind {
 }
 
 impl AvatarActorKind {
+    pub const ALL: [AvatarActorKind; 2] = [AvatarActorKind::Person, AvatarActorKind::Agent];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
             AvatarActorKind::Person => "person",
             AvatarActorKind::Agent => "agent",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<AvatarActorKind> {
+        AvatarActorKind::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -46,6 +53,8 @@ pub enum AvatarSize {
 }
 
 impl AvatarSize {
+    pub const ALL: [AvatarSize; 4] = [AvatarSize::Xsmall, AvatarSize::Small, AvatarSize::Regular, AvatarSize::Large];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
@@ -54,6 +63,11 @@ impl AvatarSize {
             AvatarSize::Regular => "regular",
             AvatarSize::Large => "large",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<AvatarSize> {
+        AvatarSize::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -66,12 +80,19 @@ pub enum AvatarTint {
 }
 
 impl AvatarTint {
+    pub const ALL: [AvatarTint; 2] = [AvatarTint::Accent, AvatarTint::Neutral];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
             AvatarTint::Accent => "accent",
             AvatarTint::Neutral => "neutral",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<AvatarTint> {
+        AvatarTint::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

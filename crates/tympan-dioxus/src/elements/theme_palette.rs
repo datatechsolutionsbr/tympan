@@ -40,6 +40,8 @@ pub enum ThemePaletteDefaultMode {
 }
 
 impl ThemePaletteDefaultMode {
+    pub const ALL: [ThemePaletteDefaultMode; 3] = [ThemePaletteDefaultMode::System, ThemePaletteDefaultMode::Light, ThemePaletteDefaultMode::Dark];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
@@ -47,6 +49,11 @@ impl ThemePaletteDefaultMode {
             ThemePaletteDefaultMode::Light => "light",
             ThemePaletteDefaultMode::Dark => "dark",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<ThemePaletteDefaultMode> {
+        ThemePaletteDefaultMode::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -60,6 +67,8 @@ pub enum ThemePaletteDefaultDensity {
 }
 
 impl ThemePaletteDefaultDensity {
+    pub const ALL: [ThemePaletteDefaultDensity; 3] = [ThemePaletteDefaultDensity::Compact, ThemePaletteDefaultDensity::Default, ThemePaletteDefaultDensity::Comfortable];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
@@ -67,6 +76,11 @@ impl ThemePaletteDefaultDensity {
             ThemePaletteDefaultDensity::Default => "default",
             ThemePaletteDefaultDensity::Comfortable => "comfortable",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<ThemePaletteDefaultDensity> {
+        ThemePaletteDefaultDensity::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

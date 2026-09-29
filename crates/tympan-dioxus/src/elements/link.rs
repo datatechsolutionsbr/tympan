@@ -24,11 +24,18 @@ pub enum LinkEmphasis {
 }
 
 impl LinkEmphasis {
+    pub const ALL: [LinkEmphasis; 2] = [LinkEmphasis::Underlined, LinkEmphasis::Subtle];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             LinkEmphasis::Underlined => "underlined",
             LinkEmphasis::Subtle => "subtle",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<LinkEmphasis> {
+        LinkEmphasis::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

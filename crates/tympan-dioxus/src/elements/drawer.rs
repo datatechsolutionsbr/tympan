@@ -33,12 +33,19 @@ pub enum DrawerPlacement {
 }
 
 impl DrawerPlacement {
+    pub const ALL: [DrawerPlacement; 2] = [DrawerPlacement::Bottom, DrawerPlacement::End];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
             DrawerPlacement::Bottom => "bottom",
             DrawerPlacement::End => "end",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<DrawerPlacement> {
+        DrawerPlacement::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -52,6 +59,8 @@ pub enum DrawerWidth {
 }
 
 impl DrawerWidth {
+    pub const ALL: [DrawerWidth; 3] = [DrawerWidth::Medium, DrawerWidth::Large, DrawerWidth::Wide];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
@@ -59,6 +68,11 @@ impl DrawerWidth {
             DrawerWidth::Large => "large",
             DrawerWidth::Wide => "wide",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<DrawerWidth> {
+        DrawerWidth::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

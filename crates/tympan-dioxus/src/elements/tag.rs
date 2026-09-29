@@ -21,11 +21,18 @@ pub enum TagTone {
 }
 
 impl TagTone {
+    pub const ALL: [TagTone; 2] = [TagTone::Neutral, TagTone::Accent];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             TagTone::Neutral => "neutral",
             TagTone::Accent => "accent",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<TagTone> {
+        TagTone::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -39,12 +46,19 @@ pub enum TagSize {
 }
 
 impl TagSize {
+    pub const ALL: [TagSize; 3] = [TagSize::Small, TagSize::Regular, TagSize::Large];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             TagSize::Small => "small",
             TagSize::Regular => "regular",
             TagSize::Large => "large",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<TagSize> {
+        TagSize::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

@@ -21,6 +21,8 @@ pub enum StatusPillTone {
 }
 
 impl StatusPillTone {
+    pub const ALL: [StatusPillTone; 5] = [StatusPillTone::Neutral, StatusPillTone::Info, StatusPillTone::Success, StatusPillTone::Warning, StatusPillTone::Danger];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             StatusPillTone::Neutral => "neutral",
@@ -29,6 +31,11 @@ impl StatusPillTone {
             StatusPillTone::Warning => "warning",
             StatusPillTone::Danger => "danger",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<StatusPillTone> {
+        StatusPillTone::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -41,11 +48,18 @@ pub enum StatusPillSize {
 }
 
 impl StatusPillSize {
+    pub const ALL: [StatusPillSize; 2] = [StatusPillSize::Small, StatusPillSize::Regular];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             StatusPillSize::Small => "small",
             StatusPillSize::Regular => "regular",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<StatusPillSize> {
+        StatusPillSize::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

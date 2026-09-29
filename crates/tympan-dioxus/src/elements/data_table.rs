@@ -40,6 +40,8 @@ pub enum DataTableDensity {
 }
 
 impl DataTableDensity {
+    pub const ALL: [DataTableDensity; 3] = [DataTableDensity::Comfortable, DataTableDensity::Standard, DataTableDensity::Compact];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
@@ -47,6 +49,11 @@ impl DataTableDensity {
             DataTableDensity::Standard => "standard",
             DataTableDensity::Compact => "compact",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<DataTableDensity> {
+        DataTableDensity::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -58,12 +65,19 @@ pub enum DataTableSortDirection {
 }
 
 impl DataTableSortDirection {
+    pub const ALL: [DataTableSortDirection; 2] = [DataTableSortDirection::Ascending, DataTableSortDirection::Descending];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
             DataTableSortDirection::Ascending => "ascending",
             DataTableSortDirection::Descending => "descending",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<DataTableSortDirection> {
+        DataTableSortDirection::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -76,12 +90,19 @@ pub enum DataTableSelectionMode {
 }
 
 impl DataTableSelectionMode {
+    pub const ALL: [DataTableSelectionMode; 2] = [DataTableSelectionMode::None, DataTableSelectionMode::Multiple];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
             DataTableSelectionMode::None => "none",
             DataTableSelectionMode::Multiple => "multiple",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<DataTableSelectionMode> {
+        DataTableSelectionMode::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

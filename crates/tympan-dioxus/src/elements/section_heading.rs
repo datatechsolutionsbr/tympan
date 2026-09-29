@@ -20,12 +20,19 @@ pub enum SectionHeadingLevel {
 }
 
 impl SectionHeadingLevel {
+    pub const ALL: [SectionHeadingLevel; 3] = [SectionHeadingLevel::V2, SectionHeadingLevel::V3, SectionHeadingLevel::V4];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             SectionHeadingLevel::V2 => "2",
             SectionHeadingLevel::V3 => "3",
             SectionHeadingLevel::V4 => "4",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<SectionHeadingLevel> {
+        SectionHeadingLevel::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

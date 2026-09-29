@@ -21,11 +21,18 @@ pub enum CheckboxAppearance {
 }
 
 impl CheckboxAppearance {
+    pub const ALL: [CheckboxAppearance; 2] = [CheckboxAppearance::Tile, CheckboxAppearance::Bare];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             CheckboxAppearance::Tile => "tile",
             CheckboxAppearance::Bare => "bare",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<CheckboxAppearance> {
+        CheckboxAppearance::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

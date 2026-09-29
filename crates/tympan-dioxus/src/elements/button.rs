@@ -20,6 +20,8 @@ pub enum ButtonVariant {
 }
 
 impl ButtonVariant {
+    pub const ALL: [ButtonVariant; 4] = [ButtonVariant::Primary, ButtonVariant::Secondary, ButtonVariant::Quiet, ButtonVariant::Danger];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             ButtonVariant::Primary => "primary",
@@ -27,6 +29,11 @@ impl ButtonVariant {
             ButtonVariant::Quiet => "quiet",
             ButtonVariant::Danger => "danger",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<ButtonVariant> {
+        ButtonVariant::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -40,12 +47,19 @@ pub enum ButtonSize {
 }
 
 impl ButtonSize {
+    pub const ALL: [ButtonSize; 3] = [ButtonSize::Compact, ButtonSize::Regular, ButtonSize::Large];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             ButtonSize::Compact => "compact",
             ButtonSize::Regular => "regular",
             ButtonSize::Large => "large",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<ButtonSize> {
+        ButtonSize::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -59,12 +73,19 @@ pub enum ButtonShape {
 }
 
 impl ButtonShape {
+    pub const ALL: [ButtonShape; 3] = [ButtonShape::Rounded, ButtonShape::Pill, ButtonShape::Circle];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             ButtonShape::Rounded => "rounded",
             ButtonShape::Pill => "pill",
             ButtonShape::Circle => "circle",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<ButtonShape> {
+        ButtonShape::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -78,12 +99,19 @@ pub enum ButtonType {
 }
 
 impl ButtonType {
+    pub const ALL: [ButtonType; 3] = [ButtonType::Button, ButtonType::Submit, ButtonType::Reset];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             ButtonType::Button => "button",
             ButtonType::Submit => "submit",
             ButtonType::Reset => "reset",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<ButtonType> {
+        ButtonType::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

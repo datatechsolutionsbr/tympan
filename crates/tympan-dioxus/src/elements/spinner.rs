@@ -20,12 +20,19 @@ pub enum SpinnerSize {
 }
 
 impl SpinnerSize {
+    pub const ALL: [SpinnerSize; 3] = [SpinnerSize::Small, SpinnerSize::Medium, SpinnerSize::Large];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             SpinnerSize::Small => "small",
             SpinnerSize::Medium => "medium",
             SpinnerSize::Large => "large",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<SpinnerSize> {
+        SpinnerSize::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -38,11 +45,18 @@ pub enum SpinnerShape {
 }
 
 impl SpinnerShape {
+    pub const ALL: [SpinnerShape; 2] = [SpinnerShape::Ring, SpinnerShape::Dots];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             SpinnerShape::Ring => "ring",
             SpinnerShape::Dots => "dots",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<SpinnerShape> {
+        SpinnerShape::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -57,6 +71,8 @@ pub enum SpinnerTone {
 }
 
 impl SpinnerTone {
+    pub const ALL: [SpinnerTone; 4] = [SpinnerTone::Inherit, SpinnerTone::Accent, SpinnerTone::OnAccent, SpinnerTone::Neutral];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             SpinnerTone::Inherit => "inherit",
@@ -64,6 +80,11 @@ impl SpinnerTone {
             SpinnerTone::OnAccent => "on-accent",
             SpinnerTone::Neutral => "neutral",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<SpinnerTone> {
+        SpinnerTone::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

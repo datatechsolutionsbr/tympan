@@ -23,6 +23,8 @@ pub enum PageHeaderHeadingLevel {
 }
 
 impl PageHeaderHeadingLevel {
+    pub const ALL: [PageHeaderHeadingLevel; 3] = [PageHeaderHeadingLevel::V1, PageHeaderHeadingLevel::V2, PageHeaderHeadingLevel::V3];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
@@ -30,6 +32,11 @@ impl PageHeaderHeadingLevel {
             PageHeaderHeadingLevel::V2 => "2",
             PageHeaderHeadingLevel::V3 => "3",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<PageHeaderHeadingLevel> {
+        PageHeaderHeadingLevel::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -43,6 +50,8 @@ pub enum PageHeaderScale {
 }
 
 impl PageHeaderScale {
+    pub const ALL: [PageHeaderScale; 3] = [PageHeaderScale::Page, PageHeaderScale::Display, PageHeaderScale::Section];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
@@ -50,6 +59,11 @@ impl PageHeaderScale {
             PageHeaderScale::Display => "display",
             PageHeaderScale::Section => "section",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<PageHeaderScale> {
+        PageHeaderScale::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

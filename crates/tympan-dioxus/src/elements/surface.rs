@@ -25,6 +25,8 @@ pub enum SurfaceElevation {
 }
 
 impl SurfaceElevation {
+    pub const ALL: [SurfaceElevation; 4] = [SurfaceElevation::Sheet, SurfaceElevation::Raised, SurfaceElevation::Floating, SurfaceElevation::Flat];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             SurfaceElevation::Sheet => "sheet",
@@ -32,6 +34,11 @@ impl SurfaceElevation {
             SurfaceElevation::Floating => "floating",
             SurfaceElevation::Flat => "flat",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<SurfaceElevation> {
+        SurfaceElevation::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -45,12 +52,19 @@ pub enum SurfacePadding {
 }
 
 impl SurfacePadding {
+    pub const ALL: [SurfacePadding; 3] = [SurfacePadding::None, SurfacePadding::Regular, SurfacePadding::Roomy];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             SurfacePadding::None => "none",
             SurfacePadding::Regular => "regular",
             SurfacePadding::Roomy => "roomy",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<SurfacePadding> {
+        SurfacePadding::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -64,12 +78,19 @@ pub enum SurfaceTitleLevel {
 }
 
 impl SurfaceTitleLevel {
+    pub const ALL: [SurfaceTitleLevel; 3] = [SurfaceTitleLevel::H2, SurfaceTitleLevel::H3, SurfaceTitleLevel::H4];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             SurfaceTitleLevel::H2 => "h2",
             SurfaceTitleLevel::H3 => "h3",
             SurfaceTitleLevel::H4 => "h4",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<SurfaceTitleLevel> {
+        SurfaceTitleLevel::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

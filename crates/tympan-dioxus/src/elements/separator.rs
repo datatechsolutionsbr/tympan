@@ -17,12 +17,19 @@ pub enum SeparatorOrientation {
 }
 
 impl SeparatorOrientation {
+    pub const ALL: [SeparatorOrientation; 2] = [SeparatorOrientation::Horizontal, SeparatorOrientation::Vertical];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
             SeparatorOrientation::Horizontal => "horizontal",
             SeparatorOrientation::Vertical => "vertical",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<SeparatorOrientation> {
+        SeparatorOrientation::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -35,12 +42,19 @@ pub enum SeparatorEmphasis {
 }
 
 impl SeparatorEmphasis {
+    pub const ALL: [SeparatorEmphasis; 2] = [SeparatorEmphasis::Regular, SeparatorEmphasis::Soft];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
             SeparatorEmphasis::Regular => "regular",
             SeparatorEmphasis::Soft => "soft",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<SeparatorEmphasis> {
+        SeparatorEmphasis::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -54,6 +68,8 @@ pub enum SeparatorSpacing {
 }
 
 impl SeparatorSpacing {
+    pub const ALL: [SeparatorSpacing; 3] = [SeparatorSpacing::None, SeparatorSpacing::Regular, SeparatorSpacing::Roomy];
+
     /// The attribute value.
     pub const fn as_str(self) -> &'static str {
         match self {
@@ -61,6 +77,11 @@ impl SeparatorSpacing {
             SeparatorSpacing::Regular => "regular",
             SeparatorSpacing::Roomy => "roomy",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<SeparatorSpacing> {
+        SeparatorSpacing::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 

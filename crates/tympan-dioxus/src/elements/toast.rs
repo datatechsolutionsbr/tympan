@@ -36,12 +36,19 @@ pub enum ToastPlacement {
 }
 
 impl ToastPlacement {
+    pub const ALL: [ToastPlacement; 3] = [ToastPlacement::TopEnd, ToastPlacement::TopCenter, ToastPlacement::BottomCenter];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             ToastPlacement::TopEnd => "top-end",
             ToastPlacement::TopCenter => "top-center",
             ToastPlacement::BottomCenter => "bottom-center",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<ToastPlacement> {
+        ToastPlacement::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
@@ -56,6 +63,8 @@ pub enum ToastTone {
 }
 
 impl ToastTone {
+    pub const ALL: [ToastTone; 4] = [ToastTone::Success, ToastTone::Error, ToastTone::Warning, ToastTone::Info];
+
     pub const fn as_str(self) -> &'static str {
         match self {
             ToastTone::Success => "success",
@@ -63,6 +72,11 @@ impl ToastTone {
             ToastTone::Warning => "warning",
             ToastTone::Info => "info",
         }
+    }
+
+    /// The variant for an attribute value.
+    pub fn parse(value: &str) -> Option<ToastTone> {
+        ToastTone::ALL.into_iter().find(|v| v.as_str() == value)
     }
 }
 
