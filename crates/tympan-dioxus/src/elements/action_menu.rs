@@ -1255,8 +1255,8 @@ mod wasm {
         /// `#activate`.
         fn activate(&mut self) {
             self.open = true;
-            let Some(host) = self.host.clone() else { return };
-            let Some(signals) = self.signals else { return };
+            let Some(_host) = self.host.clone() else { return };
+            let Some(_signals) = self.signals else { return };
             if self.origin.is_none() {
                 self.capture_origin();
             }
@@ -1264,8 +1264,8 @@ mod wasm {
             let weak = self.me.clone();
             let closure = Closure::<dyn FnMut(web_sys::Event)>::new(move |event: web_sys::Event| {
                 let Some(rc) = weak.upgrade() else { return };
-                let mut inner = rc.borrow_mut();
-                let (Some(host), Some(mut signals)) = (inner.host.clone(), inner.signals) else {
+                let inner = rc.borrow_mut();
+                let (Some(host), Some(signals)) = (inner.host.clone(), inner.signals) else {
                     return;
                 };
                 let inside = event

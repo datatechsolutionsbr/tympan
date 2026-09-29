@@ -11,6 +11,9 @@ mod generated;
 #[path = "parity/native/action_menu.rs"]
 mod native_action_menu;
 
+#[path = "parity/native/avatar.rs"]
+mod native_avatar;
+
 #[path = "parity/native/breadcrumbs.rs"]
 mod native_breadcrumbs;
 
@@ -22,6 +25,12 @@ mod native_checkbox;
 
 #[path = "parity/native/command_palette.rs"]
 mod native_command_palette;
+
+#[path = "parity/native/currency_field.rs"]
+mod native_currency_field;
+
+#[path = "parity/native/data_table.rs"]
+mod native_data_table;
 
 #[path = "parity/native/drawer.rs"]
 mod native_drawer;
@@ -35,11 +44,20 @@ mod native_inline_notice;
 #[path = "parity/native/link.rs"]
 mod native_link;
 
+#[path = "parity/native/markdown_view.rs"]
+mod native_markdown_view;
+
 #[path = "parity/native/modal.rs"]
 mod native_modal;
 
+#[path = "parity/native/native_select.rs"]
+mod native_native_select;
+
 #[path = "parity/native/notification_center.rs"]
 mod native_notification_center;
+
+#[path = "parity/native/page_header.rs"]
+mod native_page_header;
 
 #[path = "parity/native/popover.rs"]
 mod native_popover;
@@ -80,6 +98,9 @@ mod native_tabs;
 #[path = "parity/native/tag.rs"]
 mod native_tag;
 
+#[path = "parity/native/tag_field.rs"]
+mod native_tag_field;
+
 #[path = "parity/native/text_area.rs"]
 mod native_text_area;
 
@@ -91,3 +112,6 @@ mod native_theme_palette;
 
 #[path = "parity/native/toast.rs"]
 mod native_toast;
+
+#[path = "parity/native/wheel_picker.rs"]
+mod native_wheel_picker;

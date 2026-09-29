@@ -41,17 +41,29 @@ Este documento rastreia a migração dos componentes de UI do `generated/` (bind
 - [x] `Notification Center` (badge unseen com flash, ledger de histórico, modal com scroll-lock/inert/focus-trap; 3 testes)
 - [x] `Separator` (estático; 5 testes)
 
-## 🌊 Onda 3: Sobreposições — próxima
+## 🌊 Onda 3: Sobreposições — ✅ COMPLETA (28/09/2026)
 
-- [ ] `Popover` (substitui os `flyout` e `info_popover` do Astrlabe)
-- [ ] `Modal` / `Drawer` (dialog + focus-trap)
-- [ ] `Action Menu` / `Context Menu` (dropdown_menu / context_menu)
-- [ ] `Theme Palette` / `Command Palette`
+6 componentes nativos, 27 testes. Também sem `dioxus-primitives` (o upstream carrega JS próprio de focus-trap — incompatível com a meta zero-JS); o contrato modal completo (scroll-lock, inert, focus-trap, retorno de foco) foi portado diretamente, reutilizando os idiomas do notification-center.
 
-## 🌊 Onda 4: Dados e Canvas (O Fim do Jogo)
+- [x] `Popover` (modelo de placement completo, RTL-aware, flip/clamp; 5 testes)
+- [x] `Modal` (initial-focus com plano por role, backdrop press com detecção de text-selection; 6 testes)
+- [x] `Drawer` (drag-to-dismiss com pointer capture, max-height; 6 testes)
+- [x] `Action Menu` (context mode com re-anchoring, typeahead; 4 testes)
+- [x] `Command Palette` (fuzzy ranking global, scopes, recents em localStorage; 4 testes — self-rendering, SSR exato)
+- [x] `Theme Palette` (grade completa de temas/modos/densidades composta no SSR; 2 testes — self-rendering)
 
-- [ ] `Data Table` / `Native Select` / `Wheel Picker` / `Avatar` / `Currency Field` / `Tag Field` / `Markdown View` / `Empty State` / `Page Header` / `Field`
-- [ ] **`Tympan-Flow` (Canvas)**: o objetivo final. Substituir o `astrlabe-canvas-geom` e unificar a interface de nós e edges diretamente no WASM.
+## 🌊 Onda 4: Dados e Compostos — ✅ COMPLETA (28/09/2026) — **36/36 elementos portados**
+
+8 componentes nativos, 48 testes (343 no total: 156 gerados + 187 nativos).
+
+- [x] `Avatar` (falha de imagem declarativa via onerror, aria-label com {name}; 7 testes)
+- [x] `Currency Field` (parse/formatação via Intl por Reflect, caret estável, IME composition; 6 testes)
+- [x] `Data Table` (sort ciclo completo, seleção com indeterminate, skeleton/empty, foco por linhas; 5 testes — self-rendering)
+- [x] `Markdown View` (parser completo portado — fences, headings, listas, inline — links só http(s) seguros; 6 testes — self-rendering)
+- [x] `Native Select` (value espelhado na propriedade sem perturbar o picker; 5 testes)
+- [x] `Page Header` (título editável com value mirror caret-safe; 7 testes)
+- [x] `Tag Field` (APG combobox, gate de validação, category-index 1–8; 8 testes — self-rendering)
+- [x] `Wheel Picker` (scroll snapping, typeahead, drag, haptic via Reflect; 4 testes — self-rendering)
 
 ---
 
