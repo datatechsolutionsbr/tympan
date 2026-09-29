@@ -7812,6 +7812,16 @@
 /* ./components/avatar/Avatar.css */
 /* Avatar (spec: wave-1/avatar.md; design direction §2.3, §2.11). */
 @layer tympan.components {
+  /* <ty-avatar>'s anatomy root and its fallback wrapper add no box: the
+     frame or the control is the layout child. */
+  .ty-avatar-root,
+  .ty-avatar__fallback {
+    display: contents;
+  }
+  .ty-avatar__fallback[hidden] {
+    display: none;
+  }
+
   .ty-avatar {
     --ty-avatar-size: calc(var(--ty-space-6) + var(--ty-space-2));
     box-sizing: border-box;
@@ -7891,15 +7901,20 @@
     block-size: max(100%, var(--ty-control-target));
     transform: translate(-50%, -50%);
   }
-  .ty-avatar-control[data-hovered] .ty-avatar {
+  /* The data-* states are the React (react-aria) rendering; the custom
+     element's native <a>/<button> uses the platform pseudo-classes. */
+  .ty-avatar-control[data-hovered] .ty-avatar,
+  .ty-avatar-control:hover .ty-avatar {
     background: var(--ty-accent-soft);
     border-color: var(--ty-accent);
   }
-  .ty-avatar-control[data-focus-visible] {
+  .ty-avatar-control[data-focus-visible],
+  .ty-avatar-control:focus-visible {
     outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
-  .ty-avatar-control[data-pressed] .ty-avatar {
+  .ty-avatar-control[data-pressed] .ty-avatar,
+  .ty-avatar-control:active .ty-avatar {
     opacity: 0.85;
   }
 
@@ -7913,7 +7928,8 @@
     .ty-avatar[data-kind='agent'] {
       border-style: dashed;
     }
-    .ty-avatar-control[data-focus-visible] {
+    .ty-avatar-control[data-focus-visible],
+    .ty-avatar-control:focus-visible {
       outline: 2px solid Highlight;
     }
   }
@@ -7991,6 +8007,64 @@
     display: flex;
     justify-content: flex-end;
     gap: var(--ty-space-1);
+  }
+
+  /* <ty-breadcrumbs> resolves `mode="auto"` by hiding the unused container;
+     the class display would beat the UA's [hidden]. */
+  .ty-breadcrumbs__list[hidden],
+  .ty-breadcrumbs__bar[hidden] {
+    display: none;
+  }
+
+  /* <ty-breadcrumbs>: the overflow of collapsed middle levels — a native
+     disclosure whose toggle shows an ellipsis. */
+  .ty-breadcrumbs__overflow {
+    position: relative;
+    display: inline-flex;
+  }
+  .ty-breadcrumbs__overflow-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--ty-space-7, 1.75rem);
+    min-block-size: 1.75rem;
+    padding-inline: var(--ty-space-1);
+    border-radius: var(--ty-radius-control);
+    color: var(--ty-ink-3);
+    cursor: pointer;
+    list-style: none;
+  }
+  .ty-breadcrumbs__overflow-toggle::-webkit-details-marker {
+    display: none;
+  }
+  .ty-breadcrumbs__overflow-toggle:hover {
+    color: var(--ty-ink);
+    background: var(--ty-surface-sunken);
+  }
+  .ty-breadcrumbs__overflow-toggle:focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 2px;
+  }
+  .ty-breadcrumbs__overflow[open] .ty-breadcrumbs__overflow-toggle {
+    color: var(--ty-ink);
+    background: var(--ty-surface-sunken);
+  }
+  .ty-breadcrumbs__overflow-list {
+    position: absolute;
+    inset-block-start: calc(100% + var(--ty-space-1));
+    inset-inline-start: 0;
+    z-index: var(--ty-z-popover);
+    display: flex;
+    flex-direction: column;
+    gap: var(--ty-space-1);
+    min-inline-size: 10rem;
+    margin: 0;
+    padding: var(--ty-space-2);
+    list-style: none;
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-surface-raised-solid);
+    box-shadow: var(--ty-shadow-floating);
   }
 
   /* Touch: every link keeps a 44 px hit height. */
@@ -8673,6 +8747,57 @@
   .ty-table__checkbox[data-disabled] {
     cursor: not-allowed;
     opacity: 0.55;
+  }
+
+  /* <ty-data-table>: the element renders a native checkbox inside the
+     .ty-table__checkbox shell (the React renderers carry spans only). The
+     input fills the shell invisibly; its state drives the box and picks the
+     visible mark (the ty-checkbox pattern), so the right glyph shows even
+     before the host re-renders. The React renderers' single unclassed mark
+     is untouched. */
+  .ty-table__checkbox > input[type='checkbox'] {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .ty-table__checkbox > input[type='checkbox']:disabled {
+    cursor: not-allowed;
+  }
+  .ty-table__checkbox > input[type='checkbox']:focus-visible + .ty-table__checkbox-box {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 2px;
+  }
+  .ty-table__checkbox > input[type='checkbox']:checked + .ty-table__checkbox-box,
+  .ty-table__checkbox > input[type='checkbox']:indeterminate + .ty-table__checkbox-box {
+    border-color: var(--ty-accent);
+    background: var(--ty-accent);
+  }
+  .ty-table__checkbox .ty-table__check,
+  .ty-table__checkbox .ty-table__minus {
+    display: none;
+  }
+  .ty-table__checkbox > input:checked + .ty-table__checkbox-box > .ty-table__check {
+    display: block;
+  }
+  .ty-table__checkbox > input:indeterminate + .ty-table__checkbox-box > .ty-table__check {
+    display: none;
+  }
+  .ty-table__checkbox > input:indeterminate + .ty-table__checkbox-box > .ty-table__minus {
+    display: block;
+  }
+
+  /* <ty-data-table>: a row's link wraps the first cell's content; the row
+     forwards presses and Enter to it. */
+  .ty-table__row-link {
+    color: inherit;
+    text-decoration: inherit;
+  }
+  .ty-table__row-link:focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 2px;
   }
 
   .ty-table__row[data-loading] .ty-table__cell {
@@ -10628,6 +10753,52 @@
   }
 }
 
+
+/* ── <ty-popover> ────────────────────────────────────────────────────────
+   The element's anatomy: the host is an inline anchor; the panel reuses
+   the .ty-popover styles above (the React wrapper renders the same
+   classes), fixed-positioned by the element's placement model once open. */
+
+@layer tympan.components {
+  .ty-popover__anchor {
+    display: inline-block;
+    position: relative;
+  }
+
+  .ty-popover[hidden] {
+    display: none;
+  }
+
+  .ty-popover__dialog {
+    display: grid;
+    gap: var(--ty-space-2);
+  }
+
+  .ty-popover__arrow {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--ty-surface-raised-solid);
+    border: 1px solid var(--ty-line);
+    transform: rotate(45deg);
+    pointer-events: none;
+  }
+
+  .ty-popover[data-side='top'] .ty-popover__arrow {
+    inset-inline-end: var(--ty-space-4);
+    bottom: -6px;
+    border-top: none;
+    border-inline-start: none;
+  }
+
+  .ty-popover[data-side='bottom'] .ty-popover__arrow {
+    inset-inline-end: var(--ty-space-4);
+    top: -6px;
+    border-bottom: none;
+    border-inline-end: none;
+  }
+}
+
 /* ./components/progress-bar/ProgressBar.css */
 /* ProgressBar (spec: wave-1/progress-bar.md; design direction §2.3, §2.4, §2.7). */
 @layer tympan.components {
@@ -11057,6 +11228,11 @@
     color: var(--ty-ink);
   }
 
+  /* <ty-segmented-control> drives the native states; React Aria sets the data-* ones. */
+  .ty-segmented-control__segment:hover:not([data-selected], [data-disabled], :disabled) {
+    color: var(--ty-ink);
+  }
+
   /* Selection thumb: accent-soft with accent text (§2.3). */
   .ty-segmented-control__segment[data-selected] {
     border-color: var(--ty-line);
@@ -11065,12 +11241,14 @@
     box-shadow: var(--ty-shadow-raised);
   }
 
-  .ty-segmented-control__segment[data-focus-visible] {
+  .ty-segmented-control__segment[data-focus-visible],
+  .ty-segmented-control__segment:focus-visible {
     outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
 
-  .ty-segmented-control__segment[data-disabled] {
+  .ty-segmented-control__segment[data-disabled],
+  .ty-segmented-control__segment:disabled {
     opacity: 0.55;
     cursor: not-allowed;
   }
@@ -11091,7 +11269,8 @@
       color: HighlightText;
       forced-color-adjust: none;
     }
-    .ty-segmented-control__segment[data-focus-visible] {
+    .ty-segmented-control__segment[data-focus-visible],
+    .ty-segmented-control__segment:focus-visible {
       outline-color: CanvasText;
     }
   }
@@ -11944,6 +12123,18 @@
     outline: none;
     border-radius: var(--ty-radius-control) var(--ty-radius-control) 0 0;
     transition: color var(--ty-dur-quick) var(--ty-ease);
+  }
+
+  /* <ty-tabs> renders tabs as native buttons (the React Aria Tabs are divs):
+     strip the UA chrome. */
+  button.ty-tabs__tab {
+    appearance: none;
+    box-sizing: border-box;
+    padding-block: 0;
+    border: 0;
+    background: none;
+    font-family: inherit;
+    text-align: start;
   }
 
   /* Selection indicator: a bar plus a weight change, never colour alone. */
@@ -14812,7 +15003,8 @@
     font-family: var(--ty-font-serif);
     font-weight: var(--ty-font-weight-semibold);
   }
-  .ty-currency-field__input[data-disabled] {
+  .ty-currency-field__input[data-disabled],
+  .ty-currency-field__input:disabled {
     cursor: not-allowed;
     opacity: 0.55;
   }
@@ -15543,6 +15735,18 @@
     }
   }
 
+  /* <ty-tag-field> (the custom element) renders its suggestion layer inside
+     the frame, anchored under the well; the React component's Popover
+     positions its own portal copy. */
+  ty-tag-field .ty-tag-field__frame {
+    position: relative;
+  }
+  ty-tag-field .ty-tag-field__menu-layer {
+    position: absolute;
+    inset-block-start: calc(100% + var(--ty-space-1));
+    inset-inline: 0;
+  }
+
   .ty-tag-field {
     /* Chip paint by tone (neutral here, accent and category below). */
     --ty-tf-mark: var(--ty-ink-3);
@@ -15565,6 +15769,11 @@
       --ty-tf-mark: var(--ty-accent);
       --ty-tf-chip-fill: var(--ty-accent-soft);
       --ty-tf-chip-ink: var(--ty-on-accent-soft);
+    }
+    /* The categorical tint arrives as --ty-tag-field-tint (the React
+       component's inline style, or <ty-tag-field>'s category-index). */
+    &[data-tone='category'] {
+      --ty-tf-mark: var(--ty-tag-field-tint, var(--ty-ink-3));
     }
     &:focus-within {
       --ty-tf-edge: var(--ty-accent);
@@ -15922,6 +16131,12 @@
   }
   .ty-wheel[data-disabled] {
     opacity: 0.55;
+  }
+  /* A pointer drag lifts the snap until release (set by the custom element
+     while a mouse or pen drag is active). */
+  .ty-wheel[data-dragging] .ty-wheel__list {
+    scroll-snap-type: none;
+    cursor: grabbing;
   }
 
   .ty-wheel-group {
@@ -16614,9 +16829,12 @@
     cursor: pointer;
   }
   .ty-palette__option[data-highlighted] {
-    background: var(--ty-surface-sunken);
+    background: var(--ty-accent-soft);
     color: var(--ty-ink);
     box-shadow: inset 3px 0 0 var(--ty-accent);
+  }
+  .ty-palette__option[data-highlighted] .ty-palette__label {
+    font-weight: var(--ty-font-weight-semibold);
   }
   .ty-palette__icon {
     display: inline-grid;

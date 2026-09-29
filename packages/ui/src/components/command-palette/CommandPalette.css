@@ -149,9 +149,12 @@
     cursor: pointer;
   }
   .ty-palette__option[data-highlighted] {
-    background: var(--ty-surface-sunken);
+    background: var(--ty-accent-soft);
     color: var(--ty-ink);
     box-shadow: inset 3px 0 0 var(--ty-accent);
+  }
+  .ty-palette__option[data-highlighted] .ty-palette__label {
+    font-weight: var(--ty-font-weight-semibold);
   }
   .ty-palette__icon {
     display: inline-grid;
