@@ -45,7 +45,7 @@ export const tagFieldDefinition = {
     testId: { type: 'string', attribute: 'test-id', doc: 'Test hook on the root (`data-testid`).' },
   },
   events: [
-    { type: 'ty-change', kind: 'custom', detail: { value: 'string' }, reactProp: 'onChange', rustProp: 'on_change', doc: 'A value was added or removed; `value` is the next list as a JSON array. Controlled: the host writes it back to the `value` attribute.' },
+    { type: 'ty-change', kind: 'custom', detail: { value: 'string' }, reactProp: 'onChange', doc: 'A value was added or removed; `value` is the next list as a JSON array. Controlled: the host writes it back to the `value` attribute.' },
   ],
   examples: [],
 } as const satisfies ElementDefinition

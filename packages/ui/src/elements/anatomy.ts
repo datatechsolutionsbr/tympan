@@ -1,6 +1,6 @@
 // Renders an element's anatomy to an HTML string: the reference markup the
-// React wrappers, the Dioxus bindings and the element's own upgrade must all
-// produce. Pure: runs in Node (fixtures, tests) and in the browser.
+// React wrappers and the element's own upgrade must all produce. Pure:
+// runs in Node (fixtures, tests) and in the browser.
 
 import { bindingValue, holds, withDefaults, type AnatomyNode, type ElementDefinition, type Props } from './definition.ts'
 

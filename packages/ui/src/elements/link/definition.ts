@@ -16,7 +16,7 @@ export const linkDefinition = {
     accessibleLabel: { type: 'string', attribute: 'accessible-label', doc: 'Accessible name when the visible text is not enough (`aria-label`).' },
     describedBy: { type: 'string', attribute: 'described-by', doc: 'Id of an element describing the link (`aria-describedby`).' },
   },
-  events: [{ type: 'click', kind: 'native', reactProp: 'onClick', rustProp: 'onclick', doc: 'The native click of the anchor.' }],
+  events: [{ type: 'click', kind: 'native', reactProp: 'onClick', doc: 'The native click of the anchor.' }],
   slots: {
     default: { doc: 'The link text.' },
   },

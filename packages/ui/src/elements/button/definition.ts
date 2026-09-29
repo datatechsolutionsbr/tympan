@@ -24,7 +24,7 @@ export const buttonDefinition = {
     haspopup: { type: 'string', attribute: 'haspopup', doc: 'The kind of popup the button opens (`aria-haspopup`: `menu`, `dialog`, `listbox`, …).' },
     testId: { type: 'string', attribute: 'test-id', doc: 'Test hook on the native button (`data-testid`).' },
   },
-  events: [{ type: 'click', kind: 'native', reactProp: 'onClick', rustProp: 'onclick', doc: 'The native click (not fired while busy or disabled).' }],
+  events: [{ type: 'click', kind: 'native', reactProp: 'onClick', doc: 'The native click (not fired while busy or disabled).' }],
   slots: {
     default: { doc: 'The label.' },
     icon: { doc: 'A leading icon (decorative).' },

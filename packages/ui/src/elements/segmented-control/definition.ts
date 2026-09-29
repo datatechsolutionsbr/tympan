@@ -36,7 +36,7 @@ export const segmentedControlDefinition = {
     iconOnly: { type: 'boolean', attribute: 'icon-only', doc: 'Hide the labels visually; each label stays the segment\'s accessible name.' },
   },
   events: [
-    { type: 'ty-change', kind: 'custom', detail: { value: 'string' }, reactProp: 'onChange', rustProp: 'on_change', doc: 'The selection changed; `value` is the new value. Only real changes fire it — re-selecting the selected segment does nothing.' },
+    { type: 'ty-change', kind: 'custom', detail: { value: 'string' }, reactProp: 'onChange', doc: 'The selection changed; `value` is the new value. Only real changes fire it — re-selecting the selected segment does nothing.' },
   ],
   anatomy: {
     tag: 'div',

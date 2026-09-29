@@ -60,7 +60,7 @@ export const inlineNoticeDefinition = {
     toneWordSuccess: { type: 'string', attribute: 'tone-word-success', default: 'Success: ', doc: 'Visually hidden word announced before a success notice.' },
   },
   events: [
-    { type: 'ty-dismiss', kind: 'custom', reactProp: 'onDismiss', rustProp: 'on_dismiss', doc: 'The dismiss button was pressed; the host removes the notice. Focus has moved to the next logical element.' },
+    { type: 'ty-dismiss', kind: 'custom', reactProp: 'onDismiss', doc: 'The dismiss button was pressed; the host removes the notice. Focus has moved to the next logical element.' },
   ],
   slots: {
     default: { doc: 'The message body.' },

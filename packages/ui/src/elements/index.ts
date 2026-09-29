@@ -1,6 +1,5 @@
 // Tympan custom elements: one definition per component, consumed by React
-// (generated wrappers in ./react), by Rust/Dioxus (generated bindings in the
-// tympan-dioxus crate) and by plain HTML. See docs/design/single-source-components.md.
+// (generated wrappers in ./react) and by plain HTML. See docs/design/single-source-components.md.
 
 import { defineTympanElement } from './base.ts'
 import { TyWheelPickerElement } from './wheel-picker/element.ts'

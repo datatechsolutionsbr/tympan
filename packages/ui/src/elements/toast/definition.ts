@@ -35,8 +35,8 @@ export const toastDefinition = {
     dismissLabel: { type: 'string', default: 'Dismiss notification', attribute: 'dismiss-label', doc: 'Accessible name of each toast\'s dismiss button.' },
   },
   events: [
-    { type: 'ty-toast-dismiss', kind: 'custom', detail: { id: 'string' }, reactProp: 'onDismiss', rustProp: 'on_dismiss', doc: 'A toast was dismissed — timeout, dismiss button, Escape, swipe, its action, or a `dismiss(id)` call; the detail carries its id (the spec\'s `onDismiss`).' },
-    { type: 'ty-toast-action', kind: 'custom', detail: { id: 'string' }, reactProp: 'onAction', rustProp: 'on_action', doc: 'A toast\'s action was pressed; its `onPress` ran too and the toast dismissed itself. Lets hosts that cannot pass a callback still react to the action.' },
+    { type: 'ty-toast-dismiss', kind: 'custom', detail: { id: 'string' }, reactProp: 'onDismiss', doc: 'A toast was dismissed — timeout, dismiss button, Escape, swipe, its action, or a `dismiss(id)` call; the detail carries its id (the spec\'s `onDismiss`).' },
+    { type: 'ty-toast-action', kind: 'custom', detail: { id: 'string' }, reactProp: 'onAction', doc: 'A toast\'s action was pressed; its `onPress` ran too and the toast dismissed itself. Lets hosts that cannot pass a callback still react to the action.' },
   ],
   examples: [],
 } as const satisfies ElementDefinition

@@ -2,7 +2,7 @@
 
 Tympan's styling is plain CSS over `ty-` classes, `data-*` attributes and
 `--ty-*` custom properties. A host that renders HTML with another framework
-(Rust/Dioxus, Leptos, server templates, web components) or by hand can use
+(server templates, web components, …) or by hand can use
 the same stylesheets by emitting the markup described here. This document is
 the contract: the classes, attributes and element structure each component's
 CSS expects. The React components in `src/components` render exactly this

@@ -28,7 +28,7 @@ export const breadcrumbsDefinition = {
     overflowLabel: { type: 'string', default: 'Show hidden levels', attribute: 'overflow-label', doc: 'Accessible name of the overflow menu\'s toggle; translate through this attribute.' },
   },
   events: [
-    { type: 'ty-navigate', kind: 'custom', detail: { href: 'string' }, reactProp: 'onNavigate', rustProp: 'on_navigate', doc: 'A trail, overflow or back link was activated; `href` is its destination. Cancelable: a host with a client-side router calls `preventDefault()` and navigates through its adapter; uncanceled, the native anchor navigates.' },
+    { type: 'ty-navigate', kind: 'custom', detail: { href: 'string' }, reactProp: 'onNavigate', doc: 'A trail, overflow or back link was activated; `href` is its destination. Cancelable: a host with a client-side router calls `preventDefault()` and navigates through its adapter; uncanceled, the native anchor navigates.' },
   ],
   slots: {
     center: { doc: 'Replaces the centred title of the compact bar (the current page\'s label when empty).' },

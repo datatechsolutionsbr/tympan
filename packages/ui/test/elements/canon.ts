@@ -1,6 +1,6 @@
 // A canonical form of an HTML fragment for comparing markup from different
 // renderers: elements with sorted attributes (HTML boolean attributes as
-// presence), non-blank text. The same rules as the Rust parity test.
+// presence), non-blank text.
 
 const BOOLEAN = new Set(['disabled', 'checked', 'hidden', 'open', 'readonly', 'required', 'selected', 'multiple'])
 

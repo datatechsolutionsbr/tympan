@@ -51,7 +51,7 @@ export const currencyFieldDefinition = {
     testId: { type: 'string', attribute: 'test-id', doc: 'Test hook on the root (`data-testid`).' },
   },
   events: [
-    { type: 'ty-value-change', kind: 'custom', detail: { value: 'string' }, reactProp: 'onValueChange', rustProp: 'on_value_change', doc: 'After every edit; `value` is the canonical number (digits, an optional dot and decimals, never grouped; "" when empty). The display text is never reported.' },
+    { type: 'ty-value-change', kind: 'custom', detail: { value: 'string' }, reactProp: 'onValueChange', doc: 'After every edit; `value` is the canonical number (digits, an optional dot and decimals, never grouped; "" when empty). The display text is never reported.' },
   ],
   slots: {
     label: { doc: 'The visible label, targeting the input.' },

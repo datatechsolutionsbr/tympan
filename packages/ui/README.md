@@ -240,7 +240,7 @@ gone; its exports are unchanged under the subpath:
 ## Without React
 
 The stylesheet does not need React. A host that renders HTML another way
-(Rust/Dioxus, server templates, web components) links `dist/styles.css`
+(server templates, web components, …) links `dist/styles.css`
 (tokens included) and, if it offers them, the opt-in `print-themes.css` from
 `@datatechsolutions/tympan-tokens`, sets `data-ty-theme` / `data-ty-mode` /
 `data-ty-density` on `<html>`, and emits the markup in

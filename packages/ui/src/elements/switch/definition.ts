@@ -17,7 +17,7 @@ export const switchDefinition = {
     accessibleLabel: { type: 'string', attribute: 'accessible-label', doc: 'Accessible name when there is no visible label.' },
     testId: { type: 'string', attribute: 'test-id', doc: 'Test hook on the native checkbox (`data-testid`).' },
   },
-  events: [{ type: 'change', kind: 'native', detail: { checked: 'boolean' }, reactProp: 'onChange', rustProp: 'onchange', doc: 'The native change of the checkbox; `checked` is the new state.' }],
+  events: [{ type: 'change', kind: 'native', detail: { checked: 'boolean' }, reactProp: 'onChange', doc: 'The native change of the checkbox; `checked` is the new state.' }],
   slots: {
     default: { doc: 'The visible label.' },
     description: { doc: 'A secondary line, announced as the description.' },

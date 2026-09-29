@@ -7,25 +7,23 @@ choices inside it, and how the rest of the library moves over.
 ## The problem
 
 Tympan components are consumed by React applications (the gallery, the
-site, research platforms built on `@datatechsolutions/tympan`) and by
-applications that are not React at all, starting with a Rust/Dioxus one.
-Two implementations of each component (a React one and a Dioxus one written
-to look alike) drift the first time either is touched. The goal is one
-definition per component that every framework consumes.
+site, research platforms built on `@datatechsolutions/tympan`) and by hosts
+that are not React at all, through plain HTML. A component hand-written once
+as a React component and once as a custom element drifts the first time
+either is touched. The goal is one definition per component that every
+consumer is generated from.
 
 ## Decision
 
 **Tympan components become standard custom elements, written once in
-TypeScript.** React and Rust/Dioxus consume them through small wrappers that
-are *generated* from the element's definition, so they cannot disagree with
-it. Everything is themed by the same `--ty-*` custom properties and styled by
-the same `styles.css`.
+TypeScript.** React consumes them through small wrappers that are
+*generated* from the element's definition, so they cannot disagree with
+it; any other host uses the elements directly as HTML. Everything is themed
+by the same `--ty-*` custom properties and styled by the same `styles.css`.
 
-Rejected alternatives, for the record: a declarative contract from which a
-React markup layer and a Dioxus component are both generated (still two
-behaviour implementations to keep in step), and components written in Rust
-and compiled to WASM custom elements for React to consume (a WASM runtime in
-every React page, no server rendering, poor React ergonomics).
+Rejected alternative, for the record: a declarative contract from which a
+React markup layer and the element's own rendering are both generated (still
+two behaviour implementations to keep in step).
 
 ## Design choices
 
@@ -93,15 +91,13 @@ filled slots, instance-scoped ids for ARIA references) and examples.
 | Output | Where |
 |---|---|
 | React wrapper (`TyButton`, …) | `packages/ui/src/elements/react/` → `@datatechsolutions/tympan/elements/react` |
-| Dioxus binding (same names, enums for the variants) | `crates/tympan-dioxus/src/generated/` |
-| Reference HTML of every example | `crates/tympan-dioxus/tests/fixtures/` |
-| One SSR parity test per example | `crates/tympan-dioxus/tests/parity/generated.rs` |
+| Reference HTML of every example | `packages/ui/test/elements/fixtures/` |
 
 `npm run check:elements` fails when any generated file is stale. Three
 renderers must produce the same markup for every example, and tests hold
-them to it: the reference renderer (`renderElement`), the React wrapper
-(`renderToStaticMarkup`), the element built from plain HTML (jsdom), and the
-Dioxus binding (`dioxus-ssr`), all compared on a canonical tree (sorted
+them to it: the reference renderer (`renderElement`, pinned by the
+fixtures), the React wrapper (`renderToStaticMarkup`) and the element built
+from plain HTML (jsdom), all compared on a canonical tree (sorted
 attributes, boolean attributes as presence).
 
 ### Form association
@@ -120,15 +116,14 @@ No shadow roots means no cross-root problem. Enhancing elements rely on the
 native control's focus and keyboard behaviour and add only what the spec
 asks for on top (Enter toggles the switch, a busy button is focusable but
 inert, `aria-busy` and `aria-disabled`). Self-rendering elements own their
-ids per instance (`data-ty-instance`, which wrappers set from `useId` / a
-Dioxus counter) and use the ARIA pattern of the component they render: the
+ids per instance (`data-ty-instance`, which wrappers set from `useId`) and use the ARIA pattern of the component they render: the
 theme palette is a native `<dialog>` in the top layer (nothing can clip it,
 the page behind is inert, Escape cancels) holding a combobox over a listbox
 with `aria-activedescendant`, the same pattern as the React CommandPalette.
 
 ### SSR and hydration
 
-Wrappers render the full anatomy on the server (React SSR, Dioxus SSR); the
+Wrappers render the full anatomy on the server (React SSR); the
 element upgrades without changing the DOM, so there is no hydration mismatch
 and the page looks right before the element script has even loaded (the
 styles key off classes and data attributes, not the element). Interaction
@@ -139,12 +134,11 @@ render nothing on the server (the palette is closed until opened).
 
 Native events (`click`, `change`, `input`) bubble from the native controls
 and are wired by the wrappers on those controls (React `onClick` /
-`onChange`, Dioxus `onclick` / `onchange`), with the relevant fields read
+`onChange`), with the relevant fields read
 into a typed detail (`{ checked }`). Component-level events are
 `CustomEvent`s named `ty-<verb>` (`ty-theme-change`, `ty-close`), bubbling
 and composed; the React wrapper listens through a ref and calls the typed
-`onThemeChange(detail)`, the Dioxus binding through `use_custom_event` and
-calls `on_theme_change(ThemePaletteThemeChange { .. })`.
+`onThemeChange(detail)`.
 
 React 18 writes custom-element props as attributes and React 19 sets the
 element's own properties when it defines them; the generated wrapper passes
@@ -169,7 +163,7 @@ choice as `data-ty-theme` / `data-ty-mode` / `data-ty-density` on `<html>`,
 links `print-themes.css` while a print style is applied (the host names the
 URL), links a theme's web fonts only when told to (`load-fonts`), and stores
 the choice in the `{ theme, mode, density }` JSON ThemeProvider and
-`themeInitScript` use, so a React page and a Rust page on the same origin
+`themeInitScript` use, so two pages on the same origin
 share one choice. With `apply` it applies the stored choice (or its
 defaults, which a host sets to its organization's default) on connect.
 
@@ -180,13 +174,6 @@ defaults, which a host sets to its organization's default) on connect.
 | npm, with React | `@datatechsolutions/tympan/elements/react` (wrappers; registers the elements) |
 | npm, no React | `@datatechsolutions/tympan/elements` (definitions, element classes, `defineTympanElements()`) |
 | anything else | `@datatechsolutions/tympan/elements.bundle.js`: one ES module, all dependencies inlined, registers on load |
-| Rust | `tympan-tokens` embeds `styles.css`, `tokens.css`, `print-themes.css` and the bundle (`assets::ALL`, for a server to mount) and exposes every theme as `Theme`; `tympan-dioxus` holds the generated bindings and `TympanHead` |
-
-`crates/tympan-tokens/generated/` is copied from the JavaScript build by
-`tools/rust/sync.mjs`, which lists every source path in one place (the
-tokens are moving into `packages/ui`; only that table changes). The crates
-build without Node; `npm run check` fails when the copies are stale, and
-`npm run check:rust` runs `cargo fmt`, `clippy` and the tests.
 
 ## Migration of the existing React components
 
@@ -218,12 +205,12 @@ internationalisation behaviour.
 ## The flow canvas
 
 Tympan's flow canvas (`@datatechsolutions/tympan/flow`) is a React
-application component with its own layout engine; a Rust host with its own
-canvas (Astrlabe's, on `astrlabe-canvas-geom`) keeps its geometry. What they
+application component with its own layout engine; a host with its own
+canvas keeps its geometry. What they
 share is the visual layer: the `--ty-flow-*` tokens (node surface, border and
 radius, connector colours and widths including true/false branches, run
 rings for running/succeeded/failed/selected, grid dots, marquee, guides) and
-the tone tokens for node kinds. A Rust canvas styles its nodes and edges with
+the tone tokens for node kinds. Another canvas styles its nodes and edges with
 those tokens; the flow's component CSS (`flow.css`) stays with the React
 canvas until parts of it become elements.
 
@@ -233,7 +220,5 @@ canvas until parts of it become elements.
 |---|---|---|---|
 | Definition + element | yes | yes | yes |
 | Generated React wrapper | yes | yes | yes |
-| Generated Dioxus binding | yes | yes | yes |
-| Parity (reference / React / element / Dioxus SSR) | 7 examples | 5 examples | n/a (self-rendering) |
+| Parity (reference / React / element) | 7 examples | 5 examples | n/a (self-rendering) |
 | Behaviour tests (axe, keyboard, forms, theming, RTL) | yes | yes | yes |
-| Used from a Rust host | Astrlabe web | Astrlabe web | Astrlabe web |

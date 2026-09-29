@@ -15,7 +15,7 @@ export const tagDefinition = {
     live: { type: 'boolean', attribute: 'live', doc: 'A polite live region (`role="status"`) for a tag whose text updates dynamically.' },
     testId: { type: 'string', attribute: 'test-id', doc: 'Test hook on the tag (`data-testid`).' },
   },
-  events: [{ type: 'click', kind: 'native', reactProp: 'onClick', rustProp: 'onclick', doc: 'The remove button\'s native click (wired on that button).' }],
+  events: [{ type: 'click', kind: 'native', reactProp: 'onClick', doc: 'The remove button\'s native click (wired on that button).' }],
   slots: {
     default: { doc: 'The text; truncates with an ellipsis.' },
     icon: { doc: 'A leading icon (decorative); wins over the category square.' },

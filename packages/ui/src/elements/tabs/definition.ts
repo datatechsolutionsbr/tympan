@@ -27,7 +27,7 @@ export const tabsDefinition = {
     keepMounted: { type: 'boolean', attribute: 'keep-mounted', doc: 'Keep inactive panels in the DOM (hidden) to preserve their state. The element always keeps them — their nodes belong to the host — so the attribute only tells a wrapper it may unmount.' },
   },
   events: [
-    { type: 'ty-selection-change', kind: 'custom', detail: { key: 'string' }, reactProp: 'onSelectionChange', rustProp: 'on_selection_change', doc: 'A different tab was selected (a click, or the keyboard per `activation`). Uncontrolled, the element has already applied it; controlled (`selected-key`), the host flips the attribute.' },
+    { type: 'ty-selection-change', kind: 'custom', detail: { key: 'string' }, reactProp: 'onSelectionChange', doc: 'A different tab was selected (a click, or the keyboard per `activation`). Uncontrolled, the element has already applied it; controlled (`selected-key`), the host flips the attribute.' },
   ],
   slots: {
     default: { doc: 'The panels: one element per tab, keyed by `data-panel` (the tab\'s id). The element wires the role, id, `aria-labelledby` and visibility; only the selected panel shows.' },

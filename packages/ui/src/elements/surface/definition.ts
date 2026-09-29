@@ -16,7 +16,7 @@ export const surfaceDefinition = {
     disabled: { type: 'boolean', attribute: 'disabled', doc: 'Pressable surfaces only: inert primary control, no forwarding.' },
     accessibleLabel: { type: 'string', attribute: 'accessible-label', doc: 'Accessible name of the region when there is no visible title.' },
   },
-  events: [{ type: 'click', kind: 'native', reactProp: 'onClick', rustProp: 'onclick', doc: 'A press of the primary control (directly, or forwarded from anywhere on the surface).' }],
+  events: [{ type: 'click', kind: 'native', reactProp: 'onClick', doc: 'A press of the primary control (directly, or forwarded from anywhere on the surface).' }],
   slots: {
     default: { doc: 'The body.' },
     title: { doc: 'The header title (a heading). Required on a pressable surface: it holds the primary control.' },

@@ -45,8 +45,8 @@ export const themePaletteDefinition = {
     hintClose: text('hint-close', 'close', 'Footer hint beside esc.'),
   },
   events: [
-    { type: 'ty-theme-change', kind: 'custom', detail: { theme: 'string', mode: 'string', density: 'string' }, reactProp: 'onThemeChange', rustProp: 'on_theme_change', doc: 'A row was chosen and applied; the detail is the whole appearance.' },
-    { type: 'ty-close', kind: 'custom', reactProp: 'onClose', rustProp: 'on_close', doc: 'The palette asks to close (Escape, a press outside, or after a choice). The element closes itself too.' },
+    { type: 'ty-theme-change', kind: 'custom', detail: { theme: 'string', mode: 'string', density: 'string' }, reactProp: 'onThemeChange', doc: 'A row was chosen and applied; the detail is the whole appearance.' },
+    { type: 'ty-close', kind: 'custom', reactProp: 'onClose', doc: 'The palette asks to close (Escape, a press outside, or after a choice). The element closes itself too.' },
   ],
   examples: [],
 } as const satisfies ElementDefinition

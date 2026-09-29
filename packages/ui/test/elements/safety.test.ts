@@ -39,7 +39,7 @@ describe('element sources', () => {
 
 describe('rendered output escapes markup', () => {
   // Slot content is trusted (or pre-escaped) HTML by contract — the host
-  // framework escapes it (React/Dioxus text children are text by nature).
+  // framework escapes it (React text children are text by nature).
   // Everything the DEFINITION turns into markup — prop-driven text nodes and
   // every attribute value — is escaped by the reference renderer.
   it('a prop-driven text node with markup is escaped in the reference rendering', () => {

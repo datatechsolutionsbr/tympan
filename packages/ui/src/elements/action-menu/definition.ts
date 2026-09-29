@@ -52,8 +52,8 @@ export const actionMenuDefinition = {
     position: { type: 'string', attribute: 'position', doc: 'Context mode: the viewport point the menu opens at, "x,y" in CSS pixels (controlled); the last context-request point when unset. Clamped so the menu stays inside the viewport.' },
   },
   events: [
-    { type: 'ty-action', kind: 'custom', detail: { id: 'string' }, reactProp: 'onAction', rustProp: 'on_action', doc: 'An item was activated (pointer, Enter or Space); the element then asks to close. A disabled item never fires.' },
-    { type: 'ty-open-change', kind: 'custom', detail: { open: 'boolean' }, reactProp: 'onOpenChange', rustProp: 'on_open_change', doc: 'The element asks the host to change visibility — `open: true` on a trigger activation or a context request (secondary click, Shift+F10, the ContextMenu key, a long press), `open: false` on Escape, Tab, an outside press or after an action. Controlled: the element does not toggle itself; the host flips `open`.' },
+    { type: 'ty-action', kind: 'custom', detail: { id: 'string' }, reactProp: 'onAction', doc: 'An item was activated (pointer, Enter or Space); the element then asks to close. A disabled item never fires.' },
+    { type: 'ty-open-change', kind: 'custom', detail: { open: 'boolean' }, reactProp: 'onOpenChange', doc: 'The element asks the host to change visibility — `open: true` on a trigger activation or a context request (secondary click, Shift+F10, the ContextMenu key, a long press), `open: false` on Escape, Tab, an outside press or after an action. Controlled: the element does not toggle itself; the host flips `open`.' },
   ],
   slots: {
     trigger: { doc: 'Trigger mode: the host\'s own toggle — any single focusable element, wired with aria-haspopup="menu" and aria-expanded. Context mode: the target that receives the context request (secondary click, Shift+F10, long press). Empty in trigger mode: the built-in ellipsis button named by `triggerLabel`.' },

@@ -349,7 +349,7 @@ writeFileSync(
 // The theme catalogue: every theme a host can select, in menu order (the
 // built-in presets, then the print themes), with its label, whether it
 // needs print-themes.css, and the font stylesheet it names. Custom
-// elements (the theme palette) and the Rust crates read it.
+// elements (the theme palette) read it.
 writeFileSync(
   join(dist, 'themes.json'),
   JSON.stringify(

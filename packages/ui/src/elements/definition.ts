@@ -1,8 +1,8 @@
 // The single source of a Tympan custom element: its properties, events,
 // slots and light-DOM anatomy, as plain data. The element class reads it at
-// runtime; tools/elements/generate.mjs reads it to write the React wrappers,
-// the Rust/Dioxus bindings and the parity fixtures. Nothing here touches the
-// DOM, so the generator can import it in Node.
+// runtime; tools/elements/generate.mjs reads it to write the React wrappers
+// and the parity fixtures. Nothing here touches the DOM, so the generator
+// can import it in Node.
 
 export type Scalar = string | number | boolean
 
@@ -83,8 +83,6 @@ export interface EventDef {
   detail?: Record<string, 'string' | 'boolean' | 'number'>
   /** Prop name on the React wrapper (`onThemeChange`). */
   reactProp: string
-  /** Prop name on the Dioxus binding (`on_theme_change`). */
-  rustProp: string
   doc: string
 }
 
@@ -97,7 +95,7 @@ export interface Example {
 
 export interface ElementDefinition {
   tag: string
-  /** PascalCase name: `TyButton` in React, `TyButton` in Rust. */
+  /** PascalCase name: `TyButton`. */
   name: string
   /**
    * `enhancing`: the host framework renders the anatomy (from this

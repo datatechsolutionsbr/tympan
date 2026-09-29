@@ -46,9 +46,9 @@ export const dataTableDefinition = {
     maxBlockSize: { type: 'string', attribute: 'max-block-size', doc: 'Maximum height of the scroll container, enabling the sticky header.' },
   },
   events: [
-    { type: 'ty-sort-change', kind: 'custom', detail: { column: 'string', direction: 'string' }, reactProp: 'onSortChange', rustProp: 'on_sort_change', doc: 'A sortable header cycled (none → ascending → descending → none). `direction` is `ascending`, `descending` or null when the sort cleared (the Rust binding reads an empty string for the cleared state). Controlled: the host writes `sort-column`/`sort-direction`.' },
-    { type: 'ty-selection-change', kind: 'custom', detail: { keys: 'string' }, reactProp: 'onSelectionChange', rustProp: 'on_selection_change', doc: 'The selection changed (a row checkbox, the select-all header checkbox, or Space on a focused row); `keys` is a JSON array of the selected row ids. Controlled: the host writes `selected-keys`.' },
-    { type: 'ty-row-action', kind: 'custom', detail: { id: 'string' }, reactProp: 'onRowAction', rustProp: 'on_row_action', doc: 'A row without `href` was activated (Enter or a press).' },
+    { type: 'ty-sort-change', kind: 'custom', detail: { column: 'string', direction: 'string' }, reactProp: 'onSortChange', doc: 'A sortable header cycled (none → ascending → descending → none). `direction` is `ascending`, `descending` or null when the sort cleared (the attribute reads an empty string for the cleared state). Controlled: the host writes `sort-column`/`sort-direction`.' },
+    { type: 'ty-selection-change', kind: 'custom', detail: { keys: 'string' }, reactProp: 'onSelectionChange', doc: 'The selection changed (a row checkbox, the select-all header checkbox, or Space on a focused row); `keys` is a JSON array of the selected row ids. Controlled: the host writes `selected-keys`.' },
+    { type: 'ty-row-action', kind: 'custom', detail: { id: 'string' }, reactProp: 'onRowAction', doc: 'A row without `href` was activated (Enter or a press).' },
   ],
   examples: [],
 } as const satisfies ElementDefinition

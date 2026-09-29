@@ -256,7 +256,7 @@ describe('<ty-tag-field>', () => {
     expect(tagFieldDefinition.tag).toBe('ty-tag-field')
     expect(tagFieldDefinition.name).toBe('TyTagField')
     expect(tagFieldDefinition.kind).toBe('self-rendering')
-    expect(tagFieldDefinition.events.map((e) => [e.type, e.reactProp, e.rustProp])).toEqual([['ty-change', 'onChange', 'on_change']])
+    expect(tagFieldDefinition.events.map((e) => [e.type, e.reactProp])).toEqual([['ty-change', 'onChange']])
   })
 })
 

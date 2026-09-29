@@ -30,7 +30,7 @@ export const textAreaDefinition = {
     controlId: { type: 'string', attribute: 'control-id', doc: 'Explicit id of the control (a surrounding field\'s control id); `<instance>-input` otherwise.' },
     testId: { type: 'string', attribute: 'test-id', doc: 'Test hook on the root (`data-testid`).' },
   },
-  events: [{ type: 'input', kind: 'native', detail: { value: 'string' }, reactProp: 'onChange', rustProp: 'oninput', doc: 'The native input of the textarea; `value` is the whole text.' }],
+  events: [{ type: 'input', kind: 'native', detail: { value: 'string' }, reactProp: 'onChange', doc: 'The native input of the textarea; `value` is the whole text.' }],
   slots: {
     label: { doc: 'The visible label, targeting the area.' },
     hint: { doc: 'Help text under the area, announced as the description.' },

@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsdown'
 
-// The standalone custom-element bundle for hosts outside npm (the Rust
-// crates embed it): every dependency inlined, registers the elements on load.
+// The standalone custom-element bundle for hosts outside npm: every
+// dependency inlined, registers the elements on load.
 export default defineConfig({
   entry: { 'elements.bundle': 'src/elements/register.ts' },
   format: ['esm'],

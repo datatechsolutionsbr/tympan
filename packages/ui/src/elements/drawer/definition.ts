@@ -70,7 +70,7 @@ export const drawerDefinition = {
     backdropTestId: { type: 'string', attribute: 'backdrop-test-id', doc: 'Test hook on the backdrop (`data-testid`).' },
   },
   events: [
-    { type: 'ty-open-change', kind: 'custom', detail: { open: 'boolean' }, reactProp: 'onOpenChange', rustProp: 'on_open_change', doc: 'The element asks the host to change visibility — `open: false` on Escape, the close button, an allowed backdrop press or a drag past the threshold. Controlled: the element does not close itself; the host flips `open`.' },
+    { type: 'ty-open-change', kind: 'custom', detail: { open: 'boolean' }, reactProp: 'onOpenChange', doc: 'The element asks the host to change visibility — `open: false` on Escape, the close button, an allowed backdrop press or a drag past the threshold. Controlled: the element does not close itself; the host flips `open`.' },
   ],
   slots: {
     title: { doc: 'The visible heading; also the accessible name (`accessibleLabel` when empty).' },

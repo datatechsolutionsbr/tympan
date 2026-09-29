@@ -77,7 +77,7 @@ export const modalDefinition = {
     backdropTestId: { type: 'string', attribute: 'backdrop-test-id', doc: 'Test hook on the backdrop (`data-testid`).' },
   },
   events: [
-    { type: 'ty-open-change', kind: 'custom', detail: { open: 'boolean' }, reactProp: 'onOpenChange', rustProp: 'on_open_change', doc: 'The element asks the host to change visibility — `open: false` on Escape, the close button or an allowed backdrop press. Controlled: the element does not close itself; the host flips `isOpen`.' },
+    { type: 'ty-open-change', kind: 'custom', detail: { open: 'boolean' }, reactProp: 'onOpenChange', doc: 'The element asks the host to change visibility — `open: false` on Escape, the close button or an allowed backdrop press. Controlled: the element does not close itself; the host flips `isOpen`.' },
   ],
   slots: {
     title: { doc: 'The accessible name, rendered as the panel\'s heading (required by the spec; `accessibleLabel` or `labelledBy` names the panel when it is empty).' },

@@ -33,7 +33,7 @@ export const wheelPickerDefinition = {
     testId: { type: 'string', attribute: 'test-id', doc: 'Test hook on the wheel (`data-testid`).' },
   },
   events: [
-    { type: 'ty-change', kind: 'custom', detail: { value: 'string', column: 'number' }, reactProp: 'onChange', rustProp: 'on_change', doc: 'The wheel settled on a new value, or a row was activated (tap, arrows, PageUp/PageDown, Home/End, typeahead). `value` is the option\'s value, not its label; `column` is the wheel\'s index (0 for a single wheel).' },
+    { type: 'ty-change', kind: 'custom', detail: { value: 'string', column: 'number' }, reactProp: 'onChange', doc: 'The wheel settled on a new value, or a row was activated (tap, arrows, PageUp/PageDown, Home/End, typeahead). `value` is the option\'s value, not its label; `column` is the wheel\'s index (0 for a single wheel).' },
   ],
   examples: [],
 } as const satisfies ElementDefinition

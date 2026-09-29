@@ -51,7 +51,7 @@ export const popoverDefinition = {
     accessibleLabel: { type: 'string', attribute: 'accessible-label', doc: 'Accessible name of the panel when `title` is empty.' },
   },
   events: [
-    { type: 'ty-open-change', kind: 'custom', detail: { open: 'boolean' }, reactProp: 'onOpenChange', rustProp: 'on_open_change', doc: 'The element asks the host to change visibility — `open: false` on Escape, an outside press or focus leaving the panel, `open: true` on a trigger activation. Controlled: the element does not toggle itself; the host flips `open`.' },
+    { type: 'ty-open-change', kind: 'custom', detail: { open: 'boolean' }, reactProp: 'onOpenChange', doc: 'The element asks the host to change visibility — `open: false` on Escape, an outside press or focus leaving the panel, `open: true` on a trigger activation. Controlled: the element does not toggle itself; the host flips `open`.' },
   ],
   slots: {
     trigger: { doc: 'The host\'s own toggle — any single focusable element; wired to the panel (aria-expanded, activation). Empty: the built-in info button.' },

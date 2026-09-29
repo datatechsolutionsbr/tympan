@@ -88,9 +88,9 @@ export const notificationCenterDefinition = {
     timeDaysAgo: { type: 'string', default: '{count} days ago', attribute: 'time-days-ago', doc: 'Relative time of an entry days old; `{count}` is replaced.' },
   },
   events: [
-    { type: 'ty-open-change', kind: 'custom', detail: { open: 'boolean' }, reactProp: 'onOpenChange', rustProp: 'on_open_change', doc: 'The element asks the host to change visibility — `open: true` on a bell press, `open: false` on Escape, the close button, a backdrop press or a second bell press. Controlled: the element does not toggle itself; the host flips `open`.' },
-    { type: 'ty-dismiss', kind: 'custom', detail: { id: 'string' }, reactProp: 'onDismiss', rustProp: 'on_dismiss', doc: 'An entry\'s dismiss button was pressed. The element drops the entry from its rendered history at once; the host removes it from its own state.' },
-    { type: 'ty-clear', kind: 'custom', reactProp: 'onClear', rustProp: 'on_clear', doc: 'Clear all was pressed (no confirmation: history only). The element empties its rendered history and announces the `clearedLabel` politely; the host clears its own state.' },
+    { type: 'ty-open-change', kind: 'custom', detail: { open: 'boolean' }, reactProp: 'onOpenChange', doc: 'The element asks the host to change visibility — `open: true` on a bell press, `open: false` on Escape, the close button, a backdrop press or a second bell press. Controlled: the element does not toggle itself; the host flips `open`.' },
+    { type: 'ty-dismiss', kind: 'custom', detail: { id: 'string' }, reactProp: 'onDismiss', doc: 'An entry\'s dismiss button was pressed. The element drops the entry from its rendered history at once; the host removes it from its own state.' },
+    { type: 'ty-clear', kind: 'custom', reactProp: 'onClear', doc: 'Clear all was pressed (no confirmation: history only). The element empties its rendered history and announces the `clearedLabel` politely; the host clears its own state.' },
   ],
   anatomy: {
     tag: 'span',

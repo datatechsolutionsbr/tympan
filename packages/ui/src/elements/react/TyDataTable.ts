@@ -49,7 +49,7 @@ export interface TyDataTableProps {
   showColumnLines?: boolean
   /** Maximum height of the scroll container, enabling the sticky header. */
   maxBlockSize?: string
-  /** A sortable header cycled (none → ascending → descending → none). `direction` is `ascending`, `descending` or null when the sort cleared (the Rust binding reads an empty string for the cleared state). Controlled: the host writes `sort-column`/`sort-direction`. */
+  /** A sortable header cycled (none → ascending → descending → none). `direction` is `ascending`, `descending` or null when the sort cleared (the attribute reads an empty string for the cleared state). Controlled: the host writes `sort-column`/`sort-direction`. */
   onSortChange?: (detail: { column: string; direction: string }) => void
   /** The selection changed (a row checkbox, the select-all header checkbox, or Space on a focused row); `keys` is a JSON array of the selected row ids. Controlled: the host writes `selected-keys`. */
   onSelectionChange?: (detail: { keys: string }) => void

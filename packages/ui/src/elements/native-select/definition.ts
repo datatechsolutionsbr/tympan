@@ -19,7 +19,7 @@ export const nativeSelectDefinition = {
     controlId: { type: 'string', attribute: 'control-id', doc: 'Explicit id of the control (a surrounding field\'s control id); `<instance>-control` otherwise.' },
     testId: { type: 'string', attribute: 'test-id', doc: 'Test hook on the native select (`data-testid`).' },
   },
-  events: [{ type: 'change', kind: 'native', detail: { value: 'string' }, reactProp: 'onChange', rustProp: 'onchange', doc: 'The native change of the select; `value` is the new value.' }],
+  events: [{ type: 'change', kind: 'native', detail: { value: 'string' }, reactProp: 'onChange', doc: 'The native change of the select; `value` is the new value.' }],
   slots: {
     default: { doc: 'The `<option>` and `<optgroup>` children.' },
     label: { doc: 'The visible label above the control.' },

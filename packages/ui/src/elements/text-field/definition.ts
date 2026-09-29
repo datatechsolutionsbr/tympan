@@ -58,8 +58,8 @@ export const textFieldDefinition = {
     testId: { type: 'string', attribute: 'test-id', doc: 'Test hook on the root (`data-testid`).' },
   },
   events: [
-    { type: 'input', kind: 'native', detail: { value: 'string' }, reactProp: 'onChange', rustProp: 'oninput', doc: 'The native input of the field; `value` is the whole text.' },
-    { type: 'ty-clear', kind: 'custom', reactProp: 'onClear', rustProp: 'on_clear', doc: 'The clear action ran (its button, or Escape in search mode); the value is already empty and focus is back on the input.' },
+    { type: 'input', kind: 'native', detail: { value: 'string' }, reactProp: 'onChange', doc: 'The native input of the field; `value` is the whole text.' },
+    { type: 'ty-clear', kind: 'custom', reactProp: 'onClear', doc: 'The clear action ran (its button, or Escape in search mode); the value is already empty and focus is back on the input.' },
   ],
   slots: {
     label: { doc: 'The visible label, targeting the input.' },

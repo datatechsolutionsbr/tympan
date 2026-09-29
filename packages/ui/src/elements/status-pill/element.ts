@@ -5,7 +5,7 @@ import { statusPillDefinition } from './definition.ts'
  * The tone, busy state and English default label of each common status —
  * the React StatusPill's `builtInStatusMap` (whose labels come from the
  * messages catalogue). The map is runtime behaviour: a server rendering
- * (React SSR, Dioxus SSR) passes `tone` and the label itself, and the map
+ * (React SSR) passes `tone` and the label itself, and the map
  * only fills in what the host left out.
  */
 const STATUS_MAP: Record<string, { tone: string; busy?: boolean; label: string }> = {

@@ -37,7 +37,7 @@ export const pageHeaderDefinition = {
     headingId: { type: 'string', attribute: 'heading-id', doc: 'Id of the title heading, for `aria-labelledby` of the page region; `<instance>-title` when unset.' },
   },
   events: [
-    { type: 'input', kind: 'native', detail: { value: 'string' }, reactProp: 'onTitleChange', rustProp: 'oninput', doc: 'Typing in the editable title; `value` is the whole text.' },
+    { type: 'input', kind: 'native', detail: { value: 'string' }, reactProp: 'onTitleChange', doc: 'Typing in the editable title; `value` is the whole text.' },
   ],
   slots: {
     breadcrumbs: { doc: 'The breadcrumb navigation, rendered above the title.' },

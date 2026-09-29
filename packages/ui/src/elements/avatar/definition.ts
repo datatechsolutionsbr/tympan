@@ -123,7 +123,7 @@ export const avatarDefinition = {
     href: { type: 'string', attribute: 'href', doc: 'Makes the avatar a link to this destination (wins over `pressable`).' },
     actionLabel: { type: 'string', default: 'Open profile of {name}', attribute: 'action-label', doc: 'Accessible name of a pressable avatar; `{name}` is filled in. Translate through this attribute.' },
   },
-  events: [{ type: 'click', kind: 'native', reactProp: 'onPress', rustProp: 'onclick', doc: 'The native click of the pressable avatar (its link or button).' }],
+  events: [{ type: 'click', kind: 'native', reactProp: 'onPress', doc: 'The native click of the pressable avatar (its link or button).' }],
   anatomy: {
     // A boxless root (display: contents): the static frame and the two
     // pressable controls are mutually exclusive alternatives (the surface's

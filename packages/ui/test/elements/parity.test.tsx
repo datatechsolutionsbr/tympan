@@ -1,7 +1,7 @@
 // One definition, three renderers: every example of every enhancing element
-// renders the same markup through the reference renderer (the fixtures the
-// Rust bindings are tested against), the generated React wrapper, and the
-// element itself when used from plain HTML.
+// renders the same markup through the reference renderer (the fixtures in
+// ./fixtures pin it), the generated React wrapper, and the element itself
+// when used from plain HTML.
 import { execFileSync } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
@@ -66,8 +66,8 @@ for (const [def, Wrapper] of CASES) {
     for (const example of def.examples) {
       const slots = Object.fromEntries(Object.entries(example.slots).map(([k, v]) => [k, escape(v)]))
 
-      it(`${example.name}: the Rust fixture is the reference rendering`, () => {
-        const fixture = readFileSync(join(repo, 'crates/tympan-dioxus/tests/fixtures', def.tag, `${example.name}.html`), 'utf8')
+      it(`${example.name}: the fixture is the reference rendering`, () => {
+        const fixture = readFileSync(join(__dirname, 'fixtures', def.tag, `${example.name}.html`), 'utf8')
         expect(canon(fixture)).toEqual(canon(renderElement(def, example.props, slots, 'i')))
       })
 

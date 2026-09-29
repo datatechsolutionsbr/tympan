@@ -52,9 +52,9 @@ export const commandPaletteDefinition = {
     hintClose: text('hint-close', 'close', 'Footer hint beside esc.'),
   },
   events: [
-    { type: 'ty-select', kind: 'custom', detail: { id: 'string', kind: 'string', itemId: 'string' }, reactProp: 'onSelect', rustProp: 'on_select', doc: 'A row was chosen: an item (`kind: "item"`, `id` the item id), a secondary action (`kind: "action"`, `id` the action id, `itemId` its item) or a fallback action (`kind: "fallback"`). `itemId` is empty except for actions. The palette then closes itself and asks the host with `ty-close`.' },
-    { type: 'ty-scope-change', kind: 'custom', detail: { scope: 'string' }, reactProp: 'onScopeChange', rustProp: 'on_scope_change', doc: 'The active scope changed (a scope button, the chip, Tab or Backspace); `scope` is the scope id, empty when cleared. The element reflects it to the `active-scope` attribute.' },
-    { type: 'ty-close', kind: 'custom', reactProp: 'onClose', rustProp: 'on_close', doc: 'The palette asks to close (the stepped-back Escape reaching the top level, a press outside, or after a choice). The element closes itself too.' },
+    { type: 'ty-select', kind: 'custom', detail: { id: 'string', kind: 'string', itemId: 'string' }, reactProp: 'onSelect', doc: 'A row was chosen: an item (`kind: "item"`, `id` the item id), a secondary action (`kind: "action"`, `id` the action id, `itemId` its item) or a fallback action (`kind: "fallback"`). `itemId` is empty except for actions. The palette then closes itself and asks the host with `ty-close`.' },
+    { type: 'ty-scope-change', kind: 'custom', detail: { scope: 'string' }, reactProp: 'onScopeChange', doc: 'The active scope changed (a scope button, the chip, Tab or Backspace); `scope` is the scope id, empty when cleared. The element reflects it to the `active-scope` attribute.' },
+    { type: 'ty-close', kind: 'custom', reactProp: 'onClose', doc: 'The palette asks to close (the stepped-back Escape reaching the top level, a press outside, or after a choice). The element closes itself too.' },
   ],
   examples: [],
 } as const satisfies ElementDefinition

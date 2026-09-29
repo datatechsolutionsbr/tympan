@@ -10,7 +10,7 @@ export const skipLinkDefinition = {
     targetId: { type: 'string', default: 'main-content', attribute: 'target-id', doc: 'Id of the main content element; the anchor\'s href is its fragment (`#main-content`).' },
     label: { type: 'string', default: 'Skip to main content', attribute: 'label', doc: 'Link text (the I18n adapter\'s default); translate through this attribute.' },
   },
-  events: [{ type: 'click', kind: 'native', reactProp: 'onClick', rustProp: 'onclick', doc: 'The native click of the anchor, before the focus move.' }],
+  events: [{ type: 'click', kind: 'native', reactProp: 'onClick', doc: 'The native click of the anchor, before the focus move.' }],
   anatomy: {
     tag: 'a',
     class: 'ty-skip-link',
