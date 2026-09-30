@@ -3,7 +3,7 @@ import { useLarguraDisponivel, usePrint } from '../context.tsx'
 import { TabelaDados, type TabelaDadosProps } from '../panels/Method.tsx'
 import { comColchetes } from '../panels/common.tsx'
 import { semente } from '../rough.ts'
-import { cx, useIdSeguro } from '../util.ts'
+import { cx, useIdSeguro } from '../utils.ts'
 import {
   layoutBarras,
   layoutColunas,

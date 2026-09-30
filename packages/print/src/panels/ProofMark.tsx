@@ -2,7 +2,7 @@ import { ROTULOS_PROVA, type EstadoProva, type MarcaProva as FormaMarca } from '
 import type { ReactNode } from 'react'
 import { usePrint } from '../context.tsx'
 import { tracar } from '../rough.ts'
-import { cx } from '../util.ts'
+import { cx } from '../utils.ts'
 
 export interface MarcaProvaProps {
   estado: EstadoProva

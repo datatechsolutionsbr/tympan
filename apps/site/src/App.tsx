@@ -1,17 +1,17 @@
 // Routing (hash, path segments) and the pieces every section shares: the ⌘K search and lazy sections.
 import { lazy, Suspense, useCallback, useEffect, useState } from 'react'
 import { useI18n } from './i18n/I18n'
-import { BuscaContext } from './Moldura'
-import { Busca } from './Busca'
+import { SearchContext } from './Layout'
+import { Search } from './Search'
 import { formatarRota, lerRota, segmentos, type Rota } from './routes'
 
-const Home = lazy(() => import('./sections/home/Home').then((m) => ({ default: m.Inicio })))
-const History = lazy(() => import('./sections/history/History').then((m) => ({ default: m.Historia })))
+const Home = lazy(() => import('./sections/home/Home').then((m) => ({ default: m.Home })))
+const History = lazy(() => import('./sections/history/History').then((m) => ({ default: m.History })))
 const Components = lazy(() => import('./sections/components/Components').then((m) => ({ default: m.Componentes })))
-const Themes = lazy(() => import('./sections/themes/Themes').then((m) => ({ default: m.Temas })))
+const Themes = lazy(() => import('./sections/themes/Themes').then((m) => ({ default: m.Themes })))
 const Book = lazy(() => import('./sections/book/Book').then((m) => ({ default: m.Livro })))
 const Video = lazy(() => import('./sections/video/Video').then((m) => ({ default: m.Video })))
-const Install = lazy(() => import('./sections/install/Install').then((m) => ({ default: m.Instalar })))
+const Install = lazy(() => import('./sections/install/Install').then((m) => ({ default: m.Install })))
 
 export type Navegar = (r: Rota, opcoes?: { substituir?: boolean }) => void
 
@@ -43,14 +43,14 @@ export function useRota(locale: string): [Rota, Navegar] {
 export function App() {
   const { locale, t } = useI18n()
   const [rota, navegar] = useRota(locale)
-  const [busca, setBusca] = useState(false)
-  const abrirBusca = useCallback(() => setBusca(true), [])
+  const [busca, setSearch] = useState(false)
+  const abrirSearch = useCallback(() => setSearch(true), [])
 
   useEffect(() => {
     const on = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault()
-        setBusca((b) => !b)
+        setSearch((b) => !b)
       }
     }
     addEventListener('keydown', on)
@@ -67,17 +67,17 @@ export function App() {
   }, [rota.secao])
 
   return (
-    <BuscaContext.Provider value={abrirBusca}>
+    <SearchContext.Provider value={abrirSearch}>
       <Suspense fallback={<div className="ty-site-carregando" role="status">{t('comum.carregando')}</div>}>
-        {rota.secao === 'home' ? <Inicio /> : null}
-        {rota.secao === 'history' ? <Historia rota={rota} /> : null}
+        {rota.secao === 'home' ? <Home /> : null}
+        {rota.secao === 'history' ? <History rota={rota} /> : null}
         {rota.secao === 'components' ? <Componentes rota={rota} /> : null}
-        {rota.secao === 'themes' ? <Temas rota={rota} ir={navegar} /> : null}
+        {rota.secao === 'themes' ? <Themes rota={rota} ir={navegar} /> : null}
         {rota.secao === 'book' ? <Livro rota={rota} ir={navegar} /> : null}
         {rota.secao === 'video' ? <Video rota={rota} ir={navegar} /> : null}
-        {rota.secao === 'install' ? <Instalar /> : null}
+        {rota.secao === 'install' ? <Install /> : null}
       </Suspense>
-      <Busca aberta={busca} aoFechar={() => setBusca(false)} navegar={navegar} />
-    </BuscaContext.Provider>
+      <Search aberta={busca} aoFechar={() => setSearch(false)} navegar={navegar} />
+    </SearchContext.Provider>
   )
 }

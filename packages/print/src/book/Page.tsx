@@ -1,7 +1,7 @@
 import { Children, isValidElement, type CSSProperties, type ReactNode } from 'react'
 import { papelEscuro } from '@datatechsolutions/tympan-tokens'
 import { FundoEscuroProvider, LadoProvider, MoldeProvider, useDupla, usePrint } from '../context.tsx'
-import { cx } from '../util.ts'
+import { cx } from '../utils.ts'
 import { Area } from './Area.tsx'
 import { gradeDoMolde, linhasDoMolde, linhasUsadas, moldePorNome } from './templates.ts'
 import { Ornamento } from './Ornament.tsx'

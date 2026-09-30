@@ -1,6 +1,6 @@
 import { parseColor } from '@datatechsolutions/tympan-tokens'
 import { usePrint } from '../context.tsx'
-import { useIdSeguro } from '../util.ts'
+import { useIdSeguro } from '../utils.ts'
 
 const MM = 3.7795
 const n3 = (v: number) => Math.round(v * 1000) / 1000

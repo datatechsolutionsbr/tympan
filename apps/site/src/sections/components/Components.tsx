@@ -5,12 +5,12 @@
 import { ArrowLeft, ArrowRight, LayoutGrid } from 'lucide-react'
 import { lazy, Suspense, useEffect, useMemo, useState, type ComponentType } from 'react'
 import { ThemeScope, useTheme } from '@datatechsolutions/tympan'
-import { Encaixe } from '../../comum/Encaixe'
-import { GALLERY_PAGES, GalleryFrameContext } from '../../galerias'
+import { Slot } from '../../common/Slot'
+import { GALLERY_PAGES, GalleryFrameContext } from '../../galleries'
 import { useI18n } from '../../i18n/I18n'
-import { Cabeca, Moldura, useHref } from '../../Moldura'
+import { Cabeca, Layout, useHref } from '../../Layout'
 import { lerRota, type Rota, type RotaDe } from '../../routes'
-import { QuandoVisivel } from '../livro/Spread'
+import { QuandoVisivel } from '../book/Spread'
 import { CATALOGO, GRUPOS, itemDoCatalogo, type GrupoId, type ItemCatalogo } from './catalog'
 import '../../../../../packages/ui/gallery/src/gallery.css'
 import './components.css'
@@ -73,7 +73,7 @@ function Miniatura({ item }: { item: ItemCatalogo }) {
   return (
     <span className="ty-site-miniatura" aria-hidden="true">
       <QuandoVisivel reserva={<span className="ty-site-miniatura__reserva" />}>
-        <Encaixe>
+        <Slot>
           <ThemeScope theme={th.theme} mode={th.resolvedMode} density={th.density} className="ty-site-miniatura__pagina" inert>
             {Page ? (
               <GalleryFrameContext.Provider value={null}>
@@ -85,7 +85,7 @@ function Miniatura({ item }: { item: ItemCatalogo }) {
               </Suspense>
             )}
           </ThemeScope>
-        </Encaixe>
+        </Slot>
       </QuandoVisivel>
     </span>
   )
@@ -231,8 +231,8 @@ export function Componentes({ rota }: { rota: RotaDe<'components'> }) {
   const { t } = useI18n()
   const item = itemDoCatalogo(rota.pagina)
   return (
-    <Moldura secao="components" className="ty-site-pagina--componentes" rotuloLateral={t('componentes.lista')} lateral={<Lateral atual={item?.id} />}>
+    <Layout secao="components" className="ty-site-pagina--componentes" rotuloLateral={t('componentes.lista')} lateral={<Lateral atual={item?.id} />}>
       {item ? <PaginaGaleria item={item} /> : <Catalogo />}
-    </Moldura>
+    </Layout>
   )
 }

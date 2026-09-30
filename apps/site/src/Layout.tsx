@@ -35,7 +35,7 @@ export function useNomeTema(): (nome: string) => string {
 }
 
 /** Opens the ⌘K search from anywhere in the shell. */
-export const BuscaContext = createContext<() => void>(() => {})
+export const SearchContext = createContext<() => void>(() => {})
 
 export function MarcaTympan() {
   const href = useHref()
@@ -113,7 +113,7 @@ function Topo({ atual, aoAbrirLateral, rotuloLateral }: { atual: SecaoId; aoAbri
   const { t } = useI18n()
   const th = useTheme()
   const href = useHref()
-  const abrirBusca = useContext(BuscaContext)
+  const abrirSearch = useContext(SearchContext)
   const estreitoTopo = useMediaQuery('(max-width: 1279.98px)')
   const mac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform)
   return (
@@ -138,7 +138,7 @@ function Topo({ atual, aoAbrirLateral, rotuloLateral }: { atual: SecaoId; aoAbri
         ))}
       </nav>
       <div className="ty-site-topo__acoes">
-        <button type="button" className="ty-site-busca" onClick={abrirBusca} aria-keyshortcuts={mac ? 'Meta+K' : 'Control+K'}>
+        <button type="button" className="ty-site-busca" onClick={abrirSearch} aria-keyshortcuts={mac ? 'Meta+K' : 'Control+K'}>
           <Search aria-hidden="true" className="ty-icon" />
           <span className="ty-site-busca__texto">{t('busca.botao')}</span>
           <kbd className="ty-site-busca__atalho" aria-hidden="true" dir="ltr">
@@ -178,7 +178,7 @@ export function AbasRodape({ atual }: { atual: SecaoId }) {
   )
 }
 
-export interface MolduraProps {
+export interface LayoutProps {
   secao: SecaoId
   /** The section's own navigation: a sticky column beside the page, a drawer on a phone. */
   lateral?: ReactNode
@@ -189,7 +189,7 @@ export interface MolduraProps {
   className?: string
 }
 
-export function Moldura({ secao, lateral, rotuloLateral, children, className }: MolduraProps) {
+export function Layout({ secao, lateral, rotuloLateral, children, className }: LayoutProps) {
   const { t } = useI18n()
   const estreito = useMediaQuery('(max-width: 1023.98px)')
   const [aberta, setAberta] = useState(false)

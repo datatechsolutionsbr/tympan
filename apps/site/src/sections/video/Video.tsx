@@ -7,7 +7,7 @@ import { Button, ListboxSelect, SegmentedControl, ThemeScope, ThemeSwatch, useRe
 import type { Navegar } from '../../App'
 import { useI18n } from '../../i18n/I18n'
 import { useLocal } from '../../local'
-import { Cabeca, Moldura, useGruposTema, useNomeTema } from '../../Moldura'
+import { Cabeca, Layout, useGruposTema, useNomeTema } from '../../Layout'
 import { teclaDeTroca, vizinho, type RotaDe } from '../../routes'
 import { useFontesDoTema } from '../home/Home'
 import { Cena, DURACAO } from './Scene'
@@ -84,7 +84,7 @@ export function Video({ rota, ir }: { rota: RotaDe<'video'>; ir: Navegar }) {
   }))
 
   return (
-    <Moldura secao="video" className="ty-site-pagina--video">
+    <Layout secao="video" className="ty-site-pagina--video">
       <Cabeca
         eyebrow={
           <>
@@ -136,6 +136,6 @@ export function Video({ rota, ir }: { rota: RotaDe<'video'>; ir: Navegar }) {
         </span>
       </div>
       <p className="ty-site-dica">{tr('video.dica')}</p>
-    </Moldura>
+    </Layout>
   )
 }

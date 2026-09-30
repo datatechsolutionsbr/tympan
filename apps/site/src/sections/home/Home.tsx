@@ -4,9 +4,9 @@
 import { useEffect, useState } from 'react'
 import { printThemeFontUrls } from '../../tokens'
 import { useTheme } from '@datatechsolutions/tympan'
-import { BotaoCopiar } from '../../comum/BotaoCopiar'
+import { CopyButton } from '../../comum/CopyButton'
 import { useI18n, type Chave } from '../../i18n/I18n'
-import { Moldura, useHref, useNomeTema } from '../../Moldura'
+import { Layout, useHref, useNomeTema } from '../../Layout'
 import { lerRota } from '../../routes'
 import { Billboard } from './Billboard'
 import './home.css'
@@ -107,7 +107,7 @@ function Chip({ tema, compacto }: { tema: string; compacto?: boolean }) {
   )
 }
 
-export function Inicio() {
+export function Home() {
   const { t, n } = useI18n()
   const href = useHref()
   const th = useTheme()
@@ -139,7 +139,7 @@ export function Inicio() {
   ]
 
   return (
-    <Moldura secao="home" className="ty-site-pagina--inicio">
+    <Layout secao="home" className="ty-site-pagina--inicio">
       <div className="ty-site-inicio">
         <div className="ty-site-heroi">
           <div>
@@ -248,7 +248,7 @@ export function Inicio() {
                 ) : null}
               </div>
               <a className="ty-site-link" href={href({ ...lerRota('#/themes'), secao: 'themes', tema, modo: undefined, b: 'tympan' })}>
-                {t('inicio.abrirEmTemas')}
+                {t('inicio.abrirEmThemes')}
               </a>
             </div>
             <Especime />
@@ -265,7 +265,7 @@ export function Inicio() {
               <span className="ty-site-camadas__pacote">@datatechsolutions/tympan-tokens</span>
               <h3>{t('inicio.camadaTokens')}</h3>
               <p>{t('inicio.camadaTokensTexto')}</p>
-              <a href={href({ ...lerRota('#/themes'), secao: 'themes', tema: 'tympan', modo: undefined, b: 'tympan' })}>{t('inicio.verTemas')}</a>
+              <a href={href({ ...lerRota('#/themes'), secao: 'themes', tema: 'tympan', modo: undefined, b: 'tympan' })}>{t('inicio.verThemes')}</a>
             </article>
             <article>
               <span className="ty-site-camadas__pacote">@datatechsolutions/tympan</span>
@@ -326,8 +326,8 @@ export function Inicio() {
               </header>
               <div className="ty-site-codigo ty-site-codigo--grande">
                 <div className="ty-site-codigo__topo">
-                  <span className="ty-site-codigo__rotulo">{t('inicio.instalarCodigo')}</span>
-                  <BotaoCopiar texto={SNIPPET_INSTALAR} rotulo={t('inicio.instalarCodigo')} />
+                  <span className="ty-site-codigo__rotulo">{t('inicio.instalarCode')}</span>
+                  <CopyButton texto={SNIPPET_INSTALAR} rotulo={t('inicio.instalarCode')} />
                 </div>
                 <pre className="ty-site-codigo__pre" dir="ltr">
                   <code>{SNIPPET_INSTALAR}</code>
@@ -346,6 +346,6 @@ export function Inicio() {
           <span>{t('inicio.rodapeLicenca')}</span>
         </footer>
       </div>
-    </Moldura>
+    </Layout>
   )
 }

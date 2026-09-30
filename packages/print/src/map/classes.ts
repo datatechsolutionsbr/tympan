@@ -1,6 +1,6 @@
 // Classing of a choropleth: given breaks, or quantiles of the values.
 // Pure functions; the same values always give the same classes.
-import { formatarNumero } from '../util.ts'
+import { formatarNumero } from '../utils.ts'
 
 /**
  * Breaks at quantiles: `n` classes → `n − 1` ascending breaks. A value

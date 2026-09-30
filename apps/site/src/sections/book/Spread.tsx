@@ -3,7 +3,7 @@
 import { memo, useEffect, useRef, useState } from 'react'
 import { PrintBook } from '@datatechsolutions/tympan-print'
 import type { PrintPresetName } from '../../tokens'
-import { DuplaEstudo, DuplaMapas, GRAFICO_DO_ESTUDO, type TipoGraficoEstudo } from '../../galerias'
+import { DuplaEstudo, DuplaMapas, GRAFICO_DO_ESTUDO, type TipoGraficoEstudo } from '../../galleries'
 import type { Grafico } from '../../routes'
 
 export const tipoDoGrafico = (estilo: string, grafico: Grafico): TipoGraficoEstudo =>

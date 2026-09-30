@@ -11,7 +11,7 @@ import {
 } from '@datatechsolutions/tympan-tokens'
 import { PrintContextoProvider } from '../context.tsx'
 import { PRINT_CSS } from '../styles.generated.ts'
-import { cx, useIdSeguro } from '../util.ts'
+import { cx, useIdSeguro } from '../utils.ts'
 
 export interface LivroPrintProps {
   /** The book style: a preset object or its name (a deprecated id from PRINT_STYLE_ALIASES resolves to its new style). */

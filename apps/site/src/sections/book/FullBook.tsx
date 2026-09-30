@@ -5,7 +5,7 @@
 import { memo } from 'react'
 import { PartOpener, Cover, HowToRead, Spread, Timeline, PrintBook, Page } from '@datatechsolutions/tympan-print'
 import type { PrintPresetName } from '../../tokens'
-import { DuplaEstudo, DuplaMapas } from '../../galerias'
+import { DuplaEstudo, DuplaMapas } from '../../galleries'
 import type { Grafico } from '../../routes'
 import { tipoDoGrafico } from './Spread'
 

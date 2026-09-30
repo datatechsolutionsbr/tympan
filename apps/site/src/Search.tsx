@@ -4,12 +4,12 @@ import { useMemo } from 'react'
 import { presets, printThemePresets, type PrintPresetName } from './tokens'
 import { CommandPalette, type CommandGroup } from '@datatechsolutions/tympan'
 import type { Navegar } from './App'
-import { GALLERY_PAGES } from './galerias'
+import { GALLERY_PAGES } from './galleries'
 import { useI18n, type Chave } from './i18n/I18n'
-import { SECOES, useNomeTema } from './Moldura'
+import { SECOES, useNomeTema } from './Layout'
 import { lerRota, TODOS_ESTILOS } from './routes'
 
-export function Busca({ aberta, aoFechar, navegar }: { aberta: boolean; aoFechar: () => void; navegar: Navegar }) {
+export function Search({ aberta, aoFechar, navegar }: { aberta: boolean; aoFechar: () => void; navegar: Navegar }) {
   const { t, td } = useI18n()
   const nomeTema = useNomeTema()
   const grupos = useMemo<CommandGroup[]>(() => {
@@ -40,7 +40,7 @@ export function Busca({ aberta, aoFechar, navegar }: { aberta: boolean; aoFechar
       },
       {
         id: 'themes',
-        heading: t('busca.grupoTemas'),
+        heading: t('busca.grupoThemes'),
         items: presets.map((p) => ({
           id: `t-${p.name}`,
           label: nomeTema(p.name),

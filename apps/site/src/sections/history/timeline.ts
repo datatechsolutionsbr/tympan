@@ -3,7 +3,7 @@
 
 export type Text = string | Record<string, string>
 
-export interface EntradaHistoria {
+export interface EntradaHistory {
   id: string
   data: string
   era: Text
@@ -20,7 +20,7 @@ function metricas(v: unknown): string[] {
   return []
 }
 
-export function lerLinhaDoTempo(json: unknown): EntradaHistoria[] {
+export function lerLinhaDoTempo(json: unknown): EntradaHistory[] {
   const lista = Array.isArray(json) ? json : json && typeof json === 'object' && Array.isArray((json as { entries?: unknown }).entries) ? (json as { entries: unknown[] }).entries : []
   return lista
     .filter((e): e is Record<string, unknown> => !!e && typeof e === 'object')

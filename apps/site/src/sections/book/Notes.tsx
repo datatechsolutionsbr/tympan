@@ -1,7 +1,7 @@
 // Notes per book style, kept in this browser, with a copy button that puts the style, its theme id, the
 // favourites and the note together (after the Estúdio's "my choice and comments").
 import { TextArea } from '@datatechsolutions/tympan'
-import { BotaoCopiar } from '../../comum/BotaoCopiar'
+import { CopyButton } from '../../comum/CopyButton'
 import { temaDoEstilo } from '../../styles'
 import { useI18n } from '../../i18n/I18n'
 import { lerLocal, useLocal } from '../../local'
@@ -29,7 +29,7 @@ export function Notas({ estilo }: { estilo: PrintPresetName }) {
       </h3>
       <TextArea accessibleLabel={t('notas.titulo')} value={nota} onChange={(v) => setNotas({ ...notas, [estilo]: v })} rows={3} autoGrow placeholder={t('notas.placeholder')} />
       <div className="ty-site-id">
-        <BotaoCopiar texto={texto} rotulo={t('notas.copiar')} />
+        <CopyButton texto={texto} rotulo={t('notas.copiar')} />
         <span className="ty-site-dica">{t('notas.dica')}</span>
       </div>
     </section>

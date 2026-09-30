@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { useAreaNome, useLado, usePrint } from '../context.tsx'
 import { Emblema } from '../brand/Emblem.tsx'
-import { cx } from '../util.ts'
+import { cx } from '../utils.ts'
 import { comColchetes } from './common.tsx'
 import { larguraColunas } from './Panel.tsx'
 

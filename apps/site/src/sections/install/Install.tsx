@@ -1,9 +1,9 @@
-// Instalar: install and usage snippets (React, the flash-free theme script, ThemePalette, book styles in
+// Install: install and usage snippets (React, the flash-free theme script, ThemePalette, book styles in
 // print, and the tokens for non-React hosts), with an "on this page" list.
 import { Download } from 'lucide-react'
-import { Codigo } from '../../comum/Codigo'
+import { Code } from '../../comum/Code'
 import { useI18n, type Chave } from '../../i18n/I18n'
-import { Cabeca, Moldura } from '../../Moldura'
+import { Cabeca, Layout } from '../../Layout'
 import { SNIPPET_INSTALAR } from '../home/Home'
 
 const PASSOS: Array<{ id: string; titulo: Chave; texto: Chave; codigo: string }> = [
@@ -79,10 +79,10 @@ const html = renderToStaticMarkup(
   },
 ]
 
-export function Instalar() {
+export function Install() {
   const { t } = useI18n()
   return (
-    <Moldura
+    <Layout
       secao="install"
       rotuloLateral={t('instalar.nestaPagina')}
       lateral={
@@ -124,10 +124,10 @@ export function Instalar() {
               {t(p.titulo)}
             </h2>
             <p className="ty-site-lead">{t(p.texto)}</p>
-            <Codigo titulo={t(p.titulo)} codigo={p.codigo} />
+            <Code titulo={t(p.titulo)} codigo={p.codigo} />
           </section>
         ))}
       </div>
-    </Moldura>
+    </Layout>
   )
 }

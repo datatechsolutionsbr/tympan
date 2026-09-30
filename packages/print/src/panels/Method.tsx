@@ -1,6 +1,6 @@
 import type { EstadoProva } from '@datatechsolutions/tympan-tokens'
 import { LogoLakebrasil, SeloLakebrasil } from '../brand/LogoLakebrasil.tsx'
-import { cx, formatarNumero } from '../util.ts'
+import { cx, formatarNumero } from '../utils.ts'
 import { comColchetes } from './common.tsx'
 import { MarcaProva } from './ProofMark.tsx'
 

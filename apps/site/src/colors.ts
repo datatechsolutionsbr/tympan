@@ -1,5 +1,5 @@
 // Colour helpers for the token panels: parse a computed CSS colour, relative luminance and WCAG contrast.
-// Pure functions, tested in test/cores.test.ts.
+// Pure functions, tested in test/colors.test.ts.
 
 export type Rgb = [number, number, number]
 

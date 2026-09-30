@@ -1,7 +1,7 @@
 import type { EstadoProva } from '@datatechsolutions/tympan-tokens'
 import type { ReactNode } from 'react'
 import { LogoDatatech } from '../brand/LogoDatatech.tsx'
-import { cx, formatarNumero, useIdSeguro } from '../util.ts'
+import { cx, formatarNumero, useIdSeguro } from '../utils.ts'
 import { comColchetes, NumeroChamada } from './common.tsx'
 import { MarcaProva } from './ProofMark.tsx'
 

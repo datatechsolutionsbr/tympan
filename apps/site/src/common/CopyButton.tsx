@@ -5,7 +5,7 @@ import { useI18n } from '../i18n/I18n'
 import { copiar } from './copiar'
 
 /** Copy button with feedback in place ("Copiado" / "Não copiou") for a couple of seconds. */
-export function BotaoCopiar({ texto, rotulo }: { texto: string; rotulo: string }) {
+export function CopyButton({ texto, rotulo }: { texto: string; rotulo: string }) {
   const { t } = useI18n()
   const [feito, setFeito] = useState<null | boolean>(null)
   return (

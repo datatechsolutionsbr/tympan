@@ -6,18 +6,18 @@ import { BookOpen, BookOpenText, ChevronLeft, ChevronRight, Columns2, Expand, Ga
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { Button, ListboxSelect, SearchBar, SegmentedControl, useMediaQuery } from '@datatechsolutions/tympan'
 import { ESTADOS_PROVA, printPresets, resolvePrintStyle, type PrintPresetName } from '../../tokens'
-import { Cortina } from '../../comum/Cortina'
-import { Encaixe } from '../../comum/Encaixe'
-import { BotaoCopiar } from '../../comum/BotaoCopiar'
+import { Backdrop } from '../../comum/Backdrop'
+import { Slot } from '../../common/Slot'
+import { CopyButton } from '../../comum/CopyButton'
 import { amostra, familia, filtrarEstilos, paleta, temaDoEstilo } from '../../styles'
 import { useI18n, type Chave } from '../../i18n/I18n'
 import { useFavoritos, useLocal } from '../../local'
-import { Cabeca, Moldura, useHref } from '../../Moldura'
+import { Cabeca, Layout, useHref } from '../../Layout'
 import { teclaDeTroca, TODOS_ESTILOS, vizinho, type Grafico, type Modo, type RotaDe } from '../../routes'
 import { DuplaEstilo, QuandoVisivel } from './Spread'
 import { DUPLAS, DuplaDoLivroNoEstilo } from './FullBook'
 import { Notes } from './Notes'
-import { Visor } from '../../comum/Visor'
+import { Viewer } from '../../common/Viewer'
 import { useTextosEstilo } from './texts'
 
 type RotaLivro = RotaDe<'book'>
@@ -60,7 +60,7 @@ function ItemEstilo({ id, atual, fav, aoEscolher }: { id: PrintPresetName; atual
 function ListaEstilos({ atual, favs, aoEscolher }: { atual: PrintPresetName; favs: string[]; aoEscolher: (id: PrintPresetName) => void }) {
   const { t, n } = useI18n()
   const { rotulo } = useTextosEstilo()
-  const [busca, setBusca] = useState('')
+  const [busca, setSearch] = useState('')
   const filtrados = useMemo(() => {
     // Search matches the translated label too.
     const q = busca.trim()
@@ -74,7 +74,7 @@ function ListaEstilos({ atual, favs, aoEscolher }: { atual: PrintPresetName; fav
   return (
     <div className="ty-site-lista">
       <div className="ty-site-lista__busca">
-        <SearchBar query={busca} onQueryChange={setBusca} placeholder={t('livro.buscar')} label={t('livro.buscar')} />
+        <SearchBar query={busca} onQueryChange={setSearch} placeholder={t('livro.buscar')} label={t('livro.buscar')} />
       </div>
       {favoritos.length ? (
         <section className="ty-site-lista__grupo" aria-labelledby="livro-favs">
@@ -124,9 +124,9 @@ interface MesaProps {
 function Mesa({ estilo, grafico, pb, zoom, rotulo, inteira, onEscala }: MesaProps) {
   return (
     <figure className="ty-site-mesa" data-inteira={inteira ? '' : undefined}>
-      <Encaixe zoom={zoom} onEscala={onEscala} ajustarAltura={inteira}>
+      <Slot zoom={zoom} onEscala={onEscala} ajustarAltura={inteira}>
         <DuplaEstilo estilo={estilo} grafico={grafico} pb={pb} />
-      </Encaixe>
+      </Slot>
       <figcaption className="ty-site-visually-hidden">{rotulo}</figcaption>
     </figure>
   )
@@ -234,12 +234,12 @@ function SpecSheet({ estilo, pb, notas }: { estilo: PrintPresetName; pb: boolean
         <div className="ty-site-id">
           <span className="ty-site-id__rotulo">{t('livro.idTema')}</span>
           <code className="ty-site-id__valor">{tema}</code>
-          <BotaoCopiar texto={tema} rotulo={t('livro.idTema')} />
+          <CopyButton texto={tema} rotulo={t('livro.idTema')} />
         </div>
         <div className="ty-site-codigo">
           <div className="ty-site-codigo__topo">
             <span className="ty-site-codigo__rotulo">{t('livro.snippetTema')}</span>
-            <BotaoCopiar texto={snippetTema} rotulo={t('livro.snippetTema')} />
+            <CopyButton texto={snippetTema} rotulo={t('livro.snippetTema')} />
           </div>
           <pre className="ty-site-codigo__pre" dir="ltr">
             <code>{snippetTema}</code>
@@ -248,7 +248,7 @@ function SpecSheet({ estilo, pb, notas }: { estilo: PrintPresetName; pb: boolean
         <div className="ty-site-codigo">
           <div className="ty-site-codigo__topo">
             <span className="ty-site-codigo__rotulo">{t('livro.snippetLivro')}</span>
-            <BotaoCopiar texto={snippetLivro} rotulo={t('livro.snippetLivro')} />
+            <CopyButton texto={snippetLivro} rotulo={t('livro.snippetLivro')} />
           </div>
           <pre className="ty-site-codigo__pre" dir="ltr">
             <code>{snippetLivro}</code>
@@ -426,15 +426,15 @@ export function Livro({ rota, ir }: { rota: RotaLivro; ir: Ir }) {
             </div>
           </div>
           <figure className="ty-site-mesa">
-            <Encaixe zoom={zoom} onEscala={setEscala}>
+            <Slot zoom={zoom} onEscala={setEscala}>
               <DuplaDoLivroNoEstilo id={duplaAtual.id} estilo={estilo} grafico={grafico} pb={pb} />
-            </Encaixe>
+            </Slot>
             <figcaption className="ty-site-visually-hidden">{t(duplaAtual.chave)}</figcaption>
           </figure>
           {cheia ? (
-            <Visor titulo={t(duplaAtual.chave)} subtitulo={rotulo(estilo)} aoFechar={() => setCheia(false)} aoAnterior={() => irDupla(iDupla - 1)} aoProximo={() => irDupla(iDupla + 1)}>
+            <Viewer titulo={t(duplaAtual.chave)} subtitulo={rotulo(estilo)} aoFechar={() => setCheia(false)} aoAnterior={() => irDupla(iDupla - 1)} aoProximo={() => irDupla(iDupla + 1)}>
               <DuplaDoLivroNoEstilo id={duplaAtual.id} estilo={estilo} grafico={grafico} pb={pb} />
-            </Visor>
+            </Viewer>
           ) : null}
         </div>
       )
@@ -461,9 +461,9 @@ export function Livro({ rota, ir }: { rota: RotaLivro; ir: Ir }) {
               <a className="ty-site-cartao__link" href={href({ ...rota, estilo: id, modo: 'um' })}>
                 <span className="ty-site-cartao__mesa" aria-hidden="true">
                   <QuandoVisivel reserva={<span className="ty-site-cartao__reserva" style={{ background: printPresets[id].cor.papel }} />}>
-                    <Encaixe>
+                    <Slot>
                       <DuplaEstilo estilo={id} grafico={grafico} pb={pb} />
-                    </Encaixe>
+                    </Slot>
                   </QuandoVisivel>
                 </span>
                 <span className="ty-site-cartao__titulo">{rotulo(id)}</span>
@@ -506,7 +506,7 @@ export function Livro({ rota, ir }: { rota: RotaLivro; ir: Ir }) {
             <SeletorEstilo rotulo={t('livro.antes')} valor={b} aoMudar={(id) => set({ b: id }, true)} />
             <SeletorEstilo rotulo={t('livro.depois')} valor={estilo} aoMudar={(id) => set({ estilo: id }, true)} />
           </div>
-          <Cortina
+          <Backdrop
             rotuloAntes={rotulo(b)}
             rotuloDepois={rotulo(estilo)}
             antes={<Mesa estilo={b} grafico={grafico} pb={pb} zoom={1} rotulo={rotulo(b)} />}
@@ -519,7 +519,7 @@ export function Livro({ rota, ir }: { rota: RotaLivro; ir: Ir }) {
       <div className="ty-site-palco">
         <Mesa estilo={estilo} grafico={grafico} pb={pb} zoom={zoom} rotulo={rotulo(estilo)} onEscala={setEscala} />
         {cheia ? (
-          <Visor
+          <Viewer
             titulo={rotulo(estilo)}
             subtitulo={descricao(estilo)}
             aoFechar={() => setCheia(false)}
@@ -527,14 +527,14 @@ export function Livro({ rota, ir }: { rota: RotaLivro; ir: Ir }) {
             aoProximo={() => set({ estilo: vizinho(TODOS_ESTILOS, estilo, 1) }, true)}
           >
             <DuplaEstilo estilo={estilo} grafico={grafico} pb={pb} />
-          </Visor>
+          </Viewer>
         ) : null}
       </div>
     )
   })()
 
   return (
-    <Moldura
+    <Layout
       secao="book"
       className="ty-site-pagina--livro"
       rotuloLateral={t('livro.listaEstilos')}
@@ -566,6 +566,6 @@ export function Livro({ rota, ir }: { rota: RotaLivro; ir: Ir }) {
         {ficha && modo !== 'gallery' ? <SpecSheet estilo={estilo} pb={pb} notas={<Notas estilo={estilo} />} /> : null}
         </div>
       </div>
-    </Moldura>
+    </Layout>
   )
 }

@@ -2,14 +2,14 @@
 // Estúdio's curtain). The range input covers the whole stage, so drag, click and the arrow keys all work.
 import { useState, type ReactNode } from 'react'
 
-export interface CortinaProps {
+export interface BackdropProps {
   antes: ReactNode
   depois: ReactNode
   rotuloAntes: string
   rotuloDepois: string
 }
 
-export function Cortina({ antes, depois, rotuloAntes, rotuloDepois }: CortinaProps) {
+export function Backdrop({ antes, depois, rotuloAntes, rotuloDepois }: BackdropProps) {
   const [pos, setPos] = useState(50)
   return (
     <div className="ty-site-cortina" style={{ ['--ty-site-cortina' as string]: `${pos}%` }}>
@@ -33,7 +33,7 @@ export function Cortina({ antes, depois, rotuloAntes, rotuloDepois }: CortinaPro
         max={100}
         value={pos}
         onChange={(e) => setPos(Number(e.target.value))}
-        aria-label={`Cortina: antes, ${rotuloAntes}; depois, ${rotuloDepois}`}
+        aria-label={`Backdrop: antes, ${rotuloAntes}; depois, ${rotuloDepois}`}
         aria-valuetext={`${pos}% de ${rotuloAntes}`}
       />
     </div>

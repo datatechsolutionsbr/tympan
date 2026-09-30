@@ -2,7 +2,7 @@
 // The natural size is measured once rendered, so any spread template or style works.
 import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 
-export interface EncaixeProps {
+export interface SlotProps {
   children: ReactNode
   /** 1 = fit to width; above 1 the content overflows and the desk scrolls. */
   zoom?: number
@@ -15,7 +15,7 @@ export interface EncaixeProps {
   ajustarAltura?: boolean
 }
 
-export function Encaixe({ children, zoom = 1, onEscala, className, max = 1, ajustarAltura = false }: EncaixeProps) {
+export function Slot({ children, zoom = 1, onEscala, className, max = 1, ajustarAltura = false }: SlotProps) {
   const caixa = useRef<HTMLDivElement>(null)
   const content = useRef<HTMLDivElement>(null)
   const [dim, setDim] = useState<{ w: number; h: number; k: number } | null>(null)

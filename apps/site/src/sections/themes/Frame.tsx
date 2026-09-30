@@ -17,14 +17,14 @@ import {
 import { useI18n } from '../../i18n/I18n'
 import { useFontesDoTema } from '../home/Home'
 
-export interface QuadroProps {
+export interface FrameProps {
   tema: string
   modo: 'light' | 'dark'
   /** Static thumbnail: no focusable content (the gallery renders it inert). */
   miniatura?: boolean
 }
 
-export const Frame = memo(function Quadro({ tema, modo, miniatura }: QuadroProps) {
+export const Frame = memo(function Frame({ tema, modo, miniatura }: FrameProps) {
   const { t, n } = useI18n()
   const [periodo, setPeriodo] = useState('inverno')
   const [alertas, setAlertas] = useState(true)

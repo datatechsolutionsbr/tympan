@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { usePrint } from '../context.tsx'
 import { tracar } from '../rough.ts'
-import { cx } from '../util.ts'
+import { cx } from '../utils.ts'
 
 /**
  * A hand-drawn frame for styles with tremor: rough.js path in a 100 × 100

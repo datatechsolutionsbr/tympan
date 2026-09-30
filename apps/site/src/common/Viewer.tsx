@@ -1,4 +1,4 @@
-// Fullscreen viewer with zoom and pan (after the Estúdio's Visor): wheel or pinch to zoom around the
+// Fullscreen viewer with zoom and pan (after the Estúdio's Viewer): wheel or pinch to zoom around the
 // pointer, drag to pan, double-click to toggle fit / 2×, + − 0 keys, ← → to the previous / next item and
 // Escape to close. The content is rendered at its natural size and transformed.
 import { ChevronLeft, ChevronRight, Minus, Plus, Scan, X } from 'lucide-react'
@@ -6,7 +6,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNo
 import { Button } from '@datatechsolutions/tympan'
 import { useI18n } from '../i18n/I18n'
 
-export interface VisorProps {
+export interface ViewerProps {
   titulo: string
   subtitulo?: string
   aoFechar: () => void
@@ -24,7 +24,7 @@ interface Vista {
 const LIMITES = [0.1, 8] as const
 const limitar = (k: number) => Math.min(LIMITES[1], Math.max(LIMITES[0], k))
 
-export function Visor({ titulo, subtitulo, aoFechar, aoAnterior, aoProximo, children }: VisorProps) {
+export function Viewer({ titulo, subtitulo, aoFechar, aoAnterior, aoProximo, children }: ViewerProps) {
   const { t, n, dir } = useI18n()
   const palco = useRef<HTMLDivElement>(null)
   const content = useRef<HTMLDivElement>(null)

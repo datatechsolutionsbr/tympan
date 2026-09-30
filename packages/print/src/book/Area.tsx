@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { AreaNomeProvider, ColunasProvider, LarguraProvider, useAreasDoMolde } from '../context.tsx'
 import { larguraUtil } from '../panels/Panel.tsx'
-import { cx } from '../util.ts'
+import { cx } from '../utils.ts'
 
 export interface AreaProps {
   /** Area of the page's molde (livro/moldes.ts), e.g. "a", "d", "fonte". */

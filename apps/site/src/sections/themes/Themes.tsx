@@ -25,14 +25,14 @@ import { ThemeSwatch } from '../../../../../packages/ui/src/components/theme-pal
 import { FlowEditorPage } from '../../../../../packages/ui/gallery/src/flow/pages/FlowEditorPage'
 import { ProvenancePage } from '../../../../../packages/ui/gallery/src/flow/pages/ProvenancePage'
 import { useI18n } from '../../i18n/I18n'
-import { Moldura, useGruposTema, useNomeTema } from '../../Moldura'
+import { Layout, useGruposTema, useNomeTema } from '../../Layout'
 import type { Navegar } from '../../App'
 import type { RotaDe } from '../../routes'
 import './tour-styles.css'
 
-type RotaTemas = RotaDe<'themes'>
+type RotaThemes = RotaDe<'themes'>
 
-export function Temas({ rota, ir }: { rota: RotaTemas; ir: Navegar }) {
+export function Themes({ rota, ir }: { rota: RotaThemes; ir: Navegar }) {
   const { t } = useI18n()
   const thGlobal = useTheme() // We keep this if we want to read default, but we'll use local state
   const grupos = useGruposTema()
@@ -58,7 +58,7 @@ export function Temas({ rota, ir }: { rota: RotaTemas; ir: Navegar }) {
   const now = new Date('2026-09-26T12:00:00Z')
 
   return (
-    <Moldura secao="themes" className="ty-site-pagina--temas" rotuloLateral="Tour">
+    <Layout secao="themes" className="ty-site-pagina--temas" rotuloLateral="Tour">
       <div className="ty-tour-layout">
         
         {/* Navegador lateral do Tour */}
@@ -280,6 +280,6 @@ export function Temas({ rota, ir }: { rota: RotaTemas; ir: Navegar }) {
         </div>
 
       </div>
-    </Moldura>
+    </Layout>
   )
 }

@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react'
 import { LarguraProvider, useColunasDaArea, usePrint } from '../context.tsx'
-import { cx, useIdSeguro } from '../util.ts'
+import { cx, useIdSeguro } from '../utils.ts'
 import { BordaMao } from './common.tsx'
 
 export type VariantePainel = 'normal' | 'filete' | 'filete-forte' | 'cidade' | 'teste' | 'bolso' | 'pilha'

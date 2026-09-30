@@ -13,7 +13,7 @@
 import { PRINT_PRESET_NAMES, resolvePrintStyleName, type PrintPresetName } from './tokens'
 import { LOCALE_CODES } from './i18n/locales'
 
-export type SecaoId = 'home' | 'history' | 'components' | 'themes' | 'book' | 'video' | 'install'
+export type SecaoId = 'inicio' | 'historia' | 'componentes' | 'temas' | 'livro' | 'video' | 'instalar'
 export const SECAO_IDS: readonly SecaoId[] = ['home', 'history', 'components', 'themes', 'book', 'video', 'install']
 
 /** The four ways of looking at themes and book styles (from the Estúdio's Book tab). */

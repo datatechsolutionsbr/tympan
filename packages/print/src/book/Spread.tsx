@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { DuplaContextoProvider } from '../context.tsx'
-import { cx } from '../util.ts'
+import { cx } from '../utils.ts'
 
 export interface DuplaProps {
   /** Folios of the spread, "22-23" (even-odd), or "capa" for the open cover. */

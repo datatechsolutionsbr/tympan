@@ -1,6 +1,6 @@
 import { contrastRatio, deltaE2000, luminance, papelEscuro, parseColor, type PrintStyle } from '@datatechsolutions/tympan-tokens'
 import { useFundoEscuroForcado, usePrint } from '../context.tsx'
-import { cx, useIdSeguro } from '../util.ts'
+import { cx, useIdSeguro } from '../utils.ts'
 import { DATATECH } from './datatech-data.ts'
 
 export type VarianteDatatech = 'cor' | 'cor-fundo-escuro' | 'mono-escuro' | 'mono-claro' | 'badge' | 'tinta' | 'duotom' | 'estilo'

@@ -3,25 +3,25 @@
 // the active language when the entry has it, else English, else Portuguese. Each entry has a deep link.
 import { History, Link2 } from 'lucide-react'
 import { useEffect, useMemo } from 'react'
-import { BotaoCopiar } from '../../comum/BotaoCopiar'
+import { CopyButton } from '../../comum/CopyButton'
 import { useI18n } from '../../i18n/I18n'
-import { Cabeca, Moldura, useHref } from '../../Moldura'
+import { Cabeca, Layout, useHref } from '../../Layout'
 import type { RotaDe } from '../../routes'
-import { lerLinhaDoTempo, textoNoIdioma, type EntradaHistoria } from './timeline'
+import { lerLinhaDoTempo, textoNoIdioma, type EntradaHistory } from './timeline'
 import './history.css'
 
 const fontes = import.meta.glob<unknown>('../../../../../docs/history/timeline.json', { eager: true, import: 'default' })
 
-export function useLinhaDoTempo(): EntradaHistoria[] {
+export function useLinhaDoTempo(): EntradaHistory[] {
   return useMemo(() => lerLinhaDoTempo(Object.values(fontes)[0]), [])
 }
 
-export function Historia({ rota }: { rota: RotaDe<'history'> }) {
+export function History({ rota }: { rota: RotaDe<'history'> }) {
   const { t, locale } = useI18n()
   const href = useHref()
   const entradas = useLinhaDoTempo()
   const eras = useMemo(() => {
-    const out: Array<{ era: string; itens: EntradaHistoria[] }> = []
+    const out: Array<{ era: string; itens: EntradaHistory[] }> = []
     for (const e of entradas) {
       const era = textoNoIdioma(e.era, locale)
       const ultima = out[out.length - 1]
@@ -36,7 +36,7 @@ export function Historia({ rota }: { rota: RotaDe<'history'> }) {
   }, [rota.entrada, entradas])
 
   return (
-    <Moldura
+    <Layout
       secao="history"
       rotuloLateral={t('historia.eras')}
       lateral={
@@ -95,7 +95,7 @@ export function Historia({ rota }: { rota: RotaDe<'history'> }) {
                         ))}
                       </ul>
                     ) : null}
-                    <BotaoCopiar texto={link} rotulo={t('historia.copiarLink')} />
+                    <CopyButton texto={link} rotulo={t('historia.copiarLink')} />
                   </li>
                 )
               })}
@@ -103,6 +103,6 @@ export function Historia({ rota }: { rota: RotaDe<'history'> }) {
           </section>
         ))}
       </div>
-    </Moldura>
+    </Layout>
   )
 }

@@ -13,7 +13,7 @@ import { useLarguraDisponivel, usePrint } from '../context.tsx'
 import { comColchetes } from '../panels/common.tsx'
 import { TabelaDados, type TabelaDadosProps } from '../panels/Method.tsx'
 import { semente, tracar } from '../rough.ts'
-import { cx, r3, useIdSeguro } from '../util.ts'
+import { cx, r3, useIdSeguro } from '../utils.ts'
 import { classeDe, quantis, rotulosLimites } from './classes.ts'
 import {
   alturaPara,

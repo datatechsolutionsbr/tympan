@@ -6,8 +6,8 @@ import { geoConicEqualArea, geoPath, type GeoProjection } from 'd3-geo'
 import { feature, mesh } from 'topojson-client'
 import type { GeometryCollection, Topology } from 'topojson-specification'
 import type { Feature, FeatureCollection, MultiLineString, MultiPolygon, Polygon } from 'geojson'
-import municipiosTopo from './dados/municipios.topo.json'
-import ufsTopo from './dados/ufs.topo.json'
+import municipiosTopo from './data/municipios.topo.json'
+import ufsTopo from './data/ufs.topo.json'
 
 export type NivelMapa = 'uf' | 'municipio'
 

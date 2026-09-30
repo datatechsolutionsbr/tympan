@@ -1,7 +1,7 @@
 // The component catalogue: the ui gallery's pages grouped for the site, plus the research screens (full
 // applications, shown in a frame), the print views (links to Livro) and the tools. Example counts are read
 // from the gallery sources at build time (one Section per example).
-import { GALLERY_CATEGORIES, GALLERY_PAGES } from '../../galerias'
+import { GALLERY_CATEGORIES, GALLERY_PAGES } from '../../galleries'
 
 const fontes = import.meta.glob<string>(['../../../../../packages/ui/gallery/src/Showcase.tsx', '../../../../../packages/ui/gallery/src/showcase/*.tsx'], {
   query: '?raw',
