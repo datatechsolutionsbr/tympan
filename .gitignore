@@ -11,3 +11,8 @@ test-results/
 .env.*
 !.env.example
 packages/print/gallery/shots/
+
+# Patch tooling output never belongs in the tree.
+*.orig
+*.rej
+*.diff
