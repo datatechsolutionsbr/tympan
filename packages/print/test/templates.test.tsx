@@ -18,6 +18,13 @@ describe('moldes', () => {
     expect(linhas.some((l) => l.cresce)).toBe(true)
   })
 
+  it('never makes an L-shaped area: a lent cell goes to the area above or stays empty', () => {
+    // Código Florestal, virada, odd page: texto + notas, and no figure under the text.
+    const linhas = linhasUsadas(MOLDES.virada!.impar, new Set(['texto', 'notas', 'frase', 'fonte']))
+    expect(linhas.slice(0, 2).map((l) => l.areas.map(([a, n]) => `${a}:${n}`).join(' '))).toEqual(['texto:4 notas:2', 'texto:4 notas:2'])
+    expect(() => gradeDoMolde(linhas)).not.toThrow()
+  })
+
   it('places areas on the named grid and panels take the area width', () => {
     const html = renderToStaticMarkup(
       <PrintBook estilo="jornal" incluirCss={false} carregarFontes={false}>

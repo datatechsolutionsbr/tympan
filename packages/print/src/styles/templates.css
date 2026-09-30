@@ -149,3 +149,24 @@
     justify-content: flex-end;
   }
 }
+
+@layer tympan-print {
+  /* The rule of thumb closes a reading page as a display line, as in the storyboard's "Regra de bolso". */
+  .ty-print-area[data-area='frase'] .ty-print-text[data-variante='frase'] > p:not(.ty-print-sobretitle) {
+    font-size: 14pt;
+    line-height: 1.22;
+  }
+}
+
+@layer tympan-print {
+  /* A quotation set as a rule of thumb inside running text is the page's display line ("citação grande"). */
+  .ty-print-area[data-area='texto'] .ty-print-text[data-variante='frase'] > p:not(.ty-print-sobretitle) {
+    font-size: 17pt;
+    line-height: 1.2;
+  }
+
+  /* Side-by-side panels of a growing row share its height (the two chapters of one law). */
+  .ty-print-area[data-cresce] > .ty-print-painel:only-child {
+    flex: 1 1 auto;
+  }
+}

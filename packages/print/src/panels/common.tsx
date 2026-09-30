@@ -48,15 +48,23 @@ export function Sobretitulo({ children }: { children: ReactNode }) {
   return <p className="ty-print-sobretitle">{children}</p>
 }
 
-/** Placeholder text in [brackets] gets the placeholder style (mono, muted). */
+/**
+ * Placeholder text in [brackets] gets the placeholder style (mono, muted); ==text== is the key phrase of a
+ * block, marked in the style's idiom (the highlighter in the caderno and hand-lettered styles, a heavier
+ * weight elsewhere).
+ */
 export function comColchetes(texto: string): ReactNode {
-  const partes = texto.split(/(\[[^\]]*\])/g)
+  const partes = texto.split(/(\[[^\]]*\]|==[^=]+==)/g)
   if (partes.length === 1) return texto
   return partes.map((p, i) =>
     /^\[[^\]]*\]$/.test(p) ? (
       <span key={i} className="ty-print-footndente">
         {p}
       </span>
+    ) : /^==[^=]+==$/.test(p) ? (
+      <mark key={i} className="ty-print-marca">
+        {comColchetes(p.slice(2, -2))}
+      </mark>
     ) : (
       p
     ),

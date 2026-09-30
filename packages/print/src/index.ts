@@ -69,6 +69,7 @@ export { SPEC_CORRELACAO, ITENS_SPEC_CORRELACAO } from './chart/correlationContr
 export { layoutHalteres, layoutBarras, layoutColunas, layoutContagem, layoutSerie, escalaLinear, marcasEixo } from './chart/geometry.ts'
 export { PINCEIS, unidadeIsotype, gradePontos, type Pincel } from './chart/brushes.tsx'
 export { usePrint, type PrintContexto } from './context.tsx'
+export { IlustracaoCapa, DESCRICAO_MOTIVO, type MotivoCapa } from './panels/IlustracaoCapa.tsx'
 export {
   COMPONENTES,
   NoConteudo,

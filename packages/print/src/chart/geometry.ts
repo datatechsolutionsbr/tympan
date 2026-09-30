@@ -389,6 +389,8 @@ export interface OpcoesColunas {
   topo?: number
   /** Notes as the numbered list under the plot (default true); false when callouts draw them. */
   notasEmbaixo?: boolean
+  /** Widest column, in mm (default 7.5; a plate lets columns take their share of the width). */
+  bwMax?: number
 }
 
 export function layoutColunas(spec: SpecBarras, largura: number, alturaPlot = 32, opcoes: OpcoesColunas = {}): LayoutColunas {
@@ -407,7 +409,7 @@ export function layoutColunas(spec: SpecBarras, largura: number, alturaPlot = 32
   const passo = (x1 - x0) / n
   const nb = pares ? 2 : 1
   const vao = opcoes.vao ?? 0.8
-  const bw = r3(opcoes.finas ? Math.min(2.4, (passo * 0.3) / nb) : Math.min(7.5, (passo * 0.6) / nb))
+  const bw = r3(opcoes.finas ? Math.min(2.4, (passo * 0.3) / nb) : Math.min(opcoes.bwMax ?? 7.5, (passo * 0.6) / nb))
   const grupos: GrupoColunas[] = linhasG.map((l, i) => {
     const cx = r3(x0 + passo * (i + 0.5))
     const inicio = cx - (bw * l.valores.length + vao * (l.valores.length - 1)) / 2

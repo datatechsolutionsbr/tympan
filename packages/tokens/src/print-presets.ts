@@ -131,6 +131,13 @@ export interface PrintEstrutura {
   notasFigura?: 'dentro' | 'coluna'
   /** The key numbers (b) marked with the highlighter (caderno). */
   numerosMarcados?: boolean
+  /**
+   * How a chart highlights: every row in its series colours (default, most studies) or the highlighted row in
+   * the accent against the others in ink (NYT Upshot, Tufte).
+   */
+  realce?: 'serie' | 'linha'
+  /** Head of each small multiple: plain title (default), a band in the highlighter colour with an arrow (Schiphol), a dark band (Vignelli), a band in the ornament colour (Aicher), each multiple on its own tinted card (Le Corbusier, Bayer). */
+  cabecaMultiplo?: 'titulo' | 'faixa' | 'faixa-escura' | 'faixa-cor' | 'caixa-cor'
 }
 
 /**
@@ -149,8 +156,10 @@ export type Emblema = 'pictogramas' | 'formas' | 'circulo-bicolor' | 'figura-mod
  * - 'fluxo': bands whose thickness is the value, splitting at the cut (fluxo-historico).
  * - 'predios': columns drawn as buildings (height = value; windows are texture only).
  * - 'cartoes': one card per row with the numbers written large and mini columns on a shared scale.
+ * - 'halteres': a dumbbell per row, two dots joined on one axis (NYT Upshot; the only shape that keeps a
+ *   dumbbell spec as drawn). Every other shape redraws a zero-based dumbbell as its own comparison.
  */
-export type FormaGrafico = 'barras' | 'colunas' | 'eixo-central' | 'ziguezague' | 'fluxo' | 'predios' | 'cartoes'
+export type FormaGrafico = 'barras' | 'colunas' | 'eixo-central' | 'ziguezague' | 'fluxo' | 'predios' | 'cartoes' | 'halteres'
 
 /** Page ornaments (optional, CONTRATO §1). */
 export type Moldura =
@@ -589,7 +598,7 @@ const jornal: PrintStyle = {
   raio: 3,
   caixaAlta: false,
   pb: { destaque: '#121212' },
-  estrutura: { painel: 'fio', rotulo: 'letra', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false },
+  estrutura: { painel: 'fio', rotulo: 'letra', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false, forma: 'halteres', realce: 'linha' },
 }
 
 const prancheta: PrintStyle = {
@@ -761,7 +770,7 @@ const minimoDeTinta: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: { destaque: '#111111' },
-  estrutura: { painel: 'nenhum', rotulo: 'letra', rotuloCaixa: 'versalete', notas: 'margem', figura: 'amplitude', minusculas: false, forma: 'colunas', colunasFinas: true, linhaCorte: 'tracejada', tituloEstilo: 'italico' },
+  estrutura: { painel: 'nenhum', rotulo: 'letra', rotuloCaixa: 'versalete', notas: 'margem', figura: 'amplitude', minusculas: false, forma: 'colunas', colunasFinas: true, linhaCorte: 'tracejada', tituloEstilo: 'italico', realce: 'linha' },
 }
 
 const suico: PrintStyle = {
@@ -974,7 +983,7 @@ const diagramaModernista: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: { destaque: '#2a2a2a', destaque2: '#8a8a8a' },
-  estrutura: { painel: 'bloco', rotulo: 'circulo', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: true, forma: 'colunas', linhaCorte: 'cheia', marcador: 'circulo', multiplos: 'lado-a-lado', fundoPainel: 'alternado', moldura: 'quartos', manchete: 'texto' },
+  estrutura: { painel: 'bloco', rotulo: 'circulo', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: true, forma: 'colunas', linhaCorte: 'cheia', marcador: 'circulo', multiplos: 'lado-a-lado', fundoPainel: 'alternado', moldura: 'quartos', manchete: 'texto', cabecaMultiplo: 'caixa-cor' },
 }
 
 const papelSalmao: PrintStyle = {
@@ -1159,7 +1168,7 @@ const proporcaoModular: PrintStyle = {
   raio: 0,
   caixaAlta: true,
   pb: { destaque: '#5a5a5a', destaque2: '#a0a0a0' },
-  estrutura: { painel: 'bloco', rotulo: 'quadrado', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical', corRotulo: 'tinta', multiplos: 'lado-a-lado', emblema: 'figura-modular', fundoPainel: 'alternado', costura: 'barra', manchete: 'texto' },
+  estrutura: { painel: 'bloco', rotulo: 'quadrado', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical', corRotulo: 'tinta', multiplos: 'lado-a-lado', emblema: 'figura-modular', fundoPainel: 'alternado', costura: 'barra', manchete: 'texto', cabecaMultiplo: 'caixa-cor' },
 }
 
 const sinalizacao: PrintStyle = {
@@ -1176,7 +1185,7 @@ const sinalizacao: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: { marcaTexto: '#d9d9d9' },
-  estrutura: { painel: 'placa', rotulo: 'quadrado', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, cabeco: 'etiqueta', corRotulo: 'tinta', veredito: 'bloco-escuro', rastro: 'placa', manchete: 'faixa' },
+  estrutura: { painel: 'placa', rotulo: 'quadrado', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, cabeco: 'etiqueta', corRotulo: 'tinta', veredito: 'bloco-escuro', rastro: 'placa', manchete: 'faixa', cabecaMultiplo: 'faixa' },
 }
 
 const pictogramas: PrintStyle = {
@@ -1193,7 +1202,7 @@ const pictogramas: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: { destaque: '#8a8a8a', destaque2: '#3a3a3a', marcaTexto: '#d9d9d9' },
-  estrutura: { painel: 'bloco', rotulo: 'quadrado', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical', corRotulo: 'sustentada', multiplos: 'lado-a-lado', emblema: 'pictogramas', fundoPainel: 'claro', manchete: 'faixa' },
+  estrutura: { painel: 'bloco', rotulo: 'quadrado', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical', corRotulo: 'sustentada', multiplos: 'lado-a-lado', emblema: 'pictogramas', fundoPainel: 'claro', manchete: 'faixa', cabecaMultiplo: 'faixa-cor' },
 }
 
 const mapaDeMetro: PrintStyle = {
@@ -1210,7 +1219,7 @@ const mapaDeMetro: PrintStyle = {
   raio: 0,
   caixaAlta: false,
   pb: { destaque: '#4a4a4a' },
-  estrutura: { painel: 'fio', rotulo: 'circulo', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical', cabeco: 'faixa', corRotulo: 'tinta', veredito: 'bloco-escuro', rastro: 'metro', manchete: 'texto' },
+  estrutura: { painel: 'fio', rotulo: 'circulo', rotuloCaixa: 'normal', notas: 'dentro', figura: 'simples', minusculas: false, barras: 'vertical', cabeco: 'faixa', corRotulo: 'tinta', veredito: 'bloco-escuro', rastro: 'metro', manchete: 'texto', cabecaMultiplo: 'faixa-escura' },
 }
 
 const jornal1959: PrintStyle = {

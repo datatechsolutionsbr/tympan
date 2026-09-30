@@ -20,6 +20,11 @@ export interface AnotacaoGrafico {
   /** Index of the row (or point) the note explains. */
   linha: number
   texto: string
+  /**
+   * The same note as a short handwritten headline ("nos 17 cortes, 731 × 293"), for styles that write their
+   * callouts inside the chart (caderno, balloons, FT's leader lines); the long `texto` stays for the others.
+   */
+  curta?: string
 }
 
 interface Base {

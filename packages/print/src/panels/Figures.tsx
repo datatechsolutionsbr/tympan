@@ -71,30 +71,67 @@ export function Figuras({ arranjo = 'auto', pesos, manchete, className, children
   }
   const padrao = e.multiplos ? e.multiplos === 'lado-a-lado' : e.figura === 'barra-topo' || e.barras === 'vertical'
   const lado = arranjo === 'lado' || (arranjo === 'auto' && filhos.length > 1 && padrao)
+  // Multiples on tinted cards (Le Corbusier, Bayer) lose the card's padding.
+  const recuo = e.cabecaMultiplo === 'caixa-cor' ? 5.2 : 0
   if (!lado) {
     return (
-      <div className={cx('ty-print-figures', className)} data-arranjo="pilha">
-        {filhos}
+      <div className={cx('ty-print-figures', className)} data-arranjo="pilha" data-cabeca={e.cabecaMultiplo}>
+        {recuo ? <LarguraProvider value={total - recuo}>{filhos}</LarguraProvider> : filhos}
       </div>
     )
   }
+  // Under the multiples, what the style's study writes there: the scientific caption ("Fig. | A … B …") and the
+  // caderno's hand note when each small multiple has its own scale.
+  const specs = filhos.map(specDe)
+  const escalas = new Set(specs.map((sp) => (sp && 'escala' in sp && Array.isArray(sp.escala) ? String(sp.escala[1]) : '')))
+  const rodape = e.letraMultiplo ? (
+    <p className="ty-print-figures-legenda">
+      <strong>Fig. {manchete ? `| ${manchete}.` : '|'}</strong>{' '}
+      {specs.map((sp, i) => (sp?.titulo ? `${String.fromCharCode(65 + i)}. ${sp.titulo}. ` : '')).join('')}
+    </p>
+  ) : e.chamadas === 'manuscritas' && escalas.size > 1 ? (
+    <p className="ty-print-figures-aviso">atenção: cada quadro, sua escala!</p>
+  ) : null
   const p = filhos.map((f, i) => pesos?.[i] ?? pesoDe(f))
   const soma = p.reduce((a, b) => a + b, 0) || 1
   const util = total - VAO * (filhos.length - 1)
-  return (
+  const grade = (
     <div
-      className={cx('ty-print-figures', className)}
+      className={cx('ty-print-figures', rodape ? undefined : className)}
       data-arranjo="lado"
+      data-cabeca={e.cabecaMultiplo}
       style={{ gridTemplateColumns: p.map((x) => `${Math.max(0.5, x)}fr`).join(' ') }}
     >
       {filhos.map((f, i) => (
         <div key={i} className="ty-print-figures-item">
           {e.letraMultiplo ? <p className="ty-print-figures-letter">{String.fromCharCode(65 + i)}</p> : null}
-          <LarguraProvider value={Math.round(((util * (p[i] ?? 1)) / soma) * 10) / 10}>{f}</LarguraProvider>
+          <LarguraProvider value={Math.round(((util * (p[i] ?? 1)) / soma - recuo) * 10) / 10}>{f}</LarguraProvider>
         </div>
       ))}
     </div>
   )
+  return rodape ? (
+    <div className={cx('ty-print-figures-block', className)}>
+      {grade}
+      {rodape}
+    </div>
+  ) : (
+    grade
+  )
+}
+
+interface SpecResumo {
+  titulo?: string
+  escala?: [number, number]
+  linhas?: unknown[]
+  barras?: unknown[]
+  grupos?: unknown[]
+}
+
+/** The chart spec of a figure element (a GraficoMetodo, or a content node that renders one). */
+function specDe(f: ReactNode): SpecResumo | undefined {
+  if (!isValidElement<{ spec?: SpecResumo; no?: { props?: { spec?: SpecResumo } } }>(f)) return undefined
+  return f.props.spec ?? f.props.no?.props?.spec
 }
 
 /** A figure's share: its rows (spec.linhas, spec.barras or spec.grupos), at least 2. */

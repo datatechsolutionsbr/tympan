@@ -200,6 +200,20 @@ export function EixoCentral({ c, spec, largura }: { c: CtxGrafico; spec: SpecBar
 // ziguezague: a bar longer than one line folds back and forth (graficos-1900)
 // ---------------------------------------------------------------------------
 
+/**
+ * Line length of the folding bar when the content does not set one: no fold while the values sit within one
+ * order of magnitude; otherwise a quarter of the scale, rounded to a 1–2–5 step (Du Bois's study folds the
+ * 731 of the 17 cuts at 200 a line, and keeps the first cut's 18–140 on one line).
+ */
+function dobraAutomatica(teto: number, valores: number[]): number {
+  const positivos = valores.filter((v) => v > 0)
+  if (!positivos.length || Math.max(...positivos) / Math.min(...positivos) <= 10) return teto
+  const alvo = teto / 4
+  const mag = 10 ** Math.floor(Math.log10(alvo))
+  const passo = [1, 2, 5, 10].map((m) => m * mag).find((p) => p >= alvo * 0.8) ?? alvo
+  return passo
+}
+
 export function Ziguezague({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarras; largura: number }): ResultadoForma {
   const linhas = linhasDe(spec)
   const pares = linhas.some((l) => l.valores.length > 1)
@@ -207,7 +221,7 @@ export function Ziguezague({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarr
   const hachura = c.estilo.traco.hachura !== 'nenhuma'
   // A fixed label column (unless a label needs more), so figures of the same width share the ruler.
   const wRot = n(Math.max(colunaRotulos(linhas, largura), largura * 0.26))
-  const D = spec.dobra && spec.dobra > 0 ? spec.dobra : spec.escala[1]
+  const D = spec.dobra && spec.dobra > 0 ? spec.dobra : dobraAutomatica(spec.escala[1], linhas.flatMap((l) => l.valores.map((v) => v.valor)))
   const xL = n(wRot + 1.6)
   const xR = n(largura - 3.2)
   // Fixed room for the value and its callout after the last line: two figures with the same `dobra` and width

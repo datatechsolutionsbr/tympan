@@ -242,3 +242,61 @@
     gap: 2mm 4mm;
   }
 }
+
+/* Head of each small multiple (estrutura.cabecaMultiplo): the studies of Schiphol (yellow band with an arrow),
+   Vignelli (dark band), Aicher (band in the ornament colour) and Le Corbusier / Bayer (each multiple on a card). */
+@layer tympan-print {
+  .ty-print-figures:is([data-cabeca='faixa'], [data-cabeca='faixa-escura'], [data-cabeca='faixa-cor']) .ty-print-figure-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2mm;
+    padding: 0.9mm 1.8mm;
+    font-size: 7.8pt;
+  }
+
+  .ty-print-figures[data-cabeca='faixa'] .ty-print-figure-title {
+    background: var(--ty-print-marca-texto);
+    color: var(--ty-print-tinta);
+  }
+
+  .ty-print-figures[data-cabeca='faixa'] .ty-print-figure-title::after {
+    content: '→';
+    font-size: 11pt;
+    line-height: 1;
+  }
+
+  .ty-print-figures[data-cabeca='faixa-escura'] .ty-print-figure-title {
+    background: var(--ty-print-tinta);
+    color: var(--ty-print-papel);
+  }
+
+  .ty-print-figures[data-cabeca='faixa-cor'] .ty-print-figure-title {
+    background: var(--ty-print-ornamento-1, var(--ty-print-destaque-2));
+    color: var(--ty-print-papel);
+  }
+
+  .ty-print-figures[data-cabeca='caixa-cor'] > :is(.ty-print-figures-item, .ty-print-figure) {
+    padding: 2.4mm 2.6mm;
+    background: color-mix(in srgb, var(--ty-print-marca-texto) 55%, var(--ty-print-papel));
+  }
+
+  .ty-print-figures[data-cabeca='caixa-cor'] > :is(.ty-print-figures-item, .ty-print-figure):nth-child(even) {
+    background: color-mix(in srgb, var(--ty-print-destaque-2) 22%, var(--ty-print-papel));
+  }
+}
+
+@layer tympan-print {
+  .ty-print-figures-legenda {
+    margin-block-start: 1.6mm;
+    font: 400 6.8pt/1.4 var(--ty-print-fonte-corpo);
+    color: var(--ty-print-tinta-2);
+  }
+
+  .ty-print-figures-aviso {
+    margin-block-start: 1mm;
+    text-align: end;
+    font: 400 8pt/1.2 var(--ty-print-fonte-anotacao);
+    color: var(--ty-print-destaque);
+  }
+}

@@ -28,6 +28,11 @@ export interface Molde {
   descricao: string
   /** Pages with deliberate white (respiro, part openings): the fill check does not apply. */
   respiro?: boolean
+  /**
+   * Largest copyfitting scale for a sparse page of this molde (livro/ajuste.ts; default 1.3). Reading pages
+   * (running text, few blocks) may set their text larger rather than leave half the page blank.
+   */
+  maximo?: number
   par: LinhaMolde[]
   impar: LinhaMolde[]
 }
@@ -51,12 +56,14 @@ export const MOLDES: Record<string, Molde> = {
   },
   // Storyboard dupla 1: the promise (a) and the scoreboard (b, c, c′).
   'promessa-placar': {
+    maximo: 1.45,
     descricao: 'A promessa e o placar: título, manchete, a | b, c (mapa) + legenda, c′, fonte',
     par: [cheia('titulo'), cheia('manchete'), cheia('a', { cresce: true }), cheia('costura', { pe: true })],
-    impar: [cheia('titulo'), cheia('b'), L([['c', 4], ['c2', 2]], { cresce: true }), cheia('c3'), cheia('fonte', { pe: true })],
+    impar: [cheia('titulo'), cheia('b'), cheia('c', { cresce: true }), cheia('c3'), cheia('c2', { pe: true }), cheia('fonte', { pe: true })],
   },
   // The same, with the map and the second scoreboard figure side by side (Código Florestal, storyboard [111]).
   'promessa-placar-lado': {
+    maximo: 1.45,
     descricao: 'A promessa e o placar, com o map (c) e a figura c′ lado a lado',
     par: [cheia('titulo'), cheia('manchete'), cheia('a', { cresce: true }), cheia('costura', { pe: true })],
     impar: [cheia('titulo'), cheia('b'), L([['c', 3], ['c3', 3]], { cresce: true }), cheia('fonte', { pe: true })],
@@ -64,18 +71,20 @@ export const MOLDES: Record<string, Molde> = {
   // Storyboard dupla 2: running text in four columns and notes in two (respiro), one small figure.
   virada: {
     descricao: 'A virada (respiro): texto corrido em 4 colunas + notas em 2 | texto, figura pequena, frase',
-    respiro: true,
+    maximo: 1.6,
     par: [L([['texto', 4], ['notas', 2]], { cresce: true })],
     impar: [L([['texto', 4], ['notas', 2]]), L([['fig', 4], ['notas', 2]], { cresce: true }), cheia('frase'), cheia('fonte', { pe: true })],
   },
   // The tests of a method: three tests, the medians they rest on, what is missing | the trace and your city.
   testes: {
+    maximo: 1.45,
     descricao: 'Os testes e o rastro: testes, gráficos de apoio lado a lado, texto, quando o dado chegar | h + índice',
     par: [cheia('titulo'), cheia('d3'), L([['d4', 3], ['d5', 3]], { cresce: true }), cheia('texto'), L([['q', 4], ['notas', 2]], { pe: true }), cheia('fonte', { pe: true })],
     impar: [cheia('titulo2'), L([['g', 3], ['h', 3]], { cresce: true }), cheia('g2'), cheia('fonte', { pe: true })],
   },
   // Storyboard dupla 4: the verdict (e, f) | the trace (g), your city (h), the index of numbers (g′).
   veredito: {
+    maximo: 1.45,
     descricao: 'O veredito: e grande, f | g + h lado a lado, índice g′, fonte',
     par: [cheia('titulo'), cheia('e', { cresce: true }), cheia('f', { pe: true })],
     impar: [cheia('titulo2'), L([['g', 3], ['h', 3]], { cresce: true }), cheia('g2'), cheia('prox'), cheia('fonte', { pe: true })],
@@ -84,12 +93,13 @@ export const MOLDES: Record<string, Molde> = {
   // in the two-column margin, the rule of thumb at the foot (storyboard dupla 2, one page of it).
   leitura: {
     descricao: 'Página de leitura (respiro): texto em 4 colunas + números e ressalvas na margem de 2, regra de bolso no pé',
-    respiro: true,
+    maximo: 1.6,
     par: [L([['texto', 4], ['notas', 2]], { cresce: true }), cheia('frase', { pe: true })],
     impar: [L([['texto', 4], ['notas', 2]], { cresce: true }), cheia('frase', { pe: true })],
   },
   // A chapter without the promise spread: the method chart on the left, the reading on the right.
   grafico: {
+    maximo: 1.45,
     descricao: 'Gráfico do método: título, d grande, fonte | d′ (figuras de apoio ou testes), leitura, texto, fonte',
     par: [cheia('titulo'), cheia('d', { cresce: true }), cheia('fonte', { pe: true })],
     impar: [cheia('d2'), cheia('titulo2'), cheia('fig', { cresce: true }), cheia('texto'), L([['q', 4], ['notas', 2]]), cheia('b'), cheia('f'), cheia('frase'), cheia('fonte', { pe: true })],
@@ -97,42 +107,48 @@ export const MOLDES: Record<string, Molde> = {
 
   // Pending verdict (a claim still waiting for its data): numbers, the claim under test | the design published first.
   pendente: {
+    maximo: 1.45,
     descricao: 'Veredito pendente: b, e, f | desenho publicado antes, g + h',
     par: [cheia('titulo'), cheia('b'), L([['fig', 4], ['nota', 2]]), cheia('e', { cresce: true }), cheia('f', { pe: true })],
     impar: [cheia('desenho'), L([['g', 3], ['h', 3]], { cresce: true })],
   },
   // Storyboard dupla 5: for whom the rule works, and what the chapter leaves for the next.
   fechamento: {
+    maximo: 1.45,
     descricao: 'Para quem: título, figura grande, fonte | título, veredito curto, texto, quando o dado chegar, próximo capítulo',
     par: [cheia('titulo'), cheia('fig', { cresce: true }), cheia('q'), cheia('fonte', { pe: true })],
-    impar: [cheia('titulo2'), cheia('e'), cheia('texto', { cresce: true }), cheia('q'), cheia('prox', { pe: true })],
+    impar: [cheia('titulo2'), L([['e', 3], ['e2', 3]], { cresce: true }), cheia('texto'), cheia('q'), cheia('prox', { pe: true })],
   },
   // Front matter.
   'como-ler': {
+    maximo: 1.45,
     descricao: 'Como ler: título e espécime com as letras | estados de prova, seguir um número, selos, dados, cabeço, sua cidade',
     par: [cheia('titulo'), cheia('especime', { cresce: true }), cheia('letras', { pe: true })],
     impar: [cheia('estados', { cresce: true }), L([['k1', 3], ['k2', 3]]), cheia('dados'), L([['k3', 3], ['k4', 3]], { pe: true })],
   },
 
   'linha-do-tempo': {
+    maximo: 1.45,
     descricao: 'Linha do tempo das leis em duas páginas',
     par: [cheia('titulo'), cheia('linha', { cresce: true })],
     impar: [cheia('linha', { cresce: true }), cheia('nota', { pe: true })],
   },
   'abertura-parte': {
+    maximo: 1.45,
     descricao: 'Abertura de parte (respiro): número, título, pergunta, nesta parte | prancha com uma figura',
-    respiro: true,
     par: [cheia('abertura', { cresce: true })],
     impar: [cheia('fig', { cresce: true }), cheia('fonte', { pe: true })],
   },
   // Toolbox: one spread per method.
   ferramenta: {
+    maximo: 1.45,
     descricao: 'Caixa de ferramentas: o desenho, a hipótese, o sinal | receita, consulta, testes, onde aparece',
     par: [cheia('titulo'), cheia('d', { cresce: true }), L([['t1', 3], ['t2', 3]], { pe: true })],
     impar: [L([['receita', 3], ['consulta', 3]]), cheia('testes'), L([['onde', 3], ['leitura', 3]], { cresce: true }), cheia('frase', { pe: true })],
   },
   // Atlas plate: a bled map on the left, legend and regional cut-outs on the right.
   atlas: {
+    maximo: 1.45,
     descricao: 'Prancha de atlas: map sangrado | recortes regionais e legenda, fonte',
     respiro: true,
     par: [cheia('map', { cresce: true })],
@@ -140,8 +156,8 @@ export const MOLDES: Record<string, Molde> = {
   },
 
   creditos: {
+    maximo: 1.45,
     descricao: 'Reprodução e créditos: tabela de consultas, passos | ficha, marcas (colofão: branco intencional)',
-    respiro: true,
     par: [cheia('titulo'), cheia('tabela', { cresce: true }), L([['passos', 3], ['local', 3]], { pe: true }), cheia('assina', { pe: true })],
     impar: [cheia('titulo2'), cheia('ficha', { cresce: true }), L([['brand', 2], ['marca-texto', 4]], { pe: true }), L([['editora', 2], ['editora-texto', 4]], { pe: true })],
   },
@@ -182,36 +198,76 @@ const MARGEM: Record<string, LinhaMolde[]> = {
 
 /**
  * A molde is a superset: rows whose areas the page does not use are dropped, and a cell of an unused area
- * in a row is given to its neighbour on the left (or right), so no column is left empty by accident.
+ * in a row is given to its neighbour on the left (or right), so no column is left empty by accident. A cell
+ * is given only when the neighbour stays a rectangle on the grid (an area that spans two rows keeps one
+ * width); otherwise it stays empty ('.'), because an L-shaped area would void the whole grid.
  */
 export function linhasUsadas(linhas: LinhaMolde[], usadas: Set<string> | null): LinhaMolde[] {
   if (!usadas) return linhas
-  const out: LinhaMolde[] = []
-  for (const l of linhas) {
-    if (!l.areas.some(([a]) => usadas.has(a))) continue
-    const areas: Array<[string, number]> = []
-    let pendente = 0
-    for (const [a, n] of l.areas) {
-      if (usadas.has(a)) {
-        areas.push([a, n + pendente])
-        pendente = 0
-      } else if (areas.length) {
-        const ult = areas[areas.length - 1]!
-        ult[1] += n
-      } else pendente += n
-    }
-    out.push({ ...l, areas })
+  const kept = linhas.filter((l) => l.areas.some(([a]) => usadas.has(a)))
+  // Cell matrix: the name of each of the six columns, and whether it was lent from an unused area.
+  const grade = kept.map((l) => l.areas.flatMap(([a, n]) => Array.from({ length: n }, () => (usadas.has(a) ? a : null)) as Array<string | null>))
+  const emprestado = grade.map((r) => r.map((c) => c === null))
+  for (const r of grade) {
+    for (let i = 0; i < 6; i++) if (r[i] === null && i > 0 && r[i - 1] !== null) r[i] = r[i - 1]!
+    for (let i = 5; i >= 0; i--) if (r[i] === null && i < 5 && r[i + 1] !== null) r[i] = r[i + 1]!
   }
+  // Undo loans that break an area's rectangle, until every area is one.
+  for (let volta = 0; volta < 12; volta++) {
+    const ruim = areaNaoRetangular(grade)
+    if (!ruim) break
+    let mudou = false
+    grade.forEach((r, y) => r.forEach((c, x) => {
+      if (c === ruim && emprestado[y]![x]) {
+        // Lend the cell to the area above it instead (a column that grows down), or leave it empty.
+        const acima = y > 0 ? grade[y - 1]![x] : null
+        r[x] = acima && acima !== '.' && acima !== ruim ? acima : '.'
+        mudou = true
+      }
+    }))
+    if (!mudou) break
+  }
+  // A vertical loan that still breaks a rectangle falls back to an empty cell.
+  for (let volta = 0; volta < 12; volta++) {
+    const ruim = areaNaoRetangular(grade)
+    if (!ruim) break
+    grade.forEach((r, y) => r.forEach((c, x) => {
+      if (c === ruim && emprestado[y]![x]) r[x] = '.'
+    }))
+  }
+  const out: LinhaMolde[] = grade.map((r, y) => {
+    const areas: Array<[string, number]> = []
+    for (const c of r) {
+      const nome = c ?? '.'
+      const ult = areas[areas.length - 1]
+      if (ult && ult[0] === nome) ult[1] += 1
+      else areas.push([nome, 1])
+    }
+    return { ...kept[y]!, areas }
+  })
   // The growing row may have been dropped: the last content row (not a heading, not the foot) grows instead.
   if (!out.some((l) => l.cresce)) {
     for (let i = out.length - 1; i >= 0; i--) {
       const l = out[i]!
-      if (l.pe || l.fixa || l.areas.every(([a]) => FIXAS.test(a))) continue
+      if (l.pe || l.fixa || l.areas.every(([a]) => FIXAS.test(a) || a === '.')) continue
       out[i] = { ...l, cresce: true }
       break
     }
   }
   return out
+}
+
+/** First area of the cell matrix that is not a rectangle (CSS grid areas must be), or null. */
+function areaNaoRetangular(grade: Array<Array<string | null>>): string | null {
+  const caixas = new Map<string, { x0: number; x1: number; y0: number; y1: number; n: number }>()
+  grade.forEach((r, y) => r.forEach((c, x) => {
+    if (!c || c === '.') return
+    const b = caixas.get(c)
+    if (!b) caixas.set(c, { x0: x, x1: x, y0: y, y1: y, n: 1 })
+    else Object.assign(b, { x0: Math.min(b.x0, x), x1: Math.max(b.x1, x), y0: Math.min(b.y0, y), y1: Math.max(b.y1, y), n: b.n + 1 })
+  }))
+  for (const [nome, b] of caixas) if ((b.x1 - b.x0 + 1) * (b.y1 - b.y0 + 1) !== b.n) return nome
+  return null
 }
 
 /** CSS grid of a page: `grid-template-areas` and `grid-template-rows`, and each area's column span. */
@@ -227,6 +283,10 @@ export function gradeDoMolde(linhas: LinhaMolde[]): { areas: string; linhas: str
     .map((l) => {
       const celulas: string[] = []
       for (const [a, n] of l.areas) {
+        if (a === '.') {
+          for (let i = 0; i < n; i++) celulas.push('.')
+          continue
+        }
         const antes = info.get(a)
         const cresce = !l.pe && !l.fixa && !FIXAS.test(a)
         info.set(a, { colunas: Math.max(antes?.colunas ?? 0, n), cresce: Boolean(antes?.cresce || cresce), pe: Boolean(antes?.pe || l.pe) })

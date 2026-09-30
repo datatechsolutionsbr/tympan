@@ -816,3 +816,56 @@
     font-size: 12.5pt;
   }
 }
+
+@layer tympan-print {
+  /* Headline in a boxed style: the style's box (hand-drawn in the caderno) instead of the newspaper band. */
+  .ty-print-headline {
+    position: relative;
+  }
+
+  .ty-print-livro:is([data-ty-print-painel='caixa'], [data-ty-print-painel='caixa-grossa'], [data-ty-print-painel='prancha'], [data-ty-print-painel='cartao'], [data-ty-print-painel='placa'], [data-ty-print-painel='dossie']) .ty-print-headline {
+    border: max(0.2mm, var(--ty-print-traco)) solid var(--ty-print-linha);
+    background: none;
+  }
+
+  .ty-print-headline[data-mao] {
+    border-color: transparent !important;
+  }
+
+  /* A block the page wraps in the style's panel (a bare chart, a list of tests, a recipe): no heading row. */
+  .ty-print-painel[data-auto] > .ty-print-painel-corpo {
+    gap: 2mm;
+  }
+}
+
+@layer tympan-print {
+  /* The key phrase of a block (==text== in the content). */
+  .ty-print-marca {
+    background: none;
+    color: inherit;
+    font-weight: 600;
+  }
+
+  .ty-print-livro:is([data-ty-print-tremor], [data-ty-print-numeros-marcados]) .ty-print-marca {
+    font-weight: inherit;
+    background: linear-gradient(transparent 12%, var(--ty-print-marca-texto) 12%, var(--ty-print-marca-texto) 88%, transparent 88%);
+    padding-inline: 0.4mm;
+    box-decoration-break: clone;
+  }
+}
+
+@layer tympan-print {
+  /* A verdict in a half-width panel: the promise over its state, and each claim over its mark, so neither is
+     squeezed into a column of a few words. */
+  .ty-print-painel:is([data-largura='1'], [data-largura='2'], [data-largura='3']) .ty-print-veredito-topo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2mm;
+  }
+
+  .ty-print-painel:is([data-largura='1'], [data-largura='2'], [data-largura='3']) .ty-print-veredito-itens li {
+    grid-template-columns: 1fr;
+    justify-items: start;
+    gap: 1mm;
+  }
+}
