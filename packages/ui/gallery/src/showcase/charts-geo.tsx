@@ -128,8 +128,8 @@ const demoItems = [...'NNNNNNEEEECCCCCCCCSSWNE'].map((c, i) => ({ id: i, code: c
 
 
 const brazilStates = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']
-const brDemoItems = Array.from({ length: 50 }, (_, i) => ({ id: i, code: brazilStates[i % brazilStates.length] }))
-const brCentres = { 'DF': [-47.88, -15.79], 'SP': [-46.63, -23.55], 'RJ': [-43.17, -22.90], 'AM': [-60.02, -3.11] } // A few centres for markers if needed
+const brDemoItems = Array.from({ length: 50 }, (_, i) => ({ id: i, code: brazilStates[i % brazilStates.length]! }))
+const brCentres: Record<string, readonly [number, number]> = { 'DF': [-47.88, -15.79], 'SP': [-46.63, -23.55], 'RJ': [-43.17, -22.90], 'AM': [-60.02, -3.11] } // A few centres for markers if needed
 
 export function ChartsGeoShowcase({ scope }: { scope: string }) {
   const id = (s: string) => `${scope}-${s}`
