@@ -3,9 +3,9 @@
 // pencil in the caderno, woodcut in the cordel, crisp lines elsewhere). Illustration, not data: no axis, no
 // value, and an accessible name that says so.
 import type { ReactNode } from 'react'
-import { usePrint } from '../contexto.tsx'
-import { PINCEIS, type CtxPincel, type Pincel } from '../grafico/pinceis.tsx'
-import { useIdSeguro } from '../util.ts'
+import { usePrint } from '../context.tsx'
+import { PINCEIS, type CtxPincel, type Pincel } from '../chart/brushes.tsx'
+import { useIdSeguro } from '../utils.ts'
 
 export type MotivoCapa = 'estudo-de-evento' | 'moeda' | 'escada' | 'virada' | 'aperto' | 'pacto'
 
