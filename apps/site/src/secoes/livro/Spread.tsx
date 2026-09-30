@@ -1,5 +1,5 @@
 // One spread of the sample chapter (the print gallery's content) in a book style, memoised: the rough.js and
-// map renderers are the slow part of the page, so a spread only re-renders when its style, P&B or chart change.
+// map renderers are the slow part of the page, so a spread only re-renders when its style, P&B or grafico change.
 import { memo, useEffect, useRef, useState } from 'react'
 import { PrintBook } from '@datatechsolutions/tympan-print'
 import type { PrintPresetName } from '../../tokens'
@@ -7,7 +7,7 @@ import { DuplaEstudo, DuplaMapas, GRAFICO_DO_ESTUDO, type TipoGraficoEstudo } fr
 import type { Grafico } from '../../rotas'
 
 export const tipoDoGrafico = (estilo: string, grafico: Grafico): TipoGraficoEstudo =>
-  chart === 'estudo' || chart === 'map' ? (GRAFICO_DO_ESTUDO[estilo] ?? 'halteres') : chart
+  grafico === 'estudo' || grafico === 'map' ? (GRAFICO_DO_ESTUDO[estilo] ?? 'halteres') : grafico
 
 export interface DuplaEstiloProps {
   estilo: PrintPresetName

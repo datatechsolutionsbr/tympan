@@ -2,7 +2,7 @@
 // favourites and the note together (after the Estúdio's "my choice and comments").
 import { TextArea } from '@datatechsolutions/tympan'
 import { BotaoCopiar } from '../../comum/BotaoCopiar'
-import { temaDoEstilo } from '../../styles'
+import { temaDoEstilo } from '../../estilos'
 import { useI18n } from '../../i18n/I18n'
 import { lerLocal, useLocal } from '../../local'
 import type { PrintPresetName } from '../../tokens'

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { realcar } from '../src/comum/realce'
 import { contraste, hex, lerCor, nivelContraste } from '../src/cores'
-import { amostra, descricaoEstilo, familia, filtrarEstilos, temaDoEstilo } from '../src/styles'
+import { amostra, descricaoEstilo, familia, filtrarEstilos, temaDoEstilo } from '../src/estilos'
 import { alternarFavorito, guardarLocal, lerLocal } from '../src/local'
 import { contarExemplos } from '../src/secoes/componentes/catalogo'
 import { printPresets, PRINT_PRESET_NAMES } from '../src/tokens'

@@ -9,7 +9,7 @@ import { ESTADOS_PROVA, printPresets, resolvePrintStyle, type PrintPresetName } 
 import { Cortina } from '../../comum/Cortina'
 import { Encaixe } from '../../comum/Encaixe'
 import { BotaoCopiar } from '../../comum/BotaoCopiar'
-import { amostra, familia, filtrarEstilos, paleta, temaDoEstilo } from '../../styles'
+import { amostra, familia, filtrarEstilos, paleta, temaDoEstilo } from '../../estilos'
 import { useI18n, type Chave } from '../../i18n/I18n'
 import { useFavoritos, useLocal } from '../../local'
 import { Cabeca, Moldura, useHref } from '../../Moldura'

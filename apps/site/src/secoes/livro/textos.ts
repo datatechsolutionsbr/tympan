@@ -2,7 +2,7 @@
 // Built from catalogue keys; never from the preset's `referencia`.
 import { useMemo } from 'react'
 import { printPresets, type EstadoProva, type PrintPresetName, type PrintStyle } from '../../tokens'
-import { familia } from '../../styles'
+import { familia } from '../../estilos'
 import { useI18n } from '../../i18n/I18n'
 
 export function useTextosEstilo() {
