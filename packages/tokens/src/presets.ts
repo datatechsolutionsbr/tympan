@@ -118,5 +118,18 @@ export const highContrastPreset: ThemeConfig = {
   cta: 'solid',
 }
 
-export const presets: readonly ThemeConfig[] = [tympanPreset, fakhirPreset, neutralPreset, highContrastPreset]
+export const astrlabePreset: ThemeConfig = {
+  name: 'astrlabe',
+  label: 'Astrlabe',
+  seeds: {
+    ...baseSeeds,
+    brand: { hue: 240, chroma: 0.15 },
+  },
+  radius: 8,
+  contrast: 'comfortable',
+  glass: true,
+  cta: 'solid',
+}
+
+export const presets: readonly ThemeConfig[] = [tympanPreset, fakhirPreset, neutralPreset, highContrastPreset, astrlabePreset]
 export const DEFAULT_THEME = 'tympan'

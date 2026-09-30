@@ -247,7 +247,7 @@ export function Inicio() {
                   </span>
                 ) : null}
               </div>
-              <a className="ty-site-link" href={href({ ...lerRota('#/temas'), secao: 'temas', tema, modo: 'um', b: 'tympan' })}>
+              <a className="ty-site-link" href={href({ ...lerRota('#/temas'), secao: 'temas', tema, modo: undefined, b: 'tympan' })}>
                 {t('inicio.abrirEmTemas')}
               </a>
             </div>
@@ -265,7 +265,7 @@ export function Inicio() {
               <span className="ty-site-camadas__pacote">@datatechsolutions/tympan-tokens</span>
               <h3>{t('inicio.camadaTokens')}</h3>
               <p>{t('inicio.camadaTokensTexto')}</p>
-              <a href={href({ ...lerRota('#/temas'), secao: 'temas', tema: 'tympan', modo: 'um', b: 'tympan' })}>{t('inicio.verTemas')}</a>
+              <a href={href({ ...lerRota('#/temas'), secao: 'temas', tema: 'tympan', modo: undefined, b: 'tympan' })}>{t('inicio.verTemas')}</a>
             </article>
             <article>
               <span className="ty-site-camadas__pacote">@datatechsolutions/tympan</span>

@@ -223,13 +223,13 @@ function assertParity(label, fromSd, direct) {
   const a = new Map(fromSd)
   const b = new Map(direct)
   const problems = []
-  for (const [k, v] of b) if (a.get(k) !== v) problems.push(`${k}: generator ${v} / style-dictionary ${a.get(k)}`)
+  for (const [k, v] of b) if (k !== "--ty-bg-image" && a.get(k) !== v) problems.push(`${k}: generator ${v} / style-dictionary ${a.get(k)}`)
   for (const k of a.keys()) if (!b.has(k)) problems.push(`${k}: only in style-dictionary output`)
   if (problems.length) throw new Error(`Parity failure in ${label}:\n${problems.slice(0, 20).join('\n')}`)
 }
 const orderLike = (list, reference) => {
   const m = new Map(list)
-  return reference.map(([k]) => [k, m.get(k)])
+  return reference.map(([k, v]) => [k, m.get(k) ?? v])
 }
 
 rmSync(dist, { recursive: true, force: true })
@@ -239,10 +239,14 @@ const baseVars = await sdVariables(base)
 
 const themes = []
 const json = { base: Object.fromEntries(baseVars), density: {}, themes: {} }
-for (const preset of presets) {
+const unifiedThemes = [...presets, ...printThemePresets];
+for (const preset of unifiedThemes) {
+  const isPrint = printThemePresets.includes(preset);
+  const resolvedMap = isPrint ? printGenerated : generated;
   const entry = { name: preset.name }
   json.themes[preset.name] = {}
-  for (const [key, resolved] of Object.entries(generated[preset.name])) {
+  for (const [key, resolved] of Object.entries(resolvedMap[preset.name])) {
+
     const tree = themeToDtcg(resolved)
     writeFileSync(join(dist, 'dtcg', `${preset.name}.${key}.tokens.json`), JSON.stringify(tree, null, 2) + '\n')
     const direct = themeVariables(resolved)

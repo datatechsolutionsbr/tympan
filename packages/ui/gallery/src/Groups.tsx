@@ -13,10 +13,11 @@ import { PlatformShowcase } from './showcase/platform'
 import { ShellShowcase } from './showcase/shell'
 import { ShowcaseShowcase } from './showcase/showcase'
 import { Showcase } from './Showcase'
+import { ComponentsPage } from './flow/pages/ComponentsPage'
 
-export type GalleryCategory = 'Foundations' | 'Application UI' | 'Data display' | 'Identity' | 'Marketing'
+export type GalleryCategory = 'Foundations' | 'Application UI' | 'Data display' | 'Identity' | 'Marketing' | 'Research'
 
-export const GALLERY_CATEGORIES: GalleryCategory[] = ['Foundations', 'Application UI', 'Data display', 'Identity', 'Marketing']
+export const GALLERY_CATEGORIES: GalleryCategory[] = ['Foundations', 'Application UI', 'Data display', 'Identity', 'Marketing', 'Research']
 
 export interface GalleryPage {
   id: string
@@ -110,5 +111,12 @@ export const GALLERY_PAGES: GalleryPage[] = [
     category: 'Marketing',
     description: 'Showcase headings, reveal numbers and highlight stats, ruled grids, feature mosaics and tiles.',
     Component: ShowcaseShowcase,
+  },
+  {
+    id: 'flow-components',
+    title: 'Flow components',
+    category: 'Research',
+    description: 'Nodes, forms, expressions and run parts of the flow canvas.',
+    Component: ComponentsPage,
   },
 ]

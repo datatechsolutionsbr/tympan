@@ -37,7 +37,7 @@ export const CATALOGO: ItemCatalogo[] = [
   { id: 'research-shell', grupo: 'Research', titulo: 'Research shell', descricao: 'The research workspace: rail, sheet, dock, evidence panel.', tipo: 'tela' },
   { id: 'flow-provenance', grupo: 'Research', titulo: 'Provenance graph', descricao: 'W3C PROV graph with a synced tree, from reading to claim.', tipo: 'tela' },
   { id: 'flow-editor', grupo: 'Research', titulo: 'Analysis workflow (DAG)', descricao: 'Workflow editor and run inspection on the flow canvas.', tipo: 'tela' },
-  { id: 'flow-components', grupo: 'Research', titulo: 'Flow components', descricao: 'Nodes, forms, expressions and run parts of the flow canvas.', tipo: 'tela' },
+
   { id: 'print-estilos', grupo: 'Print', titulo: 'Book styles', descricao: 'The 39 book styles on the sample spread.', tipo: 'link' },
   { id: 'print-livro', grupo: 'Print', titulo: 'Whole sample book', descricao: 'Cover, reading guide, part opening, method and maps.', tipo: 'link' },
   { id: 'customizer', grupo: 'Tools', titulo: 'Theme customizer', descricao: 'Build a theme from seeds and check its contrast.', tipo: 'tela' },

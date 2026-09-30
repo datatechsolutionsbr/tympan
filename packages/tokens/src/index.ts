@@ -8,3 +8,10 @@ export * from './flow.ts'
 export * from './print-presets.ts'
 export * from './print-themes.ts'
 export * from './print-aliases.ts'
+
+import { presets as corePresets } from './presets.ts'
+import { printThemePresets } from './print-themes.ts'
+import type { ThemeConfig } from './theme.ts'
+
+// Unified exported themes: UI + Book themes combined
+export const allThemes: readonly ThemeConfig[] = [...corePresets, ...printThemePresets]

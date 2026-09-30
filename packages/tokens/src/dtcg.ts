@@ -67,6 +67,8 @@ export function themeToDtcg(t: ResolvedTheme): Tree {
   for (const [name, v] of Object.entries(t.dimensions)) dimension[name] = { $value: px(v), $extensions: ext(`--ty-${name}`) }
   const number: Tree = { $type: 'number' }
   for (const [name, v] of Object.entries(t.numbers)) number[name] = { $value: v, $extensions: ext(`--ty-${name}`) }
+  
+  
   const fontFamily: Tree = { $type: 'fontFamily' }
   for (const [name, list] of Object.entries(t.fonts)) fontFamily[name] = { $value: [...list], $extensions: ext(`--ty-font-${name}`) }
   return {
@@ -83,7 +85,7 @@ export function themeToDtcg(t: ResolvedTheme): Tree {
     shadow,
     dimension,
     number,
-    ...(Object.keys(t.fonts).length ? { fontFamily } : {}),
+    ...(Object.keys(t.fonts).length ? { fontFamily } : {})
   }
 }
 

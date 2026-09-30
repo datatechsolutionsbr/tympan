@@ -68,8 +68,6 @@ export interface ThemeConfig {
   fontsUrl?: string
   /** Shadow treatment; `soft` when omitted. */
   elevation?: Elevation
-  /** Arbitrary string variables (e.g. for textures) */
-  strings?: Record<string, string>
 }
 
 export const RAMP_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const
@@ -290,7 +288,6 @@ export interface ResolvedTheme {
   /** Font stacks keyed by token name (`serif`, `sans`, `mono`); empty when the theme keeps the base stacks. */
   fonts: Partial<Record<'serif' | 'sans' | 'mono', string[]>>
   numbers: Record<string, number>
-  strings?: Record<string, string>
   report: ContrastResult[]
 }
 
@@ -419,7 +416,6 @@ export function resolveTheme(config: ThemeConfig, mode: Mode, contrastOverride?:
     aliasRoles()
   }
 
-
   const report: ContrastResult[] = pairs.map((pair) => {
     const m = measure(pair)
     return {
@@ -487,7 +483,7 @@ export function resolveTheme(config: ThemeConfig, mode: Mode, contrastOverride?:
     if (list?.length) fonts[FONT_ROLE_TOKENS[role]] = [...list]
   }
 
-  return { name: config.name, mode, contrast, colors, ramps, cta: { angle: 135, stops: ctaStops }, shadows, dimensions, numbers, fonts, strings: config.strings ?? {}, report }
+  return { name: config.name, mode, contrast, colors, ramps, cta: { angle: 135, stops: ctaStops }, shadows, dimensions, numbers, fonts, report }
 }
 
 // ---------------------------------------------------------------------------
@@ -527,7 +523,6 @@ export function themeVariables(t: ResolvedTheme): Array<[string, string]> {
   for (const [name, px] of Object.entries(t.dimensions)) out.push([`--ty-${name}`, `${px}px`])
   for (const [name, n] of Object.entries(t.numbers)) out.push([`--ty-${name}`, String(n)])
   for (const [name, list] of Object.entries(t.fonts)) out.push([`--ty-font-${name}`, fontStackToCss(list)])
-  for (const [name, s] of Object.entries(t.strings)) out.push([`--ty-${name}`, s])
   return out
 }
 

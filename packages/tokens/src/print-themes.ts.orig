@@ -1,84 +1,3 @@
-
-function createTextureSvg(style: any): string | undefined {
-  const papel = style.papel
-  if (!papel || papel.textura === 'nenhuma' || papel.intensidade <= 0) return undefined
-  const k = papel.intensidade
-  const n3 = (x: number) => Math.round(x * 1000) / 1000
-  const matriz = (cor: string, alfa: number, limiar: number) => {
-    const c = parseColor(cor)
-    return `0 0 0 0 ${n3(c.r)}  0 0 0 0 ${n3(c.g)}  0 0 0 0 ${n3(c.b)}  0 0 0 ${n3(alfa)} ${n3(limiar)}`
-  }
-
-  const tinta = style.cor.tinta
-  let defs = ''
-  let corpo = ''
-
-  if (papel.textura === 'grao') {
-    defs = `
-      <filter id="f" x="0" y="0" width="100%" height="100%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="21" stitchTiles="stitch" />
-        <feColorMatrix values="${matriz(tinta, 0.9 * k, -0.34)}" />
-      </filter>
-    `
-    corpo = `<rect width="100%" height="100%" filter="url(#f)" />`
-  } else if (papel.textura === 'fibra') {
-    defs = `
-      <filter id="f" x="0" y="0" width="100%" height="100%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.035 0.09" numOctaves="3" seed="4" />
-        <feColorMatrix values="${matriz(tinta, 0.55 * k, -0.2)}" />
-      </filter>
-      <filter id="g" x="0" y="0" width="100%" height="100%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="11" stitchTiles="stitch" />
-        <feColorMatrix values="${matriz(tinta, 1.1 * k, -0.45)}" />
-      </filter>
-    `
-    corpo = `
-      <rect width="100%" height="100%" filter="url(#f)" opacity="0.6" />
-      <rect width="100%" height="100%" filter="url(#g)" />
-    `
-  } else if (papel.textura === 'pauta') {
-    const linha = style.pb ? '#bdbdbd' : '#b7cbe0'
-    const passo = n3(7 * 3.7795)
-    defs = `
-      <pattern id="p" width="10" height="${passo}" patternUnits="userSpaceOnUse" y="${n3(16 * 3.7795)}">
-        <line x1="0" x2="10" y1="${n3(7 * 3.7795 - 0.5)}" y2="${n3(7 * 3.7795 - 0.5)}" stroke="${linha}" stroke-width="0.9" />
-      </pattern>
-    `
-    corpo = `
-      <g opacity="${Math.min(1, 0.4 + k)}">
-        <rect width="100%" height="100%" fill="url(#p)" />
-      </g>
-    `
-  } else if (papel.textura === 'milimetrado') {
-    const mm = 3.7795
-    const cm = 37.795
-    const mmStr = n3(mm)
-    const cmStr = n3(cm)
-    const op1 = n3(0.09 * k)
-    const op2 = n3(0.22 * k)
-    const linha = style.cor.linha
-    defs = `
-      <pattern id="mm" width="${mmStr}" height="${mmStr}" patternUnits="userSpaceOnUse">
-        <path d="M ${mmStr} 0 L 0 0 0 ${mmStr}" fill="none" stroke="${linha}" stroke-opacity="${op1}" stroke-width="0.5" />
-      </pattern>
-      <pattern id="cm" width="${cmStr}" height="${cmStr}" patternUnits="userSpaceOnUse">
-        <path d="M ${cmStr} 0 L 0 0 0 ${cmStr}" fill="none" stroke="${linha}" stroke-opacity="${op2}" stroke-width="0.8" />
-      </pattern>
-    `
-    corpo = `
-      <rect width="100%" height="100%" fill="url(#mm)" />
-      <rect width="100%" height="100%" fill="url(#cm)" />
-    `
-  } else {
-    return undefined
-  }
-
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><defs>${defs}</defs>${corpo}</svg>`
-  const cleanSvg = svg.replace(/>\s+</g, '><').trim()
-  return `url('data:image/svg+xml;utf8,${encodeURIComponent(cleanSvg)}')`
-}
-
-
 // UI themes derived from the book styles of print-presets.ts. One function,
 // `printStyleToTheme`, maps a PrintStyle onto a ThemeConfig: the paper and ink
 // become the surfaces and text of the style's native mode (light for paper
@@ -207,8 +126,8 @@ function fontsOf(style: PrintStyle): { fonts: NonNullable<ThemeConfig['fonts']>;
   const display = parseFontStack(style.fontes.titulo)
   const body = parseFontStack(style.fontes.corpo)
   const monoStack = parseFontStack(style.fontes.mono)
-  const fonts: any = { display, body, serif: display, sans: body }
-  if (monoStack.at(-1) === 'monospace') { fonts.mono = monoStack; fonts.mono = monoStack; }
+  const fonts: NonNullable<ThemeConfig['fonts']> = { display, body }
+  if (monoStack.at(-1) === 'monospace') fonts.mono = monoStack
   const used = new Set([display[0], body[0], fonts.mono?.[0]].filter(Boolean))
   const specs = style.googleFonts.filter((g) => used.has(g.split(':')[0]))
   const url = googleFontsUrl({ googleFonts: specs }) ?? undefined
@@ -370,7 +289,6 @@ function draftPrintTheme(style: PrintStyle, override: PrintThemeOverride = PRINT
 
   const native = nativePins(style, brand, glass, darkPaper)
   const counter = counterPins(style, accent)
-  const bgTexture = createTextureSvg(style)
   const nativeMode: Mode = darkPaper ? 'dark' : 'light'
   const counterMode: Mode = darkPaper ? 'light' : 'dark'
 
@@ -386,7 +304,6 @@ function draftPrintTheme(style: PrintStyle, override: PrintThemeOverride = PRINT
     elevation,
     fonts,
     ...(url ? { fontsUrl: url } : {}),
-    ...(bgTexture ? { strings: { "bg-image": bgTexture } } : {}),
     pins: {
       [nativeMode]: { ...native, ...override.pins?.[nativeMode] },
       [counterMode]: { ...counter, ...override.pins?.[counterMode] },

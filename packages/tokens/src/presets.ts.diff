@@ -1,0 +1,26 @@
+--- datatech/tympan-wt/site/packages/tokens/src/presets.ts
++++ datatech/tympan-wt/site/packages/tokens/src/presets.ts
+@@ -102,4 +102,23 @@
+-export const presets: readonly ThemeConfig[] = [tympanPreset, fakhirPreset, neutralPreset, highContrastPreset]
++export const astrlabePreset: ThemeConfig = {
++  name: 'astrlabe',
++  label: 'Astrlabe',
++  seeds: {
++    ...baseSeeds,
++    brand: { hue: 240, chroma: 0.15 }, // Example deep blue for Astrlabe
++  },
++  radius: 6,
++  contrast: 'comfortable',
++  glass: false,
++  cta: 'solid',
++  pins: {
++    light: {
++      brand: '#4f46e5',
++    },
++    dark: {
++      brand: '#6366f1',
++    }
++  }
++}
++
++export const presets: readonly ThemeConfig[] = [tympanPreset, fakhirPreset, neutralPreset, highContrastPreset, astrlabePreset]

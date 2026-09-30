@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Button, TympanProvider } from '../../../../src'
+import { Button } from '../../../../src'
 import { createFlowEditorStore, ExecutionTimeline, FlowEditorStateProvider, RunReplayDialog, RunRewindDialog, RunViews, VersionHistoryPanel, type RunSummary, type TimelineEntry } from '../../../../src/flow'
+import { Section } from '../../Section'
 
 const runs: RunSummary[] = [
   { id: 'run-sample-2', status: 'completed', startedAt: '2026-01-02T10:00:00Z', durationMs: 3400, actor: { kind: 'agent', name: '[agente]', agentKey: '[agente]' }, nodeResults: [{ nodeId: 'load-sample', status: 'completed', durationMs: 200, outputs: { rows: 30 } }, { nodeId: 'apply-sample-rule', status: 'completed', durationMs: 1100 }, { nodeId: 'count', status: 'completed', durationMs: 400, outputs: { a: 12, b: 18 } }] },
@@ -12,7 +13,6 @@ const entries: TimelineEntry[] = [
   { nodeId: 'count', nodeKind: 'code', status: 'completed', startedAt: '2026-01-02T10:00:01.300Z', completedAt: '2026-01-02T10:00:01.700Z', durationMs: 400, outputs: { a: 12, b: 18 } },
 ]
 
-/** Run views, timeline, trace/replay and version history. Sample data only (neutral placeholders). */
 export function RunSection() {
   const [store] = useState(() => {
     const s = createFlowEditorStore({ initial: { nodes: [{ id: 'load-sample', kind: 'datasource', position: { x: 0, y: 0 }, data: { label: 'Carregar edição' } }, { id: 'count', kind: 'code', position: { x: 0, y: 0 }, data: { label: 'Contar' } }] } })
@@ -21,40 +21,33 @@ export function RunSection() {
   })
   const [replay, setReplay] = useState(false)
   const [rewind, setRewind] = useState(false)
-  const [versions, setVersions] = useState(false)
   return (
-    <section className="ty-flow-gallery-section" aria-labelledby="run-title">
-      <h2 id="run-title">Runs, trace and replay</h2>
-      <FlowEditorStateProvider store={store}>
-        <RunViews flowId="sample-analysis" loadRuns={() => Promise.resolve(runs)} defaultRunView={{ mode: 'panel', open: true }} />
-      </FlowEditorStateProvider>
-      <h3>Execution timeline</h3>
-      <ExecutionTimeline
-        entries={entries}
-        inspectorActions={() => (
-          <>
-            <Button size="compact" variant="secondary" onPress={() => setRewind(true)}>
-              Rewind from here
-            </Button>
-            <Button size="compact" variant="secondary" onPress={() => setReplay(true)}>
-              Replay
-            </Button>
-          </>
-        )}
-      />
-      <Button onPress={() => setVersions((v) => !v)}>Versions</Button>
-      <VersionHistoryPanel open={versions} onClose={() => setVersions(false)} flowId="sample-analysis" currentVersion={3} loadVersions={() => Promise.resolve([3, 2, 1].map((n) => ({ number: n, publishedAt: `2026-01-0${n}T12:00:00Z`, publishedBy: { kind: 'person' as const, name: 'Pessoa A' }, nodeCount: 7, connectorCount: 6 })))} onPreview={() => {}} onRestore={() => {}} />
-      <RunReplayDialog open={replay} onClose={() => setReplay(false)} runId={runs[0]!.id} flowId="sample-analysis" originalInputs={{ edition: '[edição]', minValue: 3, strict: true }} onReplay={() => Promise.resolve(setReplay(false))} />
-      <RunRewindDialog open={rewind} onClose={() => setRewind(false)} runId={runs[0]!.id} nodes={entries.map((e) => ({ nodeId: e.nodeId, nodeKind: e.nodeKind, status: e.status }))} onRewind={() => Promise.resolve(setRewind(false))} />
-      <h3>العربية (RTL) · 日本語</h3>
-      <TympanProvider locale="ar">
-        <div dir="rtl" lang="ar">
+    <>
+      <Section id="run-views" title="RunViews">
+        <div style={{ position: 'relative', height: 600, display: 'flex', alignItems: 'flex-start' }}>
+          <FlowEditorStateProvider store={store}>
+            <RunViews flowId="sample-analysis" loadRuns={() => Promise.resolve(runs)} defaultRunView={{ mode: 'panel', open: true }} />
+          </FlowEditorStateProvider>
+        </div>
+      </Section>
+      <Section id="run-timeline" title="ExecutionTimeline">
+        <div style={{ height: 400, background: 'var(--ty-surface)', border: '1px solid var(--ty-line)', borderRadius: 'var(--ty-radius-card)' }}>
           <ExecutionTimeline entries={entries} />
         </div>
-      </TympanProvider>
-      <TympanProvider locale="ja">
-        <ExecutionTimeline entries={entries.map((e) => ({ ...e, nodeId: `${e.nodeId}・政府AI調査` }))} />
-      </TympanProvider>
-    </section>
+      </Section>
+      <Section id="run-replay-dialog" title="RunReplayDialog">
+        <Button onPress={() => setReplay(true)}>Open Replay dialog</Button>
+        <RunReplayDialog open={replay} onClose={() => setReplay(false)} runId={runs[0]!.id} flowId="sample-analysis" originalInputs={{ edition: '[edição]', minValue: 3, strict: true }} onReplay={() => Promise.resolve(setReplay(false))} />
+      </Section>
+      <Section id="run-rewind-dialog" title="RunRewindDialog">
+        <Button onPress={() => setRewind(true)}>Open Rewind dialog</Button>
+        <RunRewindDialog open={rewind} onClose={() => setRewind(false)} runId={runs[0]!.id} nodes={entries.map((e) => ({ nodeId: e.nodeId, nodeKind: e.nodeKind, status: e.status }))} onRewind={() => Promise.resolve(setRewind(false))} />
+      </Section>
+      <Section id="run-version-history" title="VersionHistoryPanel">
+        <div style={{ position: 'relative', height: 600, display: 'flex' }}>
+          <VersionHistoryPanel open={true} onClose={() => {}} flowId="sample-analysis" currentVersion={3} loadVersions={() => Promise.resolve([3, 2, 1].map((n) => ({ number: n, publishedAt: `2026-01-0${n}T12:00:00Z`, publishedBy: { kind: 'person' as const, name: 'Pessoa A' }, nodeCount: 7, connectorCount: 6 })))} onPreview={() => {}} onRestore={() => {}} />
+        </div>
+      </Section>
+    </>
   )
 }

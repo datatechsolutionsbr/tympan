@@ -1,0 +1,16 @@
+@@ -86,6 +88,7 @@
+   dimensions: Record<string, number>
+   numbers: Record<string, number>
+   fonts: Record<string, string[]>
++  strings: Record<string, string>
+   report: Array<{ fg: string; over: string[]; kind: string; ratio: number; min: number; apca: number }>
+ }
+ 
+@@ -374,6 +377,7 @@
+     dimensions: { ...BASE_DIMENSIONS },
+     numbers: { ...BASE_NUMBERS },
+     fonts: config.fonts ? { ...config.fonts } : {},
++    strings: config.strings ? { ...config.strings } : {},
+     report: [],
+   }
+   if (config.glass) resolved.numbers.glass = 1

@@ -63,7 +63,7 @@ export function OverlaysNavShowcase({ scope }: { scope: string }) {
   const [compact, setCompact] = useState(false)
   const [flyout, setFlyout] = useState(false)
   const [palette, setPalette] = useState(false)
-  const [wizardStep, setWizardStep] = useState(1)
+  const [wizardStep, setWizardStep] = useState(0)
   const [dot, setDot] = useState(2)
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
   const [collapsed, setCollapsed] = useState(false)
@@ -71,25 +71,49 @@ export function OverlaysNavShowcase({ scope }: { scope: string }) {
 
   return (
     <div className="ty-gallery-showcase">
-      <Section id={id('app-navigation')} title="AppNavigation (sidebar and collapsed rail)">
-        <div className="ty-gallery-row" style={{ alignItems: 'stretch' }}>
-          <div style={{ inlineSize: 260, border: '1px solid var(--ty-line)', borderRadius: 16 }}>
-            <AppNavigation
-              entries={entries}
-              pathname="#/verify"
-              brand={<strong>Acme Research</strong>}
-              footer={<span>Edition 2026-09, verified</span>}
-              account={account}
-              collapsed={collapsed}
-              onCollapsedChange={setCollapsed}
-              labels={{ landmark: `Primary navigation ${scope}` }}
-            />
+      <Section id={id('app-navigation')} title="AppNavigation Layouts">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 32, alignItems: 'start' }}>
+          
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <span style={{ fontSize: 14, color: 'var(--ty-ink-2)', fontWeight: 600 }}>Sidebar (Expanded)</span>
+            <div style={{ height: 720, border: '1px solid var(--ty-line)', borderRadius: 16, background: 'var(--ty-surface)', display: 'flex', overflow: 'hidden' }}>
+              <div style={{ inlineSize: 260, height: "100%", display: "flex", flexDirection: "column", borderInlineEnd: "1px solid var(--ty-line)" }}>
+                <AppNavigation
+                  entries={entries}
+                  pathname="#/verify"
+                  brand={<strong>Acme Research</strong>}
+                  footer={<span>Edition 2026-09, verified</span>}
+                  account={account}
+                  collapsed={collapsed}
+                  onCollapsedChange={setCollapsed}
+                  labels={{ landmark: `Primary navigation ${scope}` }}
+                />
+              </div>
+              <div style={{ flex: 1, padding: 24, display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'var(--ty-ink-3)' }}>Content Area</div>
+            </div>
           </div>
-          <div style={{ border: '1px solid var(--ty-line)', borderRadius: 16 }}>
-            <AppNavigation entries={entries} layout="rail" pathname="#/base" labels={{ landmark: `Rail navigation ${scope}` }} />
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <span style={{ fontSize: 14, color: 'var(--ty-ink-2)', fontWeight: 600 }}>Rail (Collapsed)</span>
+            <div style={{ height: 720, border: '1px solid var(--ty-line)', borderRadius: 16, background: 'var(--ty-surface)', display: 'flex', overflow: 'hidden' }}>
+              <div style={{ height: "100%", display: "flex", flexDirection: "column", borderInlineEnd: "1px solid var(--ty-line)" }}>
+                <AppNavigation entries={entries} layout="rail" pathname="#/base" labels={{ landmark: `Rail navigation ${scope}` }} />
+              </div>
+              <div style={{ flex: 1, padding: 24, display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'var(--ty-ink-3)' }}>Content Area</div>
+            </div>
           </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center' }}>
+            <span style={{ fontSize: 14, color: 'var(--ty-ink-2)', fontWeight: 600 }}>Floating (Mobile / Contextual)</span>
+            <div style={{ width: '100%', maxWidth: 360, height: 720, border: '1px solid var(--ty-line)', borderRadius: 32, background: 'var(--ty-surface)', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ flex: 1, padding: 24, display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'var(--ty-ink-3)' }}>Content Area</div>
+              <div style={{ position: 'absolute', bottom: 24, left: '50%', transform: 'translateX(-50%)' }}>
+                <AppNavigation entries={entries.slice(0, 4)} layout="floating" pathname="#/overview" labels={{ landmark: `Floating navigation ${scope}` }} />
+              </div>
+            </div>
+          </div>
+
         </div>
-        <AppNavigation entries={entries.slice(0, 4)} layout="floating" pathname="#/overview" labels={{ landmark: `Floating navigation ${scope}` }} />
       </Section>
 
       <Section id={id('toolbar-trigger')} title="ToolbarTrigger">

@@ -126,6 +126,11 @@ const demoShapes = {
 const demoUrl = `data:application/geo+json,${encodeURIComponent(JSON.stringify(demoShapes))}`
 const demoItems = [...'NNNNNNEEEECCCCCCCCSSWNE'].map((c, i) => ({ id: i, code: c === 'W' ? 'W' : c }))
 
+
+const brazilStates = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']
+const brDemoItems = Array.from({ length: 50 }, (_, i) => ({ id: i, code: brazilStates[i % brazilStates.length] }))
+const brCentres = { 'DF': [-47.88, -15.79], 'SP': [-46.63, -23.55], 'RJ': [-43.17, -22.90], 'AM': [-60.02, -3.11] } // A few centres for markers if needed
+
 export function ChartsGeoShowcase({ scope }: { scope: string }) {
   const id = (s: string) => `${scope}-${s}`
   const [active, setActive] = useState<Set<string>>(new Set(['C']))
@@ -138,10 +143,16 @@ export function ChartsGeoShowcase({ scope }: { scope: string }) {
 
   return (
     <div className="ty-gallery-showcase">
-      <Section id={id('chart')} title="Chart (line, bar, histogram; table view)">
+      <Section id={id('chart-trend')} title="Chart: Line/Trend">
         <Chart figure={stages} />
+      </Section>
+      <Section id={id('chart-bars')} title="Chart: Bar/Columns">
         <Chart figure={bars} />
+      </Section>
+      <Section id={id('chart-histogram')} title="Chart: Histogram (Table view)">
         <Chart figure={histogram} defaultFace="table" />
+      </Section>
+      <Section id={id('chart-empty')} title="Chart: Empty">
         <Chart figure={{ ...bars, heading: 'Empty chart', records: [] }} />
       </Section>
 
@@ -180,6 +191,51 @@ export function ChartsGeoShowcase({ scope }: { scope: string }) {
           )}
           formatCounter={(t) => `${t.items} cases in ${t.regions} regions, ${t.active} selected as filter`}
           legendLimit={4}
+        />
+      </Section>
+
+      
+      <Section id={id('map-brazil')} title="Map of Brazil (Equal Earth Projection)">
+        <RegionMap
+          items={brDemoItems}
+          getRegionCode={(i) => i.code}
+          regionCentres={brCentres}
+          shapesUrl="/maps/brazil-states.geojson"
+          detailPosition="bottom-right"
+          regionProperty="sigla"
+          projection="equal-area"
+          getRegionName={(c) => registry.getSubdivision('BR', c)?.name.local ?? c}
+          getRegionTone={(c) => {
+            const regions = registry.getMacroRegions('BR')
+            const macro = regions?.find((r) => r.codes.includes(c))
+            const mapping: Record<string, any> = {
+              north: 'categorical-1',
+              northeast: 'categorical-2',
+              'central-west': 'categorical-3',
+              southeast: 'categorical-4',
+              south: 'categorical-5'
+            }
+            return macro ? mapping[macro.id] : 'neutral'
+          }}
+          getRegionFlag={(c) => `/flags/${c}.svg`}
+          isRegionActive={(c) => active.has(c)}
+          onRegionToggle={(c) =>
+            setActive((s) => {
+              const n = new Set(s)
+              if (n.has(c)) n.delete(c)
+              else n.add(c)
+              return n
+            })
+          }
+          renderRegionDetail={(code, list) => (
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <img src={`/flags/${code}.svg`} alt={code} style={{ width: '24px', borderRadius: '2px', border: '1px solid var(--ty-line)' }} />
+              <p style={{ margin: 0 }}>
+                {registry.getSubdivision('BR', code)?.name.local ?? code}: {list.length} cases
+              </p>
+            </div>
+          )}
+          formatCounter={(t) => `${t.items} cases in ${t.regions} regions`}
         />
       </Section>
 

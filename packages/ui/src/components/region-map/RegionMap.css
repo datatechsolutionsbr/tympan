@@ -113,14 +113,30 @@
 
   .ty-region-map__detail {
     position: absolute;
+  }
+  .ty-region-map__detail[data-position="bottom-left"] {
     inset-block-end: var(--ty-space-3);
     inset-inline-start: var(--ty-space-3);
+  }
+  .ty-region-map__detail[data-position="bottom-right"] {
+    inset-block-end: var(--ty-space-3);
+    inset-inline-end: var(--ty-space-3);
+  }
+  .ty-region-map__detail[data-position="top-left"] {
+    inset-block-start: var(--ty-space-3);
+    inset-inline-start: var(--ty-space-3);
+  }
+  .ty-region-map__detail {
     max-inline-size: min(22rem, calc(100% - 2 * var(--ty-space-3)));
     padding: var(--ty-space-3) var(--ty-space-4);
     border: 1px solid var(--ty-line);
     border-radius: var(--ty-radius-card);
     background: var(--ty-surface-raised);
     box-shadow: var(--ty-shadow-floating);
+  }
+  .ty-region-map__detail[data-position="top-right"] {
+    inset-block-start: var(--ty-space-3);
+    inset-inline-end: calc(44px + 2 * var(--ty-space-3)); /* offset for zoom controls */
   }
 
   .ty-region-map__legend-title {

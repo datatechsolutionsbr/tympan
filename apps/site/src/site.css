@@ -23,7 +23,7 @@ html {
 }
 body {
   margin: 0;
-  background: var(--ty-bg);
+  background: var(--ty-bg-image, none), var(--ty-bg);
   color: var(--ty-ink);
   font-family: var(--ty-font-sans);
   -webkit-font-smoothing: antialiased;
@@ -1105,7 +1105,7 @@ body {
   padding: var(--ty-space-5);
   border: 1px solid var(--ty-line);
   border-radius: var(--ty-radius-card);
-  background: var(--ty-bg);
+  background: var(--ty-bg-image, none), var(--ty-bg);
   color: var(--ty-ink);
   font-family: var(--ty-font-sans);
   min-inline-size: 0;

@@ -39,6 +39,8 @@ export interface RegionMapProps<T> {
   isRegionActive?: (code: string) => boolean
   onRegionToggle?: (code: string) => void
   renderRegionDetail?: (code: string, items: T[]) => ReactNode
+  /** Position of the detail panel (default: bottom-left). */
+  detailPosition?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
   formatCounter?: (totals: RegionMapTotals) => string
   labels?: Partial<RegionMapLabels>
   /** Regions shown in the legend before "+N more" (default 5). */
@@ -343,7 +345,7 @@ export function RegionMap<T>(props: RegionMapProps<T>) {
           </output>
         </div>
         {panel ? (
-          <div className="ty-region-map__detail" id={`${uid}-detail`}>
+          <div className="ty-region-map__detail" id={`${uid}-detail`} data-position={props.detailPosition ?? 'bottom-left'}>
             {panel}
           </div>
         ) : null}
