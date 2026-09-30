@@ -159,7 +159,7 @@ describe('DefinitionImportDialog', () => {
   })
 
   it('marks drag-over with a thicker border, not colour alone, and stops the transition under reduced motion', () => {
-    const css = cssOf('flow/dialogs/Dialogs.css')
+    const css = cssOf('flow/dialogs/dialogs.css')
     expect(css).toMatch(/\.ty-definition-import__zone\[data-drop-target\]\s*\{[^}]*border: 3px solid/)
     expect(mediaBlock(css, /\(forced-colors: active\)/)).toMatch(/4px solid Highlight/)
     expect(mediaBlock(css, /\(prefers-reduced-motion: reduce\)/)).toMatch(/transition: none/)

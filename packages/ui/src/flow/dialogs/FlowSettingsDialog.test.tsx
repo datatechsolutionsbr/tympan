@@ -88,7 +88,7 @@ describe('FlowSettingsDialog', () => {
   })
 
   it('fills the screen on phones and shows switches with system colours', () => {
-    const css = cssOf('flow/dialogs/Dialogs.css')
+    const css = cssOf('flow/dialogs/dialogs.css')
     expect(mediaBlock(css, /\(max-width: 639px\)/)).toMatch(/ty-flow-settings[\s\S]*100vw/)
     expect(css).toMatch(/min-block-size: var\(--ty-control-target, 44px\)/)
   })
