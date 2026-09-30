@@ -105,7 +105,12 @@ export const connectorTokens = Object.freeze({
   true: 'var(--ty-flow-connector-true)',
   false: 'var(--ty-flow-connector-false)',
   rule: 'var(--ty-flow-connector-rule)',
+  traversed: 'var(--ty-flow-connector-traversed)',
+  blocked: 'var(--ty-flow-connector-blocked)',
+  pending: 'var(--ty-flow-connector-pending)',
 })
 
-/** Run accent of a running node: always the semantic pending colour, never the kind tone. */
+/** Run accent of a running node: always the semantic info colour, never the kind tone. */
 export const RUN_ACCENT = 'var(--ty-flow-ring-running)'
+/** Run accent of a suspended (waiting) node: the semantic warning colour. */
+export const SUSPENDED_ACCENT = 'var(--ty-flow-ring-suspended)'

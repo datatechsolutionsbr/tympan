@@ -29,8 +29,11 @@
   .ty-run-status[data-status='restored'] {
     --ty-run-tone: var(--ty-success);
   }
-  .ty-run-status[data-status='running'],
-  .ty-run-status[data-status='pending'] {
+  .ty-run-status[data-status='running'] {
+    --ty-run-tone: var(--ty-info);
+  }
+  .ty-run-status[data-status='pending'],
+  .ty-run-status[data-status='suspended'] {
     --ty-run-tone: var(--ty-warning);
   }
   .ty-run-status[data-status='failed'] {

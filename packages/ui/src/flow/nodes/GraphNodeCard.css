@@ -44,6 +44,9 @@
     --ty-node-run-ring: var(--ty-flow-ring-running);
     animation: ty-node-running-pulse var(--ty-dur-pulse, 1.6s) ease-in-out infinite;
   }
+  .ty-node-card[data-run-state='suspended'] {
+    --ty-node-run-ring: var(--ty-flow-ring-suspended);
+  }
   .ty-node-card[data-run-state='succeeded'] {
     --ty-node-run-ring: var(--ty-flow-ring-succeeded);
   }

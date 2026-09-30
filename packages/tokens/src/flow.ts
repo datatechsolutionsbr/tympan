@@ -46,20 +46,28 @@ function toneTokens(): Array<[string, FlowToken]> {
 export const FLOW_TOKENS: ReadonlyArray<readonly [string, FlowToken]> = [
   ...toneTokens(),
   // Connectors. Rest uses the >=3:1 boundary role (WCAG 1.4.11), not line-strong.
+  // State colours: traversed success, active info, blocked warning, pending neutral.
   ['connector', color('input')],
-  ['connector-active', color('accent')],
+  ['connector-active', color('info')],
   ['connector-true', color('success')],
   ['connector-false', color('danger')],
   ['connector-rule', color('categorical-2')],
+  ['connector-traversed', color('success')],
+  ['connector-blocked', color('warning')],
+  ['connector-pending', color('neutral')],
   ['connector-width', px(1.5)],
   ['connector-width-active', px(2.5)],
-  // Node frame and state rings.
+  // Node frame and state rings. Running is info (cyan), suspended is warning
+  // (amber), so "em execução" and "aguardando" never share a hue.
   ['node-border', color('line-strong')],
   ['node-border-hover', color('input')],
   ['ring-selected', color('accent')],
-  ['ring-running', color('warning')],
+  ['ring-running', color('info')],
+  ['ring-suspended', color('warning')],
   ['ring-succeeded', color('success')],
   ['ring-failed', color('danger')],
+  // The "now" cursor of run timelines: magenta, off every state hue.
+  ['cursor-now', color('cursor-now')],
   ['node-surface', color('surface-raised-solid')],
   ['node-radius', { type: 'dimension', ref: 'radius-card' }],
   // Canvas plane.

@@ -106,6 +106,7 @@ export const ROLE_NAMES = [
   'ink', 'ink-2', 'ink-3',
   'line', 'line-soft', 'line-strong', 'input',
   'focus-ring',
+  'cursor-now',
   'brand', 'on-brand', 'brand-strong', 'brand-soft', 'on-brand-soft',
   'cta-solid', 'on-cta',
   'secondary', 'on-secondary',
@@ -175,6 +176,9 @@ function recipes(mode: Mode, contrast: ContrastLevel, glass: boolean): Partial<R
     'line-strong': { seed: 'neutral', l: pick(0.55, 0.78), c: 2.5, a: high ? pick(0.75, 0.65) : pick(0.38, 0.3) },
     input: { seed: 'neutral', l: high ? pick(0.42, 0.78) : pick(0.6, 0.58), c: 2.5 },
     'focus-ring': { seed: 'brand', l: high ? pick(0.4, 0.85) : pick(0.47, 0.79), c: 0.75 },
+    // The "now" cursor of run timelines: magenta/pink, deliberately off every
+    // state hue (success/warning/danger/info) so it never reads as a state.
+    'cursor-now': { seed: 'brand', l: pick(0.55, 0.74), c: 0.9, h: 330 },
     brand: { seed: 'brand', l: high ? pick(0.4, 0.85) : pick(0.47, 0.79), c: 0.75 },
     'brand-strong': { seed: 'brand', l: high ? pick(0.33, 0.9) : pick(0.4, 0.87), c: 0.7 },
     'brand-soft': { seed: 'brand', l: pick(0.55, 0.75), c: 0.8, a: softA },

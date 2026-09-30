@@ -4,7 +4,7 @@
 
 import type { NodeResultStatus } from '../model/types'
 
-export type NodeRunState = 'idle' | 'running' | 'succeeded' | 'failed' | 'skipped'
+export type NodeRunState = 'idle' | 'running' | 'suspended' | 'succeeded' | 'failed' | 'skipped'
 export type NodeProofState = 'proved' | 'pending' | 'refuted' | 'not_disclosed' | 'none'
 
 export interface NodeStateInput {

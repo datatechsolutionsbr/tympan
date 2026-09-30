@@ -154,8 +154,11 @@
     color: var(--ty-danger);
   }
   .ty-node-run-indicator[data-status='running'] svg,
-  .ty-node-run-indicator[data-status='pending'] svg,
   .ty-preview-status[data-status='running'] svg {
+    color: var(--ty-info);
+  }
+  .ty-node-run-indicator[data-status='pending'] svg,
+  .ty-node-run-indicator[data-status='suspended'] svg {
     color: var(--ty-warning);
   }
   .ty-node-run-indicator[data-status='running'] .ty-node-run-indicator__mark,
