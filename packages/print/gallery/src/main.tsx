@@ -5,6 +5,6 @@ import './gallery.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Galeria />
+    <Gallery />
   </StrictMode>,
 )
