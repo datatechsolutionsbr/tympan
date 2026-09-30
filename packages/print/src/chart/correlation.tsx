@@ -22,9 +22,9 @@ import {
   verticesHex,
   type EscalaEixo,
   type Hexagono,
-} from './estatistica.ts'
-import { TEXTO, TEXTO_PEQUENO, larguraTexto, marcasEixo, numeroBr, quebrar } from './geometria.ts'
-import { cssCor, type CorDado, type CtxPincel, type Pincel } from './pinceis.tsx'
+} from './statistics.ts'
+import { TEXTO, TEXTO_PEQUENO, larguraTexto, marcasEixo, numeroBr, quebrar } from './geometry.ts'
+import { cssCor, type CorDado, type CtxPincel, type Pincel } from './brushes.tsx'
 import type { EixoDispersao, PontoMunicipio, SpecAntesDepoisControle, SpecDispersao, SpecMatrizCorrelacao, SpecSimpson } from './tiposCorrelacao.ts'
 
 export interface CtxCorrelacao extends CtxPincel {

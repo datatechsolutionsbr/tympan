@@ -27,7 +27,7 @@ export const DUPLAS: DuplaDoLivro[] = [
             face="quarta"
             chamada="Uma cidade medida estação por estação."
             paragrafos={[
-              'Em 2020, Vila Aurora criou uma zona de baixa emissão no centro. Este livro pergunta o que os dados sustentam sobre o ar que se respira lá dentro, e o que ainda não dá para afirmar.',
+              'Em 2020, Vila Aurora criou uma zona de baixa emissão no centro. Este book pergunta o que os dados sustentam sobre o ar que se respira lá dentro, e o que ainda não dá para afirmar.',
               'Each number carries its source and its proof state. Data is fictional and serves as an example.',
             ]}
             destaque={{ eyebrow: 'Inverno de 2022', texto: '54 dias acima do limite logo dentro da zona, contra 127 logo fora.', fonte: 'Rede de monitoramento de Vila Aurora (fictícia)' }}
@@ -41,7 +41,7 @@ export const DUPLAS: DuplaDoLivro[] = [
             subtitulo="Dez anos de uma zona de baixa emissão, medidos estação por estação"
             autora="Example Lab"
             cortes={[10, 25, 50, 100, 150]}
-            legendaGrafismo="Os limites diários de PM2,5 usados no livro (µg/m³)"
+            legendaGrafismo="Os limites diários de PM2,5 usados no book (µg/m³)"
           />
         </Page>
       </Spread>
@@ -51,7 +51,7 @@ export const DUPLAS: DuplaDoLivro[] = [
     id: 'como-ler',
     chave: 'completo.comoLer',
     render: () => (
-      <Spread numero="6-7" parte="Como ler este livro" capitulo="Como ler este livro">
+      <Spread numero="6-7" parte="Como ler este book" capitulo="Como ler este book">
         <Page lado="par">
           <HowToRead
             secao="letras"
@@ -108,7 +108,7 @@ export const DUPLAS: DuplaDoLivro[] = [
         </Page>
         <Page lado="impar">
           <Timeline
-            titulo="As regras que o livro mede"
+            titulo="As regras que o book mede"
             de={2014}
             ate={2026}
             alt="Linha do tempo de 2014 a 2026 com cinco regras municipais fictícias de Vila Aurora e o estado de cada uma no livro."
@@ -119,7 +119,7 @@ export const DUPLAS: DuplaDoLivro[] = [
               { ano: 2023, norma: 'Lei 2.051 (ônibus elétricos)', onde: 'vol. 2', status: 'outro-volume' },
               { ano: 2025, norma: 'Decreto 2.300 (ampliação da zona)', onde: 'cap. 1', status: 'quando-o-dado-chegar' },
             ]}
-            nota="Todas as regras e números deste livro são fictícios."
+            nota="Todas as regras e números deste book são fictícios."
           />
         </Page>
       </Spread>

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { MOLDES, gradeDoMolde, linhasUsadas } from '../src/livro/moldes.ts'
+import { MOLDES, gradeDoMolde, linhasUsadas } from '../src/book/templates.ts'
 import { PrintArea, Spread, PrintBook, Page, Panel, agruparPorArea } from '../src/index.ts'
 
 describe('moldes', () => {

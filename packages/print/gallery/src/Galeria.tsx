@@ -4,7 +4,7 @@ import { PrintBook } from '../../src/index.ts'
 import { DuplaEstudo, GRAFICO_DO_ESTUDO, type TipoGraficoEstudo } from './estudo.tsx'
 import { DuplaMapas } from './mapas.tsx'
 
-type Grafico = 'estudo' | 'mapa' | TipoGraficoEstudo
+type Grafico = 'estudo' | 'map' | TipoGraficoEstudo
 
 function lerUrl() {
   const q = new URLSearchParams(window.location.search)
@@ -13,7 +13,7 @@ function lerUrl() {
   return {
     estilo,
     pb: q.get('pb') === '1',
-    grafico: (q.get('grafico') ?? 'estudo') as Grafico,
+    grafico: (q.get('chart') ?? 'estudo') as Grafico,
     foto: q.get('foto') === '1',
   }
 }
@@ -34,10 +34,10 @@ export function Galeria() {
     window.history.replaceState(null, '', `?${q.toString()}`)
   }, [estilo, pb, grafico, inicial.foto])
 
-  const tipo: TipoGraficoEstudo = grafico === 'estudo' || grafico === 'mapa' ? (GRAFICO_DO_ESTUDO[estilo] ?? 'halteres') : grafico
+  const tipo: TipoGraficoEstudo = grafico === 'estudo' || grafico === 'map' ? (GRAFICO_DO_ESTUDO[estilo] ?? 'halteres') : grafico
   const livro = (
     <PrintBook estilo={estilo} pb={pb}>
-      {grafico === 'mapa' ? <DuplaMapas /> : <DuplaEstudo grafico={tipo} />}
+      {grafico === 'map' ? <DuplaMapas /> : <DuplaEstudo grafico={tipo} />}
     </PrintBook>
   )
   if (inicial.foto) return <main className="ty-print-galeria-foto">{livro}</main>
@@ -45,7 +45,7 @@ export function Galeria() {
   return (
     <div className="ty-print-galeria">
       <header className="ty-print-galeria-barra">
-        <h1>Tympan print · estilos de livro</h1>
+        <h1>Tympan print · styles de livro</h1>
         <label>
           Estilo
           <select value={estilo} onChange={(e) => setEstilo(e.target.value as PrintPresetName)}>
@@ -63,7 +63,7 @@ export function Galeria() {
             <option value="halteres">halteres</option>
             <option value="barras">barras</option>
             <option value="contagem">contagem</option>
-            <option value="mapa">maps (example values)</option>
+            <option value="map">maps (example values)</option>
           </select>
         </label>
         <label>

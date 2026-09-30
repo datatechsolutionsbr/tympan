@@ -9,8 +9,8 @@ import {
   type PrintStyleId,
   type PrintStyleOverrides,
 } from '@datatechsolutions/tympan-tokens'
-import { PrintContextoProvider } from '../contexto.tsx'
-import { PRINT_CSS } from '../estilos.generated.ts'
+import { PrintContextoProvider } from '../context.tsx'
+import { PRINT_CSS } from '../styles.generated.ts'
 import { cx, useIdSeguro } from '../util.ts'
 
 export interface LivroPrintProps {

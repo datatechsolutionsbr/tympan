@@ -47,7 +47,7 @@ describe('locale choice', () => {
 
   it('prefers the hash, then the stored choice, then the browser, else English', () => {
     expect(escolherLocale({ hash: 'ja', guardado: 'fr', navegador: ['de'] })).toBe('ja')
-    expect(escolherLocale({ hash: 'livro', guardado: 'fr', navegador: ['de'] })).toBe('fr')
+    expect(escolherLocale({ hash: 'book', guardado: 'fr', navegador: ['de'] })).toBe('fr')
     expect(escolherLocale({ navegador: ['sv-SE', 'nl-BE'] })).toBe('nl')
     expect(escolherLocale({ navegador: ['sv'] })).toBe('en')
   })

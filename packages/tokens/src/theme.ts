@@ -34,7 +34,7 @@ export type SeedName = 'brand' | 'neutral' | 'danger' | 'warning' | 'success' | 
 export type FontRole = 'display' | 'body' | 'mono' | 'sans' | 'serif'
 
 /** CSS token of each font role (`--ty-font-<name>`). */
-export const FONT_ROLE_TOKENS: Record<FontRole, 'serif' | 'sans' | 'mono'> = { display: 'serif', body: 'sans', mono: 'mono' }
+export const FONT_ROLE_TOKENS: Record<FontRole, 'serif' | 'sans' | 'mono'> = { display: 'serif', body: 'sans', mono: 'mono', sans: 'sans', serif: 'serif' }
 
 /** Elevation treatment: blurred shadows, none (flat print), or a hard offset shadow without blur. */
 export type Elevation = 'soft' | 'flat' | 'offset'
@@ -527,7 +527,7 @@ export function themeVariables(t: ResolvedTheme): Array<[string, string]> {
   for (const [name, px] of Object.entries(t.dimensions)) out.push([`--ty-${name}`, `${px}px`])
   for (const [name, n] of Object.entries(t.numbers)) out.push([`--ty-${name}`, String(n)])
   for (const [name, list] of Object.entries(t.fonts)) out.push([`--ty-font-${name}`, fontStackToCss(list)])
-  for (const [name, s] of Object.entries(t.strings)) out.push([`--ty-${name}`, s])
+  for (const [name, s] of Object.entries(t.strings ?? {})) out.push([`--ty-${name}`, s])
   return out
 }
 

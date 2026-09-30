@@ -7,7 +7,7 @@ import { DuplaEstudo, DuplaMapas, GRAFICO_DO_ESTUDO, type TipoGraficoEstudo } fr
 import type { Grafico } from '../../rotas'
 
 export const tipoDoGrafico = (estilo: string, grafico: Grafico): TipoGraficoEstudo =>
-  grafico === 'estudo' || grafico === 'mapa' ? (GRAFICO_DO_ESTUDO[estilo] ?? 'halteres') : grafico
+  chart === 'estudo' || chart === 'map' ? (GRAFICO_DO_ESTUDO[estilo] ?? 'halteres') : chart
 
 export interface DuplaEstiloProps {
   estilo: PrintPresetName
@@ -21,7 +21,7 @@ export const DuplaEstilo = memo(function DuplaEstilo({ estilo, grafico, pb }: Du
     // The sample book is written in Portuguese, so it keeps its own direction in right-to-left interfaces.
     <div dir="ltr" className="ty-site-livro-direcao">
       <PrintBook estilo={estilo} pb={pb} incluirCss={false} className="ty-site-livro">
-        {grafico === 'mapa' ? <DuplaMapas /> : <DuplaEstudo grafico={tipoDoGrafico(estilo, grafico)} />}
+        {grafico === 'map' ? <DuplaMapas /> : <DuplaEstudo grafico={tipoDoGrafico(estilo, grafico)} />}
       </PrintBook>
     </div>
   )

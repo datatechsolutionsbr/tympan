@@ -9,7 +9,7 @@ export function familia(pilha: string): string {
   return primeira.replace(/^["']|["']$/g, '') || pilha
 }
 
-const RENDERIZADOR: Record<PrintStyle['grafico'], string> = {
+const RENDERIZADOR: Record<PrintStyle['chart'], string> = {
   limpo: 'traço limpo',
   mao: 'traço à mão',
   isotype: 'pictogramas',

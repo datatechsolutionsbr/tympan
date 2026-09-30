@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
-import { AreaNomeProvider, ColunasProvider, LarguraProvider, useAreasDoMolde } from '../contexto.tsx'
-import { larguraUtil } from '../paineis/Painel.tsx'
+import { AreaNomeProvider, ColunasProvider, LarguraProvider, useAreasDoMolde } from '../context.tsx'
+import { larguraUtil } from '../panels/Panel.tsx'
 import { cx } from '../util.ts'
 
 export interface AreaProps {

@@ -50,7 +50,7 @@ export function Busca({ aberta, aoFechar, navegar }: { aberta: boolean; aoFechar
         })),
       },
       {
-        id: 'estilos',
+        id: 'styles',
         heading: t('busca.grupoEstilos'),
         items: TODOS_ESTILOS.map((id: PrintPresetName) => ({
           id: `e-${id}`,
@@ -58,7 +58,7 @@ export function Busca({ aberta, aoFechar, navegar }: { aberta: boolean; aoFechar
           hint: `print-${id}`,
           keywords: [id, printThemePresets.find((p) => p.name === `print-${id}`)?.label ?? id],
           icon: <BookOpen aria-hidden="true" className="ty-icon" />,
-          onSelect: ir({ ...lerRota('#/livro'), secao: 'livro', estilo: id } as Parameters<Navegar>[0]),
+          onSelect: ir({ ...lerRota('#/book'), secao: 'book', estilo: id } as Parameters<Navegar>[0]),
         })),
       },
     ]

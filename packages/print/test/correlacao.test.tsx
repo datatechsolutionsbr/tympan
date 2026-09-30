@@ -6,7 +6,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 import type { RenderizadorGrafico } from '@datatechsolutions/tympan-tokens'
 import { MethodChart, PrintBook } from '../src/index.ts'
-import type { SpecAntesDepoisControle, SpecDispersao, SpecMatrizCorrelacao, SpecSimpson, PontoMunicipio } from '../src/grafico/tipos.ts'
+import type { SpecAntesDepoisControle, SpecDispersao, SpecMatrizCorrelacao, SpecSimpson, PontoMunicipio } from '../src/chart/tipos.ts'
 import {
   correlacaoDentro,
   fmtCoef,
@@ -17,8 +17,8 @@ import {
   pearson,
   postos,
   spearman,
-} from '../src/grafico/estatistica.ts'
-import { intensidadeCelula } from '../src/grafico/correlacao.tsx'
+} from '../src/chart/statistics.ts'
+import { intensidadeCelula } from '../src/chart/correlation.tsx'
 
 const RENDERIZADORES: RenderizadorGrafico[] = ['limpo', 'mao', 'isotype', 'gravura', 'prancheta', 'aquarela', 'riso', 'pontos']
 

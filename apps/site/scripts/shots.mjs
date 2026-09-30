@@ -17,7 +17,7 @@ const LOCALES = arg('locales', 'pt-BR').split(',')
 const MODOS = arg('modos', 'light,dark').split(',')
 const TAMANHOS = arg('tamanhos', '1440x900,390x844').split(',').map((s) => s.split('x').map(Number))
 const livres = process.argv.slice(2).filter((a, i, l) => !a.startsWith('--') && !(l[i - 1] ?? '').startsWith('--'))
-const ROTAS = livres.length ? livres : ['', 'componentes', 'temas', 'livro', 'video', 'instalar']
+const ROTAS = livres.length ? livres : ['', 'componentes', 'temas', 'book', 'video', 'instalar']
 const CHROME = process.env.CHROME ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 fs.mkdirSync(SAIDA, { recursive: true })
 

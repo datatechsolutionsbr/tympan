@@ -6,8 +6,8 @@
 // still come from the marks.
 import type { ReactNode } from 'react'
 import { tracar } from '../rough.ts'
-import { FOLGA_ANOTACAO, TEXTO, larguraTexto, quebrar } from './geometria.ts'
-import { cssCor, type CorDado, type CtxPincel, type Pincel } from './pinceis.tsx'
+import { FOLGA_ANOTACAO, TEXTO, larguraTexto, quebrar } from './geometry.ts'
+import { cssCor, type CorDado, type CtxPincel, type Pincel } from './brushes.tsx'
 
 export type EstiloChamada = 'manuscritas' | 'baloes' | 'guia'
 

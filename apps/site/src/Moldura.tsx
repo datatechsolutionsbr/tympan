@@ -14,7 +14,7 @@ export const SECOES: Array<{ id: SecaoId; icone: LucideIcon; rota: Rota }> = [
   { id: 'historia', icone: History, rota: { secao: 'historia' } },
   { id: 'componentes', icone: LayoutGrid, rota: { secao: 'componentes' } },
   { id: 'temas', icone: Palette, rota: lerRota('#/temas') },
-  { id: 'livro', icone: BookOpen, rota: lerRota('#/livro') },
+  { id: 'book', icone: BookOpen, rota: lerRota('#/book') },
   { id: 'video', icone: Clapperboard, rota: { secao: 'video', tema: TEMA_PADRAO } },
   { id: 'instalar', icone: Download, rota: { secao: 'instalar' } },
 ]

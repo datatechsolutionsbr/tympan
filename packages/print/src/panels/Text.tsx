@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react'
-import { useAreaNome, useLado, usePrint } from '../contexto.tsx'
-import { Emblema } from '../marca/Emblema.tsx'
+import { useAreaNome, useLado, usePrint } from '../context.tsx'
+import { Emblema } from '../brand/Emblem.tsx'
 import { cx } from '../util.ts'
-import { comColchetes } from './comum.tsx'
-import { larguraColunas } from './Painel.tsx'
+import { comColchetes } from './common.tsx'
+import { larguraColunas } from './Panel.tsx'
 
 export type VarianteTexto = 'corpo' | 'lead' | 'citacao' | 'frase' | 'meta' | 'codigo' | 'display'
 

@@ -162,7 +162,7 @@ export function Inicio() {
               <a className="ty-site-btn ty-site-btn--primario" href={href({ secao: 'componentes' })}>
                 {t('inicio.verComponentes')}
               </a>
-              <a className="ty-site-btn ty-site-btn--fantasma" href={href(lerRota('#/livro'))}>
+              <a className="ty-site-btn ty-site-btn--fantasma" href={href(lerRota('#/book'))}>
                 {t('inicio.verLivro')}
               </a>
             </div>
@@ -277,7 +277,7 @@ export function Inicio() {
               <span className="ty-site-camadas__pacote">@datatechsolutions/tympan-print</span>
               <h3>{t('inicio.camadaImpressao')}</h3>
               <p>{t('inicio.camadaImpressaoTexto')}</p>
-              <a href={href(lerRota('#/livro'))}>{t('inicio.abrirGaleria')}</a>
+              <a href={href(lerRota('#/book'))}>{t('inicio.abrirGaleria')}</a>
             </article>
           </div>
         </section>

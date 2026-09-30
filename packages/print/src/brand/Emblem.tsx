@@ -4,7 +4,7 @@
 // inks: never data, never a mark.
 import type { ReactNode } from 'react'
 import { warnDeprecatedPrintId, type Emblema as NomeEmblema } from '@datatechsolutions/tympan-tokens'
-import { usePrint } from '../contexto.tsx'
+import { usePrint } from '../context.tsx'
 
 const D = 'var(--ty-print-destaque)'
 const D2 = 'var(--ty-print-destaque-2)'

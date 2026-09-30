@@ -45,7 +45,7 @@ import { ThemePaletteTrigger } from '@datatechsolutions/tympan'
 <ThemePaletteTrigger />`,
   },
   {
-    id: 'livro',
+    id: 'book',
     titulo: 'instalar.livroTitulo',
     texto: 'instalar.livroTexto',
     codigo: `import { renderToStaticMarkup } from 'react-dom/server'

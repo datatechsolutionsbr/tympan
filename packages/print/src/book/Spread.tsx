@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { DuplaContextoProvider } from '../contexto.tsx'
+import { DuplaContextoProvider } from '../context.tsx'
 import { cx } from '../util.ts'
 
 export interface DuplaProps {

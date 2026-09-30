@@ -10,7 +10,7 @@ import { GALLERY_PAGES, GalleryFrameContext } from '../../galerias'
 import { useI18n } from '../../i18n/I18n'
 import { Cabeca, Moldura, useHref } from '../../Moldura'
 import { lerRota, type Rota, type RotaDe } from '../../rotas'
-import { QuandoVisivel } from '../livro/Spread'
+import { QuandoVisivel } from '../book/Spread'
 import { CATALOGO, GRUPOS, itemDoCatalogo, type GrupoId, type ItemCatalogo } from './catalogo'
 import '../../../../../packages/ui/gallery/src/gallery.css'
 import './componentes.css'
@@ -31,8 +31,8 @@ function useTextos() {
 }
 
 function destino(i: ItemCatalogo): Rota {
-  if (i.id === 'print-estilos') return lerRota('#/livro')
-  if (i.id === 'print-livro') return lerRota('#/livro/jornal/estudo/cor/completo')
+  if (i.id === 'print-estilos') return lerRota('#/book')
+  if (i.id === 'print-livro') return lerRota('#/book/jornal/estudo/cor/completo')
   return { secao: 'componentes', pagina: i.id }
 }
 

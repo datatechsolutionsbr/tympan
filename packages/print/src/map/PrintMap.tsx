@@ -9,9 +9,9 @@
 import { geoCentroid } from 'd3-geo'
 import type { ReactNode } from 'react'
 import type { RenderizadorGrafico } from '@datatechsolutions/tympan-tokens'
-import { useLarguraDisponivel, usePrint } from '../contexto.tsx'
-import { comColchetes } from '../paineis/comum.tsx'
-import { TabelaDados, type TabelaDadosProps } from '../paineis/Metodo.tsx'
+import { useLarguraDisponivel, usePrint } from '../context.tsx'
+import { comColchetes } from '../panels/common.tsx'
+import { TabelaDados, type TabelaDadosProps } from '../panels/Method.tsx'
 import { semente, tracar } from '../rough.ts'
 import { cx, r3, useIdSeguro } from '../util.ts'
 import { classeDe, quantis, rotulosLimites } from './classes.ts'
@@ -29,7 +29,7 @@ import {
   type Area,
   type NivelMapa,
   type Recorte,
-} from './malha.ts'
+} from './mesh.ts'
 
 export interface MapaProps {
   titulo: string
@@ -63,7 +63,7 @@ export interface MapaProps {
   naoMostra?: string
   /** Visible data table under the map; without it, a summary table is generated for assistive technology. */
   tabela?: TabelaDadosProps
-  /** Renderer; defaults to the style's `grafico`. */
+  /** Renderer; defaults to the style's `chart`. */
   renderizador?: RenderizadorGrafico
   /** Width in mm (default: the panel's inner width). */
   largura?: number
@@ -172,7 +172,7 @@ const normalizar = (s: string) =>
     .replace(/[^a-z0-9]+/g, ' ')
     .trim()
 
-/** Value of `mapa` for an area: by its code, and for UFs also by the 2-digit code. */
+/** Value of `map` for an area: by its code, and for UFs also by the 2-digit code. */
 function valorDe<T>(mapa: Record<string, T>, a: AreaPosta, nivel: NivelMapa): T | undefined {
   if (a.code in mapa) return mapa[a.code]
   if (nivel === 'uf') {
@@ -210,7 +210,7 @@ function resolverDestaques(consultas: string[], areas: AreaPosta[], nivel: Nivel
       achadas = areas.filter((a) => normalizar(a.nome) === nome && (!uf || a.uf === uf))
       if (achadas.length > 1) throw new Error(`tympan-print Mapa: destaque "${q}" é ambíguo (${achadas.map((a) => `${a.nome}/${a.uf}`).join(', ')}); use "Nome/UF" ou o código IBGE`)
     }
-    if (!achadas.length) throw new Error(`tympan-print Mapa: destaque "${q}" não encontrado no mapa`)
+    if (!achadas.length) throw new Error(`tympan-print Mapa: destaque "${q}" não encontrado no map`)
     out.push(...achadas)
   }
   return out
@@ -560,7 +560,7 @@ export function Mapa({
       ) : null}
       {naoMostra ? (
         <p className="ty-print-map-note">
-          <span className="ty-print-margin-title">O que o mapa não mostra</span> {comColchetes(naoMostra)}
+          <span className="ty-print-margin-title">O que o map não mostra</span> {comColchetes(naoMostra)}
         </p>
       ) : null}
       {exemplo || itens.some((it) => it.exemplo) ? <p className="ty-print-badge-example">Dados de exemplo</p> : null}

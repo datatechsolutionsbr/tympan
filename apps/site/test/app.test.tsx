@@ -21,27 +21,27 @@ function montar(hash: string) {
 
 describe('site app', () => {
   it('opens Livro from the hash, writes the locale into it, and keeps mode changes in path segments', async () => {
-    montar('#/livro/suico')
+    montar('#/book/suico')
     expect(await screen.findByRole('heading', { level: 1, name: 'Estilo Suíço' }, { timeout: 10000 })).toBeInTheDocument()
-    expect(location.hash).toBe('#/pt-BR/livro/suico')
+    expect(location.hash).toBe('#/pt-BR/book/suico')
     await userEvent.click(screen.getByRole('radio', { name: 'Comparar' }))
-    await waitFor(() => expect(location.hash).toBe('#/pt-BR/livro/suico/estudo/cor/comparar'))
+    await waitFor(() => expect(location.hash).toBe('#/pt-BR/book/suico/estudo/cor/comparar'))
     expect(location.hash).not.toContain('?')
   })
 
   it('changes the style with the arrow keys and the list', async () => {
-    montar('#/pt-BR/livro/jornal')
+    montar('#/pt-BR/book/jornal')
     await screen.findByRole('heading', { level: 1, name: 'Editorial de jornal' }, { timeout: 10000 })
     await act(async () => {
       document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }))
     })
-    await waitFor(() => expect(location.hash).toBe('#/pt-BR/livro/prancheta'))
+    await waitFor(() => expect(location.hash).toBe('#/pt-BR/book/prancheta'))
     await userEvent.click(screen.getByRole('button', { name: /^Cordel/ }))
-    await waitFor(() => expect(location.hash).toBe('#/pt-BR/livro/cordel'))
+    await waitFor(() => expect(location.hash).toBe('#/pt-BR/book/cordel'))
   })
 
   it('never shows the style reference credits', async () => {
-    montar('#/pt-BR/livro/graficos-1900')
+    montar('#/pt-BR/book/graficos-1900')
     await screen.findByRole('heading', { level: 1 }, { timeout: 10000 })
     expect(document.body.textContent).not.toMatch(/inspirado em/i)
   })

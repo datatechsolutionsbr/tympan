@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
-import { useLarguraDisponivel, usePrint } from '../contexto.tsx'
-import { TabelaDados, type TabelaDadosProps } from '../paineis/Metodo.tsx'
-import { comColchetes } from '../paineis/comum.tsx'
+import { useLarguraDisponivel, usePrint } from '../context.tsx'
+import { TabelaDados, type TabelaDadosProps } from '../panels/Method.tsx'
+import { comColchetes } from '../panels/common.tsx'
 import { semente } from '../rough.ts'
 import { cx, useIdSeguro } from '../util.ts'
 import {
@@ -16,18 +16,18 @@ import {
   FOLGA_ANOTACAO,
   TEXTO,
   type Eixo,
-} from './geometria.ts'
-import { PINCEIS, unidadeIsotype, type CorDado, type CtxPincel, type Pincel } from './pinceis.tsx'
+} from './geometry.ts'
+import { PINCEIS, unidadeIsotype, type CorDado, type CtxPincel, type Pincel } from './brushes.tsx'
 import type { FormaGrafico, PrintStyle } from '@datatechsolutions/tympan-tokens'
 import type { GraficoSpec, RenderizadorGrafico, SpecBarras, SpecContagem, SpecEsquema, SpecHalteres, SpecSerie } from './tipos.ts'
-import { AntesDepoisControle, Dispersao, MatrizCorrelacao, Simpson, corAchado } from './correlacao.tsx'
-import { Chamadas, posicionarChamadas } from './chamadas.tsx'
-import { Anotacoes, Chamada, Legenda, Rotulos, coresLinha, larguraLegenda } from './partes.tsx'
-import { Cartoes, EixoCentral, Fluxo, Ziguezague } from './formas.tsx'
+import { AntesDepoisControle, Dispersao, MatrizCorrelacao, Simpson, corAchado } from './correlation.tsx'
+import { Chamadas, posicionarChamadas } from './kickers.tsx'
+import { Anotacoes, Chamada, Legenda, Rotulos, coresLinha, larguraLegenda } from './parts.tsx'
+import { Cartoes, EixoCentral, Fluxo, Ziguezague } from './shapes.tsx'
 
 export interface GraficoMetodoProps {
   spec: GraficoSpec
-  /** Renderer; defaults to the style's `grafico`. */
+  /** Renderer; defaults to the style's `chart`. */
   renderizador?: RenderizadorGrafico
   /** The finding in one sentence: the figure's accessible name (and the EPUB alt text). */
   alt?: string

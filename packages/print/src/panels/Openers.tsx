@@ -1,9 +1,9 @@
 import type { EstadoProva } from '@datatechsolutions/tympan-tokens'
 import type { ReactNode } from 'react'
-import { LogoDatatech } from '../marca/LogoDatatech.tsx'
+import { LogoDatatech } from '../brand/LogoDatatech.tsx'
 import { cx, formatarNumero, useIdSeguro } from '../util.ts'
-import { comColchetes, NumeroChamada } from './comum.tsx'
-import { MarcaProva } from './MarcaProva.tsx'
+import { comColchetes, NumeroChamada } from './common.tsx'
+import { MarcaProva } from './ProofMark.tsx'
 
 // ---------------------------------------------------------------------------
 // Capa
@@ -128,7 +128,7 @@ export function AberturaParte({ numero, titulo, pergunta, partes, nestaParte, on
       <h1 className="ty-print-ofootner-title">{comColchetes(titulo)}</h1>
       <p className="ty-print-ofootner-question">{comColchetes(pergunta)}</p>
       {partes?.length ? (
-        <ol className="ty-print-ofootner-parts" aria-label="Partes do livro">
+        <ol className="ty-print-ofootner-parts" aria-label="Partes do book">
           {partes.map((p) => (
             <li key={p.numero} data-atual={p.numero === numero ? '' : undefined} aria-current={p.numero === numero ? 'true' : undefined}>
               <span className="ty-print-ofootner-roman">{p.numero}</span> {comColchetes(p.titulo)}

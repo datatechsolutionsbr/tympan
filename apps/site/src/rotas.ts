@@ -5,24 +5,24 @@
 //   #/<loc>/historia/<entrada>                            História (the timeline, when docs/history exists)
 //   #/<loc>/componentes/<página>                          Componentes
 //   #/<loc>/temas/<tema>/<modo>/<tema B>                  Temas
-//   #/<loc>/livro/<estilo>/<gráfico>/<cor|pb>/<modo>/<estilo B>   Livro
-//   #/<loc>/livro/<estilo>/<gráfico>/<cor|pb>/completo/<dupla>     Livro, the whole sample book
+//   #/<loc>/book/<estilo>/<gráfico>/<cor|pb>/<modo>/<estilo B>   Livro
+//   #/<loc>/book/<estilo>/<gráfico>/<cor|pb>/completo/<dupla>     Livro, the whole sample book
 //   #/<loc>/video/<tema>                                   Vídeo
 //   #/<loc>/instalar                                       Instalar
 // Trailing segments may be left out (their defaults apply). Pure functions, tested in test/rotas.test.ts.
 import { PRINT_PRESET_NAMES, resolvePrintStyleName, type PrintPresetName } from './tokens'
 import { LOCALE_CODES } from './i18n/locales'
 
-export type SecaoId = 'inicio' | 'historia' | 'componentes' | 'temas' | 'livro' | 'video' | 'instalar'
-export const SECAO_IDS: readonly SecaoId[] = ['inicio', 'historia', 'componentes', 'temas', 'livro', 'video', 'instalar']
+export type SecaoId = 'inicio' | 'historia' | 'componentes' | 'temas' | 'book' | 'video' | 'instalar'
+export const SECAO_IDS: readonly SecaoId[] = ['inicio', 'historia', 'componentes', 'temas', 'book', 'video', 'instalar']
 
 /** The four ways of looking at themes and book styles (from the Estúdio's Livro tab). */
 export type Modo = 'um' | 'comparar' | 'antes' | 'galeria' | 'completo'
 export const MODOS: readonly Modo[] = ['um', 'comparar', 'antes', 'galeria', 'completo']
 
 /** Chart of the method spread: the style's own ('estudo'), a fixed shape, or the map spread. */
-export type Grafico = 'estudo' | 'halteres' | 'barras' | 'contagem' | 'mapa'
-export const GRAFICOS: readonly Grafico[] = ['estudo', 'halteres', 'barras', 'contagem', 'mapa']
+export type Grafico = 'estudo' | 'halteres' | 'barras' | 'contagem' | 'map'
+export const GRAFICOS: readonly Grafico[] = ['estudo', 'halteres', 'barras', 'contagem', 'map']
 
 export const ESTILO_PADRAO: PrintPresetName = 'jornal'
 /** Default "before" of Antes × depois in Livro: the base editorial dashboard. */
@@ -35,7 +35,7 @@ export type Rota =
   | { secao: 'historia'; entrada?: string }
   | { secao: 'componentes'; pagina?: string }
   | { secao: 'temas'; tema: string; modo: Modo; b: string }
-  | { secao: 'livro'; estilo: PrintPresetName; grafico: Grafico; pb: boolean; modo: Modo; b: PrintPresetName; dupla?: string }
+  | { secao: 'book'; estilo: PrintPresetName; grafico: Grafico; pb: boolean; modo: Modo; b: PrintPresetName; dupla?: string }
   | { secao: 'video'; tema: string }
   | { secao: 'instalar' }
 
@@ -54,7 +54,7 @@ const dec = (s: string) => {
   }
 }
 
-/** Splits "#/ja/livro/…" into the locale segment (if it is one of ours) and the route segments. */
+/** Splits "#/ja/book/…" into the locale segment (if it is one of ours) and the route segments. */
 export function segmentos(hash: string): { locale?: string; partes: string[] } {
   const partes = hash.replace(/^#\/?/, '').split('?')[0]!.split('/').filter(Boolean).map(dec)
   if (partes[0] && LOCALE_CODES.includes(partes[0])) return { locale: partes[0], partes: partes.slice(1) }
@@ -71,7 +71,7 @@ export function lerRota(hash: string): Rota {
       return { secao, ...(a ? { pagina: a } : {}) }
     case 'temas':
       return { secao, tema: a || TEMA_PADRAO, modo: modoDe(b), b: c || TEMA_PADRAO }
-    case 'livro':
+    case 'book':
       // In the whole-book mode the last segment is the spread; elsewhere it is the style B.
       return modoDe(d) === 'completo'
         ? { secao, estilo: estiloDe(a), grafico: graficoDe(b), pb: c === 'pb', modo: 'completo', b: ESTILO_BASE, ...(e ? { dupla: e } : {}) }
@@ -98,10 +98,10 @@ function partesDaRota(r: Rota): string[] {
       const usaB = (r.modo === 'comparar' || r.modo === 'antes') && r.b !== TEMA_PADRAO
       return aparar(['temas', r.tema, r.modo, ...(usaB ? [r.b] : [])], [null, null, 'um'])
     }
-    case 'livro': {
+    case 'book': {
       const usaB = (r.modo === 'comparar' || r.modo === 'antes') && r.b !== ESTILO_BASE
       const fim = r.modo === 'completo' && r.dupla ? [r.dupla] : usaB ? [r.b] : []
-      return aparar(['livro', r.estilo, r.grafico, r.pb ? 'pb' : 'cor', r.modo, ...fim], [null, null, 'estudo', 'cor', 'um'])
+      return aparar(['book', r.estilo, r.grafico, r.pb ? 'pb' : 'cor', r.modo, ...fim], [null, null, 'estudo', 'cor', 'um'])
     }
     case 'video':
       return ['video', r.tema]

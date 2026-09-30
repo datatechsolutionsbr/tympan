@@ -1,8 +1,8 @@
 // Pieces shared by the method charts (GraficoMetodo and the style shapes in formas.tsx): series colours,
 // numbered callouts, row labels, notes under the plot and the key.
-import type { AnotacaoPosta } from './geometria.ts'
-import { TEXTO } from './geometria.ts'
-import type { CorDado, CtxPincel, Pincel } from './pinceis.tsx'
+import type { AnotacaoPosta } from './geometry.ts'
+import { TEXTO } from './geometry.ts'
+import type { CorDado, CtxPincel, Pincel } from './brushes.tsx'
 
 export interface CtxGrafico extends CtxPincel {
   p: Pincel

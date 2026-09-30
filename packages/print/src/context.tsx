@@ -20,7 +20,7 @@ export interface DuplaContexto {
   folios: [string, string]
   parte?: string
   capitulo?: string
-  /** Template of the spread (see livro/moldes.ts). */
+  /** Template of the spread (see book/moldes.ts). */
   molde?: string
 }
 

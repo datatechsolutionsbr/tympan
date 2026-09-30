@@ -1,6 +1,6 @@
 import { ROTULOS_PROVA, type EstadoProva, type MarcaProva as FormaMarca } from '@datatechsolutions/tympan-tokens'
 import type { ReactNode } from 'react'
-import { usePrint } from '../contexto.tsx'
+import { usePrint } from '../context.tsx'
 import { tracar } from '../rough.ts'
 import { cx } from '../util.ts'
 

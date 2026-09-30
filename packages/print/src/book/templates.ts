@@ -37,7 +37,7 @@ const cheia = (area: string, extra: Omit<LinhaMolde, 'areas'> = {}) => L([[area,
 
 /**
  * The spreads of the Volume 0 storyboard (diagramacao/dashboards.html) and of
- * the style studies (diagramacao/estilos/estilo-*.html, the method spread of
+ * the style studies (diagramacao/styles/estilo-*.html, the method spread of
  * a chapter, pp. [22]–[23]).
  */
 export const MOLDES: Record<string, Molde> = {
@@ -57,7 +57,7 @@ export const MOLDES: Record<string, Molde> = {
   },
   // The same, with the map and the second scoreboard figure side by side (Código Florestal, storyboard [111]).
   'promessa-placar-lado': {
-    descricao: 'A promessa e o placar, com o mapa (c) e a figura c′ lado a lado',
+    descricao: 'A promessa e o placar, com o map (c) e a figura c′ lado a lado',
     par: [cheia('titulo'), cheia('manchete'), cheia('a', { cresce: true }), cheia('costura', { pe: true })],
     impar: [cheia('titulo'), cheia('b'), L([['c', 3], ['c3', 3]], { cresce: true }), cheia('fonte', { pe: true })],
   },
@@ -133,9 +133,9 @@ export const MOLDES: Record<string, Molde> = {
   },
   // Atlas plate: a bled map on the left, legend and regional cut-outs on the right.
   atlas: {
-    descricao: 'Prancha de atlas: mapa sangrado | recortes regionais e legenda, fonte',
+    descricao: 'Prancha de atlas: map sangrado | recortes regionais e legenda, fonte',
     respiro: true,
-    par: [cheia('mapa', { cresce: true })],
+    par: [cheia('map', { cresce: true })],
     impar: [cheia('titulo'), cheia('recortes', { cresce: true }), cheia('fonte', { pe: true })],
   },
 
@@ -143,7 +143,7 @@ export const MOLDES: Record<string, Molde> = {
     descricao: 'Reprodução e créditos: tabela de consultas, passos | ficha, marcas (colofão: branco intencional)',
     respiro: true,
     par: [cheia('titulo'), cheia('tabela', { cresce: true }), L([['passos', 3], ['local', 3]], { pe: true }), cheia('assina', { pe: true })],
-    impar: [cheia('titulo2'), cheia('ficha', { cresce: true }), L([['marca', 2], ['marca-texto', 4]], { pe: true }), L([['editora', 2], ['editora-texto', 4]], { pe: true })],
+    impar: [cheia('titulo2'), cheia('ficha', { cresce: true }), L([['brand', 2], ['marca-texto', 4]], { pe: true }), L([['editora', 2], ['editora-texto', 4]], { pe: true })],
   },
 
 }
@@ -152,7 +152,7 @@ export const MOLDES: Record<string, Molde> = {
  * The page geometry a style gives a molde. Styles with notes in the outer
  * margin (minimo-de-tinta) move the small blocks of a row (the numbers, how to read the
  * chart, the trace, the source) into a two-column margin beside the main
- * block, as in the study of that style (diagramacao/estilos/estilo-10).
+ * block, as in the study of that style (diagramacao/styles/estilo-10).
  */
 export function linhasDoMolde(molde: Molde, lado: 'par' | 'impar', estilo: PrintStyle): LinhaMolde[] {
   const linhas = molde[lado]

@@ -38,7 +38,7 @@ import {
   Spread,
   tintasDoEstilo,
 } from '../src/index.ts'
-import { Emblema } from '../src/marca/Emblema.tsx'
+import { Emblema } from '../src/brand/Emblem.tsx'
 import { DuplaEstudo, specsEstudo } from '../gallery/src/estudo.tsx'
 
 const AMOSTRAS: Record<string, ReactElement> = {

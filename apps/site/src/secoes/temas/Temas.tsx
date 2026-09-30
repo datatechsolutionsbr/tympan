@@ -103,7 +103,7 @@ export function Temas({ rota, ir }: { rota: RotaTemas; ir: Navegar }) {
             />
           </div>
 
-          <div className={`ty-tour-preview-inner ${activeStep && activeView === 'base' ? 'has-focus' : ''}`} style={{ flex: 1, minHeight: 0 }}>
+          <div className={['ty-tour-preview-inner', activeStep && activeView === 'base' ? 'ty-site-has-focus' : ''].filter(Boolean).join(' ')} style={{ flex: 1, minHeight: 0 }}>
             {/* O ThemeScope isola a cor selecionada apenas para os previews */}
             <ThemeScope theme={shellTheme} mode={shellMode} style={{ width: '100%', height: '100%', display: 'flex' }}>
               
@@ -149,7 +149,7 @@ export function Temas({ rota, ir }: { rota: RotaTemas; ir: Navegar }) {
                   }
                 >
                   <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
-                    <div className={`ty-tour-target ${activeStep === 'theme' ? 'no-outline' : ''}`} data-tour-active={activeStep === 'header' || activeStep === 'theme'} style={{ flexShrink: 0, borderRadius: 8 }}>
+                    <div className={['ty-tour-target', activeStep === 'theme' ? 'ty-site-no-outline' : ''].filter(Boolean).join(' ')} data-tour-active={activeStep === 'header' || activeStep === 'theme'} style={{ flexShrink: 0, borderRadius: 8 }}>
                       <PageHeader
                         variant="editorial"
                         headingLevel={3}

@@ -2,7 +2,7 @@
 // gallery/shots/<preset>.png (and <preset>-pb.png with --pb). Builds the
 // gallery first, serves dist-gallery on a local port, then calls Chrome.
 //   node scripts/gallery-shots.mjs [--pb] [--only jornal,minimo-de-tinta] [--grafico halteres|mapa]
-// `--grafico mapa` shoots the map spread as <preset>-mapa.png.
+// `--grafico map` shoots the map spread as <preset>-mapa.png.
 import { execFileSync } from 'node:child_process'
 import { createReadStream, existsSync, mkdirSync, statSync } from 'node:fs'
 import { createServer } from 'node:http'
@@ -17,8 +17,8 @@ const valor = (k) => {
   return i >= 0 ? args[i + 1] : undefined
 }
 const comPb = args.includes('--pb')
-const grafico = valor('--grafico') ?? 'estudo'
-const sufixo = grafico === 'mapa' ? '-mapa' : ''
+const chart = valor('--grafico') ?? 'estudo'
+const sufixo = chart === 'map' ? '-mapa' : ''
 
 if (!args.includes('--no-build')) execFileSync('npx', ['vite', 'build', '--config', 'gallery/vite.config.ts', '--logLevel', 'warn'], { cwd: pkg, stdio: 'inherit' })
 

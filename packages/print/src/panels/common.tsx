@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { usePrint } from '../contexto.tsx'
+import { usePrint } from '../context.tsx'
 import { tracar } from '../rough.ts'
 import { cx } from '../util.ts'
 

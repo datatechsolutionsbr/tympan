@@ -9,7 +9,7 @@ const Inicio = lazy(() => import('./secoes/inicio/Inicio').then((m) => ({ defaul
 const Historia = lazy(() => import('./secoes/historia/Historia').then((m) => ({ default: m.Historia })))
 const Componentes = lazy(() => import('./secoes/componentes/Componentes').then((m) => ({ default: m.Componentes })))
 const Temas = lazy(() => import('./secoes/temas/Temas').then((m) => ({ default: m.Temas })))
-const Livro = lazy(() => import('./secoes/livro/Livro').then((m) => ({ default: m.Livro })))
+const Livro = lazy(() => import('./secoes/book/Livro').then((m) => ({ default: m.Livro })))
 const Video = lazy(() => import('./secoes/video/Video').then((m) => ({ default: m.Video })))
 const Instalar = lazy(() => import('./secoes/instalar/Instalar').then((m) => ({ default: m.Instalar })))
 
@@ -73,7 +73,7 @@ export function App() {
         {rota.secao === 'historia' ? <Historia rota={rota} /> : null}
         {rota.secao === 'componentes' ? <Componentes rota={rota} /> : null}
         {rota.secao === 'temas' ? <Temas rota={rota} ir={navegar} /> : null}
-        {rota.secao === 'livro' ? <Livro rota={rota} ir={navegar} /> : null}
+        {rota.secao === 'book' ? <Livro rota={rota} ir={navegar} /> : null}
         {rota.secao === 'video' ? <Video rota={rota} ir={navegar} /> : null}
         {rota.secao === 'instalar' ? <Instalar /> : null}
       </Suspense>

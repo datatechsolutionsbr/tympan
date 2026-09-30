@@ -9,7 +9,7 @@ import { ESTADOS_PROVA, printPresets, resolvePrintStyle, type PrintPresetName } 
 import { Cortina } from '../../comum/Cortina'
 import { Encaixe } from '../../comum/Encaixe'
 import { BotaoCopiar } from '../../comum/BotaoCopiar'
-import { amostra, familia, filtrarEstilos, paleta, temaDoEstilo } from '../../estilos'
+import { amostra, familia, filtrarEstilos, paleta, temaDoEstilo } from '../../styles'
 import { useI18n, type Chave } from '../../i18n/I18n'
 import { useFavoritos, useLocal } from '../../local'
 import { Cabeca, Moldura, useHref } from '../../Moldura'
@@ -20,7 +20,7 @@ import { Notas } from './Notas'
 import { Visor } from '../../comum/Visor'
 import { useTextosEstilo } from './textos'
 
-type RotaLivro = RotaDe<'livro'>
+type RotaLivro = RotaDe<'book'>
 type Ir = (r: RotaLivro, opcoes?: { substituir?: boolean }) => void
 
 const ZOOMS = [0.5, 0.75, 1, 1.25, 1.5, 2, 3] as const
@@ -323,7 +323,7 @@ export function Livro({ rota, ir }: { rota: RotaLivro; ir: Ir }) {
     { value: 'halteres', label: t('livro.graficoHalteres') },
     { value: 'barras', label: t('livro.graficoBarras') },
     { value: 'contagem', label: t('livro.graficoContagem') },
-    { value: 'mapa', label: t('livro.graficoMapa') },
+    { value: 'map', label: t('livro.graficoMapa') },
   ]
 
   const barra = (
@@ -535,7 +535,7 @@ export function Livro({ rota, ir }: { rota: RotaLivro; ir: Ir }) {
 
   return (
     <Moldura
-      secao="livro"
+      secao="book"
       className="ty-site-pagina--livro"
       rotuloLateral={t('livro.listaEstilos')}
       lateral={<ListaEstilos atual={estilo} favs={favs} aoEscolher={escolher} />}

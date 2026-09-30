@@ -4,11 +4,11 @@
    pt; logical properties only (the inner margin of a spread mirrors in RTL). */
 @layer tympan-print;
 
-@import './estilos/base.css';
-@import './estilos/paineis.css';
-@import './estilos/prova.css';
-@import './estilos/grafico.css';
-@import './estilos/aberturas.css';
-@import './estilos/ornamentos.css';
-@import './estilos/moldes.css';
-@import './estilos/composicao.css';
+@import './styles/base.css';
+@import './styles/panels.css';
+@import './styles/proof.css';
+@import './styles/chart.css';
+@import './styles/openers.css';
+@import './styles/ornaments.css';
+@import './styles/templates.css';
+@import './styles/composition.css';

@@ -1,11 +1,11 @@
 import { Children, isValidElement, type CSSProperties, type ReactNode } from 'react'
 import { papelEscuro } from '@datatechsolutions/tympan-tokens'
-import { FundoEscuroProvider, LadoProvider, MoldeProvider, useDupla, usePrint } from '../contexto.tsx'
+import { FundoEscuroProvider, LadoProvider, MoldeProvider, useDupla, usePrint } from '../context.tsx'
 import { cx } from '../util.ts'
 import { Area } from './Area.tsx'
-import { gradeDoMolde, linhasDoMolde, linhasUsadas, moldePorNome } from './moldes.ts'
-import { Ornamento } from './Ornamento.tsx'
-import { Textura } from './Textura.tsx'
+import { gradeDoMolde, linhasDoMolde, linhasUsadas, moldePorNome } from './templates.ts'
+import { Ornamento } from './Ornament.tsx'
+import { Textura } from './Texture.tsx'
 
 export interface PaginaProps {
   lado: 'par' | 'impar'
@@ -17,7 +17,7 @@ export interface PaginaProps {
   folio?: boolean
   /** Folio text; defaults to the spread's number for this side. */
   numero?: string
-  /** Template of this page (defaults to the spread's `molde`); see livro/moldes.ts. */
+  /** Template of this page (defaults to the spread's `molde`); see book/moldes.ts. */
   molde?: string
   className?: string
   children?: ReactNode

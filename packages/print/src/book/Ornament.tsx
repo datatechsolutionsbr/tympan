@@ -5,7 +5,7 @@
 // even one, so ornaments sit in the outer margin of both.
 import type { ReactNode } from 'react'
 import type { Moldura } from '@datatechsolutions/tympan-tokens'
-import { usePrint } from '../contexto.tsx'
+import { usePrint } from '../context.tsx'
 import { semente } from '../rough.ts'
 
 const W = 170

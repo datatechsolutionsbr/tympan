@@ -1,5 +1,5 @@
 import { Children, cloneElement, isValidElement, type ReactElement, type ReactNode } from 'react'
-import { LarguraProvider, useLarguraDisponivel, usePrint } from '../contexto.tsx'
+import { LarguraProvider, useLarguraDisponivel, usePrint } from '../context.tsx'
 import { cx } from '../util.ts'
 
 export interface FigurasProps {

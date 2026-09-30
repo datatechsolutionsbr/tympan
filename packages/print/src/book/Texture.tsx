@@ -1,5 +1,5 @@
 import { parseColor } from '@datatechsolutions/tympan-tokens'
-import { usePrint } from '../contexto.tsx'
+import { usePrint } from '../context.tsx'
 import { useIdSeguro } from '../util.ts'
 
 const MM = 3.7795

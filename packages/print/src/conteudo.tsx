@@ -5,17 +5,17 @@
 // test can refuse silently ignored content.
 import type { ComponentType, ReactNode } from 'react'
 import type { PrintPresetName, PrintStyle, PrintStyleOverrides } from '@datatechsolutions/tympan-tokens'
-import { GraficoMetodo } from './grafico/GraficoMetodo.tsx'
-import { ITENS_SPEC_CORRELACAO, SPEC_CORRELACAO } from './grafico/contratoCorrelacao.ts'
-import { Area } from './livro/Area.tsx'
-import { Dupla } from './livro/Dupla.tsx'
-import { LivroPrint } from './livro/LivroPrint.tsx'
-import { Pagina } from './livro/Pagina.tsx'
-import { LogoDatatech } from './marca/LogoDatatech.tsx'
-import { LogoLakebrasil } from './marca/LogoLakebrasil.tsx'
-import { Mapa } from './mapa/Mapa.tsx'
-import { AberturaParte, Capa, ComoLer, LinhaDoTempo } from './paineis/Aberturas.tsx'
-import { MarcaProva } from './paineis/MarcaProva.tsx'
+import { GraficoMetodo } from './chart/MethodChart.tsx'
+import { ITENS_SPEC_CORRELACAO, SPEC_CORRELACAO } from './chart/correlationContract.ts'
+import { Area } from './book/Area.tsx'
+import { Dupla } from './book/Spread.tsx'
+import { LivroPrint } from './book/PrintBook.tsx'
+import { Pagina } from './book/Page.tsx'
+import { LogoDatatech } from './brand/LogoDatatech.tsx'
+import { LogoLakebrasil } from './brand/LogoLakebrasil.tsx'
+import { Mapa } from './map/PrintMap.tsx'
+import { AberturaParte, Capa, ComoLer, LinhaDoTempo } from './panels/Openers.tsx'
+import { MarcaProva } from './panels/ProofMark.tsx'
 import {
   DesenhoPublicado,
   Ficha,
@@ -31,10 +31,10 @@ import {
   TabelaDados,
   Testes,
   Veredito,
-} from './paineis/Metodo.tsx'
-import { Figuras } from './paineis/Figuras.tsx'
-import { Painel } from './paineis/Painel.tsx'
-import { Anotacao, Margem, Texto } from './paineis/Texto.tsx'
+} from './panels/Method.tsx'
+import { Figuras } from './panels/Figures.tsx'
+import { Painel } from './panels/Panel.tsx'
+import { Anotacao, Margem, Texto } from './panels/Text.tsx'
 
 export interface NoJson {
   tipo: string
@@ -106,7 +106,7 @@ const SPEC: Record<string, string[]> = {
   ...SPEC_CORRELACAO,
 }
 const ITENS_SPEC: Record<string, string[]> = {
-  linhas: ['rotulo', 'nota', 'a', 'b', 'destaque', 'marca', 'local'],
+  linhas: ['rotulo', 'nota', 'a', 'b', 'destaque', 'brand', 'local'],
   barras: ['rotulo', 'valor', 'destaque', 'nota'],
   grupos: ['rotulo', 'valor', 'destaque', 'nota'],
   pontos: ['x', 'y', 'rotulo', 'chamada'],

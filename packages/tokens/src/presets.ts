@@ -126,7 +126,7 @@ export const astrlabePreset: ThemeConfig = {
     brand: { hue: 240, chroma: 0.15 },
   },
   radius: 8,
-  contrast: 'comfortable',
+  contrast: 'default',
   glass: true,
   cta: 'solid',
 }

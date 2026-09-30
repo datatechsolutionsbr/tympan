@@ -39,7 +39,7 @@ export function useI18n(): I18n {
   return v
 }
 
-/** Locale segment at the start of the hash (#/ja/livro/…), if any. */
+/** Locale segment at the start of the hash (#/ja/book/…), if any. */
 export const localeDoHash = (hash: string): string | null => hash.replace(/^#\/?/, '').split(/[/?]/)[0] || null
 
 export function localeInicial(): string {

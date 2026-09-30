@@ -14,9 +14,9 @@ import {
   marcasEixo,
   numeroBr,
   type LinhaGenerica,
-} from './geometria.ts'
-import { Anotacoes, Chamada, Legenda, Rotulos, coresLinha, larguraLegenda, type CtxGrafico } from './partes.tsx'
-import { cssCor, type CorDado } from './pinceis.tsx'
+} from './geometry.ts'
+import { Anotacoes, Chamada, Legenda, Rotulos, coresLinha, larguraLegenda, type CtxGrafico } from './parts.tsx'
+import { cssCor, type CorDado } from './brushes.tsx'
 import type { SpecBarras } from './tipos.ts'
 
 const n = (v: number) => {

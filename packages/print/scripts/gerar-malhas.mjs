@@ -1,4 +1,4 @@
-// Builds the map meshes of src/mapa/dados/ from the IBGE 2022 municipal mesh
+// Builds the map meshes of src/map/dados/ from the IBGE 2022 municipal mesh
 // (Malha Municipal 2022, BR_Municipios_2022.shp, SIRGAS 2000 lon/lat).
 //
 //   node scripts/gerar-malhas.mjs [path/to/BR_Municipios_2022.shp]
@@ -27,7 +27,7 @@ import { fileURLToPath } from 'node:url'
 const pkg = join(fileURLToPath(import.meta.url), '..', '..')
 const origem = process.argv[2] ?? join(homedir(), 'datatech/municipios-br/data/malhas/raw/BR_Municipios_2022.shp')
 if (!existsSync(origem)) throw new Error(`malha IBGE não encontrada: ${origem}`)
-const destino = join(pkg, 'src', 'mapa', 'dados')
+const destino = join(pkg, 'src', 'map', 'dados')
 const tmp = mkdtempSync(join(tmpdir(), 'ty-malhas-'))
 
 const NOMES_UF = {
@@ -72,4 +72,4 @@ writeFileSync(join(destino, 'ufs.topo.json'), JSON.stringify(ufs))
 const m = JSON.parse(readFileSync(mun, 'utf8'))
 if (m.objects.municipios.geometries.length !== 5570) throw new Error('esperados 5.570 municípios')
 writeFileSync(mun, JSON.stringify(m))
-for (const f of ['municipios.topo.json', 'ufs.topo.json']) console.log(`src/mapa/dados/${f}: ${(statSync(join(destino, f)).size / 1024).toFixed(0)} KB`)
+for (const f of ['municipios.topo.json', 'ufs.topo.json']) console.log(`src/map/dados/${f}: ${(statSync(join(destino, f)).size / 1024).toFixed(0)} KB`)

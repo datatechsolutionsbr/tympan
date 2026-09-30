@@ -15,7 +15,7 @@ import {
   type SpecHalteres,
   type SpecSerie,
 } from '../src/index.ts'
-import { FOLGA_ANOTACAO, TEXTO, larguraTexto, type AnotacaoPosta } from '../src/grafico/geometria.ts'
+import { FOLGA_ANOTACAO, TEXTO, larguraTexto, type AnotacaoPosta } from '../src/chart/geometry.ts'
 import { specsEstudo } from '../gallery/src/estudo.tsx'
 
 const LONGA =
