@@ -1,6 +1,6 @@
 {
   "name": "@datatechsolutions/tympan",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Tympan: accessible React components (React 18.3 or 19) on React Aria Components, styled with --ty-* CSS custom properties in @layer tympan. The flow and provenance canvas (graph viewer, DAG editor, run inspection) ships as the @datatechsolutions/tympan/flow subpath. Generated avatars (DiceBear, CC0/MIT styles only) ship as the /avatars subpath and country and region flags as the /flags subpath.",
   "license": "FSL-1.1-ALv2",
   "author": "Natalia Mesquita",
@@ -147,7 +147,7 @@
     }
   },
   "dependencies": {
-    "@datatechsolutions/tympan-tokens": "0.1.0",
+    "@datatechsolutions/tympan-tokens": "0.3.0",
     "@internationalized/date": "^3.12.4",
     "@types/d3-array": "^3.2.2",
     "@types/d3-path": "^3.1.1",

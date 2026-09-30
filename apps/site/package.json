@@ -1,7 +1,7 @@
 {
   "name": "@datatechsolutions/tympan-site",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.3.0",
   "description": "Tympan documentation and showcase app: home, components, themes, book styles, video and install. Not published.",
   "license": "FSL-1.1-ALv2",
   "author": "Natalia Mesquita",
@@ -19,9 +19,9 @@
     "shots": "node scripts/shots.mjs"
   },
   "dependencies": {
-    "@datatechsolutions/tympan": "0.1.0",
-    "@datatechsolutions/tympan-print": "0.1.0",
-    "@datatechsolutions/tympan-tokens": "0.1.0",
+    "@datatechsolutions/tympan": "0.3.0",
+    "@datatechsolutions/tympan-print": "0.3.0",
+    "@datatechsolutions/tympan-tokens": "0.3.0",
     "lucide-react": "^1.48.0"
   }
 }
