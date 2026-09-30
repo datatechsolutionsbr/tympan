@@ -19,7 +19,6 @@
     "ssr",
     "css-custom-properties"
   ],
-  "private": true,
   "type": "module",
   "sideEffects": [
     "*.css"
@@ -67,5 +66,8 @@
     "@types/topojson-specification": "^1.0.5",
     "axe-core": "^4.13.0",
     "puppeteer-core": "^25.12.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

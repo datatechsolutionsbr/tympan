@@ -17,7 +17,6 @@
     "css-custom-properties",
     "wcag"
   ],
-  "private": true,
   "type": "module",
   "sideEffects": [
     "*.css"
@@ -61,5 +60,8 @@
   },
   "devDependencies": {
     "style-dictionary": "^5.5.5"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
