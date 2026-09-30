@@ -22,6 +22,23 @@ export const coreEs: CoreMessages = {
       `${es.n(n)} de ${es.n(max)} ${es.word(max, { one: 'carácter', other: 'caracteres' })}, ${es.n(n - max)} por encima del límite`,
   },
   select: { placeholder: 'Seleccione…', done: 'Listo' },
+  calendar: {
+    previousMonth: (target) => `Mes anterior, ${target}`,
+    nextMonth: (target) => `Mes siguiente, ${target}`,
+    monthPicker: 'Mes',
+    yearPicker: 'Año',
+  },
+  dateRangeField: {
+    start: 'Fecha inicial',
+    end: 'Fecha final',
+    presets: 'Períodos rápidos',
+    apply: 'Aplicar',
+    cancel: 'Cancelar',
+    endBeforeStart: 'La fecha final es anterior a la fecha inicial.',
+    tooManyDays: (max) => `El período es más largo que ${es.n(max)} ${es.word(max, { one: 'día', other: 'días' })}.`,
+    unavailableDay: 'El período incluye un día que no se puede elegir.',
+    outOfBounds: 'El período incluye un día fuera de las fechas permitidas.',
+  },
   notice: { toneWord: { danger: 'Error:', warning: 'Atención:', info: 'Información:', success: 'Éxito:' } },
   empty: {
     'no-data': { title: 'Todavía no hay nada aquí', description: 'Los elementos aparecen aquí cuando se agregan.' },

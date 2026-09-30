@@ -1,0 +1,70 @@
+/* Tooltip (spec: wave-5-general/tooltip.md; design direction §2.5, §2.7). */
+@layer tympan.components {
+  .ty-tooltip {
+    box-sizing: border-box;
+    max-inline-size: min(36ch, calc(100vw - 2 * var(--ty-space-4)));
+    padding-block: var(--ty-space-1) var(--ty-space-1);
+    padding-inline: var(--ty-space-2) var(--ty-space-3);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-surface-raised-solid);
+    color: var(--ty-ink);
+    font-family: var(--ty-font-sans);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
+    box-shadow: var(--ty-shadow-floating);
+    z-index: var(--ty-z-popover);
+  }
+
+  /* Entrance and exit use opacity only (WCAG 1.4.13: hoverable, persistent). */
+  .ty-tooltip[data-entering] {
+    animation: ty-tooltip-fade var(--ty-dur-quick) var(--ty-ease);
+  }
+  .ty-tooltip[data-exiting] {
+    animation: ty-tooltip-fade var(--ty-dur-quick) var(--ty-ease-out) reverse;
+  }
+
+  @keyframes ty-tooltip-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .ty-tooltip__content {
+    display: inline-block;
+  }
+
+  .ty-tooltip__arrow svg {
+    display: block;
+    fill: var(--ty-surface-raised-solid);
+    stroke: var(--ty-line);
+    stroke-width: 1px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ty-tooltip[data-entering],
+    .ty-tooltip[data-exiting] {
+      animation: none;
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .ty-tooltip {
+      background: var(--ty-surface-raised-solid);
+      box-shadow: var(--ty-shadow-floating);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .ty-tooltip {
+      border: 1px solid CanvasText;
+      background: Canvas;
+      color: CanvasText;
+      forced-color-adjust: none;
+    }
+    .ty-tooltip__arrow svg {
+      fill: Canvas;
+      stroke: CanvasText;
+    }
+  }
+}

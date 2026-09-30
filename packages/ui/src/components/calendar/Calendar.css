@@ -1,0 +1,260 @@
+/* Calendar (spec: wave-5-general/calendar.md; design direction §2.3, §2.4, §2.6, §2.10). */
+@layer tympan.components {
+  .ty-calendar {
+    --ty-calendar-cell: calc(var(--ty-control-height) + var(--ty-space-1));
+    display: flex;
+    flex-direction: column;
+    gap: var(--ty-space-2);
+    min-inline-size: 0;
+  }
+  .ty-calendar__rac {
+    display: block;
+  }
+
+  /* Header: previous / title (or pickers) / next. */
+  .ty-calendar__stepper {
+    display: flex;
+    align-items: center;
+    gap: var(--ty-space-1);
+  }
+  .ty-calendar__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--ty-control-height);
+    block-size: var(--ty-control-height);
+    flex: none;
+    border: 0;
+    border-radius: var(--ty-radius-control);
+    background: transparent;
+    color: var(--ty-ink-2);
+    font: inherit;
+    cursor: pointer;
+    outline: none;
+  }
+  .ty-calendar__nav[data-hovered] {
+    background: var(--ty-surface-sunken);
+  }
+  .ty-calendar__nav[data-pressed] {
+    background: var(--ty-surface-sunken);
+    color: var(--ty-ink);
+  }
+  .ty-calendar__nav[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 2px;
+  }
+  .ty-calendar__nav[aria-disabled='true'],
+  .ty-calendar__nav[data-disabled] {
+    color: var(--ty-ink-3);
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+  .ty-calendar__heading {
+    flex: 1;
+    min-block-size: var(--ty-control-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-inline: var(--ty-space-2);
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-label);
+    font-weight: var(--ty-font-weight-semibold);
+    text-align: center;
+  }
+  .ty-calendar__pickers {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    gap: var(--ty-space-2);
+  }
+
+  /* Month grids, side by side, stacked below the small breakpoint. */
+  .ty-calendar__body {
+    display: flex;
+    gap: var(--ty-space-5);
+  }
+  .ty-calendar[data-months='2'] .ty-calendar__body,
+  .ty-calendar[data-months='3'] .ty-calendar__body {
+    justify-content: center;
+  }
+  .ty-calendar__month {
+    display: flex;
+    gap: var(--ty-space-1);
+    min-inline-size: 0;
+  }
+  .ty-calendar__weeks {
+    display: flex;
+    flex-direction: column;
+    padding-block: calc(var(--ty-font-size-meta) + var(--ty-space-2));
+  }
+  .ty-calendar__week {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-block-size: var(--ty-calendar-cell);
+    padding: 1px;
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    font-variant-numeric: tabular-nums;
+  }
+  .ty-calendar__grid {
+    flex: 1;
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+  .ty-calendar__weekday {
+    padding-block-end: var(--ty-space-1);
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    font-weight: var(--ty-font-weight-regular);
+    text-align: center;
+  }
+  .ty-calendar__grid td {
+    padding: 1px;
+    text-align: center;
+  }
+
+  /* Day cells: states carry shape and colour, never colour alone. */
+  .ty-calendar__day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--ty-calendar-cell);
+    min-block-size: var(--ty-calendar-cell);
+    border-radius: var(--ty-radius-control);
+    color: var(--ty-ink-2);
+    font-size: var(--ty-font-size-body);
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    outline: none;
+  }
+  .ty-calendar__day-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 100%;
+    min-block-size: 100%;
+    border-radius: inherit;
+  }
+  .ty-calendar__day[data-outside-month] {
+    color: var(--ty-ink-3);
+  }
+  .ty-calendar[data-months='2'] .ty-calendar__day[data-outside-month],
+  .ty-calendar[data-months='3'] .ty-calendar__day[data-outside-month] {
+    visibility: hidden;
+  }
+  .ty-calendar:not([data-outside-days]) .ty-calendar__day[data-outside-month] {
+    display: none;
+  }
+  .ty-calendar__day[data-hovered] {
+    background: var(--ty-surface-sunken);
+  }
+  .ty-calendar__day-box[data-today] {
+    color: var(--ty-ink);
+    font-weight: var(--ty-font-weight-semibold);
+    box-shadow: inset 0 0 0 1px var(--ty-line-strong);
+  }
+  .ty-calendar__day[data-selected] {
+    background: var(--ty-accent);
+    color: var(--ty-on-cta);
+    font-weight: var(--ty-font-weight-semibold);
+  }
+  .ty-calendar__day[data-selected] .ty-calendar__day-box {
+    color: inherit;
+  }
+  .ty-calendar__day[data-selection-start] {
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+  }
+  .ty-calendar__day[data-selection-end] {
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+  }
+  .ty-calendar__day[data-selected]:not([data-selection-start]):not([data-selection-end]) {
+    border-radius: 0;
+  }
+  .ty-calendar__day[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 1px;
+  }
+  .ty-calendar__day[data-unavailable] .ty-calendar__day-number {
+    color: var(--ty-ink-3);
+    text-decoration: line-through;
+  }
+  .ty-calendar__day[data-disabled],
+  .ty-calendar__day[data-unavailable] {
+    cursor: not-allowed;
+  }
+  .ty-calendar__day[data-disabled] {
+    opacity: 0.45;
+  }
+  .ty-calendar__error {
+    display: flex;
+    align-items: center;
+    gap: var(--ty-space-1);
+    color: var(--ty-danger);
+    font-size: var(--ty-font-size-meta);
+    line-height: var(--ty-font-line-height-meta);
+  }
+  .ty-calendar__footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ty-space-2);
+    padding-block-start: var(--ty-space-2);
+    border-block-start: 1px solid var(--ty-line-soft);
+  }
+
+  /* Touch: every day cell reaches the target size. */
+  @media (pointer: coarse), (max-width: 1023.98px) {
+    .ty-calendar {
+      --ty-calendar-cell: var(--ty-control-target);
+    }
+  }
+
+  /* Several months stack below the small breakpoint. */
+  @media (max-width: 639.98px) {
+    .ty-calendar[data-months='2'] .ty-calendar__body,
+    .ty-calendar[data-months='3'] .ty-calendar__body {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ty-calendar *,
+    .ty-calendar *::before,
+    .ty-calendar *::after {
+      animation-duration: 0s;
+      transition-duration: 0s;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .ty-calendar__day[data-selected] {
+      background: Highlight;
+      color: HighlightText;
+      forced-color-adjust: none;
+    }
+    .ty-calendar__day-box[data-today] {
+      box-shadow: none;
+      outline: 1px solid CanvasText;
+    }
+    .ty-calendar__day[data-unavailable] {
+      color: GrayText;
+      opacity: 1;
+    }
+    .ty-calendar__day[data-disabled] {
+      color: GrayText;
+      opacity: 1;
+    }
+    .ty-calendar__day[data-focus-visible] {
+      outline: 2px solid Highlight;
+    }
+    .ty-calendar__day,
+    .ty-calendar__weekday,
+    .ty-calendar__week {
+      forced-color-adjust: none;
+    }
+  }
+}

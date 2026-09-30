@@ -1,0 +1,140 @@
+/* DateRangeField (spec: wave-5-general/date-range-field.md; tokens as DateField and Calendar). */
+@layer tympan.components {
+  .ty-date-range-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ty-space-1);
+    min-inline-size: 0;
+  }
+  .ty-date-range-field__picker {
+    min-inline-size: 0;
+  }
+  .ty-date-range-field__group {
+    display: flex;
+    align-items: center;
+    gap: var(--ty-space-2);
+    min-block-size: var(--ty-control-height);
+    padding-inline: var(--ty-space-3);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-control);
+    background: var(--ty-input);
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-body);
+    cursor: text;
+  }
+  .ty-date-range-field__group[data-focus-within] {
+    border-color: var(--ty-accent);
+  }
+  .ty-date-range-field__group[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 1px;
+  }
+  .ty-date-range-field[data-invalid] .ty-date-range-field__group {
+    border-color: var(--ty-danger);
+  }
+  .ty-date-range-field__group[data-disabled] {
+    background: var(--ty-surface-sunken);
+    color: var(--ty-ink-3);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  .ty-date-range-field__input {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    min-block-size: var(--ty-control-target);
+    padding-inline: var(--ty-space-1);
+    font-variant-numeric: tabular-nums;
+    outline: none;
+  }
+  .ty-date-range-field__segment {
+    padding-inline: 1px;
+    border-radius: calc(var(--ty-radius-control) / 2);
+    color: var(--ty-ink);
+    font-variant-numeric: tabular-nums;
+    outline: none;
+    cursor: inherit;
+  }
+  .ty-date-range-field__segment[data-placeholder] {
+    color: var(--ty-ink-3);
+  }
+  .ty-date-range-field__segment[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 1px;
+  }
+  .ty-date-range-field__dash {
+    color: var(--ty-ink-3);
+  }
+  .ty-date-range-field__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    inline-size: var(--ty-control-target);
+    block-size: var(--ty-control-target);
+    margin-inline-end: calc((var(--ty-control-target) - var(--ty-control-height)) / -2);
+    border: 0;
+    border-radius: var(--ty-radius-control);
+    background: transparent;
+    color: var(--ty-ink-2);
+    font: inherit;
+    cursor: pointer;
+    outline: none;
+  }
+  .ty-date-range-field__trigger[data-hovered] {
+    background: var(--ty-surface-sunken);
+    color: var(--ty-ink);
+  }
+  .ty-date-range-field__trigger[data-focus-visible] {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* Popover panel: presets and calendar, apply actions at the end. */
+  .ty-date-range-field__surface {
+    display: block;
+  }
+  .ty-date-range-field__panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ty-space-3);
+    min-inline-size: 0;
+  }
+  .ty-date-range-field__presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ty-space-2);
+  }
+  .ty-date-range-field__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--ty-space-2);
+    padding-block-start: var(--ty-space-2);
+    border-block-start: 1px solid var(--ty-line-soft);
+  }
+
+  /* Narrow screens: the popover is a tray; presets become a chip row that scrolls. */
+  .ty-date-range-field__surface[data-presentation='tray'] .ty-date-range-field__presets {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    padding-block-end: var(--ty-space-1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ty-date-range-field__surface {
+      animation-duration: 0s;
+      transition-duration: 0s;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .ty-date-range-field__group {
+      border-color: CanvasText;
+      forced-color-adjust: none;
+    }
+    .ty-date-range-field__trigger[data-focus-visible] {
+      outline: 2px solid Highlight;
+    }
+  }
+}

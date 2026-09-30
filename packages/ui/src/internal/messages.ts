@@ -44,6 +44,23 @@ export interface Messages
     overLimit: (count: number, max: number) => string
   }
   select: { placeholder: string; done: string }
+  calendar: {
+    previousMonth: (target: string) => string
+    nextMonth: (target: string) => string
+    monthPicker: string
+    yearPicker: string
+  }
+  dateRangeField: {
+    start: string
+    end: string
+    presets: string
+    apply: string
+    cancel: string
+    endBeforeStart: string
+    tooManyDays: (max: number) => string
+    unavailableDay: string
+    outOfBounds: string
+  }
   notice: { toneWord: Record<'danger' | 'warning' | 'info' | 'success', string> }
   empty: Record<EmptyReason, { title: string; description: string }> & { clearFilters: string; retry: string }
   error: Record<ErrorKind, { title: string; message: string }> & {
@@ -117,6 +134,23 @@ export const defaultMessages: Messages = {
       `${en.n(n)} of ${en.n(max)} ${en.word(max, { one: 'character', other: 'characters' })}, ${en.n(n - max)} over the limit`,
   },
   select: { placeholder: 'Select…', done: 'Done' },
+  calendar: {
+    previousMonth: (target) => `Previous month, ${target}`,
+    nextMonth: (target) => `Next month, ${target}`,
+    monthPicker: 'Month',
+    yearPicker: 'Year',
+  },
+  dateRangeField: {
+    start: 'Start date',
+    end: 'End date',
+    presets: 'Presets',
+    apply: 'Apply',
+    cancel: 'Cancel',
+    endBeforeStart: 'The end date is before the start date.',
+    tooManyDays: (max) => `The range is longer than ${en.n(max)} ${en.word(max, { one: 'day', other: 'days' })}.`,
+    unavailableDay: 'The range includes a day that cannot be chosen.',
+    outOfBounds: 'The range includes a day outside the allowed dates.',
+  },
   notice: { toneWord: { danger: 'Error:', warning: 'Warning:', info: 'Information:', success: 'Success:' } },
   empty: {
     'no-data': { title: 'Nothing here yet', description: 'Items appear here once they are added.' },
@@ -217,6 +251,23 @@ export const messagesPtBR: Messages = {
       `${pt.n(n)} de ${pt.n(max)} ${pt.word(max, { one: 'caractere', other: 'caracteres' })}, ${pt.n(n - max)} acima do limite`,
   },
   select: { placeholder: 'Selecione…', done: 'Concluir' },
+  calendar: {
+    previousMonth: (target) => `Mês anterior, ${target}`,
+    nextMonth: (target) => `Próximo mês, ${target}`,
+    monthPicker: 'Mês',
+    yearPicker: 'Ano',
+  },
+  dateRangeField: {
+    start: 'Data inicial',
+    end: 'Data final',
+    presets: 'Períodos rápidos',
+    apply: 'Aplicar',
+    cancel: 'Cancelar',
+    endBeforeStart: 'A data final é anterior à data inicial.',
+    tooManyDays: (max) => `O período é maior que ${pt.n(max)} ${pt.word(max, { one: 'dia', other: 'dias' })}.`,
+    unavailableDay: 'O período inclui um dia que não pode ser escolhido.',
+    outOfBounds: 'O período inclui um dia fora das datas permitidas.',
+  },
   notice: { toneWord: { danger: 'Erro:', warning: 'Atenção:', info: 'Informação:', success: 'Sucesso:' } },
   empty: {
     'no-data': { title: 'Ainda não há nada aqui', description: 'Os itens aparecem aqui quando forem adicionados.' },
