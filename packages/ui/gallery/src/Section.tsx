@@ -1,7 +1,10 @@
 import { Check, Code2, Copy, Eye, Link2, Monitor, Moon, Smartphone, Sun, Tablet } from 'lucide-react'
 import { createContext, useContext, useState, type ReactNode } from 'react'
 import * as Tympan from '../../src'
+<<<<<<< HEAD
 import * as TympanFlow from '../../src/flow'
+=======
+>>>>>>> feat/gallery-docs-layout
 import { Button, SegmentedControl, ThemeScope, useToast, type ThemeDensity } from '../../src'
 
 /** What the gallery shell hands every card: the theme each preview starts in. */
@@ -26,7 +29,11 @@ export function importedNames(title: string): string[] {
     .replace(/\([^)]*\)/g, '')
     .split(',')
     .map((s) => s.trim())
+<<<<<<< HEAD
     .filter((name) => /^[A-Z]\w*$/.test(name) && (name in Tympan || name in TympanFlow))
+=======
+    .filter((name) => /^[A-Z]\w*$/.test(name) && name in Tympan)
+>>>>>>> feat/gallery-docs-layout
 }
 
 /** Scrolls to a specimen without touching the hash, which holds the route. */
@@ -64,10 +71,15 @@ function SpecimenCard({ id: anchor, title: name, children: states, frame }: { id
   const [copied, setCopied] = useState(false)
   const mode = modeOverride ?? frame.mode
   const names = importedNames(name)
+<<<<<<< HEAD
   const isFlow = names.some((n) => n in TympanFlow && !(n in Tympan))
   const pkg = isFlow ? '@datatechsolutions/tympan/flow' : '@datatechsolutions/tympan'
   const snippet = names.length
     ? `import { ${names.join(', ')} } from '${pkg}'`
+=======
+  const snippet = names.length
+    ? `import { ${names.join(', ')} } from '@datatechsolutions/tympan'`
+>>>>>>> feat/gallery-docs-layout
     : `// Composition example: see packages/ui/gallery/src for its source.`
 
   const copy = async () => {

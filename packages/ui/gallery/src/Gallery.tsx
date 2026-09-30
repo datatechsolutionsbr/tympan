@@ -1,9 +1,15 @@
 import { presets, printThemePresets } from '@datatechsolutions/tympan-tokens'
+<<<<<<< HEAD
 import { Languages, Monitor, Moon, SlidersHorizontal, Sun } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Button as AriaButton } from 'react-aria-components'
 import { Popover, SegmentedControl, Switch, ThemePaletteTrigger, useTheme, type NativeSelectGroup, type ThemeDensity, type ThemeMode } from '../../src'
 import { GALLERY_LOCALES, directionOf, useGalleryLocale } from './locale'
+=======
+import { useEffect, useRef, useState } from 'react'
+import { NativeSelect, SegmentedControl, Switch, useTheme, type NativeSelectGroup, type ThemeDensity, type ThemeMode } from '../../src'
+import { GALLERY_LOCALES, useGalleryLocale } from './locale'
+>>>>>>> feat/gallery-docs-layout
 import { GALLERY_CATEGORIES, GALLERY_PAGES } from './Groups'
 import { GalleryFrameContext, scrollToSpecimen } from './Section'
 
@@ -13,6 +19,7 @@ export const THEME_GROUPS: NativeSelectGroup[] = [
   { label: 'Print styles', options: printThemePresets.map((p) => ({ value: p.name, label: p.label ?? p.name })) },
 ]
 
+<<<<<<< HEAD
 /**
  * Pages outside the component categories, listed in the sidebar: the full-screen
  * research demos, the sibling print gallery (its dev port) and the tools.
@@ -86,6 +93,59 @@ function LanguagePicker() {
         ))}
       </ul>
       <div className="ty-gallery-popover__footer">
+=======
+/** Sibling galleries of the other workspace packages (their dev ports). */
+const SIBLING_GALLERIES = [
+  { label: 'Flow gallery', href: 'http://localhost:3320' },
+  { label: 'Print gallery', href: 'http://localhost:3330' },
+]
+
+export function GalleryToolbar({ extra, current }: { extra?: React.ReactNode; current?: 'components' | 'research-shell' | 'customizer' }) {
+  const t = useTheme()
+  const l = useGalleryLocale()
+  const links = [
+    { id: 'components', label: 'Components', href: '#/g/core' },
+    { id: 'research-shell', label: 'Research shell', href: '#/research-shell' },
+    { id: 'customizer', label: 'Theme customizer', href: '#/customizer' },
+  ]
+  // The toolbar wraps on narrow screens; the sticky sidebars sit under it.
+  const header = useRef<HTMLElement>(null)
+  useEffect(() => {
+    const el = header.current
+    if (!el) return
+    const observer = new ResizeObserver(() => {
+      document.documentElement.style.setProperty('--ty-gallery-header', `${el.offsetHeight}px`)
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+  return (
+    <header className="ty-gallery-toolbar" ref={header}>
+      <a className="ty-gallery-toolbar__brand" href="#/g/core">
+        Tympan
+      </a>
+      <nav className="ty-gallery-toolbar__nav" aria-label="Gallery">
+        {links.map((link) => (
+          <a key={link.id} href={link.href} aria-current={current === link.id ? 'page' : undefined}>
+            {link.label}
+          </a>
+        ))}
+        {SIBLING_GALLERIES.map((g) => (
+          <a key={g.href} href={g.href} className="ty-gallery-toolbar__external">
+            {g.label}
+          </a>
+        ))}
+      </nav>
+      <div className="ty-gallery-toolbar__controls">
+        {extra ?? <NativeSelect label="Theme" groups={THEME_GROUPS} value={t.theme} onChange={t.setTheme} />}
+        <SegmentedControl label="Mode" size="compact" options={['system', 'light', 'dark']} value={t.mode} onChange={(m) => t.setMode(m as ThemeMode)} />
+        <NativeSelect
+          label="Language"
+          options={GALLERY_LOCALES.map((x) => ({ value: x.tag, label: x.name }))}
+          value={l.locale}
+          onChange={l.setLocale}
+        />
+>>>>>>> feat/gallery-docs-layout
         <Switch isSelected={l.pseudo} onChange={l.setPseudo} label="Pseudo-localization" />
       </div>
     </Popover>
@@ -226,6 +286,7 @@ export function Gallery({ page = 'core' }: { page?: string }) {
               </ul>
             </div>
           ))}
+<<<<<<< HEAD
           {EXTRA_GROUPS.map((group) => (
             <div key={group.heading} className="ty-gallery-sidebar__group">
               <h2 className="ty-gallery-sidebar__heading">{group.heading}</h2>
@@ -240,6 +301,8 @@ export function Gallery({ page = 'core' }: { page?: string }) {
               </ul>
             </div>
           ))}
+=======
+>>>>>>> feat/gallery-docs-layout
         </nav>
 
         <main className="ty-gallery-main">

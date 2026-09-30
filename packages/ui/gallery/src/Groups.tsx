@@ -19,6 +19,10 @@ export type GalleryCategory = 'Foundations' | 'Application UI' | 'Data display' 
 
 export const GALLERY_CATEGORIES: GalleryCategory[] = ['Foundations', 'Application UI', 'Data display', 'Identity', 'Marketing', 'Research']
 
+export type GalleryCategory = 'Foundations' | 'Application UI' | 'Data display' | 'Marketing'
+
+export const GALLERY_CATEGORIES: GalleryCategory[] = ['Foundations', 'Application UI', 'Data display', 'Marketing']
+
 export interface GalleryPage {
   id: string
   title: string
@@ -92,6 +96,7 @@ export const GALLERY_PAGES: GalleryPage[] = [
     Component: ChartsGeoShowcase,
   },
   {
+<<<<<<< HEAD
     id: 'identity',
     title: 'Avatars and flags',
     category: 'Identity',
@@ -99,6 +104,8 @@ export const GALLERY_PAGES: GalleryPage[] = [
     Component: IdentityShowcase,
   },
   {
+=======
+>>>>>>> feat/gallery-docs-layout
     id: 'auth-brand',
     title: 'Auth, brand and pages',
     category: 'Marketing',
@@ -112,6 +119,7 @@ export const GALLERY_PAGES: GalleryPage[] = [
     description: 'Showcase headings, reveal numbers and highlight stats, ruled grids, feature mosaics and tiles.',
     Component: ShowcaseShowcase,
   },
+<<<<<<< HEAD
   {
     id: 'flow-components',
     title: 'Flow components',
@@ -119,4 +127,6 @@ export const GALLERY_PAGES: GalleryPage[] = [
     description: 'Nodes, forms, expressions and run parts of the flow canvas.',
     Component: ComponentsPage,
   },
+=======
+>>>>>>> feat/gallery-docs-layout
 ]
