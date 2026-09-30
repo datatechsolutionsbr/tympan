@@ -23,7 +23,7 @@ function lerUrl() {
  * of the book styles, with P&B. `?foto=1`
  * renders only the spread (used by scripts/gallery-shots.mjs).
  */
-export function Galeria() {
+export function Gallery() {
   const inicial = lerUrl()
   const [estilo, setEstilo] = useState<PrintPresetName>(inicial.estilo)
   const [pb, setPb] = useState(inicial.pb)

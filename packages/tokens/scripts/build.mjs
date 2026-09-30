@@ -239,6 +239,8 @@ const baseVars = await sdVariables(base)
 
 const themes = []
 const json = { base: Object.fromEntries(baseVars), density: {}, themes: {} }
+// Print themes go through the same parity check and into tokens.json, but
+// never into tokens.css (that sheet is opt-in as print-themes.css).
 const unifiedThemes = [...presets, ...printThemePresets];
 for (const preset of unifiedThemes) {
   const isPrint = printThemePresets.includes(preset);
@@ -256,7 +258,7 @@ for (const preset of unifiedThemes) {
     entry[slot] = viaSd
     json.themes[preset.name][key] = Object.fromEntries(viaSd)
   }
-  themes.push(entry)
+  if (!isPrint) themes.push(entry)
 }
 
 const densities = {}
