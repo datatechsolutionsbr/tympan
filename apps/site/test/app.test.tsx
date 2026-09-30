@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { ThemeProvider, TympanProvider } from '@datatechsolutions/tympan'
 import { App } from '../src/App'
-import fonte from '../src/i18n/mensagens/pt-BR.json'
+import fonte from '../src/i18n/messages/pt-BR.json'
 import { I18nProvider } from '../src/i18n/I18n'
 
 function montar(hash: string) {

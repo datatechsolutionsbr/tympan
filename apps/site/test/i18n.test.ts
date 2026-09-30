@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { formatMessage } from '@datatechsolutions/tympan'
 import { casarLocale, direcao, escolherLocale, LOCALE_CODES, urlFontesDoScript } from '../src/i18n/locales'
 
-const pasta = join(import.meta.dirname, '../src/i18n/mensagens')
+const pasta = join(import.meta.dirname, '../src/i18n/messages')
 const ler = (f: string) => JSON.parse(readFileSync(join(pasta, f), 'utf8')) as Record<string, string>
 const fonte = ler('pt-BR.json')
 const nomes = (s: string) => new Set([...s.matchAll(/\{\s*([\w-]+)\s*[,}]/g)].map((m) => m[1]))
