@@ -74,6 +74,7 @@
     "dist",
     "docs",
     "LICENSE",
+    "README.md",
     "THIRD_PARTY_NOTICES.md"
   ],
   "scripts": {
@@ -85,7 +86,8 @@
     "gallery": "npm run build -w @datatechsolutions/tympan-tokens && node scripts/build-flags.mjs && vite --config gallery/vite.config.ts",
     "gallery:build": "npm run build -w @datatechsolutions/tympan-tokens && node scripts/build-flags.mjs && vite build --config gallery/vite.config.ts",
     "pretest": "npm run build -w @datatechsolutions/tympan-tokens && node scripts/build-flags.mjs",
-    "pretypecheck": "npm run build -w @datatechsolutions/tympan-tokens && node scripts/build-flags.mjs"
+    "pretypecheck": "npm run build -w @datatechsolutions/tympan-tokens && node scripts/build-flags.mjs",
+    "prepack": "npm run build"
   },
   "peerDependencies": {
     "@dagrejs/dagre": "^3.1.1",
@@ -158,7 +160,7 @@
     }
   },
   "dependencies": {
-    "@datatechsolutions/tympan-tokens": "0.3.0",
+    "@datatechsolutions/tympan-tokens": "^0.3.0",
     "@internationalized/date": "^3.12.4",
     "@types/d3-array": "^3.2.2",
     "@types/d3-path": "^3.1.1",
@@ -196,6 +198,10 @@
     "@types/d3-geo": "^3.1.1",
     "axe-core": "^4.13.0",
     "flag-icons": "7.5.0"
+  },
+  "homepage": "https://github.com/datatechsolutionsbr/tympan#readme",
+  "bugs": {
+    "url": "https://github.com/datatechsolutionsbr/tympan/issues"
   },
   "publishConfig": {
     "access": "public"

@@ -19,9 +19,21 @@ export interface LabelDefinition<L extends object> {
   readonly bundles: Readonly<Record<string, Partial<L>>> & { readonly en: L }
 }
 
+const registry = new Map<string, LabelDefinition<object>>()
+
 /** Declares a component's strings: English is complete; other locales may be partial. */
 export function defineLabels<L extends object>(key: string, bundles: { en: L } & Record<string, Partial<L>>): LabelDefinition<L> {
-  return Object.freeze({ key, bundles: Object.freeze({ ...bundles }) as LabelDefinition<L>['bundles'] })
+  const definition: LabelDefinition<L> = Object.freeze({ key, bundles: Object.freeze({ ...bundles }) as LabelDefinition<L>['bundles'] })
+  if (!registry.has(key)) registry.set(key, definition as LabelDefinition<object>)
+  return definition
+}
+
+/**
+ * Every label definition the library ships, in definition order (one per component key). For hosts that export the
+ * built-in strings into their own translation system; values are strings or message functions, as declared.
+ */
+export function builtInLabels(): readonly LabelDefinition<object>[] {
+  return [...registry.values()]
 }
 
 /** Locales the library ships strings for. Hosts add any other through FlowMessagesProvider. */

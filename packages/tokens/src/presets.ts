@@ -97,9 +97,9 @@ export const neutralPreset: ThemeConfig = {
 }
 
 /**
- * The Fakhir research platform's look, selected by name
+ * A named product preset, selected by name
  * (`data-ty-theme="fakhir"`). Today it carries the default theme's values; it
- * is a separate preset so that app keeps its look if the default changes.
+ * is a separate preset so an app that selects it keeps its look if the default changes.
  */
 export const fakhirPreset: ThemeConfig = {
   ...tympanPreset,

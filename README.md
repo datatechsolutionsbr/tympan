@@ -22,6 +22,30 @@ layout CSS uses logical properties so right-to-left scripts work.
 Repository: `github.com/datatechsolutionsbr/tympan`; npm packages under the
 `@datatechsolutions` scope.
 
+## Install
+
+The packages are public on npmjs.com under the `@datatechsolutions` scope:
+
+```sh
+npm install @datatechsolutions/tympan @datatechsolutions/tympan-tokens react react-dom
+```
+
+Then import the stylesheets once and the components where you need them:
+
+```tsx
+import '@datatechsolutions/tympan/styles.css'   // components + tokens
+import '@datatechsolutions/tympan/flow.css'     // only if you use the flow canvas
+import { TympanProvider, Button } from '@datatechsolutions/tympan'
+import { ProvenanceGraph } from '@datatechsolutions/tympan/flow'
+import { presets, resolveTheme } from '@datatechsolutions/tympan-tokens'
+```
+
+The published packages contain compiled ES modules (`dist/*.js`), type
+declarations (`dist/*.d.ts`), source maps and the CSS; no bundler condition or
+TypeScript path mapping is needed. The sources (`src/`) ship in the tarball
+too, so the opt-in `tympan-source` export condition that points at them keeps
+working for hosts that resolve it.
+
 ## Build and test
 
 Node 24 or later.
@@ -45,6 +69,53 @@ Guards (`tools/guardrails/`):
   library or commercial templates the packages were written to replace.
 
 Galleries: `npm run gallery -w @datatechsolutions/tympan` (components, theme customizer and the flow canvas at `#/flow/...`) and `npm run gallery -w @datatechsolutions/tympan-print`.
+
+## Releasing
+
+Versions are kept in lockstep: the three published packages always carry the
+same version, and the internal dependencies use a caret range on it
+(`"@datatechsolutions/tympan-tokens": "^0.3.0"`).
+
+1. Bump the three versions and the internal ranges in one step, then refresh
+   the lockfile and check everything:
+
+   ```sh
+   node tools/release/set-version.mjs 0.3.0
+   npm install
+   npm run check
+   ```
+
+2. Commit, tag and push the tag:
+
+   ```sh
+   git commit -am "Release 0.3.0"
+   git tag v0.3.0
+   git push origin main v0.3.0
+   ```
+
+3. The `Release` workflow (`.github/workflows/release.yml`) runs on the `v*`
+   tag: it checks that the tag matches the package versions, runs the guards,
+   build, typecheck and tests, and publishes the tokens, then the components,
+   then the print package with `npm publish` (each package builds itself in
+   `prepack`).
+
+The workflow authenticates with npm **trusted publishing** (OpenID Connect):
+no npm token is stored in the repository. Each package on npmjs.com must list
+this repository as its trusted publisher (package page → Settings → Trusted
+Publisher → GitHub Actions; organization `datatechsolutionsbr`, repository
+`tympan`, workflow `release.yml`). A trusted publisher can only be added to a
+package that already exists, so the **first publish of each package is
+manual**, by a maintainer with publish rights on the scope:
+
+```sh
+npm login
+npm run check
+npm publish -w @datatechsolutions/tympan-tokens --access public
+npm publish -w @datatechsolutions/tympan --access public
+npm publish -w @datatechsolutions/tympan-print --access public
+```
+
+Check a package before publishing with `npm pack --dry-run -w <package>`.
 
 ## Provenance
 

@@ -57,10 +57,15 @@
   "scripts": {
     "build": "node scripts/build.mjs && tsdown",
     "typecheck": "tsc --noEmit -p tsconfig.json && node scripts/build.mjs --check",
-    "test": "vitest run"
+    "test": "vitest run",
+    "prepack": "npm run build"
   },
   "devDependencies": {
     "style-dictionary": "^5.5.5"
+  },
+  "homepage": "https://github.com/datatechsolutionsbr/tympan#readme",
+  "bugs": {
+    "url": "https://github.com/datatechsolutionsbr/tympan/issues"
   },
   "publishConfig": {
     "access": "public"

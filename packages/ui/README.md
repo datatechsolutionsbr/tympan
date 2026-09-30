@@ -3,7 +3,7 @@
 Tympan: accessible React components (React 18.3 or 19), built on
 [React Aria Components](https://react-spectrum.adobe.com/react-aria/) and
 styled with plain CSS custom properties (`--ty-*`) in `@layer tympan`.
-Tympan is an Astrlabe-family component published by Datatech. Licence: FSL-1.1-ALv2 (Functional Source License, Version 1.1,
+Tympan is published by Datatech. Licence: FSL-1.1-ALv2 (Functional Source License, Version 1.1,
 Apache 2.0 Future License); see `LICENSE`.
 
 ```sh
@@ -16,7 +16,8 @@ npm run gallery:build -w @datatechsolutions/tympan  # static gallery in dist-gal
 
 ## Ready-made components and a ready theme system
 
-Install (workspace or package registry), then import one stylesheet. It
+Install from npmjs.com (public packages under the `@datatechsolutions`
+scope), then import one stylesheet. It
 already contains the `@datatechsolutions/tympan-tokens` stylesheet (every `--ty-*` custom
 property for the `tympan`, `fakhir`, `astrlabe`, `neutral` and `high-contrast` presets, light and
 dark), so no other CSS is needed:
