@@ -30,7 +30,6 @@
     letter-spacing: -0.01em;
     text-decoration: none;
     flex: none;
-    align-self: center;
   }
   .ty-gallery-toolbar__mark {
     inline-size: 22px;
@@ -53,25 +52,6 @@
     margin-inline-start: 4px;
     font-size: 0.75em;
     opacity: 0.7;
-  }
-  .ty-gallery-toolbar__nav {
-    flex-wrap: wrap;
-    display: flex;
-    gap: var(--ty-space-4);
-    align-self: center;
-  }
-  .ty-gallery-toolbar__nav a {
-    color: var(--ty-ink-3);
-    font-size: var(--ty-font-size-label);
-    font-weight: var(--ty-font-weight-semibold);
-    text-decoration: none;
-  }
-  .ty-gallery-toolbar__nav a:hover,
-  .ty-gallery-toolbar__nav a[aria-current='page'] {
-    color: var(--ty-accent);
-  }
-  .ty-gallery-toolbar__nav .ty-gallery-toolbar__external::after {
-    content: ' ↗';
   }
   .ty-gallery-toolbar__controls {
     display: flex;
