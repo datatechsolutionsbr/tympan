@@ -17,7 +17,7 @@ import {
 } from './geometry.ts'
 import { Anotacoes, Chamada, Legenda, Rotulos, coresLinha, larguraLegenda, type CtxGrafico } from './parts.tsx'
 import { cssCor, type CorDado } from './brushes.tsx'
-import type { SpecBarras } from './tipos.ts'
+import type { SpecBarras } from './types.ts'
 
 const n = (v: number) => {
   const r = Math.round(v * 1000) / 1000
@@ -428,7 +428,7 @@ export function Cartoes({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarras;
         const grande = Math.min(5.2, (cw - 2) / Math.max(1, (numeroBr(b.valor).length + (a ? numeroBr(a.valor).length * 0.6 + 1.4 : 0)) * 0.62))
         const nb = a ? 2 : 1
         const bw = n(Math.min(5.5, (cw * 0.62) / nb))
-        const inicio = n(x + cw / 2 - (bw * nb + 0.8 * (nb - 1)) / 2)
+        const home = n(x + cw / 2 - (bw * nb + 0.8 * (nb - 1)) / 2)
         return (
           <g key={i} className="ty-print-g-line ty-print-g-card" data-linha={i} data-destaque={l.destaque ? '' : undefined}>
             <rect x={x} y={topo} width={cw} height={hCard} rx={raio} style={{ fill: l.destaque ? 'var(--ty-print-marca-texto)' : 'var(--ty-print-contexto)', fillOpacity: l.destaque ? 1 : 0.22 }} />

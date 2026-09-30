@@ -25,7 +25,7 @@ import {
 } from './statistics.ts'
 import { TEXTO, TEXTO_PEQUENO, larguraTexto, marcasEixo, numeroBr, quebrar } from './geometry.ts'
 import { cssCor, type CorDado, type CtxPincel, type Pincel } from './brushes.tsx'
-import type { EixoDispersao, PontoMunicipio, SpecAntesDepoisControle, SpecDispersao, SpecMatrizCorrelacao, SpecSimpson } from './tiposCorrelacao.ts'
+import type { EixoDispersao, PontoMunicipio, SpecAntesDepoisControle, SpecDispersao, SpecMatrizCorrelacao, SpecSimpson } from './correlationTypes.ts'
 
 export interface CtxCorrelacao extends CtxPincel {
   p: Pincel

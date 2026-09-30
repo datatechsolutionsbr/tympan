@@ -62,8 +62,8 @@ export { quantis, classeDe, rotulosLimites } from './map/classes.ts'
 export { LogoLakebrasil, SeloLakebrasil, type LogoLakebrasilProps, type SeloLakebrasilProps, type VarianteLogo } from './brand/LogoLakebrasil.tsx'
 export { LogoDatatech, tintasDoEstilo, type LogoDatatechProps, type VarianteDatatech } from './brand/LogoDatatech.tsx'
 export { GraficoMetodo as MethodChart, type GraficoMetodoProps as MethodChartProps } from './chart/MethodChart.tsx'
-export type { GraficoSpec, SpecHalteres, SpecBarras, SpecSerie, SpecContagem, SpecEsquema, LinhaPar, AnotacaoGrafico } from './chart/tipos.ts'
-export type { SpecDispersao, SpecSimpson, SpecMatrizCorrelacao, SpecAntesDepoisControle, SpecCorrelacao, PontoMunicipio, EixoDispersao, DestaqueMunicipio } from './chart/tipos.ts'
+export type { GraficoSpec, SpecHalteres, SpecBarras, SpecSerie, SpecContagem, SpecEsquema, LinhaPar, AnotacaoGrafico } from './chart/types.ts'
+export type { SpecDispersao, SpecSimpson, SpecMatrizCorrelacao, SpecAntesDepoisControle, SpecCorrelacao, PontoMunicipio, EixoDispersao, DestaqueMunicipio } from './chart/types.ts'
 export { pearson, spearman, postos, minimosQuadrados, correlacaoDentro, centrarPorGrupo, hexbin, marcasLog, fmtCoef, fmtCompacto } from './chart/statistics.ts'
 export { SPEC_CORRELACAO, ITENS_SPEC_CORRELACAO } from './chart/correlationContract.ts'
 export { layoutHalteres, layoutBarras, layoutColunas, layoutContagem, layoutSerie, escalaLinear, marcasEixo } from './chart/geometry.ts'
@@ -83,5 +83,5 @@ export {
   type CapituloJson,
   type LivroJson,
   type LivroConteudoProps,
-} from './conteudo.tsx'
+} from './content.tsx'
 export { PRINT_CSS } from './styles.generated.ts'

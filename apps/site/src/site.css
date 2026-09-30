@@ -368,7 +368,7 @@ body {
   transform-origin: top right;
 }
 
-/* ------------------------------------------------------------------ Livro */
+/* ------------------------------------------------------------------ Book */
 .ty-site-livro .ty-print-spread {
   margin: 0;
 }
@@ -1097,7 +1097,7 @@ body {
   color: var(--ty-ink-3);
 }
 
-/* ------------------------------------------------------------------ Temas */
+/* ------------------------------------------------------------------ Themes */
 .ty-site-quadro {
   display: flex;
   flex-direction: column;
@@ -1328,7 +1328,7 @@ body {
   color: color-mix(in oklab, var(--ty-danger) 80%, var(--ty-ink));
 }
 
-/* ------------------------------------------------------------------ Instalar */
+/* ------------------------------------------------------------------ Install */
 .ty-site-leitura {
   display: flex;
   flex-direction: column;

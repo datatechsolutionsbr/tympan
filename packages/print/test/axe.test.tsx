@@ -4,7 +4,7 @@ import { render } from '@testing-library/react'
 import { describe, it } from 'vitest'
 import { PRINT_PRESET_NAMES } from '@datatechsolutions/tympan-tokens'
 import { PrintBook, PrintMap } from '../src/index.ts'
-import { DuplaEstudo, GRAFICO_DO_ESTUDO } from '../gallery/src/estudo.tsx'
+import { DuplaEstudo, GRAFICO_DO_ESTUDO } from '../gallery/src/study.tsx'
 import { expectNoAxeViolations } from './axe.ts'
 
 describe('no axe violations', () => {

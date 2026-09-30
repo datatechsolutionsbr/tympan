@@ -7,16 +7,16 @@ import { presets, printThemePresets } from './tokens'
 import { Button, Drawer, Popover, ProductMark, SkipLink, ThemePaletteTrigger, ThemeSwitcher, useMediaQuery, useTheme, type ThemeMode, type ThemePaletteGroup } from '@datatechsolutions/tympan'
 import { useI18n, type Chave } from './i18n/I18n'
 import { infoLocale, LOCALES } from './i18n/locales'
-import { formatarRota, lerRota, TEMA_PADRAO, type Rota, type SecaoId } from './rotas'
+import { formatarRota, lerRota, TEMA_PADRAO, type Rota, type SecaoId } from './routes'
 
 export const SECOES: Array<{ id: SecaoId; icone: LucideIcon; rota: Rota }> = [
-  { id: 'inicio', icone: House, rota: { secao: 'inicio' } },
-  { id: 'historia', icone: History, rota: { secao: 'historia' } },
-  { id: 'componentes', icone: LayoutGrid, rota: { secao: 'componentes' } },
-  { id: 'temas', icone: Palette, rota: lerRota('#/temas') },
+  { id: 'home', icone: House, rota: { secao: 'home' } },
+  { id: 'history', icone: History, rota: { secao: 'history' } },
+  { id: 'components', icone: LayoutGrid, rota: { secao: 'components' } },
+  { id: 'themes', icone: Palette, rota: lerRota('#/themes') },
   { id: 'book', icone: BookOpen, rota: lerRota('#/book') },
   { id: 'video', icone: Clapperboard, rota: { secao: 'video', tema: TEMA_PADRAO } },
-  { id: 'instalar', icone: Download, rota: { secao: 'instalar' } },
+  { id: 'install', icone: Download, rota: { secao: 'install' } },
 ]
 
 /** Hash of a route in the active locale. */
@@ -41,7 +41,7 @@ export function MarcaTympan() {
   const href = useHref()
   const { t } = useI18n()
   return (
-    <a className="ty-site-marca" href={href({ secao: 'inicio' })} aria-label={t('marca.rotulo')}>
+    <a className="ty-site-marca" href={href({ secao: 'home' })} aria-label={t('marca.rotulo')}>
       <ProductMark product="tympan" size={28} decorative className="ty-site-marca__placa" />
       <span>Tympan</span>
     </a>
@@ -165,7 +165,7 @@ export function AbasRodape({ atual }: { atual: SecaoId }) {
   const href = useHref()
   return (
     <nav className="ty-site-abas" aria-label={t('shell.secoes')}>
-      {SECOES.filter((s) => s.id !== 'historia').map((s) => {
+      {SECOES.filter((s) => s.id !== 'history').map((s) => {
         const I = s.icone
         return (
           <a key={s.id} href={href(s.rota)} className="ty-site-abas__item" aria-current={s.id === atual ? 'page' : undefined}>
@@ -204,7 +204,7 @@ export function Moldura({ secao, lateral, rotuloLateral, children, className }: 
   const nome = rotuloLateral ?? t('shell.navegacaoDaSecao')
   return (
     <div className="ty-site" data-secao={secao} data-lateral={lateral ? '' : undefined}>
-      <SkipLink targetId="conteudo" label={t('shell.pularParaConteudo')} />
+      <SkipLink targetId="content" label={t('shell.pularParaConteudo')} />
       <Topo atual={secao} aoAbrirLateral={lateral && estreito ? () => setAberta(true) : undefined} rotuloLateral={nome} />
       <div className="ty-site-corpo">
         {lateral && !estreito ? (
@@ -212,7 +212,7 @@ export function Moldura({ secao, lateral, rotuloLateral, children, className }: 
             {lateral}
           </nav>
         ) : null}
-        <main id="conteudo" tabIndex={-1} className={className ? `ty-site-pagina ${className}` : 'ty-site-pagina'}>
+        <main id="content" tabIndex={-1} className={className ? `ty-site-pagina ${className}` : 'ty-site-pagina'}>
           {children}
         </main>
       </div>

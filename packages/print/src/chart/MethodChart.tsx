@@ -19,7 +19,7 @@ import {
 } from './geometry.ts'
 import { PINCEIS, unidadeIsotype, type CorDado, type CtxPincel, type Pincel } from './brushes.tsx'
 import type { FormaGrafico, PrintStyle } from '@datatechsolutions/tympan-tokens'
-import type { GraficoSpec, RenderizadorGrafico, SpecBarras, SpecContagem, SpecEsquema, SpecHalteres, SpecSerie } from './tipos.ts'
+import type { GraficoSpec, RenderizadorGrafico, SpecBarras, SpecContagem, SpecEsquema, SpecHalteres, SpecSerie } from './types.ts'
 import { AntesDepoisControle, Dispersao, MatrizCorrelacao, Simpson, corAchado } from './correlation.tsx'
 import { Chamadas, posicionarChamadas } from './kickers.tsx'
 import { Anotacoes, Chamada, Legenda, Rotulos, coresLinha, larguraLegenda } from './parts.tsx'

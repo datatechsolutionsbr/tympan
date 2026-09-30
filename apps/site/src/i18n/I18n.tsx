@@ -74,7 +74,7 @@ export function I18nProvider({ inicial, catalogoInicial, children }: { inicial: 
   const [estado, setEstado] = useState({ locale: inicial, catalogo: catalogoInicial })
   const setLocale = useCallback((code: string) => {
     guardarLocal('locale', code)
-    void carregarCatalogo(code).then((catalogo) => setEstado({ locale: code, catalogo }))
+    void carregarCatalogo(code).then((catalogo) => setEstado({ locale: code, catalog }))
   }, [])
 
   // The locale of a hash that names one (#/ar/…) wins, including on back/forward.

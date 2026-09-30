@@ -3,15 +3,15 @@ import { lazy, Suspense, useCallback, useEffect, useState } from 'react'
 import { useI18n } from './i18n/I18n'
 import { BuscaContext } from './Moldura'
 import { Busca } from './Busca'
-import { formatarRota, lerRota, segmentos, type Rota } from './rotas'
+import { formatarRota, lerRota, segmentos, type Rota } from './routes'
 
-const Inicio = lazy(() => import('./secoes/inicio/Inicio').then((m) => ({ default: m.Inicio })))
-const Historia = lazy(() => import('./secoes/historia/Historia').then((m) => ({ default: m.Historia })))
-const Componentes = lazy(() => import('./secoes/componentes/Componentes').then((m) => ({ default: m.Componentes })))
-const Temas = lazy(() => import('./secoes/temas/Temas').then((m) => ({ default: m.Temas })))
-const Livro = lazy(() => import('./secoes/book/Livro').then((m) => ({ default: m.Livro })))
-const Video = lazy(() => import('./secoes/video/Video').then((m) => ({ default: m.Video })))
-const Instalar = lazy(() => import('./secoes/instalar/Instalar').then((m) => ({ default: m.Instalar })))
+const Home = lazy(() => import('./sections/home/Home').then((m) => ({ default: m.Inicio })))
+const History = lazy(() => import('./sections/history/History').then((m) => ({ default: m.Historia })))
+const Components = lazy(() => import('./sections/components/Components').then((m) => ({ default: m.Componentes })))
+const Themes = lazy(() => import('./sections/themes/Themes').then((m) => ({ default: m.Temas })))
+const Book = lazy(() => import('./sections/book/Book').then((m) => ({ default: m.Livro })))
+const Video = lazy(() => import('./sections/video/Video').then((m) => ({ default: m.Video })))
+const Install = lazy(() => import('./sections/install/Install').then((m) => ({ default: m.Instalar })))
 
 export type Navegar = (r: Rota, opcoes?: { substituir?: boolean }) => void
 
@@ -58,7 +58,7 @@ export function App() {
   }, [])
 
   useEffect(() => {
-    document.title = rota.secao === 'inicio' ? 'Tympan' : `${t(`secao.${rota.secao}`)} · Tympan`
+    document.title = rota.secao === 'home' ? 'Tympan' : `${t(`secao.${rota.secao}`)} · Tympan`
   }, [rota.secao, t])
 
   // A new section starts at the top.
@@ -69,13 +69,13 @@ export function App() {
   return (
     <BuscaContext.Provider value={abrirBusca}>
       <Suspense fallback={<div className="ty-site-carregando" role="status">{t('comum.carregando')}</div>}>
-        {rota.secao === 'inicio' ? <Inicio /> : null}
-        {rota.secao === 'historia' ? <Historia rota={rota} /> : null}
-        {rota.secao === 'componentes' ? <Componentes rota={rota} /> : null}
-        {rota.secao === 'temas' ? <Temas rota={rota} ir={navegar} /> : null}
+        {rota.secao === 'home' ? <Inicio /> : null}
+        {rota.secao === 'history' ? <Historia rota={rota} /> : null}
+        {rota.secao === 'components' ? <Componentes rota={rota} /> : null}
+        {rota.secao === 'themes' ? <Temas rota={rota} ir={navegar} /> : null}
         {rota.secao === 'book' ? <Livro rota={rota} ir={navegar} /> : null}
         {rota.secao === 'video' ? <Video rota={rota} ir={navegar} /> : null}
-        {rota.secao === 'instalar' ? <Instalar /> : null}
+        {rota.secao === 'install' ? <Instalar /> : null}
       </Suspense>
       <Busca aberta={busca} aoFechar={() => setBusca(false)} navegar={navegar} />
     </BuscaContext.Provider>

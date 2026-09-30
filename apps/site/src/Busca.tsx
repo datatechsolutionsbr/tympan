@@ -7,7 +7,7 @@ import type { Navegar } from './App'
 import { GALLERY_PAGES } from './galerias'
 import { useI18n, type Chave } from './i18n/I18n'
 import { SECOES, useNomeTema } from './Moldura'
-import { lerRota, TODOS_ESTILOS } from './rotas'
+import { lerRota, TODOS_ESTILOS } from './routes'
 
 export function Busca({ aberta, aoFechar, navegar }: { aberta: boolean; aoFechar: () => void; navegar: Navegar }) {
   const { t, td } = useI18n()
@@ -19,7 +19,7 @@ export function Busca({ aberta, aoFechar, navegar }: { aberta: boolean; aoFechar
     }
     return [
       {
-        id: 'secoes',
+        id: 'sections',
         heading: t('busca.grupoSecoes'),
         items: SECOES.map((s) => {
           const I = s.icone
@@ -27,7 +27,7 @@ export function Busca({ aberta, aoFechar, navegar }: { aberta: boolean; aoFechar
         }),
       },
       {
-        id: 'componentes',
+        id: 'components',
         heading: t('busca.grupoComponentes'),
         items: GALLERY_PAGES.map((p) => ({
           id: `c-${p.id}`,
@@ -35,18 +35,18 @@ export function Busca({ aberta, aoFechar, navegar }: { aberta: boolean; aoFechar
           description: td(`pagina.${p.id}.descricao`, p.description),
           keywords: [p.title, p.id],
           icon: <LayoutGrid aria-hidden="true" className="ty-icon" />,
-          onSelect: ir({ secao: 'componentes', pagina: p.id }),
+          onSelect: ir({ secao: 'components', pagina: p.id }),
         })),
       },
       {
-        id: 'temas',
+        id: 'themes',
         heading: t('busca.grupoTemas'),
         items: presets.map((p) => ({
           id: `t-${p.name}`,
           label: nomeTema(p.name),
           keywords: [p.name],
           icon: <Palette aria-hidden="true" className="ty-icon" />,
-          onSelect: ir({ ...lerRota('#/temas'), secao: 'temas', tema: p.name } as Parameters<Navegar>[0]),
+          onSelect: ir({ ...lerRota('#/themes'), secao: 'themes', tema: p.name } as Parameters<Navegar>[0]),
         })),
       },
       {

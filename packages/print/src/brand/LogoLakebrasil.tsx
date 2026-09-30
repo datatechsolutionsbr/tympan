@@ -1,7 +1,7 @@
 import { papelEscuro } from '@datatechsolutions/tympan-tokens'
 import { useFundoEscuroForcado, usePrint } from '../context.tsx'
 import { cx, useIdSeguro } from '../util.ts'
-import { CORES_WORDMARK, FAIXAS_COR, FAIXAS_MONO, ICEBERG, WORDMARK_BRASIL, WORDMARK_LAKE } from './logo-dados.ts'
+import { CORES_WORDMARK, FAIXAS_COR, FAIXAS_MONO, ICEBERG, WORDMARK_BRASIL, WORDMARK_LAKE } from './logo-data.ts'
 
 export type VarianteLogo = 'cor' | 'cor-fundo-escuro' | 'mono-escuro' | 'mono-claro' | 'simbolo'
 

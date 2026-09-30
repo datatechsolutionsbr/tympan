@@ -6,7 +6,7 @@
 import type { ReactNode } from 'react'
 import type { PrintStyle, RenderizadorGrafico } from '@datatechsolutions/tympan-tokens'
 import { tracar, type Tracado } from '../rough.ts'
-import { ICONES, type FormaIcone } from './icones.ts'
+import { ICONES, type FormaIcone } from './icons.ts'
 
 export type CorDado = 'destaque' | 'destaque-2' | 'tinta' | 'tinta-2' | 'tinta-3' | 'contexto' | 'papel' | 'linha'
 export const CORES_DADO: CorDado[] = ['destaque', 'destaque-2', 'tinta', 'tinta-2', 'contexto']

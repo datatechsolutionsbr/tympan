@@ -20,12 +20,12 @@ function montar(hash: string) {
 }
 
 describe('site app', () => {
-  it('opens Livro from the hash, writes the locale into it, and keeps mode changes in path segments', async () => {
+  it('opens Book from the hash, writes the locale into it, and keeps mode changes in path segments', async () => {
     montar('#/book/suico')
     expect(await screen.findByRole('heading', { level: 1, name: 'Estilo Suíço' }, { timeout: 10000 })).toBeInTheDocument()
     expect(location.hash).toBe('#/pt-BR/book/suico')
     await userEvent.click(screen.getByRole('radio', { name: 'Comparar' }))
-    await waitFor(() => expect(location.hash).toBe('#/pt-BR/book/suico/estudo/cor/comparar'))
+    await waitFor(() => expect(location.hash).toBe('#/pt-BR/book/suico/study/cor/comparar'))
     expect(location.hash).not.toContain('?')
   })
 

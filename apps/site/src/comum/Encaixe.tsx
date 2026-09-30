@@ -17,7 +17,7 @@ export interface EncaixeProps {
 
 export function Encaixe({ children, zoom = 1, onEscala, className, max = 1, ajustarAltura = false }: EncaixeProps) {
   const caixa = useRef<HTMLDivElement>(null)
-  const conteudo = useRef<HTMLDivElement>(null)
+  const content = useRef<HTMLDivElement>(null)
   const [dim, setDim] = useState<{ w: number; h: number; k: number } | null>(null)
 
   useLayoutEffect(() => {

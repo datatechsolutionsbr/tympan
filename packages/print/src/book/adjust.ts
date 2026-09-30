@@ -58,7 +58,7 @@ export function ajustarPaginas(raiz: ParentNode = document, opcoes: AjusteOpcoes
       const n = natural()
       return n.conteudo - n.mancha
     }
-    const inicio = natural()
+    const home = natural()
     const razao = inicio.conteudo / inicio.mancha
     const cresce = !respiro && comMolde && maximo > 1 && razao < alvo
     if (!cresce && inicio.conteudo - inicio.mancha <= 0.3) continue

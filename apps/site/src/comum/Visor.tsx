@@ -27,7 +27,7 @@ const limitar = (k: number) => Math.min(LIMITES[1], Math.max(LIMITES[0], k))
 export function Visor({ titulo, subtitulo, aoFechar, aoAnterior, aoProximo, children }: VisorProps) {
   const { t, n, dir } = useI18n()
   const palco = useRef<HTMLDivElement>(null)
-  const conteudo = useRef<HTMLDivElement>(null)
+  const content = useRef<HTMLDivElement>(null)
   const fechar = useRef<HTMLButtonElement | null>(null)
   const [vista, setVista] = useState<Vista>({ k: 1, x: 0, y: 0 })
   const [ajuste, setAjuste] = useState(1)

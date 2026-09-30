@@ -1,7 +1,7 @@
 // Pure chart geometry, in millimetres. Every position and length comes from
 // the data through a linear scale; renderers only decide how a mark is drawn
 // (crisp, rough, washed, pictorial), never where it goes or how long it is.
-import type { LinhaPar, SpecBarras, SpecContagem, SpecHalteres, SpecSerie } from './tipos.ts'
+import type { LinhaPar, SpecBarras, SpecContagem, SpecHalteres, SpecSerie } from './types.ts'
 
 /** A row with one value (single series) or two (a, b). */
 export interface LinhaGenerica {
@@ -410,7 +410,7 @@ export function layoutColunas(spec: SpecBarras, largura: number, alturaPlot = 32
   const bw = r3(opcoes.finas ? Math.min(2.4, (passo * 0.3) / nb) : Math.min(7.5, (passo * 0.6) / nb))
   const grupos: GrupoColunas[] = linhasG.map((l, i) => {
     const cx = r3(x0 + passo * (i + 0.5))
-    const inicio = cx - (bw * l.valores.length + vao * (l.valores.length - 1)) / 2
+    const home = cx - (bw * l.valores.length + vao * (l.valores.length - 1)) / 2
     const colunas = l.valores.map((v, k) => {
       const xs = r3(inicio + k * (bw + vao))
       const topo = y(Math.max(0, v.valor))
