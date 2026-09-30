@@ -21,6 +21,7 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    environment: npm
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -43,7 +44,7 @@ jobs:
           set -euo pipefail
           for pkg in @datatechsolutions/tympan-tokens @datatechsolutions/tympan @datatechsolutions/tympan-print; do
             echo "::group::$pkg"
-            if ! out=$(npm publish -w "$pkg" --access public 2>&1); then
+            if ! out=$(npm publish -w "$pkg" --access public --provenance 2>&1); then
               echo "$out"
               # A version published by hand (the first release) is not an error.
               if grep -q "cannot publish over the previously published versions" <<<"$out"; then
