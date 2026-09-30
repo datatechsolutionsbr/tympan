@@ -1,6 +1,6 @@
 {
   "name": "@datatechsolutions/tympan-tokens",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Tympan design tokens: W3C DTCG source (colour, space, radius, type, elevation and glass, motion, z) and an OKLCH theme generator, with the tympan, fakhir, astrlabe, neutral and high-contrast presets in light and dark (plus opt-in UI themes derived from the print book styles), built to --ty-* CSS custom properties, JSON and a TypeScript export.",
   "license": "FSL-1.1-ALv2",
   "author": "Natalia Mesquita",
