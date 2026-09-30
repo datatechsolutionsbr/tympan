@@ -11,8 +11,7 @@
   },
   "type": "module",
   "workspaces": [
-    "packages/*",
-    "apps/*"
+    "packages/*"
   ],
   "engines": {
     "node": ">=24"
