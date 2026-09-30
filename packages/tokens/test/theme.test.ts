@@ -3,6 +3,7 @@ import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import {
   apcaContrast,
+  astrlabeControlePreset,
   astrlabePreset,
   contrastRatio,
   fakhirPreset,
@@ -199,7 +200,7 @@ describe('per-script typography', () => {
 
 describe('fakhir preset', () => {
   it('ships by name with the default theme values, so an app can select it explicitly', () => {
-    expect(presets.map((p) => p.name)).toEqual(['tympan', 'fakhir', 'astrlabe', 'neutral', 'high-contrast'])
+    expect(presets.map((p) => p.name)).toEqual(['tympan', 'fakhir', 'astrlabe', 'astrlabe-controle', 'neutral', 'high-contrast'])
     expect(fakhirPreset.label).toBe('Fakhir')
     for (const mode of MODES) {
       expect(themeVariables(resolveTheme(fakhirPreset, mode))).toEqual(themeVariables(resolveTheme(tympanPreset, mode)))
@@ -230,9 +231,24 @@ describe('astrlabe preset', () => {
     expect(light.get('--ty-radius-card')).toBe('19px')
     const dark = new Map(themeVariables(resolveTheme(astrlabePreset, 'dark')))
     expect(dark.get('--ty-brand')).toBe('#818cf8')
-    expect(dark.get('--ty-bg')).toBe('#020617')
+    expect(dark.get('--ty-bg')).toBe('#0b1220')
+    expect(dark.get('--ty-ink-3')).toBe('#a3b0c0')
     expect(dark.get('--ty-glass-blur-sheet')).toBe('20px')
   })
+
+  it('keeps the state contract: running cyan off the indigo brand, waiting amber', () => {
+    const light = new Map(themeVariables(resolveTheme(astrlabePreset, 'light')))
+    expect(light.get('--ty-info')).toBe('#0e7490')
+    expect(light.get('--ty-warning')).toBe('#a16207')
+    expect(light.get('--ty-danger')).toBe('#be123c')
+    expect(light.get('--ty-success')).toBe('#15803d')
+    const dark = new Map(themeVariables(resolveTheme(astrlabePreset, 'dark')))
+    expect(dark.get('--ty-info')).toBe('#22d3ee')
+    expect(dark.get('--ty-warning')).toBe('#fbbf24')
+    expect(dark.get('--ty-danger')).toBe('#fb7185')
+    expect(dark.get('--ty-success')).toBe('#4ade80')
+  })
+
 
   it('uses the system font stacks for headings and body, no web font', () => {
     const light = new Map(themeVariables(resolveTheme(astrlabePreset, 'light')))
@@ -251,5 +267,61 @@ describe('astrlabe preset', () => {
     const text = readFileSync(built, 'utf8')
     expect(text).toContain('[data-ty-theme="astrlabe"]')
     expect(text).toContain('[data-ty-theme="astrlabe"][data-ty-mode="dark"]')
+  })
+})
+
+
+describe('astrlabe-controle preset', () => {
+  it('is a built-in UI preset, not a print theme', () => {
+    expect(presets).toContain(astrlabeControlePreset)
+    expect(printThemePresets.map((p) => p.name)).not.toContain('astrlabe-controle')
+    expect(astrlabeControlePreset.label).toBe('Astrlabe · Sala de Controle')
+    expect(astrlabeControlePreset.glass).toBe(false)
+    expect(astrlabeControlePreset.cta).toBe('solid')
+  })
+
+  it('pins the dark-operations surfaces and square corners in both modes', () => {
+    for (const mode of MODES) {
+      const vars = new Map(themeVariables(resolveTheme(astrlabeControlePreset, mode)))
+      expect(vars.get('--ty-bg')).toBe('#131a22')
+      expect(vars.get('--ty-surface-solid')).toBe('#1a232e')
+      expect(vars.get('--ty-surface-sunken')).toBe('#0e141b')
+      expect(vars.get('--ty-line')).toBe('#2e3d4c')
+      expect(vars.get('--ty-line-strong')).toBe('#46586a')
+      expect(vars.get('--ty-ink')).toBe('#e8eef4')
+      expect(vars.get('--ty-ink-2')).toBe('#bcc9d6')
+      expect(vars.get('--ty-ink-3')).toBe('#93a2b1')
+      expect(vars.get('--ty-radius-control')).toBe('2px')
+      expect(vars.get('--ty-glass-blur-sheet')).toBe('0px')
+    }
+  })
+
+  it('pins the saturated operator-console state colours, including the magenta now cursor', () => {
+    for (const mode of MODES) {
+      const vars = new Map(themeVariables(resolveTheme(astrlabeControlePreset, mode)))
+      expect(vars.get('--ty-success')).toBe('#3fb950')
+      expect(vars.get('--ty-info')).toBe('#39c5cf')
+      expect(vars.get('--ty-warning')).toBe('#d29922')
+      expect(vars.get('--ty-danger')).toBe('#f85149')
+      expect(vars.get('--ty-cursor-now')).toBe('#e34ba9')
+    }
+  })
+
+  it('renders every role in the monospace stack', () => {
+    const vars = new Map(themeVariables(resolveTheme(astrlabeControlePreset, 'dark')))
+    expect(vars.get('--ty-font-sans')).toMatch(/^ui-monospace/)
+    expect(vars.get('--ty-font-serif')).toBe(vars.get('--ty-font-sans'))
+    expect(vars.get('--ty-font-mono')).toMatch(/^ui-monospace/)
+  })
+
+  it('meets WCAG 2.2 AA in light and dark, default and high contrast', () => {
+    for (const mode of MODES) for (const contrast of ['default', 'high'] as const) everyPairPasses(astrlabeControlePreset, mode, contrast)
+  })
+
+  const builtControle = join(__dirname, '..', 'dist', 'tokens.css')
+  it.runIf(existsSync(builtControle))('is scoped to data-ty-theme="astrlabe-controle" in the built stylesheet', () => {
+    const text = readFileSync(builtControle, 'utf8')
+    expect(text).toContain('[data-ty-theme="astrlabe-controle"]')
+    expect(text).toContain('[data-ty-theme="astrlabe-controle"][data-ty-mode="dark"]')
   })
 })

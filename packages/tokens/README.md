@@ -114,7 +114,8 @@ In the design system, `<ThemeProvider>` / `useTheme()` set these attributes and
 |---|---|---|---|---|---|
 | `tympan` (default) | brand teal from the §2.3 accent, neutral with a slight teal tint, semantic hues | 10 | default | on | gradient |
 | `fakhir` | the look of the Fakhir research platform; today the same values as `tympan` | 10 | default | on | gradient |
-| `astrlabe` | the look of the Astrlabe workflow engine: indigo brand, slate neutral | 12 | default | on | gradient (indigo to purple) |
+| `astrlabe` | the look of the Astrlabe workflow engine: indigo brand, slate neutral, state contract colours | 12 | default | on | gradient (indigo to purple) |
+| `astrlabe-controle` | Astrlabe's dark operations room: deep blue-slate surfaces, square corners, saturated console state colours, monospace | 2 | default | off | solid |
 | `neutral` | grey-blue brand, near-grey neutral | 8 | default | on | solid |
 | `high-contrast` | tympan seeds | 10 | high | off | solid |
 

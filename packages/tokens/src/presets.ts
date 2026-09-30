@@ -113,7 +113,9 @@ export const fakhirPreset: ThemeConfig = {
  * where text needs 4.5:1 on light grounds), translucent glass surfaces and the
  * rounder corners of that app (12 px controls, about 20 px cards). The call to
  * action is the indigo to purple gradient its primary buttons fill with, and
- * text (headings included) uses the platform's own system fonts.
+ * text (headings included) uses the platform's own system fonts. The state
+ * contract holds on every ground: running is a cyan clearly off the indigo
+ * brand, waiting is amber.
  */
 export const astrlabePreset: ThemeConfig = {
   name: 'astrlabe',
@@ -145,14 +147,17 @@ export const astrlabePreset: ThemeConfig = {
       'surface-raised-solid': '#ffffff',
       'surface-sunken': '#f1f5f9',
       line: 'rgb(148 163 184 / 0.3)',
-      'line-strong': 'rgb(100 116 139 / 0.4)',
+      'line-strong': 'rgb(100 116 139 / 0.45)',
       ink: '#0f172a',
       'ink-2': '#334155',
-      'ink-3': '#546175',
+      // One step darker than the old #546175 so AA holds on the glass grounds.
+      'ink-3': '#4d5a6b',
       success: '#15803d',
+      // Cyan, deliberately off the indigo brand, for the running state.
+      info: '#0e7490',
       warning: '#a16207',
-      danger: '#b91c1c',
-      neutral: '#546175',
+      danger: '#be123c',
+      neutral: '#4d5a6b',
     },
     dark: {
       brand: '#818cf8',
@@ -160,21 +165,22 @@ export const astrlabePreset: ThemeConfig = {
       'brand-strong': '#a5b4fc',
       'brand-soft': 'rgb(99 102 241 / 0.2)',
       'on-brand': '#1e1b4b',
-      bg: '#020617',
-      surface: 'rgb(30 41 59 / 0.62)',
-      'surface-raised': 'rgb(30 41 59 / 0.86)',
+      bg: '#0b1220',
+      surface: 'rgb(30 41 59 / 0.72)',
+      'surface-raised': 'rgb(30 41 59 / 0.92)',
       'surface-solid': '#131c2f',
       'surface-raised-solid': '#1b2539',
       'surface-sunken': '#0b1222',
-      line: 'rgb(148 163 184 / 0.18)',
-      'line-strong': 'rgb(148 163 184 / 0.32)',
+      line: 'rgb(148 163 184 / 0.22)',
+      'line-strong': 'rgb(148 163 184 / 0.36)',
       ink: '#f8fafc',
       'ink-2': '#cbd5e1',
-      'ink-3': '#94a3b8',
+      'ink-3': '#a3b0c0',
       success: '#4ade80',
+      info: '#22d3ee',
       warning: '#fbbf24',
-      danger: '#f87171',
-      neutral: '#94a3b8',
+      danger: '#fb7185',
+      neutral: '#a3b0c0',
     },
   },
   ctaPins: {
@@ -185,6 +191,89 @@ export const astrlabePreset: ThemeConfig = {
   fonts: {
     display: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Noto Sans', 'Arial', 'sans-serif'],
     body: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Noto Sans', 'Arial', 'sans-serif'],
+    mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
+  },
+}
+
+/**
+ * Astrlabe · Sala de Controle (`data-ty-theme="astrlabe-controle"`): the
+ * dark-operations variant of the Astrlabe identity for control rooms and
+ * monitoring walls. No glass, square corners (2 px controls), deep blue-slate
+ * surfaces, and the saturated state colours of operator consoles: ok green,
+ * run cyan, wait amber, fail red, now magenta. Everything renders in a
+ * monospace stack so columns of numbers line up.
+ */
+export const astrlabeControlePreset: ThemeConfig = {
+  name: 'astrlabe-controle',
+  label: 'Astrlabe · Sala de Controle',
+  seeds: {
+    brand: seedFromColor('#6366f1', 0.2),
+    neutral: { hue: 257, chroma: 0.02 },
+    danger: { hue: 12, chroma: 0.2 },
+    warning: { hue: 75, chroma: 0.15 },
+    success: { hue: 145, chroma: 0.16 },
+    info: { hue: 185, chroma: 0.12 },
+  },
+  radius: 2,
+  contrast: 'default',
+  glass: false,
+  cta: 'solid',
+  pins: {
+    light: {
+      // The control room is always dark: the light mode carries the same
+      // dark grounds and the light-on-dark indigo brand.
+      brand: '#818cf8',
+      'focus-ring': '#818cf8',
+      'brand-strong': '#a5b4fc',
+      'brand-soft': 'rgb(99 102 241 / 0.2)',
+      'on-brand': '#1e1b4b',
+      bg: '#131a22',
+      surface: 'rgb(26 35 46 / 1)',
+      'surface-raised': 'rgb(26 35 46 / 1)',
+      'surface-solid': '#1a232e',
+      'surface-raised-solid': '#1a232e',
+      'surface-sunken': '#0e141b',
+      line: '#2e3d4c',
+      'line-strong': '#46586a',
+      ink: '#e8eef4',
+      'ink-2': '#bcc9d6',
+      'ink-3': '#93a2b1',
+      success: '#3fb950',
+      info: '#39c5cf',
+      warning: '#d29922',
+      danger: '#f85149',
+      neutral: '#93a2b1',
+      'cursor-now': '#e34ba9',
+    },
+    dark: {
+      brand: '#818cf8',
+      'focus-ring': '#818cf8',
+      'brand-strong': '#a5b4fc',
+      'brand-soft': 'rgb(99 102 241 / 0.2)',
+      'on-brand': '#1e1b4b',
+      bg: '#131a22',
+      surface: 'rgb(26 35 46 / 1)',
+      'surface-raised': 'rgb(26 35 46 / 1)',
+      'surface-solid': '#1a232e',
+      'surface-raised-solid': '#1a232e',
+      'surface-sunken': '#0e141b',
+      line: '#2e3d4c',
+      'line-strong': '#46586a',
+      ink: '#e8eef4',
+      'ink-2': '#bcc9d6',
+      'ink-3': '#93a2b1',
+      success: '#3fb950',
+      info: '#39c5cf',
+      warning: '#d29922',
+      danger: '#f85149',
+      neutral: '#93a2b1',
+      'cursor-now': '#e34ba9',
+    },
+  },
+  // Mono-friendly: one monospace stack for every role.
+  fonts: {
+    display: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
+    body: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
     mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
   },
 }
@@ -200,5 +289,5 @@ export const highContrastPreset: ThemeConfig = {
   cta: 'solid',
 }
 
-export const presets: readonly ThemeConfig[] = [tympanPreset, fakhirPreset, astrlabePreset, neutralPreset, highContrastPreset]
+export const presets: readonly ThemeConfig[] = [tympanPreset, fakhirPreset, astrlabePreset, astrlabeControlePreset, neutralPreset, highContrastPreset]
 export const DEFAULT_THEME = 'tympan'
