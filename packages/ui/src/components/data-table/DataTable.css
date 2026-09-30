@@ -265,6 +265,57 @@
     opacity: 0.55;
   }
 
+  /* <ty-data-table>: the element renders a native checkbox inside the
+     .ty-table__checkbox shell (the React renderers carry spans only). The
+     input fills the shell invisibly; its state drives the box and picks the
+     visible mark (the ty-checkbox pattern), so the right glyph shows even
+     before the host re-renders. The React renderers' single unclassed mark
+     is untouched. */
+  .ty-table__checkbox > input[type='checkbox'] {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .ty-table__checkbox > input[type='checkbox']:disabled {
+    cursor: not-allowed;
+  }
+  .ty-table__checkbox > input[type='checkbox']:focus-visible + .ty-table__checkbox-box {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 2px;
+  }
+  .ty-table__checkbox > input[type='checkbox']:checked + .ty-table__checkbox-box,
+  .ty-table__checkbox > input[type='checkbox']:indeterminate + .ty-table__checkbox-box {
+    border-color: var(--ty-accent);
+    background: var(--ty-accent);
+  }
+  .ty-table__checkbox .ty-table__check,
+  .ty-table__checkbox .ty-table__minus {
+    display: none;
+  }
+  .ty-table__checkbox > input:checked + .ty-table__checkbox-box > .ty-table__check {
+    display: block;
+  }
+  .ty-table__checkbox > input:indeterminate + .ty-table__checkbox-box > .ty-table__check {
+    display: none;
+  }
+  .ty-table__checkbox > input:indeterminate + .ty-table__checkbox-box > .ty-table__minus {
+    display: block;
+  }
+
+  /* <ty-data-table>: a row's link wraps the first cell's content; the row
+     forwards presses and Enter to it. */
+  .ty-table__row-link {
+    color: inherit;
+    text-decoration: inherit;
+  }
+  .ty-table__row-link:focus-visible {
+    outline: var(--ty-focus-width) solid var(--ty-focus-ring);
+    outline-offset: 2px;
+  }
+
   .ty-table__row[data-loading] .ty-table__cell {
     background: var(--ty-surface-solid);
   }

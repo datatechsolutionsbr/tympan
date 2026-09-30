@@ -1,0 +1,156 @@
+/* Custom elements (src/elements): what the ty-* component rules do not
+   already cover. The hosts wrap their anatomy without adding a box. */
+@layer tympan.components {
+  ty-brand-wordmark,
+  ty-button,
+  ty-checkbox,
+  ty-drawer,
+  ty-gradient-mark,
+  ty-inline-notice,
+  ty-link,
+  ty-modal,
+  ty-native-select,
+  ty-separator,
+  ty-skeleton,
+  ty-spinner,
+  ty-status-pill,
+  ty-surface,
+  ty-switch,
+  ty-tag,
+  ty-text-area,
+  ty-text-field,
+  ty-theme-palette {
+    display: contents;
+  }
+
+  /* <ty-skeleton>: the aria-hidden content wrapper and the preset container
+     (which the element composes into) add no box of their own. */
+  .ty-skeleton-content,
+  .ty-skeleton-preset {
+    display: contents;
+  }
+
+  /* The busy indicator of <ty-button>: a CSS ring (no icon font or SVG). */
+  .ty-button__busy {
+    display: inline-block;
+    flex: none;
+    box-sizing: border-box;
+    inline-size: 1.15em;
+    block-size: 1.15em;
+    border: 2px solid currentColor;
+    border-block-start-color: transparent;
+    border-radius: 50%;
+    animation: ty-button-spin 900ms linear infinite;
+  }
+
+  /* <ty-theme-palette> is a native dialog in the top layer. */
+  dialog.ty-palette {
+    position: fixed;
+    inset-block: 12vh auto;
+    inset-inline: 0;
+    margin-block: 0;
+    margin-inline: auto;
+    padding: 0;
+    inline-size: min(44rem, calc(100% - 2 * var(--ty-space-4)));
+    max-inline-size: none;
+  }
+  dialog.ty-palette:not([open]) {
+    display: none;
+  }
+  dialog.ty-palette::backdrop {
+    background: var(--ty-backdrop, rgb(15 23 42 / 0.4));
+  }
+  .ty-palette__option[data-current] .ty-palette__hint {
+    color: var(--ty-accent);
+    font-weight: var(--ty-font-weight-semibold);
+  }
+  .ty-palette__swatch {
+    display: block;
+    box-sizing: border-box;
+    inline-size: 16px;
+    block-size: 16px;
+    border: 1px solid var(--ty-line-strong);
+    border-radius: var(--ty-radius-pill);
+    background: linear-gradient(135deg, var(--ty-brand) 50%, var(--ty-bg) 50%);
+  }
+  .ty-palette__swatch[data-density-swatch] {
+    border-radius: 3px;
+    background: var(--ty-surface-sunken);
+  }
+
+  /* <ty-tag>: the categorical square takes one of the eight chart hues. */
+  .ty-tag__swatch[data-category='1'] {
+    --ty-tag-category: var(--ty-chart-1);
+  }
+  .ty-tag__swatch[data-category='2'] {
+    --ty-tag-category: var(--ty-chart-2);
+  }
+  .ty-tag__swatch[data-category='3'] {
+    --ty-tag-category: var(--ty-chart-3);
+  }
+  .ty-tag__swatch[data-category='4'] {
+    --ty-tag-category: var(--ty-chart-4);
+  }
+  .ty-tag__swatch[data-category='5'] {
+    --ty-tag-category: var(--ty-chart-5);
+  }
+  .ty-tag__swatch[data-category='6'] {
+    --ty-tag-category: var(--ty-chart-6);
+  }
+  .ty-tag__swatch[data-category='7'] {
+    --ty-tag-category: var(--ty-chart-7);
+  }
+  .ty-tag__swatch[data-category='8'] {
+    --ty-tag-category: var(--ty-chart-8);
+  }
+
+  /* <ty-checkbox>: the indicator always holds both marks; the native
+     :checked / :indeterminate state (or the host attribute before upgrade)
+     picks the visible one, so every renderer shows the right mark. */
+  .ty-checkbox__check,
+  .ty-checkbox__minus {
+    display: none;
+  }
+  .ty-checkbox__row:has(> input:checked) .ty-checkbox__check {
+    display: block;
+  }
+  .ty-checkbox__row:has(> input:indeterminate) .ty-checkbox__check,
+  ty-checkbox[indeterminate] .ty-checkbox__row .ty-checkbox__check {
+    display: none;
+  }
+  .ty-checkbox__row:has(> input:indeterminate) .ty-checkbox__minus,
+  ty-checkbox[indeterminate] .ty-checkbox__minus {
+    display: block;
+  }
+
+  /* <ty-text-field>: parts the element hides dynamically (an empty field's
+     clear action, an over-limit success) — the class display would beat the
+     UA's [hidden]. */
+  .ty-text-field [hidden] {
+    display: none;
+  }
+
+  /* <ty-text-field>: the reveal action holds both icons; its pressed state
+     picks the visible one (like <ty-checkbox>'s indicator). */
+  .ty-text-field__eye-off {
+    display: none;
+  }
+  .ty-text-field__reveal[aria-pressed='true'] .ty-text-field__eye {
+    display: none;
+  }
+  .ty-text-field__reveal[aria-pressed='true'] .ty-text-field__eye-off {
+    display: block;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ty-button__busy {
+      animation: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .ty-palette__swatch {
+      forced-color-adjust: none;
+    }
+  }
+}

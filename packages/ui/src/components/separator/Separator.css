@@ -29,7 +29,8 @@
     margin-inline: var(--ty-separator-gap);
   }
 
-  .ty-separator--captioned {
+  .ty-separator--captioned,
+  .ty-separator[data-captioned] {
     display: flex;
     align-items: center;
     gap: var(--ty-space-3);
@@ -49,7 +50,7 @@
   }
 
   @media (forced-colors: active) {
-    .ty-separator:not(.ty-separator--captioned),
+    .ty-separator:not(.ty-separator--captioned):not([data-captioned]),
     .ty-separator__line {
       background: CanvasText;
     }

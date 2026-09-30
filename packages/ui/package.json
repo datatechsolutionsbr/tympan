@@ -55,18 +55,30 @@
       "types": "./dist/flags.d.ts",
       "default": "./dist/flags.js"
     },
+    "./elements": {
+      "tympan-source": "./src/elements/index.ts",
+      "types": "./dist/elements.d.ts",
+      "default": "./dist/elements.js"
+    },
+    "./elements/react": {
+      "tympan-source": "./src/elements/react/index.ts",
+      "types": "./dist/elements-react.d.ts",
+      "default": "./dist/elements-react.js"
+    },
+    "./elements.bundle.js": "./dist/elements.bundle.js",
     "./styles.css": "./dist/styles.css",
     "./flow.css": "./dist/flow.css",
     "./package.json": "./package.json"
   },
   "files": [
     "dist",
+    "docs",
     "LICENSE",
     "THIRD_PARTY_NOTICES.md"
   ],
   "scripts": {
     "prebuild": "npm run build -w @datatechsolutions/tympan-tokens && node scripts/build-flags.mjs",
-    "build": "tsdown && node scripts/build-css.mjs && node scripts/prune-flag-maps.mjs",
+    "build": "tsdown && tsdown -c tsdown.elements.config.ts && node scripts/build-css.mjs && node scripts/prune-flag-maps.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest",

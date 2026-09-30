@@ -1,5 +1,17 @@
 /* Drawer (spec: wave-1/drawer.md; design direction §2.4, §2.5, §2.7, §2.8). */
 @layer tympan.components {
+  /* <ty-drawer> locks the page's scroll while open (the element sets the
+     attribute on the root; the last of stacked drawers removes it). */
+  :root[data-ty-drawer-open] {
+    overflow: hidden;
+  }
+
+  /* The anatomy stays mounted while closed; the class's `display: flex`
+     would beat the UA's `[hidden]`. */
+  .ty-drawer__backdrop[hidden] {
+    display: none;
+  }
+
   .ty-drawer__backdrop {
     position: fixed;
     inset: 0;

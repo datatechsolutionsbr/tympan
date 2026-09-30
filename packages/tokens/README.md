@@ -91,7 +91,8 @@ declared on every theme and mode scope so a nested theme re-resolves them.
 ```
 
 - `data-ty-theme`: `tympan` (default, also applied to `:root`), `fakhir`,
-  `neutral`, `high-contrast`, or the name of a generated theme.
+  `astrlabe`, `neutral`, `high-contrast`, an opt-in print theme (from
+  `print-themes.css`), or the name of a generated theme.
 - `data-ty-mode`: `light`, `dark`, or `system`/absent (follows `prefers-color-scheme`).
 - `data-ty-density`: see above.
 
@@ -115,6 +116,7 @@ In the design system, `<ThemeProvider>` / `useTheme()` set these attributes and
 |---|---|---|---|---|---|
 | `tympan` (default) | brand teal from the §2.3 accent, neutral with a slight teal tint, semantic hues | 10 | default | on | gradient |
 | `fakhir` | the look of the Fakhir research platform; today the same values as `tympan` | 10 | default | on | gradient |
+| `astrlabe` | the look of the Astrlabe workflow engine: indigo brand, slate neutral | 12 | default | on | gradient (indigo to purple) |
 | `neutral` | grey-blue brand, near-grey neutral | 8 | default | on | solid |
 | `high-contrast` | tympan seeds | 10 | high | off | solid |
 
@@ -123,6 +125,9 @@ The `tympan` preset (and `fakhir`, which an app selects by name with
 colours of design direction §2.3 (accent,
 surfaces, ink, lines, semantic tones, the CTA gradient) on top of the generated
 roles, so the product keeps the approved look; every other role is generated.
+`astrlabe` pins the Astrlabe app's slate and indigo values in the same way
+(indigo 600 / 400 as the text-safe brand in light / dark, indigo 500 as the
+focus ring, slate 50 / 950 grounds, glass surfaces).
 `neutral` and `high-contrast` are fully generated.
 
 ## Book-style print presets

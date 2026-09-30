@@ -32,6 +32,8 @@ describe('token contract', () => {
         .map((f) => readFileSync(join(dirname(file), f), 'utf8'))
         .join('\n')
       const local = new Set([...css.matchAll(/(--ty-[\w-]+)\s*:/g)].map((m) => m[1]))
+      // native-states.css restyles other components' markup, so it may read their own properties.
+      if (file.endsWith('native-states.css')) for (const other of cssFiles(src)) for (const m of readFileSync(other, 'utf8').matchAll(/(--ty-[\w-]+)\s*:/g)) local.add(m[1])
       for (const m of siblings.matchAll(/['"](--ty-[\w-]+)['"]/g)) local.add(m[1])
       const used = [...new Set([...css.matchAll(/var\(\s*(--ty-[\w-]+)/g)].map((m) => m[1]!))]
       const missing = used.filter((n) => !defined.has(n) && !local.has(n))

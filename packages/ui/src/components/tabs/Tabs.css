@@ -41,6 +41,18 @@
     transition: color var(--ty-dur-quick) var(--ty-ease);
   }
 
+  /* <ty-tabs> renders tabs as native buttons (the React Aria Tabs are divs):
+     strip the UA chrome. */
+  button.ty-tabs__tab {
+    appearance: none;
+    box-sizing: border-box;
+    padding-block: 0;
+    border: 0;
+    background: none;
+    font-family: inherit;
+    text-align: start;
+  }
+
   /* Selection indicator: a bar plus a weight change, never colour alone. */
   .ty-tabs__tab::after {
     content: '';

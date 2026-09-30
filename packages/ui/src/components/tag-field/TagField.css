@@ -54,6 +54,18 @@
     }
   }
 
+  /* <ty-tag-field> (the custom element) renders its suggestion layer inside
+     the frame, anchored under the well; the React component's Popover
+     positions its own portal copy. */
+  ty-tag-field .ty-tag-field__frame {
+    position: relative;
+  }
+  ty-tag-field .ty-tag-field__menu-layer {
+    position: absolute;
+    inset-block-start: calc(100% + var(--ty-space-1));
+    inset-inline: 0;
+  }
+
   .ty-tag-field {
     /* Chip paint by tone (neutral here, accent and category below). */
     --ty-tf-mark: var(--ty-ink-3);
@@ -76,6 +88,11 @@
       --ty-tf-mark: var(--ty-accent);
       --ty-tf-chip-fill: var(--ty-accent-soft);
       --ty-tf-chip-ink: var(--ty-on-accent-soft);
+    }
+    /* The categorical tint arrives as --ty-tag-field-tint (the React
+       component's inline style, or <ty-tag-field>'s category-index). */
+    &[data-tone='category'] {
+      --ty-tf-mark: var(--ty-tag-field-tint, var(--ty-ink-3));
     }
     &:focus-within {
       --ty-tf-edge: var(--ty-accent);

@@ -74,6 +74,11 @@
     color: var(--ty-ink);
   }
 
+  /* <ty-segmented-control> drives the native states; React Aria sets the data-* ones. */
+  .ty-segmented-control__segment:hover:not([data-selected], [data-disabled], :disabled) {
+    color: var(--ty-ink);
+  }
+
   /* Selection thumb: accent-soft with accent text (§2.3). */
   .ty-segmented-control__segment[data-selected] {
     border-color: var(--ty-line);
@@ -82,12 +87,14 @@
     box-shadow: var(--ty-shadow-raised);
   }
 
-  .ty-segmented-control__segment[data-focus-visible] {
+  .ty-segmented-control__segment[data-focus-visible],
+  .ty-segmented-control__segment:focus-visible {
     outline: var(--ty-focus-width) solid var(--ty-focus-ring);
     outline-offset: 2px;
   }
 
-  .ty-segmented-control__segment[data-disabled] {
+  .ty-segmented-control__segment[data-disabled],
+  .ty-segmented-control__segment:disabled {
     opacity: 0.55;
     cursor: not-allowed;
   }
@@ -108,7 +115,8 @@
       color: HighlightText;
       forced-color-adjust: none;
     }
-    .ty-segmented-control__segment[data-focus-visible] {
+    .ty-segmented-control__segment[data-focus-visible],
+    .ty-segmented-control__segment:focus-visible {
       outline-color: CanvasText;
     }
   }

@@ -1,0 +1,37 @@
+/* BrandWordmark (element-first: <ty-brand-wordmark>; docs/design/single-source-components.md). */
+@layer tympan.components {
+  .ty-brand-wordmark {
+    color: var(--ty-ink);
+    font-family: var(--ty-font-serif);
+    font-size: var(--ty-font-size-h3);
+    font-weight: var(--ty-font-weight-semibold);
+    letter-spacing: var(--ty-font-tracking-h1);
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .ty-brand-wordmark[data-size='small'] {
+    font-size: var(--ty-font-size-body-lg);
+  }
+  .ty-brand-wordmark[data-size='large'] {
+    font-size: var(--ty-font-size-display);
+  }
+
+  /* The accent segment in the brand gradient, clipped to the glyphs. */
+  .ty-brand-wordmark__accent {
+    background-image: linear-gradient(100deg, var(--ty-info), var(--ty-brand) 55%, var(--ty-brand-strong));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  @media (forced-colors: active) {
+    .ty-brand-wordmark {
+      color: CanvasText;
+    }
+    .ty-brand-wordmark__accent {
+      background: none;
+      color: CanvasText;
+      forced-color-adjust: none;
+    }
+  }
+}

@@ -104,6 +104,12 @@
   .ty-wheel[data-disabled] {
     opacity: 0.55;
   }
+  /* A pointer drag lifts the snap until release (set by the custom element
+     while a mouse or pen drag is active). */
+  .ty-wheel[data-dragging] .ty-wheel__list {
+    scroll-snap-type: none;
+    cursor: grabbing;
+  }
 
   .ty-wheel-group {
     display: flex;

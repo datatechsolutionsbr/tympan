@@ -4,8 +4,10 @@ export default defineConfig({
   // One entry per subpath: the flow canvas (@datatechsolutions/tympan/flow) and
   // generated avatars (/avatars) and flags (/flags) sit apart from the
   // components, so hosts that do not import them never load them or their
-  // optional peer dependencies.
-  entry: { index: 'src/index.ts', flow: 'src/flow/index.ts', avatars: 'src/avatars/index.ts', flags: 'src/flags/index.ts' },
+  // optional peer dependencies. The custom elements are subpaths too:
+  // @datatechsolutions/tympan/elements (the elements, no React) and
+  // /elements/react (the generated wrappers).
+  entry: { index: 'src/index.ts', flow: 'src/flow/index.ts', avatars: 'src/avatars/index.ts', flags: 'src/flags/index.ts', elements: 'src/elements/index.ts', 'elements-react': 'src/elements/react/index.ts' },
   format: ['esm'],
   platform: 'neutral',
   target: 'es2022',

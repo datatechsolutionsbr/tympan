@@ -82,3 +82,49 @@
     }
   }
 }
+
+
+/* ── <ty-popover> ────────────────────────────────────────────────────────
+   The element's anatomy: the host is an inline anchor; the panel reuses
+   the .ty-popover styles above (the React wrapper renders the same
+   classes), fixed-positioned by the element's placement model once open. */
+
+@layer tympan.components {
+  .ty-popover__anchor {
+    display: inline-block;
+    position: relative;
+  }
+
+  .ty-popover[hidden] {
+    display: none;
+  }
+
+  .ty-popover__dialog {
+    display: grid;
+    gap: var(--ty-space-2);
+  }
+
+  .ty-popover__arrow {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--ty-surface-raised-solid);
+    border: 1px solid var(--ty-line);
+    transform: rotate(45deg);
+    pointer-events: none;
+  }
+
+  .ty-popover[data-side='top'] .ty-popover__arrow {
+    inset-inline-end: var(--ty-space-4);
+    bottom: -6px;
+    border-top: none;
+    border-inline-start: none;
+  }
+
+  .ty-popover[data-side='bottom'] .ty-popover__arrow {
+    inset-inline-end: var(--ty-space-4);
+    top: -6px;
+    border-bottom: none;
+    border-inline-end: none;
+  }
+}
