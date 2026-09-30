@@ -5,7 +5,7 @@ import { render } from '@testing-library/react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 import type { FormaGrafico, PrintStyleOverrides, RenderizadorGrafico } from '@datatechsolutions/tympan-tokens'
-import { GraficoMetodo, LivroPrint, type SpecBarras, type SpecHalteres } from '../src/index.ts'
+import { MethodChart, PrintBook, type SpecBarras, type SpecHalteres } from '../src/index.ts'
 import { PRIMEIRO, SOMADOS, specsEstudo } from '../gallery/src/estudo.tsx'
 
 const RENDERIZADORES: RenderizadorGrafico[] = ['limpo', 'mao', 'isotype', 'gravura', 'prancheta', 'aquarela', 'riso', 'pontos']
@@ -15,9 +15,9 @@ const [PRIM, SOMA] = specsEstudo('barras') as [SpecBarras, SpecBarras]
 
 function desenhar(spec: SpecBarras, forma: FormaGrafico, renderizador: RenderizadorGrafico, extra: PrintStyleOverrides['estrutura'] = {}) {
   return render(
-    <LivroPrint estilo="jornal" tokens={{ estrutura: { forma, ...extra } }}>
-      <GraficoMetodo spec={spec} renderizador={renderizador} largura={124} />
-    </LivroPrint>,
+    <PrintBook estilo="jornal" tokens={{ estrutura: { forma, ...extra } }}>
+      <MethodChart spec={spec} renderizador={renderizador} largura={124} />
+    </PrintBook>,
   )
 }
 
@@ -39,7 +39,7 @@ describe('every shape draws every value in every renderer', () => {
           const { container, unmount } = desenhar(spec, forma, r)
           const fig = container.querySelector('figure')!
           expect(fig.getAttribute('data-forma')).toBe(forma)
-          const barras = [...container.querySelectorAll('g.ty-print-barra')]
+          const barras = [...container.querySelectorAll('g.ty-print-bar')]
           const linhas = spec.linhas!
           // Every (row, series) is drawn and carries its value.
           for (const i of linhas.keys())
@@ -82,7 +82,7 @@ describe('the folding bar keeps one line = dobra in both figures (same scale, as
   it('mm per unit is the same for the north segment and the 12 segments summed', () => {
     const ks = [PRIM, SOMA].map((spec) => {
       const { container, unmount } = desenhar(spec, 'ziguezague', 'limpo')
-      const b = [...container.querySelectorAll('g.ty-print-barra')].find((x) => num(x, 'valor') > 0)!
+      const b = [...container.querySelectorAll('g.ty-print-bar')].find((x) => num(x, 'valor') > 0)!
       const k = num(b, 'w') / num(b, 'valor')
       unmount()
       return k
@@ -96,11 +96,11 @@ describe('the folding bar keeps one line = dobra in both figures (same scale, as
 describe('the line of the cut and the column marker', () => {
   it('one cut line per pair; a circle on each column', () => {
     const { container } = desenhar(PRIM, 'colunas', 'limpo', { linhaCorte: 'cheia', marcador: 'circulo' })
-    expect(container.querySelectorAll('g.ty-print-g-corte')).toHaveLength(PRIM.linhas!.length)
-    expect(container.querySelectorAll('g.ty-print-g-marcador')).toHaveLength(PRIM.linhas!.length * 2)
+    expect(container.querySelectorAll('g.ty-print-g-cut')).toHaveLength(PRIM.linhas!.length)
+    expect(container.querySelectorAll('g.ty-print-g-marker')).toHaveLength(PRIM.linhas!.length * 2)
     // The cut line sits between the two columns of its group.
-    const cols = [...container.querySelectorAll('g.ty-print-barra')]
-    const linhas = [...container.querySelectorAll('g.ty-print-g-corte line')]
+    const cols = [...container.querySelectorAll('g.ty-print-bar')]
+    const linhas = [...container.querySelectorAll('g.ty-print-g-cut line')]
     linhas.forEach((ln, i) => {
       const [a, b] = cols.filter((c) => num(c, 'linha') === i)
       const x = Number(ln.getAttribute('x1'))
@@ -118,7 +118,7 @@ describe('callouts inside the chart point at their value and stay in the figure'
           const { container, unmount } = desenhar(spec, 'colunas', r, { chamadas })
           const svg = container.querySelector('svg')!
           const [, , W, H] = svg.getAttribute('viewBox')!.split(' ').map(Number)
-          const notas = [...container.querySelectorAll('g.ty-print-g-chamada-nota')]
+          const notas = [...container.querySelectorAll('g.ty-print-g-kicker-note')]
           expect(notas).toHaveLength(spec.anotacoes!.length)
           for (const [k, nt] of notas.entries()) {
             expect(num(nt, 'x')).toBeGreaterThanOrEqual(-0.01)
@@ -127,7 +127,7 @@ describe('callouts inside the chart point at their value and stay in the figure'
             expect(num(nt, 'y') + num(nt, 'h')).toBeLessThan(H!)
             // The target is the top of the last column of the annotated row.
             const linha = spec.anotacoes![k]!.linha
-            const col = [...container.querySelectorAll(`g.ty-print-barra[data-linha="${linha}"]`)].at(-1)!
+            const col = [...container.querySelectorAll(`g.ty-print-bar[data-linha="${linha}"]`)].at(-1)!
             expect(num(nt, 'alvo-x')).toBeGreaterThan(num(col, 'x'))
             expect(num(nt, 'alvo-x')).toBeLessThan(num(col, 'x') + 8)
             expect(num(nt, 'alvo-y')).toBeLessThan(num(col, 'base') - num(col, 'h'))
@@ -135,7 +135,7 @@ describe('callouts inside the chart point at their value and stay in the figure'
             expect(num(nt, 'y') + num(nt, 'h')).toBeLessThan(num(col, 'base') - num(col, 'h'))
           }
           // No numbered list under the plot when the notes are drawn in it.
-          expect(container.querySelectorAll('g.ty-print-g-anotacao')).toHaveLength(0)
+          expect(container.querySelectorAll('g.ty-print-g-annotetion')).toHaveLength(0)
           unmount()
         }
       })
@@ -145,9 +145,9 @@ describe('a dumbbell takes the style shape only when nothing is lost', () => {
   const halteres = specsEstudo('halteres')[0] as SpecHalteres
   it('converted when the style declares a shape and the axis starts at zero', () => {
     const { container } = render(
-      <LivroPrint estilo="jornal" tokens={{ estrutura: { forma: 'colunas' } }}>
-        <GraficoMetodo spec={halteres} largura={120} />
-      </LivroPrint>,
+      <PrintBook estilo="jornal" tokens={{ estrutura: { forma: 'colunas' } }}>
+        <MethodChart spec={halteres} largura={120} />
+      </PrintBook>,
     )
     expect(container.querySelector('figure')!.getAttribute('data-tipo')).toBe('halteres')
     expect(container.querySelector('figure')!.getAttribute('data-forma')).toBe('colunas')
@@ -159,12 +159,12 @@ describe('a dumbbell takes the style shape only when nothing is lost', () => {
     ]
     for (const [tokens, spec] of casos) {
       const { container, unmount } = render(
-        <LivroPrint estilo="jornal" tokens={tokens}>
-          <GraficoMetodo spec={spec} largura={120} />
-        </LivroPrint>,
+        <PrintBook estilo="jornal" tokens={tokens}>
+          <MethodChart spec={spec} largura={120} />
+        </PrintBook>,
       )
       expect(container.querySelector('figure')!.getAttribute('data-forma')).toBeNull()
-      expect(container.querySelectorAll('g.ty-print-ponto').length).toBeGreaterThan(0)
+      expect(container.querySelectorAll('g.ty-print-point').length).toBeGreaterThan(0)
       unmount()
     }
   })
@@ -174,7 +174,7 @@ describe('shapes render deterministically on the server', () => {
   for (const forma of FORMAS)
     it(forma, () => {
       for (const r of RENDERIZADORES) {
-        const html = () => renderToStaticMarkup(<LivroPrint estilo="caderno" tokens={{ estrutura: { forma, chamadas: 'manuscritas' } }}>{[PRIM, SOMA].map((s, k) => <GraficoMetodo key={k} spec={s} renderizador={r} largura={120} />)}</LivroPrint>)
+        const html = () => renderToStaticMarkup(<PrintBook estilo="caderno" tokens={{ estrutura: { forma, chamadas: 'manuscritas' } }}>{[PRIM, SOMA].map((s, k) => <MethodChart key={k} spec={s} renderizador={r} largura={120} />)}</PrintBook>)
         const a = html()
         expect(a).toBe(html())
         expect(a).not.toMatch(/NaN|undefined|Infinity/)

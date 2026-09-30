@@ -3,7 +3,7 @@
 import { geoContains, geoPath } from 'd3-geo'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
-import { ALBERS_BRASIL, LivroPrint, Mapa, municipios, projecaoBrasil, quantis, classeDe, ufs, ufsDoRecorte } from '../src/index.ts'
+import { ALBERS_BRASIL, PrintBook, PrintMap, municipios, projecaoBrasil, quantis, classeDe, ufs, ufsDoRecorte } from '../src/index.ts'
 
 /** Codes drawn in each class: { classe: [codes] } from the per-class paths. */
 function desenhados(html: string): Map<number, string[]> {
@@ -100,16 +100,16 @@ describe('classes', () => {
   })
 })
 
-describe('Mapa', () => {
+describe('PrintMap', () => {
   const html = (el: React.ReactElement, estilo: 'jornal' | 'caderno' | 'cordel' | 'cartao-postal' = 'jornal', pb = false) =>
     renderToStaticMarkup(
-      <LivroPrint estilo={estilo} pb={pb}>
+      <PrintBook estilo={estilo} pb={pb}>
         {el}
-      </LivroPrint>,
+      </PrintBook>,
     )
 
   it('draws every one of the 5,570 municipalities', () => {
-    const s = html(<Mapa titulo="t" alt="achado" exemplo largura={120} />)
+    const s = html(<PrintMap titulo="t" alt="achado" exemplo largura={120} />)
     expect(todos(s)).toHaveLength(5570)
     expect(new Set(todos(s)).size).toBe(5570)
     expect(todos(s).every((c) => /^\d{7}$/.test(c))).toBe(true)
@@ -119,7 +119,7 @@ describe('Mapa', () => {
 
   it('classes values, marks missing ones "sem dado", and highlights by code and by name', () => {
     const valores = { '3550308': 12, '5300108': 3, '3304557': 7 }
-    const s = html(<Mapa titulo="t" alt="a" valores={valores} limites={[5, 10]} destaques={['3550308', 'Brasília/DF']} largura={120} />)
+    const s = html(<PrintMap titulo="t" alt="a" valores={valores} limites={[5, 10]} destaques={['3550308', 'Brasília/DF']} largura={120} />)
     const d = desenhados(s)
     expect(d.get(2)).toEqual(['3550308'])
     expect(d.get(0)).toEqual(['5300108'])
@@ -131,47 +131,47 @@ describe('Mapa', () => {
   })
 
   it('refuses an ambiguous or unknown highlight', () => {
-    expect(() => html(<Mapa titulo="t" alt="a" exemplo destaques={['Bom Jesus']} />)).toThrow(/ambíguo/)
-    expect(() => html(<Mapa titulo="t" alt="a" exemplo destaques={['Atlântida Perdida']} />)).toThrow(/não encontrado/)
+    expect(() => html(<PrintMap titulo="t" alt="a" exemplo destaques={['Bom Jesus']} />)).toThrow(/ambíguo/)
+    expect(() => html(<PrintMap titulo="t" alt="a" exemplo destaques={['Atlântida Perdida']} />)).toThrow(/não encontrado/)
   })
 
   it('recorte draws only its UFs; uf level draws 27 areas', () => {
-    const s = html(<Mapa titulo="t" alt="a" recorte="Sul" exemplo largura={80} />)
+    const s = html(<PrintMap titulo="t" alt="a" recorte="Sul" exemplo largura={80} />)
     const codes = todos(s)
     expect(codes.length).toBe(1191)
     expect(codes.every((c) => ['41', '42', '43'].includes(c.slice(0, 2)))).toBe(true)
-    const u = html(<Mapa titulo="t" alt="a" nivel="uf" valores={{ SP: 645, '31': 853 }} limites={[700]} largura={80} />)
+    const u = html(<PrintMap titulo="t" alt="a" nivel="uf" valores={{ SP: 645, '31': 853 }} limites={[700]} largura={80} />)
     expect(todos(u)).toHaveLength(27)
     expect(desenhados(u).get(1)).toEqual(['MG'])
   })
 
   it('fits the height and lays small multiples out in a grid under it', () => {
-    const s = html(<Mapa titulo="t" alt="a" exemplo largura={120} altura={60} />)
+    const s = html(<PrintMap titulo="t" alt="a" exemplo largura={120} altura={60} />)
     const [, w, h] = s.match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/)!.map(Number) as [number, number, number]
     expect(h).toBeLessThanOrEqual(60)
     expect(w).toBeLessThan(120)
     const m = html(
-      <Mapa titulo="t" alt="a" exemplo largura={120} altura={80} colunas={3} multiplos={['Norte', 'Nordeste', 'Sudeste', 'Sul', 'Centro-Oeste'].map((r) => ({ titulo: r, recorte: r as 'Sul' }))} />,
+      <PrintMap titulo="t" alt="a" exemplo largura={120} altura={80} colunas={3} multiplos={['Norte', 'Nordeste', 'Sudeste', 'Sul', 'Centro-Oeste'].map((r) => ({ titulo: r, recorte: r as 'Sul' }))} />,
     )
     const [, mw, mh] = m.match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/)!.map(Number) as [number, number, number]
     expect(mw).toBe(120)
     expect(mh).toBeLessThanOrEqual(80)
     expect(todos(m)).toHaveLength(5570)
-    expect(m.match(/class="ty-print-mapa-legenda"/g)).toHaveLength(1)
+    expect(m.match(/class="ty-print-map-legend"/g)).toHaveLength(1)
   })
 
   it('inks classes by style: flat, hatched in P&B, dotted in pontos', () => {
-    expect(html(<Mapa titulo="t" alt="a" exemplo largura={60} nivel="uf" />)).toContain('color-mix(in oklab')
-    const pb = html(<Mapa titulo="t" alt="a" exemplo largura={60} nivel="uf" />, 'jornal', true)
+    expect(html(<PrintMap titulo="t" alt="a" exemplo largura={60} nivel="uf" />)).toContain('color-mix(in oklab')
+    const pb = html(<PrintMap titulo="t" alt="a" exemplo largura={60} nivel="uf" />, 'jornal', true)
     expect(pb).toMatch(/<pattern[^>]*-k0"[^>]*rotate\(45\)/)
     expect(pb).not.toContain('color-mix(in oklab')
-    expect(html(<Mapa titulo="t" alt="a" exemplo largura={60} nivel="uf" renderizador="pontos" />)).toMatch(/<pattern[^>]*-k4"[^>]*><rect[^>]*><\/rect><circle/)
+    expect(html(<PrintMap titulo="t" alt="a" exemplo largura={60} nivel="uf" renderizador="pontos" />)).toMatch(/<pattern[^>]*-k4"[^>]*><rect[^>]*><\/rect><circle/)
   })
 
   it('is deterministic in every renderer, and never NaN', () => {
     for (const estilo of ['jornal', 'caderno', 'cordel', 'cartao-postal'] as const) {
       for (const pb of [false, true]) {
-        const el = <Mapa titulo="t" alt="a" exemplo largura={90} recorte="Nordeste" destaques={['Recife/PE']} />
+        const el = <PrintMap titulo="t" alt="a" exemplo largura={90} recorte="Nordeste" destaques={['Recife/PE']} />
         const a = html(el, estilo, pb)
         expect(html(el, estilo, pb)).toBe(a)
         expect(a).not.toMatch(/NaN|undefined|Infinity/)

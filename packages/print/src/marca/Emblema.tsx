@@ -144,7 +144,7 @@ export function Emblema({ escala = 1 }: { escala?: number }) {
   const nome = pedido === 'modulor' ? 'figura-modular' : pedido
   const e = EMBLEMAS[nome]
   return (
-    <svg className="ty-print-emblema" data-emblema={nome} viewBox={`0 0 ${e.w} ${e.h}`} width={`${e.w * escala}mm`} height={`${e.h * escala}mm`} aria-hidden="true" focusable="false">
+    <svg className="ty-print-emblem" data-emblema={nome} viewBox={`0 0 ${e.w} ${e.h}`} width={`${e.w * escala}mm`} height={`${e.h * escala}mm`} aria-hidden="true" focusable="false">
       {e.corpo}
     </svg>
   )

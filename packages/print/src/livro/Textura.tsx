@@ -17,7 +17,7 @@ function matriz(cor: string, alfa: number, limiar: number): string {
  */
 export function Textura({ lado }: { lado: 'par' | 'impar' }) {
   const { estilo, pb } = usePrint()
-  const id = useIdSeguro('ty-print-papel')
+  const id = useIdSeguro('ty-print-pafootl')
   const { textura, intensidade } = estilo.papel
   if (textura === 'nenhuma' || intensidade <= 0) return null
   const tinta = estilo.cor.tinta
@@ -87,7 +87,7 @@ export function Textura({ lado }: { lado: 'par' | 'impar' }) {
     )
   }
   return (
-    <svg className="ty-print-textura" aria-hidden="true" focusable="false">
+    <svg className="ty-print-texture" aria-hidden="true" focusable="false">
       <defs>{defs}</defs>
       {corpo}
     </svg>

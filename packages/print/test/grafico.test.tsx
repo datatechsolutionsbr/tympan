@@ -3,7 +3,7 @@
 import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import type { RenderizadorGrafico } from '@datatechsolutions/tympan-tokens'
-import { GraficoMetodo, LivroPrint, layoutBarras, layoutColunas, layoutHalteres, marcasEixo, type SpecBarras, type SpecHalteres } from '../src/index.ts'
+import { MethodChart, PrintBook, layoutBarras, layoutColunas, layoutHalteres, marcasEixo, type SpecBarras, type SpecHalteres } from '../src/index.ts'
 import { PRIMEIRO, SOMADOS, specsEstudo } from '../gallery/src/estudo.tsx'
 
 const RENDERIZADORES: RenderizadorGrafico[] = ['limpo', 'mao', 'isotype', 'gravura', 'prancheta', 'aquarela', 'riso', 'pontos']
@@ -20,17 +20,17 @@ describe('halteres: points sit on the data in every renderer', () => {
     it(r, () => {
       for (const spec of specs) {
         const { container, unmount } = render(
-          <LivroPrint estilo="jornal">
-            <GraficoMetodo spec={spec} renderizador={r} largura={130} />
-          </LivroPrint>,
+          <PrintBook estilo="jornal">
+            <MethodChart spec={spec} renderizador={r} largura={130} />
+          </PrintBook>,
         )
-        const svg = container.querySelector('svg.ty-print-grafico')!
+        const svg = container.querySelector('svg.ty-print-chart')!
         const x0 = Number(svg.getAttribute('data-x0'))
         const x1 = Number(svg.getAttribute('data-x1'))
         const [d0, d1] = spec.escala
         expect(Number(svg.getAttribute('data-d0'))).toBe(d0)
         expect(Number(svg.getAttribute('data-d1'))).toBe(d1)
-        const pontos = [...container.querySelectorAll('g.ty-print-ponto')]
+        const pontos = [...container.querySelectorAll('g.ty-print-point')]
         expect(pontos).toHaveLength(spec.linhas.length * 2)
         const ys = new Map<number, number>()
         for (const p of pontos) {
@@ -49,8 +49,8 @@ describe('halteres: points sit on the data in every renderer', () => {
         for (let i = 1; i < ordem.length; i++) expect(ordem[i]! - ordem[i - 1]!).toBeCloseTo(ordem[1]! - ordem[0]!, 5)
         // The distance between the two points of a row is proportional to b − a.
         for (const [i, l] of spec.linhas.entries()) {
-          const [xa] = translate(container.querySelector(`g.ty-print-ponto[data-linha="${i}"][data-serie="a"]`)!)
-          const [xb] = translate(container.querySelector(`g.ty-print-ponto[data-linha="${i}"][data-serie="b"]`)!)
+          const [xa] = translate(container.querySelector(`g.ty-print-point[data-linha="${i}"][data-serie="a"]`)!)
+          const [xb] = translate(container.querySelector(`g.ty-print-point[data-linha="${i}"][data-serie="b"]`)!)
           expect(xb - xa).toBeCloseTo(((l.b - l.a) / (d1 - d0)) * (x1 - x0), 2)
         }
         unmount()
@@ -76,12 +76,12 @@ describe('barras: bar lengths come from the data in every renderer', () => {
   for (const r of RENDERIZADORES) {
     it(r, () => {
       const { container } = render(
-        <LivroPrint estilo="jornal">
-          <GraficoMetodo spec={spec} renderizador={r} largura={130} />
-        </LivroPrint>,
+        <PrintBook estilo="jornal">
+          <MethodChart spec={spec} renderizador={r} largura={130} />
+        </PrintBook>,
       )
       const L = layoutBarras(spec, 130)
-      const barras = [...container.querySelectorAll('g.ty-print-barra')]
+      const barras = [...container.querySelectorAll('g.ty-print-bar')]
       expect(barras).toHaveLength(PRIMEIRO.length * 2)
       for (const b of barras) {
         const valor = Number(b.getAttribute('data-valor'))
@@ -98,14 +98,14 @@ describe('colunas (vertical bars): heights come from the data in every renderer'
   for (const r of RENDERIZADORES) {
     it(r, () => {
       const { container } = render(
-        <LivroPrint estilo="cientifico">
-          <GraficoMetodo spec={spec} renderizador={r} largura={120} />
-        </LivroPrint>,
+        <PrintBook estilo="cientifico">
+          <MethodChart spec={spec} renderizador={r} largura={120} />
+        </PrintBook>,
       )
       const L = layoutColunas(spec, 120)
-      const svg = container.querySelector('svg.ty-print-grafico')!
+      const svg = container.querySelector('svg.ty-print-chart')!
       expect(svg.getAttribute('data-orientacao')).toBe('vertical')
-      const colunas = [...container.querySelectorAll('g.ty-print-barra')]
+      const colunas = [...container.querySelectorAll('g.ty-print-bar')]
       expect(colunas).toHaveLength(SOMADOS.length * 2)
       const xs = new Set<number>()
       for (const b of colunas) {
@@ -125,9 +125,9 @@ describe('accessible figure', () => {
   it('names the finding, keeps a data table and tags local-lake numbers', () => {
     const spec = specsEstudo('halteres')[0]
     const { container, getByRole } = render(
-      <LivroPrint estilo="semanario">
-        <GraficoMetodo spec={spec} alt="Inverno 2022: 127 fora, 54 dentro." local />
-      </LivroPrint>,
+      <PrintBook estilo="semanario">
+        <MethodChart spec={spec} alt="Inverno 2022: 127 fora, 54 dentro." local />
+      </PrintBook>,
     )
     expect(getByRole('img', { name: 'Inverno 2022: 127 fora, 54 dentro.' })).toBeInTheDocument()
     const tabela = container.querySelector('.ty-print-sr table')!

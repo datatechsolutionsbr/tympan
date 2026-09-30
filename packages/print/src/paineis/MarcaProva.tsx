@@ -65,7 +65,7 @@ function Icone({ estado }: { estado: EstadoProva }) {
       break
   }
   return (
-    <svg className="ty-print-prova-icone" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+    <svg className="ty-print-proof-icon" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
       {corpo}
     </svg>
   )
@@ -133,7 +133,7 @@ function Forma({ estado, estilo }: { estado: EstadoProva; estilo: 'formas' | 'po
     }
   }
   return (
-    <svg className="ty-print-prova-forma" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+    <svg className="ty-print-proof-shape" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
       {corpo}
     </svg>
   )
@@ -154,7 +154,7 @@ function Contorno({ forma, estado, tremor, chave }: { forma: FormaMarca; estado:
       if (t === 'duplo') paths.push('M50 5 A45 15 0 1 1 49.9 5 Z')
     }
     return (
-      <svg className="ty-print-prova-contorno" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <svg className="ty-print-proof-outline" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
         {paths.map((d, i) => (
           <path key={i} d={d} vectorEffect="non-scaling-stroke" style={style} strokeDasharray={dash(t)} strokeLinecap="round" />
         ))}
@@ -175,7 +175,7 @@ function Contorno({ forma, estado, tremor, chave }: { forma: FormaMarca; estado:
       if (t === 'duplo') paths.push(`M2 ${y + 4} H98`)
     }
     return (
-      <svg className="ty-print-prova-contorno ty-print-prova-contorno--baixo" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <svg className="ty-print-proof-outline ty-print-proof-outline--bottom" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
         {paths.map((d, i) => (
           <path key={i} d={d} vectorEffect="non-scaling-stroke" style={style} strokeDasharray={dash(t)} strokeLinecap="round" />
         ))}
@@ -187,7 +187,7 @@ function Contorno({ forma, estado, tremor, chave }: { forma: FormaMarca; estado:
   for (const p of tracar({ k: 'retangulo', x: 1.5, y: 3, w: 97, h: 34 }, chave, o)) paths.push(p.d)
   if (t === 'duplo') for (const p of tracar({ k: 'retangulo', x: 4, y: 6.5, w: 92, h: 27 }, `${chave}-2`, o)) paths.push(p.d)
   return (
-    <svg className="ty-print-prova-contorno" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <svg className="ty-print-proof-outline" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
       {paths.map((d, i) => (
         <path key={i} d={d} vectorEffect="non-scaling-stroke" style={{ ...style, strokeWidth: w * 1.3 }} strokeDasharray={dash(t)} strokeLinecap="round" />
       ))}
@@ -209,7 +209,7 @@ export function MarcaProva({ estado, grande = false, forma, className }: MarcaPr
   const comIcone = f === 'pilula' || f === 'etiqueta'
   return (
     <span
-      className={cx('ty-print-prova', className)}
+      className={cx('ty-print-proof', className)}
       data-estado={estado}
       data-forma={f}
       data-traco={TRACO[estado]}
@@ -218,7 +218,7 @@ export function MarcaProva({ estado, grande = false, forma, className }: MarcaPr
     >
       {comIcone ? <Icone estado={estado} /> : null}
       {f === 'formas' || f === 'ponto' ? <Forma estado={estado} estilo={f} /> : null}
-      <span className="ty-print-prova-texto">{ROTULOS_PROVA[estado]}</span>
+      <span className="ty-print-proof-text">{ROTULOS_PROVA[estado]}</span>
       {comContorno ? <Contorno forma={f} estado={estado} tremor={tremor} chave={`prova-${estado}-${grande ? 'g' : 'p'}`} /> : null}
     </span>
   )

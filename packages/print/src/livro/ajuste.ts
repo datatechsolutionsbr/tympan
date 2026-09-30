@@ -37,10 +37,10 @@ export function ajustarPaginas(raiz: ParentNode = document, opcoes: AjusteOpcoes
   const passo = opcoes.passo ?? 0.02
   const MM = 96 / 25.4
   const out: AjustePagina[] = []
-  const paginas = Array.from(raiz.querySelectorAll<HTMLElement>('.ty-print-pagina'))
+  const paginas = Array.from(raiz.querySelectorAll<HTMLElement>('.ty-print-page'))
   for (const pg of paginas) {
     if (pg.getAttribute('data-variante') === 'capa') continue
-    const m = pg.querySelector<HTMLElement>(':scope > .ty-print-mancha')
+    const m = pg.querySelector<HTMLElement>(':scope > .ty-print-type-area')
     if (!m) continue
     const respiro = pg.hasAttribute('data-respiro') || pg.getAttribute('data-variante') === 'prancha'
     const comMolde = pg.hasAttribute('data-molde')

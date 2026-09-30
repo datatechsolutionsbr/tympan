@@ -38,11 +38,11 @@ function dataBr(iso?: string): string | undefined {
 
 export function Promessa({ citacao, norma, data, resumo, urn, detalhes, genealogia, className }: PromessaProps) {
   return (
-    <div className={cx('ty-print-promessa', className)}>
-      <blockquote className="ty-print-promessa-citacao">
+    <div className={cx('ty-print-promise', className)}>
+      <blockquote className="ty-print-promise-quote">
         <p>“{comColchetes(citacao.replace(/^["“]|["”]$/g, ''))}”</p>
       </blockquote>
-      <p className="ty-print-norma">
+      <p className="ty-print-norm">
         <cite>{comColchetes(norma)}</cite>
         {data ? (
           <>
@@ -52,18 +52,18 @@ export function Promessa({ citacao, norma, data, resumo, urn, detalhes, genealog
         ) : null}
       </p>
       {urn ? <p className="ty-print-urn">{urn}</p> : null}
-      {detalhes?.length ? <Ficha itens={detalhes} className="ty-print-promessa-detalhes" /> : null}
+      {detalhes?.length ? <Ficha itens={detalhes} className="ty-print-promise-details" /> : null}
       {genealogia?.length ? (
-        <ol className="ty-print-genealogia" aria-label="Genealogia da regra">
+        <ol className="ty-print-genealogy" aria-label="Genealogia da regra">
           {genealogia.map((g, i) => (
             <li key={i} data-atual={g.atual ? '' : undefined}>
-              <span className="ty-print-genealogia-ano">{comColchetes(g.ano)}</span>
-              <span className="ty-print-genealogia-texto">{comColchetes(g.texto)}</span>
+              <span className="ty-print-genealogy-year">{comColchetes(g.ano)}</span>
+              <span className="ty-print-genealogy-text">{comColchetes(g.texto)}</span>
             </li>
           ))}
         </ol>
       ) : null}
-      {resumo ? <p className="ty-print-resumo">{comColchetes(resumo)}</p> : null}
+      {resumo ? <p className="ty-print-summary">{comColchetes(resumo)}</p> : null}
     </div>
   )
 }
@@ -95,26 +95,26 @@ const antes = (u?: string) => Boolean(u && /^(R\$|US\$|€|\$)/.test(u))
 
 export function Numeros({ itens, exemplo = false, className }: NumerosProps) {
   return (
-    <div className={cx('ty-print-numeros-bloco', className)}>
-      {exemplo ? <p className="ty-print-selo-exemplo">Dados de exemplo</p> : null}
-      <dl className="ty-print-numeros">
+    <div className={cx('ty-print-numbers-block', className)}>
+      {exemplo ? <p className="ty-print-badge-example">Dados de exemplo</p> : null}
+      <dl className="ty-print-numbers">
         {itens.map((it, i) => (
-          <div key={i} className="ty-print-numero">
-            <dt className="ty-print-numero-rotulo">
+          <div key={i} className="ty-print-number">
+            <dt className="ty-print-number-label">
               {comColchetes(it.rotulo)}
-              {it.meta ? <span className="ty-print-numero-meta"> {comColchetes(it.meta)}</span> : null}{' '}
+              {it.meta ? <span className="ty-print-number-meta"> {comColchetes(it.meta)}</span> : null}{' '}
               <span className="ty-print-ref">{comColchetes(it.ref)}</span>
             </dt>
-            <dd className="ty-print-numero-valor">
-              {antes(it.unidade) ? <span className="ty-print-unidade">{it.unidade} </span> : null}
-              <span className="ty-print-valor">{comColchetes(formatarNumero(it.valor))}</span>
-              {it.unidade && !antes(it.unidade) ? <span className="ty-print-unidade"> {it.unidade}</span> : null}
+            <dd className="ty-print-number-value">
+              {antes(it.unidade) ? <span className="ty-print-unit">{it.unidade} </span> : null}
+              <span className="ty-print-value">{comColchetes(formatarNumero(it.valor))}</span>
+              {it.unidade && !antes(it.unidade) ? <span className="ty-print-unit"> {it.unidade}</span> : null}
               {it.comparado !== undefined ? (
                 <>
                   <span className="ty-print-vs" aria-label="contra">
                     {' × '}
                   </span>
-                  <span className="ty-print-comparado">{comColchetes(formatarNumero(it.comparado))}</span>
+                  <span className="ty-print-compared">{comColchetes(formatarNumero(it.comparado))}</span>
                 </>
               ) : null}
             </dd>
@@ -144,8 +144,8 @@ export function TabelaDados({ titulo, colunas, linhas, nota, className }: Tabela
   // A column is numeric when declared, or when every cell of it is a number.
   const numerica = cols.map((c, j) => c.numerica ?? (linhas.length > 0 && linhas.every((l) => typeof l[j] === 'number')))
   return (
-    <div className={cx('ty-print-tabela-bloco', className)}>
-      <table className="ty-print-tabela">
+    <div className={cx('ty-print-table-block', className)}>
+      <table className="ty-print-table">
         {titulo ? <caption>{comColchetes(titulo)}</caption> : null}
         <thead>
           <tr>
@@ -171,7 +171,7 @@ export function TabelaDados({ titulo, colunas, linhas, nota, className }: Tabela
           ))}
         </tbody>
       </table>
-      {nota ? <p className="ty-print-tabela-nota">{comColchetes(nota)}</p> : null}
+      {nota ? <p className="ty-print-table-note">{comColchetes(nota)}</p> : null}
     </div>
   )
 }
@@ -201,19 +201,19 @@ export interface VereditoProps {
 
 export function Veredito({ promessa, texto, estado, itens, medicaoMarcada, proposto = false, className }: VereditoProps) {
   return (
-    <div className={cx('ty-print-veredito', className)} data-estado={estado}>
-      <div className="ty-print-veredito-topo">
-        <blockquote className="ty-print-veredito-promessa">
+    <div className={cx('ty-print-verdict', className)} data-estado={estado}>
+      <div className="ty-print-verdict-top">
+        <blockquote className="ty-print-verdict-promise">
           <p>“{comColchetes(promessa.replace(/^["“]|["”]$/g, ''))}”</p>
         </blockquote>
         {estado ? <MarcaProva estado={estado} grande /> : null}
       </div>
-      <p className="ty-print-veredito-texto">{comColchetes(texto)}</p>
+      <p className="ty-print-verdict-text">{comColchetes(texto)}</p>
       {itens.length ? (
-        <ul className="ty-print-veredito-itens">
+        <ul className="ty-print-verdict-items">
           {itens.map((it, i) => (
             <li key={i}>
-              <span className="ty-print-afirmacao">
+              <span className="ty-print-claim">
                 <span>{comColchetes(it.afirmacao)}</span>
                 <small className="ty-print-base">{comColchetes(it.base)}</small>
               </span>
@@ -223,11 +223,11 @@ export function Veredito({ promessa, texto, estado, itens, medicaoMarcada, propo
         </ul>
       ) : null}
       {medicaoMarcada ? (
-        <p className="ty-print-medicao-marcada">
-          <span className="ty-print-medicao-rotulo">Medição marcada:</span> {comColchetes(medicaoMarcada)}
+        <p className="ty-print-reading-markda">
+          <span className="ty-print-reading-label">Medição marcada:</span> {comColchetes(medicaoMarcada)}
         </p>
       ) : null}
-      {proposto ? <p className="ty-print-proposto">Estados propostos, a confirmar pela autora depois do teste formal.</p> : null}
+      {proposto ? <p className="ty-print-proposed">Estados propostos, a confirmar pela autora depois do teste formal.</p> : null}
     </div>
   )
 }
@@ -241,15 +241,15 @@ export interface TestesProps {
 /** The design's tests, each with its proof state. */
 export function Testes({ titulo, itens, className }: TestesProps) {
   return (
-    <div className={cx('ty-print-testes', className)}>
-      {titulo ? <p className="ty-print-bloco-titulo">{comColchetes(titulo)}</p> : null}
-      <ol className="ty-print-testes-lista">
+    <div className={cx('ty-print-tests', className)}>
+      {titulo ? <p className="ty-print-block-title">{comColchetes(titulo)}</p> : null}
+      <ol className="ty-print-tests-list">
         {itens.map((it, i) => (
           <li key={i}>
-            <p className="ty-print-teste-pergunta">{comColchetes(it.pergunta)}</p>
+            <p className="ty-print-test-question">{comColchetes(it.pergunta)}</p>
             <MarcaProva estado={it.estado} />
-            <p className="ty-print-teste-texto">{comColchetes(it.texto)}</p>
-            {it.proposto ? <p className="ty-print-proposto">estado proposto</p> : null}
+            <p className="ty-print-test-text">{comColchetes(it.texto)}</p>
+            {it.proposto ? <p className="ty-print-proposed">estado proposto</p> : null}
           </li>
         ))}
       </ol>
@@ -264,13 +264,13 @@ export interface NaoDaParaAfirmarProps {
 
 export function NaoDaParaAfirmar({ itens, className }: NaoDaParaAfirmarProps) {
   return (
-    <ul className={cx('ty-print-nao', className)}>
+    <ul className={cx('ty-print-not', className)}>
       {itens.map((it, i) => (
         <li key={i}>
-          <p className="ty-print-nao-titulo">{comColchetes(it.titulo)}</p>
+          <p className="ty-print-not-title">{comColchetes(it.titulo)}</p>
           <p>
             {comColchetes(it.texto)}
-            {it.remete ? <span className="ty-print-remete"> → {comColchetes(it.remete)}</span> : null}
+            {it.remete ? <span className="ty-print-refers"> → {comColchetes(it.remete)}</span> : null}
           </p>
         </li>
       ))}
@@ -287,11 +287,11 @@ export interface QuandoODadoChegarProps {
 /** What data would settle the question, and where it is now. */
 export function QuandoODadoChegar({ texto, itens, className }: QuandoODadoChegarProps) {
   return (
-    <aside className={cx('ty-print-quando', className)}>
-      <p className="ty-print-bloco-titulo">Quando o dado chegar</p>
+    <aside className={cx('ty-print-when', className)}>
+      <p className="ty-print-block-title">Quando o dado chegar</p>
       {texto ? <p>{comColchetes(texto)}</p> : null}
       {itens?.length ? (
-        <ul className="ty-print-quando-itens">
+        <ul className="ty-print-when-items">
           {itens.map((it, i) => (
             <li key={i}>
               <MarcaProva estado={it.estado} />
@@ -345,20 +345,20 @@ export function Rastro({ referencia, numero, descricao, consulta, sha256, tabela
     ['Versão', versao, edicao ? `edição ${edicao}` : undefined, true],
   ]
   return (
-    <div className={cx('ty-print-rastro-bloco', className)} data-ref={referencia}>
-      <dl className="ty-print-rastro">
+    <div className={cx('ty-print-trace-block', className)} data-ref={referencia}>
+      <dl className="ty-print-trace">
         {linhas.map(([k, v, nota, mono], i) => (
-          <div key={k} className="ty-print-rastro-passo" data-passo={i}>
+          <div key={k} className="ty-print-trace-step" data-passo={i}>
             <dt>{k}</dt>
             <dd>
-              <span className={cx('ty-print-rastro-valor', i === 0 && 'ty-print-rastro-numero', mono && 'ty-print-mono')}>{comColchetes(v)}</span>
-              {nota ? <span className="ty-print-rastro-nota">{comColchetes(nota)}</span> : null}
+              <span className={cx('ty-print-trace-value', i === 0 && 'ty-print-trace-number', mono && 'ty-print-mono')}>{comColchetes(v)}</span>
+              {nota ? <span className="ty-print-trace-note">{comColchetes(nota)}</span> : null}
             </dd>
           </div>
         ))}
       </dl>
       {assinatura || versaoLake ? (
-        <div className="ty-print-rastro-assina">
+        <div className="ty-print-trace-signs">
           {assinatura ? <LogoLakebrasil largura={26} /> : null}
           {versaoLake ? <SeloLakebrasil versaoLake={versaoLake} /> : null}
         </div>
@@ -378,7 +378,7 @@ export interface FonteProps {
 
 export function Fonte({ texto, versaoLake, rodape = false, className }: FonteProps) {
   return (
-    <p className={cx('ty-print-fonte', className)} data-rodape={rodape ? '' : undefined}>
+    <p className={cx('ty-print-source', className)} data-rodape={rodape ? '' : undefined}>
       <b>Fonte:</b> {comColchetes(texto.replace(/^Fontes?:\s*/, ''))}
       {versaoLake ? (
         <>
@@ -399,8 +399,8 @@ export interface FichaProps {
 /** Term and definition list (credits, catalogue card, details of a norm). */
 export function Ficha({ titulo, itens, className }: FichaProps) {
   return (
-    <div className={cx('ty-print-ficha', className)}>
-      {titulo ? <p className="ty-print-bloco-titulo">{comColchetes(titulo)}</p> : null}
+    <div className={cx('ty-print-spec-sheet', className)}>
+      {titulo ? <p className="ty-print-block-title">{comColchetes(titulo)}</p> : null}
       <dl>
         {itens.map((t, i) => (
           <div key={i}>
@@ -426,8 +426,8 @@ export interface DesenhoPublicadoProps {
 /** Pre-registered design: how the book will measure when the data arrives. */
 export function DesenhoPublicado({ titulo, itens, className }: DesenhoPublicadoProps) {
   return (
-    <div className={cx('ty-print-desenho', className)}>
-      {titulo ? <p className="ty-print-bloco-titulo">{comColchetes(titulo)}</p> : null}
+    <div className={cx('ty-print-design', className)}>
+      {titulo ? <p className="ty-print-block-title">{comColchetes(titulo)}</p> : null}
       <dl>
         {itens.map((it, i) => (
           <div key={i}>
@@ -453,9 +453,9 @@ export interface NaSuaCidadeProps {
 /** "In your city": a card to fill in, with the web address where it comes filled. */
 export function NaSuaCidade({ titulo, campos, nota, url, versaoLake, className }: NaSuaCidadeProps) {
   return (
-    <div className={cx('ty-print-cidade', className)}>
-      {titulo ? <p className="ty-print-bloco-titulo">{comColchetes(titulo)}</p> : null}
-      <dl className="ty-print-cidade-campos">
+    <div className={cx('ty-print-city', className)}>
+      {titulo ? <p className="ty-print-block-title">{comColchetes(titulo)}</p> : null}
+      <dl className="ty-print-city-fields">
         {campos.map((c, i) => (
           <div key={i}>
             <dt>{comColchetes(c)}</dt>
@@ -463,8 +463,8 @@ export function NaSuaCidade({ titulo, campos, nota, url, versaoLake, className }
           </div>
         ))}
       </dl>
-      {nota ? <p className="ty-print-cidade-nota">{comColchetes(nota)}</p> : null}
-      <p className="ty-print-cidade-url">
+      {nota ? <p className="ty-print-city-note">{comColchetes(nota)}</p> : null}
+      <p className="ty-print-city-url">
         <span className="ty-print-mono">{url}</span>
         {versaoLake ? <SeloLakebrasil versaoLake={versaoLake} /> : null}
       </p>
@@ -480,9 +480,9 @@ export interface ManchetaIlustrativaProps {
 /** An illustrative headline (not a real clipping), always tagged as such. */
 export function ManchetaIlustrativa({ texto, className }: ManchetaIlustrativaProps) {
   return (
-    <figure className={cx('ty-print-manchete', className)}>
-      <p className="ty-print-manchete-texto">{comColchetes(texto.replace(/^\[Manchete ilustrativa:\s*/i, '').replace(/\]$/, ''))}</p>
-      <figcaption className="ty-print-selo-exemplo">Manchete ilustrativa</figcaption>
+    <figure className={cx('ty-print-headline', className)}>
+      <p className="ty-print-headline-text">{comColchetes(texto.replace(/^\[Manchete ilustrativa:\s*/i, '').replace(/\]$/, ''))}</p>
+      <figcaption className="ty-print-badge-example">Manchete ilustrativa</figcaption>
     </figure>
   )
 }
@@ -495,9 +495,9 @@ export interface ProximoCapituloProps {
 
 export function ProximoCapitulo({ titulo, texto, className }: ProximoCapituloProps) {
   return (
-    <aside className={cx('ty-print-proximo', className)}>
-      <p className="ty-print-sobretitulo">Próximo capítulo</p>
-      <p className="ty-print-proximo-titulo">{comColchetes(titulo)} →</p>
+    <aside className={cx('ty-print-next', className)}>
+      <p className="ty-print-sobretitle">Próximo capítulo</p>
+      <p className="ty-print-next-title">{comColchetes(titulo)} →</p>
       <p>{comColchetes(texto)}</p>
     </aside>
   )

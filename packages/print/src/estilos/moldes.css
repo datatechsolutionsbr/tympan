@@ -1,20 +1,20 @@
 /* Spread templates (livro/moldes.ts): the page grid gets named areas from the molde (inline
    grid-template-areas and grid-template-rows); here, how areas fill their cell. */
 @layer tympan-print {
-  .ty-print-pagina[data-molde] .ty-print-mancha {
+  .ty-print-page[data-molde] .ty-print-type-area {
     grid-auto-flow: row;
     align-content: stretch;
     row-gap: 3.4mm;
   }
 
   /* Measuring the natural height of a templated page (livro/ajuste.ts): rows at content height. */
-  .ty-print-pagina[data-molde] .ty-print-mancha[data-medindo] {
+  .ty-print-page[data-molde] .ty-print-type-area[data-medindo] {
     grid-template-rows: none !important;
     grid-auto-rows: auto;
     align-content: start;
   }
 
-  .ty-print-mancha[data-medindo] .ty-print-area > :last-child {
+  .ty-print-type-area[data-medindo] .ty-print-area > :last-child {
     flex: none !important;
   }
 
@@ -31,17 +31,17 @@
     justify-content: space-evenly;
   }
 
-  .ty-print-area[data-cresce] > :last-child:is(.ty-print-painel, .ty-print-figura, .ty-print-figuras, .ty-print-figuras-bloco) {
+  .ty-print-area[data-cresce] > :last-child:is(.ty-print-panel, .ty-print-figure, .ty-print-figures, .ty-print-figures-block) {
     flex: 1 1 auto;
   }
 
-  .ty-print-area[data-cresce] > .ty-print-painel:last-child > .ty-print-painel-corpo {
+  .ty-print-area[data-cresce] > .ty-print-panel:last-child > .ty-print-panel-body {
     flex: 1 1 auto;
     justify-content: space-around;
   }
 
   /* A bare figure in the growing row sits in the middle of its cell, air shared above and below. */
-  .ty-print-area[data-cresce] > :last-child:is(.ty-print-figura, .ty-print-figuras, .ty-print-figuras-bloco, .ty-print-mapa) {
+  .ty-print-area[data-cresce] > :last-child:is(.ty-print-figure, .ty-print-figures, .ty-print-figures-block, .ty-print-map) {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -53,7 +53,7 @@
     min-inline-size: 0;
   }
 
-  .ty-print-area > .ty-print-fonte[data-rodape] {
+  .ty-print-area > .ty-print-source[data-rodape] {
     position: static;
   }
 
@@ -67,33 +67,33 @@
 /* In the growing row, lists spread over the height the page gives them (the studies space the verdict's
    claims, the trace's steps and the city form generously), instead of leaving one hole under the panel. */
 @layer tympan-print {
-  .ty-print-area[data-cresce] > .ty-print-painel:last-child > .ty-print-painel-corpo > :last-child:is(.ty-print-veredito, .ty-print-rastro-bloco, .ty-print-cidade, .ty-print-nao, .ty-print-testes, .ty-print-numeros-bloco, .ty-print-promessa, .ty-print-desenho, .ty-print-ficha, .ty-print-como-ler, .ty-print-quando) {
+  .ty-print-area[data-cresce] > .ty-print-panel:last-child > .ty-print-panel-body > :last-child:is(.ty-print-verdict, .ty-print-trace-block, .ty-print-city, .ty-print-not, .ty-print-tests, .ty-print-numbers-block, .ty-print-promise, .ty-print-design, .ty-print-spec-sheet, .ty-print-how-to-read, .ty-print-when) {
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
   }
 
-  .ty-print-area[data-cresce] > :last-child:is(.ty-print-como-ler, .ty-print-linha-tempo, .ty-print-desenho, .ty-print-ficha, .ty-print-testes) {
+  .ty-print-area[data-cresce] > :last-child:is(.ty-print-how-to-read, .ty-print-line-time, .ty-print-design, .ty-print-spec-sheet, .ty-print-tests) {
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
   }
 
-  .ty-print-area[data-cresce] :is(.ty-print-veredito-itens, .ty-print-rastro, .ty-print-cidade-campos, .ty-print-nao, .ty-print-quando-itens, .ty-print-promessa-detalhes, .ty-print-como-ler-letras, .ty-print-como-ler-estados, .ty-print-linha-tempo-anos-lista, .ty-print-desenho > dl, .ty-print-numeros) {
+  .ty-print-area[data-cresce] :is(.ty-print-verdict-items, .ty-print-trace, .ty-print-city-fields, .ty-print-not, .ty-print-when-items, .ty-print-promise-details, .ty-print-how-to-read-letters, .ty-print-how-to-read-states, .ty-print-line-time-years-list, .ty-print-design > dl, .ty-print-numbers) {
     flex: 1 1 auto;
     display: grid;
     align-content: space-evenly;
   }
 
   /* Promessa: the norm details spread; the genealogy stays at the foot. */
-  .ty-print-area[data-cresce] .ty-print-promessa > .ty-print-genealogia {
+  .ty-print-area[data-cresce] .ty-print-promise > .ty-print-genealogy {
     margin-block-start: auto;
   }
 }
 
 @layer tympan-print {
   /* The trace is signed like the studies: the lakebrasil mark, then the seal of the lake version. */
-  .ty-print-rastro-assina {
+  .ty-print-trace-signs {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -103,7 +103,7 @@
 }
 
 @layer tympan-print {
-  .ty-print-figuras[data-arranjo='pilha'] {
+  .ty-print-figures[data-arranjo='pilha'] {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -111,19 +111,19 @@
     gap: 4mm;
   }
 
-  .ty-print-figuras[data-arranjo='lado'] {
+  .ty-print-figures[data-arranjo='lado'] {
     display: grid;
     column-gap: 5mm;
     align-items: start;
   }
 
-  .ty-print-figuras-item {
+  .ty-print-figures-item {
     min-inline-size: 0;
   }
 }
 
 @layer tympan-print {
-  .ty-print-figuras-letra {
+  .ty-print-figures-letter {
     font: 700 9pt/1 var(--ty-print-fonte-rotulo);
     margin-block-end: 1mm;
   }
@@ -131,16 +131,16 @@
 
 @layer tympan-print {
   /* Notes columns (two columns beside the main block, the minimo-de-tinta margin): lists and key numbers stack. */
-  .ty-print-area[data-colunas='2'] :is(.ty-print-chamadas, .ty-print-como-ler-letras, .ty-print-testes-lista) {
+  .ty-print-area[data-colunas='2'] :is(.ty-print-kickers, .ty-print-how-to-read-letters, .ty-print-tests-list) {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .ty-print-area[data-colunas='2'] .ty-print-numero {
+  .ty-print-area[data-colunas='2'] .ty-print-number {
     grid-template-columns: minmax(0, 1fr);
     row-gap: 0.4mm;
   }
 
-  .ty-print-area[data-colunas='2'] .ty-print-numero-rotulo {
+  .ty-print-area[data-colunas='2'] .ty-print-number-label {
     grid-column: 1;
     grid-row: 2;
   }

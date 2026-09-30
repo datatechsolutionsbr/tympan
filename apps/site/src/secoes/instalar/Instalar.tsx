@@ -17,9 +17,9 @@ import { TympanProvider, ThemeProvider, Button } from '@datatechsolutions/tympan
 
 export function App() {
   return (
-    <TympanProvider locale="pt-BR">
+    <TympanProvider locale="en">
       <ThemeProvider storageKey="app-theme">
-        <Button variant="primary">Salvar</Button>
+        <Button variant="primary">Save</Button>
       </ThemeProvider>
     </TympanProvider>
   )
@@ -49,17 +49,17 @@ import { ThemePaletteTrigger } from '@datatechsolutions/tympan'
     titulo: 'instalar.livroTitulo',
     texto: 'instalar.livroTexto',
     codigo: `import { renderToStaticMarkup } from 'react-dom/server'
-import { LivroPrint, Dupla, Pagina, Painel, Texto } from '@datatechsolutions/tympan-print'
+import { PrintBook, Spread, Page, Panel, Text } from '@datatechsolutions/tympan-print'
 
 const html = renderToStaticMarkup(
-  <LivroPrint estilo="jornal" pb={false}>
-    <Dupla numero="22-23" capitulo="Qualidade do ar">
-      <Pagina lado="par">
-        <Painel letra="a" titulo="O método">…</Painel>
-      </Pagina>
-      <Pagina lado="impar">…</Pagina>
-    </Dupla>
-  </LivroPrint>,
+  <PrintBook estilo="jornal" pb={false}>
+    <Spread numero="22-23" capitulo="Air quality">
+      <Page lado="par">
+        <Panel letra="a" titulo="The method">…</Panel>
+      </Page>
+      <Page lado="impar">…</Page>
+    </Spread>
+  </PrintBook>,
 )`,
   },
   {

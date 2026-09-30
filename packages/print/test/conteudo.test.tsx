@@ -8,7 +8,7 @@ import { join } from 'node:path'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 import { PRINT_PRESET_NAMES } from '@datatechsolutions/tympan-tokens'
-import { CapituloConteudo, LivroConteudo, LivroPrint, NoConteudo, propsDesconhecidas, type CapituloJson, type LivroJson, type NoJson } from '../src/index.ts'
+import { CapituloConteudo, LivroConteudo, PrintBook, NoConteudo, propsDesconhecidas, type CapituloJson, type LivroJson, type NoJson } from '../src/index.ts'
 
 const pasta = process.env.BRASIL_REAL_CONTEUDO
 const disponivel = Boolean(pasta && existsSync(join(pasta, 'livro.json')))
@@ -46,14 +46,14 @@ describe.skipIf(!disponivel)('brasil-real content', () => {
           let html = ''
           expect(() => {
             html = renderToStaticMarkup(
-              <LivroPrint estilo={estilo} incluirCss={false} carregarFontes={false}>
+              <PrintBook estilo={estilo} incluirCss={false} carregarFontes={false}>
                 <NoConteudo no={no} />
-              </LivroPrint>,
+              </PrintBook>,
             )
           }, onde).not.toThrow()
           expect(html, onde).not.toMatch(/NaN|Infinity|>undefined</)
         }
-        expect(renderToStaticMarkup(<LivroPrint estilo={estilo} incluirCss={false} carregarFontes={false}><CapituloConteudo capitulo={cap} /></LivroPrint>).length).toBeGreaterThan(500)
+        expect(renderToStaticMarkup(<PrintBook estilo={estilo} incluirCss={false} carregarFontes={false}><CapituloConteudo capitulo={cap} /></PrintBook>).length).toBeGreaterThan(500)
       }
     })
   }

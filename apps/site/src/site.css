@@ -369,7 +369,7 @@ body {
 }
 
 /* ------------------------------------------------------------------ Livro */
-.ty-site-livro .ty-print-dupla {
+.ty-site-livro .ty-print-spread {
   margin: 0;
 }
 .ty-site-barra {
@@ -441,7 +441,7 @@ body {
     var(--ty-site-mesa);
   box-shadow: inset 0 0 0 1px var(--ty-site-mesa-borda);
 }
-.ty-site-mesa .ty-print-dupla {
+.ty-site-mesa .ty-print-spread {
   box-shadow:
     0 1px 2px rgb(0 0 0 / 0.18),
     0 12px 32px rgb(0 0 0 / 0.22);
@@ -966,7 +966,7 @@ body {
   background: var(--ty-site-mesa);
   pointer-events: none;
 }
-.ty-site-cartao__mesa .ty-print-dupla {
+.ty-site-cartao__mesa .ty-print-spread {
   box-shadow: 0 6px 18px rgb(0 0 0 / 0.25);
 }
 .ty-site-cartao__reserva {

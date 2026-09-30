@@ -33,14 +33,14 @@ export function Texto({ eyebrow, titulo, nivel = 2, variante = 'corpo', paragraf
   const lado = useLado()
   const comEmblema = Boolean(estilo.estrutura.emblema && titulo && nivel <= 2 && area === 'titulo' && lado === 'par')
   return (
-    <div className={cx('ty-print-texto', className)} data-variante={variante} data-nivel={nivel} data-emblema={comEmblema ? '' : undefined} style={larguraColunas(largura)}>
+    <div className={cx('ty-print-text', className)} data-variante={variante} data-nivel={nivel} data-emblema={comEmblema ? '' : undefined} style={larguraColunas(largura)}>
       {comEmblema ? <Emblema /> : null}
-      {eyebrow ? <p className="ty-print-sobretitulo">{comColchetes(eyebrow)}</p> : null}
+      {eyebrow ? <p className="ty-print-sobretitle">{comColchetes(eyebrow)}</p> : null}
       {titulo ? (
-        <H className="ty-print-titulo">
+        <H className="ty-print-title">
           {recorte
             ? titulo.split(/\s+/).map((p, i) => (
-                <span key={i} className="ty-print-palavra">
+                <span key={i} className="ty-print-word">
                   {comColchetes(p)}
                 </span>
               ))
@@ -49,14 +49,14 @@ export function Texto({ eyebrow, titulo, nivel = 2, variante = 'corpo', paragraf
       ) : null}
       {variante === 'codigo'
         ? paragrafos?.map((p, i) => (
-            <pre key={i} className="ty-print-codigo">
+            <pre key={i} className="ty-print-code">
               <code>{p}</code>
             </pre>
           ))
         : variante === 'citacao'
           ? paragrafos?.length
             ? (
-                <blockquote className="ty-print-citacao">
+                <blockquote className="ty-print-quote">
                   {paragrafos.map((p, i) => (
                     <p key={i}>{comColchetes(p)}</p>
                   ))}
@@ -65,7 +65,7 @@ export function Texto({ eyebrow, titulo, nivel = 2, variante = 'corpo', paragraf
             : null
           : paragrafos?.map((p, i) => <p key={i}>{comColchetes(p)}</p>)}
       {lista ? (
-        <Lista className="ty-print-lista">
+        <Lista className="ty-print-list">
           {lista.itens.map((it, i) => (
             <li key={i}>{comColchetes(it)}</li>
           ))}
@@ -85,8 +85,8 @@ export interface MargemProps {
 /** Margin note ("onde isso volta", "caixa de ferramentas"): in the outer margin for styles with margin notes, a small aside otherwise. */
 export function Margem({ titulo, texto, className }: MargemProps) {
   return (
-    <aside className={cx('ty-print-margem', className)}>
-      <p className="ty-print-margem-titulo">{comColchetes(titulo)}</p>
+    <aside className={cx('ty-print-margin', className)}>
+      <p className="ty-print-margin-title">{comColchetes(titulo)}</p>
       <p>{comColchetes(texto)}</p>
     </aside>
   )
@@ -102,13 +102,13 @@ export interface AnotacaoProps {
 /** Editorial note, drawn the style's way (hand lettering, italic, sidenote in the margin). */
 export function Anotacao({ alvo, texto, className }: AnotacaoProps) {
   return (
-    <aside className={cx('ty-print-anotacao', className)}>
+    <aside className={cx('ty-print-annotetion', className)}>
       {alvo ? (
-        <span className="ty-print-chamada" aria-label={`chamada ${alvo}`}>
+        <span className="ty-print-kicker" aria-label={`chamada ${alvo}`}>
           {alvo}
         </span>
       ) : null}
-      <span className="ty-print-anotacao-texto">{comColchetes(texto)}</span>
+      <span className="ty-print-annotetion-text">{comColchetes(texto)}</span>
     </aside>
   )
 }

@@ -1,67 +1,67 @@
 // @datatechsolutions/tympan-print: static React components for data books (FSL-1.1-ALv2).
-export { LivroPrint, type LivroPrintProps } from './livro/LivroPrint.tsx'
-export { Dupla, type DuplaProps } from './livro/Dupla.tsx'
-export { Pagina, type PaginaProps } from './livro/Pagina.tsx'
-export { Area, type AreaProps } from './livro/Area.tsx'
+export { LivroPrint as PrintBook, type LivroPrintProps as PrintBookProps } from './livro/LivroPrint.tsx'
+export { Dupla as Spread, type DuplaProps as SpreadProps } from './livro/Dupla.tsx'
+export { Pagina as Page, type PaginaProps as PageProps } from './livro/Pagina.tsx'
+export { Area as PrintArea, type AreaProps as PrintAreaProps } from './livro/Area.tsx'
 export { ajustarPaginas, SCRIPT_AJUSTE_PAGINAS, type AjusteOpcoes, type AjustePagina } from './livro/ajuste.ts'
 export { MOLDES, gradeDoMolde, linhasDoMolde, moldePorNome, type Molde, type LinhaMolde, type InfoArea } from './livro/moldes.ts'
-export { Textura } from './livro/Textura.tsx'
-export { Ornamento } from './livro/Ornamento.tsx'
-export { Painel, type PainelProps, type VariantePainel } from './paineis/Painel.tsx'
-export { Figuras, type FigurasProps } from './paineis/Figuras.tsx'
-export { Texto, Margem, Anotacao, type TextoProps, type MargemProps, type AnotacaoProps, type VarianteTexto } from './paineis/Texto.tsx'
+export { Textura as Texture } from './livro/Textura.tsx'
+export { Ornamento as Ornament } from './livro/Ornamento.tsx'
+export { Painel as Panel, type PainelProps as PanelProps, type VariantePainel as PanelVariant } from './paineis/Painel.tsx'
+export { Figuras as Figures, type FigurasProps as FiguresProps } from './paineis/Figuras.tsx'
+export { Texto as Text, Margem as Margin, Anotacao as Annotation, type TextoProps as TextProps, type MargemProps as MarginProps, type AnotacaoProps as AnnotationProps, type VarianteTexto as TextVariant } from './paineis/Texto.tsx'
 export {
-  Promessa,
-  Numeros,
-  TabelaDados,
-  Veredito,
-  Testes,
-  NaoDaParaAfirmar,
-  QuandoODadoChegar,
-  Rastro,
-  Fonte,
-  Ficha,
-  DesenhoPublicado,
-  NaSuaCidade,
-  ManchetaIlustrativa,
-  ProximoCapitulo,
-  type PromessaProps,
-  type NumerosProps,
-  type NumeroItem,
-  type TabelaDadosProps,
-  type ColunaTabela,
-  type VereditoProps,
-  type VereditoItem,
-  type TestesProps,
-  type NaoDaParaAfirmarProps,
-  type QuandoODadoChegarProps,
-  type RastroProps,
-  type FonteProps,
-  type FichaProps,
-  type Termo,
-  type DesenhoPublicadoProps,
-  type NaSuaCidadeProps,
-  type ManchetaIlustrativaProps,
-  type ProximoCapituloProps,
+  Promessa as PromiseText,
+  Numeros as Numbers,
+  TabelaDados as DataTable,
+  Veredito as Verdict,
+  Testes as Tests,
+  NaoDaParaAfirmar as CannotClaim,
+  QuandoODadoChegar as WhenDataArrives,
+  Rastro as Trace,
+  Fonte as Source,
+  Ficha as SpecSheet,
+  DesenhoPublicado as PublishedDesign,
+  NaSuaCidade as InYourCity,
+  ManchetaIlustrativa as IllustrativeHeadline,
+  ProximoCapitulo as NextChapter,
+  type PromessaProps as PromiseTextProps,
+  type NumerosProps as NumbersProps,
+  type NumeroItem as NumberItem,
+  type TabelaDadosProps as DataTableProps,
+  type ColunaTabela as TableColumn,
+  type VereditoProps as VerdictProps,
+  type VereditoItem as VerdictItem,
+  type TestesProps as TestsProps,
+  type NaoDaParaAfirmarProps as CannotClaimProps,
+  type QuandoODadoChegarProps as WhenDataArrivesProps,
+  type RastroProps as TraceProps,
+  type FonteProps as SourceProps,
+  type FichaProps as SpecSheetProps,
+  type Termo as Term,
+  type DesenhoPublicadoProps as PublishedDesignProps,
+  type NaSuaCidadeProps as InYourCityProps,
+  type ManchetaIlustrativaProps as IllustrativeHeadlineProps,
+  type ProximoCapituloProps as NextChapterProps,
 } from './paineis/Metodo.tsx'
-export { MarcaProva, type MarcaProvaProps } from './paineis/MarcaProva.tsx'
+export { MarcaProva as ProofMark, type MarcaProvaProps as ProofMarkProps } from './paineis/MarcaProva.tsx'
 export {
-  Capa,
-  AberturaParte,
-  ComoLer,
-  LinhaDoTempo,
-  type CapaProps,
-  type AberturaParteProps,
-  type ComoLerProps,
-  type LinhaDoTempoProps,
+  Capa as Cover,
+  AberturaParte as PartOpener,
+  ComoLer as HowToRead,
+  LinhaDoTempo as Timeline,
+  type CapaProps as CoverProps,
+  type AberturaParteProps as PartOpenerProps,
+  type ComoLerProps as HowToReadProps,
+  type LinhaDoTempoProps as TimelineProps,
   type StatusLei,
 } from './paineis/Aberturas.tsx'
-export { Mapa, type MapaProps } from './mapa/Mapa.tsx'
+export { Mapa as PrintMap, type MapaProps as PrintMapProps } from './mapa/Mapa.tsx'
 export { ALBERS_BRASIL, REGIOES, projecaoBrasil, municipios, ufs, ufsDoRecorte, type NivelMapa, type Recorte, type Regiao } from './mapa/malha.ts'
 export { quantis, classeDe, rotulosLimites } from './mapa/classes.ts'
 export { LogoLakebrasil, SeloLakebrasil, type LogoLakebrasilProps, type SeloLakebrasilProps, type VarianteLogo } from './marca/LogoLakebrasil.tsx'
 export { LogoDatatech, tintasDoEstilo, type LogoDatatechProps, type VarianteDatatech } from './marca/LogoDatatech.tsx'
-export { GraficoMetodo, type GraficoMetodoProps } from './grafico/GraficoMetodo.tsx'
+export { GraficoMetodo as MethodChart, type GraficoMetodoProps as MethodChartProps } from './grafico/GraficoMetodo.tsx'
 export type { GraficoSpec, SpecHalteres, SpecBarras, SpecSerie, SpecContagem, SpecEsquema, LinhaPar, AnotacaoGrafico } from './grafico/tipos.ts'
 export type { SpecDispersao, SpecSimpson, SpecMatrizCorrelacao, SpecAntesDepoisControle, SpecCorrelacao, PontoMunicipio, EixoDispersao, DestaqueMunicipio } from './grafico/tipos.ts'
 export { pearson, spearman, postos, minimosQuadrados, correlacaoDentro, centrarPorGrupo, hexbin, marcasLog, fmtCoef, fmtCompacto } from './grafico/estatistica.ts'

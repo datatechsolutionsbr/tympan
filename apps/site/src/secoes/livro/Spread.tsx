@@ -1,7 +1,7 @@
 // One spread of the sample chapter (the print gallery's content) in a book style, memoised: the rough.js and
 // map renderers are the slow part of the page, so a spread only re-renders when its style, P&B or chart change.
 import { memo, useEffect, useRef, useState } from 'react'
-import { LivroPrint } from '@datatechsolutions/tympan-print'
+import { PrintBook } from '@datatechsolutions/tympan-print'
 import type { PrintPresetName } from '../../tokens'
 import { DuplaEstudo, DuplaMapas, GRAFICO_DO_ESTUDO, type TipoGraficoEstudo } from '../../galerias'
 import type { Grafico } from '../../rotas'
@@ -20,9 +20,9 @@ export const DuplaEstilo = memo(function DuplaEstilo({ estilo, grafico, pb }: Du
     // The component CSS is imported once (main.tsx); each spread adds only its style's custom properties.
     // The sample book is written in Portuguese, so it keeps its own direction in right-to-left interfaces.
     <div dir="ltr" className="ty-site-livro-direcao">
-      <LivroPrint estilo={estilo} pb={pb} incluirCss={false} className="ty-site-livro">
+      <PrintBook estilo={estilo} pb={pb} incluirCss={false} className="ty-site-livro">
         {grafico === 'mapa' ? <DuplaMapas /> : <DuplaEstudo grafico={tipoDoGrafico(estilo, grafico)} />}
-      </LivroPrint>
+      </PrintBook>
     </div>
   )
 })

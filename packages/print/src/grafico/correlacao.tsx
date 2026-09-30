@@ -168,55 +168,55 @@ function Eixos({ c, sx, sy, area, ex, ey, W, H, zero, amplitude }: { c: CtxCorre
   const mx = marcasDe(sx, alvoX(x0, x1))
   const my = marcasDe(sy, alvoY(y0, y1))
   return (
-    <g className="ty-print-g-eixo">
+    <g className="ty-print-g-axis">
       {my.map((v) => (
         <g key={`y${v}`}>
-          <g className="ty-print-grade">{c.p.linha(c, { chave: `gy-${v}`, x1: x0, y1: sy(v), x2: x1, y2: sy(v), cor: 'linha', largura: 0.12, tipo: 'grade' })}</g>
-          <text className="ty-print-g-eixo-texto" x={xRotY} y={n3(sy(v) + 0.7)} textAnchor="end">
+          <g className="ty-print-grid">{c.p.linha(c, { chave: `gy-${v}`, x1: x0, y1: sy(v), x2: x1, y2: sy(v), cor: 'linha', largura: 0.12, tipo: 'grade' })}</g>
+          <text className="ty-print-g-axis-text" x={xRotY} y={n3(sy(v) + 0.7)} textAnchor="end">
             {fmtCompacto(v)}
           </text>
         </g>
       ))}
       {amplitude ? (
         // Range frame (minimo-de-tinta): shown only by styles with figure 'amplitude', which hide the full axes and grid.
-        <g className="ty-print-eixo-amplitude">
+        <g className="ty-print-axis-range">
           <line x1={amplitude.x[0]} x2={amplitude.x[1]} y1={y1} y2={y1} style={{ stroke: 'var(--ty-print-tinta-2)', strokeWidth: 0.2 }} />
           <line x1={x0} x2={x0} y1={amplitude.y[0]} y2={amplitude.y[1]} style={{ stroke: 'var(--ty-print-tinta-2)', strokeWidth: 0.2 }} />
         </g>
       ) : null}
       {mx.map((v) => (
         <g key={`x${v}`}>
-          <g className="ty-print-grade">{c.p.linha(c, { chave: `gx-${v}`, x1: sx(v), y1: y0, x2: sx(v), y2: y1, cor: 'linha', largura: 0.12, tipo: 'grade' })}</g>
+          <g className="ty-print-grid">{c.p.linha(c, { chave: `gx-${v}`, x1: sx(v), y1: y0, x2: sx(v), y2: y1, cor: 'linha', largura: 0.12, tipo: 'grade' })}</g>
           {(() => {
             // The end ticks are aligned to the figure's edge instead of spilling out of it.
             const w = larguraTexto(fmtCompacto(v), TEXTO_PEQUENO) * 1.15
             const X = sx(v)
             const [x, ancora] = X + w / 2 > W ? [W, 'end' as const] : [X, 'middle' as const]
             return (
-              <text className="ty-print-g-eixo-texto" x={x} y={n3(y1 + 2.9)} textAnchor={ancora}>
+              <text className="ty-print-g-axis-text" x={x} y={n3(y1 + 2.9)} textAnchor={ancora}>
                 {fmtCompacto(v)}
               </text>
             )
           })()}
         </g>
       ))}
-      <g className="ty-print-eixo-cheio">{c.p.linha(c, { chave: 'eixo-x', x1: x0, y1: y1, x2: x1, y2: y1, cor: 'tinta-2', largura: 0.2, tipo: 'eixo' })}</g>
-      <g className="ty-print-eixo-cheio">{c.p.linha(c, { chave: 'eixo-y', x1: x0, y1: y0, x2: x0, y2: y1, cor: 'tinta-2', largura: 0.2, tipo: 'eixo' })}</g>
+      <g className="ty-print-axis-full">{c.p.linha(c, { chave: 'eixo-x', x1: x0, y1: y1, x2: x1, y2: y1, cor: 'tinta-2', largura: 0.2, tipo: 'eixo' })}</g>
+      <g className="ty-print-axis-full">{c.p.linha(c, { chave: 'eixo-y', x1: x0, y1: y0, x2: x0, y2: y1, cor: 'tinta-2', largura: 0.2, tipo: 'eixo' })}</g>
       {zero ? (
         <g className="ty-print-g-zero">
           {c.p.linha(c, { chave: 'eixo-zero', x1: n3(zero.x - 1.6), y1: y1, x2: n3(zero.x + 1.6), y2: y1, cor: 'tinta-2', largura: 0.2, tipo: 'eixo' })}
           {/* axis break between the zero strip and the log axis */}
           <path d={`M${n3(x0 - 2.1)} ${n3(y1 + 0.9)}l0.8 -1.8M${n3(x0 - 1.2)} ${n3(y1 + 0.9)}l0.8 -1.8`} style={{ stroke: 'var(--ty-print-tinta-2)', strokeWidth: 0.2, fill: 'none' }} />
-          <text className="ty-print-g-eixo-texto" x={zero.x} y={n3(y1 + 2.9)} textAnchor="middle">
+          <text className="ty-print-g-axis-text" x={zero.x} y={n3(y1 + 2.9)} textAnchor="middle">
             {zero.rotulo}
           </text>
         </g>
       ) : null}
-      <text className="ty-print-g-unidade" x={0} y={n3(y0 - 2.4)} style={{ fontWeight: 600, fill: 'var(--ty-print-tinta-2)' }}>
+      <text className="ty-print-g-unit" x={0} y={n3(y0 - 2.4)} style={{ fontWeight: 600, fill: 'var(--ty-print-tinta-2)' }}>
         {tituloEixo(ey)}
         {ey.log ? ' · escala log' : ''}
       </text>
-      <text className="ty-print-g-unidade" x={W} y={n3(H - 1)} textAnchor="end" style={{ fontWeight: 600, fill: 'var(--ty-print-tinta-2)' }}>
+      <text className="ty-print-g-unit" x={W} y={n3(H - 1)} textAnchor="end" style={{ fontWeight: 600, fill: 'var(--ty-print-tinta-2)' }}>
         {tituloEixo(ex)}
         {ex.log ? ' · escala log' : ''}
       </text>
@@ -247,7 +247,7 @@ function Legenda({ c, itens, largura, y }: { c: CtxCorrelacao; itens: Array<{ am
     }
     const a = it.amostra
     out.push(
-      <g key={k} className="ty-print-g-legenda-item">
+      <g key={k} className="ty-print-g-legend-item">
         {a.tipo === 'linha' ? (
           <g strokeDasharray={a.tracejada ? '1.1 0.6' : undefined}>{c.p.linha(c, { chave: `leg-${k}`, x1: n3(x), y1: n3(yy - 0.8), x2: n3(x + 4.2), y2: n3(yy - 0.8), cor: a.cor, largura: a.largura, tipo: 'serie' })}</g>
         ) : a.tipo === 'ponto' ? (
@@ -262,7 +262,7 @@ function Legenda({ c, itens, largura, y }: { c: CtxCorrelacao; itens: Array<{ am
     )
     x += w
   })
-  return { el: <g className="ty-print-g-legenda">{out}</g>, fim: yy }
+  return { el: <g className="ty-print-g-legend">{out}</g>, fim: yy }
 }
 
 // ---------------------------------------------------------------------------
@@ -352,7 +352,7 @@ function confere(declarado: number | undefined, calculado: number | null) {
 
 function Aviso({ x, y, texto }: { x: number; y: number; texto: string }) {
   return (
-    <text className="ty-print-g-aviso" x={x} y={y} data-aviso="coeficiente" style={{ fill: 'var(--ty-print-destaque)' }}>
+    <text className="ty-print-g-warning" x={x} y={y} data-aviso="coeficiente" style={{ fill: 'var(--ty-print-destaque)' }}>
       {texto}
     </text>
   )
@@ -438,7 +438,7 @@ function semDados(titulo: string, dados: string | undefined, largura: number): R
     corpo: (
       <>
         <rect x={0.2} y={0.2} width={n3(largura - 0.4)} height={13.6} style={{ fill: 'none', stroke: 'var(--ty-print-linha)', strokeWidth: 0.2 }} strokeDasharray="1 0.6" />
-        <text className="ty-print-g-aviso" x={n3(largura / 2)} y={7.6} textAnchor="middle" data-aviso="sem-dados">
+        <text className="ty-print-g-warning" x={n3(largura / 2)} y={7.6} textAnchor="middle" data-aviso="sem-dados">
           {texto}
         </text>
       </>
@@ -494,19 +494,19 @@ export function Dispersao({ c, spec, largura }: { c: CtxCorrelacao; spec: SpecDi
   const opac = nTotal > 3000 ? 0.24 : nTotal > 1500 ? 0.32 : nTotal > 400 ? 0.5 : 0.72
   const nuvem =
     modo === 'hexbin' ? (
-      <g className="ty-print-g-nuvem" data-modo="hexbin" data-raio={raioHex} filter={filtroCamada(c)}>
+      <g className="ty-print-g-cloud" data-modo="hexbin" data-raio={raioHex} filter={filtroCamada(c)}>
         {hexes.map((h, k) => marcaHex(c, k, h, raioHex, h.n / nMax, 'tinta-2'))}
       </g>
     ) : nTotal <= 600 && !spec.tamanhoPorPopulacao ? (
-      <g className="ty-print-g-nuvem" data-modo="pontos" style={{ opacity: opac }}>
+      <g className="ty-print-g-cloud" data-modo="pontos" style={{ opacity: opac }}>
         {ordem.map((q) => (
-          <g key={q.i} className="ty-print-ponto" data-i={q.i} data-valor-x={q.p.x} data-valor-y={q.p.y} data-cx={q.X} data-cy={q.Y} transform={`translate(${q.X} ${q.Y})`}>
+          <g key={q.i} className="ty-print-point" data-i={q.i} data-valor-x={q.p.x} data-valor-y={q.p.y} data-cx={q.X} data-cy={q.Y} transform={`translate(${q.X} ${q.Y})`}>
             {c.p.ponto(c, { chave: `d-${q.i}`, r: raio(q), cor: 'tinta-2', cheio: true })}
           </g>
         ))}
       </g>
     ) : (
-      <g className="ty-print-g-nuvem" data-modo="pontos" style={{ opacity: spec.tamanhoPorPopulacao ? 0.42 : opac }} filter={filtroCamada(c)}>
+      <g className="ty-print-g-cloud" data-modo="pontos" style={{ opacity: spec.tamanhoPorPopulacao ? 0.42 : opac }} filter={filtroCamada(c)}>
         {ordem.map((q) => marcaLeve(c, q.i, q.X, q.Y, raio(q), 'tinta-2'))}
       </g>
     )
@@ -524,7 +524,7 @@ export function Dispersao({ c, spec, largura }: { c: CtxCorrelacao; spec: SpecDi
       const X2 = sx.deT(tb)
       const Y2 = sy.deT(yb)
       linha = (
-        <g className="ty-print-g-tendencia" data-a={n3(reta.a)} data-b={reta.b} data-x1={X1} data-y1={Y1} data-x2={X2} data-y2={Y2}>
+        <g className="ty-print-g-trend" data-a={n3(reta.a)} data-b={reta.b} data-x1={X1} data-y1={Y1} data-x2={X2} data-y2={Y2}>
           {c.p.linha(c, { chave: 'tendencia', x1: X1, y1: Y1, x2: X2, y2: Y2, cor: achadoCor, largura: 0.55, tipo: 'serie' })}
         </g>
       )
@@ -532,7 +532,7 @@ export function Dispersao({ c, spec, largura }: { c: CtxCorrelacao; spec: SpecDi
       const w = larguraTexto(textoCoef, TEXTO * 1.1) * 1.08
       const lugar = lugarRotulo(X1, Y1, X2, Y2, w, plotados, area)
       rotuloCoef = (
-        <text className="ty-print-g-valor ty-print-g-coef" x={lugar.x} y={lugar.y} data-coef={coef === null ? '' : n3(coef)} style={{ ...HALO, fill: cssCor(achadoCor), fontSize: n3(TEXTO * 1.1) }}>
+        <text className="ty-print-g-value ty-print-g-coef" x={lugar.x} y={lugar.y} data-coef={coef === null ? '' : n3(coef)} style={{ ...HALO, fill: cssCor(achadoCor), fontSize: n3(TEXTO * 1.1) }}>
           {textoCoef}
         </text>
       )
@@ -540,7 +540,7 @@ export function Dispersao({ c, spec, largura }: { c: CtxCorrelacao; spec: SpecDi
   }
   if (!rotuloCoef)
     rotuloCoef = (
-      <text className="ty-print-g-valor ty-print-g-coef" x={n3(area.x1)} y={n3(area.y0 + TEXTO)} textAnchor="end" data-coef={coef === null ? '' : n3(coef)} style={{ ...HALO, fill: cssCor(achadoCor) }}>
+      <text className="ty-print-g-value ty-print-g-coef" x={n3(area.x1)} y={n3(area.y0 + TEXTO)} textAnchor="end" data-coef={coef === null ? '' : n3(coef)} style={{ ...HALO, fill: cssCor(achadoCor) }}>
         {textoCoef}
       </text>
     )
@@ -563,31 +563,31 @@ export function Dispersao({ c, spec, largura }: { c: CtxCorrelacao; spec: SpecDi
       <g className="ty-print-g-area" data-x0={area.x0} data-x1={area.x1} data-y0={area.y0} data-y1={area.y1} data-dx0={sx.dominio[0]} data-dx1={sx.dominio[1]} data-dy0={sy.dominio[0]} data-dy1={sy.dominio[1]} data-logx={spec.x.log ? '' : undefined} data-logy={spec.y.log ? '' : undefined} />
       {nuvem}
       {capitais.map((q) => (
-        <g key={`cap-${q.i}`} className="ty-print-g-capital" data-i={q.i} transform={`translate(${q.X} ${q.Y})`}>
+        <g key={`cap-${q.i}`} className="ty-print-g-chapital" data-i={q.i} transform={`translate(${q.X} ${q.Y})`}>
           {c.p.ponto(c, { chave: `cap-${q.i}`, r: 0.95, cor: 'tinta', cheio: false })}
         </g>
       ))}
       {linha}
       {alvos.map((a, k) => (
-        <g key={`dst-${k}`} className="ty-print-g-destaque" data-i={a.q.i} data-cx={a.q.X} data-cy={a.q.Y}>
+        <g key={`dst-${k}`} className="ty-print-g-highlight" data-i={a.q.i} data-cx={a.q.X} data-cy={a.q.Y}>
           <g transform={`translate(${a.q.X} ${a.q.Y})`}>{c.p.ponto(c, { chave: `dst-${a.q.i}`, r: 0.95, cor: achadoCor, cheio: true })}</g>
-          <text className="ty-print-g-rotulo" x={postos[k]!.x} y={postos[k]!.y} textAnchor={postos[k]!.ancora} style={{ ...HALO, fontSize: TEXTO }}>
+          <text className="ty-print-g-label" x={postos[k]!.x} y={postos[k]!.y} textAnchor={postos[k]!.ancora} style={{ ...HALO, fontSize: TEXTO }}>
             {a.texto}
           </text>
         </g>
       ))}
       {rotuloCoef}
-      <text className="ty-print-g-chave" x={W} y={2.4} textAnchor="end">
+      <text className="ty-print-g-brace" x={W} y={2.4} textAnchor="end">
         {`n = ${numeroBr(nCoef)} municípios`}
       </text>
       {!ok ? <Aviso x={area.x0 + 1} y={n3(area.y0 + TEXTO)} texto={`coeficiente publicado ${fmtCoef(spec.coeficiente!)} ≠ ${fmtCoef(coef!)} calculado dos pontos`} /> : null}
       {G.fora > 0 ? (
-        <text className="ty-print-g-aviso" x={W} y={n3(H - 3.6)} textAnchor="end">
+        <text className="ty-print-g-warning" x={W} y={n3(H - 3.6)} textAnchor="end">
           {`${numeroBr(G.fora)} fora dos eixos`}
         </text>
       ) : null}
       {faltando > 0 ? (
-        <text className="ty-print-g-aviso" x={0} y={n3(H - 1)}>
+        <text className="ty-print-g-warning" x={0} y={n3(H - 1)}>
           {`${faltando} destaque(s) sem ponto`}
         </text>
       ) : null}
@@ -673,10 +673,10 @@ export function Simpson({ c, spec, largura }: { c: CtxCorrelacao; spec: SpecSimp
     const X2 = sx.deT(tb)
     const Y2 = sy.deT(yb)
     return (
-      <g key={`lg-${k}`} className="ty-print-g-reta-grupo" data-grupo={q.nome} data-a={q.reta.a} data-b={q.reta.b} data-x1={X1} data-y1={Y1} data-x2={X2} data-y2={Y2} data-destaque={d ? '' : undefined} strokeDasharray={d ? undefined : '1.1 0.6'} style={d ? undefined : { opacity: 0.7 }}>
+      <g key={`lg-${k}`} className="ty-print-g-line-group" data-grupo={q.nome} data-a={q.reta.a} data-b={q.reta.b} data-x1={X1} data-y1={Y1} data-x2={X2} data-y2={Y2} data-destaque={d ? '' : undefined} strokeDasharray={d ? undefined : '1.1 0.6'} style={d ? undefined : { opacity: 0.7 }}>
         {c.p.linha(c, { chave: `lg-${q.nome}`, x1: X1, y1: Y1, x2: X2, y2: Y2, cor: achadoCor, largura: d ? 0.55 : 0.28, tipo: 'serie' })}
         {d ? (
-          <text className="ty-print-g-rotulo" x={n3(Math.min(area.x1 - larguraTexto(`${q.nome} +0,00`), X2 + 0.8))} y={n3(Y2 + 0.8)} style={{ ...HALO, fill: cssCor(achadoCor), fontSize: TEXTO }}>
+          <text className="ty-print-g-label" x={n3(Math.min(area.x1 - larguraTexto(`${q.nome} +0,00`), X2 + 0.8))} y={n3(Y2 + 0.8)} style={{ ...HALO, fill: cssCor(achadoCor), fontSize: TEXTO }}>
             {`${q.nome} ${q.r === null ? '' : fmtCoef(q.r, 2)}`}
           </text>
         ) : null}
@@ -693,13 +693,13 @@ export function Simpson({ c, spec, largura }: { c: CtxCorrelacao; spec: SpecSimp
       const X2 = sx.deT(tb)
       const Y2 = sy.deT(yb)
       geralEl = (
-        <g className="ty-print-g-tendencia" data-a={retaGeral.a} data-b={retaGeral.b} data-x1={X1} data-y1={Y1} data-x2={X2} data-y2={Y2}>
+        <g className="ty-print-g-trend" data-a={retaGeral.a} data-b={retaGeral.b} data-x1={X1} data-y1={Y1} data-x2={X2} data-y2={Y2}>
           {c.p.linha(c, { chave: 'geral', x1: X1, y1: Y1, x2: X2, y2: Y2, cor: 'tinta', largura: 0.75, tipo: 'serie' })}
           {(() => {
             const texto = `${geral}: r = ${rGeral === null ? '—' : fmtCoef(rGeral)}`
             const lugar = lugarRotulo(X1, Y1, X2, Y2, larguraTexto(texto, TEXTO * 1.05) * 1.08, plotados, area)
             return (
-              <text className="ty-print-g-valor ty-print-g-coef" x={lugar.x} y={lugar.y} data-coef={rGeral === null ? '' : n3(rGeral)} style={HALO}>
+              <text className="ty-print-g-value ty-print-g-coef" x={lugar.x} y={lugar.y} data-coef={rGeral === null ? '' : n3(rGeral)} style={HALO}>
                 {texto}
               </text>
             )
@@ -713,22 +713,22 @@ export function Simpson({ c, spec, largura }: { c: CtxCorrelacao; spec: SpecSimp
       {cab.el}
       <Eixos c={c} sx={sx} sy={sy} area={area} ex={spec.x} ey={spec.y} W={W} H={H} amplitude={amplitudeDe(plotados)} />
       <g className="ty-print-g-area" data-x0={area.x0} data-x1={area.x1} data-y0={area.y0} data-y1={area.y1} data-dx0={sx.dominio[0]} data-dx1={sx.dominio[1]} data-dy0={sy.dominio[0]} data-dy1={sy.dominio[1]} data-r-geral={rGeral ?? ''} data-r-dentro={rDentro ?? ''} data-r-entre={rEntre ?? ''} />
-      <g className="ty-print-g-nuvem" data-modo="pontos" style={{ opacity: opac }} filter={filtroCamada(c)}>
+      <g className="ty-print-g-cloud" data-modo="pontos" style={{ opacity: opac }} filter={filtroCamada(c)}>
         {plotados.filter((q) => !destaques.has(q.p.grupo ?? '')).map((q) => marcaLeve(c, q.i, q.X, q.Y, r, 'contexto'))}
       </g>
       {destaques.size ? (
-        <g className="ty-print-g-nuvem-destaque" style={{ opacity: Math.min(1, opac + 0.3) }} filter={filtroCamada(c)}>
+        <g className="ty-print-g-cloud-highlight" style={{ opacity: Math.min(1, opac + 0.3) }} filter={filtroCamada(c)}>
           {plotados.filter((q) => destaques.has(q.p.grupo ?? '')).map((q) => marcaLeve(c, q.i, q.X, q.Y, r, achadoCor))}
         </g>
       ) : null}
-      <g className="ty-print-g-retas-grupo">{porGrupo.filter((q) => !destaques.has(q.nome)).map(linhaGrupo)}</g>
+      <g className="ty-print-g-lines-group">{porGrupo.filter((q) => !destaques.has(q.nome)).map(linhaGrupo)}</g>
       {spec.medias ? (
-        <g className="ty-print-g-medias">
+        <g className="ty-print-g-means">
           {porGrupo.map((q, k) => {
             const X = sx.deT(q.mx)
             const Y = sy.deT(q.my)
             return (
-              <g key={k} className="ty-print-g-media" data-grupo={q.nome} data-cx={X} data-cy={Y} transform={`translate(${X} ${Y})`}>
+              <g key={k} className="ty-print-g-mean" data-grupo={q.nome} data-cx={X} data-cy={Y} transform={`translate(${X} ${Y})`}>
                 {c.p.ponto(c, { chave: `m-${q.nome}`, r: 0.75, cor: 'tinta', cheio: false })}
               </g>
             )
@@ -736,8 +736,8 @@ export function Simpson({ c, spec, largura }: { c: CtxCorrelacao; spec: SpecSimp
         </g>
       ) : null}
       {geralEl}
-      <g className="ty-print-g-retas-grupo-destaque">{porGrupo.filter((q) => destaques.has(q.nome)).map(linhaGrupo)}</g>
-      <text className="ty-print-g-chave" x={W} y={n3(cab.fim + 2.6)} textAnchor="end">
+      <g className="ty-print-g-lines-group-highlight">{porGrupo.filter((q) => destaques.has(q.nome)).map(linhaGrupo)}</g>
+      <text className="ty-print-g-brace" x={W} y={n3(cab.fim + 2.6)} textAnchor="end">
         {`n = ${numeroBr(base.length)} municípios · ${porGrupo.filter((q) => q.reta).length} retas por ${nomeGrupo}${inverte ? ' · o sinal se inverte' : ''}`}
       </text>
       {!ok ? <Aviso x={area.x0 + 1} y={n3(area.y0 + TEXTO)} texto="coeficiente publicado ≠ calculado dos pontos" /> : null}
@@ -846,7 +846,7 @@ export function MatrizCorrelacao({ c, spec, largura }: { c: CtxCorrelacao; spec:
   linhasIdx.forEach((i, li) => {
     const y = n3(y0 + li * ch)
     rotulos.push(
-      <text key={`r${i}`} className="ty-print-g-rotulo" x={n3(x0 - 1.2)} y={n3(y + ch / 2 + 0.85)} textAnchor="end">
+      <text key={`r${i}`} className="ty-print-g-label" x={n3(x0 - 1.2)} y={n3(y + ch / 2 + 0.85)} textAnchor="end">
         {spec.indicadores[i]}
       </text>,
     )
@@ -857,10 +857,10 @@ export function MatrizCorrelacao({ c, spec, largura }: { c: CtxCorrelacao; spec:
       const x = n3(x0 + cj * cw)
       const forte = intensidadeCelula(r) >= 0.5 && c.p.nome !== 'pontos' && c.p.nome !== 'isotype'
       celulas.push(
-        <g key={`c${i}-${j}`} className="ty-print-g-celula" data-linha={i} data-coluna={j} data-r={r} data-x={x} data-y={y} data-w={cw} data-h={ch}>
+        <g key={`c${i}-${j}`} className="ty-print-g-cell" data-linha={i} data-coluna={j} data-r={r} data-x={x} data-y={y} data-w={cw} data-h={ch}>
           {celula(c, `${i}-${j}`, n3(x + 0.25), n3(y + 0.25), n3(cw - 0.5), n3(ch - 0.5), r)}
           {destaque.has(`${i},${j}`) ? <rect x={n3(x + 0.1)} y={n3(y + 0.1)} width={n3(cw - 0.2)} height={n3(ch - 0.2)} style={{ fill: 'none', stroke: 'var(--ty-print-tinta)', strokeWidth: 0.4 }} /> : null}
-          <text className="ty-print-g-valor" x={n3(x + cw / 2)} y={n3(y + ch / 2 + 0.85)} textAnchor="middle" style={forte ? { fill: 'var(--ty-print-papel)' } : c.p.nome === 'pontos' || c.p.nome === 'isotype' ? HALO : undefined}>
+          <text className="ty-print-g-value" x={n3(x + cw / 2)} y={n3(y + ch / 2 + 0.85)} textAnchor="middle" style={forte ? { fill: 'var(--ty-print-papel)' } : c.p.nome === 'pontos' || c.p.nome === 'isotype' ? HALO : undefined}>
             {i === j ? '1' : fmtCoef(r, casas)}
           </text>
         </g>,
@@ -868,7 +868,7 @@ export function MatrizCorrelacao({ c, spec, largura }: { c: CtxCorrelacao; spec:
     })
   })
   const cab = colunasIdx.map((j, cj) => (
-    <text key={`h${j}`} className="ty-print-g-eixo-texto" x={n3(x0 + cj * cw + cw / 2)} y={n3(2 + (nCab - cabecas[cj]!.length) * TEXTO_PEQUENO * 1.2)} textAnchor="middle" style={{ fill: 'var(--ty-print-tinta-2)' }}>
+    <text key={`h${j}`} className="ty-print-g-axis-text" x={n3(x0 + cj * cw + cw / 2)} y={n3(2 + (nCab - cabecas[cj]!.length) * TEXTO_PEQUENO * 1.2)} textAnchor="middle" style={{ fill: 'var(--ty-print-tinta-2)' }}>
       {cabecas[cj]!.map((l, t) => (
         <tspan key={t} x={n3(x0 + cj * cw + cw / 2)} dy={t === 0 ? 0 : n3(TEXTO_PEQUENO * 1.2)}>
           {l}
@@ -882,18 +882,18 @@ export function MatrizCorrelacao({ c, spec, largura }: { c: CtxCorrelacao; spec:
   const wK = Math.min(64, largura - x0)
   const xK = n3(x0)
   const chave = (
-    <g className="ty-print-g-escala-divergente">
+    <g className="ty-print-g-scale-diverging">
       {Array.from({ length: passos + 1 }, (_, s) => {
         const r = -1 + (2 * s) / passos
         const w = wK / (passos + 1)
         return <g key={s}>{celula(c, `k${s}`, n3(xK + s * w), yK, n3(w + 0.02), 2.4, r)}</g>
       })}
       {[-1, -0.5, 0, 0.5, 1].map((v) => (
-        <text key={v} className="ty-print-g-eixo-texto" x={n3(xK + ((v + 1) / 2) * (wK - wK / (passos + 1)) + wK / (passos + 1) / 2)} y={n3(yK + 5)} textAnchor="middle">
+        <text key={v} className="ty-print-g-axis-text" x={n3(xK + ((v + 1) / 2) * (wK - wK / (passos + 1)) + wK / (passos + 1) / 2)} y={n3(yK + 5)} textAnchor="middle">
           {v === 0 ? '0' : fmtCoef(v, 1)}
         </text>
       ))}
-      <text className="ty-print-g-chave" x={xK} y={n3(yK + 8.2)}>
+      <text className="ty-print-g-brace" x={xK} y={n3(yK + 8.2)}>
         {`${spec.metodo ?? 'r de Pearson'} · cinza = sem correlação · negativo = hachurado`}
       </text>
     </g>
@@ -966,22 +966,22 @@ export function AntesDepoisControle({ c, spec, largura }: { c: CtxCorrelacao; sp
   const corpo = (
     <>
       {cab.el}
-      <g className="ty-print-g-eixo">
+      <g className="ty-print-g-axis">
         {marcas.map((v) => (
           <g key={v}>
-            <g className="ty-print-grade">{c.p.linha(c, { chave: `g-${v}`, x1: sx(v), y1: topo, x2: sx(v), y2: yEixo, cor: 'linha', largura: 0.12, tipo: 'grade' })}</g>
-            <text className="ty-print-g-eixo-texto" x={sx(v)} y={n3(yEixo + 2.7)} textAnchor="middle">
+            <g className="ty-print-grid">{c.p.linha(c, { chave: `g-${v}`, x1: sx(v), y1: topo, x2: sx(v), y2: yEixo, cor: 'linha', largura: 0.12, tipo: 'grade' })}</g>
+            <text className="ty-print-g-axis-text" x={sx(v)} y={n3(yEixo + 2.7)} textAnchor="middle">
               {v === 0 ? '0' : fmtCoef(v, v % 1 === 0 ? 0 : String(v).split('.')[1]!.length)}
             </text>
           </g>
         ))}
         {c.p.linha(c, { chave: 'eixo', x1: x0, y1: yEixo, x2: x1, y2: yEixo, cor: 'tinta-2', largura: 0.2, tipo: 'eixo' })}
         {zeroDentro ? <g className="ty-print-g-zero">{c.p.linha(c, { chave: 'zero', x1: sx(0), y1: n3(topo - 1), x2: sx(0), y2: yEixo, cor: 'tinta', largura: 0.35, tipo: 'guia' })}</g> : null}
-        <text className="ty-print-g-unidade" x={x1} y={n3(yEixo + 5.6)} textAnchor="end">
+        <text className="ty-print-g-unit" x={x1} y={n3(yEixo + 5.6)} textAnchor="end">
           {spec.medida ?? 'coeficiente de correlação'}
         </text>
         {zeroDentro ? (
-          <text className="ty-print-g-nota" x={n3(sx(0) + 0.8)} y={n3(topo - 0.2)}>
+          <text className="ty-print-g-note" x={n3(sx(0) + 0.8)} y={n3(topo - 0.2)}>
             sem correlação
           </text>
         ) : null}
@@ -993,36 +993,36 @@ export function AntesDepoisControle({ c, spec, largura }: { c: CtxCorrelacao; sp
         const off = raio + 0.9
         const cor: CorDado = corAchado(c)
         return (
-          <g key={l.i} className="ty-print-g-linha" data-linha={l.i} data-destaque={l.destaque ? '' : undefined}>
-            <text className="ty-print-g-rotulo" x={0} y={n3(l.y + 0.9)}>
+          <g key={l.i} className="ty-print-g-line" data-linha={l.i} data-destaque={l.destaque ? '' : undefined}>
+            <text className="ty-print-g-label" x={0} y={n3(l.y + 0.9)}>
               {l.rotulo}
             </text>
             {l.nota ? (
-              <text className="ty-print-g-nota" x={0} y={n3(l.y + 0.9 + TEXTO * 1.15)}>
+              <text className="ty-print-g-note" x={0} y={n3(l.y + 0.9 + TEXTO * 1.15)}>
                 {l.nota}
               </text>
             ) : null}
             {dir - esq > 2 * raio + 0.6 ? (
-              <g className="ty-print-conector">
+              <g className="ty-print-connector">
                 {c.p.linha(c, { chave: `con-${l.i}`, x1: n3(l.xa + (paraDireita ? raio : -raio)), y1: l.y, x2: n3(l.xb + (paraDireita ? -raio - 0.4 : raio + 0.4)), y2: l.y, cor, largura: l.destaque ? 0.6 : 0.4, tipo: 'conector' })}
                 <path d={`M${n3(l.xb + (paraDireita ? -raio - 0.2 : raio + 0.2))} ${l.y}l${paraDireita ? -1.1 : 1.1} -0.75v1.5Z`} style={{ fill: cssCor(cor) }} />
               </g>
             ) : null}
-            <g className="ty-print-ponto" data-linha={l.i} data-serie="bruto" data-valor={l.bruto} data-cx={l.xa} data-cy={l.y} transform={`translate(${l.xa} ${l.y})`}>
+            <g className="ty-print-point" data-linha={l.i} data-serie="bruto" data-valor={l.bruto} data-cx={l.xa} data-cy={l.y} transform={`translate(${l.xa} ${l.y})`}>
               {c.p.ponto(c, { chave: `a-${l.i}`, r: raio, cor: 'tinta', cheio: false })}
             </g>
-            <g className="ty-print-ponto" data-linha={l.i} data-serie="controlado" data-valor={l.controlado} data-cx={l.xb} data-cy={l.y} transform={`translate(${l.xb} ${l.y})`}>
+            <g className="ty-print-point" data-linha={l.i} data-serie="controlado" data-valor={l.controlado} data-cx={l.xb} data-cy={l.y} transform={`translate(${l.xb} ${l.y})`}>
               {c.p.ponto(c, { chave: `b-${l.i}`, r: raio, cor, cheio: true })}
             </g>
-            <text className="ty-print-g-valor-a" x={n3(l.xa + (paraDireita ? -off : off))} y={n3(l.y + 0.85)} textAnchor={paraDireita ? 'end' : 'start'} style={HALO}>
+            <text className="ty-print-g-value-a" x={n3(l.xa + (paraDireita ? -off : off))} y={n3(l.y + 0.85)} textAnchor={paraDireita ? 'end' : 'start'} style={HALO}>
               {fmtCoef(l.bruto)}
             </text>
-            <text className="ty-print-g-valor" x={n3(l.xb + (paraDireita ? off : -off))} y={n3(l.y + 0.85)} textAnchor={paraDireita ? 'start' : 'end'} style={{ ...HALO, fill: cssCor(cor) }}>
+            <text className="ty-print-g-value" x={n3(l.xb + (paraDireita ? off : -off))} y={n3(l.y + 0.85)} textAnchor={paraDireita ? 'start' : 'end'} style={{ ...HALO, fill: cssCor(cor) }}>
               {fmtCoef(l.controlado)}
             </text>
             {l.inverte ? (
               // Under the row, from the controlled point, so it never meets the zero line's label.
-              <text className="ty-print-g-nota" x={l.xb} y={n3(l.y + raio + 2.4)} textAnchor={paraDireita ? 'start' : 'end'} style={{ ...HALO, fill: cssCor(cor) }}>
+              <text className="ty-print-g-note" x={l.xb} y={n3(l.y + raio + 2.4)} textAnchor={paraDireita ? 'start' : 'end'} style={{ ...HALO, fill: cssCor(cor) }}>
                 o sinal se inverte
               </text>
             ) : null}

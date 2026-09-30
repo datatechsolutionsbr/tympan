@@ -34,20 +34,20 @@ export function Figuras({ arranjo = 'auto', pesos, manchete, className, children
     if (notas.length) {
       const larguraNotas = Math.round(((total - 5) / 3) * 10) / 10
       return (
-        <div className={cx('ty-print-figuras-bloco', className)}>
+        <div className={cx('ty-print-figures-block', className)}>
           {titulo}
-          <div className="ty-print-figuras-leia">
+          <div className="ty-print-figures-read">
             <LarguraProvider value={Math.round((total - 5 - larguraNotas) * 10) / 10}>
               <Figuras arranjo={arranjo} pesos={pesos}>
                 {semNotas}
               </Figuras>
             </LarguraProvider>
-            <aside className="ty-print-leia-assim">
-              <p className="ty-print-leia-assim-titulo">Leia assim</p>
+            <aside className="ty-print-read-this">
+              <p className="ty-print-read-this-title">Leia assim</p>
               <ol>
                 {notas.map((n, i) => (
                   <li key={i}>
-                    <span className="ty-print-chamada">{n.marca ?? i + 1}</span>
+                    <span className="ty-print-kicker">{n.marca ?? i + 1}</span>
                     <span>{n.texto}</span>
                   </li>
                 ))}
@@ -61,7 +61,7 @@ export function Figuras({ arranjo = 'auto', pesos, manchete, className, children
   const filhos = Children.toArray(children)
   if (titulo) {
     return (
-      <div className={cx('ty-print-figuras-bloco', className)}>
+      <div className={cx('ty-print-figures-block', className)}>
         {titulo}
         <Figuras arranjo={arranjo} pesos={pesos}>
           {children}
@@ -73,7 +73,7 @@ export function Figuras({ arranjo = 'auto', pesos, manchete, className, children
   const lado = arranjo === 'lado' || (arranjo === 'auto' && filhos.length > 1 && padrao)
   if (!lado) {
     return (
-      <div className={cx('ty-print-figuras', className)} data-arranjo="pilha">
+      <div className={cx('ty-print-figures', className)} data-arranjo="pilha">
         {filhos}
       </div>
     )
@@ -83,13 +83,13 @@ export function Figuras({ arranjo = 'auto', pesos, manchete, className, children
   const util = total - VAO * (filhos.length - 1)
   return (
     <div
-      className={cx('ty-print-figuras', className)}
+      className={cx('ty-print-figures', className)}
       data-arranjo="lado"
       style={{ gridTemplateColumns: p.map((x) => `${Math.max(0.5, x)}fr`).join(' ') }}
     >
       {filhos.map((f, i) => (
-        <div key={i} className="ty-print-figuras-item">
-          {e.letraMultiplo ? <p className="ty-print-figuras-letra">{String.fromCharCode(65 + i)}</p> : null}
+        <div key={i} className="ty-print-figures-item">
+          {e.letraMultiplo ? <p className="ty-print-figures-letter">{String.fromCharCode(65 + i)}</p> : null}
           <LarguraProvider value={Math.round(((util * (p[i] ?? 1)) / soma) * 10) / 10}>{f}</LarguraProvider>
         </div>
       ))}
@@ -107,7 +107,7 @@ function pesoDe(f: ReactNode): number {
 
 function Manchete({ texto, forma }: { texto: string; forma: 'texto' | 'faixa' | 'diagonal' | 'lupa' }) {
   return (
-    <p className="ty-print-manchete-grafico" data-forma={forma}>
+    <p className="ty-print-headline-chart" data-forma={forma}>
       <span>{texto}</span>
     </p>
   )

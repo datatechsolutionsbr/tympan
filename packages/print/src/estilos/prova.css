@@ -2,7 +2,7 @@
    and every state also differs by line (solid, double, wavy, thin, dashed,
    dotted) and icon, so the mark reads in black and white. */
 @layer tympan-print {
-  .ty-print-prova {
+  .ty-print-proof {
     --ty-print-prova-cor: var(--ty-print-tinta);
     position: relative;
     display: inline-flex;
@@ -18,20 +18,20 @@
     inline-size: fit-content;
   }
 
-  .ty-print-prova[data-estado='sustentada'] { --ty-print-prova-cor: var(--ty-print-prova-sustentada); }
-  .ty-print-prova[data-estado='refutada'] { --ty-print-prova-cor: var(--ty-print-prova-refutada); }
-  .ty-print-prova[data-estado='nao-da-para-afirmar'] { --ty-print-prova-cor: var(--ty-print-prova-nao-da-para-afirmar); }
-  .ty-print-prova[data-estado='pendente'] { --ty-print-prova-cor: var(--ty-print-prova-pendente); }
-  .ty-print-prova[data-estado='sem-dado'] { --ty-print-prova-cor: var(--ty-print-prova-sem-dado); }
-  .ty-print-prova[data-estado='nao-testada'] { --ty-print-prova-cor: var(--ty-print-prova-nao-testada); }
+  .ty-print-proof[data-estado='sustentada'] { --ty-print-prova-cor: var(--ty-print-prova-sustentada); }
+  .ty-print-proof[data-estado='refutada'] { --ty-print-prova-cor: var(--ty-print-prova-refutada); }
+  .ty-print-proof[data-estado='nao-da-para-afirmar'] { --ty-print-prova-cor: var(--ty-print-prova-nao-da-para-afirmar); }
+  .ty-print-proof[data-estado='pendente'] { --ty-print-prova-cor: var(--ty-print-prova-pendente); }
+  .ty-print-proof[data-estado='sem-dado'] { --ty-print-prova-cor: var(--ty-print-prova-sem-dado); }
+  .ty-print-proof[data-estado='nao-testada'] { --ty-print-prova-cor: var(--ty-print-prova-nao-testada); }
 
-  .ty-print-prova-icone {
+  .ty-print-proof-icon {
     inline-size: 2.3mm;
     block-size: 2.3mm;
     flex: none;
   }
 
-  .ty-print-prova-contorno {
+  .ty-print-proof-outline {
     position: absolute;
     inset: -0.8mm -1.4mm;
     inline-size: calc(100% + 2.8mm);
@@ -40,7 +40,7 @@
     pointer-events: none;
   }
 
-  .ty-print-prova[data-grande] {
+  .ty-print-proof[data-grande] {
     padding: 1.6mm 2.8mm;
     font: 700 10.5pt/1.1 var(--ty-print-fonte-titulo);
     white-space: normal;
@@ -48,53 +48,53 @@
     text-align: center;
   }
 
-  .ty-print-prova[data-grande] .ty-print-prova-icone {
+  .ty-print-proof[data-grande] .ty-print-proof-icon {
     inline-size: 3.6mm;
     block-size: 3.6mm;
   }
 
   /* pill: rounded outline with an icon */
-  .ty-print-prova[data-forma='pilula'] {
+  .ty-print-proof[data-forma='pilula'] {
     border: 0.22mm solid var(--ty-print-prova-cor);
     border-radius: 3mm;
   }
 
-  .ty-print-prova[data-forma='pilula'][data-traco='duplo'] { border-style: double; border-width: 0.7mm; }
-  .ty-print-prova[data-forma='pilula'][data-traco='tracejado'] { border-style: dashed; }
-  .ty-print-prova[data-forma='pilula'][data-traco='pontilhado'] { border-style: dotted; }
-  .ty-print-prova[data-forma='pilula'][data-traco='fino'] { border-width: 0.14mm; }
-  .ty-print-prova[data-forma='pilula'][data-traco='solido'] { border-width: 0.32mm; }
+  .ty-print-proof[data-forma='pilula'][data-traco='duplo'] { border-style: double; border-width: 0.7mm; }
+  .ty-print-proof[data-forma='pilula'][data-traco='tracejado'] { border-style: dashed; }
+  .ty-print-proof[data-forma='pilula'][data-traco='pontilhado'] { border-style: dotted; }
+  .ty-print-proof[data-forma='pilula'][data-traco='fino'] { border-width: 0.14mm; }
+  .ty-print-proof[data-forma='pilula'][data-traco='solido'] { border-width: 0.32mm; }
 
   /* stamp: capitals, heavy frame, slightly turned */
-  .ty-print-prova[data-forma='carimbo'] {
+  .ty-print-proof[data-forma='carimbo'] {
     border: 0.45mm solid var(--ty-print-prova-cor);
     text-transform: uppercase;
     letter-spacing: 0.06em;
     transform: rotate(-2deg);
   }
 
-  .ty-print-prova[data-forma='carimbo'][data-grande] { transform: rotate(-4deg); border-width: 0.7mm; }
-  .ty-print-prova[data-forma='carimbo'][data-traco='duplo'] { border-style: double; border-width: 0.9mm; }
-  .ty-print-prova[data-forma='carimbo'][data-traco='tracejado'] { border-style: dashed; }
-  .ty-print-prova[data-forma='carimbo'][data-traco='pontilhado'] { border-style: dotted; }
-  .ty-print-prova[data-forma='carimbo'][data-traco='fino'] { border-width: 0.2mm; }
-  .ty-print-prova[data-forma='carimbo'][data-mao] { border-color: transparent; }
+  .ty-print-proof[data-forma='carimbo'][data-grande] { transform: rotate(-4deg); border-width: 0.7mm; }
+  .ty-print-proof[data-forma='carimbo'][data-traco='duplo'] { border-style: double; border-width: 0.9mm; }
+  .ty-print-proof[data-forma='carimbo'][data-traco='tracejado'] { border-style: dashed; }
+  .ty-print-proof[data-forma='carimbo'][data-traco='pontilhado'] { border-style: dotted; }
+  .ty-print-proof[data-forma='carimbo'][data-traco='fino'] { border-width: 0.2mm; }
+  .ty-print-proof[data-forma='carimbo'][data-mao] { border-color: transparent; }
 
   /* circle and underline: drawn in SVG (hand or ruled) */
-  .ty-print-prova[data-forma='circulo'] {
+  .ty-print-proof[data-forma='circulo'] {
     padding: 1.4mm 2.8mm;
   }
 
-  .ty-print-prova[data-forma='circulo'][data-grande] {
+  .ty-print-proof[data-forma='circulo'][data-grande] {
     padding: 3mm 4.6mm;
   }
 
-  .ty-print-prova[data-forma='sublinhado'] {
+  .ty-print-proof[data-forma='sublinhado'] {
     padding: 0.6mm 0.4mm 1.4mm;
   }
 
   /* bar: a rectangular block; filled for sustained and refuted */
-  .ty-print-prova[data-forma='barra'] {
+  .ty-print-proof[data-forma='barra'] {
     min-inline-size: 22mm;
     padding: 1mm 2.4mm;
     border: 0.25mm solid var(--ty-print-prova-cor);
@@ -102,25 +102,25 @@
     letter-spacing: 0.06em;
   }
 
-  .ty-print-prova[data-forma='barra']:is([data-estado='sustentada'], [data-estado='refutada']) {
+  .ty-print-proof[data-forma='barra']:is([data-estado='sustentada'], [data-estado='refutada']) {
     background: var(--ty-print-prova-cor);
     color: var(--ty-print-papel);
   }
 
-  .ty-print-prova[data-forma='barra'][data-traco='ondulado'] { border-style: double; border-width: 0.8mm; }
-  .ty-print-prova[data-forma='barra'][data-traco='tracejado'] { border-style: dashed; }
-  .ty-print-prova[data-forma='barra'][data-traco='pontilhado'] {
+  .ty-print-proof[data-forma='barra'][data-traco='ondulado'] { border-style: double; border-width: 0.8mm; }
+  .ty-print-proof[data-forma='barra'][data-traco='tracejado'] { border-style: dashed; }
+  .ty-print-proof[data-forma='barra'][data-traco='pontilhado'] {
     border-width: 0;
     border-block-end: 0.3mm dotted var(--ty-print-prova-cor);
   }
 
-  .ty-print-prova[data-forma='barra'][data-grande] {
+  .ty-print-proof[data-forma='barra'][data-grande] {
     text-transform: none;
     letter-spacing: 0;
   }
 
   /* Watercolour styles wash the bar instead of filling it. */
-  .ty-print-livro[data-ty-print-grafico='aquarela'] .ty-print-prova[data-forma='barra'] {
+  .ty-print-book[data-ty-print-grafico='aquarela'] .ty-print-proof[data-forma='barra'] {
     border-color: transparent;
     border-radius: 0.6mm;
     background: color-mix(in srgb, var(--ty-print-prova-cor) 18%, transparent);
@@ -131,27 +131,27 @@
     font-size: 8.4pt;
   }
 
-  .ty-print-livro[data-ty-print-grafico='aquarela'] .ty-print-prova[data-forma='barra'][data-traco='ondulado'] {
+  .ty-print-book[data-ty-print-grafico='aquarela'] .ty-print-proof[data-forma='barra'][data-traco='ondulado'] {
     text-decoration: underline wavy;
     text-underline-offset: 0.8mm;
   }
 
-  .ty-print-livro[data-ty-print-grafico='aquarela'] .ty-print-prova[data-forma='barra'][data-traco='tracejado'] {
+  .ty-print-book[data-ty-print-grafico='aquarela'] .ty-print-proof[data-forma='barra'][data-traco='tracejado'] {
     border: 0.25mm dashed var(--ty-print-prova-cor);
   }
 
-  .ty-print-livro[data-ty-print-grafico='aquarela'] .ty-print-prova[data-forma='barra'][data-traco='pontilhado'] {
+  .ty-print-book[data-ty-print-grafico='aquarela'] .ty-print-proof[data-forma='barra'][data-traco='pontilhado'] {
     background: color-mix(in srgb, var(--ty-print-prova-cor) 10%, transparent);
     border-block-end: 0.3mm dotted var(--ty-print-prova-cor);
   }
 
   /* label: legend-key swatch (the icon) and the word, small caps */
-  .ty-print-prova[data-forma='etiqueta'] {
+  .ty-print-proof[data-forma='etiqueta'] {
     padding: 0.4mm 0;
     font-variant-caps: var(--ty-print-rotulo-variante);
   }
 
-  .ty-print-prova[data-forma='etiqueta'][data-grande] {
+  .ty-print-proof[data-forma='etiqueta'][data-grande] {
     padding: 0;
     text-align: start;
   }

@@ -23,7 +23,7 @@ export function Dupla({ numero, parte, capitulo, abreCapitulo = false, molde, cl
   const [par = '', impar = ''] = capa ? ['', ''] : numero.split('-')
   return (
     <div
-      className={cx('ty-print-dupla', className)}
+      className={cx('ty-print-spread', className)}
       role="group"
       aria-label={capa ? 'Capa aberta' : `Páginas ${par} e ${impar}`}
       data-abre-capitulo={abreCapitulo ? '' : undefined}

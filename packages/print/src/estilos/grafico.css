@@ -1,40 +1,40 @@
 /* Method charts. SVG user units are millimetres, so font sizes below are in mm (px in user space). */
 @layer tympan-print {
-  .ty-print-figura {
+  .ty-print-figure {
     display: flex;
     flex-direction: column;
     gap: 1mm;
     min-inline-size: 0;
   }
 
-  .ty-print-figura-cabeca {
+  .ty-print-figure-head {
     display: flex;
     flex-direction: column;
     gap: 0.4mm;
   }
 
-  .ty-print-figura-titulo {
+  .ty-print-figure-title {
     font: 700 7.6pt/1.25 var(--ty-print-fonte-rotulo);
     color: var(--ty-print-tinta);
   }
 
-  .ty-print-figura-subtitulo {
+  .ty-print-figure-subtitle {
     font: 400 6.8pt/1.3 var(--ty-print-fonte-rotulo);
     color: var(--ty-print-tinta-2);
   }
 
-  .ty-print-selo-local {
+  .ty-print-badge-local {
     margin-block-start: 0.8mm;
   }
 
   /* semanario: short bar and rule over each figure. */
-  .ty-print-livro[data-ty-print-figura='barra-topo'] .ty-print-figura {
+  .ty-print-book[data-ty-print-figura='barra-topo'] .ty-print-figure {
     position: relative;
     padding-block-start: 2.6mm;
     border-block-start: 0.25mm solid var(--ty-print-prova-refutada);
   }
 
-  .ty-print-livro[data-ty-print-figura='barra-topo'] .ty-print-figura::before {
+  .ty-print-book[data-ty-print-figura='barra-topo'] .ty-print-figure::before {
     content: '';
     position: absolute;
     inset-block-start: 0;
@@ -44,144 +44,144 @@
     background: var(--ty-print-prova-refutada);
   }
 
-  .ty-print-livro[data-ty-print-figura='barra-topo'] .ty-print-figura-titulo {
+  .ty-print-book[data-ty-print-figura='barra-topo'] .ty-print-figure-title {
     font-size: 8.4pt;
   }
 
-  .ty-print-grafico {
+  .ty-print-chart {
     display: block;
     max-inline-size: 100%;
     block-size: auto;
     overflow: visible;
   }
 
-  .ty-print-grafico text {
+  .ty-print-chart text {
     font-family: var(--ty-print-fonte-rotulo);
     font-size: 2.45px;
     fill: var(--ty-print-tinta);
   }
 
-  .ty-print-g-rotulo {
+  .ty-print-g-label {
     font-weight: 600;
     font-size: 2.55px;
   }
 
-  .ty-print-grafico .ty-print-g-nota {
+  .ty-print-chart .ty-print-g-note {
     font-size: 2.05px;
     fill: var(--ty-print-tinta-3);
   }
 
-  .ty-print-grafico .ty-print-g-valor,
-  .ty-print-grafico .ty-print-g-valor-a {
+  .ty-print-chart .ty-print-g-value,
+  .ty-print-chart .ty-print-g-value-a {
     font-family: var(--ty-print-fonte-numero);
     font-weight: 700;
     font-variant-numeric: tabular-nums;
   }
 
-  .ty-print-grafico .ty-print-g-valor-a {
+  .ty-print-chart .ty-print-g-value-a {
     font-weight: 400;
     fill: var(--ty-print-tinta-2);
   }
 
-  .ty-print-grafico [data-cor='destaque'] {
+  .ty-print-chart [data-cor='destaque'] {
     fill: var(--ty-print-destaque);
   }
 
-  .ty-print-grafico .ty-print-g-eixo-texto,
-  .ty-print-grafico .ty-print-g-unidade,
-  .ty-print-grafico .ty-print-g-chave {
+  .ty-print-chart .ty-print-g-axis-text,
+  .ty-print-chart .ty-print-g-unit,
+  .ty-print-chart .ty-print-g-brace {
     font-size: 2.05px;
     fill: var(--ty-print-tinta-3);
     font-variant-numeric: tabular-nums;
   }
 
-  .ty-print-grafico .ty-print-g-aviso {
+  .ty-print-chart .ty-print-g-warning {
     font-family: var(--ty-print-fonte-mono);
     font-size: 1.9px;
     fill: var(--ty-print-tinta-3);
   }
 
-  .ty-print-grafico .ty-print-g-legenda text {
+  .ty-print-chart .ty-print-g-legend text {
     font-size: 2.2px;
     fill: var(--ty-print-tinta-2);
   }
 
-  .ty-print-g-chamada circle {
+  .ty-print-g-kicker circle {
     fill: var(--ty-print-papel);
     stroke: var(--ty-print-tinta);
     stroke-width: 0.2;
   }
 
-  .ty-print-grafico .ty-print-g-chamada text {
+  .ty-print-chart .ty-print-g-kicker text {
     font-family: var(--ty-print-fonte-numero);
     font-weight: 700;
     font-size: 2px;
   }
 
-  .ty-print-grafico .ty-print-g-anotacao text,
-  .ty-print-grafico .ty-print-g-anotacao-texto {
+  .ty-print-chart .ty-print-g-annotetion text,
+  .ty-print-chart .ty-print-g-annotetion-text {
     font-family: var(--ty-print-fonte-anotacao);
     font-style: italic;
     font-size: 2.55px;
     fill: var(--ty-print-tinta-2);
   }
 
-  .ty-print-grafico .ty-print-g-anotacao:first-of-type text {
+  .ty-print-chart .ty-print-g-annotetion:first-of-type text {
     fill: var(--ty-print-destaque);
   }
 
-  .ty-print-grafico .ty-print-g-referencia text,
-  .ty-print-grafico .ty-print-g-evento text,
-  .ty-print-grafico .ty-print-g-faixa text {
+  .ty-print-chart .ty-print-g-reference text,
+  .ty-print-chart .ty-print-g-event text,
+  .ty-print-chart .ty-print-g-band text {
     font-size: 2.05px;
     fill: var(--ty-print-tinta-2);
   }
 
-  .ty-print-grafico .ty-print-g-evento text:first-of-type {
+  .ty-print-chart .ty-print-g-event text:first-of-type {
     fill: var(--ty-print-destaque);
     font-weight: 700;
   }
 
   /* Map (src/mapa): the areas are the projected mesh; only inks and strokes vary. */
-  .ty-print-mapa-areas path {
+  .ty-print-map-areas path {
     stroke: none;
   }
 
-  .ty-print-mapa-municipais {
+  .ty-print-map-municipalities {
     fill: none;
     stroke: var(--ty-print-papel);
     stroke-linejoin: round;
   }
 
-  .ty-print-mapa-bordas,
-  .ty-print-mapa-bordas path {
+  .ty-print-map-borders,
+  .ty-print-map-borders path {
     fill: none;
     stroke: var(--ty-print-tinta-2);
     stroke-linejoin: round;
     stroke-linecap: round;
   }
 
-  .ty-print-mapa-contorno,
-  .ty-print-mapa-contorno path {
+  .ty-print-map-outline,
+  .ty-print-map-outline path {
     fill: none;
     stroke: var(--ty-print-tinta);
     stroke-linejoin: round;
     stroke-linecap: round;
   }
 
-  .ty-print-mapa-destaque path,
-  .ty-print-mapa-destaque circle,
-  .ty-print-mapa-destaque line {
+  .ty-print-map-highlight path,
+  .ty-print-map-highlight circle,
+  .ty-print-map-highlight line {
     fill: none;
     stroke: var(--ty-print-destaque);
   }
 
-  .ty-print-mapa-amostra {
+  .ty-print-map-sample {
     stroke: var(--ty-print-linha);
     stroke-width: 0.3;
   }
 
-  .ty-print-mapa svg text {
+  .ty-print-map svg text {
     font-family: var(--ty-print-fonte-rotulo);
     font-size: 2.6px;
     font-weight: 600;
@@ -191,31 +191,31 @@
     stroke-width: 0.35;
   }
 
-  .ty-print-mapa svg .ty-print-mapa-rotulo {
+  .ty-print-map svg .ty-print-map-label {
     font-size: 2.1px;
   }
 
-  .ty-print-mapa svg .ty-print-mapa-titulo-celula {
+  .ty-print-map svg .ty-print-map-title-cell {
     font-size: 2.5px;
     font-weight: 700;
     stroke: none;
   }
 
   /* The range frame is only for figure 'amplitude' (minimo-de-tinta): no grid, the axis spans the data. */
-  .ty-print-eixo-amplitude {
+  .ty-print-axis-range {
     display: none;
   }
 
-  .ty-print-livro[data-ty-print-figura='amplitude'] :is(.ty-print-grade, .ty-print-eixo-cheio) {
+  .ty-print-book[data-ty-print-figura='amplitude'] :is(.ty-print-grid, .ty-print-axis-full) {
     display: none;
   }
 
-  .ty-print-livro[data-ty-print-figura='amplitude'] .ty-print-eixo-amplitude {
+  .ty-print-book[data-ty-print-figura='amplitude'] .ty-print-axis-range {
     display: inline;
   }
 
   /* Hand-lettered styles: chart labels in the hand font, a touch larger. */
-  .ty-print-livro[data-ty-print-tremor] .ty-print-grafico :is(.ty-print-g-rotulo, .ty-print-g-anotacao text, .ty-print-g-anotacao-texto) {
+  .ty-print-book[data-ty-print-tremor] .ty-print-chart :is(.ty-print-g-label, .ty-print-g-annotetion text, .ty-print-g-annotetion-text) {
     font-family: var(--ty-print-fonte-anotacao);
     font-style: normal;
   }
@@ -223,18 +223,18 @@
 
 @layer tympan-print {
   /* A plate (prancha) gives the figure the whole type area. */
-  .ty-print-pagina[data-variante='prancha'] .ty-print-mancha {
+  .ty-print-page[data-variante='prancha'] .ty-print-type-area {
     align-content: center;
   }
 
-  .ty-print-pagina[data-variante='prancha'] .ty-print-grafico {
+  .ty-print-page[data-variante='prancha'] .ty-print-chart {
     inline-size: 100% !important;
   }
 }
 
 @layer tympan-print {
   /* Figures side by side (small multiples); each keeps its own width in mm. */
-  .ty-print-figuras {
+  .ty-print-figures {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;

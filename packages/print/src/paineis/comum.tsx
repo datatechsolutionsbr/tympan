@@ -26,7 +26,7 @@ export function BordaMao({ chave, grossa = false, dupla = false }: { chave: stri
       : []),
   ]
   return (
-    <svg className="ty-print-borda-mao" aria-hidden="true" focusable="false" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <svg className="ty-print-hand-border" aria-hidden="true" focusable="false" viewBox="0 0 100 100" preserveAspectRatio="none">
       {tracos.map((p, i) => (
         <path key={i} d={p.d} vectorEffect="non-scaling-stroke" style={{ fill: 'none', stroke: 'var(--ty-print-linha)', strokeWidth: largura }} strokeLinecap="round" />
       ))}
@@ -37,7 +37,7 @@ export function BordaMao({ chave, grossa = false, dupla = false }: { chave: stri
 /** Numbered callout marker ("1", "2"…), the same mark the chart draws beside a row. */
 export function NumeroChamada({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <span className={cx('ty-print-chamada', className)} aria-hidden="true">
+    <span className={cx('ty-print-kicker', className)} aria-hidden="true">
       {children}
     </span>
   )
@@ -45,7 +45,7 @@ export function NumeroChamada({ children, className }: { children: ReactNode; cl
 
 /** Eyebrow line above a title. */
 export function Sobretitulo({ children }: { children: ReactNode }) {
-  return <p className="ty-print-sobretitulo">{children}</p>
+  return <p className="ty-print-sobretitle">{children}</p>
 }
 
 /** Placeholder text in [brackets] gets the placeholder style (mono, muted). */
@@ -54,7 +54,7 @@ export function comColchetes(texto: string): ReactNode {
   if (partes.length === 1) return texto
   return partes.map((p, i) =>
     /^\[[^\]]*\]$/.test(p) ? (
-      <span key={i} className="ty-print-pendente">
+      <span key={i} className="ty-print-footndente">
         {p}
       </span>
     ) : (

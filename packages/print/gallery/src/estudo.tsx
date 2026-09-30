@@ -1,20 +1,20 @@
 // The method spread of a fictional example study: "Estudo de qualidade do ar
-// urbano de Vila Aurora", by the "Laboratório Exemplo". It is the content of
+// Vila Aurora urban", by the "Example Lab". It is the content of
 // the gallery and of the tests. Every name and number here is invented.
 import {
-  ComoLer,
-  Dupla,
-  Fonte,
-  GraficoMetodo,
-  NaoDaParaAfirmar,
-  Numeros,
-  Pagina,
-  Painel,
-  Promessa,
-  Rastro,
-  TabelaDados,
-  Texto,
-  Veredito,
+  HowToRead,
+  Spread,
+  Source,
+  MethodChart,
+  CannotClaim,
+  Numbers,
+  Page,
+  Panel,
+  PromiseText,
+  Trace,
+  DataTable,
+  Text,
+  Verdict,
   type GraficoSpec,
   type LinhaPar,
   usePrint,
@@ -134,16 +134,16 @@ function FigurasMetodo({ g1, g2 }: { g1: GraficoSpec; g2: GraficoSpec }) {
   if ((e.multiplos === 'lado-a-lado' || e.barras === 'vertical') && g1.tipo === 'barras') {
     const letras = e.letraMultiplo ? ['A', 'B'] : [undefined, undefined]
     return (
-      <div className="ty-print-figuras">
-        <GraficoMetodo spec={g1} alt={ACHADOS[0]} local largura={e.forma === 'cartoes' ? 76 : 70} letra={letras[0]} />
-        <GraficoMetodo spec={g2} alt={ACHADOS[1]} largura={e.forma === 'cartoes' ? 50 : 54} letra={letras[1]} />
+      <div className="ty-print-figures">
+        <MethodChart spec={g1} alt={ACHADOS[0]} local largura={e.forma === 'cartoes' ? 76 : 70} letra={letras[0]} />
+        <MethodChart spec={g2} alt={ACHADOS[1]} largura={e.forma === 'cartoes' ? 50 : 54} letra={letras[1]} />
       </div>
     )
   }
   return (
     <>
-      <GraficoMetodo spec={g1} alt={ACHADOS[0]} local />
-      <GraficoMetodo spec={g2} alt={ACHADOS[1]} />
+      <MethodChart spec={g1} alt={ACHADOS[0]} local />
+      <MethodChart spec={g2} alt={ACHADOS[1]} />
     </>
   )
 }
@@ -151,32 +151,32 @@ function FigurasMetodo({ g1, g2 }: { g1: GraficoSpec; g2: GraficoSpec }) {
 export function DuplaEstudo({ grafico = 'halteres' }: { grafico?: TipoGraficoEstudo }) {
   const [g1, g2] = specsEstudo(grafico)
   return (
-    <Dupla numero="22-23" parte="Parte I · Ar e cidade" capitulo="Capítulo [n] · A zona de baixa emissão" abreCapitulo>
-      <Pagina lado="par">
-        <Texto eyebrow="Capítulo [n] · A zona de baixa emissão · o método" titulo="Antes do efeito, o teste da fronteira" nivel={1} />
-        <Painel letra="a" titulo="A promessa da regra" largura={3}>
-          <Promessa
+    <Spread numero="22-23" parte="Parte I · Ar e cidade" capitulo="Capítulo [n] · A zona de baixa emissão" abreCapitulo>
+      <Page lado="par">
+        <Text eyebrow="Capítulo [n] · A zona de baixa emissão · o método" titulo="Antes do efeito, o teste da fronteira" nivel={1} />
+        <Panel letra="a" titulo="A promessa da regra" largura={3}>
+          <PromiseText
             citacao="Menos carros poluentes no centro, menos dias de ar ruim para quem mora lá."
             norma="Decreto municipal nº 1.234, de 3 de março de 2020, de Vila Aurora (fictício), que cria a zona de baixa emissão"
             resumo="Veículos acima do limite de emissão pagam multa ao entrar na zona. O limite diário de PM2,5 é 25 µg/m³, e a fronteira tem 12 trechos."
           />
-        </Painel>
-        <Painel letra="b" titulo="Os números" largura={3}>
-          <Numeros
+        </Panel>
+        <Panel letra="b" titulo="Os números" largura={3}>
+          <Numbers
             itens={[
               { valor: 127, comparado: 54, rotulo: 'dias acima do limite logo fora × logo dentro da zona, trecho norte, inverno 2022', ref: '#k5' },
               { valor: 702, comparado: 286, rotulo: 'fora × dentro nos 12 trechos somados, inverno 2022', ref: '[#k7]' },
               { valor: 318, comparado: 241, rotulo: 'fora × dentro nos 12 trechos, estimativa do inverno 2025', ref: '#k6' },
             ]}
           />
-        </Painel>
-        <Texto
+        </Panel>
+        <Text
           variante="lead"
           paragrafos={['A comparação de fronteira põe lado a lado as estações logo dentro e logo fora da zona, e só vale se os dois lados eram parecidos antes dela. Antes de medir o efeito, contam-se os dias acima do limite de cada lado.']}
         />
-        <Painel letra="d" titulo="O gráfico do método: dias acima do limite de cada lado da fronteira">
+        <Panel letra="d" titulo="O gráfico do método: dias acima do limite de cada lado da fronteira">
           <FigurasMetodo g1={g1} g2={g2} />
-          <TabelaDados
+          <DataTable
             colunas={['Inverno', 'Trechos', { rotulo: 'Logo dentro', numerica: true }, { rotulo: 'Logo fora', numerica: true }, 'Edição']}
             linhas={[
               ['2016', 'norte', 118, 124, 'preliminar, não publicado'],
@@ -186,15 +186,15 @@ export function DuplaEstudo({ grafico = 'halteres' }: { grafico?: TipoGraficoEst
               ['2025 (estimativa)', '12 somados', 241, 318, EDICAO],
             ]}
           />
-        </Painel>
-        <Fonte
+        </Panel>
+        <Source
           rodape
           texto="Rede de monitoramento de Vila Aurora (dados fictícios): invernos de 2016, 2019 e 2022 e estimativa de 2025. Fronteira: decreto municipal de 2020 (fictício). Consultas consultas/ar/pm25-fronteira.sql (2022, 2025) e consultas/ar/pm25-fronteira-preliminar.sql (2016, 2019; dados preliminares, não publicados)."
         />
-      </Pagina>
-      <Pagina lado="impar">
-        <Painel letra="d′" titulo="Como ler o gráfico ao lado">
-          <ComoLer
+      </Page>
+      <Page lado="impar">
+        <Panel letra="d′" titulo="Como ler o gráfico ao lado">
+          <HowToRead
             itens={[
               'No trecho norte, 127 dias acima do limite logo fora da zona e 54 logo dentro (inverno 2022). Em 2016 e 2019, antes da zona, os dois lados eram parecidos.',
               'Nos 12 trechos somados, 702 contra 286: o padrão não é de um trecho só.',
@@ -202,10 +202,10 @@ export function DuplaEstudo({ grafico = 'halteres' }: { grafico?: TipoGraficoEst
               'Contagem não é teste: falta separar os dias de vento fraco [teste a rodar].',
             ]}
           />
-        </Painel>
-        <Texto eyebrow="O veredito" titulo="O que o dado permite dizer, por enquanto" nivel={2} />
-        <Painel letra="e" titulo="Veredito com estado de prova">
-          <Veredito
+        </Panel>
+        <Text eyebrow="O veredito" titulo="O que o dado permite dizer, por enquanto" nivel={2} />
+        <Panel letra="e" titulo="Verdict com estado de prova">
+          <Verdict
             promessa="Menos carros poluentes no centro, menos dias de ar ruim para quem mora lá."
             estado="nao-da-para-afirmar"
             texto="Os dias acima do limite caíram logo dentro da zona, e os dois lados eram parecidos antes dela. Que a melhora valha o ano todo para quem mora lá, o dado de hoje não mostra."
@@ -218,18 +218,18 @@ export function DuplaEstudo({ grafico = 'halteres' }: { grafico?: TipoGraficoEst
             ]}
             proposto
           />
-        </Painel>
-        <Painel letra="f" titulo="O que não dá para afirmar" largura={3}>
-          <NaoDaParaAfirmar
+        </Panel>
+        <Panel letra="f" titulo="O que não dá para afirmar" largura={3}>
+          <CannotClaim
             itens={[
               { titulo: 'Que a zona limpou o ar da cidade inteira.', texto: 'A comparação usa só as estações perto da fronteira (2016, 2019, 2022).' },
               { titulo: 'Que a estimativa de 2025 encerra o assunto.', texto: '318 contra 241 é contagem, não teste [teste a rodar].' },
               { titulo: 'O efeito longe da fronteira.', texto: 'A comparação só vale para as estações quase gêmeas dos dois lados da linha.' },
             ]}
           />
-        </Painel>
-        <Painel letra="g" titulo="Rastro do número #k5" largura={3}>
-          <Rastro
+        </Panel>
+        <Panel letra="g" titulo="Trace do número #k5" largura={3}>
+          <Trace
             referencia="#k5"
             numero="127"
             descricao="dias acima do limite logo fora da zona, trecho norte"
@@ -243,8 +243,8 @@ export function DuplaEstudo({ grafico = 'halteres' }: { grafico?: TipoGraficoEst
             edicao="[AAAA-MM]"
             assinatura={false}
           />
-        </Painel>
-      </Pagina>
-    </Dupla>
+        </Panel>
+      </Page>
+    </Spread>
   )
 }

@@ -371,7 +371,7 @@ export function Mapa({
 }: MapaProps) {
   const { estilo, pb } = usePrint()
   const disponivel = useLarguraDisponivel()
-  const id = useIdSeguro('ty-print-mapa')
+  const id = useIdSeguro('ty-print-map')
   const W = r3(larguraProp ?? disponivel ?? (sangria ? 150 : 110))
   const nome = renderizador ?? estilo.grafico
   const modo = modoDe(nome, pb)
@@ -470,20 +470,20 @@ export function Mapa({
   const desenhar = (c: Celula) => {
     const { g, ks, alvo } = c
     return (
-      <g key={c.chave} className="ty-print-mapa-celula" transform={c.x || c.y ? `translate(${c.x} ${c.y})` : undefined}>
+      <g key={c.chave} className="ty-print-map-cell" transform={c.x || c.y ? `translate(${c.x} ${c.y})` : undefined}>
         {/* One filled path per class (the areas' outlines joined): a hatch or dot pattern is painted
             once per class, not once per municipality, which keeps print rasterisers fast. */}
-        <g className="ty-print-mapa-areas" data-areas={g.areas.length}>
+        <g className="ty-print-map-areas" data-areas={g.areas.length}>
           {porClasse(g.areas, ks).map(([k, grupo]) => (
             <path key={k} d={grupo.map((a) => a.d).join('')} data-classe={k} data-codes={grupo.map((a) => a.code).join(' ')} style={{ fill: tinta.fill(k) }} />
           ))}
         </g>
-        {g.municipais ? <path className="ty-print-mapa-municipais" d={g.municipais} style={{ strokeWidth: c.g.areas.length > 2000 ? 0.05 : 0.08 }} /> : null}
-        {borda(g.internas, `${c.chave}|internas`, 'ty-print-mapa-bordas', lw * 0.75)}
-        {borda(g.contorno, `${c.chave}|contorno`, 'ty-print-mapa-contorno', lw * 1.25)}
+        {g.municipais ? <path className="ty-print-map-municipalities" d={g.municipais} style={{ strokeWidth: c.g.areas.length > 2000 ? 0.05 : 0.08 }} /> : null}
+        {borda(g.internas, `${c.chave}|internas`, 'ty-print-map-borders', lw * 0.75)}
+        {borda(g.contorno, `${c.chave}|contorno`, 'ty-print-map-outline', lw * 1.25)}
         {mostrarRotulos
           ? g.areas.map((a) => (
-              <text key={`r${a.code}`} className="ty-print-mapa-rotulo" x={a.cx} y={r3(a.cy + 0.8)} textAnchor="middle">
+              <text key={`r${a.code}`} className="ty-print-map-label" x={a.cx} y={r3(a.cy + 0.8)} textAnchor="middle">
                 {nivel === 'uf' ? a.code : a.nome}
               </text>
             ))
@@ -493,7 +493,7 @@ export function Mapa({
           const lx = r3(a.cx + (esquerda ? -3 : 3))
           const ly = r3(a.cy - 2.4)
           return (
-            <g key={`d${a.code}`} className="ty-print-mapa-destaque" data-code={a.code}>
+            <g key={`d${a.code}`} className="ty-print-map-highlight" data-code={a.code}>
               <path d={a.d} style={{ strokeWidth: r3(lw * 1.8) }} />
               {a.tam < 1.6 ? <circle cx={a.cx} cy={a.cy} r={0.9} style={{ strokeWidth: r3(lw * 1.4) }} /> : null}
               <line x1={a.cx} y1={a.cy} x2={lx} y2={r3(ly + 0.6)} style={{ strokeWidth: r3(lw * 0.8) }} />
@@ -509,7 +509,7 @@ export function Mapa({
 
   return (
     <figure
-      className={cx('ty-print-mapa', className)}
+      className={cx('ty-print-map', className)}
       data-nivel={nivel}
       data-renderizador={nome}
       data-modo={modo}
@@ -517,15 +517,15 @@ export function Mapa({
       data-sangria={sangria ? '' : undefined}
       data-exemplo={exemplo || itens.some((it) => it.exemplo) ? '' : undefined}
     >
-      <figcaption className="ty-print-figura-cabeca">
-        <span className="ty-print-figura-titulo">{comColchetes(titulo)}</span>
+      <figcaption className="ty-print-figure-head">
+        <span className="ty-print-figure-title">{comColchetes(titulo)}</span>
       </figcaption>
-      <svg className="ty-print-mapa-svg" viewBox={`0 0 ${Wt} ${Ht}`} role="img" aria-label={alt} style={{ maxInlineSize: `${Wt}mm`, aspectRatio: `${Wt} / ${Ht}` }}>
+      <svg className="ty-print-map-svg" viewBox={`0 0 ${Wt} ${Ht}`} role="img" aria-label={alt} style={{ maxInlineSize: `${Wt}mm`, aspectRatio: `${Wt} / ${Ht}` }}>
         <defs>{tinta.defs}</defs>
         {celulas.map((c, i) => (
           <g key={c.chave}>
             {c.titulo ? (
-              <text className="ty-print-mapa-titulo-celula" x={r3((i % nCol) * (Wc + vao))} y={r3(c.y - 1.4)}>
+              <text className="ty-print-map-title-cell" x={r3((i % nCol) * (Wc + vao))} y={r3(c.y - 1.4)}>
                 {c.titulo.replace(/\s*\[[^\]]*\]\s*/g, ' ').trim()}
               </text>
             ) : null}
@@ -534,11 +534,11 @@ export function Mapa({
         ))}
       </svg>
       {temSerie ? (
-        <ul className="ty-print-mapa-legenda" data-escala={escala}>
+        <ul className="ty-print-map-legend" data-escala={escala}>
           {rotulosClasses.map((l, k) => (
             <li key={k}>
               <svg viewBox="0 0 6 6" aria-hidden="true" focusable="false">
-                <rect width={6} height={6} className="ty-print-mapa-amostra" style={{ fill: tinta.fill(k) }} />
+                <rect width={6} height={6} className="ty-print-map-sample" style={{ fill: tinta.fill(k) }} />
               </svg>
               {comColchetes(l)}
             </li>
@@ -546,7 +546,7 @@ export function Mapa({
           {semDadoN > 0 ? (
             <li>
               <svg viewBox="0 0 6 6" aria-hidden="true" focusable="false">
-                <rect width={6} height={6} className="ty-print-mapa-amostra" style={{ fill: tinta.fill(SEM_DADO) }} />
+                <rect width={6} height={6} className="ty-print-map-sample" style={{ fill: tinta.fill(SEM_DADO) }} />
               </svg>
               {semDado}
             </li>
@@ -554,16 +554,16 @@ export function Mapa({
         </ul>
       ) : null}
       {comoLer ? (
-        <p className="ty-print-mapa-nota">
-          <span className="ty-print-margem-titulo">Como ler</span> {comColchetes(comoLer)}
+        <p className="ty-print-map-note">
+          <span className="ty-print-margin-title">Como ler</span> {comColchetes(comoLer)}
         </p>
       ) : null}
       {naoMostra ? (
-        <p className="ty-print-mapa-nota">
-          <span className="ty-print-margem-titulo">O que o mapa não mostra</span> {comColchetes(naoMostra)}
+        <p className="ty-print-map-note">
+          <span className="ty-print-margin-title">O que o mapa não mostra</span> {comColchetes(naoMostra)}
         </p>
       ) : null}
-      {exemplo || itens.some((it) => it.exemplo) ? <p className="ty-print-selo-exemplo">Dados de exemplo</p> : null}
+      {exemplo || itens.some((it) => it.exemplo) ? <p className="ty-print-badge-example">Dados de exemplo</p> : null}
       {tabela ? (
         <TabelaDados {...tabela} />
       ) : temSerie ? (

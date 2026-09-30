@@ -29,22 +29,22 @@ export function ShellShowcase({ scope }: { scope: string }) {
         <PageHeader
           variant="editorial"
           headingLevel={3}
-          title="Visão geral"
-          trail={[{ label: 'Laboratório Exemplo', href: '#/org' }, { label: 'Ar de Vila Aurora', href: '#/air' }, { label: 'Visão geral' }]}
-          lead="Qualidade do ar em cinco estações de Vila Aurora, com a leitura de origem citada em cada número."
+          title="Overview"
+          trail={[{ label: 'Example Lab', href: '#/org' }, { label: 'Vila Aurora air', href: '#/air' }, { label: 'Overview' }]}
+          lead="Air quality across five stations in Vila Aurora, with the source reading cited for every number."
         />
       </Section>
 
       <Section id={id('rail')} title="Rail navigation (RailNavSection, RailNavItem, RailContextButton)">
         <div className="ty-gallery-rail">
-          <RailContextButton scope="Laboratório Exemplo" name="Qualidade do ar de Vila Aurora" />
+          <RailContextButton scope="Example Lab" name="Vila Aurora air quality" />
           <nav aria-label={`Rail sample ${scope}`}>
             <RailNavSection>
-              <RailNavItem label="Visão geral" icon={Home} href="#/overview" current />
+              <RailNavItem label="Overview" icon={Home} href="#/overview" current />
             </RailNavSection>
-            <RailNavSection label="Coletar">
-              <RailNavItem label="Estações e trilha" icon={BookOpen} href="#/sources" />
-              <RailNavItem label="Verificação" icon={CheckSquare} href="#/verify" count={12} />
+            <RailNavSection label="Collect">
+              <RailNavItem label="Stations and trail" icon={BookOpen} href="#/sources" />
+              <RailNavItem label="Verification" icon={CheckSquare} href="#/verify" count={12} />
             </RailNavSection>
           </nav>
         </div>

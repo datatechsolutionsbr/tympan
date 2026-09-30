@@ -201,7 +201,7 @@ export function Ornamento({ lado }: { lado: 'par' | 'impar' }) {
   const p = pagina(moldura, lado)
   if (!m && !p) return null
   return (
-    <svg className="ty-print-ornamento" viewBox={`0 0 ${W} ${H}`} aria-hidden="true" focusable="false" data-moldura={moldura}>
+    <svg className="ty-print-ornament" viewBox={`0 0 ${W} ${H}`} aria-hidden="true" focusable="false" data-moldura={moldura}>
       {p}
       {m ? <g transform={lado === 'par' ? undefined : `translate(${W} 0) scale(-1 1)`}>{m}</g> : null}
     </svg>

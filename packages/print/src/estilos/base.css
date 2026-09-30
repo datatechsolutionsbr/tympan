@@ -5,7 +5,7 @@
     margin: 0;
   }
 
-  .ty-print-livro {
+  .ty-print-book {
     --ty-print-mesa: color-mix(in srgb, var(--ty-print-papel) 82%, var(--ty-print-tinta));
     --ty-print-sombra: color-mix(in srgb, var(--ty-print-tinta) 16%, transparent);
     color: var(--ty-print-tinta);
@@ -17,23 +17,23 @@
     text-rendering: geometricPrecision;
   }
 
-  .ty-print-livro *,
-  .ty-print-livro *::before,
-  .ty-print-livro *::after {
+  .ty-print-book *,
+  .ty-print-book *::before,
+  .ty-print-book *::after {
     box-sizing: border-box;
   }
 
-  .ty-print-livro :where(h1, h2, h3, h4, p, ul, ol, dl, dd, figure, blockquote, table, pre) {
+  .ty-print-book :where(h1, h2, h3, h4, p, ul, ol, dl, dd, figure, blockquote, table, pre) {
     margin: 0;
   }
 
-  .ty-print-livro :where(ul, ol) {
+  .ty-print-book :where(ul, ol) {
     padding: 0;
     list-style: none;
   }
 
   /* Spread: two pages side by side on screen. */
-  .ty-print-dupla {
+  .ty-print-spread {
     display: flex;
     inline-size: 340mm;
     block-size: 240mm;
@@ -42,7 +42,7 @@
     box-shadow: 0 1mm 4mm var(--ty-print-sombra);
   }
 
-  .ty-print-pagina {
+  .ty-print-page {
     position: relative;
     flex: none;
     inline-size: 170mm;
@@ -53,7 +53,7 @@
   }
 
   /* The gutter shade: light on the inner edge of each page. */
-  .ty-print-pagina::after {
+  .ty-print-page::after {
     content: '';
     position: absolute;
     inset-block: 0;
@@ -61,25 +61,25 @@
     pointer-events: none;
   }
 
-  .ty-print-pagina[data-lado='par']::after {
+  .ty-print-page[data-lado='par']::after {
     inset-inline-end: 0;
     background: linear-gradient(to left, color-mix(in srgb, var(--ty-print-tinta) 7%, transparent), transparent);
   }
 
-  .ty-print-pagina[data-lado='impar']::after {
+  .ty-print-page[data-lado='impar']::after {
     inset-inline-start: 0;
     background: linear-gradient(to right, color-mix(in srgb, var(--ty-print-tinta) 7%, transparent), transparent);
   }
 
-  [dir='rtl'] .ty-print-pagina[data-lado='par']::after {
+  [dir='rtl'] .ty-print-page[data-lado='par']::after {
     background: linear-gradient(to right, color-mix(in srgb, var(--ty-print-tinta) 7%, transparent), transparent);
   }
 
-  [dir='rtl'] .ty-print-pagina[data-lado='impar']::after {
+  [dir='rtl'] .ty-print-page[data-lado='impar']::after {
     background: linear-gradient(to left, color-mix(in srgb, var(--ty-print-tinta) 7%, transparent), transparent);
   }
 
-  .ty-print-textura {
+  .ty-print-texture {
     position: absolute;
     inset: 0;
     inline-size: 100%;
@@ -88,7 +88,7 @@
   }
 
   /* Type area: six columns; inner margin 18 mm, outer 14 mm. */
-  .ty-print-mancha {
+  .ty-print-type-area {
     position: absolute;
     inset-block: 17mm 15mm;
     display: grid;
@@ -99,30 +99,30 @@
     row-gap: 3mm;
   }
 
-  .ty-print-pagina[data-lado='par'] .ty-print-mancha {
+  .ty-print-page[data-lado='par'] .ty-print-type-area {
     inset-inline: 14mm 18mm;
   }
 
-  .ty-print-pagina[data-lado='impar'] .ty-print-mancha {
+  .ty-print-page[data-lado='impar'] .ty-print-type-area {
     inset-inline: 18mm 14mm;
   }
 
-  .ty-print-mancha > * {
+  .ty-print-type-area > * {
     grid-column: 1 / -1;
     min-inline-size: 0;
   }
 
-  .ty-print-pagina[data-variante='prancha'] .ty-print-mancha {
+  .ty-print-page[data-variante='prancha'] .ty-print-type-area {
     inset-block: 12mm 12mm;
   }
 
-  .ty-print-pagina[data-variante='capa'] {
+  .ty-print-page[data-variante='capa'] {
     background: var(--ty-print-tinta);
     color: var(--ty-print-papel);
   }
 
   /* On the inverted cover, secondary inks are the paper colour at lower strength. */
-  .ty-print-pagina[data-variante='capa'] .ty-print-mancha {
+  .ty-print-page[data-variante='capa'] .ty-print-type-area {
     --ty-print-tinta-2: color-mix(in srgb, var(--ty-print-papel) 85%, transparent);
     --ty-print-tinta-3: color-mix(in srgb, var(--ty-print-papel) 75%, transparent);
     --ty-print-linha: var(--ty-print-papel);
@@ -131,17 +131,17 @@
     grid-template-rows: 1fr auto;
   }
 
-  .ty-print-mancha:has(> .ty-print-fonte[data-rodape]) {
+  .ty-print-type-area:has(> .ty-print-source[data-rodape]) {
     padding-block-end: 12mm;
   }
 
-  .ty-print-mancha > .ty-print-fonte[data-rodape] {
+  .ty-print-type-area > .ty-print-source[data-rodape] {
     position: absolute;
     inset-block-end: 0;
     inset-inline: 0;
   }
 
-  .ty-print-cabeco,
+  .ty-print-running-head,
   .ty-print-folio {
     position: absolute;
     z-index: 1;
@@ -152,7 +152,7 @@
     color: var(--ty-print-tinta-3);
   }
 
-  .ty-print-cabeco {
+  .ty-print-running-head {
     inset-block-start: 8.5mm;
   }
 
@@ -161,11 +161,11 @@
     font-variant-numeric: tabular-nums;
   }
 
-  .ty-print-pagina[data-lado='par'] :is(.ty-print-cabeco, .ty-print-folio) {
+  .ty-print-page[data-lado='par'] :is(.ty-print-running-head, .ty-print-folio) {
     inset-inline-start: 14mm;
   }
 
-  .ty-print-pagina[data-lado='impar'] :is(.ty-print-cabeco, .ty-print-folio) {
+  .ty-print-page[data-lado='impar'] :is(.ty-print-running-head, .ty-print-folio) {
     inset-inline-end: 14mm;
   }
 
@@ -182,7 +182,7 @@
     font-family: var(--ty-print-fonte-mono);
   }
 
-  .ty-print-pendente {
+  .ty-print-footndente {
     font-family: var(--ty-print-fonte-mono);
     font-size: 0.86em;
     color: var(--ty-print-tinta-3);
@@ -203,44 +203,44 @@
     gap: 1.2mm;
   }
 
-  .ty-print-logo-rotulo {
+  .ty-print-logo-label {
     font: 600 6pt/1 var(--ty-print-fonte-rotulo);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     opacity: 0.8;
   }
 
-  .ty-print-assinatura {
+  .ty-print-signature {
     flex-direction: row;
     align-items: center;
     gap: 1.4mm;
   }
 
-  .ty-print-assinatura-texto {
+  .ty-print-signature-text {
     font: 500 6.4pt/1.2 var(--ty-print-fonte-rotulo);
     color: var(--ty-print-tinta-2);
   }
 
-  .ty-print-assinatura[data-fundo='escuro'] .ty-print-assinatura-texto {
+  .ty-print-signature[data-fundo='escuro'] .ty-print-signature-text {
     color: var(--ty-print-papel);
   }
 
   @media print {
-    .ty-print-dupla {
+    .ty-print-spread {
       display: contents;
     }
 
-    .ty-print-pagina {
+    .ty-print-page {
       break-after: page;
       break-inside: avoid;
     }
 
-    .ty-print-pagina::after {
+    .ty-print-page::after {
       display: none;
     }
 
     /* A chapter opens on an even page (the left page of a spread). */
-    .ty-print-dupla[data-abre-capitulo] > .ty-print-pagina:first-child {
+    .ty-print-spread[data-abre-capitulo] > .ty-print-page:first-child {
       break-before: left;
     }
   }

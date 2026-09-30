@@ -1,7 +1,7 @@
 /* Structures of the later styles: page ornaments, running-head bands and tags,
    title treatments, dossier and signage panels. */
 @layer tympan-print {
-  .ty-print-ornamento {
+  .ty-print-ornament {
     position: absolute;
     inset: 0;
     inline-size: 100%;
@@ -9,12 +9,12 @@
     pointer-events: none;
   }
 
-  [dir='rtl'] .ty-print-ornamento {
+  [dir='rtl'] .ty-print-ornament {
     transform: scaleX(-1);
   }
 
   /* ------------------------------------------------------------ running heads */
-  .ty-print-livro[data-ty-print-cabeco='faixa'] .ty-print-pagina:not([data-variante='capa'])::before {
+  .ty-print-book[data-ty-print-cabeco='faixa'] .ty-print-page:not([data-variante='capa'])::before {
     content: '';
     position: absolute;
     inset-block-start: 0;
@@ -25,18 +25,18 @@
     box-shadow: inset 0 1.2mm 0 -0.8mm var(--ty-print-papel);
   }
 
-  .ty-print-livro:is([data-ty-print-cabeco='faixa'], [data-ty-print-moldura='diagonais']) .ty-print-cabeco {
+  .ty-print-book:is([data-ty-print-cabeco='faixa'], [data-ty-print-moldura='diagonais']) .ty-print-running-head {
     inset-block-start: 5.6mm;
     font-weight: 700;
     letter-spacing: 0.04em;
     color: var(--ty-print-papel);
   }
 
-  .ty-print-livro[data-ty-print-moldura='diagonais'] .ty-print-cabeco {
+  .ty-print-book[data-ty-print-moldura='diagonais'] .ty-print-running-head {
     text-transform: uppercase;
   }
 
-  .ty-print-livro[data-ty-print-cabeco='etiqueta'] .ty-print-cabeco {
+  .ty-print-book[data-ty-print-cabeco='etiqueta'] .ty-print-running-head {
     inset-block-start: 7mm;
     padding: 1mm 2mm;
     background: var(--ty-print-tinta);
@@ -44,11 +44,11 @@
     font-weight: 600;
   }
 
-  .ty-print-livro[data-ty-print-cabeco='etiqueta'] .ty-print-cabeco::before {
+  .ty-print-book[data-ty-print-cabeco='etiqueta'] .ty-print-running-head::before {
     content: '→ ';
   }
 
-  .ty-print-livro[data-ty-print-cabeco='etiqueta'] .ty-print-folio {
+  .ty-print-book[data-ty-print-cabeco='etiqueta'] .ty-print-folio {
     padding: 0.8mm 1.6mm;
     background: var(--ty-print-marca-texto);
     color: var(--ty-print-tinta);
@@ -56,16 +56,16 @@
   }
 
   /* Page frames push running heads and folios inside the frame. */
-  .ty-print-livro:is([data-ty-print-moldura='dupla'], [data-ty-print-moldura='regua']) .ty-print-cabeco {
+  .ty-print-book:is([data-ty-print-moldura='dupla'], [data-ty-print-moldura='regua']) .ty-print-running-head {
     inset-block-start: 9.5mm;
   }
 
-  .ty-print-livro:is([data-ty-print-moldura='dupla'], [data-ty-print-moldura='regua']) .ty-print-folio {
+  .ty-print-book:is([data-ty-print-moldura='dupla'], [data-ty-print-moldura='regua']) .ty-print-folio {
     inset-block-end: 8.5mm;
   }
 
   /* ------------------------------------------------------------ titles */
-  .ty-print-livro[data-ty-print-titulo='recorte'] .ty-print-palavra {
+  .ty-print-book[data-ty-print-titulo='recorte'] .ty-print-word {
     display: inline-block;
     margin-inline-end: 1mm;
     margin-block-end: 0.8mm;
@@ -75,16 +75,16 @@
     transform: rotate(-1.2deg);
   }
 
-  .ty-print-livro[data-ty-print-titulo='recorte'] .ty-print-palavra:nth-child(2n) {
+  .ty-print-book[data-ty-print-titulo='recorte'] .ty-print-word:nth-child(2n) {
     transform: rotate(1.4deg);
   }
 
-  .ty-print-livro[data-ty-print-titulo='recorte'] .ty-print-palavra:nth-child(3) {
+  .ty-print-book[data-ty-print-titulo='recorte'] .ty-print-word:nth-child(3) {
     background: var(--ty-print-destaque-2);
     color: var(--ty-print-tinta);
   }
 
-  .ty-print-livro[data-ty-print-titulo='faixa'] :is(.ty-print-texto[data-nivel='1'], .ty-print-texto[data-nivel='2']) .ty-print-titulo {
+  .ty-print-book[data-ty-print-titulo='faixa'] :is(.ty-print-text[data-nivel='1'], .ty-print-text[data-nivel='2']) .ty-print-title {
     display: inline-block;
     padding: 0.6mm 2.4mm;
     background: var(--ty-print-marca-texto);
@@ -93,11 +93,11 @@
     font-style: italic;
   }
 
-  .ty-print-livro[data-ty-print-titulo='sombra'] .ty-print-titulo {
+  .ty-print-book[data-ty-print-titulo='sombra'] .ty-print-title {
     text-shadow: 0.55mm 0.55mm 0 var(--ty-print-ornamento-3);
   }
 
-  .ty-print-livro[data-ty-print-titulo='arcoiris'] :is(.ty-print-texto[data-nivel='1'], .ty-print-texto[data-nivel='2']) .ty-print-titulo {
+  .ty-print-book[data-ty-print-titulo='arcoiris'] :is(.ty-print-text[data-nivel='1'], .ty-print-text[data-nivel='2']) .ty-print-title {
     background-image: linear-gradient(90deg, var(--ty-print-ornamento-1), var(--ty-print-ornamento-2), var(--ty-print-ornamento-3), var(--ty-print-ornamento-4));
     -webkit-background-clip: text;
     background-clip: text;
@@ -105,52 +105,52 @@
   }
 
   /* ------------------------------------------------------------ dossier panel */
-  .ty-print-livro[data-ty-print-painel='dossie'] .ty-print-painel:not([data-variante='pilha'], [data-variante='filete'], [data-variante='filete-forte']) {
+  .ty-print-book[data-ty-print-painel='dossie'] .ty-print-panel:not([data-variante='pilha'], [data-variante='filete'], [data-variante='filete-forte']) {
     padding: 0 2.6mm 2.6mm;
     border: 0.45mm solid var(--ty-print-tinta);
   }
 
-  .ty-print-livro[data-ty-print-painel='dossie'] .ty-print-painel-titulo {
+  .ty-print-book[data-ty-print-painel='dossie'] .ty-print-panel-title {
     margin-inline: -2.6mm;
     padding: 1.2mm 2.6mm;
     background: var(--ty-print-tinta);
     color: var(--ty-print-papel);
   }
 
-  .ty-print-livro[data-ty-print-painel='dossie'] .ty-print-painel-titulo .ty-print-letra {
+  .ty-print-book[data-ty-print-painel='dossie'] .ty-print-panel-title .ty-print-letter {
     color: var(--ty-print-papel);
   }
 
-  .ty-print-livro[data-ty-print-painel='dossie'] .ty-print-letra {
+  .ty-print-book[data-ty-print-painel='dossie'] .ty-print-letter {
     text-transform: uppercase;
   }
 
-  .ty-print-livro[data-ty-print-painel='dossie'] .ty-print-letra::before {
+  .ty-print-book[data-ty-print-painel='dossie'] .ty-print-letter::before {
     content: 'campo\00a0';
   }
 
-  .ty-print-livro[data-ty-print-painel='dossie'] .ty-print-letra::after {
+  .ty-print-book[data-ty-print-painel='dossie'] .ty-print-letter::after {
     content: '\00a0/';
   }
 
   /* ------------------------------------------------------------ signage panel */
-  .ty-print-livro[data-ty-print-painel='placa'] .ty-print-painel-titulo {
+  .ty-print-book[data-ty-print-painel='placa'] .ty-print-panel-title {
     padding: 1mm 2mm 1mm 0;
     background: var(--ty-print-marca-texto);
     color: var(--ty-print-tinta);
   }
 
-  .ty-print-livro[data-ty-print-painel='placa'] .ty-print-painel-titulo::after {
+  .ty-print-book[data-ty-print-painel='placa'] .ty-print-panel-title::after {
     content: '→';
     margin-inline-start: auto;
     font-size: 9pt;
   }
 
-  [dir='rtl'] .ty-print-livro[data-ty-print-painel='placa'] .ty-print-painel-titulo::after {
+  [dir='rtl'] .ty-print-book[data-ty-print-painel='placa'] .ty-print-panel-title::after {
     content: '←';
   }
 
-  .ty-print-livro[data-ty-print-painel='placa'] .ty-print-letra {
+  .ty-print-book[data-ty-print-painel='placa'] .ty-print-letter {
     align-self: stretch;
     block-size: auto;
     margin-block: -1mm;

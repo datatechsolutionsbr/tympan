@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { PRINT_PRESET_NAMES, printPresets, resolvePrintStyleName, type PrintPresetName } from '@datatechsolutions/tympan-tokens'
-import { LivroPrint } from '../../src/index.ts'
+import { PrintBook } from '../../src/index.ts'
 import { DuplaEstudo, GRAFICO_DO_ESTUDO, type TipoGraficoEstudo } from './estudo.tsx'
 import { DuplaMapas } from './mapas.tsx'
 
@@ -36,9 +36,9 @@ export function Galeria() {
 
   const tipo: TipoGraficoEstudo = grafico === 'estudo' || grafico === 'mapa' ? (GRAFICO_DO_ESTUDO[estilo] ?? 'halteres') : grafico
   const livro = (
-    <LivroPrint estilo={estilo} pb={pb}>
+    <PrintBook estilo={estilo} pb={pb}>
       {grafico === 'mapa' ? <DuplaMapas /> : <DuplaEstudo grafico={tipo} />}
-    </LivroPrint>
+    </PrintBook>
   )
   if (inicial.foto) return <main className="ty-print-galeria-foto">{livro}</main>
 
@@ -63,7 +63,7 @@ export function Galeria() {
             <option value="halteres">halteres</option>
             <option value="barras">barras</option>
             <option value="contagem">contagem</option>
-            <option value="mapa">mapas (valores de exemplo)</option>
+            <option value="mapa">maps (example values)</option>
           </select>
         </label>
         <label>

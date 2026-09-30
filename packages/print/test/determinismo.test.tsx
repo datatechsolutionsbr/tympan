@@ -4,17 +4,17 @@
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 import { PRINT_PRESET_NAMES } from '@datatechsolutions/tympan-tokens'
-import { LivroPrint } from '../src/index.ts'
+import { PrintBook } from '../src/index.ts'
 import { DuplaEstudo, GRAFICO_DO_ESTUDO } from '../gallery/src/estudo.tsx'
 
 describe('deterministic output', () => {
   for (const estilo of PRINT_PRESET_NAMES) {
     it(estilo, () => {
       const livro = (pb: boolean) => (
-        <LivroPrint estilo={estilo} pb={pb}>
+        <PrintBook estilo={estilo} pb={pb}>
           <DuplaEstudo grafico={GRAFICO_DO_ESTUDO[estilo] ?? 'halteres'} />
           <DuplaEstudo grafico="halteres" />
-        </LivroPrint>
+        </PrintBook>
       )
       for (const pb of [false, true]) {
         const a = renderToStaticMarkup(livro(pb))

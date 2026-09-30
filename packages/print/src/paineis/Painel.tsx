@@ -46,27 +46,27 @@ export function Painel({ letra, titulo, eyebrow, largura: larguraPedida, variant
   const largura = daArea ? Math.min(daArea, larguraPedida ?? daArea) : larguraPedida
   const H = `h${nivel}` as 'h2' | 'h3' | 'h4'
   const { estilo } = usePrint()
-  const id = useIdSeguro('ty-print-painel')
+  const id = useIdSeguro('ty-print-panel')
   const moldura = estilo.estrutura.painel
   const mao = estilo.traco.tremor > 0 && (moldura === 'caixa' || moldura === 'caixa-grossa') && variante !== 'pilha' && variante !== 'filete' && variante !== 'filete-forte'
   const temCabeca = Boolean(letra || titulo)
   return (
     <section
-      className={cx('ty-print-painel', className)}
+      className={cx('ty-print-panel', className)}
       data-variante={variante}
       data-largura={largura ?? 6}
       aria-labelledby={temCabeca ? `${id}-t` : undefined}
       style={{ ...(daArea ? undefined : larguraColunas(largura)), ...style }}
     >
       {mao ? <BordaMao chave={`painel-${letra ?? ''}-${typeof titulo === 'string' ? titulo : ''}`} grossa={moldura === 'caixa-grossa'} dupla={moldura === 'caixa-grossa'} /> : null}
-      {eyebrow ? <p className="ty-print-sobretitulo">{eyebrow}</p> : null}
+      {eyebrow ? <p className="ty-print-sobretitle">{eyebrow}</p> : null}
       {temCabeca ? (
-        <H className="ty-print-painel-titulo" id={`${id}-t`}>
-          {letra ? <span className="ty-print-letra">{letra}</span> : null}
-          {titulo ? <span className="ty-print-painel-nome">{titulo}</span> : null}
+        <H className="ty-print-panel-title" id={`${id}-t`}>
+          {letra ? <span className="ty-print-letter">{letra}</span> : null}
+          {titulo ? <span className="ty-print-panel-name">{titulo}</span> : null}
         </H>
       ) : null}
-      <div className="ty-print-painel-corpo">
+      <div className="ty-print-panel-body">
         <LarguraProvider value={larguraUtil(largura, moldura, variante)}>{children}</LarguraProvider>
       </div>
     </section>

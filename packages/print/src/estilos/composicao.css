@@ -3,18 +3,18 @@
    itself beyond fonts and colours (style audit, G2 and G4–G8). Decoration never covers data. */
 @layer tympan-print {
   /* ------------------------------------------------------------ G2 emblem beside the spread title */
-  .ty-print-texto[data-emblema] {
+  .ty-print-text[data-emblema] {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     column-gap: 4mm;
     align-items: end;
   }
 
-  .ty-print-texto[data-emblema] > :not(.ty-print-emblema) {
+  .ty-print-text[data-emblema] > :not(.ty-print-emblem) {
     grid-column: 1;
   }
 
-  .ty-print-texto[data-emblema] > .ty-print-emblema {
+  .ty-print-text[data-emblema] > .ty-print-emblem {
     grid-column: 2;
     grid-row: 1 / span 3;
     align-self: end;
@@ -22,66 +22,66 @@
   }
 
   /* ------------------------------------------------------------ G5 title treatments */
-  .ty-print-livro[data-ty-print-titulo='italico'] :is(.ty-print-texto[data-nivel='1'], .ty-print-texto[data-nivel='2']) .ty-print-titulo {
+  .ty-print-book[data-ty-print-titulo='italico'] :is(.ty-print-text[data-nivel='1'], .ty-print-text[data-nivel='2']) .ty-print-title {
     font-style: italic;
     font-weight: 400;
   }
 
-  .ty-print-livro[data-ty-print-titulo='italico'] .ty-print-texto[data-nivel='1'] .ty-print-titulo,
-  .ty-print-livro[data-ty-print-titulo='italico'] .ty-print-area[data-area='titulo'] .ty-print-texto[data-nivel='2'] .ty-print-titulo {
+  .ty-print-book[data-ty-print-titulo='italico'] .ty-print-text[data-nivel='1'] .ty-print-title,
+  .ty-print-book[data-ty-print-titulo='italico'] .ty-print-area[data-area='titulo'] .ty-print-text[data-nivel='2'] .ty-print-title {
     font-size: 22pt;
   }
 
   /* graficos-1900: capitals, wide spacing, centred (the plates' lettering). */
-  .ty-print-livro[data-ty-print-titulo='centro'] :is(.ty-print-area[data-area^='titulo'], .ty-print-texto[data-nivel='1']) :is(.ty-print-titulo, .ty-print-sobretitulo) {
+  .ty-print-book[data-ty-print-titulo='centro'] :is(.ty-print-area[data-area^='titulo'], .ty-print-text[data-nivel='1']) :is(.ty-print-title, .ty-print-sobretitle) {
     text-align: center;
     letter-spacing: 0.14em;
   }
 
-  .ty-print-livro[data-ty-print-titulo='centro'] :is(.ty-print-area[data-area^='titulo'], .ty-print-texto[data-nivel='1']) .ty-print-titulo {
+  .ty-print-book[data-ty-print-titulo='centro'] :is(.ty-print-area[data-area^='titulo'], .ty-print-text[data-nivel='1']) .ty-print-title {
     text-transform: uppercase;
     font-size: 15pt;
   }
 
   /* fluxo-historico: centred italic, like the figurative map's cartouche. */
-  .ty-print-livro[data-ty-print-titulo='centro-italico'] :is(.ty-print-area[data-area^='titulo'], .ty-print-texto[data-nivel='1']) :is(.ty-print-titulo, .ty-print-sobretitulo) {
+  .ty-print-book[data-ty-print-titulo='centro-italico'] :is(.ty-print-area[data-area^='titulo'], .ty-print-text[data-nivel='1']) :is(.ty-print-title, .ty-print-sobretitle) {
     text-align: center;
   }
 
-  .ty-print-livro[data-ty-print-titulo='centro-italico'] :is(.ty-print-area[data-area^='titulo'], .ty-print-texto[data-nivel='1']) .ty-print-titulo {
+  .ty-print-book[data-ty-print-titulo='centro-italico'] :is(.ty-print-area[data-area^='titulo'], .ty-print-text[data-nivel='1']) .ty-print-title {
     font-style: italic;
     font-weight: 400;
   }
 
   /* Constructivism: heavier and larger, capitals. */
-  .ty-print-livro[data-ty-print-titulo='pesado'] :is(.ty-print-texto[data-nivel='1'], .ty-print-texto[data-nivel='2']) .ty-print-titulo {
+  .ty-print-book[data-ty-print-titulo='pesado'] :is(.ty-print-text[data-nivel='1'], .ty-print-text[data-nivel='2']) .ty-print-title {
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: -0.01em;
   }
 
-  .ty-print-livro[data-ty-print-titulo='pesado'] .ty-print-area[data-area='titulo'] .ty-print-titulo {
+  .ty-print-book[data-ty-print-titulo='pesado'] .ty-print-area[data-area='titulo'] .ty-print-title {
     font-size: 24pt;
     line-height: 1;
   }
 
   /* Swiss grid: the spread title is set from the third column, larger, flush left. */
-  .ty-print-livro[data-ty-print-titulo='coluna3'] .ty-print-pagina[data-lado='par'] .ty-print-area[data-area='titulo'] > .ty-print-texto {
+  .ty-print-book[data-ty-print-titulo='coluna3'] .ty-print-page[data-lado='par'] .ty-print-area[data-area='titulo'] > .ty-print-text {
     padding-inline-start: calc((100% - 25mm) / 6 * 2 + 10mm);
   }
 
-  .ty-print-livro[data-ty-print-titulo='coluna3'] .ty-print-pagina[data-lado='par'] .ty-print-area[data-area='titulo'] .ty-print-titulo {
+  .ty-print-book[data-ty-print-titulo='coluna3'] .ty-print-page[data-lado='par'] .ty-print-area[data-area='titulo'] .ty-print-title {
     font-size: 26pt;
     line-height: 1.02;
     letter-spacing: -0.02em;
   }
 
-  .ty-print-livro[data-ty-print-titulo='coluna3'] .ty-print-area[data-area='titulo2'] > .ty-print-texto {
+  .ty-print-book[data-ty-print-titulo='coluna3'] .ty-print-area[data-area='titulo2'] > .ty-print-text {
     padding-inline-start: calc((100% - 25mm) / 6 * 2 + 10mm);
   }
 
   /* Caderno: the title underlined in red pen. */
-  .ty-print-livro[data-ty-print-titulo='sublinhado'] :is(.ty-print-texto[data-nivel='1'], .ty-print-texto[data-nivel='2']) .ty-print-titulo {
+  .ty-print-book[data-ty-print-titulo='sublinhado'] :is(.ty-print-text[data-nivel='1'], .ty-print-text[data-nivel='2']) .ty-print-title {
     display: inline;
     text-decoration: underline;
     text-decoration-color: var(--ty-print-destaque-2);
@@ -90,7 +90,7 @@
     text-decoration-skip-ink: none;
   }
 
-  .ty-print-livro[data-ty-print-titulo='sublinhado'] :is(.ty-print-texto[data-nivel='1'], .ty-print-texto[data-nivel='2']) .ty-print-sobretitulo {
+  .ty-print-book[data-ty-print-titulo='sublinhado'] :is(.ty-print-text[data-nivel='1'], .ty-print-text[data-nivel='2']) .ty-print-sobretitle {
     font-family: var(--ty-print-fonte-anotacao);
     color: var(--ty-print-destaque-2);
     font-size: 8pt;
@@ -99,39 +99,39 @@
   }
 
   /* ------------------------------------------------------------ G4 panel fills */
-  .ty-print-livro[data-ty-print-fundo-painel='claro'] .ty-print-painel:not([data-variante='pilha']):not(:has(.ty-print-veredito)) {
+  .ty-print-book[data-ty-print-fundo-painel='claro'] .ty-print-panel:not([data-variante='pilha']):not(:has(.ty-print-verdict)) {
     background: color-mix(in srgb, var(--ty-print-destaque-2) 13%, var(--ty-print-papel));
     padding: 2.4mm 2.8mm;
     border: 0;
   }
 
-  .ty-print-livro[data-ty-print-fundo-painel='alternado'] .ty-print-painel:not([data-variante='pilha']) {
+  .ty-print-book[data-ty-print-fundo-painel='alternado'] .ty-print-panel:not([data-variante='pilha']) {
     padding: 2.4mm 2.8mm;
     background: color-mix(in srgb, var(--ty-print-destaque) 14%, var(--ty-print-papel));
   }
 
-  .ty-print-livro[data-ty-print-fundo-painel='alternado'] :is(.ty-print-area[data-area='b'], .ty-print-area[data-area='g'], .ty-print-area[data-area='d2'], .ty-print-area[data-area='c3']) .ty-print-painel:not([data-variante='pilha']) {
+  .ty-print-book[data-ty-print-fundo-painel='alternado'] :is(.ty-print-area[data-area='b'], .ty-print-area[data-area='g'], .ty-print-area[data-area='d2'], .ty-print-area[data-area='c3']) .ty-print-panel:not([data-variante='pilha']) {
     background: color-mix(in srgb, var(--ty-print-destaque-2) 15%, var(--ty-print-papel));
   }
 
-  .ty-print-livro[data-ty-print-fundo-painel='alternado'] .ty-print-area[data-area='d'] .ty-print-painel {
+  .ty-print-book[data-ty-print-fundo-painel='alternado'] .ty-print-area[data-area='d'] .ty-print-panel {
     background: color-mix(in srgb, var(--ty-print-marca-texto) 45%, var(--ty-print-papel));
   }
 
   /* Riso: halftone dots in the pink ink and a dashed frame in the blue. */
-  .ty-print-livro[data-ty-print-fundo-painel='pontilhado'] .ty-print-painel:not([data-variante='pilha']) {
+  .ty-print-book[data-ty-print-fundo-painel='pontilhado'] .ty-print-panel:not([data-variante='pilha']) {
     padding: 2.4mm 2.8mm;
     border: 0.35mm solid var(--ty-print-destaque-2);
     background: radial-gradient(color-mix(in srgb, var(--ty-print-destaque) 22%, transparent) 0.28mm, transparent 0.34mm) 0 0 / 1.3mm 1.3mm, var(--ty-print-papel);
   }
 
-  .ty-print-livro[data-ty-print-fundo-painel='pontilhado'] .ty-print-area[data-area='d2'] .ty-print-painel {
+  .ty-print-book[data-ty-print-fundo-painel='pontilhado'] .ty-print-area[data-area='d2'] .ty-print-panel {
     border-style: dashed;
     background: var(--ty-print-papel);
   }
 
   /* ------------------------------------------------------------ G4 verdict as a block */
-  .ty-print-livro[data-ty-print-veredito='bloco-escuro'] .ty-print-painel:has(.ty-print-veredito) {
+  .ty-print-book[data-ty-print-veredito='bloco-escuro'] .ty-print-panel:has(.ty-print-verdict) {
     --ty-print-tinta-bloco: var(--ty-print-tinta);
     background: var(--ty-print-tinta-bloco);
     color: var(--ty-print-papel);
@@ -140,64 +140,64 @@
     outline: 0;
   }
 
-  .ty-print-livro[data-ty-print-veredito='bloco-escuro'] .ty-print-painel:has(.ty-print-veredito) :is(.ty-print-veredito, .ty-print-afirmacao, .ty-print-base, .ty-print-proposto, .ty-print-veredito-texto, .ty-print-veredito-promessa) {
+  .ty-print-book[data-ty-print-veredito='bloco-escuro'] .ty-print-panel:has(.ty-print-verdict) :is(.ty-print-verdict, .ty-print-claim, .ty-print-base, .ty-print-proposed, .ty-print-verdict-text, .ty-print-verdict-promise) {
     color: var(--ty-print-papel);
   }
 
-  .ty-print-livro[data-ty-print-veredito='bloco-escuro']:not([data-ty-print-painel='placa']) .ty-print-painel:has(.ty-print-veredito) :is(.ty-print-painel-titulo, .ty-print-letra) {
+  .ty-print-book[data-ty-print-veredito='bloco-escuro']:not([data-ty-print-painel='placa']) .ty-print-panel:has(.ty-print-verdict) :is(.ty-print-panel-title, .ty-print-letter) {
     color: var(--ty-print-papel);
   }
 
-  .ty-print-livro[data-ty-print-veredito='bloco-escuro'] .ty-print-painel:has(.ty-print-veredito) :is(.ty-print-base, .ty-print-proposto) {
+  .ty-print-book[data-ty-print-veredito='bloco-escuro'] .ty-print-panel:has(.ty-print-verdict) :is(.ty-print-base, .ty-print-proposed) {
     opacity: 0.78;
   }
 
-  .ty-print-livro[data-ty-print-veredito='bloco-escuro'] .ty-print-painel:has(.ty-print-veredito) .ty-print-veredito-itens > * {
+  .ty-print-book[data-ty-print-veredito='bloco-escuro'] .ty-print-panel:has(.ty-print-verdict) .ty-print-verdict-items > * {
     border-color: color-mix(in srgb, var(--ty-print-papel) 30%, transparent);
   }
 
   /* In the dark block, dots and shapes print in the paper colour (shape and word still tell the states apart);
      labels and pills keep their own inks on a paper chip, so every state stays legible. */
-  .ty-print-livro[data-ty-print-veredito='bloco-escuro'] .ty-print-painel:has(.ty-print-veredito) .ty-print-prova:is([data-forma='ponto'], [data-forma='formas']) {
+  .ty-print-book[data-ty-print-veredito='bloco-escuro'] .ty-print-panel:has(.ty-print-verdict) .ty-print-proof:is([data-forma='ponto'], [data-forma='formas']) {
     --ty-print-prova-cor: var(--ty-print-papel);
   }
 
-  .ty-print-livro[data-ty-print-veredito='bloco-escuro'] .ty-print-painel:has(.ty-print-veredito) .ty-print-prova:not([data-forma='ponto']):not([data-forma='formas']) {
+  .ty-print-book[data-ty-print-veredito='bloco-escuro'] .ty-print-panel:has(.ty-print-verdict) .ty-print-proof:not([data-forma='ponto']):not([data-forma='formas']) {
     background-color: var(--ty-print-papel);
     border-radius: 0.8mm;
   }
 
-  .ty-print-livro[data-ty-print-veredito='bloco-cor'] .ty-print-painel:has(.ty-print-veredito) {
+  .ty-print-book[data-ty-print-veredito='bloco-cor'] .ty-print-panel:has(.ty-print-verdict) {
     background: color-mix(in srgb, var(--ty-print-destaque) 26%, var(--ty-print-papel));
     padding: 3mm 3.4mm;
     border: 0.35mm solid var(--ty-print-destaque-2);
   }
 
   /* ------------------------------------------------------------ G4 linking paragraph */
-  .ty-print-livro[data-ty-print-costura='faixa'] :is(.ty-print-area[data-area='lead'], .ty-print-area[data-area='costura']) > .ty-print-texto {
+  .ty-print-book[data-ty-print-costura='faixa'] :is(.ty-print-area[data-area='lead'], .ty-print-area[data-area='costura']) > .ty-print-text {
     background: var(--ty-print-marca-texto);
     padding: 2mm 3mm;
   }
 
-  .ty-print-livro[data-ty-print-costura='bloco-escuro'] :is(.ty-print-area[data-area='lead'], .ty-print-area[data-area='costura']) > .ty-print-texto {
+  .ty-print-book[data-ty-print-costura='bloco-escuro'] :is(.ty-print-area[data-area='lead'], .ty-print-area[data-area='costura']) > .ty-print-text {
     background: var(--ty-print-tinta);
     color: var(--ty-print-papel);
     padding: 2.2mm 3mm;
   }
 
-  .ty-print-livro[data-ty-print-costura='barra'] :is(.ty-print-area[data-area='lead'], .ty-print-area[data-area='costura']) > .ty-print-texto {
+  .ty-print-book[data-ty-print-costura='barra'] :is(.ty-print-area[data-area='lead'], .ty-print-area[data-area='costura']) > .ty-print-text {
     border-inline-start: 2.6mm solid var(--ty-print-destaque-2);
     padding-inline-start: 3.4mm;
   }
 
-  .ty-print-livro[data-ty-print-costura='selo'] :is(.ty-print-area[data-area='lead'], .ty-print-area[data-area='costura']) > .ty-print-texto {
+  .ty-print-book[data-ty-print-costura='selo'] :is(.ty-print-area[data-area='lead'], .ty-print-area[data-area='costura']) > .ty-print-text {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     column-gap: 3mm;
     align-items: start;
   }
 
-  .ty-print-livro[data-ty-print-costura='selo'] :is(.ty-print-area[data-area='lead'], .ty-print-area[data-area='costura']) > .ty-print-texto::before {
+  .ty-print-book[data-ty-print-costura='selo'] :is(.ty-print-area[data-area='lead'], .ty-print-area[data-area='costura']) > .ty-print-text::before {
     content: 'Você sabia?';
     grid-row: 1 / span 4;
     inline-size: 12mm;
@@ -212,25 +212,25 @@
   }
 
   /* ------------------------------------------------------------ G3 headline of the method figures */
-  .ty-print-figuras-bloco {
+  .ty-print-figures-block {
     display: flex;
     flex-direction: column;
     gap: 2.4mm;
   }
 
-  .ty-print-manchete-grafico {
+  .ty-print-headline-chart {
     font: 700 11.5pt/1.15 var(--ty-print-fonte-titulo);
     color: var(--ty-print-tinta);
     text-transform: var(--ty-print-titulo-caixa);
   }
 
-  .ty-print-manchete-grafico[data-forma='faixa'] span {
+  .ty-print-headline-chart[data-forma='faixa'] span {
     display: inline-block;
     padding: 1mm 2.4mm;
     background: var(--ty-print-marca-texto);
   }
 
-  .ty-print-manchete-grafico[data-forma='diagonal'] span {
+  .ty-print-headline-chart[data-forma='diagonal'] span {
     display: inline-block;
     padding: 1.4mm 5mm 1.4mm 3mm;
     background: var(--ty-print-destaque);
@@ -239,7 +239,7 @@
     clip-path: polygon(0 0, 100% 0, 94% 100%, 0 100%);
   }
 
-  .ty-print-manchete-grafico[data-forma='lupa'] {
+  .ty-print-headline-chart[data-forma='lupa'] {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -250,7 +250,7 @@
     color: var(--ty-print-destaque-2);
   }
 
-  .ty-print-manchete-grafico[data-forma='lupa']::after {
+  .ty-print-headline-chart[data-forma='lupa']::after {
     content: '';
     flex: none;
     inline-size: 7mm;
@@ -260,14 +260,14 @@
   }
 
   /* Dados BR: the notes beside the figure, headed "Leia assim". */
-  .ty-print-figuras-leia {
+  .ty-print-figures-read {
     display: grid;
     grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
     column-gap: 5mm;
     align-items: start;
   }
 
-  .ty-print-leia-assim {
+  .ty-print-read-this {
     display: flex;
     flex-direction: column;
     gap: 2mm;
@@ -275,19 +275,19 @@
     font: 400 7pt/1.35 var(--ty-print-fonte-corpo);
   }
 
-  .ty-print-leia-assim-titulo {
+  .ty-print-read-this-title {
     font: 700 6.4pt/1 var(--ty-print-fonte-rotulo);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--ty-print-destaque);
   }
 
-  .ty-print-leia-assim ol {
+  .ty-print-read-this ol {
     display: grid;
     gap: 3.2mm;
   }
 
-  .ty-print-leia-assim li {
+  .ty-print-read-this li {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     gap: 1.6mm;
@@ -296,15 +296,15 @@
 
   /* ------------------------------------------------------------ G7 the trace, in the style's idiom */
   /* mapa-de-metro: a metro line with a station at each step. */
-  .ty-print-livro[data-ty-print-rastro='metro'] .ty-print-rastro {
+  .ty-print-book[data-ty-print-rastro='metro'] .ty-print-trace {
     gap: 2.4mm;
   }
 
-  .ty-print-livro[data-ty-print-rastro='metro'] .ty-print-rastro-passo {
+  .ty-print-book[data-ty-print-rastro='metro'] .ty-print-trace-step {
     padding-inline-start: 5mm;
   }
 
-  .ty-print-livro[data-ty-print-rastro='metro'] .ty-print-rastro-passo::before {
+  .ty-print-book[data-ty-print-rastro='metro'] .ty-print-trace-step::before {
     content: '';
     position: absolute;
     inset-inline-start: 0.4mm;
@@ -317,7 +317,7 @@
     z-index: 1;
   }
 
-  .ty-print-livro[data-ty-print-rastro='metro'] .ty-print-rastro-passo:not(:last-child)::after {
+  .ty-print-book[data-ty-print-rastro='metro'] .ty-print-trace-step:not(:last-child)::after {
     content: '';
     position: absolute;
     inset-inline-start: 1.4mm;
@@ -327,28 +327,28 @@
   }
 
   /* sinalizacao: each step a sign plate, label on the yellow band with an arrow. */
-  .ty-print-livro[data-ty-print-rastro='placa'] .ty-print-rastro {
+  .ty-print-book[data-ty-print-rastro='placa'] .ty-print-trace {
     gap: 1.2mm;
   }
 
-  .ty-print-livro[data-ty-print-rastro='placa'] .ty-print-rastro-passo {
+  .ty-print-book[data-ty-print-rastro='placa'] .ty-print-trace-step {
     border-block-start: 0.35mm solid var(--ty-print-tinta);
     padding-block-start: 1mm;
   }
 
-  .ty-print-livro[data-ty-print-rastro='placa'] .ty-print-rastro dt {
+  .ty-print-book[data-ty-print-rastro='placa'] .ty-print-trace dt {
     display: inline-block;
     padding: 0.5mm 1.4mm;
     background: var(--ty-print-marca-texto);
     color: var(--ty-print-tinta);
   }
 
-  .ty-print-livro[data-ty-print-rastro='placa'] .ty-print-rastro dt::after {
+  .ty-print-book[data-ty-print-rastro='placa'] .ty-print-trace dt::after {
     content: ' →';
   }
 
   /* ------------------------------------------------------------ caderno: key numbers highlighted */
-  .ty-print-livro[data-ty-print-numeros-marcados] .ty-print-numero-valor {
+  .ty-print-book[data-ty-print-numeros-marcados] .ty-print-number-value {
     background: linear-gradient(transparent 12%, var(--ty-print-marca-texto) 12%, var(--ty-print-marca-texto) 88%, transparent 88%);
     padding-inline: 0.8mm;
     transform: rotate(-1.2deg);
@@ -356,29 +356,29 @@
   }
 
   /* ------------------------------------------------------------ G6 proof marks in the style's idiom */
-  .ty-print-prova:is([data-forma='formas'], [data-forma='ponto']) {
+  .ty-print-proof:is([data-forma='formas'], [data-forma='ponto']) {
     padding: 0.4mm 0;
     gap: 1.6mm;
     text-transform: lowercase;
   }
 
-  .ty-print-prova-forma {
+  .ty-print-proof-shape {
     inline-size: 2.8mm;
     block-size: 2.8mm;
     flex: none;
   }
 
-  .ty-print-prova[data-grande] .ty-print-prova-forma {
+  .ty-print-proof[data-grande] .ty-print-proof-shape {
     inline-size: 5.6mm;
     block-size: 5.6mm;
   }
 
   /* graficos-1900: stamps pressed at a slight angle. */
-  .ty-print-livro[data-ty-print-style='graficos-1900'] .ty-print-prova[data-forma='carimbo'] {
+  .ty-print-book[data-ty-print-style='graficos-1900'] .ty-print-proof[data-forma='carimbo'] {
     transform: rotate(-3deg);
   }
 
-  .ty-print-livro[data-ty-print-style='graficos-1900'] .ty-print-prova[data-forma='carimbo'][data-grande] {
+  .ty-print-book[data-ty-print-style='graficos-1900'] .ty-print-proof[data-forma='carimbo'][data-grande] {
     transform: rotate(-6deg);
   }
 }

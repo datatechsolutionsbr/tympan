@@ -70,7 +70,7 @@ function colunaRotulos(linhas: LinhaGenerica[], largura: number) {
 function barra(c: CtxGrafico, o: { chave: string; x: number; y: number; w: number; h: number; cor: CorDado; hachura: boolean; valor: number; mm: number; esquerda?: boolean; linha: number; serie: 'a' | 'b'; attrs?: Record<string, string | number> }) {
   return (
     <g
-      className="ty-print-barra"
+      className="ty-print-bar"
       data-linha={o.linha}
       data-serie={o.serie}
       data-valor={o.valor}
@@ -148,7 +148,7 @@ export function EixoCentral({ c, spec, largura }: { c: CtxGrafico; spec: SpecBar
     <>
       {chave(c, spec, pares, algum)}
       {pares ? (
-        <g className="ty-print-g-lados" style={{ fontSize: 2.2 }}>
+        <g className="ty-print-g-sides" style={{ fontSize: 2.2 }}>
           <text x={n(xc - 1)} y={n(topo - 0.6)} textAnchor="end" style={{ fill: cssCor('tinta-2'), fontSize: 2.2 }}>
             {`← ${spec.rotuloA ?? 'a'}`}
           </text>
@@ -157,9 +157,9 @@ export function EixoCentral({ c, spec, largura }: { c: CtxGrafico; spec: SpecBar
           </text>
         </g>
       ) : null}
-      <g className="ty-print-g-eixo">
+      <g className="ty-print-g-axis">
         {marcas.map((m) => (
-          <text key={m.x} className="ty-print-g-eixo-texto" x={m.x} y={n(yFim + 2.6)} textAnchor="middle">
+          <text key={m.x} className="ty-print-g-axis-text" x={m.x} y={n(yFim + 2.6)} textAnchor="middle">
             {numeroBr(m.v)}
           </text>
         ))}
@@ -172,16 +172,16 @@ export function EixoCentral({ c, spec, largura }: { c: CtxGrafico; spec: SpecBar
         const wb = n(b.valor * k)
         const direita = n(xc + wb + 1)
         return (
-          <g key={i} className="ty-print-g-linha" data-linha={i} data-destaque={l.destaque ? '' : undefined}>
+          <g key={i} className="ty-print-g-line" data-linha={i} data-destaque={l.destaque ? '' : undefined}>
             <Rotulos y={n(y + 1.6)} rotulo={l.rotulo} nota={l.nota} local={l.local} />
             {a ? barra(c, { chave: `ec-${i}-a`, x: xc, y, w: wa, h, cor: cor.a, hachura: hachura && !algum, valor: a.valor, mm: k, esquerda: true, linha: i, serie: 'a' }) : null}
             {barra(c, { chave: `ec-${i}-b`, x: xc, y, w: wb, h, cor: cor.b, hachura: false, valor: b.valor, mm: k, linha: i, serie: 'b' })}
             {a ? (
-              <text className="ty-print-g-valor-a" x={n(xc - wa - 1)} y={n(y + h - 0.7)} textAnchor="end" data-cor={l.destaque ? 'destaque' : 'tinta'}>
+              <text className="ty-print-g-value-a" x={n(xc - wa - 1)} y={n(y + h - 0.7)} textAnchor="end" data-cor={l.destaque ? 'destaque' : 'tinta'}>
                 {numeroBr(a.valor)}
               </text>
             ) : null}
-            <text className="ty-print-g-valor" x={direita} y={n(y + h - 0.7)} data-cor={l.destaque ? 'destaque' : 'tinta'}>
+            <text className="ty-print-g-value" x={direita} y={n(y + h - 0.7)} data-cor={l.destaque ? 'destaque' : 'tinta'}>
               {numeroBr(b.valor)}
             </text>
             {l.marca ? <Chamada x={n(direita + larguraTexto(numeroBr(b.valor)) + 3)} y={n(y + h / 2)} texto={l.marca} /> : null}
@@ -189,7 +189,7 @@ export function EixoCentral({ c, spec, largura }: { c: CtxGrafico; spec: SpecBar
         )
       })}
       {/* The axis is the cut: drawn over the bars' roots. */}
-      <g className="ty-print-g-corte">{c.p.linha(c, { chave: 'eixo-central', x1: xc, y1: n(topo), x2: xc, y2: yFim, cor: 'tinta', largura: 0.6, tipo: 'eixo' })}</g>
+      <g className="ty-print-g-cut">{c.p.linha(c, { chave: 'eixo-central', x1: xc, y1: n(topo), x2: xc, y2: yFim, cor: 'tinta', largura: 0.6, tipo: 'eixo' })}</g>
       {notas.el}
     </>
   )
@@ -258,7 +258,7 @@ export function Ziguezague({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarr
       }
       const paraDireita = (j - 1) % 2 === 0
       partes.push(
-        <text key={`v-${i}-${v.serie}`} className={v.serie === 'a' && pares ? 'ty-print-g-valor-a' : 'ty-print-g-valor'} x={n(paraDireita ? fimX + 1 : fimX - 1)} y={n(fimY + h - 0.5)} textAnchor={paraDireita ? 'start' : 'end'} data-cor={l.destaque ? 'destaque' : 'tinta'}>
+        <text key={`v-${i}-${v.serie}`} className={v.serie === 'a' && pares ? 'ty-print-g-value-a' : 'ty-print-g-value'} x={n(paraDireita ? fimX + 1 : fimX - 1)} y={n(fimY + h - 0.5)} textAnchor={paraDireita ? 'start' : 'end'} data-cor={l.destaque ? 'destaque' : 'tinta'}>
           {numeroBr(v.valor)}
         </text>,
       )
@@ -268,7 +268,7 @@ export function Ziguezague({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarr
       y += h + entre
     })
     blocos.push(
-      <g key={i} className="ty-print-g-linha" data-linha={i} data-destaque={l.destaque ? '' : undefined}>
+      <g key={i} className="ty-print-g-line" data-linha={i} data-destaque={l.destaque ? '' : undefined}>
         <Rotulos y={n(y0 + 2)} rotulo={l.rotulo} nota={l.nota} local={l.local} />
         {partes}
       </g>,
@@ -280,7 +280,7 @@ export function Ziguezague({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarr
   const corpo = (
     <>
       {chave(c, spec, pares, algum)}
-      <text className="ty-print-g-chave" x={largura} y={2.4} textAnchor="end">
+      <text className="ty-print-g-brace" x={largura} y={2.4} textAnchor="end">
         {`cada linha cheia = ${numeroBr(D)}`}
       </text>
       {blocos}
@@ -336,8 +336,8 @@ export function Fluxo({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarras; l
   const corpo = (
     <>
       {chave(c, spec, pares, algum)}
-      <g className="ty-print-g-chave-espessura">
-        <text className="ty-print-g-chave" x={n(largura - 3.4)} y={n(2.4 + (pares ? 3.6 : 0))} textAnchor="end">
+      <g className="ty-print-g-brace-esfootssura">
+        <text className="ty-print-g-brace" x={n(largura - 3.4)} y={n(2.4 + (pares ? 3.6 : 0))} textAnchor="end">
           {`espessura de ${numeroBr(u)}`}
         </text>
         <rect x={n(largura - 2.2)} y={n(2.4 + (pares ? 3.6 : 0) - u * k)} width={1.6} height={n(u * k)} style={{ fill: 'var(--ty-print-tinta)' }} data-valor={u} data-h={n(u * k)} />
@@ -347,7 +347,7 @@ export function Fluxo({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarras; l
         const yA = n(top + tb)
         const a2 = n(yA + gap)
         return (
-          <g key={i} className="ty-print-g-linha" data-linha={i} data-destaque={l.destaque ? '' : undefined}>
+          <g key={i} className="ty-print-g-line" data-linha={i} data-destaque={l.destaque ? '' : undefined}>
             <Rotulos y={n(top + (tb + ta) / 2 + 0.6)} rotulo={l.rotulo} nota={l.nota} local={l.local} />
             {l.marca ? <Chamada x={n(xL - 2.6)} y={n(top + (tb + ta) / 2)} texto={l.marca} /> : null}
             {barra(c, { chave: `fx-${i}-b`, x: xL, y: n(top), w: n(xR - xL), h: tb, cor: cor.b, hachura: false, valor: vB, mm: k, linha: i, serie: 'b', attrs: { 'data-espessura': tb } })}
@@ -360,21 +360,21 @@ export function Fluxo({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarras; l
                   style={{ fill: cssCor(cor.a) }}
                 />
                 {barra(c, { chave: `fx-${i}-a2`, x: n(xc + T), y: a2, w: n(xR - xc - T), h: ta, cor: cor.a, hachura: hachura && !algum, valor: vA, mm: k, linha: i, serie: 'a', attrs: { 'data-espessura': ta, 'data-parte': 'depois' } })}
-                <text className="ty-print-g-valor-a" x={n(xR + 1)} y={n(a2 + ta / 2 + 0.8)} data-cor={l.destaque ? 'destaque' : 'tinta'}>
+                <text className="ty-print-g-value-a" x={n(xR + 1)} y={n(a2 + ta / 2 + 0.8)} data-cor={l.destaque ? 'destaque' : 'tinta'}>
                   {numeroBr(vA)}
                 </text>
               </>
             ) : null}
-            <text className="ty-print-g-valor" x={n(xR + 1)} y={n(top + tb / 2 + 0.8)} data-cor={l.destaque ? 'destaque' : 'tinta'}>
+            <text className="ty-print-g-value" x={n(xR + 1)} y={n(top + tb / 2 + 0.8)} data-cor={l.destaque ? 'destaque' : 'tinta'}>
               {numeroBr(vB)}
             </text>
           </g>
         )
       })}
-      <g className="ty-print-g-corte" strokeDasharray="0.7 0.6">
+      <g className="ty-print-g-cut" strokeDasharray="0.7 0.6">
         {c.p.linha(c, { chave: 'corte', x1: xc, y1: n(topoFluxo - 2.2), x2: xc, y2: fimFluxo, cor: 'tinta-2', largura: 0.2, tipo: 'guia' })}
       </g>
-      <text className="ty-print-g-nota" x={n(xc + 0.8)} y={n(topoFluxo - 1)}>
+      <text className="ty-print-g-note" x={n(xc + 0.8)} y={n(topoFluxo - 1)}>
         corte
       </text>
       {notas.el}
@@ -409,10 +409,10 @@ export function Cartoes({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarras;
   const corpo = (
     <>
       {chave(c, spec, pares, algum)}
-      <g className="ty-print-g-eixo">
+      <g className="ty-print-g-axis">
         {marcasY.map((v) => (
           <g key={v}>
-            <text className="ty-print-g-eixo-texto" x={n(wAx - 1)} y={n(yBase - (v - spec.escala[0]) * k + 0.7)} textAnchor="end">
+            <text className="ty-print-g-axis-text" x={n(wAx - 1)} y={n(yBase - (v - spec.escala[0]) * k + 0.7)} textAnchor="end">
               {numeroBr(v)}
             </text>
           </g>
@@ -430,15 +430,15 @@ export function Cartoes({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarras;
         const bw = n(Math.min(5.5, (cw * 0.62) / nb))
         const inicio = n(x + cw / 2 - (bw * nb + 0.8 * (nb - 1)) / 2)
         return (
-          <g key={i} className="ty-print-g-linha ty-print-g-cartao" data-linha={i} data-destaque={l.destaque ? '' : undefined}>
+          <g key={i} className="ty-print-g-line ty-print-g-card" data-linha={i} data-destaque={l.destaque ? '' : undefined}>
             <rect x={x} y={topo} width={cw} height={hCard} rx={raio} style={{ fill: l.destaque ? 'var(--ty-print-marca-texto)' : 'var(--ty-print-contexto)', fillOpacity: l.destaque ? 1 : 0.22 }} />
-            <text className="ty-print-g-nota" x={n(x + 1.4)} y={n(topo + 3)} style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <text className="ty-print-g-note" x={n(x + 1.4)} y={n(topo + 3)} style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               {palavras.join(' ')}
             </text>
-            <text className="ty-print-g-rotulo" x={n(x + 1.4)} y={n(topo + 6.2)} style={{ fontSize: 3.1 }}>
+            <text className="ty-print-g-label" x={n(x + 1.4)} y={n(topo + 6.2)} style={{ fontSize: 3.1 }}>
               {ultimo || l.rotulo}
             </text>
-            <text x={n(x + 1.4)} y={n(topo + 11)} className="ty-print-g-valor" style={{ fontSize: n(grande), fill: cssCor(cor.b) }}>
+            <text x={n(x + 1.4)} y={n(topo + 11)} className="ty-print-g-value" style={{ fontSize: n(grande), fill: cssCor(cor.b) }}>
               {numeroBr(b.valor)}
               {a ? (
                 <tspan style={{ fontSize: n(grande * 0.6), fill: cssCor(cor.a) }}>
@@ -453,17 +453,17 @@ export function Cartoes({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarras;
               const xs = n(inicio + j * (bw + 0.8))
               return (
                 <g key={v.serie}>
-                  <g className="ty-print-barra" data-linha={i} data-serie={v.serie} data-valor={v.valor} data-x={xs} data-base={yBase} data-h={h} transform={`translate(${xs} ${yBase}) rotate(-90)`}>
+                  <g className="ty-print-bar" data-linha={i} data-serie={v.serie} data-valor={v.valor} data-x={xs} data-base={yBase} data-h={h} transform={`translate(${xs} ${yBase}) rotate(-90)`}>
                     {c.p.barra(c, { chave: `ct-${i}-${v.serie}`, w: h, h: bw, cor: cor[v.serie], enchimento: v.serie === 'a' && pares && hachura && !algum ? 'hachura' : 'cheio', valor: v.valor, mmPorUnidade: k })}
                   </g>
-                  <text className={v.serie === 'a' && pares ? 'ty-print-g-valor-a' : 'ty-print-g-valor'} x={n(xs + bw / 2)} y={n(yBase - h - 1)} textAnchor="middle" style={{ fontSize: 2.2 }}>
+                  <text className={v.serie === 'a' && pares ? 'ty-print-g-value-a' : 'ty-print-g-value'} x={n(xs + bw / 2)} y={n(yBase - h - 1)} textAnchor="middle" style={{ fontSize: 2.2 }}>
                     {numeroBr(v.valor)}
                   </text>
                 </g>
               )
             })}
             {l.nota || l.local ? (
-              <text className="ty-print-g-nota" x={n(x + cw / 2)} y={n(yBase + 3.4)} textAnchor="middle" data-local={l.local ? '' : undefined}>
+              <text className="ty-print-g-note" x={n(x + cw / 2)} y={n(yBase + 3.4)} textAnchor="middle" data-local={l.local ? '' : undefined}>
                 {l.local ? (l.nota ? `${l.nota} · lake local` : 'lake local') : l.nota}
               </text>
             ) : null}

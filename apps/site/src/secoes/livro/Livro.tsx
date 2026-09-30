@@ -14,7 +14,7 @@ import { useI18n, type Chave } from '../../i18n/I18n'
 import { useFavoritos, useLocal } from '../../local'
 import { Cabeca, Moldura, useHref } from '../../Moldura'
 import { teclaDeTroca, TODOS_ESTILOS, vizinho, type Grafico, type Modo, type RotaDe } from '../../rotas'
-import { DuplaEstilo, QuandoVisivel } from './Dupla'
+import { DuplaEstilo, QuandoVisivel } from './Spread'
 import { DUPLAS, DuplaDoLivroNoEstilo } from './LivroCompleto'
 import { Notas } from './Notas'
 import { Visor } from '../../comum/Visor'
@@ -143,13 +143,13 @@ function Linha({ rotulo, children }: { rotulo: string; children: ReactNode }) {
   )
 }
 
-function Ficha({ estilo, pb, notas }: { estilo: PrintPresetName; pb: boolean; notas?: ReactNode }) {
+function SpecSheet({ estilo, pb, notas }: { estilo: PrintPresetName; pb: boolean; notas?: ReactNode }) {
   const { t } = useI18n()
   const { rotulo, papelDe, rendDe, marcaDe, rotuloProva } = useTextosEstilo()
   const s = useMemo(() => resolvePrintStyle(printPresets[estilo], { pb }), [estilo, pb])
   const tema = temaDoEstilo(estilo)
   const snippetTema = `import '@datatechsolutions/tympan-tokens/print-themes/${tema}.css'\n\n<html data-ty-theme="${tema}">`
-  const snippetLivro = `import { LivroPrint } from '@datatechsolutions/tympan-print'\n\n<LivroPrint estilo="${estilo}"${pb ? ' pb' : ''}>\n  …\n</LivroPrint>`
+  const snippetLivro = `import { PrintBook } from '@datatechsolutions/tympan-print'\n\n<PrintBook estilo="${estilo}"${pb ? ' pb' : ''}>\n  …\n</PrintBook>`
   const papeis: Array<[Chave, string, string]> = [
     ['livro.fonteTitulo', s.fontes.titulo, t('livro.amostraTitulo')],
     ['livro.fonteCorpo', s.fontes.corpo, t('livro.amostraCorpo')],
@@ -563,7 +563,7 @@ export function Livro({ rota, ir }: { rota: RotaLivro; ir: Ir }) {
           {corpo}
           {modo !== 'galeria' ? <p className="ty-site-dica">{t('livro.dicaTeclas')}</p> : null}
         </div>
-        {ficha && modo !== 'galeria' ? <Ficha estilo={estilo} pb={pb} notas={<Notas estilo={estilo} />} /> : null}
+        {ficha && modo !== 'galeria' ? <SpecSheet estilo={estilo} pb={pb} notas={<Notas estilo={estilo} />} /> : null}
         </div>
       </div>
     </Moldura>

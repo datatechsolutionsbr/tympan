@@ -10,7 +10,7 @@ import { GALLERY_PAGES, GalleryFrameContext } from '../../galerias'
 import { useI18n } from '../../i18n/I18n'
 import { Cabeca, Moldura, useHref } from '../../Moldura'
 import { lerRota, type Rota, type RotaDe } from '../../rotas'
-import { QuandoVisivel } from '../livro/Dupla'
+import { QuandoVisivel } from '../livro/Spread'
 import { CATALOGO, GRUPOS, itemDoCatalogo, type GrupoId, type ItemCatalogo } from './catalogo'
 import '../../../../../packages/ui/gallery/src/gallery.css'
 import './componentes.css'
@@ -69,15 +69,15 @@ function Lateral({ atual }: { atual?: string }) {
 /** A gallery page scaled down: inert, hidden from assistive technology, in the site's theme. */
 function Miniatura({ item }: { item: ItemCatalogo }) {
   const th = useTheme()
-  const Pagina = GALLERY_PAGES.find((p) => p.id === item.id)?.Component as ComponentType<{ scope: string }> | undefined
+  const Page = GALLERY_PAGES.find((p) => p.id === item.id)?.Component as ComponentType<{ scope: string }> | undefined
   return (
     <span className="ty-site-miniatura" aria-hidden="true">
       <QuandoVisivel reserva={<span className="ty-site-miniatura__reserva" />}>
         <Encaixe>
           <ThemeScope theme={th.theme} mode={th.resolvedMode} density={th.density} className="ty-site-miniatura__pagina" inert>
-            {Pagina ? (
+            {Page ? (
               <GalleryFrameContext.Provider value={null}>
-                <Pagina scope={`mini-${item.id}`} />
+                <Page scope={`mini-${item.id}`} />
               </GalleryFrameContext.Provider>
             ) : (
               <Suspense fallback={null}>
@@ -158,7 +158,7 @@ function PaginaGaleria({ item }: { item: ItemCatalogo }) {
   const href = useHref()
   const tx = useTextos()
   const pagina = GALLERY_PAGES.find((p) => p.id === item.id)
-  const Pagina = pagina?.Component as ComponentType<{ scope: string }> | undefined
+  const Page = pagina?.Component as ComponentType<{ scope: string }> | undefined
   const indice = usePaginaNoIndice(item.id)
   const lista = CATALOGO.filter((i) => i.tipo !== 'link')
   const pos = lista.findIndex((i) => i.id === item.id)
@@ -169,10 +169,10 @@ function PaginaGaleria({ item }: { item: ItemCatalogo }) {
       <div className="ty-site-doc__principal">
         <Cabeca eyebrow={tx.grupo(item.grupo)} titulo={tx.titulo(item)} lead={tx.descricao(item)} />
         {item.exemplos ? <p className="ty-site-dica">{tx.exemplos(item.exemplos)}</p> : null}
-        {Pagina ? (
+        {Page ? (
           <GalleryFrameContext.Provider value={{ theme: th.theme, mode: th.resolvedMode, density: th.density }}>
             <div className="ty-site-pagina-galeria ty-gallery-page" key={item.id}>
-              <Pagina scope="site" />
+              <Page scope="site" />
             </div>
           </GalleryFrameContext.Provider>
         ) : (

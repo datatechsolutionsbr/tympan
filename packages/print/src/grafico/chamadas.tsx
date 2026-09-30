@@ -114,7 +114,7 @@ function ponta(x: number, y: number, dx: number, dy: number, cor: CorDado, largu
 /** Draws the notes placed by posicionarChamadas in the band that starts at `topo`. */
 export function Chamadas({ c, estilo, notas, topo, cor }: { c: Ctx; estilo: EstiloChamada; notas: NotaPosta[]; topo: number; cor: CorDado }) {
   return (
-    <g className="ty-print-g-chamadas" data-estilo={estilo}>
+    <g className="ty-print-g-kickers" data-estilo={estilo}>
       {notas.map((nt, k) => {
         const pad = estilo === 'baloes' ? 1.2 : 0
         const x = nt.x
@@ -125,7 +125,7 @@ export function Chamadas({ c, estilo, notas, topo, cor }: { c: Ctx; estilo: Esti
         const xAncora = n3(Math.min(x + nt.w - 1, Math.max(x + 1, alvo.x)))
         const texto = (
           <text
-            className={estilo === 'manuscritas' ? 'ty-print-g-anotacao-texto' : 'ty-print-g-chamada-texto'}
+            className={estilo === 'manuscritas' ? 'ty-print-g-annotetion-text' : 'ty-print-g-kicker-text'}
             x={estilo === 'guia' ? n3(x + nt.w) : estilo === 'baloes' ? n3(x + nt.w / 2) : x}
             y={n3(y + pad + TAM * 0.9)}
             textAnchor={estilo === 'guia' ? 'end' : estilo === 'baloes' ? 'middle' : 'start'}
@@ -140,7 +140,7 @@ export function Chamadas({ c, estilo, notas, topo, cor }: { c: Ctx; estilo: Esti
         )
         const destino = { x: alvo.x, y: n3(alvo.y - 0.6) }
         return (
-          <g key={k} className="ty-print-g-chamada-nota" data-x={x} data-y={y} data-w={nt.w} data-h={h} data-alvo-x={alvo.x} data-alvo-y={alvo.y}>
+          <g key={k} className="ty-print-g-kicker-note" data-x={x} data-y={y} data-w={nt.w} data-h={h} data-alvo-x={alvo.x} data-alvo-y={alvo.y}>
             {estilo === 'baloes' ? (
               <>
                 <path

@@ -20,7 +20,7 @@ export function coresLinha(destaque: boolean, algumDestaque: boolean): { a: CorD
 
 export function Chamada({ x, y, texto }: { x: number; y: number; texto: string }) {
   return (
-    <g className="ty-print-g-chamada" transform={`translate(${n(x)} ${n(y)})`}>
+    <g className="ty-print-g-kicker" transform={`translate(${n(x)} ${n(y)})`}>
       <circle r={1.45} />
       <text y={0.72} textAnchor="middle">
         {texto}
@@ -33,11 +33,11 @@ export function Rotulos({ y, rotulo, nota, local }: { y: number; rotulo: string;
   const extra = local ? (nota ? `${nota} · lake local` : 'lake local') : nota
   return (
     <>
-      <text className="ty-print-g-rotulo" x={0} y={n(y)}>
+      <text className="ty-print-g-label" x={0} y={n(y)}>
         {rotulo}
       </text>
       {extra ? (
-        <text className="ty-print-g-nota" x={0} y={n(y + TEXTO * 1.15)} data-local={local ? '' : undefined}>
+        <text className="ty-print-g-note" x={0} y={n(y + TEXTO * 1.15)} data-local={local ? '' : undefined}>
           {extra}
         </text>
       ) : null}
@@ -48,9 +48,9 @@ export function Rotulos({ y, rotulo, nota, local }: { y: number; rotulo: string;
 export function Anotacoes({ c, postas, marcas }: { c: Ctx; postas: AnotacaoPosta[]; marcas: Array<string | undefined> }) {
   const h = TEXTO * 1.4
   return (
-    <g className="ty-print-g-anotacoes">
+    <g className="ty-print-g-annotetions">
       {postas.map((a, k) => (
-        <g key={k} className="ty-print-g-anotacao" data-linha={a.linha}>
+        <g key={k} className="ty-print-g-annotetion" data-linha={a.linha}>
           {a.guia ? c.p.linha(c, { chave: `guia-${k}`, x1: a.guia.x, y1: a.guia.y1, x2: a.guia.x, y2: a.guia.y2, cor: 'destaque', largura: 0.18, tipo: 'guia' }) : <Chamada x={1.6} y={a.y - TEXTO * 0.32} texto={marcas[a.linha] ?? String(a.linha + 1)} />}
           <text x={a.x} y={a.y} textAnchor={a.guia ? 'end' : 'start'}>
             {a.linhas.map((l, i) => (
@@ -68,7 +68,7 @@ export function Anotacoes({ c, postas, marcas }: { c: Ctx; postas: AnotacaoPosta
 export function Legenda({ c, y: yBase, itens }: { c: Ctx; y: number; itens: Array<{ x: number; y?: number; texto: string; cor: CorDado; tipo: 'ponto-vazio' | 'ponto' | 'barra-a' | 'barra-b' }> }) {
   const hachura = c.estilo.traco.hachura !== 'nenhuma'
   return (
-    <g className="ty-print-g-legenda">
+    <g className="ty-print-g-legend">
       {itens.map((it, k) => {
         const y = it.y ?? yBase
         return (

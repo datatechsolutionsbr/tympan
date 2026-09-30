@@ -37,14 +37,14 @@ export interface LivroPrintProps {
 export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carregarFontes = true, lang = 'pt-BR', className, children }: LivroPrintProps) {
   const base = typeof estilo === 'string' ? printPresetById(estilo) : estilo
   const resolvido = resolvePrintStyle(base, { pb, overrides: tokens })
-  const escopo = useIdSeguro('ty-print-livro')
+  const escopo = useIdSeguro('ty-print-book')
   const seletor = `[data-ty-print-livro="${escopo}"]`
   const css = `${incluirCss ? PRINT_CSS : ''}\n${printStyleToCss(base, { pb, overrides: tokens, seletor })}`
   const fontes = carregarFontes ? googleFontsUrl(resolvido) : null
   const e = resolvido.estrutura
   return (
     <div
-      className={cx('ty-print-livro', className)}
+      className={cx('ty-print-book', className)}
       lang={lang}
       data-ty-print-livro={escopo}
       data-ty-print-style={base.name}

@@ -63,26 +63,26 @@ const n = (v: number) => Math.round(v * 1000) / 1000
 
 function EixoX({ c, eixo, unidade, naoZero }: { c: Ctx; eixo: Eixo; unidade?: string; naoZero?: boolean }) {
   return (
-    <g className="ty-print-g-eixo">
+    <g className="ty-print-g-axis">
       {eixo.marcas.map((m) => (
         <g key={m.v}>
-          <g className="ty-print-grade">{c.p.linha(c, { chave: `grade-${m.v}`, x1: m.x, y1: eixo.topo, x2: m.x, y2: eixo.y, cor: 'linha', largura: 0.12, tipo: 'grade' })}</g>
-          <text className="ty-print-g-eixo-texto" x={m.x} y={n(eixo.y + 2.7)} textAnchor="middle">
+          <g className="ty-print-grid">{c.p.linha(c, { chave: `grade-${m.v}`, x1: m.x, y1: eixo.topo, x2: m.x, y2: eixo.y, cor: 'linha', largura: 0.12, tipo: 'grade' })}</g>
+          <text className="ty-print-g-axis-text" x={m.x} y={n(eixo.y + 2.7)} textAnchor="middle">
             {m.texto}
           </text>
         </g>
       ))}
-      <g className="ty-print-eixo-cheio">{c.p.linha(c, { chave: 'eixo', x1: eixo.x0, y1: eixo.y, x2: eixo.x1, y2: eixo.y, cor: 'tinta-2', largura: 0.2, tipo: 'eixo' })}</g>
-      <g className="ty-print-eixo-amplitude">
+      <g className="ty-print-axis-full">{c.p.linha(c, { chave: 'eixo', x1: eixo.x0, y1: eixo.y, x2: eixo.x1, y2: eixo.y, cor: 'tinta-2', largura: 0.2, tipo: 'eixo' })}</g>
+      <g className="ty-print-axis-range">
         <line x1={eixo.amplitude[0]} x2={eixo.amplitude[1]} y1={eixo.y} y2={eixo.y} style={{ stroke: 'var(--ty-print-tinta-2)', strokeWidth: 0.2 }} />
       </g>
       {unidade ? (
-        <text className="ty-print-g-unidade" x={eixo.x1} y={n(eixo.y + 5.6)} textAnchor="end">
+        <text className="ty-print-g-unit" x={eixo.x1} y={n(eixo.y + 5.6)} textAnchor="end">
           {unidade}
         </text>
       ) : null}
       {naoZero ? (
-        <text className="ty-print-g-aviso" x={eixo.x0} y={n(eixo.y + 5.6)}>
+        <text className="ty-print-g-warning" x={eixo.x0} y={n(eixo.y + 5.6)}>
           o eixo não começa no zero
         </text>
       ) : null}
@@ -106,7 +106,7 @@ function Halteres({ c, spec, largura }: { c: Ctx; spec: SpecHalteres; largura: n
         <Legenda c={c} y={2.4} itens={leg} />
         <EixoX c={c} eixo={L.eixo} unidade={spec.unidade} naoZero={spec.eixoNaoComecaNoZero} />
         {L.referencias.map((r, k) => (
-          <g key={k} className="ty-print-g-referencia">
+          <g key={k} className="ty-print-g-reference">
             <line x1={r.x} x2={r.x} y1={L.eixo.topo} y2={L.eixo.y} style={{ stroke: 'var(--ty-print-tinta-3)', strokeWidth: 0.2 }} strokeDasharray="0.8 0.6" />
             <text x={n(r.x + 0.8)} y={n(L.eixo.topo - 1)}>
               {r.rotulo}
@@ -119,23 +119,23 @@ function Halteres({ c, spec, largura }: { c: Ctx; spec: SpecHalteres; largura: n
           const esq = Math.min(l.xa, l.xb)
           const dir = Math.max(l.xa, l.xb)
           return (
-            <g key={l.i} className="ty-print-g-linha" data-linha={l.i} data-destaque={l.destaque ? '' : undefined}>
+            <g key={l.i} className="ty-print-g-line" data-linha={l.i} data-destaque={l.destaque ? '' : undefined}>
               <Rotulos y={l.y + 0.9} rotulo={l.rotulo} nota={l.nota} local={l.local} />
               {dir - esq > 2 * r ? (
-                <g className="ty-print-conector" strokeDasharray={l.local ? '1 0.7' : undefined}>
+                <g className="ty-print-connector" strokeDasharray={l.local ? '1 0.7' : undefined}>
                   {c.p.linha(c, { chave: `con-${l.i}`, x1: n(esq + r), y1: l.y, x2: n(dir - r), y2: l.y, cor: cor.conector, largura: l.destaque ? 0.7 : 0.45, tipo: 'conector' })}
                 </g>
               ) : null}
-              <g className="ty-print-ponto" data-linha={l.i} data-serie="a" data-valor={l.a} data-cx={l.xa} data-cy={l.y} transform={`translate(${l.xa} ${l.y})`}>
+              <g className="ty-print-point" data-linha={l.i} data-serie="a" data-valor={l.a} data-cx={l.xa} data-cy={l.y} transform={`translate(${l.xa} ${l.y})`}>
                 {c.p.ponto(c, { chave: `a-${l.i}`, r, cor: cor.a, cheio: false })}
               </g>
-              <g className="ty-print-ponto" data-linha={l.i} data-serie="b" data-valor={l.b} data-cx={l.xb} data-cy={l.y} transform={`translate(${l.xb} ${l.y})`}>
+              <g className="ty-print-point" data-linha={l.i} data-serie="b" data-valor={l.b} data-cx={l.xb} data-cy={l.y} transform={`translate(${l.xb} ${l.y})`}>
                 {c.p.ponto(c, { chave: `b-${l.i}`, r, cor: cor.b, cheio: true })}
               </g>
-              <text className="ty-print-g-valor-a" x={l.rotA.x} y={n(l.y + 0.85)} textAnchor={l.rotA.ancora} data-cor={cor.texto}>
+              <text className="ty-print-g-value-a" x={l.rotA.x} y={n(l.y + 0.85)} textAnchor={l.rotA.ancora} data-cor={cor.texto}>
                 {numeroBr(l.a)}
               </text>
-              <text className="ty-print-g-valor" x={l.rotB.x} y={n(l.y + 0.85)} textAnchor={l.rotB.ancora} data-cor={cor.texto}>
+              <text className="ty-print-g-value" x={l.rotB.x} y={n(l.y + 0.85)} textAnchor={l.rotB.ancora} data-cor={cor.texto}>
                 {numeroBr(l.b)}
               </text>
               {l.marca ? <Chamada x={l.marca.x} y={l.y} texto={l.marca.texto} /> : null}
@@ -172,7 +172,7 @@ function Barras({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numbe
           />
         ) : null}
         {u ? (
-          <text className="ty-print-g-chave" x={largura} y={2.4} textAnchor="end">
+          <text className="ty-print-g-brace" x={largura} y={2.4} textAnchor="end">
             1 ícone = {numeroBr(u)}
           </text>
         ) : null}
@@ -180,16 +180,16 @@ function Barras({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numbe
         {L.linhas.map((l) => {
           const cor = coresLinha(l.destaque, algum)
           return (
-            <g key={l.i} className="ty-print-g-linha" data-linha={l.i} data-destaque={l.destaque ? '' : undefined}>
+            <g key={l.i} className="ty-print-g-line" data-linha={l.i} data-destaque={l.destaque ? '' : undefined}>
               <Rotulos y={l.y + (unico ? 2.8 : 2.4)} rotulo={l.rotulo} nota={l.nota} local={l.local} />
               {l.barras.map((b) => {
                 const corB: CorDado = unico ? (algum && !l.destaque ? 'contexto' : 'destaque') : b.serie === 'a' ? (algum && !l.destaque ? 'contexto' : cor.a) : cor.b
                 return (
                   <g key={b.serie}>
-                    <g className="ty-print-barra" data-linha={l.i} data-serie={b.serie} data-valor={b.valor} data-x={b.x} data-w={b.w} transform={`translate(${b.x} ${b.y})`}>
+                    <g className="ty-print-bar" data-linha={l.i} data-serie={b.serie} data-valor={b.valor} data-x={b.x} data-w={b.w} transform={`translate(${b.x} ${b.y})`}>
                       {c.p.barra(c, { chave: `bar-${l.i}-${b.serie}`, w: b.w, h: b.h, cor: corB, enchimento: b.serie === 'a' && hachura ? 'hachura' : 'cheio', valor: b.valor, mmPorUnidade: L.mmPorUnidade })}
                     </g>
-                    <text className={b.serie === 'a' && !unico ? 'ty-print-g-valor-a' : 'ty-print-g-valor'} x={b.rotulo.x} y={b.rotulo.y} data-cor={l.destaque ? 'destaque' : 'tinta'}>
+                    <text className={b.serie === 'a' && !unico ? 'ty-print-g-value-a' : 'ty-print-g-value'} x={b.rotulo.x} y={b.rotulo.y} data-cor={l.destaque ? 'destaque' : 'tinta'}>
                       {numeroBr(b.valor)}
                     </text>
                   </g>
@@ -222,7 +222,7 @@ function Janelas({ x, base, w, h }: { x: number; base: number; w: number; h: num
   for (let yy = lado * 1.4; yy + lado <= h - lado * 0.6; yy += passoY)
     for (let k = 0; k < colunas; k++) out.push(<rect key={`${k}-${yy}`} x={n(x + lado * 0.5 + k * passoX + (passoX - lado) / 2)} y={n(base - yy - lado)} width={n(lado)} height={n(lado)} />)
   return (
-    <g className="ty-print-g-janelas" style={{ fill: 'var(--ty-print-papel)', opacity: 0.85 }}>
+    <g className="ty-print-g-windows" style={{ fill: 'var(--ty-print-papel)', opacity: 0.85 }}>
       {out}
     </g>
   )
@@ -266,22 +266,22 @@ function Colunas({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numb
           />
         ) : null}
         {u ? (
-          <text className="ty-print-g-chave" x={largura} y={2.4} textAnchor="end">
+          <text className="ty-print-g-brace" x={largura} y={2.4} textAnchor="end">
             1 ícone = {numeroBr(u)}
           </text>
         ) : null}
-        <g className="ty-print-g-eixo">
+        <g className="ty-print-g-axis">
           {L.marcasY.map((m) => (
             <g key={m.v}>
-              <g className="ty-print-grade">{c.p.linha(c, { chave: `gy-${m.v}`, x1: x0, y1: m.y, x2: x1, y2: m.y, cor: 'linha', largura: 0.12, tipo: 'grade' })}</g>
-              <text className="ty-print-g-eixo-texto" x={n(x0 - 1.2)} y={n(m.y + 0.7)} textAnchor="end">
+              <g className="ty-print-grid">{c.p.linha(c, { chave: `gy-${m.v}`, x1: x0, y1: m.y, x2: x1, y2: m.y, cor: 'linha', largura: 0.12, tipo: 'grade' })}</g>
+              <text className="ty-print-g-axis-text" x={n(x0 - 1.2)} y={n(m.y + 0.7)} textAnchor="end">
                 {m.texto}
               </text>
             </g>
           ))}
-          <g className="ty-print-eixo-cheio">{c.p.linha(c, { chave: 'eixo-x', x1: x0, y1: y1, x2: x1, y2: y1, cor: 'tinta', largura: 0.3, tipo: 'eixo' })}</g>
+          <g className="ty-print-axis-full">{c.p.linha(c, { chave: 'eixo-x', x1: x0, y1: y1, x2: x1, y2: y1, cor: 'tinta', largura: 0.3, tipo: 'eixo' })}</g>
           {spec.unidade ? (
-            <text className="ty-print-g-unidade" x={x1} y={n(L.altura - 1.4)} textAnchor="end">
+            <text className="ty-print-g-unit" x={x1} y={n(L.altura - 1.4)} textAnchor="end">
               {spec.unidade}
             </text>
           ) : null}
@@ -290,10 +290,10 @@ function Colunas({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numb
           const cor = coresLinha(g.destaque, algum)
           const extra = g.local ? (g.nota ? `${g.nota} · lake local` : 'lake local') : g.nota
           return (
-            <g key={g.i} className="ty-print-g-linha" data-linha={g.i} data-destaque={g.destaque ? '' : undefined}>
+            <g key={g.i} className="ty-print-g-line" data-linha={g.i} data-destaque={g.destaque ? '' : undefined}>
               {corte && g.colunas.length > 1 ? (
                 // The cut between the two columns of the group (minimo-de-tinta and infografico-ilustrado dashed, diagrama-modernista solid).
-                <g className="ty-print-g-corte" strokeDasharray={corte === 'tracejada' ? '0.7 0.6' : undefined}>
+                <g className="ty-print-g-cut" strokeDasharray={corte === 'tracejada' ? '0.7 0.6' : undefined}>
                   {c.p.linha(c, { chave: `corte-${g.i}`, x1: n((g.colunas[0]!.x + g.colunas[0]!.w + g.colunas[1]!.x) / 2), y1: y1, x2: n((g.colunas[0]!.x + g.colunas[0]!.w + g.colunas[1]!.x) / 2), y2: n(L.area.y0 - 1), cor: corte === 'cheia' ? 'tinta' : 'tinta-3', largura: corte === 'cheia' ? 0.45 : 0.2, tipo: 'guia' })}
                 </g>
               ) : null}
@@ -302,22 +302,22 @@ function Colunas({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numb
                 return (
                   <g key={b.serie}>
                     {/* The bar is drawn horizontally by the renderer and turned upright: length = data, width = column. */}
-                    <g className="ty-print-barra" data-linha={g.i} data-serie={b.serie} data-valor={b.valor} data-x={b.x} data-base={b.base} data-h={b.h} transform={`translate(${b.x} ${b.base}) rotate(-90)`}>
+                    <g className="ty-print-bar" data-linha={g.i} data-serie={b.serie} data-valor={b.valor} data-x={b.x} data-base={b.base} data-h={b.h} transform={`translate(${b.x} ${b.base}) rotate(-90)`}>
                       {pBarra.barra(c, { chave: `col-${g.i}-${b.serie}`, w: b.h, h: b.w, cor: corB, enchimento: b.serie === 'a' && hachura && !predios ? 'hachura' : 'cheio', valor: b.valor, mmPorUnidade: L.mmPorUnidade })}
                     </g>
                     {predios && b.h > 2 ? <Janelas x={b.x} base={b.base} w={b.w} h={b.h} /> : null}
                     {e.marcador === 'circulo' ? (
-                      <g className="ty-print-g-marcador" transform={`translate(${n(b.x + b.w / 2)} ${n(b.base - b.h)})`}>
+                      <g className="ty-print-g-marker" transform={`translate(${n(b.x + b.w / 2)} ${n(b.base - b.h)})`}>
                         {c.p.ponto(c, { chave: `mc-${g.i}-${b.serie}`, r: n(Math.min(1.3, b.w / 2)), cor: corB, cheio: true })}
                       </g>
                     ) : null}
-                    <text className={b.serie === 'a' && !unico ? 'ty-print-g-valor-a' : 'ty-print-g-valor'} x={b.rotulo.x} y={b.rotulo.y} textAnchor="middle" data-cor={g.destaque ? 'destaque' : 'tinta'}>
+                    <text className={b.serie === 'a' && !unico ? 'ty-print-g-value-a' : 'ty-print-g-value'} x={b.rotulo.x} y={b.rotulo.y} textAnchor="middle" data-cor={g.destaque ? 'destaque' : 'tinta'}>
                       {numeroBr(b.valor)}
                     </text>
                   </g>
                 )
               })}
-              <text className="ty-print-g-rotulo" x={g.cx} y={n(y1 + 3.3)} textAnchor="middle">
+              <text className="ty-print-g-label" x={g.cx} y={n(y1 + 3.3)} textAnchor="middle">
                 {g.linhasRotulo.map((t, k) => (
                   <tspan key={k} x={g.cx} dy={k === 0 ? 0 : n(TEXTO * 1.1)}>
                     {t}
@@ -325,7 +325,7 @@ function Colunas({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numb
                 ))}
               </text>
               {extra ? (
-                <text className="ty-print-g-nota" x={g.cx} y={g.yNota} textAnchor="middle" data-local={g.local ? '' : undefined}>
+                <text className="ty-print-g-note" x={g.cx} y={g.yNota} textAnchor="middle" data-local={g.local ? '' : undefined}>
                   {extra}
                 </text>
               ) : null}
@@ -357,29 +357,29 @@ function Contagem({ c, spec, largura }: { c: Ctx; spec: SpecContagem; largura: n
     L,
     corpo: (
       <>
-        <text className="ty-print-g-chave" x={0} y={2.4}>
+        <text className="ty-print-g-brace" x={0} y={2.4}>
           {chave}
         </text>
         {L.pares ? (
-          <text className="ty-print-g-chave" x={largura} y={2.4} textAnchor="end">
+          <text className="ty-print-g-brace" x={largura} y={2.4} textAnchor="end">
             {`contorno: ${spec.rotuloA ?? 'a'} · cheio: ${spec.rotuloB ?? 'b'}`}
           </text>
         ) : null}
         {L.linhas.map((l) => {
           const cor = coresLinha(l.destaque, algum)
           return (
-            <g key={l.i} className="ty-print-g-linha" data-linha={l.i}>
+            <g key={l.i} className="ty-print-g-line" data-linha={l.i}>
               <Rotulos y={l.y + 2.6} rotulo={l.rotulo} nota={l.nota} />
               {l.grupos.map((g) => {
                 const corG: CorDado = L.pares ? (g.serie === 'a' ? cor.a : cor.b) : algum && !l.destaque ? 'contexto' : 'destaque'
                 return (
-                  <g key={g.serie} className="ty-print-grupo" data-serie={g.serie} data-valor={g.valor}>
+                  <g key={g.serie} className="ty-print-group" data-serie={g.serie} data-valor={g.valor}>
                     {g.celulas.map((cel, k) => (
-                      <g key={k} className="ty-print-icone" data-fracao={cel.fracao} transform={`translate(${cel.x} ${cel.y})`}>
+                      <g key={k} className="ty-print-icon" data-fracao={cel.fracao} transform={`translate(${cel.x} ${cel.y})`}>
                         {c.p.icone(c, { chave: `ic-${l.i}-${g.serie}-${k}`, w: cel.w, h: cel.h, fracao: cel.fracao, cor: corG, enchimento: g.serie === 'a' && L.pares ? 'hachura' : 'cheio', forma })}
                       </g>
                     ))}
-                    <text className={g.serie === 'a' && L.pares ? 'ty-print-g-valor-a' : 'ty-print-g-valor'} x={g.rotulo.x} y={g.rotulo.y} data-cor={l.destaque ? 'destaque' : 'tinta'}>
+                    <text className={g.serie === 'a' && L.pares ? 'ty-print-g-value-a' : 'ty-print-g-value'} x={g.rotulo.x} y={g.rotulo.y} data-cor={l.destaque ? 'destaque' : 'tinta'}>
                       {numeroBr(g.valor)}
                     </text>
                   </g>
@@ -410,42 +410,42 @@ function Serie({ c, spec, largura }: { c: Ctx; spec: SpecSerie; largura: number 
     corpo: (
       <>
         {L.faixas.map((f, k) => (
-          <g key={k} className="ty-print-g-faixa">
+          <g key={k} className="ty-print-g-band">
             <rect x={f.x0} y={y0} width={n(f.x1 - f.x0)} height={n(y1 - y0)} style={{ fill: 'var(--ty-print-marca-texto)' }} />
             <text x={n(f.x0 + 0.8)} y={n(y1 - 1.2)}>
               {f.rotulo}
             </text>
           </g>
         ))}
-        <g className="ty-print-g-eixo">
+        <g className="ty-print-g-axis">
           {L.marcasY.map((m) => (
             <g key={m.v}>
-              <g className="ty-print-grade">{c.p.linha(c, { chave: `gy-${m.v}`, x1: x0, y1: m.y, x2: x1, y2: m.y, cor: 'linha', largura: 0.12, tipo: 'grade' })}</g>
-              <text className="ty-print-g-eixo-texto" x={n(x0 - 1.2)} y={n(m.y + 0.7)} textAnchor="end">
+              <g className="ty-print-grid">{c.p.linha(c, { chave: `gy-${m.v}`, x1: x0, y1: m.y, x2: x1, y2: m.y, cor: 'linha', largura: 0.12, tipo: 'grade' })}</g>
+              <text className="ty-print-g-axis-text" x={n(x0 - 1.2)} y={n(m.y + 0.7)} textAnchor="end">
                 {m.texto}
               </text>
             </g>
           ))}
           {L.marcasX.map((m) => (
-            <text key={m.v} className="ty-print-g-eixo-texto" x={m.x} y={n(y1 + 3)} textAnchor="middle">
+            <text key={m.v} className="ty-print-g-axis-text" x={m.x} y={n(y1 + 3)} textAnchor="middle">
               {m.texto}
             </text>
           ))}
           {c.p.linha(c, { chave: 'eixo-x', x1: x0, y1: y1, x2: x1, y2: y1, cor: 'tinta-2', largura: 0.2, tipo: 'eixo' })}
           {spec.unidade ? (
-            <text className="ty-print-g-unidade" x={x0} y={n(y0 - (L.faixas.length ? 4.6 : 1.2))}>
+            <text className="ty-print-g-unit" x={x0} y={n(y0 - (L.faixas.length ? 4.6 : 1.2))}>
               {spec.unidade}
             </text>
           ) : null}
         </g>
         {L.eventos.map((e, k) => (
-          <g key={k} className="ty-print-g-evento">
+          <g key={k} className="ty-print-g-event">
             {c.p.linha(c, { chave: `ev-${k}`, x1: e.x, y1: y0, x2: e.x, y2: y1, cor: 'destaque', largura: 0.3, tipo: 'guia' })}
             <text x={n(e.x + 0.9)} y={n(y0 + 2.6)}>
               {e.rotulo}
             </text>
             {e.nota ? (
-              <text className="ty-print-g-nota" x={n(e.x + 0.9)} y={n(y0 + 5.2)}>
+              <text className="ty-print-g-note" x={n(e.x + 0.9)} y={n(y0 + 5.2)}>
                 {e.nota}
               </text>
             ) : null}
@@ -454,10 +454,10 @@ function Serie({ c, spec, largura }: { c: Ctx; spec: SpecSerie; largura: number 
         {spec.interpolar && L.pontos.length > 1 ? c.p.caminho(c, { chave: 'serie', pontos: L.pontos, cor: 'destaque', largura: 0.5 }) : null}
         {L.pontos.map((p) => (
           <g key={p.i}>
-            <g className="ty-print-ponto" data-linha={p.i} data-serie="b" data-valor={p.vy} data-cx={p.x} data-cy={p.y} transform={`translate(${p.x} ${p.y})`}>
+            <g className="ty-print-point" data-linha={p.i} data-serie="b" data-valor={p.vy} data-cx={p.x} data-cy={p.y} transform={`translate(${p.x} ${p.y})`}>
               {c.p.ponto(c, { chave: `p-${p.i}`, r: 1, cor: 'destaque', cheio: true })}
             </g>
-            <text className="ty-print-g-valor" x={n(p.x + 1.4)} y={n(p.y - 1.6)} data-cor="tinta">
+            <text className="ty-print-g-value" x={n(p.x + 1.4)} y={n(p.y - 1.6)} data-cor="tinta">
               {p.rotulo ?? numeroBr(p.vy)}
             </text>
             {p.chamada !== undefined ? <Chamada x={n(p.x + 1.4 + larguraTexto(p.rotulo ?? numeroBr(p.vy)) + 2.4)} y={n(p.y - 2.4)} texto={String(p.chamada)} /> : null}
@@ -492,7 +492,7 @@ function Esquema({ c, spec, largura }: { c: Ctx; spec: SpecEsquema; largura: num
   const rnd = aleatorio(`${spec.nome}|${spec.titulo}`)
   const partes: ReactNode[] = []
   const eixos = (
-    <g className="ty-print-g-eixo" key="eixos">
+    <g className="ty-print-g-axis" key="eixos">
       {c.p.linha(c, { chave: 'ex', x1: x0, y1: y1, x2: x1, y2: y1, cor: 'tinta-2', largura: 0.25, tipo: 'eixo' })}
       {c.p.linha(c, { chave: 'ey', x1: x0, y1: y0, x2: x0, y2: y1, cor: 'tinta-2', largura: 0.25, tipo: 'eixo' })}
     </g>
@@ -517,15 +517,15 @@ function Esquema({ c, spec, largura }: { c: Ctx; spec: SpecEsquema; largura: num
     const ya = base(xc - 0.01)
     const yb = base(xc + 0.01)
     partes.push(
-      <g key="salto" className="ty-print-g-salto">
+      <g key="salto" className="ty-print-g-jump">
         {c.p.linha(c, { chave: 'salto', x1: xc + 1.4, y1: ya, x2: xc + 1.4, y2: yb, cor: 'destaque', largura: 0.35, tipo: 'guia' })}
       </g>,
     )
-    if (r[0]) partes.push(<text key="r0" className="ty-print-g-anotacao-texto" x={n(xc + 3)} y={n((ya + yb) / 2 + 0.8)}>{r[0]}</text>)
-    if (r[1]) partes.push(<text key="r1" className="ty-print-g-nota" x={n(xc + 1)} y={n(y0 - 1.6)}>{r[1]}</text>)
-    if (r[2]) partes.push(<text key="r2" className="ty-print-g-nota" x={n(xc - jan + 0.8)} y={n(y1 - 1.4)}>{r[2]}</text>)
-    if (r[3]) partes.push(<text key="r3" className="ty-print-g-eixo-texto" x={x1} y={n(y1 + 3.6)} textAnchor="end">{r[3]}</text>)
-    if (r[4]) partes.push(<text key="r4" className="ty-print-g-eixo-texto" x={n(x0 + 1)} y={n(y0 - 1.6)}>{r[4]}</text>)
+    if (r[0]) partes.push(<text key="r0" className="ty-print-g-annotetion-text" x={n(xc + 3)} y={n((ya + yb) / 2 + 0.8)}>{r[0]}</text>)
+    if (r[1]) partes.push(<text key="r1" className="ty-print-g-note" x={n(xc + 1)} y={n(y0 - 1.6)}>{r[1]}</text>)
+    if (r[2]) partes.push(<text key="r2" className="ty-print-g-note" x={n(xc - jan + 0.8)} y={n(y1 - 1.4)}>{r[2]}</text>)
+    if (r[3]) partes.push(<text key="r3" className="ty-print-g-axis-text" x={x1} y={n(y1 + 3.6)} textAnchor="end">{r[3]}</text>)
+    if (r[4]) partes.push(<text key="r4" className="ty-print-g-axis-text" x={n(x0 + 1)} y={n(y0 - 1.6)}>{r[4]}</text>)
   } else if (spec.nome === 'densidade-no-corte') {
     partes.push(eixos)
     const nb = 16
@@ -546,20 +546,20 @@ function Esquema({ c, spec, largura }: { c: Ctx; spec: SpecEsquema; largura: num
     // Inside the figure: right of the jump when it fits, else end-aligned at the right edge.
     if (r[0]) {
       const cabe = xc + bw + 1.2 + (larguraTexto(r[0], TEXTO * 1.05) / FOLGA_ANOTACAO) <= W
-      partes.push(<text key="r0" className="ty-print-g-anotacao-texto" x={cabe ? n(xc + bw + 1.2) : n(W)} y={n(y0 + 2)} textAnchor={cabe ? 'start' : 'end'}>{r[0]}</text>)
+      partes.push(<text key="r0" className="ty-print-g-annotetion-text" x={cabe ? n(xc + bw + 1.2) : n(W)} y={n(y0 + 2)} textAnchor={cabe ? 'start' : 'end'}>{r[0]}</text>)
     }
-    if (r[1]) partes.push(<text key="r1" className="ty-print-g-eixo-texto" x={x1} y={n(y1 + 3.6)} textAnchor="end">{r[1]}</text>)
+    if (r[1]) partes.push(<text key="r1" className="ty-print-g-axis-text" x={x1} y={n(y1 + 3.6)} textAnchor="end">{r[1]}</text>)
   } else {
     partes.push(eixos)
     const k = Math.max(3, r.length || 6)
     for (let i = 0; i < k; i++) {
       const x = x0 + ((x1 - x0) * (i + 0.5)) / k
       partes.push(<g key={`c${i}`}>{c.p.linha(c, { chave: `c${i}`, x1: x, y1: y0, x2: x, y2: y1, cor: i === 0 ? 'destaque' : 'tinta-2', largura: 0.3, tipo: 'guia' })}</g>)
-      if (r[i]) partes.push(<text key={`t${i}`} className="ty-print-g-eixo-texto" x={n(x)} y={n(y1 + 3.6)} textAnchor="middle">{r[i]}</text>)
+      if (r[i]) partes.push(<text key={`t${i}`} className="ty-print-g-axis-text" x={n(x)} y={n(y1 + 3.6)} textAnchor="middle">{r[i]}</text>)
     }
   }
   partes.push(
-    <text key="aviso" className="ty-print-g-aviso" x={x1} y={n(H - 1)} textAnchor="end">
+    <text key="aviso" className="ty-print-g-warning" x={x1} y={n(H - 1)} textAnchor="end">
       esquema ilustrativo, sem dados reais
     </text>,
   )
@@ -618,21 +618,21 @@ export function GraficoMetodo({ spec: specOriginal, renderizador, alt, tabela, l
   // Correlation charts write their finding from the coefficients they recompute from the points.
   const nomeAcessivel = alt ?? spec.achado ?? ('achado' in r ? r.achado : undefined) ?? spec.titulo
   return (
-    <figure className={cx('ty-print-figura', className)} data-tipo={specOriginal.tipo} data-forma={spec.tipo === 'barras' ? forma : undefined} data-renderizador={nome} data-local={local ? '' : undefined}>
-      <figcaption className="ty-print-figura-cabeca">
-        <span className="ty-print-figura-titulo">
+    <figure className={cx('ty-print-figure', className)} data-tipo={specOriginal.tipo} data-forma={spec.tipo === 'barras' ? forma : undefined} data-renderizador={nome} data-local={local ? '' : undefined}>
+      <figcaption className="ty-print-figure-head">
+        <span className="ty-print-figure-title">
           {letra ? (
-            <span className="ty-print-figura-letra" style={{ fontSize: '11pt', fontWeight: 700, marginInlineEnd: '2.4mm' }}>
+            <span className="ty-print-figure-letter" style={{ fontSize: '11pt', fontWeight: 700, marginInlineEnd: '2.4mm' }}>
               {letra}
             </span>
           ) : null}
           {comColchetes(spec.titulo)}
         </span>
-        {spec.subtitulo ? <span className="ty-print-figura-subtitulo">{comColchetes(spec.subtitulo)}</span> : null}
-        {local ? <span className="ty-print-selo-local">lake local, não publicado</span> : null}
+        {spec.subtitulo ? <span className="ty-print-figure-subtitle">{comColchetes(spec.subtitulo)}</span> : null}
+        {local ? <span className="ty-print-badge-local">lake local, não publicado</span> : null}
       </figcaption>
       <svg
-        className="ty-print-grafico"
+        className="ty-print-chart"
         role="img"
         aria-label={nomeAcessivel}
         viewBox={`0 0 ${W} ${H}`}

@@ -71,7 +71,7 @@ export function LogoLakebrasil({ variante = 'cor', largura, protecao = false, de
   const h = Math.round(((w * vb.h) / vb.w) * 100) / 100
   const cores = CORES_WORDMARK[versao]
   return (
-    <span className={cx('ty-print-logo', protecao && 'ty-print-logo--protecao', className)} data-versao={versao} style={protecao ? { padding: `${Math.round(h * 0.44 * 100) / 100}mm` } : undefined}>
+    <span className={cx('ty-print-logo', protecao && 'ty-print-logo--protection', className)} data-versao={versao} style={protecao ? { padding: `${Math.round(h * 0.44 * 100) / 100}mm` } : undefined}>
       <svg {...(decorativo ? { 'aria-hidden': true } : { role: 'img', 'aria-label': 'lakebrasil' })} viewBox={`0 0 ${vb.w} ${vb.h}`} style={{ inlineSize: `${w}mm`, blockSize: `${h}mm` }}>
         <Iceberg id={id} versao={versao} />
         {soSimbolo ? null : (
@@ -93,10 +93,10 @@ export interface SeloLakebrasilProps {
 /** "Dados lakebrasil · lake AAAA-MM-DD": the symbol and the text are one fixed unit. */
 export function SeloLakebrasil({ versaoLake, className }: SeloLakebrasilProps) {
   return (
-    <span className={cx('ty-print-selo', className)}>
+    <span className={cx('ty-print-badge', className)}>
       <LogoLakebrasil variante="simbolo" largura={2.6} decorativo />
-      <span className="ty-print-selo-texto">
-        <span className="ty-print-selo-nome">Dados lakebrasil</span> · <span className="ty-print-selo-versao">lake {versaoLake}</span>
+      <span className="ty-print-badge-text">
+        <span className="ty-print-badge-name">Dados lakebrasil</span> · <span className="ty-print-badge-version">lake {versaoLake}</span>
       </span>
     </span>
   )

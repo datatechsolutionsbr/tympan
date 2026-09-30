@@ -5,7 +5,7 @@ import { render } from '@testing-library/react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 import type { RenderizadorGrafico } from '@datatechsolutions/tympan-tokens'
-import { GraficoMetodo, LivroPrint } from '../src/index.ts'
+import { MethodChart, PrintBook } from '../src/index.ts'
 import type { SpecAntesDepoisControle, SpecDispersao, SpecMatrizCorrelacao, SpecSimpson, PontoMunicipio } from '../src/grafico/tipos.ts'
 import {
   correlacaoDentro,
@@ -60,7 +60,7 @@ const posicao = (A: ReturnType<typeof area>, x: number, y: number) => {
   ] as const
 }
 
-const noLivro = (el: React.ReactElement) => render(<LivroPrint estilo="jornal">{el}</LivroPrint>)
+const noLivro = (el: React.ReactElement) => render(<PrintBook estilo="jornal">{el}</PrintBook>)
 
 describe('statistics', () => {
   it('pearson, spearman, ranks and least squares', () => {
@@ -133,9 +133,9 @@ describe('dispersao: points on the data and the coefficient drawn in every rende
   }
   for (const nome of RENDERIZADORES) {
     it(nome, () => {
-      const { container, unmount } = noLivro(<GraficoMetodo spec={spec} renderizador={nome} largura={128} />)
+      const { container, unmount } = noLivro(<MethodChart spec={spec} renderizador={nome} largura={128} />)
       const A = area(container)
-      const gs = [...container.querySelectorAll('g.ty-print-ponto')]
+      const gs = [...container.querySelectorAll('g.ty-print-point')]
       expect(gs).toHaveLength(pontos.length)
       for (const g of gs) {
         const p = pontos[Number(g.getAttribute('data-i'))]!
@@ -150,7 +150,7 @@ describe('dispersao: points on the data and the coefficient drawn in every rende
       expect(coef.textContent).toContain(fmtCoef(r))
       expect(container.querySelector('[data-aviso="coeficiente"]')).toBeNull()
       // The trend line is the least-squares line: its ends map back onto y = a + b·x.
-      const t = container.querySelector('g.ty-print-g-tendencia')!
+      const t = container.querySelector('g.ty-print-g-trend')!
       const reta = minimosQuadrados(pontos.map((p) => p.x), pontos.map((p) => p.y))!
       for (const k of [1, 2]) {
         const X = Number(t.getAttribute(`data-x${k}`))
@@ -160,7 +160,7 @@ describe('dispersao: points on the data and the coefficient drawn in every rende
         expect(yv).toBeCloseTo(reta.a + reta.b * xv, 1)
       }
       // Named municipalities sit on their points.
-      const d = [...container.querySelectorAll('g.ty-print-g-destaque')]
+      const d = [...container.querySelectorAll('g.ty-print-g-highlight')]
       expect(d).toHaveLength(2)
       expect(d[1]!.textContent).toBe('o décimo')
       const p3 = pontos[3]!
@@ -174,17 +174,17 @@ describe('dispersao: points on the data and the coefficient drawn in every rende
   }
 
   it('flags a published coefficient that the points do not give', () => {
-    const { container } = noLivro(<GraficoMetodo spec={{ ...spec, coeficiente: 0.123 }} largura={128} />)
+    const { container } = noLivro(<MethodChart spec={{ ...spec, coeficiente: 0.123 }} largura={128} />)
     expect(container.querySelector('[data-aviso="coeficiente"]')!.textContent).toContain('+0,123')
   })
 
   it('log axes: positions and r are computed on ln', () => {
     const pts = nuvem(300, 11, { log: true })
     const s: SpecDispersao = { tipo: 'dispersao', titulo: 't', pontos: pts, x: { rotulo: 'x', log: true }, y: { rotulo: 'y', log: true } }
-    const { container } = noLivro(<GraficoMetodo spec={s} largura={128} />)
+    const { container } = noLivro(<MethodChart spec={s} largura={128} />)
     const A = area(container)
     expect(A.logx && A.logy).toBe(true)
-    for (const g of container.querySelectorAll('g.ty-print-ponto')) {
+    for (const g of container.querySelectorAll('g.ty-print-point')) {
       const p = pts[Number(g.getAttribute('data-i'))]!
       const [X, Y] = translate(g)
       const [ex, ey] = posicao(A, p.x, p.y)
@@ -198,12 +198,12 @@ describe('dispersao: points on the data and the coefficient drawn in every rende
   it('spearman on all points, zeros of a log axis in their own strip', () => {
     const pts = [...nuvem(80, 5, { log: true }), { x: 0, y: 5000, ibge: 9, municipio: 'Porto', uf: 'PR' }, { x: 0, y: 30, ibge: 10, municipio: 'Sede', uf: 'SP' }]
     const s: SpecDispersao = { tipo: 'dispersao', titulo: 't', pontos: pts, x: { rotulo: 'x', log: true }, y: { rotulo: 'y', log: true }, metodo: 'spearman', rotuloZeroX: 'sem área' }
-    const { container } = noLivro(<GraficoMetodo spec={s} largura={128} />)
+    const { container } = noLivro(<MethodChart spec={s} largura={128} />)
     const rho = spearman(pts.map((p) => p.x), pts.map((p) => p.y))!
     expect(Number(container.querySelector('.ty-print-g-coef')!.getAttribute('data-coef'))).toBeCloseTo(rho, 3)
     expect(container.querySelector('.ty-print-g-coef')!.textContent).toContain('ρ')
     const A = area(container)
-    const zeros = [...container.querySelectorAll('g.ty-print-ponto')].filter((g) => pts[Number(g.getAttribute('data-i'))]!.x === 0)
+    const zeros = [...container.querySelectorAll('g.ty-print-point')].filter((g) => pts[Number(g.getAttribute('data-i'))]!.x === 0)
     expect(zeros).toHaveLength(2)
     for (const g of zeros) expect(translate(g)[0]).toBeLessThan(A.x0)
     expect(new Set(zeros.map((g) => translate(g)[0])).size).toBe(1)
@@ -213,12 +213,12 @@ describe('dispersao: points on the data and the coefficient drawn in every rende
     const pts = nuvem(2400, 9)
     const s: SpecDispersao = { tipo: 'dispersao', titulo: 't', pontos: pts, x: { rotulo: 'x' }, y: { rotulo: 'y' } }
     for (const nome of RENDERIZADORES) {
-      const { container, unmount } = noLivro(<GraficoMetodo spec={s} renderizador={nome} largura={128} />)
+      const { container, unmount } = noLivro(<MethodChart spec={s} renderizador={nome} largura={128} />)
       const A = area(container)
-      const g = container.querySelector('g.ty-print-g-nuvem')!
+      const g = container.querySelector('g.ty-print-g-cloud')!
       expect(g.getAttribute('data-modo')).toBe('hexbin')
       const R = Number(g.getAttribute('data-raio'))
-      const hexes = [...container.querySelectorAll('.ty-print-g-nuvem .ty-print-hex')].map((h) => ({ n: Number(h.getAttribute('data-n')), cx: Number(h.getAttribute('data-cx')), cy: Number(h.getAttribute('data-cy')) }))
+      const hexes = [...container.querySelectorAll('.ty-print-g-cloud .ty-print-hex')].map((h) => ({ n: Number(h.getAttribute('data-n')), cx: Number(h.getAttribute('data-cx')), cy: Number(h.getAttribute('data-cy')) }))
       expect(hexes.reduce((a, h) => a + h.n, 0)).toBe(pts.length)
       // Each point lies within one circumradius of some hexagon centre.
       for (const p of pts.slice(0, 200)) {
@@ -264,7 +264,7 @@ describe('simpson: overall and within-group lines', () => {
   })
   for (const nome of RENDERIZADORES) {
     it(nome, () => {
-      const { container, unmount } = noLivro(<GraficoMetodo spec={spec} renderizador={nome} largura={128} />)
+      const { container, unmount } = noLivro(<MethodChart spec={spec} renderizador={nome} largura={128} />)
       const a = container.querySelector('g.ty-print-g-area')!
       expect(Number(a.getAttribute('data-r-geral'))).toBeCloseTo(geral, 6)
       expect(Number(a.getAttribute('data-r-dentro'))).toBeCloseTo(dentro, 6)
@@ -274,7 +274,7 @@ describe('simpson: overall and within-group lines', () => {
       expect(container.querySelector('[data-aviso="coeficiente"]')).toBeNull()
       const A = area(container)
       // Each group's line is that group's least-squares line.
-      const linhas = [...container.querySelectorAll('g.ty-print-g-reta-grupo')]
+      const linhas = [...container.querySelectorAll('g.ty-print-g-line-group')]
       expect(linhas).toHaveLength(4)
       for (const l of linhas) {
         const grupo = l.getAttribute('data-grupo')!
@@ -290,7 +290,7 @@ describe('simpson: overall and within-group lines', () => {
         }
       }
       // Group means sit on the means.
-      for (const m of container.querySelectorAll('g.ty-print-g-media')) {
+      for (const m of container.querySelectorAll('g.ty-print-g-mean')) {
         const gp = pontos.filter((p) => p.grupo === m.getAttribute('data-grupo'))
         const [ex, ey] = posicao(A, gp.reduce((s, p) => s + p.x, 0) / gp.length, gp.reduce((s, p) => s + p.y, 0) / gp.length)
         expect(Number(m.getAttribute('data-cx'))).toBeCloseTo(ex, 1)
@@ -315,8 +315,8 @@ describe('matriz-correlacao', () => {
   }
   for (const nome of RENDERIZADORES) {
     it(nome, () => {
-      const { container, unmount } = noLivro(<GraficoMetodo spec={spec} renderizador={nome} largura={120} />)
-      const cel = [...container.querySelectorAll('g.ty-print-g-celula')]
+      const { container, unmount } = noLivro(<MethodChart spec={spec} renderizador={nome} largura={120} />)
+      const cel = [...container.querySelectorAll('g.ty-print-g-cell')]
       expect(cel).toHaveLength(6)
       for (const c of cel) {
         const i = Number(c.getAttribute('data-linha'))
@@ -352,16 +352,16 @@ describe('antes-depois-controle', () => {
   }
   for (const nome of RENDERIZADORES) {
     it(nome, () => {
-      const { container, unmount } = noLivro(<GraficoMetodo spec={spec} renderizador={nome} largura={120} />)
+      const { container, unmount } = noLivro(<MethodChart spec={spec} renderizador={nome} largura={120} />)
       const svg = container.querySelector('svg')!
       const x0 = Number(svg.getAttribute('data-x0'))
       const x1 = Number(svg.getAttribute('data-x1'))
-      for (const p of container.querySelectorAll('g.ty-print-ponto')) {
+      for (const p of container.querySelectorAll('g.ty-print-point')) {
         const v = Number(p.getAttribute('data-valor'))
         expect(translate(p)[0]).toBeCloseTo(x0 + ((v + 1) / 2) * (x1 - x0), 2)
       }
-      expect(container.querySelectorAll('g.ty-print-g-linha')[0]!.textContent).toContain('o sinal se inverte')
-      expect(container.querySelectorAll('g.ty-print-g-linha')[1]!.textContent).not.toContain('o sinal se inverte')
+      expect(container.querySelectorAll('g.ty-print-g-line')[0]!.textContent).toContain('o sinal se inverte')
+      expect(container.querySelectorAll('g.ty-print-g-line')[1]!.textContent).not.toContain('o sinal se inverte')
       expect(svg.getAttribute('aria-label')).toContain('+0,056')
       unmount()
     })
@@ -379,7 +379,7 @@ describe('correlation charts render deterministically on the server', () => {
   for (const nome of RENDERIZADORES)
     it(nome, () => {
       for (const pb of [false, true]) {
-        const html = () => renderToStaticMarkup(<LivroPrint estilo="caderno" pb={pb}>{specs.map((s, k) => <GraficoMetodo key={k} spec={s} renderizador={nome} largura={120} />)}</LivroPrint>)
+        const html = () => renderToStaticMarkup(<PrintBook estilo="caderno" pb={pb}>{specs.map((s, k) => <MethodChart key={k} spec={s} renderizador={nome} largura={120} />)}</PrintBook>)
         const a = html()
         expect(a).toBe(html())
         expect(a).not.toMatch(/NaN|undefined|Infinity/)
@@ -394,7 +394,7 @@ describe('a chart whose data was not loaded says so', () => {
       { tipo: 'simpson', titulo: 's', dados: 'figuras/dados/q36.json', x: { rotulo: 'x' }, y: { rotulo: 'y' } },
       { tipo: 'matriz-correlacao', titulo: 'm', dados: 'figuras/dados/m.json' },
     ] as unknown as SpecDispersao[]) {
-      const html = renderToStaticMarkup(<LivroPrint estilo="jornal"><GraficoMetodo spec={spec} largura={100} /></LivroPrint>)
+      const html = renderToStaticMarkup(<PrintBook estilo="jornal"><MethodChart spec={spec} largura={100} /></PrintBook>)
       expect(html).toContain('dados não carregados: figuras/dados/')
       expect(html).not.toMatch(/NaN|Infinity/)
     }

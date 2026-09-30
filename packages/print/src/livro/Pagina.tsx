@@ -42,7 +42,7 @@ export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero
   const corpo = variante === 'capa' ? <FundoEscuroProvider value={!papelEscuro(estilo)}>{children}</FundoEscuroProvider> : children
   return (
     <section
-      className={cx('ty-print-pagina', className)}
+      className={cx('ty-print-page', className)}
       data-lado={lado}
       data-variante={variante}
       data-molde={grade ? nomeMolde : undefined}
@@ -51,8 +51,8 @@ export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero
     >
       <Textura lado={lado} />
       {variante === 'normal' ? <Ornamento lado={lado} /> : null}
-      {textoCabeco ? <p className="ty-print-cabeco">{textoCabeco}</p> : null}
-      <div className="ty-print-mancha" style={estiloMancha}>
+      {textoCabeco ? <p className="ty-print-running-head">{textoCabeco}</p> : null}
+      <div className="ty-print-type-area" style={estiloMancha}>
         <LadoProvider value={lado}>{grade ? <MoldeProvider value={grade.info}>{corpo}</MoldeProvider> : corpo}</LadoProvider>
       </div>
       {mostrarFolio ? <p className="ty-print-folio">{textoFolio}</p> : null}

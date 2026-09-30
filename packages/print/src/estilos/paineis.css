@@ -1,10 +1,10 @@
 /* Panels and text blocks. Frames follow data-ty-print-painel; letters follow data-ty-print-rotulo. */
 @layer tympan-print {
   /* ------------------------------------------------------------ labels */
-  .ty-print-sobretitulo,
-  .ty-print-bloco-titulo,
-  .ty-print-margem-titulo,
-  .ty-print-painel-titulo {
+  .ty-print-sobretitle,
+  .ty-print-block-title,
+  .ty-print-margin-title,
+  .ty-print-panel-title {
     font: 700 6.6pt/1.2 var(--ty-print-fonte-rotulo);
     letter-spacing: var(--ty-print-rotulo-espaco);
     text-transform: var(--ty-print-rotulo-caixa);
@@ -12,17 +12,17 @@
     color: var(--ty-print-tinta);
   }
 
-  .ty-print-sobretitulo {
+  .ty-print-sobretitle {
     color: var(--ty-print-tinta-3);
     margin-block-end: 1mm;
   }
 
-  .ty-print-bloco-titulo {
+  .ty-print-block-title {
     margin-block-end: 1.6mm;
   }
 
   /* ------------------------------------------------------------ titles and text */
-  .ty-print-titulo {
+  .ty-print-title {
     font-family: var(--ty-print-fonte-titulo);
     font-weight: 600;
     text-transform: var(--ty-print-titulo-caixa);
@@ -31,54 +31,54 @@
     text-wrap: balance;
   }
 
-  .ty-print-texto[data-nivel='1'] .ty-print-titulo {
+  .ty-print-text[data-nivel='1'] .ty-print-title {
     font-size: 21pt;
     line-height: 1.06;
     margin-block-end: 2.4mm;
   }
 
-  .ty-print-texto[data-nivel='2'] .ty-print-titulo {
+  .ty-print-text[data-nivel='2'] .ty-print-title {
     font-size: 15pt;
     line-height: 1.1;
     margin-block-end: 1.8mm;
   }
 
-  .ty-print-texto[data-nivel='3'] .ty-print-titulo,
-  .ty-print-texto[data-nivel='4'] .ty-print-titulo {
+  .ty-print-text[data-nivel='3'] .ty-print-title,
+  .ty-print-text[data-nivel='4'] .ty-print-title {
     font-size: 10.5pt;
     line-height: 1.2;
     margin-block-end: 1.2mm;
   }
 
-  .ty-print-texto p + p {
+  .ty-print-text p + p {
     margin-block-start: 1.6mm;
   }
 
-  .ty-print-texto[data-variante='lead'] > p:not(.ty-print-sobretitulo) {
+  .ty-print-text[data-variante='lead'] > p:not(.ty-print-sobretitle) {
     font-size: 9pt;
     line-height: 1.42;
   }
 
-  .ty-print-texto[data-variante='meta'] {
+  .ty-print-text[data-variante='meta'] {
     font: 400 6.6pt/1.4 var(--ty-print-fonte-rotulo);
     color: var(--ty-print-tinta-2);
   }
 
-  .ty-print-texto[data-variante='frase'] > p:not(.ty-print-sobretitulo) {
+  .ty-print-text[data-variante='frase'] > p:not(.ty-print-sobretitle) {
     font: italic 400 11pt/1.3 var(--ty-print-fonte-titulo);
     padding-inline-start: 3mm;
     border-inline-start: 0.8mm solid var(--ty-print-destaque);
   }
 
-  .ty-print-texto[data-variante='display'] > p:not(.ty-print-sobretitulo) {
+  .ty-print-text[data-variante='display'] > p:not(.ty-print-sobretitle) {
     font: 600 16pt/1.15 var(--ty-print-fonte-titulo);
   }
 
-  .ty-print-citacao p {
+  .ty-print-quote p {
     font: italic 400 12pt/1.3 var(--ty-print-fonte-corpo);
   }
 
-  .ty-print-codigo {
+  .ty-print-code {
     font: 400 6.6pt/1.45 var(--ty-print-fonte-mono);
     white-space: pre-wrap;
     padding: 2mm 2.4mm;
@@ -86,39 +86,39 @@
     border-inline-start: 0.5mm solid var(--ty-print-linha);
   }
 
-  .ty-print-lista {
+  .ty-print-list {
     display: grid;
     gap: 1mm;
     margin-block-start: 1.2mm;
   }
 
-  ol.ty-print-lista {
+  ol.ty-print-list {
     counter-reset: ty-print-item;
   }
 
-  .ty-print-lista li {
+  .ty-print-list li {
     position: relative;
     padding-inline-start: 4.4mm;
   }
 
-  ol.ty-print-lista li {
+  ol.ty-print-list li {
     counter-increment: ty-print-item;
   }
 
-  .ty-print-lista li::before {
+  .ty-print-list li::before {
     content: '–';
     position: absolute;
     inset-inline-start: 0;
     color: var(--ty-print-tinta-3);
   }
 
-  ol.ty-print-lista li::before {
+  ol.ty-print-list li::before {
     content: counter(ty-print-item);
     font: 700 6.4pt/1.6 var(--ty-print-fonte-numero);
     color: var(--ty-print-destaque);
   }
 
-  .ty-print-margem {
+  .ty-print-margin {
     grid-column: span 2;
     font: 400 6.8pt/1.38 var(--ty-print-fonte-corpo);
     color: var(--ty-print-tinta-2);
@@ -126,12 +126,12 @@
     border-block-start: 0.2mm solid var(--ty-print-linha);
   }
 
-  .ty-print-margem-titulo {
+  .ty-print-margin-title {
     display: block;
     margin-block-end: 0.6mm;
   }
 
-  .ty-print-anotacao {
+  .ty-print-annotetion {
     display: flex;
     gap: 1.6mm;
     align-items: baseline;
@@ -140,7 +140,7 @@
   }
 
   /* minimo-de-tinta and other margin-note styles: notes take the last two columns, in small type. */
-  .ty-print-livro[data-ty-print-notas='margem'] :is(.ty-print-margem, .ty-print-anotacao) {
+  .ty-print-book[data-ty-print-notas='margem'] :is(.ty-print-margin, .ty-print-annotetion) {
     grid-column: 5 / -1;
     border: 0;
     font-size: 7pt;
@@ -148,7 +148,7 @@
   }
 
   /* ------------------------------------------------------------ callout number */
-  .ty-print-chamada {
+  .ty-print-kicker {
     display: inline-flex;
     flex: none;
     align-items: center;
@@ -162,27 +162,27 @@
   }
 
   /* ------------------------------------------------------------ panel frames */
-  .ty-print-painel {
+  .ty-print-panel {
     position: relative;
     display: flex;
     flex-direction: column;
     gap: 1.4mm;
   }
 
-  .ty-print-painel-titulo {
+  .ty-print-panel-title {
     display: flex;
     align-items: center;
     gap: 1.6mm;
   }
 
-  .ty-print-painel-corpo {
+  .ty-print-panel-body {
     display: flex;
     flex-direction: column;
     gap: 1.6mm;
     min-inline-size: 0;
   }
 
-  .ty-print-borda-mao {
+  .ty-print-hand-border {
     position: absolute;
     inset: 0;
     inline-size: 100%;
@@ -191,22 +191,22 @@
     pointer-events: none;
   }
 
-  .ty-print-livro[data-ty-print-painel='fio'] .ty-print-painel {
+  .ty-print-book[data-ty-print-painel='fio'] .ty-print-panel {
     border-block-start: 0.2mm solid var(--ty-print-tinta);
     padding-block-start: 2mm;
   }
 
-  .ty-print-livro[data-ty-print-painel='fio-grosso'] .ty-print-painel {
+  .ty-print-book[data-ty-print-painel='fio-grosso'] .ty-print-panel {
     border-block-start: 0.8mm solid var(--ty-print-tinta);
     padding-block-start: 2.2mm;
   }
 
-  .ty-print-livro:is([data-ty-print-painel='caixa'], [data-ty-print-painel='caixa-grossa'], [data-ty-print-painel='prancha'], [data-ty-print-painel='cartao']) .ty-print-painel {
+  .ty-print-book:is([data-ty-print-painel='caixa'], [data-ty-print-painel='caixa-grossa'], [data-ty-print-painel='prancha'], [data-ty-print-painel='cartao']) .ty-print-panel {
     padding: 2.6mm 3mm;
     border: max(0.2mm, var(--ty-print-traco)) solid var(--ty-print-linha);
   }
 
-  .ty-print-livro[data-ty-print-painel='caixa-grossa'] .ty-print-painel {
+  .ty-print-book[data-ty-print-painel='caixa-grossa'] .ty-print-panel {
     padding: 3.4mm 4mm;
     border-width: 0.6mm;
     outline: 0.2mm solid var(--ty-print-linha);
@@ -214,16 +214,16 @@
   }
 
   /* Styles with tremor draw the frame by hand (rough SVG) instead of the ruled border. */
-  .ty-print-livro[data-ty-print-tremor]:is([data-ty-print-painel='caixa'], [data-ty-print-painel='caixa-grossa']) .ty-print-painel {
+  .ty-print-book[data-ty-print-tremor]:is([data-ty-print-painel='caixa'], [data-ty-print-painel='caixa-grossa']) .ty-print-panel {
     border-color: transparent;
     outline-color: transparent;
   }
 
-  .ty-print-livro[data-ty-print-painel='prancha'] .ty-print-painel {
+  .ty-print-book[data-ty-print-painel='prancha'] .ty-print-panel {
     border-width: 0.25mm;
   }
 
-  .ty-print-livro[data-ty-print-painel='prancha'] .ty-print-painel-titulo {
+  .ty-print-book[data-ty-print-painel='prancha'] .ty-print-panel-title {
     margin-inline: -3mm;
     margin-block-start: -2.6mm;
     padding: 1.4mm 3mm;
@@ -231,8 +231,8 @@
   }
 
   /* Drafting-board corner ticks, outside the frame. */
-  .ty-print-livro[data-ty-print-painel='prancha'] .ty-print-painel::before,
-  .ty-print-livro[data-ty-print-painel='prancha'] .ty-print-painel::after {
+  .ty-print-book[data-ty-print-painel='prancha'] .ty-print-panel::before,
+  .ty-print-book[data-ty-print-painel='prancha'] .ty-print-panel::after {
     content: '';
     position: absolute;
     inline-size: 3mm;
@@ -241,7 +241,7 @@
     border-style: solid;
   }
 
-  .ty-print-livro[data-ty-print-painel='prancha'] .ty-print-painel::before {
+  .ty-print-book[data-ty-print-painel='prancha'] .ty-print-panel::before {
     inset-block-start: -1.6mm;
     inset-inline-start: -1.6mm;
     border-width: 0;
@@ -249,7 +249,7 @@
     border-inline-start-width: 0.25mm;
   }
 
-  .ty-print-livro[data-ty-print-painel='prancha'] .ty-print-painel::after {
+  .ty-print-book[data-ty-print-painel='prancha'] .ty-print-panel::after {
     inset-block-end: -1.6mm;
     inset-inline-end: -1.6mm;
     border-width: 0;
@@ -257,24 +257,24 @@
     border-inline-end-width: 0.25mm;
   }
 
-  .ty-print-livro[data-ty-print-painel='cartao'] .ty-print-painel {
+  .ty-print-book[data-ty-print-painel='cartao'] .ty-print-panel {
     padding: 2.2mm 2.6mm;
     border: 0.45mm solid var(--ty-print-linha);
     border-radius: var(--ty-print-raio);
     background: color-mix(in srgb, var(--ty-print-papel) 70%, #ffffff);
   }
 
-  .ty-print-livro[data-ty-print-painel='bloco'] .ty-print-painel {
+  .ty-print-book[data-ty-print-painel='bloco'] .ty-print-panel {
     padding: 3mm 3.4mm;
     background: color-mix(in srgb, var(--ty-print-marca-texto) 75%, var(--ty-print-papel));
   }
 
-  .ty-print-livro[data-ty-print-painel='bloco'] .ty-print-painel:nth-of-type(even) {
+  .ty-print-book[data-ty-print-painel='bloco'] .ty-print-panel:nth-of-type(even) {
     background: color-mix(in srgb, var(--ty-print-destaque-2) 22%, var(--ty-print-papel));
   }
 
   /* Content variants (independent of the style). */
-  .ty-print-livro .ty-print-painel[data-variante='filete'] {
+  .ty-print-book .ty-print-panel[data-variante='filete'] {
     border: 0;
     border-block-start: 0.2mm solid var(--ty-print-tinta);
     padding: 2mm 0 0;
@@ -282,7 +282,7 @@
     outline: 0;
   }
 
-  .ty-print-livro .ty-print-painel[data-variante='filete-forte'] {
+  .ty-print-book .ty-print-panel[data-variante='filete-forte'] {
     border: 0;
     border-block-start: 0.8mm solid var(--ty-print-tinta);
     padding: 2.2mm 0 0;
@@ -290,17 +290,17 @@
     outline: 0;
   }
 
-  .ty-print-livro .ty-print-painel[data-variante='cidade'] {
+  .ty-print-book .ty-print-panel[data-variante='cidade'] {
     padding: 2.4mm 3mm;
     border: 0.25mm dashed var(--ty-print-tinta-2);
     outline: 0;
   }
 
-  .ty-print-livro .ty-print-painel[data-variante='bolso'] {
+  .ty-print-book .ty-print-panel[data-variante='bolso'] {
     background: color-mix(in srgb, var(--ty-print-marca-texto) 60%, var(--ty-print-papel));
   }
 
-  .ty-print-livro .ty-print-painel[data-variante='pilha'] {
+  .ty-print-book .ty-print-panel[data-variante='pilha'] {
     border: 0;
     outline: 0;
     padding: 0;
@@ -308,7 +308,7 @@
   }
 
   /* ------------------------------------------------------------ panel letters */
-  .ty-print-letra {
+  .ty-print-letter {
     display: inline-flex;
     flex: none;
     align-items: center;
@@ -319,7 +319,7 @@
     color: var(--ty-print-tinta-3);
   }
 
-  .ty-print-livro[data-ty-print-rotulo='quadrado'] .ty-print-letra {
+  .ty-print-book[data-ty-print-rotulo='quadrado'] .ty-print-letter {
     min-inline-size: 3.8mm;
     block-size: 3.8mm;
     padding-inline: 0.6mm;
@@ -327,7 +327,7 @@
     color: var(--ty-print-rotulo-tinta, var(--ty-print-papel));
   }
 
-  .ty-print-livro[data-ty-print-rotulo='circulo'] .ty-print-letra {
+  .ty-print-book[data-ty-print-rotulo='circulo'] .ty-print-letter {
     min-inline-size: 4.2mm;
     block-size: 4.2mm;
     border-radius: 50%;
@@ -335,38 +335,38 @@
     color: var(--ty-print-rotulo-tinta, var(--ty-print-papel));
   }
 
-  .ty-print-livro[data-ty-print-painel='prancha'][data-ty-print-rotulo='circulo'] .ty-print-letra {
+  .ty-print-book[data-ty-print-painel='prancha'][data-ty-print-rotulo='circulo'] .ty-print-letter {
     background: none;
     border: 0.25mm solid var(--ty-print-linha);
     color: var(--ty-print-tinta);
   }
 
-  .ty-print-livro[data-ty-print-rotulo='parenteses'] .ty-print-letra::before {
+  .ty-print-book[data-ty-print-rotulo='parenteses'] .ty-print-letter::before {
     content: '(';
   }
 
-  .ty-print-livro[data-ty-print-rotulo='parenteses'] .ty-print-letra::after {
+  .ty-print-book[data-ty-print-rotulo='parenteses'] .ty-print-letter::after {
     content: ')';
   }
 
-  .ty-print-livro[data-ty-print-rotulo='letra'] .ty-print-letra {
+  .ty-print-book[data-ty-print-rotulo='letra'] .ty-print-letter {
     color: var(--ty-print-destaque);
   }
 
   /* ------------------------------------------------------------ Promessa */
-  .ty-print-promessa-citacao p,
-  .ty-print-veredito-promessa p {
+  .ty-print-promise-quote p,
+  .ty-print-verdict-promise p {
     font: italic 400 9.8pt/1.28 var(--ty-print-fonte-corpo);
     text-wrap: pretty;
   }
 
-  .ty-print-norma {
+  .ty-print-norm {
     margin-block-start: 1.4mm;
     font: 400 6.9pt/1.4 var(--ty-print-fonte-rotulo);
     color: var(--ty-print-tinta-2);
   }
 
-  .ty-print-norma cite {
+  .ty-print-norm cite {
     font-style: normal;
   }
 
@@ -376,17 +376,17 @@
     overflow-wrap: anywhere;
   }
 
-  .ty-print-resumo {
+  .ty-print-summary {
     margin-block-start: 1mm;
     font: 400 6.9pt/1.4 var(--ty-print-fonte-rotulo);
     color: var(--ty-print-tinta-2);
   }
 
-  .ty-print-promessa-detalhes {
+  .ty-print-promise-details {
     margin-block-start: 1.6mm;
   }
 
-  .ty-print-genealogia {
+  .ty-print-genealogy {
     display: flex;
     flex-wrap: wrap;
     gap: 0.6mm 2mm;
@@ -395,35 +395,35 @@
     color: var(--ty-print-tinta-2);
   }
 
-  .ty-print-genealogia li:not(:last-child)::after {
+  .ty-print-genealogy li:not(:last-child)::after {
     content: ' →';
     color: var(--ty-print-tinta-3);
   }
 
-  .ty-print-genealogia li[data-atual] {
+  .ty-print-genealogy li[data-atual] {
     font-weight: 700;
     color: var(--ty-print-tinta);
   }
 
-  .ty-print-genealogia-ano {
+  .ty-print-genealogy-year {
     font-weight: 700;
     margin-inline-end: 0.8mm;
   }
 
   /* ------------------------------------------------------------ Numeros */
-  .ty-print-numeros {
+  .ty-print-numbers {
     display: grid;
     gap: 2mm;
   }
 
-  .ty-print-numero {
+  .ty-print-number {
     display: grid;
     grid-template-columns: minmax(20mm, auto) 1fr;
     column-gap: 3mm;
     align-items: baseline;
   }
 
-  .ty-print-numero-valor {
+  .ty-print-number-value {
     grid-column: 1;
     grid-row: 1;
     font: 600 13pt/1 var(--ty-print-fonte-numero);
@@ -432,19 +432,19 @@
     color: var(--ty-print-tinta);
   }
 
-  .ty-print-numero-rotulo {
+  .ty-print-number-label {
     grid-column: 2;
     grid-row: 1;
     font: 400 6.6pt/1.3 var(--ty-print-fonte-rotulo);
     color: var(--ty-print-tinta-2);
   }
 
-  .ty-print-numero-meta,
+  .ty-print-number-meta,
   .ty-print-ref {
     color: var(--ty-print-tinta-3);
   }
 
-  .ty-print-unidade {
+  .ty-print-unit {
     font-size: 0.55em;
     font-weight: 500;
     color: var(--ty-print-tinta-2);
@@ -457,14 +457,14 @@
     color: var(--ty-print-tinta-3);
   }
 
-  .ty-print-comparado {
+  .ty-print-compared {
     font-weight: 400;
     font-size: 0.72em;
     color: var(--ty-print-destaque-2);
   }
 
-  .ty-print-selo-exemplo,
-  .ty-print-selo-local {
+  .ty-print-badge-example,
+  .ty-print-badge-local {
     display: inline-block;
     align-self: flex-start;
     inline-size: fit-content;
@@ -477,20 +477,20 @@
   }
 
   /* ------------------------------------------------------------ TabelaDados */
-  .ty-print-tabela {
+  .ty-print-table {
     inline-size: 100%;
     border-collapse: collapse;
     font: 400 6.6pt/1.3 var(--ty-print-fonte-rotulo);
     font-variant-numeric: tabular-nums;
   }
 
-  .ty-print-tabela caption {
+  .ty-print-table caption {
     text-align: start;
     font-weight: 700;
     padding-block-end: 1mm;
   }
 
-  .ty-print-tabela th {
+  .ty-print-table th {
     text-align: start;
     font-weight: 600;
     font-size: 6.2pt;
@@ -499,47 +499,47 @@
     padding: 0.4mm 1.2mm 0.6mm;
   }
 
-  .ty-print-tabela td {
+  .ty-print-table td {
     padding: 0.3mm 1.2mm;
     border-block-end: 0.15mm solid var(--ty-print-linha);
     vertical-align: baseline;
   }
 
-  .ty-print-tabela [data-numerica] {
+  .ty-print-table [data-numerica] {
     text-align: end;
   }
 
-  .ty-print-tabela td[data-mono] {
+  .ty-print-table td[data-mono] {
     font-family: var(--ty-print-fonte-mono);
     font-size: 6pt;
     overflow-wrap: anywhere;
   }
 
-  .ty-print-tabela-nota {
+  .ty-print-table-note {
     margin-block-start: 1mm;
     font: 400 6.2pt/1.35 var(--ty-print-fonte-rotulo);
     color: var(--ty-print-tinta-3);
   }
 
   /* ------------------------------------------------------------ Veredito and tests */
-  .ty-print-veredito {
+  .ty-print-verdict {
     display: flex;
     flex-direction: column;
     gap: 2mm;
   }
 
-  .ty-print-veredito-topo {
+  .ty-print-verdict-top {
     display: flex;
     gap: 4mm;
     align-items: flex-start;
     justify-content: space-between;
   }
 
-  .ty-print-veredito-texto {
+  .ty-print-verdict-text {
     font-size: 8.6pt;
   }
 
-  .ty-print-veredito-itens li {
+  .ty-print-verdict-items li {
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 3mm;
@@ -548,7 +548,7 @@
     border-block-start: 0.15mm solid var(--ty-print-linha);
   }
 
-  .ty-print-afirmacao {
+  .ty-print-claim {
     display: flex;
     flex-direction: column;
     font-size: 8.2pt;
@@ -560,83 +560,83 @@
     color: var(--ty-print-tinta-3);
   }
 
-  .ty-print-medicao-marcada {
+  .ty-print-reading-markda {
     padding: 1.4mm 2mm;
     border: 0.2mm dashed var(--ty-print-tinta-3);
     font: 400 7pt/1.35 var(--ty-print-fonte-rotulo);
   }
 
-  .ty-print-medicao-rotulo {
+  .ty-print-reading-label {
     font-weight: 700;
   }
 
-  .ty-print-proposto {
+  .ty-print-proposed {
     font: italic 400 6.4pt/1.3 var(--ty-print-fonte-rotulo);
     color: var(--ty-print-tinta-3);
   }
 
-  .ty-print-testes-lista {
+  .ty-print-tests-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(34mm, 1fr));
     gap: 3mm;
   }
 
-  .ty-print-testes-lista li {
+  .ty-print-tests-list li {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 1.2mm;
   }
 
-  .ty-print-teste-pergunta {
+  .ty-print-test-question {
     font: 600 8.4pt/1.25 var(--ty-print-fonte-corpo);
   }
 
-  .ty-print-teste-texto {
+  .ty-print-test-text {
     font-size: 7.6pt;
     line-height: 1.35;
   }
 
-  .ty-print-nao {
+  .ty-print-not {
     display: grid;
   }
 
-  .ty-print-nao li {
+  .ty-print-not li {
     padding-block: 1.2mm 1.4mm;
     border-block-start: 0.15mm solid var(--ty-print-linha);
     font-size: 7.9pt;
     line-height: 1.38;
   }
 
-  .ty-print-nao li:first-child {
+  .ty-print-not li:first-child {
     border-block-start: 0;
     padding-block-start: 0;
   }
 
-  .ty-print-nao-titulo {
+  .ty-print-not-title {
     font: 600 8.1pt/1.3 var(--ty-print-fonte-corpo);
     color: var(--ty-print-prova-refutada);
   }
 
-  .ty-print-remete {
+  .ty-print-refers {
     font: 400 6.4pt var(--ty-print-fonte-rotulo);
     color: var(--ty-print-tinta-3);
   }
 
-  .ty-print-quando {
+  .ty-print-when {
     padding: 2.4mm 3mm;
     border: 0.25mm dashed var(--ty-print-tinta-2);
     border-radius: var(--ty-print-raio);
     font-size: 8pt;
   }
 
-  .ty-print-quando-itens {
+  .ty-print-when-items {
     display: grid;
     gap: 1.4mm;
     margin-block-start: 1mm;
   }
 
-  .ty-print-quando-itens li {
+  .ty-print-when-items li {
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 2mm;
@@ -644,64 +644,64 @@
   }
 
   /* ------------------------------------------------------------ Rastro, Fonte, seal */
-  .ty-print-rastro {
+  .ty-print-trace {
     display: grid;
     gap: 1.6mm;
   }
 
-  .ty-print-rastro-passo {
+  .ty-print-trace-step {
     position: relative;
   }
 
-  .ty-print-rastro dt {
+  .ty-print-trace dt {
     font: 700 6pt/1.1 var(--ty-print-fonte-rotulo);
     letter-spacing: 0.07em;
     text-transform: uppercase;
     color: var(--ty-print-tinta-3);
   }
 
-  .ty-print-rastro dd {
+  .ty-print-trace dd {
     display: flex;
     flex-direction: column;
   }
 
-  .ty-print-rastro-valor {
+  .ty-print-trace-value {
     font-size: 7.9pt;
     line-height: 1.25;
     overflow-wrap: anywhere;
   }
 
-  .ty-print-rastro-valor.ty-print-mono {
+  .ty-print-trace-value.ty-print-mono {
     font-size: 6.6pt;
   }
 
-  .ty-print-rastro-numero {
+  .ty-print-trace-number {
     font: 500 15pt/1 var(--ty-print-fonte-titulo);
     color: var(--ty-print-destaque);
   }
 
-  .ty-print-rastro-nota {
+  .ty-print-trace-note {
     font: 400 6.1pt/1.3 var(--ty-print-fonte-rotulo);
     color: var(--ty-print-tinta-3);
     overflow-wrap: anywhere;
   }
 
-  .ty-print-rastro-bloco {
+  .ty-print-trace-block {
     display: flex;
     flex-direction: column;
     gap: 2.4mm;
   }
 
-  .ty-print-fonte {
+  .ty-print-source {
     font: 400 6.2pt/1.4 var(--ty-print-fonte-rotulo);
     color: var(--ty-print-tinta-2);
   }
 
-  .ty-print-fonte b {
+  .ty-print-source b {
     color: var(--ty-print-tinta);
   }
 
-  .ty-print-selo {
+  .ty-print-badge {
     display: inline-flex;
     align-items: center;
     gap: 1.2mm;
@@ -711,18 +711,18 @@
     color: var(--ty-print-tinta-3);
   }
 
-  .ty-print-selo-versao {
+  .ty-print-badge-version {
     font-family: var(--ty-print-fonte-mono);
     font-weight: 400;
   }
 
-  .ty-print-ficha dl {
+  .ty-print-spec-sheet dl {
     display: grid;
     gap: 1mm;
   }
 
-  .ty-print-ficha dl > div,
-  .ty-print-desenho dl > div {
+  .ty-print-spec-sheet dl > div,
+  .ty-print-design dl > div {
     display: grid;
     grid-template-columns: 24mm 1fr;
     gap: 2mm;
@@ -730,47 +730,47 @@
     line-height: 1.35;
   }
 
-  .ty-print-ficha dt,
-  .ty-print-desenho dt {
+  .ty-print-spec-sheet dt,
+  .ty-print-design dt {
     font: 700 6.4pt/1.5 var(--ty-print-fonte-rotulo);
     letter-spacing: 0.04em;
     text-transform: var(--ty-print-rotulo-caixa);
     color: var(--ty-print-tinta-2);
   }
 
-  .ty-print-desenho dl {
+  .ty-print-design dl {
     display: grid;
     gap: 1.2mm;
   }
 
-  .ty-print-desenho dl > div {
+  .ty-print-design dl > div {
     padding-block-start: 1mm;
     border-block-start: 0.15mm solid var(--ty-print-linha);
   }
 
   /* ------------------------------------------------------------ Na sua cidade */
-  .ty-print-cidade-campos {
+  .ty-print-city-fields {
     display: grid;
     gap: 1.6mm;
   }
 
-  .ty-print-cidade-campos dt {
+  .ty-print-city-fields dt {
     font: 400 6.6pt/1.2 var(--ty-print-fonte-rotulo);
     color: var(--ty-print-tinta-2);
   }
 
-  .ty-print-cidade-campos dd {
+  .ty-print-city-fields dd {
     block-size: 4.4mm;
     border-block-end: 0.2mm dotted var(--ty-print-tinta-2);
   }
 
-  .ty-print-cidade-nota {
+  .ty-print-city-note {
     margin-block-start: 1.6mm;
     font: 400 6.6pt/1.35 var(--ty-print-fonte-rotulo);
     color: var(--ty-print-tinta-2);
   }
 
-  .ty-print-cidade-url {
+  .ty-print-city-url {
     display: flex;
     flex-wrap: wrap;
     gap: 1mm 2mm;
@@ -781,7 +781,7 @@
   }
 
   /* ------------------------------------------------------------ headline, next chapter */
-  .ty-print-manchete {
+  .ty-print-headline {
     display: flex;
     flex-direction: column;
     gap: 1mm;
@@ -790,17 +790,17 @@
     border-block: 0.5mm solid var(--ty-print-tinta);
   }
 
-  .ty-print-manchete-texto {
+  .ty-print-headline-text {
     font: 700 13pt/1.12 var(--ty-print-fonte-titulo);
   }
 
-  .ty-print-proximo {
+  .ty-print-next {
     padding-block-start: 2mm;
     border-block-start: 0.5mm solid var(--ty-print-tinta);
     font-size: 7.8pt;
   }
 
-  .ty-print-proximo-titulo {
+  .ty-print-next-title {
     font: 600 11pt/1.2 var(--ty-print-fonte-titulo);
     margin-block-end: 0.8mm;
   }
@@ -808,11 +808,11 @@
 
 @layer tympan-print {
   /* Wide display faces set in capitals (graficos-1900, drafting board) print smaller. */
-  .ty-print-livro[data-ty-print-caixa-alta] .ty-print-texto[data-nivel='1'] .ty-print-titulo {
+  .ty-print-book[data-ty-print-caixa-alta] .ty-print-text[data-nivel='1'] .ty-print-title {
     font-size: 16pt;
   }
 
-  .ty-print-livro[data-ty-print-caixa-alta] .ty-print-texto[data-nivel='2'] .ty-print-titulo {
+  .ty-print-book[data-ty-print-caixa-alta] .ty-print-text[data-nivel='2'] .ty-print-title {
     font-size: 12.5pt;
   }
 }

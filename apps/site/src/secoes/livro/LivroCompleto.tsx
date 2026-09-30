@@ -3,11 +3,11 @@
 // previous/next spread and the same style, chart and Cor/P&B as the Livro view (after the Estúdio's
 // "Livro completo"). The book's text is a Portuguese sample; the interface around it is translated.
 import { memo } from 'react'
-import { AberturaParte, Capa, ComoLer, Dupla, LinhaDoTempo, LivroPrint, Pagina } from '@datatechsolutions/tympan-print'
+import { PartOpener, Cover, HowToRead, Spread, Timeline, PrintBook, Page } from '@datatechsolutions/tympan-print'
 import type { PrintPresetName } from '../../tokens'
 import { DuplaEstudo, DuplaMapas } from '../../galerias'
 import type { Grafico } from '../../rotas'
-import { tipoDoGrafico } from './Dupla'
+import { tipoDoGrafico } from './Spread'
 
 export interface DuplaDoLivro {
   id: string
@@ -21,39 +21,39 @@ export const DUPLAS: DuplaDoLivro[] = [
     id: 'capa',
     chave: 'completo.capa',
     render: () => (
-      <Dupla numero="capa">
-        <Pagina lado="par" variante="capa" folio={false}>
-          <Capa
+      <Spread numero="capa">
+        <Page lado="par" variante="capa" folio={false}>
+          <Cover
             face="quarta"
             chamada="Uma cidade medida estação por estação."
             paragrafos={[
               'Em 2020, Vila Aurora criou uma zona de baixa emissão no centro. Este livro pergunta o que os dados sustentam sobre o ar que se respira lá dentro, e o que ainda não dá para afirmar.',
-              'Cada número traz a sua fonte e o seu estado de prova. Os dados são fictícios e servem de exemplo.',
+              'Each number carries its source and its proof state. Data is fictional and serves as an example.',
             ]}
             destaque={{ eyebrow: 'Inverno de 2022', texto: '54 dias acima do limite logo dentro da zona, contra 127 logo fora.', fonte: 'Rede de monitoramento de Vila Aurora (fictícia)' }}
           />
-        </Pagina>
-        <Pagina lado="impar" variante="capa" folio={false}>
-          <Capa
+        </Page>
+        <Page lado="impar" variante="capa" folio={false}>
+          <Cover
             face="primeira"
-            eyebrow="Laboratório Exemplo · Volume 1"
+            eyebrow="Example Lab · Volume 1"
             titulo="O ar de Vila Aurora"
             subtitulo="Dez anos de uma zona de baixa emissão, medidos estação por estação"
-            autora="Laboratório Exemplo"
+            autora="Example Lab"
             cortes={[10, 25, 50, 100, 150]}
             legendaGrafismo="Os limites diários de PM2,5 usados no livro (µg/m³)"
           />
-        </Pagina>
-      </Dupla>
+        </Page>
+      </Spread>
     ),
   },
   {
     id: 'como-ler',
     chave: 'completo.comoLer',
     render: () => (
-      <Dupla numero="6-7" parte="Como ler este livro" capitulo="Como ler este livro">
-        <Pagina lado="par">
-          <ComoLer
+      <Spread numero="6-7" parte="Como ler este livro" capitulo="Como ler este livro">
+        <Page lado="par">
+          <HowToRead
             secao="letras"
             titulo="As letras dos painéis"
             letras={[
@@ -65,9 +65,9 @@ export const DUPLAS: DuplaDoLivro[] = [
             ]}
             regra="Se um número não tem fonte, ele não está no livro."
           />
-        </Pagina>
-        <Pagina lado="impar">
-          <ComoLer
+        </Page>
+        <Page lado="impar">
+          <HowToRead
             secao="estados"
             titulo="Os estados de prova"
             estados={[
@@ -79,17 +79,17 @@ export const DUPLAS: DuplaDoLivro[] = [
               { estado: 'nao-testada', texto: 'A afirmação está registrada, mas ninguém a testou.' },
             ]}
           />
-        </Pagina>
-      </Dupla>
+        </Page>
+      </Spread>
     ),
   },
   {
     id: 'parte',
     chave: 'completo.parte',
     render: () => (
-      <Dupla numero="8-9" parte="Parte I · Ar e cidade" capitulo="Parte I · Ar e cidade">
-        <Pagina lado="par">
-          <AberturaParte
+      <Spread numero="8-9" parte="Parte I · Ar e cidade" capitulo="Parte I · Ar e cidade">
+        <Page lado="par">
+          <PartOpener
             numero="I"
             titulo="Ar e cidade"
             pergunta="Uma regra de trânsito pode mudar o ar de um bairro?"
@@ -105,9 +105,9 @@ export const DUPLAS: DuplaDoLivro[] = [
             ]}
             ondeIssoVolta="Na Parte III, quando as internações entrarem na conta."
           />
-        </Pagina>
-        <Pagina lado="impar">
-          <LinhaDoTempo
+        </Page>
+        <Page lado="impar">
+          <Timeline
             titulo="As regras que o livro mede"
             de={2014}
             ate={2026}
@@ -121,8 +121,8 @@ export const DUPLAS: DuplaDoLivro[] = [
             ]}
             nota="Todas as regras e números deste livro são fictícios."
           />
-        </Pagina>
-      </Dupla>
+        </Page>
+      </Spread>
     ),
   },
   { id: 'metodo', chave: 'completo.metodo', render: (estilo, grafico) => <DuplaEstudo grafico={tipoDoGrafico(estilo, grafico)} /> },
@@ -133,9 +133,9 @@ export const DuplaDoLivroNoEstilo = memo(function DuplaDoLivroNoEstilo({ id, est
   const d = DUPLAS.find((x) => x.id === id) ?? DUPLAS[0]!
   return (
     <div dir="ltr" className="ty-site-livro-direcao">
-      <LivroPrint estilo={estilo} pb={pb} incluirCss={false} className="ty-site-livro">
+      <PrintBook estilo={estilo} pb={pb} incluirCss={false} className="ty-site-livro">
         {d.render(estilo, grafico)}
-      </LivroPrint>
+      </PrintBook>
     </div>
   )
 })

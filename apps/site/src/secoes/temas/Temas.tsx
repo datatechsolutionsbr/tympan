@@ -92,7 +92,7 @@ export function Temas({ rota, ir }: { rota: RotaTemas; ir: Navegar }) {
           {/* Seletor de Views (Carrossel) */}
           <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'center' }}>
             <SegmentedControl
-              label="Exemplos de Aplicação"
+              label="Application Examples"
               options={[
                 { value: 'base', label: 'Dashboard Base', icon: LayoutPanelLeft },
                 { value: 'canvas', label: 'Workflow Canvas', icon: View },
@@ -117,11 +117,11 @@ export function Temas({ rota, ir }: { rota: RotaTemas; ir: Navegar }) {
                   ambient
                   navOpen={false}
                   brand={<BrandMark size="small" />}
-                  context={<RailContextButton scope="Laboratório Exemplo" name="Qualidade do Ar" />}
+                  context={<RailContextButton scope="Example Lab" name="Air Quality" />}
                   navigation={
                     <div className="ty-tour-target" data-tour-active={activeStep === 'rail'} style={{ borderRadius: 8 }}>
                       <RailNavSection label="Pesquisa">
-                        <RailNavItem label="Visão geral" icon={Home} href="#/" current />
+                        <RailNavItem label="Overview" icon={Home} href="#/" current />
                       </RailNavSection>
                       <RailNavSection label="Evidências">
                         <RailNavItem label="Estações e trilha" icon={BookOpen} href="#/" />
@@ -135,7 +135,7 @@ export function Temas({ rota, ir }: { rota: RotaTemas; ir: Navegar }) {
                         anchor="container" 
                         edge="bottom" 
                         destinations={[
-                          { id: 'o', label: 'Visão geral', icon: Home, href: '#/', active: true },
+                          { id: 'o', label: 'Overview', icon: Home, href: '#/', active: true },
                           { id: 'b', label: 'Base', icon: FileStack, href: '#/' },
                         ]} 
                         contextual={[
@@ -153,8 +153,8 @@ export function Temas({ rota, ir }: { rota: RotaTemas; ir: Navegar }) {
                       <PageHeader
                         variant="editorial"
                         headingLevel={3}
-                        title="Visão geral"
-                        trail={[{ label: 'Laboratório Exemplo', href: '#/' }, { label: 'Visão geral' }]}
+                        title="Overview"
+                        trail={[{ label: 'Example Lab', href: '#/' }, { label: 'Overview' }]}
                         lead="Qualidade do ar em cinco estações, com a leitura de origem citada em cada número."
                         actions={
                           <div className="ty-tour-target" data-tour-active={activeStep === 'theme'} style={{ display: 'flex', gap: 12, alignItems: 'center', padding: 4, borderRadius: 8 }}>

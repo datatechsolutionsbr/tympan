@@ -133,14 +133,14 @@ export function LogoDatatech({ variante = 'cor', largura, cor, cor2, rotulo, tex
   )
   return (
     <span
-      className={cx('ty-print-logo', 'ty-print-logo--datatech', texto && 'ty-print-assinatura', className)}
+      className={cx('ty-print-logo', 'ty-print-logo--datatech', texto && 'ty-print-signature', className)}
       data-versao={tingido ? variante : chave}
       data-fundo={escuro ? 'escuro' : undefined}
       style={protecao ? { padding: `${Math.round(h * 0.5 * 100) / 100}mm` } : undefined}
     >
-      {rotulo ? <span className="ty-print-logo-rotulo">{rotulo}</span> : null}
+      {rotulo ? <span className="ty-print-logo-label">{rotulo}</span> : null}
       {svg}
-      {texto ? <span className="ty-print-assinatura-texto">{texto}</span> : null}
+      {texto ? <span className="ty-print-signature-text">{texto}</span> : null}
     </span>
   )
 }
