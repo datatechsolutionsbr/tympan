@@ -609,6 +609,122 @@
       transition: none;
     }
   }
+
+  /* ---- run time panel: where the time went --------------------------- */
+  .ty-run-time {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ty-space-3);
+    min-inline-size: 0;
+    color: var(--ty-ink-2);
+    font-family: var(--ty-font-sans);
+    font-size: var(--ty-font-size-body);
+  }
+  .ty-run-time__title {
+    margin: 0;
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-body-lg);
+    font-weight: var(--ty-font-weight-semibold);
+  }
+  .ty-run-time__claim {
+    margin: 0;
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-body-lg);
+    font-weight: var(--ty-font-weight-semibold);
+  }
+  .ty-run-time__rows {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ty-space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ty-run-time__row {
+    display: grid;
+    grid-template-columns: minmax(7rem, auto) minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: var(--ty-space-3);
+    row-gap: var(--ty-space-1);
+  }
+  .ty-run-time__state {
+    grid-column: 1;
+  }
+  .ty-run-time__name {
+    grid-column: 2;
+    overflow: hidden;
+    color: var(--ty-ink);
+    font-weight: var(--ty-font-weight-semibold);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .ty-run-time__duration {
+    grid-column: 3;
+    color: var(--ty-ink-3);
+    font-size: var(--ty-font-size-meta);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .ty-run-time__bar {
+    grid-column: 1 / -1;
+    block-size: 6px;
+    overflow: hidden;
+    border-radius: var(--ty-radius-pill);
+    background: var(--ty-surface-sunken);
+  }
+  .ty-run-time__fill {
+    display: block;
+    block-size: 100%;
+    border-radius: inherit;
+    background: var(--ty-info);
+  }
+  .ty-run-time__row[data-state='succeeded'] .ty-run-time__fill {
+    background: var(--ty-success);
+  }
+  .ty-run-time__row[data-state='failed'] .ty-run-time__fill {
+    background: var(--ty-danger);
+  }
+  .ty-run-time__row[data-state='skipped'] .ty-run-time__fill {
+    background: var(--ty-neutral);
+  }
+  /* Waiting rows never claim a share: a hatched track, not a fill. */
+  .ty-run-time__fill[data-hatched] {
+    background: repeating-linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--ty-warning) 55%, transparent) 0 4px,
+      transparent 4px 8px
+    );
+  }
+  .ty-run-time__events {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ty-space-2);
+  }
+  .ty-run-time__events-title {
+    margin: 0;
+    color: var(--ty-ink);
+    font-size: var(--ty-font-size-label);
+    font-weight: var(--ty-font-weight-semibold);
+  }
+  .ty-run-time__event-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ty-space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ty-run-time__event {
+    display: flex;
+    gap: var(--ty-space-2);
+    font-size: var(--ty-font-size-meta);
+  }
+  .ty-run-time__event-time {
+    flex: none;
+    color: var(--ty-ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+
   @media (forced-colors: active) {
     .ty-run-status,
     .ty-run-status__word {

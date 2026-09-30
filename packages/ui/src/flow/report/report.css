@@ -196,6 +196,52 @@
     outline-offset: 2px;
   }
 
+
+  /* ---- claim title and provenance tag (report chrome) ---------------- */
+  .ty-claim-title {
+    margin: 0;
+    color: var(--ty-ink);
+    font-family: var(--ty-font-serif);
+    font-size: var(--ty-font-size-h3);
+    font-weight: var(--ty-font-weight-bold);
+    line-height: var(--ty-font-line-height-h3);
+    text-wrap: pretty;
+  }
+  .ty-provenance-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ty-space-1);
+    max-inline-size: 100%;
+    padding-block: 2px;
+    padding-inline: var(--ty-space-2);
+    border: 1px solid var(--ty-line);
+    border-radius: var(--ty-radius-pill);
+    background: var(--ty-surface-raised);
+    color: var(--ty-ink-2);
+    font-family: var(--ty-font-sans);
+    font-size: var(--ty-font-size-meta);
+    font-weight: var(--ty-font-weight-semibold);
+    text-decoration: none;
+  }
+  a.ty-provenance-tag:hover {
+    border-color: var(--ty-line-strong);
+    color: var(--ty-ink);
+  }
+  .ty-provenance-tag__icon {
+    display: inline-flex;
+    flex: none;
+    color: var(--ty-info);
+  }
+  .ty-provenance-tag__icon svg {
+    inline-size: 12px;
+    block-size: 12px;
+  }
+  .ty-provenance-tag__name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   @media (forced-colors: active) {
     .ty-flow-report__mark,
     .ty-flow-report__area {

@@ -34,6 +34,7 @@ export interface GraphNodeCardLabels {
   locked: string
   dimmed: string
   running: string
+  suspended: string
   succeeded: string
   failed: string
   skipped: string
@@ -50,6 +51,7 @@ export const graphNodeCardLabels = defineLabels<GraphNodeCardLabels>('GraphNodeC
     locked: 'read only',
     dimmed: 'not run',
     running: 'running',
+    suspended: 'suspended',
     succeeded: 'succeeded',
     failed: 'failed',
     skipped: 'skipped',
@@ -64,6 +66,7 @@ export const graphNodeCardLabels = defineLabels<GraphNodeCardLabels>('GraphNodeC
     locked: 'somente leitura',
     dimmed: 'não executado',
     running: 'em execução',
+    suspended: 'aguardando',
     succeeded: 'concluído',
     failed: 'falhou',
     skipped: 'ignorado',
@@ -78,6 +81,7 @@ export const graphNodeCardLabels = defineLabels<GraphNodeCardLabels>('GraphNodeC
     locked: 'solo lectura',
     dimmed: 'no ejecutado',
     running: 'en ejecución',
+    suspended: 'en espera',
     succeeded: 'completado',
     failed: 'falló',
     skipped: 'omitido',

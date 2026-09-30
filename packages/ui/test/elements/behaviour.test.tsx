@@ -768,7 +768,7 @@ describe('<ty-theme-palette>', () => {
   })
 
   it('model: every theme is offered, filtering is accent and case blind', () => {
-    expect(THEMES).toHaveLength(44)
+    expect(THEMES).toHaveLength(45)
     expect(match('Gráficos de exposição', 'grafi')).toEqual([0, 1, 2, 3, 4])
     const found = sections('', { theme: 'astrlabe', mode: 'system', density: 'default' }, {
       groups: { preset: 'T', print: 'P', mode: 'M', density: 'D' },
@@ -776,7 +776,7 @@ describe('<ty-theme-palette>', () => {
       densities: { compact: 'C', default: 'D', comfortable: 'F' },
       themes: {},
     })
-    expect(found.map((s) => s.rows.length)).toEqual([5, 39, 3, 3])
+    expect(found.map((s) => s.rows.length)).toEqual([6, 39, 3, 3])
     expect(found[0]!.rows.find((r) => r.value === 'astrlabe')!.current).toBe(true)
   })
 })
