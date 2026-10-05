@@ -12,7 +12,7 @@ import { RunStatusMark, type RunWordLabels } from './RunStatusMark'
 import { prettyValue } from './runData'
 import type { RunActor } from './types'
 
-export type TimelineStatus = 'completed' | 'running' | 'failed' | 'pending' | 'skipped'
+export type TimelineStatus = 'completed' | 'running' | 'failed' | 'cancelled' | 'pending' | 'skipped'
 
 export interface ModelCall {
   sequence?: number

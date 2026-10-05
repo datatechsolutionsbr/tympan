@@ -4,7 +4,7 @@
 
 import type { ReactNode } from 'react'
 import { Toolbar } from 'react-aria-components'
-import { CircleCheck, CircleDashed, CircleX, History, LoaderCircle, SkipForward, Undo2 } from 'lucide-react'
+import { CircleCheck, CircleDashed, CircleStop, CircleX, History, LoaderCircle, SkipForward, Undo2 } from 'lucide-react'
 import { Button, type IconComponent } from '../../index'
 import { humaniseKey, useRenderCatalog, type RenderCatalog } from '../catalog/RenderCatalog'
 import type { ToneName } from '../catalog/palette'
@@ -71,6 +71,7 @@ export interface PreviewStatusLabels {
   running: string
   completed: string
   failed: string
+  cancelled: string
   skipped: string
   restored: string
   'served-from-history': string
@@ -78,9 +79,9 @@ export interface PreviewStatusLabels {
 }
 
 export const previewStatusLabels = defineLabels<PreviewStatusLabels>('previewStatus', {
-  en: { running: 'running', completed: 'completed', failed: 'failed', skipped: 'skipped', restored: 'restored', 'served-from-history': 'from history', unknown: 'not run' },
-  'pt-BR': { running: 'em execução', completed: 'concluída', failed: 'falhou', skipped: 'ignorada', restored: 'restaurada', 'served-from-history': 'do histórico', unknown: 'não executada' },
-  es: { running: 'en ejecución', completed: 'completado', failed: 'falló', skipped: 'omitido', restored: 'restaurado', 'served-from-history': 'del historial', unknown: 'no ejecutado' },
+  en: { running: 'running', completed: 'completed', failed: 'failed', cancelled: 'cancelled', skipped: 'skipped', restored: 'restored', 'served-from-history': 'from history', unknown: 'not run' },
+  'pt-BR': { running: 'em execução', completed: 'concluída', failed: 'falhou', cancelled: 'cancelada', skipped: 'ignorada', restored: 'restaurada', 'served-from-history': 'do histórico', unknown: 'não executada' },
+  es: { running: 'en ejecución', completed: 'completado', failed: 'falló', cancelled: 'cancelado', skipped: 'omitido', restored: 'restaurado', 'served-from-history': 'del historial', unknown: 'no ejecutado' },
 })
 export const defaultPreviewStatusLabels = previewStatusLabels.bundles.en
 
@@ -88,6 +89,7 @@ const STATUS_GLYPHS: Record<RunStatus, IconComponent> = {
   running: LoaderCircle,
   completed: CircleCheck,
   failed: CircleX,
+  cancelled: CircleStop,
   skipped: SkipForward,
   restored: Undo2,
   'served-from-history': History,

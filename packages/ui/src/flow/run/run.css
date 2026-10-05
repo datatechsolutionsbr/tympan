@@ -33,7 +33,9 @@
     --ty-run-tone: var(--ty-info);
   }
   .ty-run-status[data-status='pending'],
-  .ty-run-status[data-status='suspended'] {
+  .ty-run-status[data-status='awaiting-approval'],
+  .ty-run-status[data-status='suspended'],
+  .ty-run-status[data-status='cancelled'] {
     --ty-run-tone: var(--ty-warning);
   }
   .ty-run-status[data-status='failed'] {

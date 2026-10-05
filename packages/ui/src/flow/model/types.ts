@@ -78,6 +78,6 @@ export interface NodeRunResult {
 }
 
 /** Status vocabulary of read-only previews and run inspection. */
-export type RunStatus = 'running' | 'completed' | 'failed' | 'skipped' | 'restored' | 'served-from-history' | 'unknown'
+export type RunStatus = 'running' | 'completed' | 'failed' | 'cancelled' | 'skipped' | 'restored' | 'served-from-history' | 'unknown'
 
 export const ORIGIN_VIEWPORT: Viewport = Object.freeze({ x: 0, y: 0, zoom: 1 })

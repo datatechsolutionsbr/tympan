@@ -13,7 +13,7 @@ import { useFlowEditorState } from '../state/editorState'
 import { NON_EXECUTABLE_KINDS } from './RunPanel'
 import { RunStatusMark, runWordLabels, runWordOf, type RunWordLabels } from './RunStatusMark'
 import { countTools, prettyValue, sumTokens, useRunHistory, useTransition } from './runData'
-import type { LoadRuns, RunNodeResult, RunSummary } from './types'
+import type { LoadRuns, RunNodeResult, RunSummary, RunWord } from './types'
 
 export interface RunDrawerLabels {
   title: string
@@ -177,10 +177,13 @@ export function RunDrawer(props: RunDrawerProps) {
   return <DrawerBody {...props} />
 }
 
-function drawerWord(status: string, isRunning: boolean): 'idle' | 'running' | 'completed' | 'failed' {
+type DrawerWord = Exclude<RunWord, 'skipped' | 'restored' | 'unknown'>
+
+/** Run-level word for the drawer header; step-only words read as idle. */
+function drawerWord(status: string, isRunning: boolean): DrawerWord {
   if (isRunning) return 'running'
   const w = runWordOf(status)
-  return w === 'running' || w === 'completed' || w === 'failed' ? w : 'idle'
+  return w === 'skipped' || w === 'restored' || w === 'unknown' ? 'idle' : w
 }
 
 function DrawerBody(props: RunDrawerProps) {

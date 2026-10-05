@@ -1,7 +1,7 @@
 // Status of a run or of a node inside a run: always an icon and a word
 // (design direction §2.3, §2.11); the tone only reinforces them.
 
-import { CircleCheck, CircleDashed, CircleHelp, CircleSlash, CircleX, Clock, History, LoaderCircle } from 'lucide-react'
+import { CircleCheck, CircleDashed, CircleHelp, CirclePause, CircleSlash, CircleStop, CircleX, Clock, Hand, History, LoaderCircle } from 'lucide-react'
 import type { ComponentType, SVGProps } from 'react'
 import { defineLabels, useLabels } from '../internal/labels'
 import { normaliseStatus } from './lineage'
@@ -10,9 +10,45 @@ import type { RunWord } from './types'
 export type RunWordLabels = Record<RunWord, string>
 
 export const runWordLabels = defineLabels<RunWordLabels>('run-status', {
-  en: { idle: 'idle', pending: 'pending', running: 'running', completed: 'completed', failed: 'failed', skipped: 'skipped', restored: 'restored', unknown: 'unknown' },
-  'pt-BR': { idle: 'parada', pending: 'pendente', running: 'em execução', completed: 'concluída', failed: 'falhou', skipped: 'pulada', restored: 'reaproveitada', unknown: 'desconhecido' },
-  es: { idle: 'inactiva', pending: 'pendiente', running: 'en ejecución', completed: 'completada', failed: 'falló', skipped: 'omitida', restored: 'restaurada', unknown: 'desconocido' },
+  en: {
+    idle: 'idle',
+    pending: 'pending',
+    running: 'running',
+    'awaiting-approval': 'awaiting approval',
+    suspended: 'suspended',
+    completed: 'completed',
+    failed: 'failed',
+    cancelled: 'cancelled',
+    skipped: 'skipped',
+    restored: 'restored',
+    unknown: 'unknown',
+  },
+  'pt-BR': {
+    idle: 'parada',
+    pending: 'pendente',
+    running: 'em execução',
+    'awaiting-approval': 'aguardando aprovação',
+    suspended: 'suspensa',
+    completed: 'concluída',
+    failed: 'falhou',
+    cancelled: 'cancelada',
+    skipped: 'pulada',
+    restored: 'reaproveitada',
+    unknown: 'desconhecido',
+  },
+  es: {
+    idle: 'inactiva',
+    pending: 'pendiente',
+    running: 'en ejecución',
+    'awaiting-approval': 'esperando aprobación',
+    suspended: 'suspendida',
+    completed: 'completada',
+    failed: 'falló',
+    cancelled: 'cancelada',
+    skipped: 'omitida',
+    restored: 'restaurada',
+    unknown: 'desconocido',
+  },
 })
 
 export const defaultRunWordLabels: RunWordLabels = runWordLabels.bundles.en
@@ -34,8 +70,13 @@ const WORD_OF: Record<string, RunWord> = {
   failed: 'failed',
   error: 'failed',
   errored: 'failed',
-  cancelled: 'failed',
-  canceled: 'failed',
+  cancelled: 'cancelled',
+  canceled: 'cancelled',
+  aborted: 'cancelled',
+  paused_for_approval: 'awaiting-approval',
+  awaiting_approval: 'awaiting-approval',
+  suspended: 'suspended',
+  paused: 'suspended',
   skipped: 'skipped',
   restored: 'restored',
   served_from_history: 'restored',
@@ -53,6 +94,9 @@ const ICONS: Record<RunWord, ComponentType<SVGProps<SVGSVGElement>>> = {
   running: LoaderCircle,
   completed: CircleCheck,
   failed: CircleX,
+  'awaiting-approval': Hand,
+  suspended: CirclePause,
+  cancelled: CircleStop,
   skipped: CircleSlash,
   restored: History,
   unknown: CircleHelp,
