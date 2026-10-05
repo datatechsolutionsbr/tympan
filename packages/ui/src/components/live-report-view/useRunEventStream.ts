@@ -8,14 +8,14 @@ export interface RunStreamCallbacks {
   event: (event: RunEvent) => void
   /** Last event id seen, used to resume after a reconnect. */
   cursor: (lastEventId: string) => void
-  done: (outcome: 'completed' | 'failed') => void
+  done: (outcome: 'completed' | 'failed' | 'cancelled') => void
   error: (error: unknown) => void
 }
 
 /** Host transport: opens one connection and returns the function that closes it. */
 export type OpenRunStream = (flowId: string, runId: string, callbacks: RunStreamCallbacks, lastEventId: string | null) => () => void
 
-export type RunStreamStatus = 'idle' | 'streaming' | 'completed' | 'failed' | 'error'
+export type RunStreamStatus = 'idle' | 'streaming' | 'completed' | 'failed' | 'cancelled' | 'error'
 
 export interface RunStreamOptions {
   /** Consecutive retries before giving up (default 3). */
@@ -93,7 +93,7 @@ export function useRunEventStream(flowId: string | null, runId: string | null, o
           cursor: guard((id: string) => {
             cursor = id
           }),
-          done: guard((outcome: 'completed' | 'failed') => {
+          done: guard((outcome: 'completed' | 'failed' | 'cancelled') => {
             finished = true
             shutdown()
             setState((s) => ({ ...s, status: outcome }))

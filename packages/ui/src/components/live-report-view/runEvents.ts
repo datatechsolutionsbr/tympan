@@ -15,6 +15,7 @@ export type RunEvent =
   | { type: 'ui.section'; section: ReportSection; id?: string }
   | { type: 'run.completed'; id?: string }
   | { type: 'run.failed'; message: string; id?: string }
+  | { type: 'run.cancelled'; id?: string }
 
 export interface RunStep {
   id: string
@@ -97,6 +98,8 @@ export function reduceRunEvent(view: RunView, event: RunEvent): RunView {
       return { ...view, phase: 'completed', pausedStep: null }
     case 'run.failed':
       return { ...view, phase: 'failed', error: event.message, pausedStep: null }
+    case 'run.cancelled':
+      return { ...view, phase: 'cancelled', pausedStep: null }
     default:
       return view
   }
