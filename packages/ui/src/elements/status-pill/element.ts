@@ -18,6 +18,8 @@ const STATUS_MAP: Record<string, { tone: string; busy?: boolean; label: string }
   error: { tone: 'danger', label: 'Error' },
   success: { tone: 'success', label: 'Success' },
   cancelled: { tone: 'neutral', label: 'Cancelled' },
+  paused_for_approval: { tone: 'warning', label: 'Awaiting approval' },
+  suspended: { tone: 'warning', label: 'Suspended' },
 }
 
 /**

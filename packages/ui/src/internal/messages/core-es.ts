@@ -78,6 +78,8 @@ export const coreEs: CoreMessages = {
     error: 'Error',
     success: 'Éxito',
     cancelled: 'Cancelado',
+    awaitingApproval: 'Esperando aprobación',
+    suspended: 'Suspendido',
   },
   tag: { remove: (text) => `Quitar ${text}` },
   toast: { region: 'Notificaciones', dismiss: 'Descartar notificación' },

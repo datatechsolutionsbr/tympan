@@ -91,9 +91,11 @@ Every run view shows a status as an icon plus a word (`RunStatusMark`,
 | `suspended`           | `suspended`         | warning |
 | `completed`           | `completed`         | success |
 | `failed`              | `failed`            | danger  |
-| `cancelled`           | `cancelled`         | warning |
+| `cancelled`           | `cancelled`         | neutral |
 
-Cancelled is never shown as failed or as success. The live stream has its
+Cancelled is never shown as failed or as success: its tone is neutral
+everywhere (`RunStatusMark`, `toneForStatus`, `StatusPill`); awaiting
+approval and suspended share the pending (warning) tone. The live stream has its
 own `StreamStatus` (`idle`, `streaming`, `completed`, `failed`, `cancelled`,
 `error`); `cancelled`, like `completed` and `failed`, is the run's end, while
 `error` is the connection failing (`isTerminalStreamStatus`). A host that
