@@ -147,7 +147,8 @@ export const astrlabePreset: ThemeConfig = {
       'surface-raised': 'rgb(255 255 255 / 0.86)',
       'surface-solid': '#ffffff',
       'surface-raised-solid': '#ffffff',
-      'surface-sunken': '#f1f5f9',
+      // The canvas plane: the app's pale lavender ground.
+      'surface-sunken': '#f2f3fa',
       // The liquid divider: slate 400 at about a quarter.
       line: 'rgb(148 163 184 / 0.26)',
       'line-strong': 'rgb(100 116 139 / 0.45)',
@@ -269,11 +270,12 @@ export const astrlabePreset: ThemeConfig = {
       'wordmark-gradient': 'linear-gradient(90deg, #38bdf8, #818cf8, #a855f7)',
     },
   },
-  // The app's type scale: 24 px page titles, 18 px sections, 16 px
+  // The app's type scale: 30 px display, 24 px page titles, 18 px sections, 16 px
   // sub-sections, 14 px labels, tight tracking on titles.
   strings: {
-    'font-size-display': '24px',
-    'font-line-height-display': '32px',
+    // The display step is the 30 px wordmark of the sign-in screens.
+    'font-size-display': '30px',
+    'font-line-height-display': '36px',
     'font-size-h1': '24px',
     'font-line-height-h1': '32px',
     'font-size-h2': '18px',
