@@ -1,8 +1,12 @@
 /* StepList (spec: wave-2/step-list.md; design direction §2.2, §2.3, §2.10). */
 @layer tympan.components {
+  /* The compact layout follows the list's own width, not the viewport's:
+     inside a card or dialog narrower than the window, three labelled steps
+     squeezed the names to one letter per line under the connectors. */
   .ty-step-list {
     --ty-step-ink: var(--ty-ink-3);
     --ty-step-edge: var(--ty-line-strong);
+    container: ty-step-list / inline-size;
     min-inline-size: 0;
   }
   .ty-step-list__list {
@@ -128,7 +132,7 @@
   .ty-step-list[data-appearance='bar'] .ty-step-list__step[data-status='upcoming'] {
     border-block-start-color: var(--ty-line);
   }
-  @media (max-width: 639.98px) {
+  @container ty-step-list (max-width: 39.99rem) {
     .ty-step-list[data-appearance='markers'] .ty-step-list__text {
       position: absolute;
       inline-size: 1px;
