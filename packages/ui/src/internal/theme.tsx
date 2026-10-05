@@ -42,10 +42,13 @@ export interface ThemeProviderProps {
    */
   storageKey?: string
   /**
-   * Font stylesheet per theme name (for example `printThemeFontUrls` from
-   * the tokens package). The URL of the current theme is added as a
-   * `<link rel="stylesheet">` (in `<head>` for `document`, inside the wrapper
-   * for `scope`); themes without an entry load nothing.
+   * Extra font stylesheet per theme name, for the host's own themes. The
+   * fonts of every built-in and print theme are bundled with
+   * `@font-face` in the token sheets, so this is optional and empty by
+   * default (nothing is fetched from a third party). The URL of the current
+   * theme is added as a `<link rel="stylesheet">` (in `<head>` for
+   * `document`, inside the wrapper for `scope`); themes without an entry
+   * load nothing.
    */
   fonts?: Readonly<Record<string, string>>
   className?: string
@@ -171,7 +174,7 @@ export function useTheme(): ThemeState {
  */
 export function themeInitScript(storageKey = 'ty-theme', defaults: Stored = {}, options: { fonts?: Readonly<Record<string, string>> } = {}): string {
   const d = JSON.stringify({ theme: defaults.theme ?? 'tympan', mode: defaults.mode ?? 'system', density: defaults.density ?? 'default' })
-  // Optional: the font stylesheet of the stored theme, added before first paint (same link ThemeProvider `fonts` manages).
+  // Optional: a host font stylesheet for the stored theme, added before first paint (same link ThemeProvider `fonts` manages). Built-in and print theme fonts are bundled and need none.
   const fonts = options.fonts && Object.keys(options.fonts).length
     ? `var f=${JSON.stringify(options.fonts).replace(/</g, '\\u003c')}[t];if(f){var l=document.createElement('link');l.rel='stylesheet';l.href=f;l.setAttribute('data-ty-theme-fonts','');document.head.appendChild(l);}`
     : ''

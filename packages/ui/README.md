@@ -39,16 +39,30 @@ the tokens without components can import `@datatechsolutions/tympan-tokens/token
 **Print styles as themes (opt-in).** Every book style of
 `@datatechsolutions/tympan-print` is also a UI theme named `print-<style>`
 (palette, typography, radius and surface treatment of the style, light and
-dark, WCAG AA). They are not in `styles.css`; load them after it and pass the
-font map so the style's families load with the theme:
+dark, WCAG AA). They are not in `styles.css`; load them after it. Each
+sheet carries the `@font-face` rules of its style's families, served from the
+tokens package, so no font map is needed:
 
 ```tsx
 import '@datatechsolutions/tympan/styles.css'
 import '@datatechsolutions/tympan-tokens/print-themes.css'   // or print-themes/print-<style>.css for one
-import { printThemeFontUrls } from '@datatechsolutions/tympan-tokens'
 
-<ThemeProvider theme="print-minimo-de-tinta" fonts={printThemeFontUrls}>…</ThemeProvider>
+<ThemeProvider theme="print-minimo-de-tinta">…</ThemeProvider>
 ```
+
+**Fonts come in the package.** Every family a Tympan theme names (Source
+Serif 4, IBM Plex Sans and Mono, the Noto families of each script, CJK
+included, and the families of the print themes) is bundled as woff2 in
+`@datatechsolutions/tympan-tokens/fonts/` (SIL OFL 1.1). `styles.css` starts
+with `@import '@datatechsolutions/tympan-tokens/fonts.css'`, which your
+bundler (Vite, webpack, Parcel …) resolves and whose font URLs it rebases and
+emits as assets. A face is downloaded only when text uses it and falls in its
+`unicode-range`, so a Latin-only page fetches a few Latin slices and nothing
+goes to Google Fonts or any other third party at runtime (CSP needs only
+`font-src 'self'`). Serving `styles.css` without a bundler, copy
+`node_modules/@datatechsolutions/tympan-tokens/{dist,fonts}` side by side and
+point the import at that `dist/fonts.css`, or drop the line to fall back to
+system faces.
 
 Print styles renamed to neutral ids keep their old theme names as deprecated
 aliases: `ThemeProvider` and `themeInitScript` read a stored or passed
@@ -142,12 +156,13 @@ export function App() {
   `dark`) and `data-ty-density` (`compact`, `default`, `comfortable`) on
   `<html>` (or on a wrapper with `target="scope"`). Persistence belongs to the
   host: pass controlled values and callbacks, or `storageKey` for localStorage.
-  `fonts` (theme name to stylesheet URL, e.g. `printThemeFontUrls`) adds the
-  font link of the current theme.
+  The fonts of every built-in and print theme are bundled (above); the
+  optional `fonts` prop (theme name to stylesheet URL) adds a `<link>` for
+  extra fonts of the host's own themes and loads nothing by default.
 - **No flash of the wrong theme (SPA)**: put the output of
   `themeInitScript('ty-theme')` in an inline `<script>` in `<head>`, before the
   stylesheet; it sets the three attributes from storage before first paint
-  (`themeInitScript(key, defaults, { fonts })` also adds the theme's font link).
+  (`themeInitScript(key, defaults, { fonts })` also adds a host font link, if you pass one).
   The gallery's `vite.config.ts` shows it with a `transformIndexHtml` hook.
 - **`ThemeScope`**: applies a theme/mode/density to a subtree (previews).
 - **`variants()`**: variants declared as data; returns `data-*` attributes the

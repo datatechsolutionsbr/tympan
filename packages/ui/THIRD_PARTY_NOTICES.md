@@ -8,6 +8,13 @@ and `@datatechsolutions/tympan-tokens` are licensed under FSL-1.1-ALv2
 below, except the flag artwork of flag-icons, which is bundled (see
 "Bundled artwork"). Versions are those resolved on 2026-09-26.
 
+## Bundled fonts
+
+`dist/styles.css` imports `@datatechsolutions/tympan-tokens/fonts.css`; the
+font files themselves (97 families, SIL OFL 1.1, from Google Fonts) ship in
+`@datatechsolutions/tympan-tokens/fonts/`, listed with their versions and
+licences in that package's `THIRD_PARTY_NOTICES.md` and `fonts/manifest.json`.
+
 ## Runtime dependencies
 
 | Package | Version | Licence | Use |
