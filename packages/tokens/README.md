@@ -15,15 +15,42 @@ npm test -w @datatechsolutions/tympan-tokens           # vitest: colour math, ra
 
 | Output | Content |
 |---|---|
-| `@datatechsolutions/tympan-tokens/tokens.css` | every `--ty-*` custom property, in `@layer tympan.tokens` |
+| `@datatechsolutions/tympan-tokens/tokens.css` | every `--ty-*` custom property, in `@layer tympan.tokens`; starts with `@import './fonts.css'` |
+| `@datatechsolutions/tympan-tokens/fonts.css` | `@font-face` rules (font-display swap, unicode-range slices) for the base stacks and the per-script Noto families |
+| `@datatechsolutions/tympan-tokens/fonts/` | the bundled woff2 files, their licences (`<family>/OFL.txt`) and `manifest.json` (family, weights, version, origin, licence, size) |
 | `@datatechsolutions/tympan-tokens/tokens.json` | resolved values: base, density steps, each preset × mode (× high contrast) |
 | `@datatechsolutions/tympan-tokens/dtcg/*.tokens.json` | W3C DTCG trees (2025.10 format) of every set, as fed to Style Dictionary (`dtcg/print/` for the print themes) |
 | `@datatechsolutions/tympan-tokens/print-themes.css` | opt-in: every print book style as a UI theme (`data-ty-theme="print-<style>"`), light, dark and high contrast |
 | `@datatechsolutions/tympan-tokens/print-themes/<theme>.css` | opt-in: one print theme per file (for example `print-themes/print-suico.css`) |
-| `@datatechsolutions/tympan-tokens/print-themes.json` | name, label, font stylesheet URL and CSS file of each print theme |
+| `@datatechsolutions/tympan-tokens/print-themes.json` | name, label, CSS file and (legacy) Google Fonts URL of each print theme |
 | `@datatechsolutions/tympan-tokens/values` | the resolved values as a typed JS module (`values`, `cssVar()`) |
 | `@datatechsolutions/tympan-tokens` | the generator: colour math, `resolveTheme`, presets, `generateThemeCss`, DTCG conversion |
 | `dist/contrast-report.md` | WCAG ratio and APCA Lc of every declared pair, per preset and mode |
+
+## Fonts
+
+Every family a theme names ships in the package as woff2 (97 families, SIL
+OFL 1.1, from Google Fonts; see `THIRD_PARTY_NOTICES.md` and
+`fonts/manifest.json`): Source Serif 4, IBM Plex Sans and Mono, the Noto
+families of the per-script `:lang()` stacks (Arabic, Hebrew, Indic, Thai,
+Ethiopic, CJK …) and every print theme's families. Files are sliced by
+`unicode-range` the way Google Fonts serves them; a browser downloads a slice
+only when text uses that face and falls in its range, so the CJK families
+(about 41 MB of the 55 MB) cost nothing on a page without CJK text.
+
+- `tokens.css` imports `./fonts.css` (base stacks and Noto); a bundler
+  resolves the relative URLs (`../fonts/<family>/<file>.woff2`) and emits the
+  files as assets. `@datatechsolutions/tympan/styles.css` keeps the same
+  import as `@import '@datatechsolutions/tympan-tokens/fonts.css'`.
+- The print theme sheets carry their own families' rules.
+- To opt out (strict size budget, own font hosting): import the tokens
+  without the fonts by aliasing `@datatechsolutions/tympan-tokens/fonts.css`
+  to an empty file in your bundler; the stacks then fall back to system
+  faces. `fontFaceCss(manifest, specs, base)` builds the same rules for a
+  subset of families.
+- `node scripts/fetch-fonts.mjs` (`npm run fetch-fonts`) refetches the files
+  from `BASE_FONT_SPECS`, `SCRIPT_FONT_SPECS` and the print styles'
+  `googleFonts`; the build fails when a spec has no bundled files.
 
 ## Token model
 
@@ -142,8 +169,8 @@ focus ring, slate 50 / 950 grounds, glass surfaces).
 style draws on is named only in its description (`referencia`, "inspirado em
 …").
 Optional fields cover page ornaments (`estrutura.moldura`, `cor.ornamento`),
-columns (`estrutura.barras`), running-head bands and title treatments. Each `PrintStyle` names its fonts (Google Fonts,
-OFL), paper and ink, data and proof-state colours, paper texture, stroke,
+columns (`estrutura.barras`), running-head bands and title treatments. Each `PrintStyle` names its fonts (Google Fonts
+families, OFL, bundled in `fonts/`), paper and ink, data and proof-state colours, paper texture, stroke,
 chart renderer, proof-mark shape and page structure.
 
 ```ts
@@ -227,8 +254,11 @@ example `print-suico`, `print-minimo-de-tinta`). The mapping is data-driven:
   accent kept as the brand where it reads.
 - **Typography**: `fonts.display` and `fonts.body` are the style's title and
   body stacks; `fonts.mono` is the style's mono stack only when it is really
-  monospace (otherwise the base mono stays). `fontsUrl` is the style's Google
-  Fonts css2 URL (`googleFontsUrl`) limited to those families.
+  monospace (otherwise the base mono stays). The theme's sheet declares the
+  bundled `@font-face` rules of the style's families (`printThemeFontSpecs`).
+  `fontsUrl` (the style's Google Fonts css2 URL, `googleFontsUrl`) and
+  `printThemeFontUrls` remain as legacy API for hosts that prefer Google's
+  CDN; the themes no longer need them.
 - **Surface**: radius from the print corner radius (mm at 96 dpi); glass,
   a gradient call to action and soft shadows only for the card and wash
   styles (`dashboard`, `aquarela`); flat shadows for the ruled print styles
@@ -246,18 +276,16 @@ The print themes are **not** in `tokens.css`. To enable them in an app:
 
 ```ts
 import '@datatechsolutions/tympan/styles.css'                      // or tokens.css
-import '@datatechsolutions/tympan-tokens/print-themes.css'         // all print themes (about 2 MB, 160 kB gzip)
+import '@datatechsolutions/tympan-tokens/print-themes.css'         // all print themes (about 2.3 MB, with their @font-face rules)
 // or only the ones you offer:
 import '@datatechsolutions/tympan-tokens/print-themes/print-suico.css'
 
-import { printThemeFontUrls } from '@datatechsolutions/tympan-tokens'
-<ThemeProvider theme="print-suico" fonts={printThemeFontUrls}>…</ThemeProvider>
+<ThemeProvider theme="print-suico">…</ThemeProvider>
 ```
 
-`ThemeProvider`'s `fonts` map (theme name to stylesheet URL) adds the font
-link of the current theme; `themeInitScript(key, defaults, { fonts })` does the
-same before first paint. Without it the stacks fall back to the style's
-system families. `generatePrintThemesCss(list)` builds the same sheet at
+Each sheet declares the `@font-face` rules of its style's families, with URLs
+relative to the package's `fonts/`; the files load only when the theme is
+active and text uses them. `generatePrintThemesCss(list)` builds the same sheet at
 runtime. A default theme nested inside a print theme inherits the print
 fonts, because the built-in presets do not redeclare the font tokens.
 

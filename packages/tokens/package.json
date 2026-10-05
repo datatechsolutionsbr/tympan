@@ -40,6 +40,8 @@
       "default": "./dist/print-aliases.js"
     },
     "./tokens.css": "./dist/tokens.css",
+    "./fonts.css": "./dist/fonts.css",
+    "./fonts/*": "./fonts/*",
     "./print-themes.css": "./dist/print-themes.css",
     "./print-themes/*": "./dist/print-themes/*",
     "./print-themes.json": "./dist/print-themes.json",
@@ -51,14 +53,17 @@
   "files": [
     "dist",
     "src",
+    "fonts",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "THIRD_PARTY_NOTICES.md"
   ],
   "scripts": {
     "build": "node scripts/build.mjs && tsdown",
     "typecheck": "tsc --noEmit -p tsconfig.json && node scripts/build.mjs --check",
     "test": "vitest run",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "fetch-fonts": "node scripts/fetch-fonts.mjs"
   },
   "devDependencies": {
     "style-dictionary": "^5.5.5"

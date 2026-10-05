@@ -398,7 +398,20 @@ function draftPrintTheme(style: PrintStyle, override: PrintThemeOverride = PRINT
 /** Every book style as a UI theme, in the order of `printPresets`. */
 export const printThemePresets: readonly ThemeConfig[] = (Object.values(printPresets) as PrintStyle[]).map((s) => printStyleToTheme(s))
 
-/** Stylesheet URL of the families of each print theme, by theme name (for ThemeProvider's `fonts`). */
+/**
+ * Legacy: Google Fonts stylesheet URL of the families of each print theme, by
+ * theme name. The print theme sheets now declare the bundled fonts
+ * (`printThemeFontSpecs`), so ThemeProvider needs no `fonts` map; this stays
+ * for hosts that prefer Google's CDN.
+ */
 export const printThemeFontUrls: Readonly<Record<string, string>> = Object.fromEntries(
   printThemePresets.filter((t) => t.fontsUrl).map((t) => [t.name, t.fontsUrl!]),
+)
+
+/**
+ * Google Fonts specs of each print theme, by theme name: the families its
+ * stacks name, bundled under fonts/ and declared in the theme's sheet.
+ */
+export const printThemeFontSpecs: Readonly<Record<string, readonly string[]>> = Object.fromEntries(
+  (Object.values(printPresets) as PrintStyle[]).map((s) => [`${PRINT_THEME_PREFIX}${s.name}`, [...s.googleFonts]]),
 )

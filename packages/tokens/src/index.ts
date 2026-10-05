@@ -8,6 +8,7 @@ export * from './flow.ts'
 export * from './print-presets.ts'
 export * from './print-themes.ts'
 export * from './print-aliases.ts'
+export * from './fonts.ts'
 
 import { presets as corePresets } from './presets.ts'
 import { printThemePresets } from './print-themes.ts'
