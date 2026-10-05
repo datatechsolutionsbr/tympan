@@ -4,10 +4,24 @@
 import type { ActorKind } from '../../index'
 
 /** Status word every run view shows (always beside an icon). */
-export type RunWord = 'idle' | 'pending' | 'running' | 'completed' | 'failed' | 'skipped' | 'restored' | 'unknown'
+export type RunWord =
+  | 'idle'
+  | 'pending'
+  | 'running'
+  | 'awaiting-approval'
+  | 'suspended'
+  | 'completed'
+  | 'failed'
+  | 'cancelled'
+  | 'skipped'
+  | 'restored'
+  | 'unknown'
 
-/** State of the connection that delivers run events. */
-export type StreamStatus = 'idle' | 'streaming' | 'completed' | 'failed' | 'error'
+/**
+ * State of the connection that delivers run events. `completed`, `failed`
+ * and `cancelled` are the run's own end; `error` is the connection failing.
+ */
+export type StreamStatus = 'idle' | 'streaming' | 'completed' | 'failed' | 'cancelled' | 'error'
 
 /** The person, agent or system behind a run or a version (design direction §2.11). */
 export type RunActor = { kind: ActorKind; name: string } & Partial<Record<'agentKey' | 'model' | 'email', string>>
@@ -43,6 +57,7 @@ interface RunEventPayloads {
   'run-started': { runId?: string }
   'run-completed': { runId?: string }
   'run-failed': { runId?: string; error?: string }
+  'run-cancelled': { runId?: string }
   'node-started': { nodeId: string }
   'node-completed': { nodeId: string } & StepTiming
   'node-restored': { nodeId: string } & StepTiming

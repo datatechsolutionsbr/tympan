@@ -36,6 +36,7 @@ export function applyRunEvent(actions: ProjectionActions, event: RunEvent): void
       return
     case 'run-completed':
     case 'run-failed':
+    case 'run-cancelled':
       actions.setRunning(false)
       return
     default:
@@ -49,7 +50,12 @@ export function resetRunProjection(actions: ProjectionActions): void {
   actions.setRunning(false)
 }
 
-const TERMINAL: readonly StreamStatus[] = ['completed', 'failed', 'error']
+const TERMINAL: readonly StreamStatus[] = ['completed', 'failed', 'cancelled', 'error']
+
+/** True for a stream status that ends the run (or the connection, for `error`). */
+export function isTerminalStreamStatus(status: StreamStatus): boolean {
+  return TERMINAL.includes(status)
+}
 
 /**
  * Applies only the events not yet applied. Clears results only on a genuine
@@ -97,7 +103,7 @@ export interface FlowExecution {
   events: readonly RunEvent[]
 }
 
-const ENDS = new Set(['run-completed', 'run-failed'])
+const ENDS = new Set(['run-completed', 'run-failed', 'run-cancelled'])
 
 export function useFlowExecution(flowId: string, startRun: StartRun, openStream: OpenRunStream, cancelRun?: CancelRun): FlowExecution {
   const [isRunning, setIsRunning] = useState(false)
