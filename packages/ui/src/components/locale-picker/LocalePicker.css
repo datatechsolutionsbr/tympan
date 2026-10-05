@@ -15,9 +15,12 @@
     gap: var(--ty-space-1);
     outline: none;
   }
+  /* Columns follow the surface's width, not the viewport's: a dialog is
+     narrower than the window, and three viewport-driven columns squeezed
+     names such as "Español" into the code beside them. */
   .ty-locale-picker__list[data-layout='grid'] {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
   }
   .ty-locale-picker__option {
     display: flex;
@@ -53,6 +56,7 @@
     min-inline-size: 0;
   }
   .ty-locale-picker__code {
+    flex: none;
     color: var(--ty-ink-3);
     font-family: var(--ty-font-mono);
     font-size: var(--ty-font-size-meta);
@@ -70,12 +74,6 @@
     color: var(--ty-ink-3);
     font-size: var(--ty-font-size-meta);
     line-height: var(--ty-font-line-height-meta);
-  }
-
-  @media (min-width: 640px) {
-    .ty-locale-picker__list[data-layout='grid'] {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
   }
 
   @media (forced-colors: active) {
