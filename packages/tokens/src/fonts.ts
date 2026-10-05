@@ -2,6 +2,8 @@
 // files inside this package (packages/tokens/fonts/, fetched once by
 // scripts/fetch-fonts.mjs and committed), declared with @font-face in
 // dist/fonts.css (imported by tokens.css) and in the print theme sheets.
+// The CJK families are the exception: they ship in the optional
+// @datatechsolutions/tympan-fonts-cjk package (see CJK_FONT_FAMILIES).
 // @font-face only downloads a file when text uses that face and falls in its
 // unicode-range, so nothing is fetched from a third party at runtime and an
 // unused script or theme costs nothing.
@@ -53,8 +55,31 @@ export const SCRIPT_FONT_FAMILIES: readonly string[] = [
 
 export const SCRIPT_FONT_SPECS: readonly string[] = SCRIPT_FONT_FAMILIES.map((f) => `${f}:${NOTO_WEIGHTS}`)
 
-/** Every spec whose faces go into dist/fonts.css (and so tokens.css). */
-export const CORE_FONT_SPECS: readonly string[] = [...BASE_FONT_SPECS, ...SCRIPT_FONT_SPECS]
+/**
+ * The CJK Noto families (about 41 MB of woff2). The token stacks and the
+ * `:lang()` rules still name them, but their files and @font-face rules live
+ * in the optional package @datatechsolutions/tympan-fonts-cjk (activated with
+ * `import '@datatechsolutions/tympan-fonts-cjk/fonts.css'`); without it the
+ * browser falls back to the system CJK faces.
+ */
+export const CJK_FONT_FAMILIES: readonly string[] = [
+  'Noto Sans JP',
+  'Noto Serif JP',
+  'Noto Sans SC',
+  'Noto Serif SC',
+  'Noto Sans TC',
+  'Noto Serif TC',
+  'Noto Sans KR',
+  'Noto Serif KR',
+]
+
+const isCjkSpec = (spec: string) => CJK_FONT_FAMILIES.includes(spec.split(':')[0]!)
+
+/** Specs whose faces go into the fonts.css of @datatechsolutions/tympan-fonts-cjk. */
+export const CJK_FONT_SPECS: readonly string[] = SCRIPT_FONT_SPECS.filter(isCjkSpec)
+
+/** Every spec whose faces go into dist/fonts.css (and so tokens.css): base and non-CJK Noto. */
+export const CORE_FONT_SPECS: readonly string[] = [...BASE_FONT_SPECS, ...SCRIPT_FONT_SPECS.filter((s) => !isCjkSpec(s))]
 
 /**
  * Family names that are platform faces, generic keywords or legacy aliases

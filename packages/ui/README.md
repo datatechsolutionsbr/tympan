@@ -51,8 +51,8 @@ import '@datatechsolutions/tympan-tokens/print-themes.css'   // or print-themes/
 ```
 
 **Fonts come in the package.** Every family a Tympan theme names (Source
-Serif 4, IBM Plex Sans and Mono, the Noto families of each script, CJK
-included, and the families of the print themes) is bundled as woff2 in
+Serif 4, IBM Plex Sans and Mono, the Noto families of each script and the
+families of the print themes) is bundled as woff2 in
 `@datatechsolutions/tympan-tokens/fonts/` (SIL OFL 1.1). `styles.css` starts
 with `@import '@datatechsolutions/tympan-tokens/fonts.css'`, which your
 bundler (Vite, webpack, Parcel …) resolves and whose font URLs it rebases and
@@ -63,6 +63,17 @@ goes to Google Fonts or any other third party at runtime (CSP needs only
 `node_modules/@datatechsolutions/tympan-tokens/{dist,fonts}` side by side and
 point the import at that `dist/fonts.css`, or drop the line to fall back to
 system faces.
+
+**CJK fonts are optional.** The Japanese, Chinese and Korean Noto families
+(about 41 MB) are not in `tympan-tokens`; without them CJK text uses the
+system faces (macOS and Windows have them). To bundle them, install
+`@datatechsolutions/tympan-fonts-cjk` and import its sheet once, next to
+`styles.css`:
+
+```tsx
+import '@datatechsolutions/tympan/styles.css'
+import '@datatechsolutions/tympan-fonts-cjk/fonts.css'
+```
 
 Print styles renamed to neutral ids keep their old theme names as deprecated
 aliases: `ThemeProvider` and `themeInitScript` read a stored or passed

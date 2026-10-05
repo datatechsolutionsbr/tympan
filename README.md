@@ -7,6 +7,7 @@ print components.
 | Package | Path | What it is |
 |---|---|---|
 | `@datatechsolutions/tympan-tokens` | `packages/tokens` | Design tokens in the W3C DTCG format (colour, space, radius, type, elevation and glass, motion, z) and an OKLCH theme generator, built to `--ty-*` CSS custom properties, JSON and a TypeScript export. Presets: `tympan` (default), `fakhir`, `astrlabe`, `neutral`, `high-contrast`. Formerly `@fakhir/tokens`. |
+| `@datatechsolutions/tympan-fonts-cjk` | `packages/fonts-cjk` | Optional: the CJK Noto families (Sans and Serif JP, SC, TC, KR, about 41 MB of woff2) named by the token stacks, with their `@font-face` rules. Without it CJK text uses the system faces. |
 | `@datatechsolutions/tympan` | `packages/ui` | Accessible React components (React 18.3 or 19) on React Aria Components, styled with plain CSS in `@layer tympan`, and, as the `@datatechsolutions/tympan/flow` subpath (`src/flow`), the flow and provenance canvas: a W3C PROV provenance graph viewer, a DAG workflow editor, run inspection and the forms and dialogs around them. Formerly `@fakhir/ui` (before that `@fakhir/design-system`). |
 | `@datatechsolutions/tympan-print` | `packages/print` | Static, server-renderable React components for data books (spreads, lettered panels, method charts with eight renderers, proof-state marks, number trace, lakebrasil and Datatech marks) in the book-style presets of the tokens package, for PDF and EPUB. |
 
@@ -38,6 +39,18 @@ import '@datatechsolutions/tympan/flow.css'     // only if you use the flow canv
 import { TympanProvider, Button } from '@datatechsolutions/tympan'
 import { ProvenanceGraph } from '@datatechsolutions/tympan/flow'
 import { presets, resolveTheme } from '@datatechsolutions/tympan-tokens'
+```
+
+The fonts of every theme come with the tokens package, except the CJK Noto
+families, which are an optional package (about 41 MB of woff2; without it,
+Japanese, Chinese and Korean text uses the system faces):
+
+```sh
+npm install @datatechsolutions/tympan-fonts-cjk
+```
+
+```tsx
+import '@datatechsolutions/tympan-fonts-cjk/fonts.css'
 ```
 
 The published packages contain compiled ES modules (`dist/*.js`), type
@@ -72,11 +85,11 @@ Galleries: `npm run gallery -w @datatechsolutions/tympan` (components, theme cus
 
 ## Releasing
 
-Versions are kept in lockstep: the three published packages always carry the
+Versions are kept in lockstep: the four published packages always carry the
 same version, and the internal dependencies use a caret range on it
 (`"@datatechsolutions/tympan-tokens": "^0.3.0"`).
 
-1. Bump the three versions and the internal ranges in one step, then refresh
+1. Bump the four versions and the internal ranges in one step, then refresh
    the lockfile and check everything:
 
    ```sh
@@ -95,8 +108,8 @@ same version, and the internal dependencies use a caret range on it
 
 3. The `Release` workflow (`.github/workflows/release.yml`) runs on the `v*`
    tag: it checks that the tag matches the package versions, runs the guards,
-   build, typecheck and tests, and publishes the tokens, then the components,
-   then the print package with `npm publish` (each package builds itself in
+   build, typecheck and tests, and publishes the tokens, then the CJK fonts, then the
+   components, then the print package with `npm publish` (each package builds itself in
    `prepack`).
 
 The workflow authenticates with npm **trusted publishing** (OpenID Connect):
@@ -111,6 +124,7 @@ manual**, by a maintainer with publish rights on the scope:
 npm login
 npm run check
 npm publish -w @datatechsolutions/tympan-tokens --access public
+npm publish -w @datatechsolutions/tympan-fonts-cjk --access public
 npm publish -w @datatechsolutions/tympan --access public
 npm publish -w @datatechsolutions/tympan-print --access public
 ```

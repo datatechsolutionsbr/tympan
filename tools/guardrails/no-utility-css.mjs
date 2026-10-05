@@ -1,7 +1,7 @@
 // check:no-utility-css — the clean-room library must stay free of utility-class
 // CSS frameworks. Fails on (the forbidden patterns are listed below):
 //  - any forbidden utility-CSS or class-variance-authority dependency in
-//    the package.json of packages/tokens, packages/ui (with the flow canvas)
+//    the package.json of packages/tokens, packages/fonts-cjk, packages/ui (with the flow canvas)
 //    or packages/print, or in their package-lock.json entries;
 //  - shadcn registry files (components.json);
 //  - utility-framework at-rules in CSS (CSS_DIRECTIVE below);

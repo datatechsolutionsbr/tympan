@@ -1,5 +1,5 @@
 // check:logical-css — Tympan supports right-to-left scripts, so layout CSS in
-// packages/tokens, packages/ui (with the flow canvas) and packages/print uses logical properties only.
+// packages/tokens, packages/fonts-cjk, packages/ui (with the flow canvas) and packages/print uses logical properties only.
 // Fails on physical left/right properties and values:
 //  - margin-left/right, padding-left/right, border-left/right(-*),
 //    border-*-left/right-radius, scroll-margin/padding-left/right, left:, right:;

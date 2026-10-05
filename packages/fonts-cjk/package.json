@@ -1,0 +1,48 @@
+{
+  "name": "@datatechsolutions/tympan-fonts-cjk",
+  "version": "0.4.0",
+  "description": "Optional Tympan font package: the CJK Noto families named by the @datatechsolutions/tympan-tokens stacks (Noto Sans and Serif JP, SC, TC, KR) as self-hosted woff2 sliced by unicode-range, with their @font-face rules. Activate with import '@datatechsolutions/tympan-fonts-cjk/fonts.css'.",
+  "license": "OFL-1.1",
+  "author": "Natalia Mesquita",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/datatechsolutionsbr/tympan.git",
+    "directory": "packages/fonts-cjk"
+  },
+  "keywords": [
+    "fonts",
+    "cjk",
+    "noto",
+    "woff2",
+    "font-face",
+    "tympan"
+  ],
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    "./fonts.css": "./dist/fonts.css",
+    "./fonts/*": "./fonts/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "fonts",
+    "LICENSE",
+    "README.md",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "node scripts/build.mjs --check",
+    "prepack": "npm run build"
+  },
+  "homepage": "https://github.com/datatechsolutionsbr/tympan#readme",
+  "bugs": {
+    "url": "https://github.com/datatechsolutionsbr/tympan/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

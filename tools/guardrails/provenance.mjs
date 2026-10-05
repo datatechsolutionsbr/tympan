@@ -1,7 +1,7 @@
 // check:provenance — hard-fail markers that would suggest material from the
 // forked component library or commercial templates leaked into the clean room,
 // and imports of avatar artwork outside the licence allow-list.
-// Scans every file of packages/tokens, packages/ui (with the flow canvas) and packages/print except build
+// Scans every file of packages/tokens, packages/fonts-cjk, packages/ui (with the flow canvas) and packages/print except build
 // output and node_modules. The similarity comparison against the fork runs
 // outside the clean room (see tools/provenance/README.md).
 import { lineOf, read, rel, report, walk } from './lib.mjs'

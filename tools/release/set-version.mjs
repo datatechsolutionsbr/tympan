@@ -1,4 +1,4 @@
-// Sets one version on the three published packages and the caret ranges between them.
+// Sets one version on the four published packages and the caret ranges between them.
 //
 //   node tools/release/set-version.mjs 0.3.1        # write
 //   node tools/release/set-version.mjs --check v0.3.1  # exit 1 unless every package is at that version
@@ -7,7 +7,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..')
-const PACKAGES = ['tokens', 'ui', 'print'].map((dir) => join(root, 'packages', dir, 'package.json'))
+const PACKAGES = ['tokens', 'fonts-cjk', 'ui', 'print'].map((dir) => join(root, 'packages', dir, 'package.json'))
 const SCOPE = '@datatechsolutions/'
 const SEMVER = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/
 

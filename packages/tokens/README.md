@@ -16,7 +16,7 @@ npm test -w @datatechsolutions/tympan-tokens           # vitest: colour math, ra
 | Output | Content |
 |---|---|
 | `@datatechsolutions/tympan-tokens/tokens.css` | every `--ty-*` custom property, in `@layer tympan.tokens`; starts with `@import './fonts.css'` |
-| `@datatechsolutions/tympan-tokens/fonts.css` | `@font-face` rules (font-display swap, unicode-range slices) for the base stacks and the per-script Noto families |
+| `@datatechsolutions/tympan-tokens/fonts.css` | `@font-face` rules (font-display swap, unicode-range slices) for the base stacks and the per-script Noto families (CJK in `@datatechsolutions/tympan-fonts-cjk/fonts.css`) |
 | `@datatechsolutions/tympan-tokens/fonts/` | the bundled woff2 files, their licences (`<family>/OFL.txt`) and `manifest.json` (family, weights, version, origin, licence, size) |
 | `@datatechsolutions/tympan-tokens/tokens.json` | resolved values: base, density steps, each preset × mode (× high contrast) |
 | `@datatechsolutions/tympan-tokens/dtcg/*.tokens.json` | W3C DTCG trees (2025.10 format) of every set, as fed to Style Dictionary (`dtcg/print/` for the print themes) |
@@ -29,16 +29,26 @@ npm test -w @datatechsolutions/tympan-tokens           # vitest: colour math, ra
 
 ## Fonts
 
-Every family a theme names ships in the package as woff2 (97 families, SIL
+Every family a theme names ships in the package as woff2 (89 families, SIL
 OFL 1.1, from Google Fonts; see `THIRD_PARTY_NOTICES.md` and
 `fonts/manifest.json`): Source Serif 4, IBM Plex Sans and Mono, the Noto
 families of the per-script `:lang()` stacks (Arabic, Hebrew, Indic, Thai,
-Ethiopic, CJK …) and every print theme's families. Files are sliced by
+Ethiopic …) and every print theme's families. Files are sliced by
 `unicode-range` the way Google Fonts serves them; a browser downloads a slice
-only when text uses that face and falls in its range, so the CJK families
-(about 41 MB of the 55 MB) cost nothing on a page without CJK text.
+only when text uses that face and falls in its range.
 
-- `tokens.css` imports `./fonts.css` (base stacks and Noto); a bundler
+The CJK Noto families (Noto Sans and Serif JP, SC, TC, KR; about 41 MB) are
+the exception: the stacks and `:lang()` rules still name them, but their
+files and `@font-face` rules are in the optional package
+`@datatechsolutions/tympan-fonts-cjk` (`CJK_FONT_FAMILIES`,
+`CJK_FONT_SPECS`). Without it, CJK text falls back to the system faces (macOS
+and Windows cover CJK); with it, the bundled faces load:
+
+```ts
+import '@datatechsolutions/tympan-fonts-cjk/fonts.css'
+```
+
+- `tokens.css` imports `./fonts.css` (base stacks and non-CJK Noto); a bundler
   resolves the relative URLs (`../fonts/<family>/<file>.woff2`) and emits the
   files as assets. `@datatechsolutions/tympan/styles.css` keeps the same
   import as `@import '@datatechsolutions/tympan-tokens/fonts.css'`.
@@ -50,7 +60,9 @@ only when text uses that face and falls in its range, so the CJK families
   subset of families.
 - `node scripts/fetch-fonts.mjs` (`npm run fetch-fonts`) refetches the files
   from `BASE_FONT_SPECS`, `SCRIPT_FONT_SPECS` and the print styles'
-  `googleFonts`; the build fails when a spec has no bundled files.
+  `googleFonts` into this package's `fonts/` and, for the CJK families,
+  `packages/fonts-cjk/fonts/` (manifest and notices per package); the build
+  fails when a non-CJK spec has no bundled files.
 
 ## Token model
 
