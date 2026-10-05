@@ -120,6 +120,9 @@ export const FORCED_COLORS_VARS: VarList = [
   ['--ty-shadow-modal', 'none'],
   ['--ty-glass-blur-sheet', '0px'],
   ['--ty-glass-blur-floating', '0px'],
+  ['--ty-glass-edge', 'CanvasText'],
+  ['--ty-glass-fill', 'Canvas'],
+  ['--ty-glass-fill-raised', 'Canvas'],
 ]
 
 /** Reduced transparency (and no backdrop-filter support): opaque surfaces, no blur, no ambient. */
@@ -130,6 +133,8 @@ export const OPAQUE_VARS: VarList = [
   ['--ty-glass-blur-sheet', '0px !important'],
   ['--ty-glass-blur-floating', '0px !important'],
   ['--ty-glass-saturate', '1 !important'],
+  ['--ty-glass-fill', 'var(--ty-surface-solid) !important'],
+  ['--ty-glass-fill-raised', 'var(--ty-surface-raised-solid) !important'],
   ['--ty-ambient-1', 'transparent !important'],
   ['--ty-ambient-2', 'transparent !important'],
 ]

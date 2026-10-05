@@ -18,7 +18,7 @@
 
   /* The accent segment in the brand gradient, clipped to the glyphs. */
   .ty-brand-wordmark__accent {
-    background-image: linear-gradient(100deg, var(--ty-info), var(--ty-brand) 55%, var(--ty-brand-strong));
+    background-image: var(--ty-wordmark-gradient, linear-gradient(100deg, var(--ty-info), var(--ty-brand) 55%, var(--ty-brand-strong)));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;

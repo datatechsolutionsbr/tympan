@@ -3,7 +3,7 @@
   .ty-gradient-mark {
     --ty-gradient-mark-unit: var(--ty-space-6);
     --ty-gradient-mark-radius: calc(var(--ty-gradient-mark-unit) * 0.3);
-    --ty-gradient-mark-gradient: linear-gradient(135deg, var(--ty-info), var(--ty-brand) 55%, var(--ty-brand-strong));
+    --ty-gradient-mark-gradient: var(--ty-mark-gradient, linear-gradient(135deg, var(--ty-info), var(--ty-brand) 55%, var(--ty-brand-strong)));
     display: inline-grid;
     place-items: center;
     inline-size: var(--ty-gradient-mark-unit);

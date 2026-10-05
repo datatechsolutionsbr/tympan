@@ -70,6 +70,31 @@ export interface ThemeConfig {
   elevation?: Elevation
   /** Arbitrary string variables (e.g. for textures) */
   strings?: Record<string, string>
+  /**
+   * String variables per mode (`--ty-<name>`), for values that differ
+   * between light and dark: a glass edge, a fill gradient, a brand mark
+   * gradient. Like pins, they are exact design values: the generated
+   * high-contrast variant leaves them out, so components fall back.
+   */
+  modeStrings?: Partial<Record<Mode, Record<string, string>>>
+  /** Backdrop saturation of glass surfaces per mode (1.15 when omitted). */
+  glassSaturate?: Partial<Record<Mode, number>>
+  /** Exact shadow layers per mode, replacing the generated ones by name. */
+  shadowPins?: Partial<Record<Mode, Partial<Record<ShadowName, ShadowPin[]>>>>
+  /** Card and sheet radii in px, when they do not follow the control radius. */
+  radii?: Partial<Record<'card' | 'sheet', number>>
+}
+
+export type ShadowName = 'sheet' | 'raised' | 'floating' | 'modal' | 'sheet-inset'
+
+/** One shadow layer of `shadowPins`, its colour as a CSS colour string. */
+export interface ShadowPin {
+  x: number
+  y: number
+  blur: number
+  spread: number
+  color: string
+  inset?: boolean
 }
 
 export const RAMP_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const
@@ -288,7 +313,7 @@ export interface ResolvedTheme {
   colors: Record<string, Rgba>
   ramps: Record<SeedName, Record<RampStep, Rgba>>
   cta: { angle: number; stops: Rgba[] }
-  shadows: Record<'sheet' | 'raised' | 'floating' | 'modal' | 'sheet-inset', ShadowLayer[]>
+  shadows: Record<ShadowName, ShadowLayer[]>
   /** Pixel dimensions (radius, glass blur, focus width). */
   dimensions: Record<string, number>
   /** Font stacks keyed by token name (`serif`, `sans`, `mono`); empty when the theme keeps the base stacks. */
@@ -471,19 +496,24 @@ export function resolveTheme(config: ThemeConfig, mode: Mode, contrastOverride?:
     }
   }
 
+  const shadowPins = config.shadowPins?.[mode] ?? {}
+  for (const [name, layers] of Object.entries(shadowPins) as Array<[ShadowName, ShadowPin[]]>) {
+    shadows[name] = layers.map((l) => ({ ...l, color: parseColor(l.color) }))
+  }
+
   const R = config.radius
   const dimensions: Record<string, number> = {
     radius: R,
     'radius-control': R,
-    'radius-card': Math.round(R * 1.6),
-    'radius-sheet': Math.round(R * 2.4),
+    'radius-card': config.radii?.card ?? Math.round(R * 1.6),
+    'radius-sheet': config.radii?.sheet ?? Math.round(R * 2.4),
     'radius-pill': 999,
     'radius-agent': Math.max(2, Math.round(R * 0.6)),
     'focus-width': contrast === 'high' ? 3 : 2,
     'glass-blur-sheet': config.glass ? 20 : 0,
     'glass-blur-floating': config.glass ? 24 : 0,
   }
-  const numbers: Record<string, number> = { 'glass-saturate': config.glass ? 1.15 : 1 }
+  const numbers: Record<string, number> = { 'glass-saturate': config.glass ? (config.glassSaturate?.[mode] ?? 1.15) : 1 }
 
   const fonts: ResolvedTheme['fonts'] = {}
   for (const role of ['display', 'body', 'mono'] as const) {
@@ -491,7 +521,7 @@ export function resolveTheme(config: ThemeConfig, mode: Mode, contrastOverride?:
     if (list?.length) fonts[FONT_ROLE_TOKENS[role]] = [...list]
   }
 
-  return { name: config.name, mode, contrast, colors, ramps, cta: { angle: 135, stops: ctaStops }, shadows, dimensions, numbers, fonts, strings: config.strings ?? {}, report }
+  return { name: config.name, mode, contrast, colors, ramps, cta: { angle: 135, stops: ctaStops }, shadows, dimensions, numbers, fonts, strings: { ...config.strings, ...(contrast === config.contrast ? config.modeStrings?.[mode] : undefined) }, report }
 }
 
 // ---------------------------------------------------------------------------

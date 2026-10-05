@@ -16,25 +16,31 @@
 
   /* Level 1: sheet (glass). */
   .ty-surface[data-elevation='sheet'] {
+    border-width: var(--ty-glass-edge-width, 1px);
+    border-color: var(--ty-glass-edge, var(--ty-line));
     border-radius: var(--ty-radius-sheet);
-    background: var(--ty-surface);
+    background: var(--ty-glass-fill, var(--ty-surface));
     box-shadow: var(--ty-shadow-sheet), var(--ty-shadow-sheet-inset);
     backdrop-filter: blur(var(--ty-glass-blur-sheet)) saturate(var(--ty-glass-saturate));
     -webkit-backdrop-filter: blur(var(--ty-glass-blur-sheet)) saturate(var(--ty-glass-saturate));
   }
   /* Level 2: raised card, no blur of its own (§2.5 stacking rule). */
   .ty-surface[data-elevation='raised'] {
+    border-width: var(--ty-glass-edge-width, 1px);
+    border-color: var(--ty-glass-edge, var(--ty-line));
     border-radius: var(--ty-radius-card);
-    background: var(--ty-surface-raised);
+    background: var(--ty-glass-fill-raised, var(--ty-surface-raised));
     color: var(--ty-on-surface-raised);
-    box-shadow: var(--ty-shadow-raised);
+    box-shadow: var(--ty-shadow-raised), var(--ty-glass-highlight, 0 0 #0000);
   }
   /* Level 3: floating. */
   .ty-surface[data-elevation='floating'] {
+    border-width: var(--ty-glass-edge-width, 1px);
+    border-color: var(--ty-glass-edge, var(--ty-line));
     border-radius: var(--ty-radius-card);
-    background: var(--ty-surface-raised);
+    background: var(--ty-glass-fill-raised, var(--ty-surface-raised));
     color: var(--ty-on-surface-raised);
-    box-shadow: var(--ty-shadow-floating);
+    box-shadow: var(--ty-shadow-floating), var(--ty-glass-highlight, 0 0 #0000);
     backdrop-filter: blur(var(--ty-glass-blur-floating));
     -webkit-backdrop-filter: blur(var(--ty-glass-blur-floating));
   }

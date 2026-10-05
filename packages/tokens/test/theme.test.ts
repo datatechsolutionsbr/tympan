@@ -228,11 +228,13 @@ describe('astrlabe preset', () => {
     expect(light.get('--ty-bg')).toBe('#f8fafc')
     expect(light.get('--ty-ink')).toBe('#0f172a')
     expect(light.get('--ty-radius-control')).toBe('12px')
-    expect(light.get('--ty-radius-card')).toBe('19px')
+    expect(light.get('--ty-radius-card')).toBe('20px')
+    expect(light.get('--ty-radius-sheet')).toBe('24px')
     const dark = new Map(themeVariables(resolveTheme(astrlabePreset, 'dark')))
     expect(dark.get('--ty-brand')).toBe('#818cf8')
-    expect(dark.get('--ty-bg')).toBe('#0b1220')
-    expect(dark.get('--ty-ink-3')).toBe('#a3b0c0')
+    expect(dark.get('--ty-bg')).toBe('#020617')
+    expect(dark.get('--ty-ink-3')).toBe('#94a3b8')
+    expect(dark.get('--ty-glass-saturate')).toBe('1.5')
     expect(dark.get('--ty-glass-blur-sheet')).toBe('20px')
   })
 
@@ -249,6 +251,27 @@ describe('astrlabe preset', () => {
     expect(dark.get('--ty-success')).toBe('#4ade80')
   })
 
+
+  it('carries the liquid glass: gradient fills, specular edges, pinned shadows, the brand mark', () => {
+    const light = new Map(themeVariables(resolveTheme(astrlabePreset, 'light')))
+    expect(light.get('--ty-glass-fill')).toMatch(/^linear-gradient\(135deg/)
+    expect(light.get('--ty-glass-edge-width')).toBe('1.5px')
+    expect(light.get('--ty-shadow-sheet')).toBe('0px 4px 16px -2px rgb(0 0 0 / 0.1), 0px 12px 40px -8px rgb(0 0 0 / 0.06)')
+    expect(light.get('--ty-mark-gradient')).toBe('linear-gradient(135deg, #38bdf8 0%, #6366f1 40%, #a855f7 100%)')
+    expect(light.get('--ty-font-size-h1')).toBe('24px')
+    const dark = new Map(themeVariables(resolveTheme(astrlabePreset, 'dark')))
+    expect(dark.get('--ty-glass-fill')).toMatch(/^linear-gradient\(140deg/)
+    // The high-contrast variant drops the exact per-mode values, so components fall back.
+    const high = new Map(themeVariables(resolveTheme(astrlabePreset, 'light', 'high')))
+    expect(high.has('--ty-glass-fill')).toBe(false)
+  })
+
+  it('leaves the other presets on the generated glass', () => {
+    const t = new Map(themeVariables(resolveTheme(presets.find((p) => p.name === 'tympan')!, 'dark')))
+    expect(t.get('--ty-glass-saturate')).toBe('1.15')
+    expect(t.has('--ty-glass-fill')).toBe(false)
+    expect(t.get('--ty-radius-card')).toBe('16px')
+  })
 
   it('uses the system font stacks for headings and body, no web font', () => {
     const light = new Map(themeVariables(resolveTheme(astrlabePreset, 'light')))
