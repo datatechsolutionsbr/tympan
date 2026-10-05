@@ -5,6 +5,7 @@ import type { ReactNode } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { StatusPill, TympanProvider } from '../../index'
 import { expectNoAxeViolations } from '../../../test/axe'
+import { cssOf } from '../../../test/css'
 import { eventTypeFromContract, runStatusFromContract } from '../../utilities/api-error-model/apiErrors'
 import { toneForStatus } from '../../utilities/formatters/formatters'
 import { createFlowEditorStore, FlowEditorStateProvider } from '../state/editorState'
@@ -12,6 +13,9 @@ import { applyRunEvent, isTerminalStreamStatus, useFlowExecution, useRunProjecti
 import { ExecutionTimeline } from './ExecutionTimeline'
 import { RunDrawer } from './RunDrawer'
 import { RunStatusMark, runWordOf } from './RunStatusMark'
+import { RunTimePanel } from './RunTimePanel'
+import { nodeStatusFromContract } from '../../utilities/api-error-model/apiErrors'
+import { initialRunView, reduceRunEvent } from '../../components/live-report-view/runEvents'
 import type { RunEvent, RunSummary } from './types'
 
 const editor = (store = createFlowEditorStore()) =>
@@ -115,5 +119,39 @@ describe('cancelled run views', () => {
     const { container } = render(<ExecutionTimeline entries={[{ nodeId: 'load', nodeKind: 'code', status: 'cancelled' }]} />)
     expect(screen.getAllByText('cancelled').length).toBeGreaterThan(0)
     await expectNoAxeViolations(container)
+  })
+})
+
+describe('cancelled elsewhere in Tympan', () => {
+  it('one neutral tone for cancelled; waiting states share the pending tone', () => {
+    const { container } = render(
+      <>
+        <RunStatusMark status="cancelled" />
+        <StatusPill status="cancelled" />
+        <StatusPill status="paused_for_approval" />
+        <StatusPill status="suspended" />
+      </>,
+    )
+    expect(toneForStatus('cancelled')).toBe('neutral')
+    expect(screen.getByText('Awaiting approval')).toBeInTheDocument()
+    expect(screen.getByText('Suspended')).toBeInTheDocument()
+    const css = cssOf('flow/run/run.css')
+    expect(css).not.toMatch(/data-status='cancelled'/)
+    expect(container.querySelector('[data-status="cancelled"][data-tone]')?.getAttribute('data-tone')).toBe('neutral')
+    expect(container.querySelector('[data-status="suspended"][data-tone]')?.getAttribute('data-tone')).toBe('warning')
+  })
+
+  it('a contract step that was cancelled stays cancelled', () => {
+    expect(nodeStatusFromContract('cancelled')).toBe('cancelled')
+  })
+
+  it('RunTimePanel shows a cancelled row with its word', async () => {
+    const { container } = render(<RunTimePanel nodes={[{ id: 'a', name: 'A', state: 'cancelled', durationMs: 10 }]} />)
+    expect(screen.getByText('cancelled')).toBeInTheDocument()
+    await expectNoAxeViolations(container)
+  })
+
+  it('the live report reduces run.cancelled to the cancelled phase', () => {
+    expect(reduceRunEvent(initialRunView(null, 'running'), { type: 'run.cancelled' }).phase).toBe('cancelled')
   })
 })
