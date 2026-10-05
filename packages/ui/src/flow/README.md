@@ -78,6 +78,30 @@ import { ProvenanceGraph, FlowEditor } from '@datatechsolutions/tympan/flow'
   `FlowPaletteTokens` (`kindTone`, `kindTokens`, `connectorTokens`),
   `nodeStateAttributes`, `createFlowEditorStore` and the dialog stack.
 
+## Run status vocabulary
+
+Every run view shows a status as an icon plus a word (`RunStatusMark`,
+`runWordOf`). Engine spellings map onto one `RunWord`:
+
+| Server state          | `RunWord`           | Tone    |
+| --------------------- | ------------------- | ------- |
+| `queued`              | `pending`           | warning |
+| `running`             | `running`           | info    |
+| `paused_for_approval` | `awaiting-approval` | warning |
+| `suspended`           | `suspended`         | warning |
+| `completed`           | `completed`         | success |
+| `failed`              | `failed`            | danger  |
+| `cancelled`           | `cancelled`         | warning |
+
+Cancelled is never shown as failed or as success. The live stream has its
+own `StreamStatus` (`idle`, `streaming`, `completed`, `failed`, `cancelled`,
+`error`); `cancelled`, like `completed` and `failed`, is the run's end, while
+`error` is the connection failing (`isTerminalStreamStatus`). A host that
+learns of a cancellation reports it either with `onStatus('cancelled')` or a
+`run-cancelled` event. `runStatusFromContract` maps `cancelled`, and maps
+`paused_for_approval` and `suspended` to `paused`; `toneForStatus` reads
+cancelled as neutral.
+
 ## Canvas tools in the bottom dock
 
 `canvasToolItems({ zoom, mode, onModeChange, onZoomIn, onZoomOut,
