@@ -61,10 +61,10 @@ describe('StepList', () => {
     expect(onStepSelect).toHaveBeenCalledWith(1)
   })
 
-  it('shows markers only with the current name below on narrow screens', () => {
+  it('shows markers only with the current name below when the list is narrow', () => {
     const { container } = render(<StepList steps={four} currentIndex={2} label="Setup" />)
     expect(container.querySelector('.ty-step-list__now')).toHaveTextContent('Sources')
-    const narrow = mediaBlock(cssOf('components/step-list/StepList.css'), /\(max-width:\s*639\.98px\)/)
+    const narrow = mediaBlock(cssOf('components/step-list/StepList.css'), /ty-step-list\s*\(max-width:\s*39\.99rem\)/, '@container')
     expect(narrow).toMatch(/\.ty-step-list__now\s*\{[^}]*display:\s*block/)
     expect(narrow).toMatch(/clip-path:\s*inset\(50%\)/)
   })

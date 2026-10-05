@@ -12,8 +12,8 @@ export function cssOf(relativeToSrc: string): string {
 }
 
 /** Returns the body of the first `@media <query>` block (brace-balanced), or ''. */
-export function mediaBlock(css: string, query: RegExp): string {
-  const re = new RegExp(`@media\\s*${query.source}[^{]*\\{`, 'g')
+export function mediaBlock(css: string, query: RegExp, atRule = '@media'): string {
+  const re = new RegExp(`${atRule}\\s*${query.source}[^{]*\\{`, 'g')
   const m = re.exec(css)
   if (!m) return ''
   let depth = 1
