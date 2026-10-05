@@ -1,4 +1,4 @@
-import { CircleAlert, CircleCheck, CircleHelp, CircleMinus, CircleX, Clock, LoaderCircle } from 'lucide-react'
+import { CircleAlert, CircleCheck, CircleHelp, CircleMinus, CircleStop, CircleX, Clock, LoaderCircle } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { cx } from '../../internal/cx'
 import { devWarning } from '../../internal/dev'
@@ -40,6 +40,7 @@ export function builtInStatusMap(messages: Messages): StatusMap {
     processing: { label: s.processing, tone: 'info', icon: <LoaderCircle />, busy: true },
     error: { label: s.error, tone: 'danger', icon: <CircleAlert /> },
     success: { label: s.success, tone: 'success', icon: <CircleCheck /> },
+    cancelled: { label: s.cancelled, tone: 'neutral', icon: <CircleStop /> },
   }
 }
 

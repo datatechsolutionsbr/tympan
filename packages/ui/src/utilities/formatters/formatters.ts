@@ -160,11 +160,11 @@ export type StatusTone = 'positive' | 'pending' | 'negative' | 'neutral'
 
 const TONE_WORDS: Record<Exclude<StatusTone, 'neutral'>, string[]> = {
   positive: ['approved', 'active', 'success', 'succeeded', 'completed', 'done', 'proved', 'published', 'verified', 'ok'],
-  pending: ['pending', 'processing', 'running', 'queued', 'waiting', 'draft', 'in_review', 'review', 'scheduled'],
+  pending: ['pending', 'processing', 'running', 'queued', 'waiting', 'paused', 'paused_for_approval', 'awaiting_approval', 'suspended', 'draft', 'in_review', 'review', 'scheduled'],
   negative: ['rejected', 'error', 'failed', 'failure', 'refuted', 'blocked', 'expired', 'invalid'],
 }
 
-/** Semantic tone for a status word; never a style class. */
+/** Semantic tone for a status word; never a style class. Cancelled reads as neutral, never positive. */
 export function toneForStatus(status: string | null | undefined): StatusTone {
   const s = (status ?? '').trim().toLowerCase().replace(/[\s-]+/g, '_')
   for (const tone of ['positive', 'pending', 'negative'] as const) if (TONE_WORDS[tone].includes(s)) return tone

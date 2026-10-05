@@ -77,6 +77,7 @@ export const coreEs: CoreMessages = {
     processing: 'Procesando',
     error: 'Error',
     success: 'Éxito',
+    cancelled: 'Cancelado',
   },
   tag: { remove: (text) => `Quitar ${text}` },
   toast: { region: 'Notificaciones', dismiss: 'Descartar notificación' },

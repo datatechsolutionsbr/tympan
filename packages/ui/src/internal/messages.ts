@@ -78,7 +78,7 @@ export interface Messages
     pageOf: (n: number, count: number) => string
   }
   skipLink: string
-  status: Record<'pending' | 'approved' | 'rejected' | 'active' | 'inactive' | 'processing' | 'error' | 'success', string>
+  status: Record<'pending' | 'approved' | 'rejected' | 'active' | 'inactive' | 'processing' | 'error' | 'success' | 'cancelled', string>
   tag: { remove: (text: string) => string }
   toast: { region: string; dismiss: string }
   avatar: { open: (name: string) => string }
@@ -189,6 +189,7 @@ export const defaultMessages: Messages = {
     processing: 'Processing',
     error: 'Error',
     success: 'Success',
+    cancelled: 'Cancelled',
   },
   tag: { remove: (text) => `Remove ${text}` },
   toast: { region: 'Notifications', dismiss: 'Dismiss notification' },
@@ -306,6 +307,7 @@ export const messagesPtBR: Messages = {
     processing: 'Processando',
     error: 'Erro',
     success: 'Sucesso',
+    cancelled: 'Cancelado',
   },
   tag: { remove: (text) => `Remover ${text}` },
   toast: { region: 'Notificações', dismiss: 'Dispensar notificação' },

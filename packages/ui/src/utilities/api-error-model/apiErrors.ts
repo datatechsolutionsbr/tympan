@@ -84,7 +84,7 @@ export function codeOf(value: unknown): string {
 /* ---- Run domain ---- */
 
 export type NodeStatus = 'pending' | 'running' | 'success' | 'error' | 'skipped'
-export type RunStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cancelled'
+export type RunStatus = 'pending' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled'
 export type VariableValue = string | number | boolean | null | VariableValue[] | { [key: string]: VariableValue }
 
 export const KNOWN_RUN_EVENT_TYPES = [
@@ -98,6 +98,7 @@ export const KNOWN_RUN_EVENT_TYPES = [
   'run.paused',
   'run.completed',
   'run.failed',
+  'run.cancelled',
   'model.generation',
   'tool.execution',
   'agent.stream',
@@ -139,11 +140,16 @@ export function createRunEventConsumer(handlers: RunEventHandlers): (event: Exec
 
 const RUN_STATUS_FROM_CONTRACT: Record<string, RunStatus> = {
   queued: 'pending',
+  pending: 'pending',
   running: 'running',
   waiting: 'running',
+  paused_for_approval: 'paused',
+  suspended: 'paused',
   succeeded: 'completed',
+  completed: 'completed',
   failed: 'failed',
   cancelled: 'cancelled',
+  canceled: 'cancelled',
 }
 
 const NODE_STATUS_FROM_CONTRACT: Record<string, NodeStatus> = {
@@ -180,7 +186,7 @@ export function nodeStatusFromContract(status: string): NodeStatus {
 export function eventTypeFromContract(event: string, runStatus?: string): string {
   if (event === 'run.status') {
     const s = runStatus ? runStatusFromContract(runStatus) : 'running'
-    return s === 'completed' ? 'run.completed' : s === 'failed' ? 'run.failed' : runStatus === 'waiting' ? 'run.paused' : 'run.started'
+    return s === 'completed' ? 'run.completed' : s === 'failed' ? 'run.failed' : s === 'cancelled' ? 'run.cancelled' : s === 'paused' || runStatus === 'waiting' ? 'run.paused' : 'run.started'
   }
   return EVENT_FROM_CONTRACT[event] ?? event
 }
