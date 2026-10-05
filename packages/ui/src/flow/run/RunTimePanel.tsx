@@ -11,7 +11,7 @@ import { formatDuration, formatRelative } from '../internal/format'
 import type { RunWord } from '../run/types'
 import { RunStatusMark } from './RunStatusMark'
 
-export type RunTimeNodeState = 'running' | 'waiting' | 'succeeded' | 'failed' | 'skipped'
+export type RunTimeNodeState = 'running' | 'waiting' | 'succeeded' | 'failed' | 'cancelled' | 'skipped'
 
 export interface RunTimeNode {
   id: string
@@ -72,6 +72,7 @@ const WORD_OF: Record<RunTimeNodeState, RunWord> = {
   waiting: 'pending',
   succeeded: 'completed',
   failed: 'failed',
+  cancelled: 'cancelled',
   skipped: 'skipped',
 }
 

@@ -83,7 +83,7 @@ export function codeOf(value: unknown): string {
 
 /* ---- Run domain ---- */
 
-export type NodeStatus = 'pending' | 'running' | 'success' | 'error' | 'skipped'
+export type NodeStatus = 'pending' | 'running' | 'success' | 'error' | 'cancelled' | 'skipped'
 export type RunStatus = 'pending' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled'
 export type VariableValue = string | number | boolean | null | VariableValue[] | { [key: string]: VariableValue }
 
@@ -159,7 +159,8 @@ const NODE_STATUS_FROM_CONTRACT: Record<string, NodeStatus> = {
   succeeded: 'success',
   failed: 'error',
   skipped: 'skipped',
-  cancelled: 'skipped',
+  cancelled: 'cancelled',
+  canceled: 'cancelled',
 }
 
 const EVENT_FROM_CONTRACT: Record<string, string> = {
