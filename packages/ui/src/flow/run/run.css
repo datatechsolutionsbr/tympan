@@ -453,12 +453,25 @@
     gap: var(--ty-space-2);
     min-inline-size: 0;
   }
+  /* The node id and its kind, and the status, duration and time, are
+     separate words: lay them out with a gap so they never run together. */
+  .ty-timeline__node,
+  .ty-timeline__step-meta {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--ty-space-1) var(--ty-space-2);
+    min-inline-size: 0;
+  }
   .ty-timeline__node {
     color: var(--ty-ink);
     font-family: var(--ty-font-mono);
     direction: ltr;
     unicode-bidi: isolate;
     overflow-wrap: anywhere;
+  }
+  .ty-timeline__step-meta > * {
+    white-space: nowrap;
   }
   .ty-timeline__inspector {
     display: flex;
