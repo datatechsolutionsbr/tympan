@@ -108,11 +108,12 @@ describe('FloatingActionBar', () => {
     expect(chevron).toHaveAttribute('tabindex', '-1')
     await userEvent.tab()
     await userEvent.keyboard('{ArrowRight}{Shift>}{F10}{/Shift}')
-    expect(await screen.findByRole('menu')).toBeInTheDocument()
+    // The menu opens after an animation frame; on a loaded CI machine that can pass the 1 s default.
+    expect(await screen.findByRole('menu', {}, { timeout: 5000 })).toBeInTheDocument()
     await userEvent.keyboard('{Escape}')
-    await waitFor(() => expect(screen.queryByRole('menu')).toBeNull())
+    await waitFor(() => expect(screen.queryByRole('menu')).toBeNull(), { timeout: 5000 })
     await userEvent.click(chevron)
-    expect(await screen.findByRole('menu')).toBeInTheDocument()
+    expect(await screen.findByRole('menu', {}, { timeout: 5000 })).toBeInTheDocument()
   })
 
   it('asks for confirmation before running a destructive entry', async () => {
