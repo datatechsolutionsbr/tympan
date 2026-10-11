@@ -39,10 +39,10 @@ describe('Cover children', () => {
           const pg = document.querySelector('.ty-print-page')!.getBoundingClientRect()
           return { a: [a.left, a.top, a.right, a.bottom], pg: [pg.left, pg.top, pg.right, pg.bottom] }
         })
-        expect(r.a[0]).toBeCloseTo(r.pg[0] - folga * MM, 0)
-        expect(r.a[1]).toBeCloseTo(r.pg[1] - folga * MM, 0)
-        expect(r.a[2]).toBeCloseTo(r.pg[2] + folga * MM, 0)
-        expect(r.a[3]).toBeCloseTo(r.pg[3] + folga * MM, 0)
+        expect(r.a[0]!).toBeCloseTo(r.pg[0]! - folga * MM, 0)
+        expect(r.a[1]!).toBeCloseTo(r.pg[1]! - folga * MM, 0)
+        expect(r.a[2]!).toBeCloseTo(r.pg[2]! + folga * MM, 0)
+        expect(r.a[3]!).toBeCloseTo(r.pg[3]! + folga * MM, 0)
       }
     } finally {
       await b.close()
