@@ -5,7 +5,8 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 import { contrastRatio, parseColor, printPresets } from '@datatechsolutions/tympan-tokens'
 import { coresCategorias } from '../src/chart/categoryColours.ts'
-import { Parliament, PrintBook, PrintMap, municipios } from '../src/index.ts'
+import { MethodChart, Parliament, PrintBook, PrintMap, municipios } from '../src/index.ts'
+const MethodChartImport = ({ spec }: { spec: object }) => <MethodChart spec={spec as never} alt="a" />
 
 const AZUIS = { PSDB: '#0080c0', PODE: '#0a85c4', NOVO: '#0b7fbd' } // three near blues
 
@@ -45,5 +46,14 @@ describe('components with official colours', () => {
     expect(h).toContain('class="ty-print-category-chip" style="background:#c4122d;color:#ffffff"')
     expect(h).toMatch(/data-sigla="PODE"[^>]*fill:var\(--ty-print-papel\);stroke:#0a85c4/)
     expect(h).toMatch(/data-sigla="PSDB"[^>]*fill:#0080c0/)
+  })
+})
+
+describe('bars with colours by key', () => {
+  it('single-series bars take the official colours; near blues get a hatch overlay; light colour outlined', () => {
+    const spec = { tipo: 'barras', titulo: 'Votos', escala: [0, 100], barras: [{ rotulo: 'PSDB', valor: 40 }, { rotulo: 'PODE', valor: 30 }, { rotulo: 'NOVO', valor: 20 }, { rotulo: 'X', valor: 10 }], cores: { ...AZUIS, X: '#fdfbf0' } }
+    const h = renderToStaticMarkup(<PrintBook estilo="jornal" incluirCss={false} carregarFontes={false}><MethodChartImport spec={spec} /></PrintBook>)
+    expect(h).toMatch(/data-categoria="PSDB"[^>]*>.*?fill:#0080c0/)
+    expect((h.match(/class="ty-print-bar-key"/g) ?? []).length).toBe(3) // PODE, NOVO hatched; X outlined
   })
 })

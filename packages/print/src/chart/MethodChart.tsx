@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { coresCategorias } from './categoryColours.ts'
 import { tx } from '../i18n.ts'
 import { useLarguraDisponivel, usePrint } from '../context.tsx'
 import { TabelaDados, type TabelaDadosProps } from '../panels/Method.tsx'
@@ -192,10 +193,26 @@ function Barras({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numbe
   const hachura = c.estilo.traco.hachura !== 'nenhuma'
   const unico = !L.legenda
   const u = c.p.nome === 'isotype' ? unidadeIsotype(L.mmPorUnidade) : 0
+  // Colours by key (single series): the bar's category colour, safe-printed (hatch when two are too close,
+  // outline when too light); the highlight then marks the label only.
+  const pbAtual = usePrint().pb
+  const chaves = unico && spec.barras ? spec.barras.map((b) => b.categoria ?? b.rotulo) : null
+  const porChave = chaves && (spec.cores || Object.keys(c.estilo.cor.categorias ?? {}).some((k) => chaves.includes(k))) ? coresCategorias(chaves, c.estilo, pbAtual, spec.cores) : null
   return {
     L,
     corpo: (
       <>
+        {porChave ? (
+          <defs>
+            {porChave.map((k, i) =>
+              k.hachura === null ? null : (
+                <pattern key={i} id={`${c.id}-cat-${i}`} width={1.2} height={1.2} patternUnits="userSpaceOnUse" patternTransform={`rotate(${[45, -45, 0, 90, 45, -45, 0, 90][k.hachura] ?? 45})`}>
+                  {k.hachura >= 4 ? <circle cx={0.6} cy={0.6} r={0.22} style={{ fill: k.texto, fillOpacity: 0.55 }} /> : <line x1={0} y1={0} x2={0} y2={1.2} style={{ stroke: k.texto, strokeWidth: 0.18, strokeOpacity: 0.55 }} />}
+                </pattern>
+              ),
+            )}
+          </defs>
+        ) : null}
         {L.legenda ? (
           <Legenda
             c={c}
@@ -215,11 +232,15 @@ function Barras({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numbe
             <g key={l.i} className="ty-print-g-line" data-linha={l.i} data-destaque={l.destaque ? '' : undefined}>
               <Rotulos y={l.y + (unico ? 2.8 : 2.4)} rotulo={l.rotulo} nota={l.nota} local={l.local} />
               {l.barras.map((b) => {
-                const corB: CorDado = unico ? corUnica(l.destaque) : b.serie === 'a' ? cor.a : cor.b
+                const k = porChave?.[l.i]
+                const corB: CorDado = k ? (k.cor as CorDado) : unico ? corUnica(l.destaque) : b.serie === 'a' ? cor.a : cor.b
                 return (
                   <g key={b.serie}>
-                    <g className="ty-print-bar" data-linha={l.i} data-serie={b.serie} data-valor={b.valor} data-x={b.x} data-w={b.w} transform={`translate(${b.x} ${b.y})`}>
+                    <g className="ty-print-bar" data-linha={l.i} data-serie={b.serie} data-valor={b.valor} data-x={b.x} data-w={b.w} data-categoria={k?.chave} transform={`translate(${b.x} ${b.y})`}>
                       {c.p.barra(c, { chave: `bar-${l.i}-${b.serie}`, w: b.w, h: b.h, cor: corB, enchimento: b.serie === 'a' && hachura ? 'hachura' : 'cheio', valor: b.valor, mmPorUnidade: L.mmPorUnidade })}
+                      {k && (k.hachura !== null || k.contorno) ? (
+                        <rect className="ty-print-bar-key" width={b.w} height={b.h} style={{ fill: k.hachura !== null ? `url(#${c.id}-cat-${l.i})` : 'none', ...(k.contorno ? { stroke: 'var(--ty-print-tinta-3)', strokeWidth: 0.12 } : {}) }} />
+                      ) : null}
                     </g>
                     <text className={b.serie === 'a' && !unico ? 'ty-print-g-value-a' : 'ty-print-g-value'} x={b.rotulo.x} y={b.rotulo.y} data-cor={l.destaque ? 'destaque' : 'tinta'}>
                       {numeroBr(b.valor)}

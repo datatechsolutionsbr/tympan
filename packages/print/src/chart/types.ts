@@ -60,7 +60,10 @@ export interface SpecBarras extends Base {
   unidade?: string
   /** Folding bar (style shape 'ziguezague'): units per full line; default the top of `escala` (no fold). */
   dobra?: number
-  barras?: Array<{ rotulo: string; valor: number; destaque?: boolean; nota?: string }>
+  /** `categoria`: key for `cores` / the theme's `cor.categorias` (default: the bar's label). */
+  barras?: Array<{ rotulo: string; valor: number; destaque?: boolean; nota?: string; categoria?: string }>
+  /** Colours by category key (official party colours…) for single-series bars; else the theme's `cor.categorias`. */
+  cores?: Record<string, string>
   linhas?: LinhaPar[]
   rotuloA?: string
   rotuloB?: string

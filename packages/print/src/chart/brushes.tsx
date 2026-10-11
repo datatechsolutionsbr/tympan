@@ -8,9 +8,10 @@ import type { PrintStyle, RenderizadorGrafico } from '@datatechsolutions/tympan-
 import { tracar, type Tracado } from '../rough.ts'
 import { ICONES, type FormaIcone } from './icons.ts'
 
-export type CorDado = 'destaque' | 'destaque-2' | 'tinta' | 'tinta-2' | 'tinta-3' | 'contexto' | 'papel' | 'linha'
+export type CorDado = 'destaque' | 'destaque-2' | 'tinta' | 'tinta-2' | 'tinta-3' | 'contexto' | 'papel' | 'linha' | `#${string}` | `var(${string}`
 export const CORES_DADO: CorDado[] = ['destaque', 'destaque-2', 'tinta', 'tinta-2', 'contexto']
-export const cssCor = (c: CorDado) => `var(--ty-print-${c})`
+/** A theme role (var) or, for colours by key, a literal colour or var passed through. */
+export const cssCor = (c: CorDado) => (c.startsWith('#') || c.startsWith('var(') ? c : `var(--ty-print-${c})`)
 
 export type Enchimento = 'cheio' | 'hachura' | 'vazio'
 
