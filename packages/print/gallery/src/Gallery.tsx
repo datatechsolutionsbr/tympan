@@ -9,6 +9,9 @@ import lakebrasil from '../../../tokens/test/fixtures/lakebrasil-editorial.token
 
 // Book themes shown in the gallery: a neutral example and the lakebrasil-editorial tokens (brand repo JSON).
 const TEMAS = [registerPrintTheme(TEMA_EXEMPLO_EDITORA).id, registerPrintTheme(lakebrasil).id]
+// Data-theme colours for the panel blocks (PLANO §12 of the Brasil Real book: AA on cream paper).
+registerPrintTheme({ id: 'lakebrasil-painel', base: 'lakebrasil-editorial', cor: { temas: { eleitorado: '#6b4f7a', economia: '#7a5c12', social: '#8a3a62', educacao: '#1f5f5b', saneamento: '#3b6470' } } })
+TEMAS.push('lakebrasil-painel')
 
 type Grafico = 'study' | 'map' | 'books' | TipoGraficoEstudo
 

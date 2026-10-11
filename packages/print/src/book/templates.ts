@@ -50,6 +50,14 @@ export const MOLDES: Record<string, Molde> = {
   // with the name (3 columns), a flag/coat-of-arms box in the title corner (1) and the locator map (2); b a
   // strip of key numbers; c the main table, growing to the foot; d and e side by side; f a full-width table;
   // the source at the foot. Same areas on both pages, so a book of 5,571 pages is one loop.
+  // The same page as a dense panel: the head row, then one area `painel` for a GradePainel of themed blocks
+  // (8 columns, blocks of any span), growing to the foot; the source at the foot.
+  'unidade-territorial-painel': {
+    maximo: 1.2,
+    descricao: 'Uma página por unidade territorial, painel denso: título + bandeira + mapa (a) | painel (GradePainel, 8 colunas, cresce) | fonte',
+    par: [L([['titulo', 3], ['bandeira', 1], ['a', 2]], { fixa: true }), cheia('painel', { cresce: true }), cheia('fonte', { pe: true })],
+    impar: [L([['titulo', 3], ['bandeira', 1], ['a', 2]], { fixa: true }), cheia('painel', { cresce: true }), cheia('fonte', { pe: true })],
+  },
   'unidade-territorial': {
     maximo: 1.2,
     descricao: 'Uma página por unidade territorial: título + bandeira + mapa de localização (a) | b números | c tabela (cresce) | d + e | f | fonte',

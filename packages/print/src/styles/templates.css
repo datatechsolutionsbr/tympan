@@ -171,3 +171,10 @@
     flex: 1 1 auto;
   }
 }
+
+/* A dense panel grid in the growing area starts under the head (no air above it); blocks keep their height. */
+@layer tympan-print {
+  .ty-print-area[data-cresce]:has(> .ty-print-panel-grid) {
+    justify-content: flex-start;
+  }
+}

@@ -5,13 +5,13 @@
 // and print no labels over the mesh; a callout, when asked, sits outside the
 // drawing with a leader line to the margin.
 import { tx } from '../i18n.ts'
-import { geoCentroid } from 'd3-geo'
+import { geoCentroid, geoDistance } from 'd3-geo'
 import type { ReactNode } from 'react'
 import { useLarguraDisponivel, usePrint } from '../context.tsx'
 import { comColchetes } from '../panels/common.tsx'
 import { TabelaDados } from '../panels/Method.tsx'
 import { cx, formatarNumero, r3 } from '../utils.ts'
-import { alturaPara, bordas, caminho, municipios, municipiosPorCodigo, projecaoBrasil, ufDoMunicipio, ufsDoRecorte, vizinhanca, type Recorte } from './mesh.ts'
+import { CAPITAIS, alturaPara, bordas, caminho, ufs, municipios, municipiosPorCodigo, projecaoBrasil, ufDoMunicipio, ufsDoRecorte, vizinhanca, type Recorte } from './mesh.ts'
 
 export interface MapaLocalizacaoProps {
   /** 7-digit IBGE code of the unit. */
@@ -29,6 +29,12 @@ export interface MapaLocalizacaoProps {
   chamada?: { texto: string; lado?: 'inicio' | 'fim' }
   /** Draw UF borders that cross the neighbourhood (default true). */
   divisas?: boolean
+  /** A small Brazil in a corner with the unit's UF filled (default false). */
+  inset?: boolean
+  /** Mark the UF capital when it falls in the window and is not the unit (true: from CAPITAIS; or a code). */
+  capital?: boolean | string
+  /** A graphic scale with a round length (default false). */
+  escala?: boolean
   className?: string
 }
 
@@ -36,7 +42,7 @@ export interface MapaLocalizacaoProps {
  * The unit (in the style's highlight ink) among its neighbours (in the context grey), framed by their bounding
  * box. No names over the mesh; the page title names the unit and the optional callout sits in the margin.
  */
-export function MapaLocalizacao({ codigo, alt, titulo, aneis = 1, largura, altura, chamada, divisas = true, className }: MapaLocalizacaoProps) {
+export function MapaLocalizacao({ codigo, alt, titulo, aneis = 1, largura, altura, chamada, divisas = true, inset = false, capital = false, escala = false, className }: MapaLocalizacaoProps) {
   const { pb } = usePrint()
   const disponivel = useLarguraDisponivel()
   const { vizinhos } = vizinhanca(codigo, aneis)
@@ -62,6 +68,7 @@ export function MapaLocalizacao({ codigo, alt, titulo, aneis = 1, largura, altur
   const destaque = pb ? 'var(--ty-print-tinta)' : 'var(--ty-print-interesse, var(--ty-print-destaque))'
   const contexto = 'var(--ty-print-contexto-area, var(--ty-print-contexto))'
   const nomeFoco = foco.properties.name
+  const extras = extrasLocalizacao({ proj, codigo, uf: ufDoMunicipio(codigo), W, H, dx, inset, capital, escala, pb })
   return (
     <figure className={cx('ty-print-map', 'ty-print-locator', className)} data-codigo={codigo} data-areas={areas.length} data-chamada={chamada ? (inicio ? 'inicio' : 'fim') : undefined}>
       {titulo ? (
@@ -78,6 +85,7 @@ export function MapaLocalizacao({ codigo, alt, titulo, aneis = 1, largura, altur
           {divisa ? <path className="ty-print-locator-uf" d={divisa} style={{ fill: 'none', stroke: 'var(--ty-print-tinta-3)', strokeWidth: 0.3, strokeDasharray: '0.8 0.5' }} /> : null}
           <path className="ty-print-locator-focus" data-code={codigo} d={path(foco) ?? ''} style={{ fill: destaque, stroke: 'var(--ty-print-tinta)', strokeWidth: 0.3 }} />
         </g>
+        {extras}
         {chamada ? (
           <g className="ty-print-callout">
             <circle cx={r3(fx + dx)} cy={fy} r={0.5} style={{ fill: 'var(--ty-print-tinta)' }} />
@@ -223,4 +231,57 @@ export function Bandeira({ src, alt, semImagem, proporcao = 10 / 7, className }:
       {semImagem ?? tx('semBandeira')}
     </div>
   )
+}
+
+/** Inset of Brazil with the UF, the capital point and a graphic scale for the locator map. */
+function extrasLocalizacao({ proj, codigo, uf, W, H, dx, inset, capital, escala, pb }: { proj: ReturnType<typeof projecaoBrasil>; codigo: string; uf: string; W: number; H: number; dx: number; inset: boolean; capital: boolean | string; escala: boolean; pb: boolean }) {
+  const out: ReactNode[] = []
+  const cap = capital === true ? CAPITAIS[uf] : typeof capital === 'string' ? capital : undefined
+  if (cap && cap !== codigo) {
+    const f = municipiosPorCodigo([cap])[0]
+    const p = f ? proj(geoCentroid(f)) : null
+    if (p && p[0] >= 0 && p[0] <= W && p[1] >= 0 && p[1] <= H) {
+      out.push(
+        <g key="cap" className="ty-print-locator-capital" transform={`translate(${r3(p[0] + dx)} ${r3(p[1])})`} aria-label={tx('capital')}>
+          <circle r={0.9} style={{ fill: 'var(--ty-print-papel)', stroke: 'var(--ty-print-tinta)', strokeWidth: 0.3 }} />
+          <circle r={0.35} style={{ fill: 'var(--ty-print-tinta)' }} />
+        </g>,
+      )
+    }
+  }
+  if (escala) {
+    // A round length near a quarter of the width, measured on the ground at the bottom of the window.
+    const y = H - 1.2
+    const a = proj.invert?.([W * 0.6, y])
+    const b = proj.invert?.([W * 0.6 + W / 4, y])
+    if (a && b) {
+      const km = geoDistance(a, b) * 6371
+      const passos = [1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000]
+      const kmR = passos.reduce((m, p) => (Math.abs(p - km) < Math.abs(m - km) ? p : m), 1)
+      const len = r3(((W / 4) * kmR) / km)
+      const x0 = r3(W - len - 0.8 + dx)
+      out.push(
+        <g key="esc" className="ty-print-locator-scale" data-km={kmR}>
+          <line x1={x0} y1={y} x2={r3(x0 + len)} y2={y} style={{ stroke: 'var(--ty-print-tinta)', strokeWidth: 0.35 }} />
+          <line x1={x0} y1={y - 0.6} x2={x0} y2={y} style={{ stroke: 'var(--ty-print-tinta)', strokeWidth: 0.25 }} />
+          <line x1={r3(x0 + len)} y1={y - 0.6} x2={r3(x0 + len)} y2={y} style={{ stroke: 'var(--ty-print-tinta)', strokeWidth: 0.25 }} />
+          <text className="ty-print-map-label" x={r3(x0 + len)} y={r3(y - 0.9)} textAnchor="end">{`${kmR} km`}</text>
+        </g>,
+      )
+    }
+  }
+  if (inset) {
+    const w = r3(Math.min(12, W * 0.28))
+    const todas = ufs()
+    const pi = projecaoBrasil(todas, w, w, 0.2)
+    const caminhoInset = caminho(pi).digits(1)
+    const alvo = todas.find((f) => f.properties.code === uf)
+    out.push(
+      <g key="inset" className="ty-print-locator-inset" transform={`translate(${r3(dx + 0.3)} 0.3)`}>
+        <path d={caminhoInset(bordas().contorno) ?? ''} style={{ fill: 'var(--ty-print-papel)', stroke: 'var(--ty-print-tinta-3)', strokeWidth: 0.2 }} />
+        {alvo ? <path d={caminhoInset(alvo) ?? ''} style={{ fill: pb ? 'var(--ty-print-tinta)' : 'var(--ty-print-interesse, var(--ty-print-destaque))' }} /> : null}
+      </g>,
+    )
+  }
+  return out
 }

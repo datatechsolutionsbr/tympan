@@ -152,5 +152,16 @@ registerPrintTheme({
 | `Parliament` | hemicycle, one dot per seat, parties in order, optional `maioria` line; legend with seat counts |
 | `vizinhanca(code, aneis)` | neighbour codes from the mesh topology |
 
+| molde `unidade-territorial-painel` | head row + one growing area `painel` for a `PanelGrid` + `fonte` |
+| `PanelGrid` | dense grid (8 columns by default) of blocks of any span, packed in order |
+| `ThemeBlock` | themed block: rule and tag in the theme's colour (`cor.temas.<id>` → `--ty-print-tema-<id>`; ink in P&B), title, tiles, or the reason it has none (`vazio`) |
+| `IndicatorTile` | label, value in the number font (book locale), unit/prefix, optional `Sparkline`, `PercentileBar`, year; `[sem dado]` when null |
+| `PercentileBar` | bar filled to the national percentile in the block colour (never good/bad colours, no arrows), "acima de X% dos municípios" or, with `polaridade="menos"`, "maior que em X%…", and the rank with ties ("1º–3º de 15 em RR") |
+| `Sparkline` | a series in real millimetres (never stretched), last point marked |
+| `PrintLocatorMap inset capital escala` | small Brazil with the UF, the UF capital (`CAPITAIS`) when in the window and not the unit, a round graphic scale |
+
+Fill mode: `estrutura.preencher` (on in `dashboard`) or `Page preencher` packs panels into rows of six columns,
+widens the last panel of each row to the row's end and lets copyfitting grow sparse pages (up to 1.5).
+
 The municipal mesh is IBGE Malha Municipal 2024 (5,571 municipalities). Gallery:
 `npm run gallery` → "livros: unidade territorial"; `node scripts/gallery-shots.mjs --grafico books --only lakebrasil-editorial --pb`.
