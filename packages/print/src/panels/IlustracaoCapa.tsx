@@ -86,6 +86,7 @@ export function IlustracaoCapa({ motivo }: { motivo: MotivoCapa }) {
   const c: Ctx = { id, estilo, p: PINCEIS[nome] }
   return (
     <svg className="ty-print-capa-ilustracao" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMid meet" role="img" aria-label={DESCRICAO_MOTIVO[motivo]}>
+      <title>{DESCRICAO_MOTIVO[motivo]}</title>
       <defs>{c.p.defs(c)}</defs>
       {corpo(c, motivo)}
     </svg>

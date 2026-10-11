@@ -103,3 +103,16 @@ describe('molde unidade-territorial', () => {
     expect(h).not.toContain('data-fora-do-molde')
   })
 })
+
+describe('accessibility for EPUB: every figure svg has a title', () => {
+  it('svg[role=img] carries <title> as first child in the gallery spreads', async () => {
+    const { DuplaEstudo } = await import('../gallery/src/study.tsx')
+    const { DuplaMapas } = await import('../gallery/src/maps.tsx')
+    for (const el of [<DuplaEstudo key="e" grafico="halteres" />, <DuplaMapas key="m" />]) {
+      const h = html(el)
+      const svgs = [...h.matchAll(/<svg[^>]*role="img"[^>]*>(<[a-z]+)/g)]
+      expect(svgs.length).toBeGreaterThan(0)
+      for (const m of svgs) expect(m[1]).toBe('<title')
+    }
+  })
+})

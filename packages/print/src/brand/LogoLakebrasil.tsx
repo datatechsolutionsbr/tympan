@@ -73,6 +73,7 @@ export function LogoLakebrasil({ variante = 'cor', largura, protecao = false, de
   return (
     <span className={cx('ty-print-logo', protecao && 'ty-print-logo--protection', className)} data-versao={versao} style={protecao ? { padding: `${Math.round(h * 0.44 * 100) / 100}mm` } : undefined}>
       <svg {...(decorativo ? { 'aria-hidden': true } : { role: 'img', 'aria-label': 'lakebrasil' })} viewBox={`0 0 ${vb.w} ${vb.h}`} style={{ inlineSize: `${w}mm`, blockSize: `${h}mm` }}>
+        {decorativo ? null : <title>lakebrasil</title>}
         <Iceberg id={id} versao={versao} />
         {soSimbolo ? null : (
           <>

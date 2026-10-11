@@ -128,7 +128,7 @@ export function LogoDatatech({ variante = 'cor', largura, cor, cor2, rotulo, tex
       {...(texto ? { 'aria-hidden': true } : { role: 'img', 'aria-label': 'Datatech Solutions' })}
       viewBox={dados.viewBox}
       style={{ inlineSize: `${w}mm`, blockSize: `${h}mm` }}
-      dangerouslySetInnerHTML={{ __html: inner }}
+      dangerouslySetInnerHTML={{ __html: texto ? inner : `<title>Datatech Solutions</title>${inner}` }}
     />
   )
   return (

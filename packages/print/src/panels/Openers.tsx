@@ -93,6 +93,7 @@ function Grafismo({ cortes, legenda }: { cortes: number[]; legenda?: string }) {
   return (
     <figure className="ty-print-graphic" aria-labelledby={legenda ? `${id}-l` : undefined}>
       <svg viewBox={`0 0 ${w} ${h}`} role="img" aria-label={legenda ?? `${cortes.length} linhas de corte`}>
+        <title>{legenda ?? `${cortes.length} linhas de corte`}</title>
         {cortes.map((c, i) => (
           <line key={i} className="ty-print-graphic-line" x1={x(c)} x2={x(c)} y1={2} y2={h - 8} data-valor={c} />
         ))}

@@ -671,6 +671,8 @@ export function GraficoMetodo({ spec: specOriginal, renderizador, alt, tabela, l
         data-d1={r.eixo?.d1}
         data-orientacao={r.eixo && 'vertical' in r.eixo ? 'vertical' : undefined}
       >
+        <title>{nomeAcessivel}</title>
+        {spec.subtitulo ? <desc>{spec.subtitulo.replace(/\s*\[[^\]]*\]\s*/g, ' ').trim()}</desc> : null}
         <defs>{p.defs(c)}</defs>
         {r.corpo}
       </svg>
