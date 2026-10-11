@@ -789,7 +789,7 @@ export function GraficoMetodo({ spec: specOriginal, renderizador, forma: formaPe
                   <rect width={6} height={6} style={{ fill: k.cor, ...(k.contorno ? { stroke: 'var(--ty-print-tinta-3)', strokeWidth: 0.4 } : {}) }} />
                   {k.hachura !== null ? <line x1={0} y1={6} x2={6} y2={0} style={{ stroke: k.texto, strokeWidth: 0.6, strokeOpacity: 0.55 }} /> : null}
                 </svg>
-                {comColchetes(k.chave)}
+                {comColchetes(k.rotulo)}
               </li>
             ))}
         </ul>

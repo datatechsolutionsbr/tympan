@@ -19,8 +19,19 @@ export function Intervalo({ c, spec, largura }: { c: Ctx; spec: SpecIntervalo; l
   const todas = grupos.flatMap((g) => g.linhas)
   const casas = spec.casas ?? 1
   const fmt = (v: number) => numeroLocal(v, casas, true)
+  const resumo = (l: (typeof todas)[number]): number | undefined => {
+    if (l.valor !== undefined) return l.valor
+    const a = l.amostras ?? []
+    if (!a.length || spec.resumoAmostras === 'nenhum') return undefined
+    if (spec.resumoAmostras === 'mediana') {
+      const o = [...a].sort((x, y) => x - y)
+      const m = Math.floor(o.length / 2)
+      return o.length % 2 ? o[m]! : (o[m - 1]! + o[m]!) / 2
+    }
+    return a.reduce((t, v) => t + v, 0) / a.length
+  }
   const esq = n(Math.min(largura * 0.35, Math.max(...todas.map((l) => larguraTexto(l.rotulo))) + 2.4))
-  const dir = n(Math.max(0, ...todas.map((l) => (l.valor === undefined ? 0 : larguraTexto(fmt(l.valor))))) + 2.6)
+  const dir = n(Math.max(0, ...todas.map((l) => { const v = resumo(l); return v === undefined ? 0 : larguraTexto(fmt(v)) })) + 2.6)
   const x0 = esq
   const x1 = n(largura - dir)
   const x = escalaLinear(spec.escala, [x0, x1])
@@ -70,9 +81,9 @@ export function Intervalo({ c, spec, largura }: { c: Ctx; spec: SpecIntervalo; l
             ),
           )}
           {l.valor !== undefined ? <g transform={`translate(${x(l.valor)} ${cy})`}>{c.p.ponto(c, { chave: `pt-${k}`, r: l.destaque ? 1.15 : 0.95, cor, cheio: !(pb && !l.destaque && !ch) })}</g> : null}
-          {l.valor !== undefined ? (
-            <text className="ty-print-g-value" x={n(x1 + 1.5)} y={n(cy + 0.9)} data-cor={l.destaque ? 'destaque' : 'tinta'}>
-              {fmt(l.valor)}
+          {resumo(l) !== undefined ? (
+            <text className="ty-print-g-value" x={n(x1 + 1.5)} y={n(cy + 0.9)} data-cor={l.destaque ? 'destaque' : 'tinta'} data-resumo={l.valor === undefined ? spec.resumoAmostras ?? 'media' : undefined}>
+              {fmt(resumo(l)!)}
             </text>
           ) : null}
         </g>,
@@ -111,7 +122,7 @@ export function Intervalo({ c, spec, largura }: { c: Ctx; spec: SpecIntervalo; l
     ),
     tabela: {
       colunas: [tx('base'), { rotulo: spec.unidade ?? tx('valor'), numerica: true }, { rotulo: spec.rotuloIntervalo ?? 'IC', numerica: true }],
-      linhas: todas.map((l) => [l.rotulo, l.valor === undefined ? '' : fmt(l.valor), l.intervalo ? `${fmt(l.intervalo[0])}–${fmt(l.intervalo[1])}` : (l.amostras ?? []).map(fmt).join('; ')]),
+      linhas: todas.map((l) => [l.rotulo, resumo(l) === undefined ? '' : fmt(resumo(l)!), l.intervalo ? `${fmt(l.intervalo[0])}–${fmt(l.intervalo[1])}` : (l.amostras ?? []).map(fmt).join('; ')]),
     },
     legendaCores: porChave && spec.legenda !== false ? porChave : undefined,
     eixo: { x0, x1, d0: spec.escala[0], d1: spec.escala[1] },

@@ -64,7 +64,7 @@ export interface SpecBarras extends Base {
   /** `categoria`: key for `cores` / the theme's `cor.categorias` (default: the bar's label). */
   barras?: Array<{ rotulo: string; valor: number; destaque?: boolean; nota?: string; categoria?: string }>
   /** Colours by category key (official party colours…) for single-series bars; else the theme's `cor.categorias`. */
-  cores?: Record<string, string>
+  cores?: Record<string, string | { cor: string; rotulo?: string }>
   /** Legend of the colours by key; default on when colours by key apply. */
   legenda?: boolean
   /**
@@ -134,12 +134,17 @@ export interface SpecIntervalo extends Base {
   casas?: number
   /** Legend of the colours by key (`cores`); default on when `cores` is given. */
   legenda?: boolean
+  /**
+   * Number printed for a samples-only row without `valor`: the samples' mean (default), their median, or none.
+   * The derived number is printed at the row's end like an estimate (no dot is drawn for it).
+   */
+  resumoAmostras?: 'media' | 'mediana' | 'nenhum'
   /** Column name of the interval in the data table (default "IC"). */
   rotuloIntervalo?: string
   linhas?: LinhaIntervalo[]
   grupos?: Array<{ titulo?: string; nota?: string; linhas: LinhaIntervalo[] }>
   /** Colours by key (`categoria` or the label). */
-  cores?: Record<string, string>
+  cores?: Record<string, string | { cor: string; rotulo?: string }>
 }
 
 export interface LinhaIntervalo {

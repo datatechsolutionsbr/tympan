@@ -60,3 +60,20 @@ describe('intervalo 0.5.2', () => {
     expect(h({ ...sp, legenda: false }, { alt: 'a' })).not.toContain('data-legenda-cores')
   })
 })
+
+describe('intervalo 0.5.4', () => {
+  const h = (sp: object) => renderToStaticMarkup(<PrintBook estilo="jornal" incluirCss={false} carregarFontes={false}><MethodChart spec={sp as never} largura={100} alt="a" /></PrintBook>)
+  it('samples-only rows print the samples mean by default, the median on request, or nothing', () => {
+    const base = { tipo: 'intervalo', escala: [0, 10], linhas: [{ rotulo: 'A', amostras: [1, 2, 9] }] }
+    expect(h(base)).toMatch(/data-resumo="media">4,0</)
+    expect(h({ ...base, resumoAmostras: 'mediana' })).toMatch(/data-resumo="mediana">2,0</)
+    expect(h({ ...base, resumoAmostras: 'nenhum' })).not.toContain('data-resumo')
+  })
+  it('colours by key with a display label: the legend prints the label, not the technical key', () => {
+    const sp = { tipo: 'intervalo', escala: [0, 10], cores: { lora_rag: { cor: '#5a5f9c', rotulo: 'LoRA + RAG' } }, linhas: [{ rotulo: 'LoRA + RAG', categoria: 'lora_rag', valor: 5, intervalo: [4, 6] }] }
+    const x = h(sp)
+    expect(x).toContain('data-legenda-cores=""')
+    expect(x).toMatch(/data-legenda-cores=""[^]*?>LoRA \+ RAG<\/li>/)
+    expect(x).not.toMatch(/data-legenda-cores=""[^]*?lora_rag/)
+  })
+})

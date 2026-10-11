@@ -126,8 +126,11 @@ registerPrintTheme({
 // <PrintBook estilo="minha-editora" fontes="locais" impressao> … </PrintBook>
 ```
 
-- **Custom cover plate**: `<Cover>{art}</Cover>` replaces the cover layout with your own drawing, edge to
-  edge, and into the bleed when the book prints with `impressao` (crop marks still drawn).
+- **Custom cover plate**: `<Cover>{art}</Cover>` replaces the cover layout with your own drawing, anchored
+  to the page box, edge to edge and into the bleed when the book prints with `impressao` (crop marks still
+  drawn); `fundo` (CSS colour) and `margem` (`true` = the cover margins, or mm).
+- **Colours by key with labels**: `cores={{ lora_rag: { cor: '#5a5f9c', rotulo: 'LoRA + RAG' } }}` — legends
+  print the label, not the technical key.
 - **Marks**: `Cover logo` (true = `marcas.editora`, or a mark/element; 22 mm front, 26 mm back, 14 mm tall
   at most) and a running-foot mark on the inner side (`Page marca`, or the theme's `folio.marca: 'editora'`;
   height from the molde's `marcaRodape`, default 3.5 mm). `Mark` renders any of them (P&B: `srcPb` or grey; dark backgrounds: `srcNegativo`). `folio.marca: 'selo'`
@@ -170,6 +173,7 @@ registerPrintTheme({
 | `PrintSymbolMap` | proportional circles (area ∝ value) over the recorte outline, largest first, reference legend |
 | `Parliament` | hemicycle, one dot per seat, parties in order, optional `maioria` line; legend with seat counts |
 | colours by key | `PrintMap escala="categorica" cores={{ PT: '#c4122d' }}`, `Parliament cores`, single-series `barras` (`spec.cores`, key = `categoria` or the label) or the theme's `cor.categorias`: two visible categories closer than ΔE2000 10 get an extra hatch (a ring in the parliament); text over a colour is black or white for AA; very light colours get a thin outline; P&B prints a grey tone, a hatch of its own kind and the label |
+| intervals | `GraficoMetodo` `tipo: 'intervalo'`: rows with `valor` and `intervalo` (whiskers), or samples only (`amostras`, one dot each; the printed number is their mean, or `resumoAmostras: 'mediana' \| 'nenhum'`); `casas` fixed decimals; groups |
 | party bars | single-series `barras` with `cores` (or `orientacao: 'horizontal'`, `compacto`) are horizontal in every style: value with its unit and fixed `casas` at the tip, colours by key, the panel's width, height per bar shared from `altura`; the colour legend only when a bar's key differs from its label (or `legenda`) |
 | `PrintLocatorMap quadro` | fixed frame for every locator of a book: window by the unit (kept inside the UF on a border), every municipality it covers, theme highlight with paper rules, inset in its own column, capital and scale |
 | `vizinhanca(code, aneis)` | neighbour codes from the mesh topology |

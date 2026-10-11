@@ -5,8 +5,13 @@
 // hatch of its own kind, always next to its label.
 import { contrastRatio, deltaE2000, luminance, parseColor, toGrey, type PrintStyle } from '@datatechsolutions/tympan-tokens'
 
+/** A colour by key: the colour, or the colour and the text shown for the key (technical key ≠ label). */
+export type CorPorChave = string | { cor: string; rotulo?: string }
+
 export interface CorCategoria {
   chave: string
+  /** Text shown for the key (legends): `rotulo` of the colour entry, else the key. */
+  rotulo: string
   /** Fill (hex, or the style's categorical var when the key has no colour). */
   cor: string
   /** Text colour over the fill: black or white, whichever passes AA (4.5:1) — or the better of the two. */
@@ -33,9 +38,18 @@ export function textoSobre(fundo: string): '#000000' | '#ffffff' {
  * with neither take the style's qualitative palette in order. In P&B the fills are greys and every category
  * gets a hatch (kind by position), so tone + hatch + label carry it.
  */
-export function coresCategorias(chaves: string[], estilo: Pick<PrintStyle, 'cor'>, pb: boolean, cores?: Record<string, string>): CorCategoria[] {
+export function coresCategorias(chaves: string[], estilo: Pick<PrintStyle, 'cor'>, pb: boolean, cores?: Record<string, CorPorChave>): CorCategoria[] {
   const papel = estilo.cor.papel
-  const mapa = { ...estilo.cor.categorias, ...cores }
+  const rotulos: Record<string, string> = {}
+  const proprias: Record<string, string> = {}
+  for (const [k, v] of Object.entries(cores ?? {})) {
+    if (typeof v === 'string') proprias[k] = v
+    else {
+      proprias[k] = v.cor
+      if (v.rotulo) rotulos[k] = v.rotulo
+    }
+  }
+  const mapa: Record<string, string> = { ...estilo.cor.categorias, ...proprias }
   const out: CorCategoria[] = []
   let livre = 0
   for (const chave of chaves) {
@@ -57,6 +71,7 @@ export function coresCategorias(chaves: string[], estilo: Pick<PrintStyle, 'cor'
     }
     out.push({
       chave,
+      rotulo: rotulos[chave] ?? chave,
       cor,
       texto: real ? textoSobre(cor) : PRETO,
       contorno: real ? contrastRatio(real, parseColor(papel)) < 1.3 || luminance(real) > 0.85 : false,

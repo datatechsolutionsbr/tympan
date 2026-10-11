@@ -63,7 +63,7 @@ export interface MapaProps {
   /** Category by code (party, winner, type) for `escala="categorica"`; up to eight categories. */
   categorias?: Record<string, string | null>
   /** Colours by category (official party colours…); else the theme's `cor.categorias`, else the qualitative palette. */
-  cores?: Record<string, string>
+  cores?: Record<string, string | { cor: string; rotulo?: string }>
   /** Print the legend (default true; the classes or categories still go to the data table). */
   mostrarLegenda?: boolean
   /** Order of the categories in the legend and palette (default: most areas first, then alphabetical). */
@@ -543,14 +543,14 @@ export function Mapa({
   }
   const Wt = itens.length > 1 ? W : (celulas[0] as Celula).g.W
   const Ht = r3(y)
-  const rotulosClasses = legenda ?? nomesCategorias ?? (lim ? rotulosLimites(lim, unidade) : Array.from({ length: n }, (_, k) => `classe ${k + 1}`))
+  const cats = nomesCategorias ? coresCategorias(nomesCategorias, estilo, pb, cores) : undefined
+  const rotulosClasses = legenda ?? (nomesCategorias && cats ? cats.map((k) => k.rotulo) : nomesCategorias) ?? (lim ? rotulosLimites(lim, unidade) : Array.from({ length: n }, (_, k) => `classe ${k + 1}`))
   const conta = (c: Celula, k: number) => c.ks.filter((x) => x === k).length
   const semDadoN = celulas.reduce((t, c) => t + conta(c, SEM_DADO), 0)
 
   // Pattern ids are content-addressed (book scope + what the patterns draw): two maps that share an id draw
   // the same patterns, so a duplicate id in one HTML (books rendered separately) can never borrow another's inks.
   const id = `ty-print-map-${escopoLivro || 'solto'}-${hashCurto(`${modo}|${n}|${escala}|${pb}|${nome}|${nomesCategorias ? JSON.stringify([nomesCategorias, cores ?? null, estilo.cor.categorias ?? null]) : ''}`)}`
-  const cats = nomesCategorias ? coresCategorias(nomesCategorias, estilo, pb, cores) : undefined
   const tinta = tintas(id, modo, n, escala, pb, nome === 'gravura', cats)
 
   // Borders: crisp, or trembled by rough.js (fixed seed) in hand-made styles.

@@ -29,7 +29,7 @@ export interface HemicicloProps {
   /** Majority line (e.g. 257 of 513): a tick at the seat that reaches it. */
   maioria?: number
   /** Colours by party (official colours); else `Bancada.cor`, the theme's `cor.categorias`, the qualitative palette. */
-  cores?: Record<string, string>
+  cores?: Record<string, string | { cor: string; rotulo?: string }>
   /** Print the legend (party, colour, seats); default true. */
   legenda?: boolean
   className?: string
@@ -139,7 +139,7 @@ export function Hemiciclo({ titulo, alt, bancadas, largura = 80, fileiras, maior
             </svg>
             {/* The party tag on its own colour, text in black or white for AA. */}
             <span className="ty-print-category-chip" style={{ background: cor(i, b), color: cats[i]!.texto }} data-texto={cats[i]!.texto}>
-              {b.sigla}
+              {cats[i]!.rotulo}
             </span>{' '}
             {b.assentos}
           </li>
