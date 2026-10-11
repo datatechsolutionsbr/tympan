@@ -23,7 +23,7 @@ import type { FormaGrafico, PrintStyle } from '@datatechsolutions/tympan-tokens'
 import type { GraficoSpec, RenderizadorGrafico, SpecBarras, SpecContagem, SpecEsquema, SpecHalteres, SpecSerie } from './types.ts'
 import { AntesDepoisControle, Dispersao, MatrizCorrelacao, Simpson, corAchado } from './correlation.tsx'
 import { Chamadas, posicionarChamadas } from './kickers.tsx'
-import { Anotacoes, Chamada, Legenda, Rotulos, coresLinha, larguraLegenda } from './parts.tsx'
+import { Anotacoes, COR_SERIE, Chamada, Legenda, Rotulos, corUnica, coresLinha, larguraLegenda } from './parts.tsx'
 import { Cartoes, EixoCentral, Fluxo, Ziguezague } from './shapes.tsx'
 
 export interface GraficoMetodoProps {
@@ -128,7 +128,7 @@ function Halteres({ c, spec, largura }: { c: Ctx; spec: SpecHalteres; largura: n
   const L = layoutHalteres(spec, largura)
   const algum = spec.linhas.some((l) => l.destaque)
   const leg = [
-    { x: 0, texto: spec.rotuloA, cor: (algum ? 'tinta' : 'destaque-2') as CorDado, tipo: 'ponto-vazio' as const },
+    { x: 0, texto: spec.rotuloA, cor: COR_SERIE.a as CorDado, tipo: 'ponto-vazio' as const },
     { x: larguraLegenda(spec.rotuloA), texto: spec.rotuloB, cor: (algum ? 'tinta' : 'destaque') as CorDado, tipo: 'ponto' as const },
   ]
   return {
@@ -200,7 +200,7 @@ function Barras({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numbe
           <Legenda
             c={c}
             y={L.legenda.y}
-            itens={L.legenda.itens.map((it) => ({ x: it.x - L.eixo.x0 + 0, texto: it.texto, cor: (algum ? (it.serie === 'a' ? 'contexto' : 'tinta') : it.serie === 'a' ? 'destaque-2' : 'destaque') as CorDado, tipo: it.serie === 'a' ? ('barra-a' as const) : ('barra-b' as const) }))}
+            itens={L.legenda.itens.map((it) => ({ x: it.x - L.eixo.x0 + 0, texto: it.texto, cor: COR_SERIE[it.serie as 'a' | 'b'] as CorDado, tipo: it.serie === 'a' ? ('barra-a' as const) : ('barra-b' as const) }))}
           />
         ) : null}
         {u ? (
@@ -215,7 +215,7 @@ function Barras({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numbe
             <g key={l.i} className="ty-print-g-line" data-linha={l.i} data-destaque={l.destaque ? '' : undefined}>
               <Rotulos y={l.y + (unico ? 2.8 : 2.4)} rotulo={l.rotulo} nota={l.nota} local={l.local} />
               {l.barras.map((b) => {
-                const corB: CorDado = unico ? (algum && !l.destaque ? 'contexto' : 'destaque') : b.serie === 'a' ? (algum && !l.destaque ? 'contexto' : cor.a) : cor.b
+                const corB: CorDado = unico ? corUnica(l.destaque) : b.serie === 'a' ? cor.a : cor.b
                 return (
                   <g key={b.serie}>
                     <g className="ty-print-bar" data-linha={l.i} data-serie={b.serie} data-valor={b.valor} data-x={b.x} data-w={b.w} transform={`translate(${b.x} ${b.y})`}>
@@ -295,7 +295,7 @@ function Colunas({ c, spec, largura, altura }: { c: Ctx; spec: SpecBarras; largu
           <Legenda
             c={c}
             y={L.legenda.y}
-            itens={L.legenda.itens.map((it) => ({ x: it.x, y: it.y, texto: it.texto, cor: (algum ? (it.serie === 'a' ? 'contexto' : 'tinta') : it.serie === 'a' ? 'destaque-2' : 'destaque') as CorDado, tipo: it.serie === 'a' ? ('barra-a' as const) : ('barra-b' as const) }))}
+            itens={L.legenda.itens.map((it) => ({ x: it.x, y: it.y, texto: it.texto, cor: COR_SERIE[it.serie as 'a' | 'b'] as CorDado, tipo: it.serie === 'a' ? ('barra-a' as const) : ('barra-b' as const) }))}
           />
         ) : null}
         {u ? (
@@ -331,7 +331,7 @@ function Colunas({ c, spec, largura, altura }: { c: Ctx; spec: SpecBarras; largu
                 </g>
               ) : null}
               {g.colunas.map((b) => {
-                const corB: CorDado = unico ? (algum && !g.destaque ? 'contexto' : 'destaque') : b.serie === 'a' ? (algum && !g.destaque ? 'contexto' : cor.a) : cor.b
+                const corB: CorDado = unico ? corUnica(Boolean(g.destaque)) : b.serie === 'a' ? cor.a : cor.b
                 return (
                   <g key={b.serie}>
                     {/* The bar is drawn horizontally by the renderer and turned upright: length = data, width = column. */}
@@ -404,7 +404,7 @@ function Contagem({ c, spec, largura }: { c: Ctx; spec: SpecContagem; largura: n
             <g key={l.i} className="ty-print-g-line" data-linha={l.i}>
               <Rotulos y={l.y + 2.6} rotulo={l.rotulo} nota={l.nota} />
               {l.grupos.map((g) => {
-                const corG: CorDado = L.pares ? (g.serie === 'a' ? cor.a : cor.b) : algum && !l.destaque ? 'contexto' : 'destaque'
+                const corG: CorDado = L.pares ? (g.serie === 'a' ? cor.a : cor.b) : corUnica(l.destaque)
                 return (
                   <g key={g.serie} className="ty-print-group" data-serie={g.serie} data-valor={g.valor}>
                     {g.celulas.map((cel, k) => (

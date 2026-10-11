@@ -16,7 +16,7 @@ import {
   numeroBr,
   type LinhaGenerica,
 } from './geometry.ts'
-import { Anotacoes, Chamada, Legenda, Rotulos, coresLinha, larguraLegenda, type CtxGrafico } from './parts.tsx'
+import { Anotacoes, COR_SERIE, Chamada, Legenda, Rotulos, corUnica, coresLinha, larguraLegenda, type CtxGrafico } from './parts.tsx'
 import { cssCor, type CorDado } from './brushes.tsx'
 import type { SpecBarras } from './types.ts'
 
@@ -44,19 +44,19 @@ function tabelaDe(spec: SpecBarras, linhas: LinhaGenerica[]): ResultadoForma['ta
 
 function coresSerie(l: LinhaGenerica, algum: boolean, unico: boolean): Record<'a' | 'b', CorDado> {
   const cor = coresLinha(Boolean(l.destaque), algum)
-  if (unico) return { a: cor.b, b: algum && !l.destaque ? 'contexto' : 'destaque' }
-  return { a: algum && !l.destaque ? 'contexto' : cor.a, b: cor.b }
+  if (unico) return { a: corUnica(Boolean(l.destaque)), b: corUnica(Boolean(l.destaque)) }
+  return { a: cor.a, b: cor.b }
 }
 
-function chave(c: CtxGrafico, spec: SpecBarras, pares: boolean, algum: boolean): ReactNode {
+function chave(c: CtxGrafico, spec: SpecBarras, pares: boolean, _algum: boolean): ReactNode {
   if (!pares) return null
   return (
     <Legenda
       c={c}
       y={2.4}
       itens={[
-        { x: 0, texto: spec.rotuloA ?? 'a', cor: algum ? 'contexto' : 'destaque-2', tipo: 'barra-a' },
-        { x: larguraLegenda(spec.rotuloA ?? 'a'), texto: spec.rotuloB ?? 'b', cor: algum ? 'tinta' : 'destaque', tipo: 'barra-b' },
+        { x: 0, texto: spec.rotuloA ?? 'a', cor: COR_SERIE.a, tipo: 'barra-a' },
+        { x: larguraLegenda(spec.rotuloA ?? 'a'), texto: spec.rotuloB ?? 'b', cor: COR_SERIE.b, tipo: 'barra-b' },
       ]}
     />
   )
@@ -175,7 +175,7 @@ export function EixoCentral({ c, spec, largura }: { c: CtxGrafico; spec: SpecBar
         return (
           <g key={i} className="ty-print-g-line" data-linha={i} data-destaque={l.destaque ? '' : undefined}>
             <Rotulos y={n(y + 1.6)} rotulo={l.rotulo} nota={l.nota} local={l.local} />
-            {a ? barra(c, { chave: `ec-${i}-a`, x: xc, y, w: wa, h, cor: cor.a, hachura: hachura && !algum, valor: a.valor, mm: k, esquerda: true, linha: i, serie: 'a' }) : null}
+            {a ? barra(c, { chave: `ec-${i}-a`, x: xc, y, w: wa, h, cor: cor.a, hachura, valor: a.valor, mm: k, esquerda: true, linha: i, serie: 'a' }) : null}
             {barra(c, { chave: `ec-${i}-b`, x: xc, y, w: wb, h, cor: cor.b, hachura: false, valor: b.valor, mm: k, linha: i, serie: 'b' })}
             {a ? (
               <text className="ty-print-g-value-a" x={n(xc - wa - 1)} y={n(y + h - 0.7)} textAnchor="end" data-cor={l.destaque ? 'destaque' : 'tinta'}>
@@ -368,13 +368,13 @@ export function Fluxo({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarras; l
             {barra(c, { chave: `fx-${i}-b`, x: xL, y: n(top), w: n(xR - xL), h: tb, cor: cor.b, hachura: false, valor: vB, mm: k, linha: i, serie: 'b', attrs: { 'data-espessura': tb } })}
             {pares && ta > 0 ? (
               <>
-                {barra(c, { chave: `fx-${i}-a1`, x: xL, y: yA, w: n(xc - xL), h: ta, cor: cor.a, hachura: hachura && !algum, valor: vA, mm: k, linha: i, serie: 'a', attrs: { 'data-espessura': ta } })}
+                {barra(c, { chave: `fx-${i}-a1`, x: xL, y: yA, w: n(xc - xL), h: ta, cor: cor.a, hachura, valor: vA, mm: k, linha: i, serie: 'a', attrs: { 'data-espessura': ta } })}
                 {/* the split after the cut: the band bends down by a fixed gap, keeping its thickness */}
                 <path
                   d={`M${xc} ${yA}C${n(xc + T / 2)} ${yA} ${n(xc + T / 2)} ${a2} ${n(xc + T)} ${a2}V${n(a2 + ta)}C${n(xc + T / 2)} ${n(a2 + ta)} ${n(xc + T / 2)} ${n(yA + ta)} ${xc} ${n(yA + ta)}Z`}
                   style={{ fill: cssCor(cor.a) }}
                 />
-                {barra(c, { chave: `fx-${i}-a2`, x: n(xc + T), y: a2, w: n(xR - xc - T), h: ta, cor: cor.a, hachura: hachura && !algum, valor: vA, mm: k, linha: i, serie: 'a', attrs: { 'data-espessura': ta, 'data-parte': 'depois' } })}
+                {barra(c, { chave: `fx-${i}-a2`, x: n(xc + T), y: a2, w: n(xR - xc - T), h: ta, cor: cor.a, hachura, valor: vA, mm: k, linha: i, serie: 'a', attrs: { 'data-espessura': ta, 'data-parte': 'depois' } })}
                 <text className="ty-print-g-value-a" x={n(xR + 1)} y={n(a2 + ta / 2 + 0.8)} data-cor={l.destaque ? 'destaque' : 'tinta'}>
                   {numeroBr(vA)}
                 </text>

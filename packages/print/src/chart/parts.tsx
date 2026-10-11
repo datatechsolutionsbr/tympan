@@ -12,12 +12,22 @@ type Ctx = CtxGrafico
 
 const n = (v: number) => Math.round(v * 1000) / 1000
 
-/** Colours of a row: series colours when nothing is highlighted, highlight against context otherwise. */
-export function coresLinha(destaque: boolean, algumDestaque: boolean): { a: CorDado; b: CorDado; conector: CorDado; texto: 'destaque' | 'tinta' } {
-  if (!algumDestaque) return { a: 'destaque-2', b: 'destaque', conector: 'contexto', texto: 'tinta' }
-  if (destaque) return { a: 'destaque', b: 'destaque', conector: 'destaque', texto: 'destaque' }
-  return { a: 'tinta', b: 'tinta', conector: 'contexto', texto: 'tinta' }
+/**
+ * Colours of a row. The highlight colour means one thing only: the row(s) the author marked. Series keep
+ * constant colours of their own, with or without a highlighted row: the first series in the context grey,
+ * the second in `destaque-2`; a marked row draws its second series (and its label) in `destaque`.
+ */
+export function coresLinha(destaque: boolean, _algumDestaque?: boolean): { a: CorDado; b: CorDado; conector: CorDado; texto: 'destaque' | 'tinta' } {
+  return destaque ? { a: 'contexto', b: 'destaque', conector: 'destaque', texto: 'destaque' } : { a: 'contexto', b: 'destaque-2', conector: 'contexto', texto: 'tinta' }
 }
+
+/** Single series: a constant series ink; only a marked row is in the highlight colour. */
+export function corUnica(destaque: boolean): CorDado {
+  return destaque ? 'destaque' : 'tinta-2'
+}
+
+/** Legend colours of the two series (constant: they do not change when a row is highlighted). */
+export const COR_SERIE = { a: 'contexto', b: 'destaque-2' } as const satisfies Record<'a' | 'b', CorDado>
 
 export function Chamada({ x, y, texto }: { x: number; y: number; texto: string }) {
   return (
