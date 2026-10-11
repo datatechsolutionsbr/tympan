@@ -97,7 +97,19 @@ describe('compact bars', () => {
     expect(h).toContain('>36,0%<')
     expect(h).toContain('>21,5%<')
     expect(h).not.toContain('ty-print-g-axis')
-    expect(h).toMatch(/viewBox="0 0 [\d.]+ 6\.4"/) // 2 bars × 3 mm + 0.4
+    expect(h).toMatch(/viewBox="0 0 [\d.]+ 7\.6"/) // 2 bars × 3.6 mm (legible minimum over the 3 asked) + 0.4
     expect(h).toMatch(/data-categoria="PL"[^>]*>.*?fill:#1a3a8a/)
+  })
+})
+
+describe('compacto wins over the preset shape', () => {
+  it('every preset draws compact bars when compacto is set (no style shape, legible default height)', async () => {
+    const { PRINT_PRESET_NAMES } = await import('@datatechsolutions/tympan-tokens')
+    const spec = { tipo: 'barras', titulo: 'V', escala: [0, 40], unidade: '%', compacto: true, barras: [{ rotulo: 'A', valor: 30 }, { rotulo: 'B', valor: 10 }] }
+    for (const estilo of PRINT_PRESET_NAMES) {
+      const h = renderToStaticMarkup(<PrintBook estilo={estilo} incluirCss={false} carregarFontes={false}><MethodChartImport spec={spec} /></PrintBook>)
+      expect(h, estilo).toContain('class="ty-print-g-compact"')
+      expect(h, estilo).toMatch(/viewBox="0 0 [\d.]+ 8\.8"/) // 2 × 4.2 mm + 0.4
+    }
   })
 })

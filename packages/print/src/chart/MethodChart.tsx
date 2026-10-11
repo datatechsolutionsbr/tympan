@@ -189,11 +189,14 @@ function Halteres({ c, spec, largura }: { c: Ctx; spec: SpecHalteres; largura: n
   }
 }
 
+/** Smallest compact bar row: the label text (≈7 pt) plus air, so compact bars stay legible. */
+const ALTURA_MIN_BARRA = 3.6
+
 function BarrasCompactas({ c, spec, largura, altura }: { c: Ctx; spec: SpecBarras; largura: number; altura?: number }) {
   const pbAtual = usePrint().pb
   const barras = spec.barras ?? []
   // A fixed height per bar; with `altura` (the panel's), the bars share it (never under 2.6 mm, never over 6).
-  const h = spec.alturaBarra ?? (altura ? Math.max(2.6, Math.min(6, (altura - 0.4) / Math.max(1, (spec.barras ?? []).length))) : 3.4)
+  const h = Math.max(ALTURA_MIN_BARRA, spec.alturaBarra ?? (altura ? Math.min(6, (altura - 0.4) / Math.max(1, (spec.barras ?? []).length)) : 4.2))
   const un = spec.unidade ?? ''
   const fmt = (v: number) => `${spec.casas !== undefined ? numeroLocal(v, spec.casas, true) : numeroBr(v)}${un}`
   const esq = n(Math.min(largura * 0.4, Math.max(0, ...barras.map((b) => larguraTexto(b.rotulo))) + 2))
