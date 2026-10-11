@@ -63,3 +63,27 @@ describe('PrintBook with a registered theme', () => {
     expect(t).toMatch(/'Fira Sans Condensed'/)
   })
 })
+
+describe('page ornaments follow the theme trim', () => {
+  it('draws in the trim viewBox with every shape inside it', () => {
+    for (const base of ['art-nouveau', 'construtivismo', 'memphis', 'azulejo-modernista', 'bauhaus', 'pop-art']) {
+      registerPrintTheme({ id: 'formato-x', base, pagina: { largura: 140, altura: 200 } })
+      const h = renderToStaticMarkup(
+        <PrintBook estilo="formato-x" incluirCss={false} carregarFontes={false}>
+          <Spread numero="2-3">
+            <Page lado="par" />
+            <Page lado="impar" />
+          </Spread>
+        </PrintBook>,
+      )
+      unregisterPrintTheme('formato-x')
+      const orn = [...h.matchAll(/<svg class="ty-print-ornament" viewBox="([^"]+)"[^>]*>(.*?)<\/svg>/g)]
+      expect(orn.length, base).toBeGreaterThan(0)
+      for (const [, vb, corpo] of orn) {
+        expect(vb).toBe('0 0 140 200')
+        for (const m of corpo!.matchAll(/\b(?:y|y1|y2|cy)="(-?[\d.]+)"/g)) expect(Number(m[1]), base).toBeLessThanOrEqual(200.01)
+        for (const m of corpo!.matchAll(/\b(?:x|x1|x2|cx)="(-?[\d.]+)"/g)) expect(Number(m[1]), base).toBeLessThanOrEqual(140.01)
+      }
+    }
+  })
+})

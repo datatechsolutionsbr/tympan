@@ -118,7 +118,7 @@ registerPrintTheme({
 - **Print for the press**: `impressao` (or `{ sangria, marcasCorte }`) puts each page on a sheet of trim +
   bleed (+ 6 mm slug with crop marks); `@page` grows to match. Print-on-demand services that want *no*
   bleed take the default output (PDF = trim size); offset printers and services that ask for bleed take
-  `impressao` (default 3 mm). Page ornaments are drawn for 170 × 240 mm and scale to other trims.
+  `impressao` (default 3 mm). Page ornaments are drawn in the theme trim.
 - **Fonts offline**: `fontes="locais"` emits `@font-face` for the OFL woff2 files bundled in
   `@datatechsolutions/tympan-tokens/fonts` (every family the presets name, incl. Source Serif 4, IBM Plex
   Sans/Mono, Fira Sans Condensed; versions, licences and sha256 in `fonts/manifest.json`), found at
