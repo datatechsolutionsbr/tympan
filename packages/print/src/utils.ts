@@ -1,9 +1,21 @@
 import { useId } from 'react'
+import { useEscopoLivro } from './context.tsx'
 
 /** A `useId` value usable in SVG `id` and `url(#…)` references (letters, digits, dashes). */
 export function useIdSeguro(prefixo = 'ty-print'): string {
   const raw = useId()
-  return `${prefixo}-${raw.replace(/[^a-zA-Z0-9_-]/g, '')}`
+  const escopo = useEscopoLivro()
+  return `${prefixo}-${escopo ? `${escopo}-` : ''}${raw.replace(/[^a-zA-Z0-9_-]/g, '')}`
+}
+
+/** FNV-1a hash of a string in base 36 (stable scope names). */
+export function hashCurto(chave: string): string {
+  let h = 2166136261
+  for (let i = 0; i < chave.length; i++) {
+    h ^= chave.charCodeAt(i)
+    h = Math.imul(h, 16777619)
+  }
+  return (h >>> 0).toString(36)
 }
 
 const fmt = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 })

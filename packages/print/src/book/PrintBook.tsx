@@ -9,9 +9,9 @@ import {
   type PrintStyleId,
   type PrintStyleOverrides,
 } from '@datatechsolutions/tympan-tokens'
-import { PrintContextoProvider } from '../context.tsx'
+import { EscopoLivroProvider, PrintContextoProvider } from '../context.tsx'
 import { PRINT_CSS } from '../styles.generated.ts'
-import { cx, useIdSeguro } from '../utils.ts'
+import { cx, hashCurto } from '../utils.ts'
 
 export interface LivroPrintProps {
   /** The book style: a preset object or its name (a deprecated id from PRINT_STYLE_ALIASES resolves to its new style). */
@@ -25,6 +25,12 @@ export interface LivroPrintProps {
   /** Link the style's Google Fonts (turn off when the host loads fonts itself, e.g. embedded in an EPUB). */
   carregarFontes?: boolean
   lang?: string
+  /**
+   * Scope name of this book's custom properties and SVG ids. Defaults to a hash of the style, P&B and
+   * overrides, so books in different styles in one HTML never share tokens. Set it when several books
+   * in the same style are rendered separately and concatenated (their SVG ids then stay apart too).
+   */
+  escopo?: string
   className?: string
   children?: ReactNode
 }
@@ -34,10 +40,10 @@ export interface LivroPrintProps {
  * preset's custom properties, the component CSS and `@page` (170 × 240 mm),
  * and provides the resolved style to every component below.
  */
-export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carregarFontes = true, lang = 'pt-BR', className, children }: LivroPrintProps) {
+export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carregarFontes = true, lang = 'pt-BR', escopo: escopoProp, className, children }: LivroPrintProps) {
   const base = typeof estilo === 'string' ? printPresetById(estilo) : estilo
   const resolvido = resolvePrintStyle(base, { pb, overrides: tokens })
-  const escopo = useIdSeguro('ty-print-book')
+  const escopo = `tpb-${(escopoProp ?? hashCurto(JSON.stringify([pb, resolvido]))).replace(/[^a-zA-Z0-9_-]/g, '')}`
   const seletor = `[data-ty-print-livro="${escopo}"]`
   const css = `${incluirCss ? PRINT_CSS : ''}\n${printStyleToCss(base, { pb, overrides: tokens, seletor })}`
   const fontes = carregarFontes ? googleFontsUrl(resolvido) : null
@@ -71,7 +77,9 @@ export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carr
     >
       {fontes ? <link rel="stylesheet" href={fontes} /> : null}
       <style dangerouslySetInnerHTML={{ __html: css }} />
-      <PrintContextoProvider value={{ estilo: resolvido, pb }}>{children}</PrintContextoProvider>
+      <EscopoLivroProvider value={escopo}>
+        <PrintContextoProvider value={{ estilo: resolvido, pb }}>{children}</PrintContextoProvider>
+      </EscopoLivroProvider>
     </div>
   )
 }

@@ -9,11 +9,11 @@
 import { geoCentroid } from 'd3-geo'
 import type { ReactNode } from 'react'
 import type { RenderizadorGrafico } from '@datatechsolutions/tympan-tokens'
-import { useLarguraDisponivel, usePrint } from '../context.tsx'
+import { useEscopoLivro, useLarguraDisponivel, usePrint } from '../context.tsx'
 import { comColchetes } from '../panels/common.tsx'
 import { TabelaDados, type TabelaDadosProps } from '../panels/Method.tsx'
 import { semente, tracar } from '../rough.ts'
-import { cx, r3, useIdSeguro } from '../utils.ts'
+import { cx, hashCurto, r3 } from '../utils.ts'
 import { classeDe, quantis, rotulosLimites } from './classes.ts'
 import {
   alturaPara,
@@ -371,7 +371,7 @@ export function Mapa({
 }: MapaProps) {
   const { estilo, pb } = usePrint()
   const disponivel = useLarguraDisponivel()
-  const id = useIdSeguro('ty-print-map')
+  const escopoLivro = useEscopoLivro()
   const W = r3(larguraProp ?? disponivel ?? (sangria ? 150 : 110))
   const nome = renderizador ?? estilo.grafico
   const modo = modoDe(nome, pb)
@@ -441,6 +441,9 @@ export function Mapa({
   const conta = (c: Celula, k: number) => c.ks.filter((x) => x === k).length
   const semDadoN = celulas.reduce((t, c) => t + conta(c, SEM_DADO), 0)
 
+  // Pattern ids are content-addressed (book scope + what the patterns draw): two maps that share an id draw
+  // the same patterns, so a duplicate id in one HTML (books rendered separately) can never borrow another's inks.
+  const id = `ty-print-map-${escopoLivro || 'solto'}-${hashCurto(`${modo}|${n}|${escala}|${pb}|${nome}`)}`
   const tinta = tintas(id, modo, n, escala, pb, nome === 'gravura')
 
   // Borders: crisp, or trembled by rough.js (fixed seed) in hand-made styles.

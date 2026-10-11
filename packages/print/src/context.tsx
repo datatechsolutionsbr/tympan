@@ -84,3 +84,11 @@ export const LadoProvider = LadoCtx.Provider
 export function useLado(): 'par' | 'impar' | null {
   return useContext(LadoCtx)
 }
+
+const EscopoCtx = createContext<string>('')
+/** Scope of the enclosing PrintBook (prefixes generated SVG ids so books rendered separately never share one). */
+export const EscopoLivroProvider = EscopoCtx.Provider
+
+export function useEscopoLivro(): string {
+  return useContext(EscopoCtx)
+}
