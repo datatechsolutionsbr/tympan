@@ -73,6 +73,12 @@ export interface SpecBarras extends Base {
    */
   compacto?: boolean
   alturaBarra?: number
+  /**
+   * Orientation of single-series bars, over the style's shape: 'horizontal' draws the compact horizontal bars
+   * (value with its unit at the tip, colours by key). Single-series bars with `cores` are horizontal unless
+   * 'vertical' is asked.
+   */
+  orientacao?: 'horizontal' | 'vertical'
   /** Decimals of the values, fixed (compact bars). */
   casas?: number
   linhas?: LinhaPar[]

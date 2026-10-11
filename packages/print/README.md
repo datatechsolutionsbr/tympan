@@ -170,6 +170,8 @@ registerPrintTheme({
 | `PrintSymbolMap` | proportional circles (area ∝ value) over the recorte outline, largest first, reference legend |
 | `Parliament` | hemicycle, one dot per seat, parties in order, optional `maioria` line; legend with seat counts |
 | colours by key | `PrintMap escala="categorica" cores={{ PT: '#c4122d' }}`, `Parliament cores`, single-series `barras` (`spec.cores`, key = `categoria` or the label) or the theme's `cor.categorias`: two visible categories closer than ΔE2000 10 get an extra hatch (a ring in the parliament); text over a colour is black or white for AA; very light colours get a thin outline; P&B prints a grey tone, a hatch of its own kind and the label |
+| party bars | single-series `barras` with `cores` (or `orientacao: 'horizontal'`, `compacto`) are horizontal in every style: value with its unit and fixed `casas` at the tip, colours by key, the panel's width, height per bar shared from `altura`; the colour legend only when a bar's key differs from its label (or `legenda`) |
+| `PrintLocatorMap quadro` | fixed frame for every locator of a book: window by the unit (kept inside the UF on a border), every municipality it covers, theme highlight with paper rules, inset in its own column, capital and scale |
 | `vizinhanca(code, aneis)` | neighbour codes from the mesh topology |
 
 | molde `unidade-territorial-painel` | head row + one growing area `painel` for a `PanelGrid` + `fonte` |

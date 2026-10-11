@@ -64,7 +64,9 @@ describe('legend switches', () => {
     expect(html(<Parliament alt="c" bancadas={[{ sigla: 'A', assentos: 3 }]} legenda={false} />)).not.toContain('ty-print-map-legend')
     expect(html(<PrintMap titulo="t" alt="a" recorte={['RR']} exemplo mostrarLegenda={false} />)).not.toContain('ty-print-map-legend')
     const spec = { tipo: 'barras', titulo: 'V', escala: [0, 100], barras: [{ rotulo: 'PSDB', valor: 40 }], cores: AZUIS }
-    expect(html(<MethodChartImport spec={spec} />)).toContain('data-legenda-cores=""')
+    // Bars labelled by their own key: no repeated legend unless asked.
+    expect(html(<MethodChartImport spec={spec} />)).not.toContain('data-legenda-cores')
+    expect(html(<MethodChartImport spec={{ ...spec, legenda: true }} />)).toContain('data-legenda-cores=""')
   })
 })
 

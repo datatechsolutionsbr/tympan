@@ -189,10 +189,11 @@ function Halteres({ c, spec, largura }: { c: Ctx; spec: SpecHalteres; largura: n
   }
 }
 
-function BarrasCompactas({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: number }) {
+function BarrasCompactas({ c, spec, largura, altura }: { c: Ctx; spec: SpecBarras; largura: number; altura?: number }) {
   const pbAtual = usePrint().pb
   const barras = spec.barras ?? []
-  const h = spec.alturaBarra ?? 3.4
+  // A fixed height per bar; with `altura` (the panel's), the bars share it (never under 2.6 mm, never over 6).
+  const h = spec.alturaBarra ?? (altura ? Math.max(2.6, Math.min(6, (altura - 0.4) / Math.max(1, (spec.barras ?? []).length))) : 3.4)
   const un = spec.unidade ?? ''
   const fmt = (v: number) => `${spec.casas !== undefined ? numeroLocal(v, spec.casas, true) : numeroBr(v)}${un}`
   const esq = n(Math.min(largura * 0.4, Math.max(0, ...barras.map((b) => larguraTexto(b.rotulo))) + 2))
@@ -205,6 +206,17 @@ function BarrasCompactas({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largu
     L: { largura, altura: alturaTotal },
     corpo: (
       <g className="ty-print-g-compact">
+        {porChave ? (
+          <defs>
+            {porChave.map((k, i) =>
+              k.hachura === null ? null : (
+                <pattern key={i} id={`${c.id}-cat-${i}`} width={1.2} height={1.2} patternUnits="userSpaceOnUse" patternTransform={`rotate(${[45, -45, 0, 90, 45, -45, 0, 90][k.hachura] ?? 45})`}>
+                  {k.hachura >= 4 ? <circle cx={0.6} cy={0.6} r={0.22} style={{ fill: k.texto, fillOpacity: 0.55 }} /> : <line x1={0} y1={0} x2={0} y2={1.2} style={{ stroke: k.texto, strokeWidth: 0.18, strokeOpacity: 0.55 }} />}
+                </pattern>
+              ),
+            )}
+          </defs>
+        ) : null}
         {barras.map((b, i) => {
           const k = porChave?.[i]
           const cor: CorDado = k ? (k.cor as CorDado) : corUnica(Boolean(b.destaque))
@@ -218,7 +230,7 @@ function BarrasCompactas({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largu
               </text>
               <g className="ty-print-bar" data-linha={i} data-valor={b.valor} data-categoria={k?.chave} transform={`translate(${esq} ${n(y + (h - hb) / 2)})`}>
                 {c.p.barra(c, { chave: `cb-${i}`, w, h: hb, cor, enchimento: 'cheio', valor: b.valor, mmPorUnidade: 1 })}
-                {k?.contorno ? <rect width={w} height={hb} style={{ fill: 'none', stroke: 'var(--ty-print-tinta-3)', strokeWidth: 0.12 }} /> : null}
+                {k && (k.hachura !== null || k.contorno) ? <rect className="ty-print-bar-key" width={w} height={hb} style={{ fill: k.hachura !== null ? `url(#${c.id}-cat-${i})` : 'none', ...(k.contorno ? { stroke: 'var(--ty-print-tinta-3)', strokeWidth: 0.12 } : {}) }} /> : null}
               </g>
               <text className="ty-print-g-value" x={n(esq + w + 0.8)} y={n(y + h * 0.68)} data-cor={b.destaque ? 'destaque' : 'tinta'}>
                 {fmt(b.valor)}
@@ -230,7 +242,8 @@ function BarrasCompactas({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largu
     ),
     tabela: { colunas: [tx('base'), { rotulo: un || tx('valor'), numerica: true }], linhas: barras.map((b) => [b.rotulo, fmt(b.valor)]) },
     eixo: { x0: esq, x1: n(largura - dir), d0: spec.escala[0], d1: spec.escala[1] },
-    legendaCores: porChave && spec.legenda !== false ? porChave : undefined,
+    // The legend repeats the bar labels when each bar is labelled by its own key: shown then only on request.
+    legendaCores: porChave && (spec.legenda ?? (spec.barras ?? []).some((b) => b.categoria && b.categoria !== b.rotulo)) ? porChave : undefined,
   }
 }
 
@@ -310,7 +323,8 @@ function Barras({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numbe
           linhas: linhasG.map((l) => [l.nota ? `${l.rotulo} (${l.nota})` : l.rotulo, l.valores[0]?.valor ?? '', l.valores[1]?.valor ?? '']),
         },
     eixo: { x0: L.eixo.x0, x1: L.eixo.x1, d0: spec.escala[0], d1: spec.escala[1] },
-    legendaCores: porChave && spec.legenda !== false ? porChave : undefined,
+    // The legend repeats the bar labels when each bar is labelled by its own key: shown then only on request.
+    legendaCores: porChave && (spec.legenda ?? (spec.barras ?? []).some((b) => b.categoria && b.categoria !== b.rotulo)) ? porChave : undefined,
   }
 }
 
@@ -695,6 +709,8 @@ export function GraficoMetodo({ spec: specOriginal, renderizador, forma: formaPe
   const r =
     spec.tipo === 'halteres'
       ? Halteres({ c, spec, largura })
+      : spec.tipo === 'barras' && spec.barras?.length && !spec.linhas?.length && (spec.compacto || spec.orientacao === 'horizontal' || (spec.cores && spec.orientacao !== 'vertical' && !formaPedida))
+        ? BarrasCompactas({ c, spec, largura, altura })
       : spec.tipo === 'barras'
         ? forma === 'colunas' || forma === 'predios' || (altura && (forma === 'barras' || forma === 'halteres'))
           ? Colunas({ c, spec, largura, altura })
@@ -706,9 +722,7 @@ export function GraficoMetodo({ spec: specOriginal, renderizador, forma: formaPe
                 ? Fluxo({ c, spec, largura })
                 : forma === 'cartoes'
                   ? Cartoes({ c, spec, largura })
-                  : spec.compacto && spec.barras?.length
-                    ? BarrasCompactas({ c, spec, largura })
-                    : Barras({ c, spec, largura })
+                  : Barras({ c, spec, largura })
         : spec.tipo === 'contagem'
           ? Contagem({ c, spec, largura })
           : spec.tipo === 'serie'
