@@ -13,7 +13,7 @@
 
 import { fromDtcgColor, type DtcgColor } from './dtcg.ts'
 import { toHex } from './color.ts'
-import { fontFaceCss, type FontManifest } from './fonts.ts'
+import { SYSTEM_FONT_FAMILIES, fontFaceCss, type FontManifest } from './fonts.ts'
 import {
   mergePrintStyle,
   printPresetById,
@@ -209,13 +209,31 @@ export const TEMA_EXEMPLO_EDITORA: PrintBookTheme = {
 }
 
 
-/**
- * @font-face rules for a style from the fonts bundled in this package (`fonts/manifest.json`): every Google
- * Fonts spec of the style that is bundled, with URLs `<base><file>` (`base` is where the HTML finds
- * `@datatechsolutions/tympan-tokens/fonts/`), then the theme's own `fontesLocais`, which win for their family.
- */
-export function fontesEmpacotadasCss(style: Pick<PrintStyle, 'googleFonts' | 'fontesLocais'>, manifest: FontManifest, base: string): string {
+/** Families named in a style's font stacks (quotes removed), in role order, without generic and system faces. */
+export function familiasDoEstilo(style: Pick<PrintStyle, 'fontes'>): string[] {
+  const out: string[] = []
+  for (const pilha of Object.values(style.fontes) as string[])
+    for (const f of pilha.split(',').map((x) => x.trim().replace(/^["']|["']$/g, '')))
+      if (f && !SYSTEM_FONT_FAMILIES.includes(f) && !out.includes(f)) out.push(f)
+  return out
+}
+
+/** Families the style names (first of each stack) that have neither a bundled file nor a theme `fontesLocais`. */
+export function familiasSemArquivo(style: Pick<PrintStyle, 'fontes' | 'fontesLocais'>, manifest: FontManifest): string[] {
   const proprias = new Set((style.fontesLocais ?? []).map((f) => f.familia))
-  const specs = style.googleFonts.filter((s) => manifest.specs[s] && !proprias.has(s.split(':')[0]!))
+  const primeiras = (Object.values(style.fontes) as string[]).map((p) => p.split(',')[0]!.trim().replace(/^["']|["']$/g, ''))
+  return [...new Set(primeiras)].filter((f) => !SYSTEM_FONT_FAMILIES.includes(f) && !proprias.has(f) && !manifest.families[f])
+}
+
+/**
+ * @font-face rules for a style from the fonts bundled in this package (`fonts/manifest.json`): every face of
+ * every family its font stacks name (so a mono or label family outside `googleFonts` is not forgotten), with
+ * URLs `<base><file>`, then the theme's own `fontesLocais`, which win for their family.
+ */
+export function fontesEmpacotadasCss(style: Pick<PrintStyle, 'fontes' | 'googleFonts' | 'fontesLocais'>, manifest: FontManifest, base: string): string {
+  const proprias = new Set((style.fontesLocais ?? []).map((f) => f.familia))
+  const familias = new Set(familiasDoEstilo(style).filter((f) => manifest.families[f] && !proprias.has(f)))
+  // Every bundled spec of those families (faces are de-duplicated by fontFaceCss).
+  const specs = Object.keys(manifest.specs).filter((s) => familias.has(s.split(':')[0]!))
   return [specs.length ? fontFaceCss(manifest, specs, base) : '', fontesLocaisCss(style)].filter(Boolean).join('\n')
 }

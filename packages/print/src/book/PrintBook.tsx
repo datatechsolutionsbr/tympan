@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import {
   googleFontsUrl,
   fontesEmpacotadasCss,
+  familiasSemArquivo,
   type FontManifest,
   paginaDoEstilo,
   papelEscuro,
@@ -44,6 +45,8 @@ export interface LivroPrintProps {
    * `node_modules/@datatechsolutions/tympan-tokens/fonts` beside the HTML, or pass a file:// or http URL).
    */
   baseFontes?: string
+  /** With `fontes="locais"`: throw instead of warning when a family the theme names has no local file. */
+  fontesEstritas?: boolean
   /**
    * Print for the press: every page sits on a sheet with bleed (the page's background runs into it) and,
    * optionally, crop marks in the slug; `@page` grows to trim + 2 × (bleed + slug). `true` takes the theme's
@@ -61,6 +64,13 @@ export interface LivroPrintProps {
   children?: ReactNode
 }
 
+const AVISADOS = new Set<string>()
+function avisarUmaVez(msg: string) {
+  if (AVISADOS.has(msg)) return
+  AVISADOS.add(msg)
+  console.warn(msg)
+}
+
 /** Slug around the bleed that carries the crop marks (mm). */
 const MARGEM_MARCAS = 6
 
@@ -69,7 +79,7 @@ const MARGEM_MARCAS = 6
  * preset's custom properties, the component CSS and `@page` (the theme's trim, 170 × 240 mm by default),
  * and provides the resolved style to every component below.
  */
-export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carregarFontes = true, fontes: modoFontes, baseFontes = 'fonts/', impressao = false, lang = 'pt-BR', escopo: escopoProp, className, children }: LivroPrintProps) {
+export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carregarFontes = true, fontes: modoFontes, baseFontes = 'fonts/', fontesEstritas = false, impressao = false, lang = 'pt-BR', escopo: escopoProp, className, children }: LivroPrintProps) {
   const base = typeof estilo === 'string' ? printThemeById(estilo) : estilo
   const resolvido = resolvePrintStyle(base, { pb, overrides: tokens })
   const escopo = `tpb-${(escopoProp ?? hashCurto(JSON.stringify([pb, resolvido]))).replace(/[^a-zA-Z0-9_-]/g, '')}`
@@ -80,6 +90,14 @@ export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carr
   const pagina = `@page { size: ${pag.largura + 2 * folga}mm ${pag.altura + 2 * folga}mm; margin: 0; }`
   const varsGrafica = grafica ? `${seletor} { --ty-print-sangria: ${grafica.sangria}mm; --ty-print-folga: ${folga}mm; }` : ''
   const modo = modoFontes ?? (carregarFontes ? 'google' : 'nenhuma')
+  if (modo === 'locais') {
+    const faltam = familiasSemArquivo(resolvido, manifestoFontes as unknown as FontManifest)
+    if (faltam.length) {
+      const msg = `tympan-print: sem arquivo local para ${faltam.join(', ')} (estilo ${base.name}); o texto cai na fonte substituta da pilha. Indique fontesLocais no tema.`
+      if (fontesEstritas) throw new Error(msg)
+      avisarUmaVez(msg)
+    }
+  }
   const faces = modo === 'locais' ? fontesEmpacotadasCss(resolvido, manifestoFontes as unknown as FontManifest, baseFontes.endsWith('/') ? baseFontes : `${baseFontes}/`) : ''
   const css = `${faces}\n${incluirCss ? PRINT_CSS : ''}\n${printStyleToCss(base, { pb, overrides: tokens, seletor })}${pagina}\n${varsGrafica}\n${printTextoRolesCss(resolvido, seletor)}`
   const fontes = modo === 'google' ? googleFontsUrl(resolvido) : null

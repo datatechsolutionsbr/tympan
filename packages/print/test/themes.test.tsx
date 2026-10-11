@@ -109,3 +109,22 @@ describe('theme weights and figures reach the page', () => {
     expect(h).toContain('font-variant-numeric: tabular-nums lining-nums; }')
   })
 })
+
+describe('local fonts cover every family of the theme stacks', () => {
+  it('includes the mono family even when googleFonts omits it, and warns/throws for a family without a file', () => {
+    registerPrintTheme({ id: 'editora-exemplo', base: 'semanario', googleFonts: [], fontes: { mono: '"IBM Plex Mono", monospace' } })
+    const h = livro({ fontes: 'locais', baseFontes: '/f/' })
+    expect(h).toMatch(/font-family: 'IBM Plex Mono';[^}]*\/f\/ibmplexmono\//)
+    registerPrintTheme({ id: 'editora-exemplo', base: 'semanario', fontes: { mono: '"Fonte Inexistente", monospace' } })
+    const avisos: string[] = []
+    const orig = console.warn
+    console.warn = (m: string) => void avisos.push(m)
+    try {
+      livro({ fontes: 'locais' })
+    } finally {
+      console.warn = orig
+    }
+    expect(avisos.join()).toContain('Fonte Inexistente')
+    expect(() => livro({ fontes: 'locais', fontesEstritas: true })).toThrow(/Fonte Inexistente/)
+  })
+})
