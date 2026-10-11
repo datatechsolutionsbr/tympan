@@ -17,6 +17,7 @@ import {
 import { EscopoLivroProvider, PrintContextoProvider } from '../context.tsx'
 import { IdiomaProvider, criarIdioma, definirIdiomaAtual, idiomaAtualOuPadrao, type Idioma } from '../i18n.ts'
 import { PRINT_CSS } from '../styles.generated.ts'
+import { SCRIPT_AJUSTE_AUTOMATICO } from './adjust.ts'
 import manifestoFontes from '@datatechsolutions/tympan-tokens/fonts/manifest.json' with { type: 'json' }
 import { cx, hashCurto } from '../utils.ts'
 
@@ -54,6 +55,12 @@ export interface LivroPrintProps {
    * `pagina.sangria` (default 3 mm) and `pagina.marcasCorte`. Off (default): the PDF is the trim size.
    */
   impressao?: boolean | { sangria?: number; marcasCorte?: boolean }
+  /**
+   * Embed the copyfitting script (fits sparse and overfull pages in the browser that prints the book). Default:
+   * on when the style fills its pages (`estrutura.preencher`, e.g. dashboard); `false` to run
+   * `SCRIPT_AJUSTE_PAGINAS` yourself (or not at all).
+   */
+  ajustar?: boolean
   /** Language of the book (BCP 47): texts the components print and number formatting follow it ('pt-BR', 'en'). */
   lang?: string
   /** Overrides of the components' own texts by key (see TEXTOS_PT); merged over the theme's `textos`. */
@@ -83,7 +90,7 @@ const MARGEM_MARCAS = 6
  * preset's custom properties, the component CSS and `@page` (the theme's trim, 170 × 240 mm by default),
  * and provides the resolved style to every component below.
  */
-export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carregarFontes = true, fontes: modoFontes, baseFontes = 'fonts/', fontesEstritas = false, impressao = false, lang = 'pt-BR', textos, escopo: escopoProp, className, children }: LivroPrintProps) {
+export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carregarFontes = true, fontes: modoFontes, baseFontes = 'fonts/', fontesEstritas = false, impressao = false, lang = 'pt-BR', textos, ajustar, escopo: escopoProp, className, children }: LivroPrintProps) {
   const base = typeof estilo === 'string' ? printThemeById(estilo) : estilo
   const resolvido = resolvePrintStyle(base, { pb, overrides: tokens })
   const escopo = `tpb-${(escopoProp ?? hashCurto(JSON.stringify([pb, resolvido]))).replace(/[^a-zA-Z0-9_-]/g, '')}`
@@ -140,6 +147,7 @@ export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carr
       data-ty-print-numeros-marcados={e.numerosMarcados ? '' : undefined}
     >
       {fontes ? <link rel="stylesheet" href={fontes} /> : null}
+      {(ajustar ?? e.preencher ?? false) ? <script dangerouslySetInnerHTML={{ __html: SCRIPT_AJUSTE_AUTOMATICO }} /> : null}
       <style dangerouslySetInnerHTML={{ __html: `${css}\n${seletor} { --ty-print-texto-voce-sabia: ${JSON.stringify(idioma.t('voceSabia'))}; }` }} />
       <EscopoLivroProvider value={escopo}>
         <IdiomaProvider value={idioma}>

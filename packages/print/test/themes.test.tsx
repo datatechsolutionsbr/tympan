@@ -152,3 +152,13 @@ describe('fill mode (dashboard)', () => {
     expect(jornal).not.toContain('data-preencher')
   })
 })
+
+describe('copyfitting script embedded by PrintBook', () => {
+  const r = (estilo: string, extra: object = {}) => renderToStaticMarkup(<PrintBook estilo={estilo} incluirCss={false} carregarFontes={false} {...extra} />)
+  it('on for fill styles, off otherwise, with opt-out and opt-in', () => {
+    expect(r('dashboard')).toContain('data-ty-print-ajuste')
+    expect(r('jornal')).not.toContain('<script')
+    expect(r('dashboard', { ajustar: false })).not.toContain('<script')
+    expect(r('jornal', { ajustar: true })).toContain('data-ty-print-ajuste')
+  })
+})

@@ -160,8 +160,12 @@ registerPrintTheme({
 | `Sparkline` | a series in real millimetres (never stretched), last point marked |
 | `PrintLocatorMap inset capital escala` | small Brazil with the UF, the UF capital (`CAPITAIS`) when in the window and not the unit, a round graphic scale |
 
-Fill mode: `estrutura.preencher` (on in `dashboard`) or `Page preencher` packs panels into rows of six columns,
-widens the last panel of each row to the row's end and lets copyfitting grow sparse pages (up to 1.5).
+Fill mode: `estrutura.preencher` (on in `dashboard`) or `Page preencher` packs panels into rows of six columns
+and widens the last panel of each row to the row's end. Copyfitting (`ajustarPaginas`) grows sparse fill
+pages up to 1.5× (templated pages: the molde's `maximo`, default 1.3) and shrinks overfull ones down to 0.84.
+PrintBook embeds the copyfitting script automatically when the style fills pages (`ajustar={false}` to opt
+out, `ajustar` to force it on any style); it runs once fonts are ready and then sets
+`<html data-ty-print-ajuste="pronto">`; a PDF renderer should wait for that attribute before printing.
 
 The municipal mesh is IBGE Malha Municipal 2024 (5,571 municipalities). Gallery:
 `npm run gallery` → "livros: unidade territorial"; `node scripts/gallery-shots.mjs --grafico books --only lakebrasil-editorial --pb`.

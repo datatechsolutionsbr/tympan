@@ -3,7 +3,7 @@ export { LivroPrint as PrintBook, type LivroPrintProps as PrintBookProps } from 
 export { Dupla as Spread, type DuplaProps as SpreadProps } from './book/Spread.tsx'
 export { Pagina as Page, type PaginaProps as PageProps } from './book/Page.tsx'
 export { Area as PrintArea, type AreaProps as PrintAreaProps } from './book/Area.tsx'
-export { ajustarPaginas, SCRIPT_AJUSTE_PAGINAS, type AjusteOpcoes, type AjustePagina } from './book/adjust.ts'
+export { ajustarPaginas, SCRIPT_AJUSTE_PAGINAS, SCRIPT_AJUSTE_AUTOMATICO, type AjusteOpcoes, type AjustePagina } from './book/adjust.ts'
 export { MOLDES, gradeDoMolde, linhasDoMolde, moldePorNome, type Molde, type LinhaMolde, type InfoArea } from './book/templates.ts'
 export { Textura as Texture } from './book/Texture.tsx'
 export { Ornamento as Ornament } from './book/Ornament.tsx'

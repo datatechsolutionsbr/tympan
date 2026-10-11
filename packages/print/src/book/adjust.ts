@@ -42,6 +42,8 @@ export function ajustarPaginas(raiz: ParentNode = document, opcoes: AjusteOpcoes
     if (pg.getAttribute('data-variante') === 'capa') continue
     const m = pg.querySelector<HTMLElement>(':scope > .ty-print-type-area')
     if (!m) continue
+    // Already fitted (the book's own script ran): a second pass would measure the zoomed page and grow it again.
+    if (m.hasAttribute('data-ajuste')) continue
     const respiro = pg.hasAttribute('data-respiro') || pg.getAttribute('data-variante') === 'prancha'
     const enche = m.hasAttribute('data-preencher')
     // Fill-mode pages (dashboard) copyfit like templated pages: measured at content height, grown when sparse.
@@ -117,3 +119,10 @@ export function ajustarPaginas(raiz: ParentNode = document, opcoes: AjusteOpcoes
 
 /** `ajustarPaginas` as a self-contained script (for puppeteer's `page.evaluate` or an inline `<script>`). */
 export const SCRIPT_AJUSTE_PAGINAS = `(${ajustarPaginas.toString()})(document)`
+
+/**
+ * The script PrintBook embeds when the book fills its pages: fits every page once fonts are ready, then marks
+ * `<html data-ty-print-ajuste="pronto">` so a PDF renderer can wait for it
+ * (`page.waitForSelector('html[data-ty-print-ajuste="pronto"]')`).
+ */
+export const SCRIPT_AJUSTE_AUTOMATICO = `(function(){var f=${ajustarPaginas.toString()};function go(){try{f(document)}finally{document.documentElement.setAttribute('data-ty-print-ajuste','pronto')}}var r=function(){(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(go)};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',r);else r()})()`
