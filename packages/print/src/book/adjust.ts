@@ -47,12 +47,22 @@ export function ajustarPaginas(raiz: ParentNode = document, opcoes: AjusteOpcoes
     // Natural height: rows at content height (a molde's growing rows would otherwise always reach the foot).
     const natural = () => {
       if (comMolde) m.setAttribute('data-medindo', '')
-      const topo = m.getBoundingClientRect().top
+      const caixa = m.getBoundingClientRect()
+      const topo = caixa.top
       let fundo = topo
-      for (const c of Array.from(m.children)) fundo = Math.max(fundo, c.getBoundingClientRect().bottom)
-      const alt = m.getBoundingClientRect().height
+      // A foot source line (Fonte rodape) sits absolutely at the foot: the content must end above it, not at
+      // the foot of the type area, or the last panel prints under it (seen in atlas-oficial's full pages).
+      let limite = caixa.bottom
+      for (const c of Array.from(m.children)) {
+        const r = c.getBoundingClientRect()
+        if (c.classList.contains('ty-print-source') && c.hasAttribute('data-rodape') && getComputedStyle(c).position === 'absolute') {
+          limite = Math.min(limite, r.top - 1.5 * MM)
+          continue
+        }
+        fundo = Math.max(fundo, r.bottom)
+      }
       if (comMolde) m.removeAttribute('data-medindo')
-      return { conteudo: (fundo - topo) / MM, mancha: alt / MM }
+      return { conteudo: (fundo - topo) / MM, mancha: (limite - topo) / MM }
     }
     const excesso = () => {
       const n = natural()
