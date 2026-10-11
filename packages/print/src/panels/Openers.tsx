@@ -44,6 +44,10 @@ export interface CapaProps {
    * (into the bleed when PrintBook prints for the press). Crop marks and bleed still come from the book.
    */
   children?: ReactNode
+  /** Background of the custom plate (into the bleed): any CSS colour; default the cover field. */
+  fundo?: string
+  /** Margin of the custom plate: `true` = the cover's type-area margins, a number = mm; default 0 (edge to edge). */
+  margem?: boolean | number
   /**
    * Cover system of the collection (board L6): the collection name, the volume numeral as the mark ("0", "I"…),
    * the period or "guia de leitura", and one illustration per volume, tone on tone. With `numeral`, the front
@@ -126,10 +130,12 @@ function Grafismo({ cortes, legenda }: { cortes: number[]; legenda?: string }) {
 }
 
 /** Front or back cover, printed on the volume's colour field (or the ink colour), in the style. */
-export function Capa({ face = 'primeira', eyebrow, titulo, subtitulo, autora, chamada, paragrafos, destaque, cortes, legendaGrafismo, selo, isbn, editora = false, logo, colecao, numeral, rotulo, ilustracao, leis, perguntas, className, children }: CapaProps) {
+export function Capa({ face = 'primeira', eyebrow, titulo, subtitulo, autora, chamada, paragrafos, destaque, cortes, legendaGrafismo, selo, isbn, editora = false, logo, colecao, numeral, rotulo, ilustracao, leis, perguntas, className, children, fundo, margem }: CapaProps) {
   if (children) {
+    // Page lifts this element out of the type area and anchors it to the page box (and its bleed).
+    const pad = margem === true ? '16mm 16mm 14mm' : typeof margem === 'number' ? `${margem}mm` : undefined
     return (
-      <div className={cx('ty-print-capa', className)} data-face={face} data-prancha="">
+      <div className={cx('ty-print-capa', className)} data-face={face} data-prancha="" style={{ ...(fundo ? { background: fundo } : {}), ...(pad ? { padding: pad } : {}) }}>
         {children}
       </div>
     )

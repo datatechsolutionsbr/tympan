@@ -8,6 +8,7 @@ import { Painel } from '../panels/Panel.tsx'
 import { nomeArea, gradeDoMolde, linhasDoMolde, linhasUsadas, moldePorNome } from './templates.ts'
 import { Ornamento } from './Ornament.tsx'
 import { Textura } from './Texture.tsx'
+import { Capa } from '../panels/Openers.tsx'
 import { Marca, type MarcaEntrada } from '../brand/Marca.tsx'
 
 export interface PaginaProps {
@@ -76,6 +77,10 @@ export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero
   if (cheio) children = cheio.filhos
   const marcaRodape = variante === 'normal' ? (marca ?? (estilo.folio?.marca === 'editora' ? true : estilo.folio?.marca === 'selo' ? estilo.marcas?.selo : undefined)) : undefined
   const cc = variante === 'capa' && campo ? coresCapa(campo, estilo, pb) : null
+  // A custom cover plate (Cover with children) is anchored to the page box, not to the type area.
+  const filhos = Children.toArray(children)
+  const prancha = variante === 'capa' ? filhos.find((c) => isValidElement<{ children?: ReactNode }>(c) && c.type === Capa && c.props.children != null) : undefined
+  if (prancha) children = filhos.filter((c) => c !== prancha)
   const corpo = variante === 'capa' ? <FundoEscuroProvider value={cc ? cc.escuro : !papelEscuro(estilo)}>{children}</FundoEscuroProvider> : children
   // The cover prints `--ty-print-tinta` as its field and `--ty-print-papel` as its type (base.css).
   const estiloPagina = cc ? ({ '--ty-print-tinta': cc.fundo, '--ty-print-papel': cc.texto } as CSSProperties) : undefined
@@ -93,7 +98,8 @@ export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero
       aria-label={textoFolio ? tx('pagina', { a: textoFolio }) : lado === 'par' ? tx('paginaPar') : tx('paginaImpar')}
     >
       <Textura lado={lado} />
-      {variante !== 'prancha' ? <Ornamento lado={lado} /> : null}
+      {variante !== 'prancha' && !prancha ? <Ornamento lado={lado} /> : null}
+      {prancha ? <FundoEscuroProvider value={cc ? cc.escuro : !papelEscuro(estilo)}>{prancha}</FundoEscuroProvider> : null}
       {textoCabeco ? <p className="ty-print-running-head">{textoCabeco}</p> : null}
       <div className="ty-print-type-area" style={cheio ? { gridTemplateRows: cheio.linhas } : estiloMancha} data-preencher={cheio ? '' : undefined}>
         <LadoProvider value={lado}>{grade ? <MoldeProvider value={grade.info}>{corpo}</MoldeProvider> : corpo}</LadoProvider>

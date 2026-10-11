@@ -599,20 +599,22 @@
   }
 }
 
-/* Custom cover plate (Cover children): the whole page, edge to edge; into the bleed on a press sheet. */
+/* Custom cover plate (Cover children): lifted by Page out of the type area, on the page box; into the bleed on a
+   press sheet (the page lets it overflow there). */
 @layer tympan-print {
-  .ty-print-page[data-variante='capa'] .ty-print-capa[data-prancha] {
+  .ty-print-page > .ty-print-capa[data-prancha] {
     position: absolute;
-    inset: -16mm -16mm -14mm;
+    inset: 0;
     z-index: 2;
     overflow: hidden;
+    box-sizing: border-box;
   }
 
-  .ty-print-sheet > .ty-print-page[data-variante='capa']:has(.ty-print-capa[data-prancha]) {
+  .ty-print-sheet > .ty-print-page:has(> .ty-print-capa[data-prancha]) {
     overflow: visible;
   }
 
-  .ty-print-sheet .ty-print-page[data-variante='capa'] .ty-print-capa[data-prancha] {
-    inset: calc(-16mm - var(--ty-print-sangria, 0mm)) calc(-16mm - var(--ty-print-sangria, 0mm)) calc(-14mm - var(--ty-print-sangria, 0mm));
+  .ty-print-sheet > .ty-print-page > .ty-print-capa[data-prancha] {
+    inset: calc(-1 * var(--ty-print-sangria, 0mm));
   }
 }
