@@ -17,7 +17,7 @@ function matriz(cor: string, alfa: number, limiar: number): string {
  */
 export function Textura({ lado }: { lado: 'par' | 'impar' }) {
   const { estilo, pb } = usePrint()
-  const id = useIdSeguro('ty-print-pafootl')
+  const id = useIdSeguro('ty-print-papel')
   const { textura, intensidade } = estilo.papel
   if (textura === 'nenhuma' || intensidade <= 0) return null
   const tinta = estilo.cor.tinta

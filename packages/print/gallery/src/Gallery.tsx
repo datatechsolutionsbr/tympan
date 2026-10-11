@@ -20,7 +20,7 @@ function lerUrl() {
   return {
     estilo,
     pb: q.get('pb') === '1',
-    grafico: (q.get('chart') ?? 'study') as Grafico,
+    grafico: (q.get('grafico') ?? q.get('chart') ?? 'study') as Grafico,
     foto: q.get('foto') === '1',
   }
 }
@@ -52,7 +52,7 @@ export function Gallery() {
   return (
     <div className="ty-print-galeria">
       <header className="ty-print-galeria-barra">
-        <h1>Tympan print · styles de livro</h1>
+        <h1>Tympan print · estilos de livro</h1>
         <label>
           Estilo
           <select value={estilo} onChange={(e) => setEstilo(e.target.value)}>

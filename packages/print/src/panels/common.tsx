@@ -58,7 +58,7 @@ export function comColchetes(texto: string): ReactNode {
   if (partes.length === 1) return texto
   return partes.map((p, i) =>
     /^\[[^\]]*\]$/.test(p) ? (
-      <span key={i} className="ty-print-footndente">
+      <span key={i} className="ty-print-pendente">
         {p}
       </span>
     ) : /^==[^=]+==$/.test(p) ? (

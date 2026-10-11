@@ -58,3 +58,23 @@ describe('moldes', () => {
     ])
   })
 })
+
+describe('area names are contract (pt-BR)', () => {
+  it('creditos has `marca`, atlas has `mapa`; the mistranslated aliases still place', async () => {
+    const { MOLDES, PrintBook, Spread, Page, PrintArea } = await import('../src/index.ts')
+    const { renderToStaticMarkup } = await import('react-dom/server')
+    const areas = (m: string) => [...MOLDES[m]!.par, ...MOLDES[m]!.impar].flatMap((l) => l.areas.map(([a]) => a))
+    expect(areas('creditos')).toContain('marca')
+    expect(areas('creditos')).not.toContain('brand')
+    expect(areas('atlas')).toContain('mapa')
+    const h = renderToStaticMarkup(
+      <PrintBook estilo="jornal" incluirCss={false} carregarFontes={false}>
+        <Spread numero="2-3" molde="creditos">
+          <Page lado="impar"><PrintArea nome="brand">x</PrintArea><PrintArea nome="marca-texto">y</PrintArea></Page>
+        </Spread>
+      </PrintBook>,
+    )
+    expect(h).toContain('data-area="marca"')
+    expect(h).not.toContain('data-fora-do-molde')
+  })
+})

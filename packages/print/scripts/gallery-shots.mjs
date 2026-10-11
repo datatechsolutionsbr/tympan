@@ -53,7 +53,7 @@ try {
   for (const nome of nomes) {
     for (const pb of comPb ? [false, true] : [false]) {
       const arquivo = join(saida, `${nome}${sufixo}${pb ? '-pb' : ''}.png`)
-      const url = `http://127.0.0.1:${porta}/?foto=1&estilo=${nome}&chart=${chart}${pb ? '&pb=1' : ''}`
+      const url = `http://127.0.0.1:${porta}/?foto=1&estilo=${nome}&grafico=${chart}${pb ? '&pb=1' : ''}`
       await pagina.goto(url, { waitUntil: 'networkidle0', timeout: 60000 })
       await pagina.evaluate(() => document.fonts.ready)
       await new Promise((r) => setTimeout(r, 300))

@@ -218,7 +218,7 @@ function resolverDestaques(consultas: string[], areas: AreaPosta[], nivel: Nivel
       achadas = areas.filter((a) => normalizar(a.nome) === nome && (!uf || a.uf === uf))
       if (achadas.length > 1) throw new Error(`tympan-print Mapa: destaque "${q}" é ambíguo (${achadas.map((a) => `${a.nome}/${a.uf}`).join(', ')}); use "Nome/UF" ou o código IBGE`)
     }
-    if (!achadas.length) throw new Error(`tympan-print Mapa: destaque "${q}" não encontrado no map`)
+    if (!achadas.length) throw new Error(`tympan-print Mapa: destaque "${q}" não encontrado no mapa`)
     out.push(...achadas)
   }
   return out
@@ -636,7 +636,7 @@ export function Mapa({
       ) : null}
       {naoMostra ? (
         <p className="ty-print-map-note">
-          <span className="ty-print-margin-title">O que o map não mostra</span> {comColchetes(naoMostra)}
+          <span className="ty-print-margin-title">O que o mapa não mostra</span> {comColchetes(naoMostra)}
         </p>
       ) : null}
       {exemplo || itens.some((it) => it.exemplo) ? <p className="ty-print-badge-example">Dados de exemplo</p> : null}

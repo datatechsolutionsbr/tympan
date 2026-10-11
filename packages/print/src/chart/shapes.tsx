@@ -350,7 +350,7 @@ export function Fluxo({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarras; l
   const corpo = (
     <>
       {chave(c, spec, pares, algum)}
-      <g className="ty-print-g-brace-esfootssura">
+      <g className="ty-print-g-brace-espessura">
         <text className="ty-print-g-brace" x={n(largura - 3.4)} y={n(2.4 + (pares ? 3.6 : 0))} textAnchor="end">
           {`espessura de ${numeroBr(u)}`}
         </text>

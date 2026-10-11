@@ -253,38 +253,38 @@ export interface AberturaParteProps {
 
 export function AberturaParte({ numero, titulo, pergunta, partes, nestaParte, ondeIssoVolta, className }: AberturaParteProps) {
   return (
-    <header className={cx('ty-print-ofootner', className)}>
-      <p className="ty-print-ofootner-number">
-        Parte <span className="ty-print-ofootner-roman">{numero}</span>
+    <header className={cx('ty-print-opener', className)}>
+      <p className="ty-print-opener-number">
+        Parte <span className="ty-print-opener-roman">{numero}</span>
       </p>
-      <p className="ty-print-ofootner-numeral" aria-hidden="true">
+      <p className="ty-print-opener-numeral" aria-hidden="true">
         {numero}
       </p>
-      <h1 className="ty-print-ofootner-title">{comColchetes(titulo)}</h1>
-      <p className="ty-print-ofootner-question">{comColchetes(pergunta)}</p>
+      <h1 className="ty-print-opener-title">{comColchetes(titulo)}</h1>
+      <p className="ty-print-opener-question">{comColchetes(pergunta)}</p>
       {partes?.length ? (
-        <ol className="ty-print-ofootner-parts" aria-label="Partes do book">
+        <ol className="ty-print-opener-parts" aria-label="Partes do livro">
           {partes.map((p) => (
             <li key={p.numero} data-atual={p.numero === numero ? '' : undefined} aria-current={p.numero === numero ? 'true' : undefined}>
-              <span className="ty-print-ofootner-roman">{p.numero}</span> {comColchetes(p.titulo)}
+              <span className="ty-print-opener-roman">{p.numero}</span> {comColchetes(p.titulo)}
             </li>
           ))}
         </ol>
       ) : null}
       {nestaParte?.length ? (
-        <div className="ty-print-ofootner-chapters">
+        <div className="ty-print-opener-chapters">
           <p className="ty-print-sobretitle">Nesta parte</p>
           <ol>
             {nestaParte.map((c, i) => (
               <li key={i}>
-                <span className="ty-print-ofootner-chap">{comColchetes(c.cap)}</span> {comColchetes(c.titulo)}
+                <span className="ty-print-opener-chap">{comColchetes(c.cap)}</span> {comColchetes(c.titulo)}
               </li>
             ))}
           </ol>
         </div>
       ) : null}
       {ondeIssoVolta ? (
-        <p className="ty-print-ofootner-back">
+        <p className="ty-print-opener-back">
           <span className="ty-print-margin-title">Onde isso volta</span> {comColchetes(ondeIssoVolta)}
         </p>
       ) : null}

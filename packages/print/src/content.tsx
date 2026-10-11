@@ -108,7 +108,7 @@ const SPEC: Record<string, string[]> = {
   ...SPEC_CORRELACAO,
 }
 const ITENS_SPEC: Record<string, string[]> = {
-  linhas: ['rotulo', 'nota', 'a', 'b', 'destaque', 'brand', 'local'],
+  linhas: ['rotulo', 'nota', 'a', 'b', 'destaque', 'marca', 'local'],
   barras: ['rotulo', 'valor', 'destaque', 'nota'],
   grupos: ['rotulo', 'valor', 'destaque', 'nota'],
   pontos: ['x', 'y', 'rotulo', 'chamada'],

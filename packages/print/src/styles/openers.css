@@ -120,33 +120,33 @@
   }
 
   /* ------------------------------------------------------------ Part opening */
-  .ty-print-ofootner {
+  .ty-print-opener {
     display: flex;
     flex-direction: column;
     gap: 3mm;
     padding-block-start: 30mm;
   }
 
-  .ty-print-ofootner-number {
+  .ty-print-opener-number {
     font: 700 9pt/1 var(--ty-print-fonte-rotulo);
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--ty-print-destaque);
   }
 
-  .ty-print-ofootner-title {
+  .ty-print-opener-title {
     font: 700 34pt/1 var(--ty-print-fonte-titulo);
     text-transform: var(--ty-print-titulo-caixa);
     letter-spacing: var(--ty-print-titulo-espaco);
   }
 
-  .ty-print-ofootner-question {
+  .ty-print-opener-question {
     max-inline-size: 110mm;
     font: italic 400 13pt/1.3 var(--ty-print-fonte-titulo);
     color: var(--ty-print-tinta-2);
   }
 
-  .ty-print-ofootner-parts {
+  .ty-print-opener-parts {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 5mm;
@@ -155,53 +155,53 @@
     color: var(--ty-print-tinta-3);
   }
 
-  .ty-print-ofootner-parts li {
+  .ty-print-opener-parts li {
     padding-block-start: 1.6mm;
     border-block-start: 0.3mm solid var(--ty-print-linha);
   }
 
-  .ty-print-ofootner-parts li[data-atual] {
+  .ty-print-opener-parts li[data-atual] {
     font-weight: 700;
     color: var(--ty-print-tinta);
     border-block-start: 1mm solid var(--ty-print-destaque);
   }
 
-  .ty-print-ofootner-roman {
+  .ty-print-opener-roman {
     font-weight: 700;
   }
 
-  .ty-print-ofootner-chapters ol {
+  .ty-print-opener-chapters ol {
     display: grid;
     gap: 0;
     font-size: 10pt;
   }
 
-  .ty-print-ofootner-chapters li {
+  .ty-print-opener-chapters li {
     padding-block: 2mm;
     border-block-end: 0.2mm solid var(--ty-print-linha);
   }
 
-  .ty-print-ofootner-chap {
+  .ty-print-opener-chap {
     display: inline-block;
     min-inline-size: 12mm;
     font: 700 6.6pt var(--ty-print-fonte-rotulo);
     color: var(--ty-print-tinta-3);
   }
 
-  .ty-print-ofootner-back {
+  .ty-print-opener-back {
     font-size: 8.4pt;
     color: var(--ty-print-tinta-2);
   }
 
   /* Part opening (storyboard pp. [16]-[17]): the roman numeral as a large mark, and the part's blocks spread
      down the page instead of stopping a third of the way. */
-  .ty-print-ofootner-numeral {
+  .ty-print-opener-numeral {
     font: 700 110pt/0.82 var(--ty-print-fonte-titulo);
     color: var(--ty-print-destaque);
     margin-block: 2mm 4mm;
   }
 
-  .ty-print-area[data-cresce] > .ty-print-ofootner {
+  .ty-print-area[data-cresce] > .ty-print-opener {
     flex: 1 1 auto;
     padding-block-start: 6mm;
     justify-content: space-between;

@@ -3,7 +3,7 @@ import { contrastRatio, luminance, papelEscuro, parseColor, toGrey } from '@data
 import { FundoEscuroProvider, LadoProvider, MoldeProvider, useDupla, usePrint } from '../context.tsx'
 import { cx } from '../utils.ts'
 import { Area } from './Area.tsx'
-import { gradeDoMolde, linhasDoMolde, linhasUsadas, moldePorNome } from './templates.ts'
+import { nomeArea, gradeDoMolde, linhasDoMolde, linhasUsadas, moldePorNome } from './templates.ts'
 import { Ornamento } from './Ornament.tsx'
 import { Textura } from './Texture.tsx'
 
@@ -118,7 +118,7 @@ function MarcasCorte({ largura, altura, sangria, folga }: { largura: number; alt
 function areasDosFilhos(children: ReactNode): Set<string> | null {
   const nomes = new Set<string>()
   Children.forEach(children, (c) => {
-    if (isValidElement<{ nome?: string }>(c) && c.type === Area && c.props.nome) nomes.add(c.props.nome)
+    if (isValidElement<{ nome?: string }>(c) && c.type === Area && c.props.nome) nomes.add(nomeArea(c.props.nome))
   })
   return nomes.size ? nomes : null
 }

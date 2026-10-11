@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { AreaNomeProvider, ColunasProvider, LarguraProvider, useAreasDoMolde } from '../context.tsx'
 import { larguraUtil } from '../panels/Panel.tsx'
 import { cx } from '../utils.ts'
+import { nomeArea } from './templates.ts'
 
 export interface AreaProps {
   /** Area of the page's molde (livro/moldes.ts), e.g. "a", "d", "fonte". */
@@ -15,7 +16,8 @@ export interface AreaProps {
  * how many columns it spans; panels inside take that width (and figures size
  * themselves to it). In the growing row, the last block stretches to the foot.
  */
-export function Area({ nome, className, children }: AreaProps) {
+export function Area({ nome: nomeDado, className, children }: AreaProps) {
+  const nome = nomeArea(nomeDado)
   const info = useAreasDoMolde()?.get(nome)
   return (
     <div
