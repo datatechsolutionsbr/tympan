@@ -14,7 +14,7 @@ import {
 } from '@datatechsolutions/tympan-tokens'
 import { EscopoLivroProvider, PrintContextoProvider } from '../context.tsx'
 import { PRINT_CSS } from '../styles.generated.ts'
-import manifestoFontes from '@datatechsolutions/tympan-tokens/fonts/manifest.json'
+import manifestoFontes from '@datatechsolutions/tympan-tokens/fonts/manifest.json' with { type: 'json' }
 import { cx, hashCurto } from '../utils.ts'
 
 export interface LivroPrintProps {
