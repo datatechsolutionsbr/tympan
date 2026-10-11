@@ -207,6 +207,24 @@ export interface PrintStyle {
    * has approved variations (ink, duotone, per style), see LogoDatatech.
    */
   logo?: 'cor' | 'mono'
+  /** Typesetting options a book may need against the style's idiom (see PrintTexto). */
+  texto?: PrintTexto
+}
+
+/**
+ * Typesetting switches for books whose content fights the style: a style in lower case (bauhaus,
+ * diagrama-modernista) would print "boa vista" for a proper name; a style with old-style figures would
+ * misalign table columns.
+ */
+export interface PrintTexto {
+  /**
+   * 'estilo' (default): page titles and eyebrows follow the style's casing. 'preservar': the level-1 title,
+   * eyebrows and table cells keep the casing written in the content (proper names, codes), while panel labels
+   * and running heads keep the style's.
+   */
+  nomesProprios?: 'estilo' | 'preservar'
+  /** Figures in table cells: 'tabular' (default, lining and equal width, columns align) or 'proporcional'. */
+  numerosTabela?: 'tabular' | 'proporcional'
 }
 
 /** Any token of a style may be overridden by the editor (partial, nested). */
@@ -224,6 +242,7 @@ export interface PrintStyleOverrides {
   pb?: PrintCoresParciais
   estrutura?: Partial<PrintEstrutura>
   logo?: 'cor' | 'mono'
+  texto?: PrintTexto
 }
 
 // ---------------------------------------------------------------------------
@@ -1497,6 +1516,7 @@ export function mergePrintStyle(style: PrintStyle, overrides?: PrintStyleOverrid
     pb: overrides.pb ? mergeCores({ ...style.cor, ...style.pb, prova: { ...style.cor.prova, ...style.pb.prova } }, overrides.pb) : style.pb,
     estrutura: { ...style.estrutura, ...overrides.estrutura },
     logo: overrides.logo ?? style.logo,
+    ...(overrides.texto || style.texto ? { texto: { ...style.texto, ...overrides.texto } } : {}),
   }
 }
 
@@ -1581,6 +1601,11 @@ export function printStyleVariables(style: PrintStyle): Array<[string, string]> 
   vars.push(['--ty-print-rotulo-caixa', minusculas ? 'lowercase' : rc === 'alta' ? 'uppercase' : 'none'])
   vars.push(['--ty-print-rotulo-variante', rc === 'versalete' ? 'small-caps' : 'normal'])
   vars.push(['--ty-print-rotulo-espaco', rc === 'normal' ? 'normal' : '0.07em'])
+  const preservar = style.texto?.nomesProprios === 'preservar'
+  vars.push(['--ty-print-titulo1-caixa', preservar ? 'none' : style.caixaAlta ? 'uppercase' : minusculas ? 'lowercase' : 'none'])
+  vars.push(['--ty-print-sobretitulo-caixa', preservar ? 'none' : minusculas ? 'lowercase' : rc === 'alta' ? 'uppercase' : 'none'])
+  vars.push(['--ty-print-celula-caixa', preservar ? 'none' : minusculas ? 'lowercase' : 'none'])
+  vars.push(['--ty-print-tabela-numeros', style.texto?.numerosTabela === 'proporcional' ? 'proportional-nums lining-nums' : 'tabular-nums lining-nums'])
   const orn = style.cor.ornamento ?? []
   const reserva = [style.cor.destaque, style.cor.destaque2, style.cor.tinta, style.cor.marcaTexto]
   for (let i = 0; i < 4; i++) vars.push([`--ty-print-ornamento-${i + 1}`, orn[i] ?? reserva[i]!])
