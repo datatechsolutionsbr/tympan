@@ -145,7 +145,7 @@ describe('fill mode (dashboard)', () => {
       </PrintBook>,
     )
     expect(h).toContain('data-preencher=""')
-    expect(h).toContain('grid-template-rows:auto auto minmax(min-content, 1fr)')
+    expect(h).toContain('grid-template-rows:max-content max-content minmax(max-content, 1fr)')
     const larguras = [...h.matchAll(/data-largura="(\d)"/g)].map((m) => Number(m[1]))
     expect(larguras).toEqual([2, 4, 6])
     const jornal = renderToStaticMarkup(<PrintBook estilo="jornal" incluirCss={false} carregarFontes={false}><Spread numero="2-3"><Page lado="par"><Panel letra="a" titulo="a" largura={2}>x</Panel></Page></Spread></PrintBook>)

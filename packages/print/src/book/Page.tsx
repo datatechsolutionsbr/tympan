@@ -88,6 +88,7 @@ export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero
       data-respiro={m?.respiro ? '' : undefined}
       data-campo={cc ? '' : undefined}
       data-maximo={m?.maximo ?? (cheio ? 1.5 : undefined)}
+      data-minimo={cheio ? 0.72 : undefined}
       style={estiloPagina}
       aria-label={textoFolio ? tx('pagina', { a: textoFolio }) : lado === 'par' ? tx('paginaPar') : tx('paginaImpar')}
     >
@@ -149,7 +150,7 @@ function areasDosFilhos(children: ReactNode): Set<string> | null {
 /**
  * Fill mode: panels in reading order are packed into rows of six columns (as the grid would place them), the
  * last panel of each row widens to the row's end, and every row of panels takes a share of the free height
- * (`minmax(min-content, 1fr)`); other blocks (titles, text) keep their height. Absolutely placed blocks (the
+ * (`minmax(max-content, 1fr)`); other blocks (titles, text) keep their height. Absolutely placed blocks (the
  * foot source line) are left out of the rows.
  */
 function encherLinhas(children: ReactNode): { filhos: ReactNode[]; linhas: string } {
@@ -163,7 +164,7 @@ function encherLinhas(children: ReactNode): { filhos: ReactNode[]; linhas: strin
       const el = saida[ultimo] as ReactElement<{ largura?: number }>
       const w = Math.round(el.props.largura ?? 6)
       if (soma < 6) saida[ultimo] = cloneElement(el, { largura: w + (6 - soma) })
-      linhas.push('minmax(min-content, 1fr)')
+      linhas.push('painel')
     }
     soma = 0
     ultimo = -1
@@ -179,11 +180,13 @@ function encherLinhas(children: ReactNode): { filhos: ReactNode[]; linhas: strin
       return
     }
     fechar()
-    linhas.push('auto')
+    linhas.push('max-content')
   })
   fechar()
   // Rows keep their content height (copyfitting grows sparse pages); the last row of panels takes what is left,
   // so the foot of the page is reached without opening gaps between rows.
-  const ultimaPainel = linhas.lastIndexOf('minmax(min-content, 1fr)')
-  return { filhos: saida, linhas: linhas.map((l, i) => (l === 'auto' || i === ultimaPainel ? l : 'auto')).join(' ') }
+  // Every row is at least as tall as its content (max-content: an 'auto' row is squeezed below its panels when
+  // the page is too dense, and panels then overlap the next row). Only the last row of panels takes the rest.
+  const ultimaPainel = linhas.lastIndexOf('painel')
+  return { filhos: saida, linhas: linhas.map((_l, i) => (i === ultimaPainel ? 'minmax(max-content, 1fr)' : 'max-content')).join(' ') }
 }

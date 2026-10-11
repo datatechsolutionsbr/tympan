@@ -75,6 +75,8 @@ export function ajustarPaginas(raiz: ParentNode = document, opcoes: AjusteOpcoes
     const inicio = natural()
     const razao = inicio.conteudo / inicio.mancha
     const maximoPagina = Number(pg.getAttribute('data-maximo')) || maximo
+    // A page may allow a smaller scale than the book (fill pages: down to 0.72 before anything is left over).
+    const minimoPagina = Number(pg.getAttribute('data-minimo')) || minimo
     const cresce = !respiro && comMolde && maximoPagina > 1 && razao < alvo
     if (!cresce && inicio.conteudo - inicio.mancha <= 0.3) continue
     const original = m.style.cssText
@@ -102,7 +104,7 @@ export function ajustarPaginas(raiz: ParentNode = document, opcoes: AjusteOpcoes
       aplicar(escala)
     }
     let sobra = excesso()
-    while (sobra > 0.3 && escala - passo >= minimo - 1e-9) {
+    while (sobra > 0.3 && escala - passo >= minimoPagina - 1e-9) {
       escala = Math.round((escala - passo) * 1000) / 1000
       aplicar(escala)
       sobra = excesso()
@@ -112,6 +114,8 @@ export function ajustarPaginas(raiz: ParentNode = document, opcoes: AjusteOpcoes
       continue
     }
     m.setAttribute('data-ajuste', String(escala))
+    // What still passes the foot at the smallest scale (mm): the page is too dense; the book must split it.
+    if (sobra > 0.3) m.setAttribute('data-sobra', String(Math.round(sobra * 10) / 10))
     out.push({ pagina: pg.getAttribute('aria-label') ?? '?', escala, sobra: Math.max(0, Math.round(sobra * 10) / 10) })
   }
   return out

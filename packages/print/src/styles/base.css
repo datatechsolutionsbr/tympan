@@ -315,10 +315,16 @@
     inset-block-end: 15mm;
   }
 
+  /* Panels keep at least their content height: on a page too dense to fit, the grid grows (copyfitting then
+     shrinks it, and reports what is left over) instead of panels shrinking under their content and overlapping. */
   .ty-print-type-area[data-preencher] > .ty-print-panel {
     display: flex;
     flex-direction: column;
-    min-block-size: 0;
+    min-block-size: min-content;
+  }
+
+  .ty-print-type-area[data-preencher] > .ty-print-panel > .ty-print-panel-body > * {
+    flex: none;
   }
 
   .ty-print-type-area[data-preencher] > .ty-print-panel > .ty-print-panel-body {

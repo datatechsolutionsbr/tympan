@@ -178,3 +178,10 @@
     justify-content: flex-start;
   }
 }
+
+/* Measuring a fill page: rows at their full content height (auto rows can be squeezed under their panels). */
+@layer tympan-print {
+  .ty-print-type-area[data-preencher][data-medindo] {
+    grid-auto-rows: max-content;
+  }
+}
