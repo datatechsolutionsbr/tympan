@@ -3,13 +3,20 @@ import { PRINT_PRESET_NAMES, printPresets, resolvePrintStyleName, type PrintPres
 import { PrintBook } from '../../src/index.ts'
 import { DuplaEstudo, GRAFICO_DO_ESTUDO, type TipoGraficoEstudo } from './study.tsx'
 import { DuplaMapas } from './maps.tsx'
+import { DuplaLivros } from './books.tsx'
+import { TEMA_EXEMPLO_EDITORA, registerPrintTheme } from '@datatechsolutions/tympan-tokens'
+import lakebrasil from '../../../tokens/test/fixtures/lakebrasil-editorial.tokens.json'
 
-type Grafico = 'study' | 'map' | TipoGraficoEstudo
+// Book themes shown in the gallery: a neutral example and the lakebrasil-editorial tokens (brand repo JSON).
+const TEMAS = [registerPrintTheme(TEMA_EXEMPLO_EDITORA).id, registerPrintTheme(lakebrasil).id]
+
+type Grafico = 'study' | 'map' | 'books' | TipoGraficoEstudo
 
 function lerUrl() {
   const q = new URLSearchParams(window.location.search)
   // Old links with a deprecated style id open the renamed style.
-  const estilo: PrintPresetName = resolvePrintStyleName(q.get('estilo') ?? 'jornal') ?? 'jornal'
+  const pedido = q.get('estilo') ?? 'jornal'
+  const estilo: string = TEMAS.includes(pedido) ? pedido : (resolvePrintStyleName(pedido) ?? 'jornal')
   return {
     estilo,
     pb: q.get('pb') === '1',
@@ -25,7 +32,7 @@ function lerUrl() {
  */
 export function Gallery() {
   const inicial = lerUrl()
-  const [estilo, setEstilo] = useState<PrintPresetName>(inicial.estilo)
+  const [estilo, setEstilo] = useState<string>(inicial.estilo)
   const [pb, setPb] = useState(inicial.pb)
   const [grafico, setGrafico] = useState<Grafico>(inicial.grafico)
 
@@ -34,10 +41,10 @@ export function Gallery() {
     window.history.replaceState(null, '', `?${q.toString()}`)
   }, [estilo, pb, grafico, inicial.foto])
 
-  const tipo: TipoGraficoEstudo = grafico === 'study' || grafico === 'map' ? (GRAFICO_DO_ESTUDO[estilo] ?? 'halteres') : grafico
+  const tipo: TipoGraficoEstudo = grafico === 'study' || grafico === 'map' || grafico === 'books' ? (GRAFICO_DO_ESTUDO[estilo as PrintPresetName] ?? 'halteres') : grafico
   const livro = (
     <PrintBook estilo={estilo} pb={pb}>
-      {grafico === 'map' ? <DuplaMapas /> : <DuplaEstudo grafico={tipo} />}
+      {grafico === 'map' ? <DuplaMapas /> : grafico === 'books' ? <DuplaLivros /> : <DuplaEstudo grafico={tipo} />}
     </PrintBook>
   )
   if (inicial.foto) return <main className="ty-print-galeria-foto">{livro}</main>
@@ -48,7 +55,12 @@ export function Gallery() {
         <h1>Tympan print · styles de livro</h1>
         <label>
           Estilo
-          <select value={estilo} onChange={(e) => setEstilo(e.target.value as PrintPresetName)}>
+          <select value={estilo} onChange={(e) => setEstilo(e.target.value)}>
+            {TEMAS.map((t) => (
+              <option key={t} value={t}>
+                tema: {t}
+              </option>
+            ))}
             {PRINT_PRESET_NAMES.map((n) => (
               <option key={n} value={n}>
                 {printPresets[n].label}
@@ -64,6 +76,7 @@ export function Gallery() {
             <option value="barras">barras</option>
             <option value="contagem">contagem</option>
             <option value="map">maps (example values)</option>
+            <option value="books">livros: unidade territorial</option>
           </select>
         </label>
         <label>

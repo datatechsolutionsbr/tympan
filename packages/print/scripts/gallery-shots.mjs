@@ -1,8 +1,9 @@
 // Renders the gallery spread of every preset in headless Chrome and saves
 // gallery/shots/<preset>.png (and <preset>-pb.png with --pb). Builds the
 // gallery first, serves dist-gallery on a local port, then calls Chrome.
-//   node scripts/gallery-shots.mjs [--pb] [--only jornal,minimo-de-tinta] [--grafico halteres|mapa]
-// `--grafico map` shoots the map spread as <preset>-mapa.png.
+//   node scripts/gallery-shots.mjs [--pb] [--only jornal,minimo-de-tinta] [--grafico halteres|map|books]
+// `--grafico map` shoots the map spread as <preset>-mapa.png; `--grafico books` the territorial-unit spread
+// (<id>-livros.png; --only also takes the gallery's book themes, e.g. lakebrasil-editorial).
 import { execFileSync } from 'node:child_process'
 import { createReadStream, existsSync, mkdirSync, statSync } from 'node:fs'
 import { createServer } from 'node:http'
@@ -18,7 +19,7 @@ const valor = (k) => {
 }
 const comPb = args.includes('--pb')
 const chart = valor('--grafico') ?? 'estudo'
-const sufixo = chart === 'map' ? '-mapa' : ''
+const sufixo = chart === 'map' ? '-mapa' : chart === 'books' ? '-livros' : ''
 
 if (!args.includes('--no-build')) execFileSync('npx', ['vite', 'build', '--config', 'gallery/vite.config.ts', '--logLevel', 'warn'], { cwd: pkg, stdio: 'inherit' })
 
@@ -52,11 +53,11 @@ try {
   for (const nome of nomes) {
     for (const pb of comPb ? [false, true] : [false]) {
       const arquivo = join(saida, `${nome}${sufixo}${pb ? '-pb' : ''}.png`)
-      const url = `http://127.0.0.1:${porta}/?foto=1&estilo=${nome}&grafico=${grafico}${pb ? '&pb=1' : ''}`
+      const url = `http://127.0.0.1:${porta}/?foto=1&estilo=${nome}&chart=${chart}${pb ? '&pb=1' : ''}`
       await pagina.goto(url, { waitUntil: 'networkidle0', timeout: 60000 })
       await pagina.evaluate(() => document.fonts.ready)
       await new Promise((r) => setTimeout(r, 300))
-      const dupla = await pagina.$('.ty-print-dupla')
+      const dupla = await pagina.$('.ty-print-spread')
       await (dupla ?? pagina).screenshot({ path: arquivo })
       console.log(`gallery/shots/${nome}${sufixo}${pb ? '-pb' : ''}.png`)
     }
