@@ -882,29 +882,16 @@
 
 /* Territorial-unit books: locator map callout, flag box, proportional-circle legend, parliament chart. */
 @layer tympan-print {
-  .ty-print-locator[data-chamada] {
-    display: grid;
-    grid-template-columns: 1fr;
+  .ty-print-locator-box {
+    position: relative;
   }
 
-  .ty-print-locator[data-chamada] > .ty-print-map-svg {
-    grid-row: 2;
-    grid-column: 1;
-  }
-
-  .ty-print-locator[data-chamada] > .ty-print-callout-text {
-    grid-row: 2;
-    grid-column: 1;
-    justify-self: end;
-    inline-size: 36%;
-    font: 500 6.4pt/1.25 var(--ty-print-fonte-rotulo);
+  .ty-print-locator-box > .ty-print-callout-text {
+    position: absolute;
+    margin: 0;
+    transform: translateY(-50%);
+    font: 500 6.4pt/1.2 var(--ty-print-fonte-rotulo);
     color: var(--ty-print-tinta);
-    padding-block-start: 1.2mm;
-    border-block-start: 0;
-  }
-
-  .ty-print-locator[data-chamada='inicio'] > .ty-print-callout-text {
-    justify-self: start;
   }
 
   .ty-print-flag {

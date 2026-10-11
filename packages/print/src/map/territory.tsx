@@ -68,6 +68,7 @@ export function MapaLocalizacao({ codigo, alt, titulo, aneis = 1, largura, altur
           <span className="ty-print-figure-title">{comColchetes(titulo)}</span>
         </figcaption>
       ) : null}
+      <div className="ty-print-locator-box" style={{ maxInlineSize: `${Wsvg}mm` }}>
       <svg className="ty-print-map-svg" viewBox={`0 0 ${Wsvg} ${H}`} role="img" aria-label={alt} style={{ maxInlineSize: `${Wsvg}mm`, aspectRatio: `${Wsvg} / ${H}` }}>
         <title>{alt}</title>
         <desc>{`${nomeFoco} e ${vizinhos.length} municípios vizinhos (${aneis} anel${aneis > 1 ? 'is' : ''}).`}</desc>
@@ -79,15 +80,24 @@ export function MapaLocalizacao({ codigo, alt, titulo, aneis = 1, largura, altur
         {chamada ? (
           <g className="ty-print-callout">
             <circle cx={r3(fx + dx)} cy={fy} r={0.5} style={{ fill: 'var(--ty-print-tinta)' }} />
-            <line x1={r3(fx + dx)} y1={fy} x2={inicio ? 0 : Wsvg} y2={fy} style={{ stroke: 'var(--ty-print-tinta)', strokeWidth: 0.2 }} />
+            <line x1={r3(fx + dx)} y1={fy} x2={inicio ? r3(Math.max(0, dx - 1)) : r3(W + 1)} y2={fy} style={{ stroke: 'var(--ty-print-tinta)', strokeWidth: 0.2 }} />
           </g>
         ) : null}
       </svg>
       {chamada ? (
-        <p className="ty-print-callout-text" style={{ marginBlockStart: `${r3(Math.max(0, fy - 1.5))}mm`, textAlign: inicio ? 'start' : 'end' }}>
+        // The text sits in the reserved column beside the map, centred on the leader line (percentages of the
+        // drawing, so it stays on the line at any rendered size), never over the mesh.
+        <p
+          className="ty-print-callout-text"
+          style={{
+            top: `${r3((fy / H) * 100)}%`,
+            ...(inicio ? { insetInlineStart: 0, inlineSize: `${r3(((dx - 1.5) / Wsvg) * 100)}%`, textAlign: 'end' as const } : { insetInlineEnd: 0, inlineSize: `${r3(((Wsvg - W - 1.5) / Wsvg) * 100)}%`, textAlign: 'start' as const }),
+          }}
+        >
           {comColchetes(chamada.texto)}
         </p>
       ) : null}
+      </div>
     </figure>
   )
 }
@@ -145,7 +155,7 @@ export function MapaSimbolos({ titulo, alt, valores, recorte, unidade, raioMaxim
   const ordenados = [...pontos].sort((x, y) => y.v - x.v || x.a.properties.code.localeCompare(y.a.properties.code))
   const refs = (referencias ?? [arredonda(max), arredonda(max / 4), arredonda(max / 16)]).filter((v, i, all) => v > 0 && all.indexOf(v) === i)
   const tinta = (k: boolean) => (k && !pb ? 'var(--ty-print-destaque)' : k ? 'var(--ty-print-tinta)' : 'color-mix(in oklab, var(--ty-print-contexto) 70%, var(--ty-print-papel))')
-  const legH = raioMaximo * 2 + 2
+  const legH = raioMaximo * 2 + 4.5
   return (
     <figure className={cx('ty-print-map', 'ty-print-symbols', className)} data-pontos={pontos.length}>
       <figcaption className="ty-print-figure-head">
@@ -163,19 +173,24 @@ export function MapaSimbolos({ titulo, alt, valores, recorte, unidade, raioMaxim
         })}
       </svg>
       <svg className="ty-print-symbols-legend" viewBox={`0 0 ${W} ${legH}`} style={{ maxInlineSize: `${W}mm` }} role="img" aria-label={`Legenda: ${refs.map((v) => formatarNumero(v)).join(', ')}${unidade ? ` ${unidade}` : ''}`}>
-        {refs.map((v, i) => {
-          const r = raio(v)
-          const cx0 = raioMaximo
-          return (
-            <g key={v}>
-              <circle cx={cx0} cy={r3(legH - 1 - r)} r={r} style={{ fill: 'none', stroke: 'var(--ty-print-tinta-2)', strokeWidth: 0.15 }} />
-              <line x1={cx0} y1={r3(legH - 1 - 2 * r)} x2={r3(cx0 * 2 + 2)} y2={r3(legH - 1 - 2 * r)} style={{ stroke: 'var(--ty-print-tinta-3)', strokeWidth: 0.1 }} />
-              <text className="ty-print-map-label" x={r3(cx0 * 2 + 2.5)} y={r3(legH - 1 - 2 * r + 0.8)}>
-                {`${formatarNumero(v)}${unidade && i === 0 ? ` ${unidade}` : ''}`}
-              </text>
-            </g>
-          )
-        })}
+        {(() => {
+          // Reference circles side by side, bottom-aligned, each with its value centred under it (no overlap).
+          let x = 0.5
+          return refs.map((v, i) => {
+            const r = raio(v)
+            const larg = Math.max(2 * r, 9)
+            const cx0 = r3(x + larg / 2)
+            x += larg + 2
+            return (
+              <g key={v}>
+                <circle cx={cx0} cy={r3(raioMaximo * 2 + 0.5 - r)} r={r} style={{ fill: 'none', stroke: 'var(--ty-print-tinta-2)', strokeWidth: 0.15 }} />
+                <text className="ty-print-map-label" x={cx0} y={r3(legH - 0.6)} textAnchor="middle">
+                  {`${formatarNumero(v)}${unidade && i === 0 ? ` ${unidade}` : ''}`}
+                </text>
+              </g>
+            )
+          })
+        })()}
       </svg>
       <div className="ty-print-sr">
         <TabelaDados titulo={`Dados: ${titulo}`} colunas={['Município', { rotulo: unidade ?? 'Valor', numerica: true }]} linhas={ordenados.slice(0, 20).map(({ a, v }) => [`${a.properties.name}/${ufDoMunicipio(a.properties.code)}`, formatarNumero(v)])} nota={pontos.length > 20 ? `Os 20 maiores de ${pontos.length}.` : undefined} />

@@ -33,7 +33,11 @@ describe('PrintLocatorMap', () => {
   it('callout: leader line to the margin and the text outside the svg', () => {
     const h = html(<PrintLocatorMap codigo={BOA_VISTA} alt="a" largura={60} chamada={{ texto: 'Capital de RR' }} />)
     const svg = h.slice(h.indexOf('<svg'), h.indexOf('</svg>'))
-    expect(svg).toMatch(/<line [^>]*x2="60"/)
+    const x2 = Number(/<line [^>]*x2="([\d.]+)"/.exec(svg)![1])
+    // The leader stops at the text column (the right 38 %), and the text sits in that column, never over the map.
+    expect(x2).toBeGreaterThan(30)
+    expect(x2).toBeLessThan(60 * 0.62 + 1.5)
+    expect(h).toMatch(/class="ty-print-callout-text" style="top:[\d.]+%;inset-inline-end:0;inline-size:3[0-9.]+%/)
     expect(svg).not.toContain('Capital de RR')
     expect(h).toContain('ty-print-callout-text')
   })
@@ -67,6 +71,11 @@ describe('PrintSymbolMap', () => {
     expect(r[BOA_VISTA]).toBe(4)
     expect(r['1400050']).toBe(2)
     expect(h.indexOf(`data-code="${BOA_VISTA}"`)).toBeLessThan(h.indexOf('data-code="1400050"'))
+    // Legend labels side by side, at least 9 mm apart (they used to stack on each other).
+    const leg = h.slice(h.indexOf('ty-print-symbols-legend'))
+    const xs = [...leg.matchAll(/<text class="ty-print-map-label" x="([\d.]+)"/g)].map((m) => Number(m[1]))
+    expect(xs.length).toBeGreaterThan(1)
+    for (let i = 1; i < xs.length; i++) expect(xs[i]! - xs[i - 1]!).toBeGreaterThanOrEqual(9)
   })
 })
 
