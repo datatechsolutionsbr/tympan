@@ -31,3 +31,22 @@ describe('marks', () => {
     expect(h).toContain('class="ty-print-running-mark" style="block-size:3.5mm"')
   })
 })
+
+describe('marks 0.5.2: selo in the running foot, negative version on dark', () => {
+  it('folio.marca "selo" prints the minimal mark; a dark cover takes srcNegativo', () => {
+    const SELO = { src: 'data:,selo', alt: 'Selo', largura: 4 }
+    registerPrintTheme({ id: 'ed-x', base: 'jornal', marcas: { editora: { ...LOGO, srcNegativo: 'data:,neg' }, selo: SELO }, folio: { marca: 'selo' } })
+    const h = renderToStaticMarkup(
+      <PrintBook estilo="ed-x" incluirCss={false} carregarFontes={false}>
+        <Spread numero="2-3">
+          <Page lado="par" />
+          <Page lado="impar" variante="capa" campo="#1a1a2e">
+            <Cover titulo="T" logo />
+          </Page>
+        </Spread>
+      </PrintBook>,
+    )
+    expect(h).toMatch(/ty-print-running-mark[^>]*><img class="ty-print-mark" src="data:,selo" alt="Selo" style="inline-size:4mm/)
+    expect(h).toMatch(/src="data:,neg"[^>]*data-negativo=""/)
+  })
+})

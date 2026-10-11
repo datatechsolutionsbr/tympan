@@ -273,6 +273,8 @@ export interface PrintMarca {
   largura?: number
   /** Image used in black and white print (default: the same `src`, greyed by CSS). */
   srcPb?: string
+  /** Image for dark backgrounds (dark covers, openings on the ink field). */
+  srcNegativo?: string
 }
 
 /** Page format and print finishing. */
@@ -295,8 +297,8 @@ export interface PrintFolio {
   cabeco?: 'externo' | 'centro' | 'nenhum'
   /** Text before the folio number, e.g. "p. ". */
   prefixoFolio?: string
-  /** A mark in the running foot of every normal page: 'editora' = `marcas.editora` (default none). */
-  marca?: 'editora' | 'nenhuma'
+  /** A mark in the running foot of every normal page: 'editora' = `marcas.editora`, 'selo' = `marcas.selo` (the minimal one); default none. */
+  marca?: 'editora' | 'selo' | 'nenhuma'
 }
 
 /** A local font file (offline, deterministic builds and EPUB): one @font-face. */

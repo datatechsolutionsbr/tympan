@@ -74,7 +74,7 @@ export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero
   const enche = !grade && variante === 'normal' && (preencher ?? estilo.estrutura.preencher ?? false)
   const cheio = enche ? encherLinhas(children) : null
   if (cheio) children = cheio.filhos
-  const marcaRodape = variante === 'normal' ? (marca ?? (estilo.folio?.marca === 'editora' ? true : undefined)) : undefined
+  const marcaRodape = variante === 'normal' ? (marca ?? (estilo.folio?.marca === 'editora' ? true : estilo.folio?.marca === 'selo' ? estilo.marcas?.selo : undefined)) : undefined
   const cc = variante === 'capa' && campo ? coresCapa(campo, estilo, pb) : null
   const corpo = variante === 'capa' ? <FundoEscuroProvider value={cc ? cc.escuro : !papelEscuro(estilo)}>{children}</FundoEscuroProvider> : children
   // The cover prints `--ty-print-tinta` as its field and `--ty-print-papel` as its type (base.css).
