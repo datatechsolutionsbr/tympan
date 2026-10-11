@@ -428,7 +428,8 @@ export function Mapa({
         g,
         ks: g.areas.map((a) => classeArea(it, g, a)),
         alvo: it.destaques?.length ? resolverDestaques(it.destaques, g.areas, nivel) : [],
-        x: r3(j * (Wc + vao) + (Wc - g.W) / 2),
+        // A single map is drawn at its own (possibly narrowed) width: centring it in Wc would push it out of the viewBox.
+        x: it.unico ? 0 : r3(j * (Wc + vao) + (Wc - g.W) / 2),
         y: r3(y + cabecaCelula),
       })
     })
