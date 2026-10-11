@@ -13,8 +13,8 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-tinta-2: #3d3933;
   --ty-print-tinta-3: #5f594f;
   --ty-print-linha: #d6cfc2;
-  --ty-print-destaque: #1c1a17;
-  --ty-print-destaque-2: #9a4f2a;
+  --ty-print-destaque: #9a4f2a;
+  --ty-print-destaque-2: #c4b8a8;
   --ty-print-marca-texto: #f3e6cf;
   --ty-print-contexto: #8f877a;
   --ty-print-prova-sustentada: #3d6b1f;
@@ -38,11 +38,11 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
-  --ty-print-interesse: #1c1a17;
+  --ty-print-interesse: #9a4f2a;
   --ty-print-contexto-area: #8f877a;
   --ty-print-contexto-traco: #8f877a;
-  --ty-print-divergente-1: #9a4f2a;
-  --ty-print-divergente-2: #1c1a17;
+  --ty-print-divergente-1: #c4b8a8;
+  --ty-print-divergente-2: #9a4f2a;
   --ty-print-categorica-1: #0072b2;
   --ty-print-categorica-2: #e69f00;
   --ty-print-categorica-3: #009e73;
@@ -51,8 +51,8 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-categorica-6: #d55e00;
   --ty-print-categorica-7: #f0e442;
   --ty-print-categorica-8: #555555;
-  --ty-print-ornamento-1: #1c1a17;
-  --ty-print-ornamento-2: #9a4f2a;
+  --ty-print-ornamento-1: #9a4f2a;
+  --ty-print-ornamento-2: #c4b8a8;
   --ty-print-ornamento-3: #1c1a17;
   --ty-print-ornamento-4: #f3e6cf;
 }
@@ -68,8 +68,8 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-tinta-2: #393939;
   --ty-print-tinta-3: #5a5a5a;
   --ty-print-linha: #d0d0d0;
-  --ty-print-destaque: #1a1a1a;
-  --ty-print-destaque-2: #646464;
+  --ty-print-destaque: #646464;
+  --ty-print-destaque-2: #bababa;
   --ty-print-marca-texto: #e7e7e7;
   --ty-print-contexto: #888888;
   --ty-print-prova-sustentada: #606060;
@@ -93,11 +93,11 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
-  --ty-print-interesse: #1a1a1a;
+  --ty-print-interesse: #646464;
   --ty-print-contexto-area: #888888;
   --ty-print-contexto-traco: #888888;
-  --ty-print-divergente-1: #646464;
-  --ty-print-divergente-2: #1a1a1a;
+  --ty-print-divergente-1: #bababa;
+  --ty-print-divergente-2: #646464;
   --ty-print-categorica-1: #6d6d6d;
   --ty-print-categorica-2: #adadad;
   --ty-print-categorica-3: #8b8b8b;
@@ -106,8 +106,8 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-categorica-6: #828282;
   --ty-print-categorica-7: #e0e0e0;
   --ty-print-categorica-8: #555555;
-  --ty-print-ornamento-1: #1a1a1a;
-  --ty-print-ornamento-2: #646464;
+  --ty-print-ornamento-1: #646464;
+  --ty-print-ornamento-2: #bababa;
   --ty-print-ornamento-3: #1a1a1a;
   --ty-print-ornamento-4: #e7e7e7;
 }

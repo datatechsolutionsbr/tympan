@@ -54,17 +54,18 @@ export function formaDoEstilo(estilo: PrintStyle): FormaGrafico {
 }
 
 /**
- * Rows keep their series colours unless the style highlights one row against the others (`realce: 'linha'`,
- * NYT Upshot and Tufte): the studies of every other style colour both series in every row.
+ * A row the author highlighted is a statement about the data: every style draws it (single and multi-series
+ * bars, dumbbells, counts). Only a figure whose rows are ALL highlighted keeps its series colours.
  */
-function semRealce<S extends GraficoSpec>(spec: S, estilo: PrintStyle): S {
+function semRealce<S extends GraficoSpec>(spec: S, _estilo: PrintStyle): S {
+  return semRealceTotal(spec)
+}
+
+function semRealceTotal<S extends GraficoSpec>(spec: S): S {
   if (spec.tipo !== 'halteres' && spec.tipo !== 'barras' && spec.tipo !== 'contagem') return spec
   const s = spec as SpecHalteres | SpecBarras | SpecContagem
-  // Highlighting one row needs others to stand against: a figure whose rows are all highlighted keeps its series colours.
   const linhas: Array<{ destaque?: boolean }> = s.linhas ?? ('barras' in s ? s.barras : undefined) ?? ('grupos' in s ? s.grupos : undefined) ?? []
-  if (estilo.estrutura.realce === 'linha' && linhas.some((l) => !l.destaque)) return spec
-  // A single series has no series colours to keep: its highlighted bar is the series of interest in every style.
-  if (s.tipo === 'barras' && s.barras?.length && !s.linhas?.length && linhas.some((l) => !l.destaque)) return spec
+  if (linhas.some((l) => !l.destaque)) return spec
   return {
     ...s,
     linhas: s.linhas?.map((l) => ({ ...l, destaque: false })),

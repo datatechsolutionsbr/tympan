@@ -67,3 +67,15 @@ describe('single-series bars keep their highlight in every style', () => {
     expect(h).toContain('var(--ty-print-contexto)')
   })
 })
+
+describe('highlight in every preset and shape', () => {
+  it('dashboard highlight differs from the ink; multi-series bars and dumbbells keep the highlighted row', async () => {
+    const { printPresets } = await import('@datatechsolutions/tympan-tokens')
+    expect(printPresets.dashboard.cor.destaque).not.toBe(printPresets.dashboard.cor.tinta)
+    const pares = { tipo: 'halteres' as const, titulo: 'H', escala: [0, 10] as [number, number], rotuloA: '2010', rotuloB: '2020', linhas: [{ rotulo: 'A', a: 1, b: 5, destaque: true }, { rotulo: 'B', a: 2, b: 3 }] }
+    for (const estilo of ['dashboard', 'jornal', 'semanario'] as const) {
+      const h = renderToStaticMarkup(<PrintBook estilo={estilo} incluirCss={false} carregarFontes={false}><MethodChart spec={pares as never} alt="a" /></PrintBook>)
+      expect(h, estilo).toMatch(/data-destaque=""/)
+    }
+  })
+})

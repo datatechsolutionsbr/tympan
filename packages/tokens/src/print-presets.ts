@@ -378,8 +378,9 @@ const dashboard: PrintStyle = {
     tinta2: '#3d3933',
     tinta3: '#5f594f',
     linha: '#d6cfc2',
-    destaque: '#1c1a17',
-    destaque2: '#9a4f2a',
+    // The highlight is not the ink (a highlighted bar must stand out): rust, AA on the paper, not a party colour.
+    destaque: '#9a4f2a',
+    destaque2: '#c4b8a8',
     marcaTexto: '#f3e6cf',
     contexto: '#8f877a',
     prova: {
