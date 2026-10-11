@@ -34,7 +34,14 @@ import {
 } from './mesh.ts'
 
 export interface MapaProps {
-  titulo: string
+  /** Figure title; optional (a map inside a titled Panel needs none). */
+  titulo?: string
+  /** A large section heading above the map (the page's own title, in the style's title face). */
+  secao?: string
+  /** Legend: add the number of areas of each class or category ("8 mun."). */
+  contagemLegenda?: boolean
+  /** An icon or monogram by category key, beside its label in the legend. */
+  icones?: Record<string, ReactNode>
   /** The finding in one sentence: the map's accessible name (and the EPUB alt text). */
   alt: string
   /** `municipio` (default: the 5,571 municipalities) or `uf` (the 27 federative units). */
@@ -423,7 +430,10 @@ interface Celula {
  * `multiplos`, a grid of small maps with shared classes and one legend.
  */
 export function Mapa({
-  titulo,
+  titulo: tituloDado,
+  secao,
+  contagemLegenda = false,
+  icones,
   alt,
   nivel = 'municipio',
   valores,
@@ -453,6 +463,7 @@ export function Mapa({
   className,
 }: MapaProps) {
   const { estilo, pb } = usePrint()
+  const titulo = tituloDado ?? ''
   const disponivel = useLarguraDisponivel()
   const escopoLivro = useEscopoLivro()
   const W = r3(larguraProp ?? disponivel ?? (sangria ? 150 : 110))
@@ -617,12 +628,15 @@ export function Mapa({
       data-sangria={sangria ? '' : undefined}
       data-exemplo={exemplo || itens.some((it) => it.exemplo) ? '' : undefined}
     >
-      <figcaption className="ty-print-figure-head">
-        <span className="ty-print-figure-title">{comColchetes(titulo)}</span>
-      </figcaption>
+      {secao ? <h2 className="ty-print-map-section ty-print-title">{comColchetes(secao)}</h2> : null}
+      {tituloDado ? (
+        <figcaption className="ty-print-figure-head">
+          <span className="ty-print-figure-title">{comColchetes(tituloDado)}</span>
+        </figcaption>
+      ) : null}
       <svg className="ty-print-map-svg" viewBox={`0 0 ${Wt} ${Ht}`} role="img" aria-label={alt} style={{ maxInlineSize: `${Wt}mm`, aspectRatio: `${Wt} / ${Ht}` }}>
         <title>{alt}</title>
-        <desc>{titulo.replace(/\s*\[[^\]]*\]\s*/g, ' ').trim()}</desc>
+        <desc>{(tituloDado ?? alt).replace(/\s*\[[^\]]*\]\s*/g, ' ').trim()}</desc>
         <defs>{tinta.defs}</defs>
         {celulas.map((c, i) => (
           <g key={c.chave}>
@@ -642,7 +656,9 @@ export function Mapa({
               <svg viewBox="0 0 6 6" aria-hidden="true" focusable="false">
                 <rect width={6} height={6} className="ty-print-map-sample" style={tinta.contorno?.(k) ? { fill: tinta.fill(k), stroke: 'var(--ty-print-tinta-3)', strokeWidth: 0.4 } : { fill: tinta.fill(k) }} />
               </svg>
+              {icones && nomesCategorias?.[k] && icones[nomesCategorias[k]!] ? <span className="ty-print-map-legend-icon">{icones[nomesCategorias[k]!]}</span> : null}
               {comColchetes(l)}
+              {contagemLegenda ? <span className="ty-print-map-legend-count">{tx('contagemAreas', { n: celulas.reduce((t, c) => t + conta(c, k), 0) })}</span> : null}
             </li>
           ))}
           {semDadoN > 0 ? (
@@ -671,7 +687,7 @@ export function Mapa({
       ) : temSerie ? (
         <div className="ty-print-sr">
           <TabelaDados
-            titulo={tx('dados', { a: titulo })}
+            titulo={tx('dados', { a: tituloDado ?? alt })}
             colunas={[tx('classe'), ...(celulas.length > 1 ? celulas.map((c) => `${unidadeContagem}: ${c.titulo ?? ''}`) : [unidadeContagem])]}
             linhas={[
               ...rotulosClasses.map((l, k) => [l, ...celulas.map((c) => conta(c, k))]),

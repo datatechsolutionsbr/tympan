@@ -74,6 +74,7 @@ export const TEXTOS_PT = {
   semIndicador: 'sem indicador',
   serie: 'Série {a}–{b}',
   capital: 'capital',
+  contagemAreas: '{n} mun.',
 } as const
 
 export type ChaveTexto = keyof typeof TEXTOS_PT
@@ -149,6 +150,7 @@ export const TEXTOS_EN: Textos = {
   semIndicador: 'no indicator',
   serie: 'Series {a}–{b}',
   capital: 'capital',
+  contagemAreas: '{n} mun.',
 }
 
 /** The dictionary of a BCP 47 tag: English for `en*`, Portuguese otherwise. */

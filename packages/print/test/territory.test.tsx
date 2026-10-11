@@ -168,7 +168,7 @@ describe('PrintSymbolMap legend and context contrast', () => {
 describe('P&B for book-supplied images and the locator panel', () => {
   it('greys flags and images and takes the locator panel fill from the ink', async () => {
     const { PRINT_CSS } = await import('../src/index.ts')
-    expect(PRINT_CSS).toMatch(/\[data-ty-print-pb\] :is\(img, \.ty-print-flag[^{]*\{\s*filter: grayscale\(1\)/)
+    expect(PRINT_CSS).toMatch(/\[data-ty-print-pb\] :is\(img, svg image\) \{\s*filter: grayscale\(1\)/)
     expect(PRINT_CSS).toMatch(/\[data-ty-print-pb\] \.ty-print-panel\[data-variante='bolso'\][^{]*\{\s*background: color-mix\(in srgb, var\(--ty-print-tinta\) 7%/)
     const h = html(<PrintFlag src="data:image/png;base64,AA==" alt="Bandeira" />, true)
     expect(h).toContain('data-ty-print-pb=""')

@@ -936,7 +936,9 @@
 /* Black and white: images supplied by the book (flags, photos) print in grey, and tinted panel fills
    come from the ink, never from a colour the host passed outside the style. */
 @layer tympan-print {
-  .ty-print-book[data-ty-print-pb] :is(img, .ty-print-flag, .ty-print-panel image) {
+  /* Only raster/external images: a filter on an element with text would rasterise the text out of the PDF's
+     text layer. Vector art and text get grey colours from the P&B tokens instead. */
+  .ty-print-book[data-ty-print-pb] :is(img, svg image) {
     filter: grayscale(1);
   }
 
@@ -1069,5 +1071,25 @@
     padding: 0 0.6mm;
     border-radius: 0.4mm;
     font-weight: 600;
+  }
+}
+
+@layer tympan-print {
+  .ty-print-map-section {
+    font-size: 15pt;
+    line-height: 1.1;
+    margin-block-end: 1.6mm;
+  }
+
+  .ty-print-map-legend-icon {
+    display: inline-flex;
+    margin-inline-end: 0.8mm;
+    vertical-align: middle;
+  }
+
+  .ty-print-map-legend-count {
+    margin-inline-start: 1mm;
+    color: var(--ty-print-tinta-3);
+    font-variant-numeric: tabular-nums;
   }
 }

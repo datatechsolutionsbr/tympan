@@ -67,3 +67,23 @@ describe('legend switches', () => {
     expect(html(<MethodChartImport spec={spec} />)).toContain('data-legenda-cores=""')
   })
 })
+
+describe('categorical legend: counts, icons; section heading; optional title', () => {
+  it('prints "N mun." and the monogram by key; a section heading above; no figure title when omitted', () => {
+    const html = (el: React.ReactNode) => renderToStaticMarkup(<PrintBook estilo="jornal" incluirCss={false} carregarFontes={false}>{el}</PrintBook>)
+    const rr = municipios().filter((f) => f.properties.code.startsWith('14'))
+    const cats = Object.fromEntries(rr.map((f, i) => [f.properties.code, i < 8 ? 'PL' : 'PT']))
+    const h = html(<PrintMap alt="Partido mais votado" secao="Partido mais votado" recorte={['RR']} escala="categorica" categorias={cats} contagemLegenda icones={{ PL: <b>PL</b> }} />)
+    expect(h).toContain('>8 mun.<')
+    expect(h).toContain('>7 mun.<')
+    expect(h).toContain('<span class="ty-print-map-legend-icon"><b>PL</b></span>')
+    expect(h).toContain('<h2 class="ty-print-map-section ty-print-title">Partido mais votado</h2>')
+    expect(h).not.toContain('ty-print-figure-head')
+  })
+  it('P&B grayscale filter only on raster images, never on text', async () => {
+    const { PRINT_CSS } = await import('../src/index.ts')
+    const regras = [...PRINT_CSS.matchAll(/([^{}]+)\{[^}]*filter: grayscale\(1\)/g)].map((m) => m[1]!.trim())
+    expect(regras.length).toBeGreaterThan(0)
+    for (const r of regras) expect(r, r).not.toMatch(/ty-print-flag(?!\w)|\.ty-print-panel(?! image)|svg(?! image)/)
+  })
+})
