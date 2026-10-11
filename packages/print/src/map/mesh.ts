@@ -1,5 +1,5 @@
-// Brazil's meshes (IBGE Malha Municipal 2022, simplified by
-// scripts/gerar-malhas.mjs) and the projection. Everything here is a pure
+// Brazil's meshes (IBGE Malha Municipal 2024, simplified by
+// scripts/generate-meshes.mjs) and the projection. Everything here is a pure
 // function of the data: d3-geo projects and writes path strings, React owns
 // the SVG. No DOM, no randomness, so it renders the same on the server.
 import { geoConicEqualArea, geoPath, type GeoProjection } from 'd3-geo'
@@ -61,7 +61,7 @@ export const ufDoMunicipio = (code: string) => UF_POR_IBGE[code.slice(0, 2)] ?? 
 let cacheMun: Area<PropsMunicipio>[] | null = null
 let cacheUf: Area<PropsUf>[] | null = null
 
-/** The 5,570 municipalities (lagoons excluded), in IBGE code order. */
+/** The 5,571 municipalities (lagoons excluded), in IBGE code order. */
 export function municipios(): Area<PropsMunicipio>[] {
   cacheMun ??= (feature(topoMun, topoMun.objects.municipios) as FeatureCollection<Polygon | MultiPolygon, PropsMunicipio>).features
   return cacheMun

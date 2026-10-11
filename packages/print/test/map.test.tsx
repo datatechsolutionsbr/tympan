@@ -42,12 +42,22 @@ const SEDES: Record<string, [number, number]> = {
 }
 
 describe('mesh', () => {
-  it('has the 5,570 municipalities and 27 UFs', () => {
-    expect(municipios()).toHaveLength(5570)
-    expect(new Set(municipios().map((f) => f.properties.code)).size).toBe(5570)
+  it('has the 5,571 municipalities and 27 UFs', () => {
+    expect(municipios()).toHaveLength(5571)
+    expect(new Set(municipios().map((f) => f.properties.code)).size).toBe(5571)
     expect(municipios().every((f) => /^\d{7}$/.test(f.properties.code))).toBe(true)
     expect(ufs()).toHaveLength(27)
     expect(ufsDoRecorte('Sul')).toEqual(new Set(['PR', 'SC', 'RS']))
+  })
+
+  it('is the IBGE 2024 mesh: Boa Esperança do Norte (MT) present, UF mesh coherent with it', () => {
+    const boa = municipios().find((f) => f.properties.code === '5101837')
+    expect(boa?.properties.name).toBe('Boa Esperança do Norte')
+    // Every municipality's UF prefix names one of the 27 dissolved UFs, and every UF has municipalities.
+    const ibgeUfs = new Set(ufs().map((f) => (f.properties as unknown as { ibge: string }).ibge))
+    const prefixos = new Set(municipios().map((f) => f.properties.code.slice(0, 2)))
+    expect(prefixos).toEqual(ibgeUfs)
+    expect(municipios().filter((f) => f.properties.code.startsWith('51'))).toHaveLength(142)
   })
 
   it('rings are wound for d3 (no municipality covers the globe)', () => {
@@ -108,10 +118,10 @@ describe('PrintMap', () => {
       </PrintBook>,
     )
 
-  it('draws every one of the 5,570 municipalities', () => {
+  it('draws every one of the 5,571 municipalities', () => {
     const s = html(<PrintMap titulo="t" alt="achado" exemplo largura={120} />)
-    expect(todos(s)).toHaveLength(5570)
-    expect(new Set(todos(s)).size).toBe(5570)
+    expect(todos(s)).toHaveLength(5571)
+    expect(new Set(todos(s)).size).toBe(5571)
     expect(todos(s).every((c) => /^\d{7}$/.test(c))).toBe(true)
     expect(s).toContain('role="img"')
     expect(s).toContain('aria-label="achado"')
@@ -124,7 +134,7 @@ describe('PrintMap', () => {
     expect(d.get(2)).toEqual(['3550308'])
     expect(d.get(0)).toEqual(['5300108'])
     expect(d.get(1)).toEqual(['3304557'])
-    expect(d.get(-1)).toHaveLength(5567)
+    expect(d.get(-1)).toHaveLength(5568)
     expect(s).toContain('sem dado')
     expect(s).toContain('São Paulo/SP')
     expect(s).toContain('Brasília/DF')
@@ -156,7 +166,7 @@ describe('PrintMap', () => {
     const [, mw, mh] = m.match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/)!.map(Number) as [number, number, number]
     expect(mw).toBe(120)
     expect(mh).toBeLessThanOrEqual(80)
-    expect(todos(m)).toHaveLength(5570)
+    expect(todos(m)).toHaveLength(5571)
     expect(m.match(/class="ty-print-map-legend"/g)).toHaveLength(1)
   })
 

@@ -1,16 +1,17 @@
-// Builds the map meshes of src/map/dados/ from the IBGE 2022 municipal mesh
-// (Malha Municipal 2022, BR_Municipios_2022.shp, SIRGAS 2000 lon/lat).
+// Builds the map meshes of src/map/data/ from the IBGE 2024 municipal mesh
+// (Malha Municipal 2024, BR_Municipios_2024.shp, SIRGAS 2000 lon/lat).
 //
-//   node scripts/gerar-malhas.mjs [path/to/BR_Municipios_2022.shp]
+//   node scripts/generate-meshes.mjs [path/to/BR_Municipios_2024.shp]
 //
-// Default source: ~/datatech/municipios-br/data/malhas/raw/BR_Municipios_2022.shp
-// (download: https://www.ibge.gov.br/geociencias/organizacao-do-territorio/malhas-territoriais/
-// 15774-malhas.html, "Brasil > Municípios", 2022). Runs mapshaper (MPL-2.0)
+// Default source: ~/datatech/municipios-br/data/malhas/raw/BR_Municipios_2024.shp
+// (download: https://geoftp.ibge.gov.br/organizacao_do_territorio/malhas_territoriais/malhas_municipais/municipio_2024/Brasil/BR_Municipios_2024.zip, or https://www.ibge.gov.br/geociencias/organizacao-do-territorio/malhas-territoriais/
+// 15774-malhas.html, "Brasil > Municípios", 2024). Runs mapshaper (MPL-2.0)
 // through npx; nothing of mapshaper ships with the package.
 //
 // Steps:
 //   1. drop the two water bodies the mesh carries as pseudo-municipalities
-//      (4300001 Lagoa Mirim, 4300002 Lagoa dos Patos): 5,572 → 5,570;
+//      (4300001 Lagoa Mirim, 4300002 Lagoa dos Patos): 5,573 → 5,571 (2024 adds
+//      5101837 Boa Esperança do Norte/MT, installed in 2025);
 //   2. simplify preserving topology (Visvalingam, 2 km interval, keep-shapes so
 //      no municipality vanishes; shared borders stay shared);
 //   3. municipios.topo.json: properties { code: 7-digit IBGE code, name };
@@ -25,9 +26,9 @@ import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const pkg = join(fileURLToPath(import.meta.url), '..', '..')
-const origem = process.argv[2] ?? join(homedir(), 'datatech/municipios-br/data/malhas/raw/BR_Municipios_2022.shp')
+const origem = process.argv[2] ?? join(homedir(), 'datatech/municipios-br/data/malhas/raw/BR_Municipios_2024.shp')
 if (!existsSync(origem)) throw new Error(`malha IBGE não encontrada: ${origem}`)
-const destino = join(pkg, 'src', 'map', 'dados')
+const destino = join(pkg, 'src', 'map', 'data')
 const tmp = mkdtempSync(join(tmpdir(), 'ty-malhas-'))
 
 const NOMES_UF = {
@@ -70,6 +71,6 @@ writeFileSync(join(destino, 'ufs.topo.json'), JSON.stringify(ufs))
 
 // Stable key order and no trailing noise, so regenerating is a no-op diff.
 const m = JSON.parse(readFileSync(mun, 'utf8'))
-if (m.objects.municipios.geometries.length !== 5570) throw new Error('esperados 5.570 municípios')
+if (m.objects.municipios.geometries.length !== 5571) throw new Error('esperados 5.571 municípios')
 writeFileSync(mun, JSON.stringify(m))
-for (const f of ['municipios.topo.json', 'ufs.topo.json']) console.log(`src/map/dados/${f}: ${(statSync(join(destino, f)).size / 1024).toFixed(0)} KB`)
+for (const f of ['municipios.topo.json', 'ufs.topo.json']) console.log(`src/map/data/${f}: ${(statSync(join(destino, f)).size / 1024).toFixed(0)} KB`)

@@ -1,4 +1,4 @@
-// Mapa: the real map of Brazil (IBGE 2022 mesh, Albers equal-area conic),
+// Mapa: the real map of Brazil (IBGE 2024 mesh, Albers equal-area conic),
 // by federative unit or by municipality, as a class choropleth.
 //
 // Geometry is never touched by the style: every area is the projected mesh.
@@ -35,7 +35,7 @@ export interface MapaProps {
   titulo: string
   /** The finding in one sentence: the map's accessible name (and the EPUB alt text). */
   alt: string
-  /** `municipio` (default: the 5,570 municipalities) or `uf` (the 27 federative units). */
+  /** `municipio` (default: the 5,571 municipalities) or `uf` (the 27 federative units). */
   nivel?: NivelMapa
   /** Values by code (7-digit IBGE code; for `uf`, the abbreviation or the 2-digit code). Classed by `limites` or by quantiles. `null` or absent: no data. */
   valores?: Record<string, number | null>
@@ -337,7 +337,7 @@ interface Celula {
 }
 
 /**
- * Choropleth map of Brazil on the IBGE 2022 mesh (Albers equal-area conic,
+ * Choropleth map of Brazil on the IBGE 2024 mesh (Albers equal-area conic,
  * parallels −2° and −22°, meridian −54°). Classes print as flat colour, as
  * hatches in black and white (or in the `gravura` renderer), or as dot
  * screens (`pontos`); areas without data carry their own texture. With

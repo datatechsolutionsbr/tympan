@@ -24,12 +24,12 @@ Copyright 2012-2019 Michael Bostock). Full texts ship with the packages in
 
 ## Map data
 
-`src/mapa/dados/municipios.topo.json` and `ufs.topo.json` are derived from the
-**IBGE Malha Municipal 2022** (Instituto Brasileiro de Geografia e Estatística,
-`BR_Municipios_2022.shp`, SIRGAS 2000), public data published by IBGE, whose
-terms ask for attribution of the source: "Fonte: IBGE, Malha Municipal 2022".
-They were simplified with `scripts/gerar-malhas.mjs` (topology-preserving,
-2 km interval; the two lagoons IBGE codes as 4300001 and 4300002 removed, 5,570
+`src/map/data/municipios.topo.json` and `ufs.topo.json` are derived from the
+**IBGE Malha Municipal 2024** (Instituto Brasileiro de Geografia e Estatística,
+`BR_Municipios_2024.shp`, SIRGAS 2000), public data published by IBGE, whose
+terms ask for attribution of the source: "Fonte: IBGE, Malha Municipal 2024".
+They were simplified with `scripts/generate-meshes.mjs` (topology-preserving,
+2 km interval; the two lagoons IBGE codes as 4300001 and 4300002 removed, 5,571
 municipalities kept) and the UF layer was dissolved from the same arcs. They are
 a derived, simplified work: not for measurement, boundaries are approximate at
 the 2 km scale. Natural Earth data is not used.
@@ -55,7 +55,7 @@ licence.
 | tsdown, vite, @vitejs/plugin-react, vitest | MIT |
 | typescript | Apache-2.0 |
 | puppeteer-core 25.12 (gallery screenshots with the system Chrome) | Apache-2.0 |
-| mapshaper 0.7.68 (run through npx by `scripts/gerar-malhas.mjs`; nothing of it ships) | MPL-2.0 |
+| mapshaper 0.7.68 (run through npx by `scripts/generate-meshes.mjs`; nothing of it ships) | MPL-2.0 |
 | @types/d3-geo, @types/topojson-client, @types/topojson-specification | MIT |
 | axe-core 4.13 | MPL-2.0 (used unmodified as a test dependency) |
 | @testing-library/react, jest-dom, jsdom | MIT |
