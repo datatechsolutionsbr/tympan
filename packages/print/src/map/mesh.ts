@@ -3,7 +3,7 @@
 // function of the data: d3-geo projects and writes path strings, React owns
 // the SVG. No DOM, no randomness, so it renders the same on the server.
 import { geoConicEqualArea, geoPath, type GeoProjection } from 'd3-geo'
-import { feature, mesh } from 'topojson-client'
+import { feature, mesh, neighbors } from 'topojson-client'
 import type { GeometryCollection, Topology } from 'topojson-specification'
 import type { Feature, FeatureCollection, MultiLineString, MultiPolygon, Polygon } from 'geojson'
 import municipiosTopo from './data/municipios.topo.json'
@@ -136,4 +136,32 @@ export function bordasMunicipais(filtroUf?: Set<string>): MultiLineString {
   const obj = topoMun.objects.municipios
   const dentro = (g: { properties?: unknown }) => !filtroUf || filtroUf.has(ufDoMunicipio((g.properties as PropsMunicipio | undefined)?.code ?? ''))
   return mesh(topoMun, obj, (a, b) => a !== b && dentro(a) && dentro(b))
+}
+
+let cacheViz: number[][] | null = null
+
+/**
+ * Codes of `code` and its neighbours up to `aneis` rings (1 = municipalities sharing a border), from the
+ * topology's shared arcs, in IBGE code order. Throws on an unknown code.
+ */
+export function vizinhanca(code: string, aneis = 1): { foco: string; vizinhos: string[] } {
+  const geoms = topoMun.objects.municipios.geometries
+  cacheViz ??= neighbors(geoms as never)
+  const i = geoms.findIndex((g) => (g.properties as PropsMunicipio | undefined)?.code === code)
+  if (i < 0) throw new Error(`tympan-print: município ${code} não está na malha`)
+  const visto = new Set([i])
+  let borda = [i]
+  for (let k = 0; k < aneis; k++) {
+    const prox: number[] = []
+    for (const j of borda) for (const n of cacheViz[j] ?? []) if (!visto.has(n)) (visto.add(n), prox.push(n))
+    borda = prox
+  }
+  visto.delete(i)
+  return { foco: code, vizinhos: [...visto].map((j) => (geoms[j]!.properties as PropsMunicipio).code).sort() }
+}
+
+/** The municipality features of the given codes (geometry only for what a figure draws). */
+export function municipiosPorCodigo(codes: Iterable<string>): Area<PropsMunicipio>[] {
+  const quer = new Set(codes)
+  return municipios().filter((f) => quer.has(f.properties.code))
 }

@@ -879,3 +879,63 @@
     gap: 1mm;
   }
 }
+
+/* Territorial-unit books: locator map callout, flag box, proportional-circle legend, parliament chart. */
+@layer tympan-print {
+  .ty-print-locator[data-chamada] {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .ty-print-locator[data-chamada] > .ty-print-map-svg {
+    grid-row: 2;
+    grid-column: 1;
+  }
+
+  .ty-print-locator[data-chamada] > .ty-print-callout-text {
+    grid-row: 2;
+    grid-column: 1;
+    justify-self: end;
+    inline-size: 36%;
+    font: 500 6.4pt/1.25 var(--ty-print-fonte-rotulo);
+    color: var(--ty-print-tinta);
+    padding-block-start: 1.2mm;
+    border-block-start: 0;
+  }
+
+  .ty-print-locator[data-chamada='inicio'] > .ty-print-callout-text {
+    justify-self: start;
+  }
+
+  .ty-print-flag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 100%;
+    object-fit: contain;
+  }
+
+  .ty-print-flag[data-vazia] {
+    border: 0.3mm dashed currentColor;
+    padding: 1mm;
+    font: 5.5pt/1.2 var(--ty-print-fonte-rotulo);
+    text-align: center;
+    color: var(--ty-print-tinta-3);
+  }
+
+  .ty-print-symbols-legend text,
+  .ty-print-parliament-total {
+    font: 2.2px var(--ty-print-fonte-numero);
+    fill: var(--ty-print-tinta-2);
+  }
+
+  .ty-print-parliament-total {
+    font-size: 5px;
+    font-weight: 600;
+    fill: var(--ty-print-tinta);
+  }
+
+  .ty-print-parliament .ty-print-map-legend {
+    font-variant-numeric: tabular-nums;
+  }
+}

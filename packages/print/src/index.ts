@@ -57,7 +57,16 @@ export {
   type StatusLei,
 } from './panels/Openers.tsx'
 export { Mapa as PrintMap, type MapaProps as PrintMapProps } from './map/PrintMap.tsx'
-export { ALBERS_BRASIL, REGIOES, projecaoBrasil, municipios, ufs, ufsDoRecorte, type NivelMapa, type Recorte, type Regiao } from './map/mesh.ts'
+export {
+  MapaLocalizacao as PrintLocatorMap,
+  MapaSimbolos as PrintSymbolMap,
+  Bandeira as PrintFlag,
+  type MapaLocalizacaoProps as PrintLocatorMapProps,
+  type MapaSimbolosProps as PrintSymbolMapProps,
+  type BandeiraProps as PrintFlagProps,
+} from './map/territory.tsx'
+export { Hemiciclo as Parliament, layoutHemiciclo, type HemicicloProps as ParliamentProps, type Bancada as ParliamentGroup, type Assento as ParliamentSeat } from './chart/Parliament.tsx'
+export { ALBERS_BRASIL, vizinhanca, municipiosPorCodigo, REGIOES, projecaoBrasil, municipios, ufs, ufsDoRecorte, type NivelMapa, type Recorte, type Regiao } from './map/mesh.ts'
 export { quantis, classeDe, rotulosLimites } from './map/classes.ts'
 export { LogoLakebrasil, SeloLakebrasil, type LogoLakebrasilProps, type SeloLakebrasilProps, type VarianteLogo } from './brand/LogoLakebrasil.tsx'
 export { LogoDatatech, tintasDoEstilo, type LogoDatatechProps, type VarianteDatatech } from './brand/LogoDatatech.tsx'

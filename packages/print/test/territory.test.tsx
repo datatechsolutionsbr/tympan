@@ -1,0 +1,105 @@
+// @vitest-environment node
+// Components for one-page-per-territorial-unit books.
+import { renderToStaticMarkup } from 'react-dom/server'
+import { describe, expect, it } from 'vitest'
+import { MOLDES, Page, Parliament, PrintArea, PrintBook, PrintFlag, PrintLocatorMap, PrintMap, PrintSymbolMap, Spread, layoutHemiciclo, municipios, vizinhanca } from '../src/index.ts'
+
+const html = (el: React.ReactNode, pb = false) => renderToStaticMarkup(<PrintBook estilo="jornal" pb={pb} incluirCss={false} carregarFontes={false}>{el}</PrintBook>)
+const BOA_VISTA = '1400100'
+
+describe('vizinhanca', () => {
+  it('finds the municipalities that share a border', () => {
+    const { vizinhos } = vizinhanca(BOA_VISTA)
+    expect(vizinhos.length).toBeGreaterThan(2)
+    expect(vizinhos).not.toContain(BOA_VISTA)
+    // symmetric
+    for (const v of vizinhos) expect(vizinhanca(v).vizinhos).toContain(BOA_VISTA)
+    expect(vizinhanca(BOA_VISTA, 2).vizinhos.length).toBeGreaterThan(vizinhos.length)
+  })
+})
+
+describe('PrintLocatorMap', () => {
+  it('draws only the unit and its neighbours, no labels on the mesh, theme inks', () => {
+    const h = html(<PrintLocatorMap codigo={BOA_VISTA} alt="Boa Vista e vizinhos" largura={40} />)
+    const n = vizinhanca(BOA_VISTA).vizinhos.length + 1
+    expect(h).toContain(`data-areas="${n}"`)
+    expect(h).toContain('var(--ty-print-destaque)')
+    expect(h).toContain('var(--ty-print-contexto)')
+    expect(h).not.toContain('ty-print-map-label')
+    expect(h).toContain('<title>Boa Vista e vizinhos</title>')
+    // Size: far below a whole-mesh map (item: volume per page).
+    expect(h.length).toBeLessThan(40_000)
+  })
+  it('callout: leader line to the margin and the text outside the svg', () => {
+    const h = html(<PrintLocatorMap codigo={BOA_VISTA} alt="a" largura={60} chamada={{ texto: 'Capital de RR' }} />)
+    const svg = h.slice(h.indexOf('<svg'), h.indexOf('</svg>'))
+    expect(svg).toMatch(/<line [^>]*x2="60"/)
+    expect(svg).not.toContain('Capital de RR')
+    expect(h).toContain('ty-print-callout-text')
+  })
+})
+
+describe('categorical PrintMap', () => {
+  const cats = Object.fromEntries(municipios().filter((f) => f.properties.code.startsWith('14')).map((f, i) => [f.properties.code, ['PL', 'PL', 'PT', 'MDB'][i % 4]!]))
+  it('uses the qualitative palette, legend in count order', () => {
+    const h = html(<PrintMap titulo="t" alt="a" recorte={['RR']} escala="categorica" categorias={cats} />)
+    expect(h).toContain('var(--ty-print-categorica-1)')
+    expect(h).toContain('var(--ty-print-categorica-3)')
+    expect(h).not.toMatch(/color-mix\(in oklab, var\(--ty-print-destaque\)/)
+    expect(h.indexOf('>PL<')).toBeLessThan(h.indexOf('>MDB<'))
+  })
+  it('P&B: one distinct pattern per category', () => {
+    const h = html(<PrintMap titulo="t" alt="a" recorte={['RR']} escala="categorica" categorias={cats} />, true)
+    const pats = [...h.matchAll(/<pattern [^>]*id="([^"]+-c\d)"[^>]*>(.*?)<\/pattern>/g)].map((m) => m[0].replace(/id="[^"]+"/, ''))
+    expect(pats).toHaveLength(3)
+    expect(new Set(pats).size).toBe(3)
+  })
+  it('refuses more than eight categories', () => {
+    const muitas = Object.fromEntries(Object.keys(cats).map((c, i) => [c, `P${i}`]))
+    expect(() => html(<PrintMap titulo="t" alt="a" recorte={['RR']} escala="categorica" categorias={muitas} />)).toThrow(/até 8/)
+  })
+})
+
+describe('PrintSymbolMap', () => {
+  it('circle area is proportional to the value; largest drawn first', () => {
+    const h = html(<PrintSymbolMap titulo="Votos" alt="a" recorte={['RR']} valores={{ [BOA_VISTA]: 400, '1400050': 100 }} raioMaximo={4} />)
+    const r = Object.fromEntries([...h.matchAll(/data-code="(\d+)" cx="[^"]+" cy="[^"]+" r="([\d.]+)"/g)].map((m) => [m[1], Number(m[2])]))
+    expect(r[BOA_VISTA]).toBe(4)
+    expect(r['1400050']).toBe(2)
+    expect(h.indexOf(`data-code="${BOA_VISTA}"`)).toBeLessThan(h.indexOf('data-code="1400050"'))
+  })
+})
+
+describe('Parliament', () => {
+  it('lays out exactly the seats and keeps party order', () => {
+    expect(layoutHemiciclo(513)).toHaveLength(513)
+    expect(layoutHemiciclo(81)).toHaveLength(81)
+    const h = html(<Parliament alt="Câmara" bancadas={[{ sigla: 'A', assentos: 300 }, { sigla: 'B', assentos: 213 }]} maioria={257} />)
+    expect((h.match(/data-sigla="A"/g) ?? []).length).toBe(300)
+    expect((h.match(/data-sigla="B"/g) ?? []).length).toBe(213)
+    expect(h).toContain('var(--ty-print-categorica-2)')
+    expect(h).toContain('A 300')
+    expect(h).toContain('ty-print-parliament-majority')
+  })
+})
+
+describe('molde unidade-territorial', () => {
+  it('six blocks + title, flag and source on both pages', () => {
+    const m = MOLDES['unidade-territorial']!
+    const areas = (l: typeof m.par) => l.flatMap((x) => x.areas.map(([a]) => a))
+    expect(areas(m.par)).toEqual(['titulo', 'bandeira', 'a', 'b', 'c', 'd', 'e', 'f', 'fonte'])
+    expect(areas(m.impar)).toEqual(areas(m.par))
+    const h = html(
+      <Spread numero="6-7" molde="unidade-territorial">
+        <Page lado="par">
+          <PrintArea nome="titulo">t</PrintArea>
+          <PrintArea nome="bandeira"><PrintFlag alt="Bandeira de Boa Vista" /></PrintArea>
+          <PrintArea nome="a"><PrintLocatorMap codigo={BOA_VISTA} alt="a" /></PrintArea>
+        </Page>
+      </Spread>,
+    )
+    expect(h).toContain('data-molde="unidade-territorial"')
+    expect(h).toContain('não consta no acervo')
+    expect(h).not.toContain('data-fora-do-molde')
+  })
+})

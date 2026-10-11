@@ -45,8 +45,16 @@ export interface MapaProps {
   limites?: number[]
   /** Unit for generated legend labels. */
   unidade?: string
-  /** `sequencial` (low → high, default) or `divergente` (two sides of a middle class). */
-  escala?: 'sequencial' | 'divergente'
+  /**
+   * `sequencial` (low → high, default), `divergente` (two sides of a middle class, in the style's
+   * `--ty-print-divergente-1/2`) or `categorica` (with `categorias`: no implied order; the style's qualitative
+   * palette `--ty-print-categorica-N`, and in P&B eight hatches that differ in kind, not in density).
+   */
+  escala?: 'sequencial' | 'divergente' | 'categorica'
+  /** Category by code (party, winner, type) for `escala="categorica"`; up to eight categories. */
+  categorias?: Record<string, string | null>
+  /** Order of the categories in the legend and palette (default: most areas first, then alphabetical). */
+  ordemCategorias?: string[]
   /** Municipalities (or UFs) to outline and name: IBGE code, "Nome/UF" or a unique name. */
   destaques?: string[]
   /** Draw only a region ("Norte", "Nordeste", "Sudeste", "Sul", "Centro-Oeste") or a list of UFs. */
@@ -229,7 +237,7 @@ interface Tinta {
 }
 
 /** Position of class k: t in [0, 1] and, for diverging scales, its side. */
-function posicao(k: number, n: number, escala: 'sequencial' | 'divergente'): { t: number; lado: -1 | 0 | 1 } {
+function posicao(k: number, n: number, escala: 'sequencial' | 'divergente' | 'categorica'): { t: number; lado: -1 | 0 | 1 } {
   if (n <= 1) return { t: 1, lado: 1 }
   if (escala === 'sequencial') return { t: k / (n - 1), lado: 1 }
   const meio = (n - 1) / 2
@@ -237,11 +245,13 @@ function posicao(k: number, n: number, escala: 'sequencial' | 'divergente'): { t
   return { t: Math.abs(d), lado: d < 0 ? -1 : d > 0 ? 1 : 0 }
 }
 
-function tintas(id: string, modo: Modo, n: number, escala: 'sequencial' | 'divergente', pb: boolean, grossa: boolean): Tinta {
-  const cor = (lado: number) => (pb ? 'var(--ty-print-tinta)' : lado < 0 ? 'var(--ty-print-destaque-2)' : 'var(--ty-print-destaque)')
+function tintas(id: string, modo: Modo, n: number, escala: 'sequencial' | 'divergente' | 'categorica', pb: boolean, grossa: boolean): Tinta {
+  const div = escala === 'divergente'
+  const cor = (lado: number) => (pb ? 'var(--ty-print-tinta)' : lado < 0 ? (div ? 'var(--ty-print-divergente-1)' : 'var(--ty-print-destaque-2)') : div ? 'var(--ty-print-divergente-2)' : 'var(--ty-print-destaque)')
   const papel = 'var(--ty-print-papel)'
   const padroes: ReactNode[] = []
   const fills: string[] = []
+  if (escala === 'categorica') return tintasCategoricas(id, modo, n)
   for (let k = 0; k < n; k++) {
     const { t, lado } = posicao(k, n, escala)
     const c = cor(lado)
@@ -303,6 +313,52 @@ function tintas(id: string, modo: Modo, n: number, escala: 'sequencial' | 'diver
   }
 }
 
+/**
+ * Qualitative inks: flat colours from the style's categorical palette; in hatch mode (P&B, gravura) eight
+ * patterns that differ in kind (direction, dots, crosses, solid), so neighbours never read as "more" or "less".
+ */
+function tintasCategoricas(id: string, modo: Modo, n: number): Tinta {
+  const papel = 'var(--ty-print-papel)'
+  const tinta = 'var(--ty-print-tinta)'
+  const fills: string[] = []
+  const padroes: ReactNode[] = []
+  for (let k = 0; k < n; k++) {
+    if (modo === 'chapado') {
+      fills.push(`var(--ty-print-categorica-${(k % 8) + 1})`)
+      continue
+    }
+    const pid = `${id}-c${k}`
+    fills.push(`url(#${pid})`)
+    const e = 1.2
+    const l = (x1: number, y1: number, x2: number, y2: number, w = 0.16) => <line x1={x1} y1={y1} x2={x2} y2={y2} style={{ stroke: tinta, strokeWidth: w }} />
+    const corpo: ReactNode[] = [
+      <rect key="s" width={e} height={e} style={{ fill: 'color-mix(in oklab, var(--ty-print-tinta) 70%, var(--ty-print-papel))' }} />, // solid dark
+      <g key="d">{l(0, 0, 0, e)}</g>, // diagonal /
+      <g key="h">{l(0, e / 2, e, e / 2)}</g>, // horizontal (rotated back below)
+      <circle key="p" cx={e / 2} cy={e / 2} r={0.22} style={{ fill: tinta }} />, // dots
+      <g key="x">{l(0, 0, 0, e, 0.12)}{l(0, e / 2, e, e / 2, 0.12)}</g>, // cross
+      <rect key="w" width={e} height={e} style={{ fill: 'color-mix(in oklab, var(--ty-print-tinta) 18%, var(--ty-print-papel))' }} />, // light solid
+      <g key="v">{l(0, 0, 0, e)}</g>, // diagonal \
+      <circle key="o" cx={e / 2} cy={e / 2} r={0.3} style={{ fill: 'none', stroke: tinta, strokeWidth: 0.12 }} />, // rings
+    ]
+    const giro = [0, 45, 0, 0, 45, 0, -45, 0][k % 8]
+    padroes.push(
+      <pattern key={pid} id={pid} width={e} height={e} patternUnits="userSpaceOnUse" patternTransform={giro ? `rotate(${giro})` : undefined}>
+        <rect width={e} height={e} style={{ fill: papel }} />
+        {corpo[k % 8]}
+      </pattern>,
+    )
+  }
+  const sd = `${id}-sd`
+  padroes.push(
+    <pattern key={sd} id={sd} width={1.2} height={0.7} patternUnits="userSpaceOnUse">
+      <rect width={1.2} height={0.7} style={{ fill: papel }} />
+      <line x1={0.1} y1={0.35} x2={0.75} y2={0.35} style={{ stroke: 'var(--ty-print-contexto)', strokeWidth: 0.14 }} />
+    </pattern>,
+  )
+  return { fill: (k) => (k === SEM_DADO ? `url(#${sd})` : k === SEM_SERIE ? papel : (fills[k] ?? papel)), defs: padroes }
+}
+
 function modoDe(nome: RenderizadorGrafico, pb: boolean): Modo {
   if (nome === 'pontos') return 'pontos'
   if (pb || nome === 'gravura') return 'hachura'
@@ -352,6 +408,8 @@ export function Mapa({
   limites,
   unidade,
   escala = 'sequencial',
+  categorias,
+  ordemCategorias,
   destaques,
   recorte,
   exemplo = false,
@@ -388,6 +446,18 @@ export function Mapa({
   const Hc = altura ? Math.max(8, (altura - nLin * cabecaCelula - vao * (nLin - 1)) / nLin) : undefined
   const geos = itens.map((it) => geometria(nivel, it.recorte, Wc, Hc))
 
+  // Categorical: categories become classes in legend order (most areas first unless an order is given).
+  let nomesCategorias: string[] | undefined
+  let classesCat: Record<string, number | null> | undefined
+  if (escala === 'categorica' && categorias) {
+    const conta = new Map<string, number>()
+    for (const c of Object.values(categorias)) if (c) conta.set(c, (conta.get(c) ?? 0) + 1)
+    nomesCategorias = ordemCategorias ?? [...conta.keys()].sort((a, b) => (conta.get(b) ?? 0) - (conta.get(a) ?? 0) || a.localeCompare(b, 'pt-BR'))
+    if (nomesCategorias.length > 8) throw new Error(`tympan-print Mapa: ${nomesCategorias.length} categorias; o mapa categórico distingue até 8 (agrupe as menores em "outros")`)
+    classesCat = Object.fromEntries(Object.entries(categorias).map(([k, c]) => [k, c && nomesCategorias!.includes(c) ? nomesCategorias!.indexOf(c) : null]))
+    itens.forEach((it) => (it.classes = classesCat))
+  }
+
   // Classes, shared by every map of the figure.
   const vals: number[] = []
   itens.forEach((it, i) => {
@@ -399,7 +469,7 @@ export function Mapa({
   const algumValor = itens.some((it) => it.valores && !it.classes)
   const lim = limites ?? (algumValor ? quantis(vals, legenda?.length ?? 5) : undefined)
   const todasClasses = itens.flatMap((it) => (it.classes ? Object.values(it.classes) : [])).filter((v): v is number => typeof v === 'number')
-  const n = Math.max(1, legenda?.length ?? (lim ? lim.length + 1 : todasClasses.length ? Math.max(...todasClasses) + 1 : 5))
+  const n = Math.max(1, legenda?.length ?? nomesCategorias?.length ?? (lim ? lim.length + 1 : todasClasses.length ? Math.max(...todasClasses) + 1 : 5))
   const temSerie = itens.some((it) => it.classes || it.valores || it.exemplo)
   const classeArea = (it: MapaMultiplo, g: Geometria, a: AreaPosta): number => {
     if (it.classes) {
@@ -437,7 +507,7 @@ export function Mapa({
   }
   const Wt = itens.length > 1 ? W : (celulas[0] as Celula).g.W
   const Ht = r3(y)
-  const rotulosClasses = legenda ?? (lim ? rotulosLimites(lim, unidade) : Array.from({ length: n }, (_, k) => `classe ${k + 1}`))
+  const rotulosClasses = legenda ?? nomesCategorias ?? (lim ? rotulosLimites(lim, unidade) : Array.from({ length: n }, (_, k) => `classe ${k + 1}`))
   const conta = (c: Celula, k: number) => c.ks.filter((x) => x === k).length
   const semDadoN = celulas.reduce((t, c) => t + conta(c, SEM_DADO), 0)
 
@@ -525,6 +595,8 @@ export function Mapa({
         <span className="ty-print-figure-title">{comColchetes(titulo)}</span>
       </figcaption>
       <svg className="ty-print-map-svg" viewBox={`0 0 ${Wt} ${Ht}`} role="img" aria-label={alt} style={{ maxInlineSize: `${Wt}mm`, aspectRatio: `${Wt} / ${Ht}` }}>
+        <title>{alt}</title>
+        <desc>{titulo.replace(/\s*\[[^\]]*\]\s*/g, ' ').trim()}</desc>
         <defs>{tinta.defs}</defs>
         {celulas.map((c, i) => (
           <g key={c.chave}>
