@@ -932,3 +932,16 @@
     font-variant-numeric: tabular-nums;
   }
 }
+
+/* Black and white: images supplied by the book (flags, photos) print in grey, and tinted panel fills
+   come from the ink, never from a colour the host passed outside the style. */
+@layer tympan-print {
+  .ty-print-book[data-ty-print-pb] :is(img, .ty-print-flag, .ty-print-panel image) {
+    filter: grayscale(1);
+  }
+
+  .ty-print-book[data-ty-print-pb] .ty-print-panel[data-variante='bolso'],
+  .ty-print-book[data-ty-print-pb] .ty-print-panel:has(> .ty-print-panel-body > .ty-print-locator) {
+    background: color-mix(in srgb, var(--ty-print-tinta) 7%, var(--ty-print-papel));
+  }
+}
