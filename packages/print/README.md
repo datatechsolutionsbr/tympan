@@ -126,6 +126,9 @@ registerPrintTheme({
 // <PrintBook estilo="minha-editora" fontes="locais" impressao> … </PrintBook>
 ```
 
+- **Marks**: `Cover logo` (true = `marcas.editora`, or a mark/element; 22 mm front, 26 mm back, 14 mm tall
+  at most) and a running-foot mark on the inner side (`Page marca`, or the theme's `folio.marca: 'editora'`;
+  height from the molde's `marcaRodape`, default 3.5 mm). `Mark` renders any of them (P&B: `srcPb` or grey).
 - **Cascade**: `{ id: 'volume-3', base: 'minha-editora', cor: { destaque: '#226633' } }`.
 - **From JSON**: `registerPrintTheme(json)` takes the same object as JSON (colours as hex or DTCG colour
   objects), or a **DTCG tree** whose groups mirror the fields (`cor.destaque.$value`, `fontes.titulo.$value`

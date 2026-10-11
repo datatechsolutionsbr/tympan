@@ -8,6 +8,7 @@ import { Painel } from '../panels/Panel.tsx'
 import { nomeArea, gradeDoMolde, linhasDoMolde, linhasUsadas, moldePorNome } from './templates.ts'
 import { Ornamento } from './Ornament.tsx'
 import { Textura } from './Texture.tsx'
+import { Marca, type MarcaEntrada } from '../brand/Marca.tsx'
 
 export interface PaginaProps {
   lado: 'par' | 'impar'
@@ -31,6 +32,12 @@ export interface PaginaProps {
    * panels share the free height. Default: the style's `estrutura.preencher` (on in dashboard).
    */
   preencher?: boolean
+  /**
+   * A mark in the running foot, on the inner side opposite the folio: `true` = the theme's `marcas.editora`, or a
+   * mark object / element. Default: the theme's `folio.marca` ('editora' prints it on every normal page).
+   * Height from the molde (`marcaRodape`, default 3.5 mm).
+   */
+  marca?: MarcaEntrada
   className?: string
   children?: ReactNode
 }
@@ -52,7 +59,7 @@ function coresCapa(campo: string, estilo: ReturnType<typeof usePrint>['estilo'],
   return { fundo: f, texto, escuro: luminance(parseColor(f)) < 0.2 }
 }
 
-export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero, molde, campo, preencher, className, children }: PaginaProps) {
+export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero, molde, campo, preencher, marca, className, children }: PaginaProps) {
   const dupla = useDupla()
   const { estilo, pb, grafica } = usePrint()
   const semCabeco = variante !== 'normal' || estilo.folio?.cabeco === 'nenhum'
@@ -67,6 +74,7 @@ export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero
   const enche = !grade && variante === 'normal' && (preencher ?? estilo.estrutura.preencher ?? false)
   const cheio = enche ? encherLinhas(children) : null
   if (cheio) children = cheio.filhos
+  const marcaRodape = variante === 'normal' ? (marca ?? (estilo.folio?.marca === 'editora' ? true : undefined)) : undefined
   const cc = variante === 'capa' && campo ? coresCapa(campo, estilo, pb) : null
   const corpo = variante === 'capa' ? <FundoEscuroProvider value={cc ? cc.escuro : !papelEscuro(estilo)}>{children}</FundoEscuroProvider> : children
   // The cover prints `--ty-print-tinta` as its field and `--ty-print-papel` as its type (base.css).
@@ -89,6 +97,11 @@ export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero
       <div className="ty-print-type-area" style={cheio ? { gridTemplateRows: cheio.linhas } : estiloMancha} data-preencher={cheio ? '' : undefined}>
         <LadoProvider value={lado}>{grade ? <MoldeProvider value={grade.info}>{corpo}</MoldeProvider> : corpo}</LadoProvider>
       </div>
+      {marcaRodape ? (
+        <div className="ty-print-running-mark" style={{ blockSize: `${m?.marcaRodape ?? 3.5}mm` }}>
+          <Marca marca={marcaRodape} largura={30} altura={m?.marcaRodape ?? 3.5} />
+        </div>
+      ) : null}
       {mostrarFolio ? <p className="ty-print-folio">{`${estilo.folio?.prefixoFolio ?? ''}${textoFolio}`}</p> : null}
     </section>
   )

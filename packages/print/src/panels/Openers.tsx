@@ -1,4 +1,5 @@
 import type { EstadoProva } from '@datatechsolutions/tympan-tokens'
+import { Marca, type MarcaEntrada } from '../brand/Marca.tsx'
 import type { ReactNode } from 'react'
 import { usePrint } from '../context.tsx'
 import { Emblema } from '../brand/Emblem.tsx'
@@ -33,6 +34,11 @@ export interface CapaProps {
   isbn?: string
   /** Print the publisher's mark (Datatech Solutions), small; off by default because content places LogoDatatech itself. */
   editora?: boolean
+  /**
+   * The publisher's or collection's mark at the foot of the cover: `true` = the theme's `marcas.editora`, or a
+   * mark object / element. Width 22 mm on the front, 26 mm on the back (or the mark's own `largura`), 14 mm tall at most.
+   */
+  logo?: MarcaEntrada
   /**
    * Cover system of the collection (board L6): the collection name, the volume numeral as the mark ("0", "I"…),
    * the period or "guia de leitura", and one illustration per volume, tone on tone. With `numeral`, the front
@@ -115,7 +121,7 @@ function Grafismo({ cortes, legenda }: { cortes: number[]; legenda?: string }) {
 }
 
 /** Front or back cover, printed on the volume's colour field (or the ink colour), in the style. */
-export function Capa({ face = 'primeira', eyebrow, titulo, subtitulo, autora, chamada, paragrafos, destaque, cortes, legendaGrafismo, selo, isbn, editora = false, colecao, numeral, rotulo, ilustracao, leis, perguntas, className }: CapaProps) {
+export function Capa({ face = 'primeira', eyebrow, titulo, subtitulo, autora, chamada, paragrafos, destaque, cortes, legendaGrafismo, selo, isbn, editora = false, logo, colecao, numeral, rotulo, ilustracao, leis, perguntas, className }: CapaProps) {
   if (face === 'primeira' && numeral) {
     return (
       <div className={cx('ty-print-capa', className)} data-face={face} data-l6="">
@@ -139,6 +145,11 @@ export function Capa({ face = 'primeira', eyebrow, titulo, subtitulo, autora, ch
         {titulo ? <TituloCapa titulo={titulo} /> : null}
         {subtitulo ? <p className="ty-print-capa-subtitulo">{comColchetes(subtitulo)}</p> : null}
         {autora ? <p className="ty-print-capa-autora">{comColchetes(autora)}</p> : null}
+        {logo ? (
+          <div className="ty-print-capa-logo">
+            <Marca marca={logo} largura={22} altura={14} />
+          </div>
+        ) : null}
       </div>
     )
   }
@@ -229,6 +240,7 @@ export function Capa({ face = 'primeira', eyebrow, titulo, subtitulo, autora, ch
       ) : null}
       <div className="ty-print-chapa-foot">
         {editora ? <LogoDatatech largura={face === 'primeira' ? 22 : 26} /> : null}
+        {logo ? <Marca marca={logo} largura={face === 'primeira' ? 22 : 26} altura={14} /> : null}
         {isbn ? <p className="ty-print-chapa-isbn">ISBN {comColchetes(isbn)}</p> : null}
       </div>
     </div>

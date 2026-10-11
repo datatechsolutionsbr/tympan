@@ -333,3 +333,36 @@
     block-size: auto;
   }
 }
+
+/* Marks (publisher logo, collection seal): running foot on the inner side, cover foot. */
+@layer tympan-print {
+  .ty-print-mark {
+    display: block;
+    max-inline-size: 100%;
+  }
+
+  img.ty-print-mark[data-pb] {
+    filter: grayscale(1);
+  }
+
+  .ty-print-running-mark {
+    position: absolute;
+    z-index: 1;
+    inset-block-end: 6.5mm;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .ty-print-page[data-lado='par'] .ty-print-running-mark {
+    inset-inline-end: 18mm;
+  }
+
+  .ty-print-page[data-lado='impar'] .ty-print-running-mark {
+    inset-inline-start: 18mm;
+  }
+
+  .ty-print-capa-logo {
+    margin-block-start: auto;
+    padding-block-start: 3mm;
+  }
+}

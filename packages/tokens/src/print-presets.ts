@@ -295,6 +295,8 @@ export interface PrintFolio {
   cabeco?: 'externo' | 'centro' | 'nenhum'
   /** Text before the folio number, e.g. "p. ". */
   prefixoFolio?: string
+  /** A mark in the running foot of every normal page: 'editora' = `marcas.editora` (default none). */
+  marca?: 'editora' | 'nenhuma'
 }
 
 /** A local font file (offline, deterministic builds and EPUB): one @font-face. */

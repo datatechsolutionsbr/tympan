@@ -33,6 +33,8 @@ export interface Molde {
    * (running text, few blocks) may set their text larger rather than leave half the page blank.
    */
   maximo?: number
+  /** Height (mm) of the mark in the running foot (Page `marca`, theme `folio.marca`); default 3.5. */
+  marcaRodape?: number
   par: LinhaMolde[]
   impar: LinhaMolde[]
 }
