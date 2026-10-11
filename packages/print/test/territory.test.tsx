@@ -145,3 +145,22 @@ describe('Parliament geometry', () => {
     })
   }
 })
+
+describe('PrintSymbolMap legend and context contrast', () => {
+  it('legend circles live in the map drawing and use the same radius function', () => {
+    const h = html(<PrintSymbolMap titulo="V" alt="a" recorte={['RR']} valores={{ [BOA_VISTA]: 400, '1400050': 100 }} referencias={[400, 100]} raioMaximo={4} />)
+    expect((h.match(/<svg/g) ?? []).length).toBe(1) // one drawing: the legend is inside it
+    const leg = h.slice(h.indexOf('<g class="ty-print-symbols-legend"'))
+    const rs = [...leg.matchAll(/<circle [^>]*r="([\d.]+)"/g)].map((m) => Number(m[1]))
+    expect(rs).toEqual([4, 2]) // same as the map's 400 → 4 mm, 100 → 2 mm
+  })
+  it('context grey reaches 1.5:1 (areas) and 3:1 (strokes) on the paper', async () => {
+    const { contrastRatio, parseColor, printStyleVariables, resolvePrintStyle } = await import('@datatechsolutions/tympan-tokens')
+    const s = resolvePrintStyle('jornal', { overrides: { cor: { papel: '#f4ecd8', contexto: '#efe7d4' } } })
+    const v = Object.fromEntries(printStyleVariables(s))
+    expect(contrastRatio(parseColor(v['--ty-print-contexto-area']!), parseColor('#f4ecd8'))).toBeGreaterThanOrEqual(1.5)
+    expect(contrastRatio(parseColor(v['--ty-print-contexto-traco']!), parseColor('#f4ecd8'))).toBeGreaterThanOrEqual(3)
+    const loc = html(<PrintLocatorMap codigo={BOA_VISTA} alt="a" />)
+    expect(loc).toContain('var(--ty-print-contexto-area')
+  })
+})

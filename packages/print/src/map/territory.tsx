@@ -59,7 +59,7 @@ export function MapaLocalizacao({ codigo, alt, titulo, aneis = 1, largura, altur
   const Wsvg = chamada ? Wtot : W
   const dx = chamada && inicio ? r3(Wtot - W) : 0
   const destaque = pb ? 'var(--ty-print-tinta)' : 'var(--ty-print-destaque)'
-  const contexto = 'color-mix(in oklab, var(--ty-print-contexto) 45%, var(--ty-print-papel))'
+  const contexto = 'var(--ty-print-contexto-area, var(--ty-print-contexto))'
   const nomeFoco = foco.properties.name
   return (
     <figure className={cx('ty-print-map', 'ty-print-locator', className)} data-codigo={codigo} data-areas={areas.length} data-chamada={chamada ? (inicio ? 'inicio' : 'fim') : undefined}>
@@ -153,26 +153,26 @@ export function MapaSimbolos({ titulo, alt, valores, recorte, unidade, raioMaxim
   const raio = (v: number) => (max > 0 ? r3(raioMaximo * Math.sqrt(v / max)) : 0)
   const alvo = new Set(destaques ?? [])
   const ordenados = [...pontos].sort((x, y) => y.v - x.v || x.a.properties.code.localeCompare(y.a.properties.code))
-  const refs = (referencias ?? [arredonda(max), arredonda(max / 4), arredonda(max / 16)]).filter((v, i, all) => v > 0 && all.indexOf(v) === i)
-  const tinta = (k: boolean) => (k && !pb ? 'var(--ty-print-destaque)' : k ? 'var(--ty-print-tinta)' : 'color-mix(in oklab, var(--ty-print-contexto) 70%, var(--ty-print-papel))')
+  const refs = (referencias ?? [arredonda(max), arredonda(max / 4), arredonda(max / 16)]).map((v) => Math.min(v, max)).filter((v, i, all) => v > 0 && all.indexOf(v) === i)
+  const tinta = (k: boolean) => (k && !pb ? 'var(--ty-print-destaque)' : k ? 'var(--ty-print-tinta)' : 'var(--ty-print-contexto-area, var(--ty-print-contexto))')
   const legH = raioMaximo * 2 + 4.5
   return (
     <figure className={cx('ty-print-map', 'ty-print-symbols', className)} data-pontos={pontos.length}>
       <figcaption className="ty-print-figure-head">
         <span className="ty-print-figure-title">{comColchetes(titulo)}</span>
       </figcaption>
-      <svg className="ty-print-map-svg" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={alt} style={{ maxInlineSize: `${W}mm`, aspectRatio: `${W} / ${H}` }}>
+      <svg className="ty-print-map-svg" viewBox={`0 0 ${W} ${r3(H + legH)}`} role="img" aria-label={alt} style={{ maxInlineSize: `${W}mm`, aspectRatio: `${W} / ${r3(H + legH)}` }}>
         <title>{alt}</title>
-        <desc>{`Círculos proporcionais: ${pontos.length} municípios; a área do círculo é proporcional ao valor (máximo ${formatarNumero(max)}${unidade ? ` ${unidade}` : ''}).`}</desc>
-        <path className="ty-print-map-borders" d={path(b.internas) ?? ''} style={{ fill: 'none', stroke: 'var(--ty-print-linha)', strokeWidth: 0.2 }} />
+        <desc>{`Legenda: ${refs.map((v) => formatarNumero(v)).join(', ')}. Círculos proporcionais: ${pontos.length} municípios; a área do círculo é proporcional ao valor (máximo ${formatarNumero(max)}${unidade ? ` ${unidade}` : ''}).`}</desc>
+        <path className="ty-print-map-borders" d={path(b.internas) ?? ''} style={{ fill: 'none', stroke: 'var(--ty-print-contexto-traco, var(--ty-print-linha))', strokeWidth: 0.2 }} />
         <path className="ty-print-map-outline" d={path(b.contorno) ?? ''} style={{ fill: 'none', stroke: 'var(--ty-print-tinta-3)', strokeWidth: 0.3 }} />
         {ordenados.map(({ a, v }) => {
           const [x, y] = proj(geoCentroid(a)) ?? path.centroid(a)
           const k = alvo.has(a.properties.code)
           return <circle key={a.properties.code} data-code={a.properties.code} cx={r3(x)} cy={r3(y)} r={raio(v)} style={{ fill: tinta(k), fillOpacity: k ? 0.9 : 0.75, stroke: 'var(--ty-print-papel)', strokeWidth: 0.15 }} />
         })}
-      </svg>
-      <svg className="ty-print-symbols-legend" viewBox={`0 0 ${W} ${legH}`} style={{ maxInlineSize: `${W}mm` }} role="img" aria-label={`Legenda: ${refs.map((v) => formatarNumero(v)).join(', ')}${unidade ? ` ${unidade}` : ''}`}>
+        {/* Legend in the same drawing, so its circles use the same radius function AND the same scale. */}
+        <g className="ty-print-symbols-legend" transform={`translate(0 ${H})`}>
         {(() => {
           // Reference circles side by side, bottom-aligned, each with its value centred under it (no overlap).
           let x = 0.5
@@ -191,6 +191,7 @@ export function MapaSimbolos({ titulo, alt, valores, recorte, unidade, raioMaxim
             )
           })
         })()}
+        </g>
       </svg>
       <div className="ty-print-sr">
         <TabelaDados titulo={`Dados: ${titulo}`} colunas={['Município', { rotulo: unidade ?? 'Valor', numerica: true }]} linhas={ordenados.slice(0, 20).map(({ a, v }) => [`${a.properties.name}/${ufDoMunicipio(a.properties.code)}`, formatarNumero(v)])} nota={pontos.length > 20 ? `Os 20 maiores de ${pontos.length}.` : undefined} />

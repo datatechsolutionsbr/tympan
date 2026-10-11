@@ -11,7 +11,7 @@
 // white variant) into `--ty-print-*` custom properties on
 // `[data-ty-print-style="<name>"]`.
 
-import { luminance, parseColor, toHex, type Rgba } from './color.ts'
+import { contrastRatio, luminance, oklchToRgb, parseColor, rgbToOklch, toHex, type Rgba } from './color.ts'
 import { PRINT_STYLE_ALIASES, warnDeprecatedPrintId, type PrintStyleAlias } from './print-aliases.ts'
 
 export type RenderizadorGrafico = 'limpo' | 'mao' | 'isotype' | 'gravura' | 'prancheta' | 'aquarela' | 'riso' | 'pontos'
@@ -1664,6 +1664,23 @@ const kebab: Record<Exclude<keyof PrintCores, 'prova' | 'ornamento' | 'divergent
 
 const num = (n: number) => String(Math.round(n * 1000) / 1000)
 
+/**
+ * `cor` moved along OKLCH lightness (hue and chroma kept) until it reaches `min`:1 against `papel`: the
+ * context grey of a theme stays visible on cream paper (areas ≥ 1.5:1, strokes ≥ 3:1).
+ */
+export function contrasteMinimo(cor: string, papel: string, min: number): string {
+  const p = parseColor(papel)
+  if (contrastRatio(parseColor(cor), p) >= min) return toHex(parseColor(cor))
+  const v = rgbToOklch(parseColor(cor))
+  const passo = luminance(p) > 0.2 ? -0.005 : 0.005
+  let out = parseColor(cor)
+  for (let i = 0; i < 200 && contrastRatio(out, p) < min; i++) {
+    v.l = Math.min(0.995, Math.max(0.02, v.l + passo))
+    out = oklchToRgb(v)
+  }
+  return toHex(out)
+}
+
 /** Qualitative palette (Okabe & Ito 2008, colour-blind safe) used when a style defines none. */
 export const CATEGORICA_PADRAO = ['#0072b2', '#e69f00', '#009e73', '#cc79a7', '#56b4e9', '#d55e00', '#f0e442', '#555555'] as const
 
@@ -1697,6 +1714,8 @@ export function printStyleVariables(style: PrintStyle): Array<[string, string]> 
   vars.push(['--ty-print-sobretitulo-caixa', preservar ? 'none' : minusculas ? 'lowercase' : rc === 'alta' ? 'uppercase' : 'none'])
   vars.push(['--ty-print-celula-caixa', preservar ? 'none' : minusculas ? 'lowercase' : 'none'])
   vars.push(['--ty-print-tabela-numeros', style.texto?.numerosTabela === 'proporcional' ? 'proportional-nums lining-nums' : 'tabular-nums lining-nums'])
+  vars.push(['--ty-print-contexto-area', contrasteMinimo(style.cor.contexto, style.cor.papel, 1.5)])
+  vars.push(['--ty-print-contexto-traco', contrasteMinimo(style.cor.contexto, style.cor.papel, 3)])
   const dv = style.cor.divergente ?? [style.cor.destaque2, style.cor.destaque]
   vars.push(['--ty-print-divergente-1', dv[0]])
   vars.push(['--ty-print-divergente-2', dv[1]])
