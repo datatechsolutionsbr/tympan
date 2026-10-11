@@ -25,6 +25,19 @@ npm run gallery:shots -w @datatechsolutions/tympan-print # gallery/shots/<preset
 also renders every panel of a real book's content folder in every preset and
 fails on any prop the components would ignore.
 
+## Installing
+
+`react` and `react-dom` are peer dependencies (18.3 or 19): the package never brings its own copy.
+
+- **Recommended for a local build** (before a release is published): pack and install the tarballs,
+  `npm pack -w @datatechsolutions/tympan-tokens -w @datatechsolutions/tympan-print` in this repo, then
+  `npm i ../tympan/datatechsolutions-tympan-tokens-*.tgz ../tympan/datatechsolutions-tympan-print-*.tgz`.
+- `file:` works only with `--install-links` (or `install-links=true` in the consumer's `.npmrc`): a plain
+  `file:` dependency is a symlink, and Node resolves `react` from the link's real path, which is this
+  workspace's React 19; a React 18 app then fails with "Objects are not valid as a React child". Bundlers
+  that follow symlinks need `resolve.dedupe: ['react', 'react-dom']` for the same reason.
+- `node tools/consumer-react18.mjs` checks both paths against a React 18 project.
+
 ## Use
 
 ```tsx
