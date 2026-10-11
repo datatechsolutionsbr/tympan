@@ -5,13 +5,15 @@
 // and print no labels over the mesh; a callout, when asked, sits outside the
 // drawing with a leader line to the margin.
 import { tx } from '../i18n.ts'
-import { geoCentroid, geoDistance } from 'd3-geo'
+import { geoCentroid, geoConicEqualArea, geoDistance } from 'd3-geo'
+import { deltaE2000, parseColor } from '@datatechsolutions/tympan-tokens'
+import { textoSobre } from '../chart/categoryColours.ts'
 import type { ReactNode } from 'react'
 import { useLarguraDisponivel, usePrint } from '../context.tsx'
 import { comColchetes } from '../panels/common.tsx'
 import { TabelaDados } from '../panels/Method.tsx'
 import { cx, formatarNumero, r3 } from '../utils.ts'
-import { CAPITAIS, alturaPara, bordas, caminho, ufs, municipios, municipiosPorCodigo, projecaoBrasil, ufDoMunicipio, ufsDoRecorte, vizinhanca, type Recorte } from './mesh.ts'
+import { ALBERS_BRASIL, CAPITAIS, alturaPara, bordas, caminho, ufs, municipios, municipiosPorCodigo, projecaoBrasil, ufDoMunicipio, ufsDoRecorte, vizinhanca, type Recorte } from './mesh.ts'
 
 export interface MapaLocalizacaoProps {
   /** 7-digit IBGE code of the unit. */
@@ -35,6 +37,11 @@ export interface MapaLocalizacaoProps {
   capital?: boolean | string
   /** A graphic scale with a round length (default false). */
   escala?: boolean
+  /**
+   * Fixed frame (mm): every locator of the book the same size; the window is centred on the unit, sized by
+   * it, kept inside the UF on a border, and shows every municipality it covers (not only neighbours).
+   */
+  quadro?: { largura: number; altura: number }
   className?: string
 }
 
@@ -42,7 +49,8 @@ export interface MapaLocalizacaoProps {
  * The unit (in the style's highlight ink) among its neighbours (in the context grey), framed by their bounding
  * box. No names over the mesh; the page title names the unit and the optional callout sits in the margin.
  */
-export function MapaLocalizacao({ codigo, alt, titulo, aneis = 1, largura, altura, chamada, divisas = true, inset = false, capital = false, escala = false, className }: MapaLocalizacaoProps) {
+export function MapaLocalizacao({ codigo, alt, titulo, aneis = 1, largura, altura, chamada, divisas = true, inset = false, capital = false, escala = false, quadro, className }: MapaLocalizacaoProps) {
+  if (quadro) return <LocalizacaoQuadro codigo={codigo} alt={alt} titulo={titulo} quadro={quadro} inset={inset} capital={capital} escala={escala} className={className} />
   const { pb } = usePrint()
   const disponivel = useLarguraDisponivel()
   const { vizinhos } = vizinhanca(codigo, aneis)
@@ -284,4 +292,113 @@ function extrasLocalizacao({ proj, codigo, uf, W, H, dx, inset, capital, escala,
     )
   }
   return out
+}
+
+// ---------------------------------------------------------------------------
+// Fixed-frame locator (every map of a book the same size)
+// ---------------------------------------------------------------------------
+
+const CAIXAS = new Map<string, [number, number, number, number]>()
+
+/** Planar lon/lat box of a feature (robust to ring orientation, unlike a spherical bounds). */
+function caixaPlana(f: { properties: { code: string }; geometry: { coordinates: unknown } }): [number, number, number, number] {
+  const pronta = CAIXAS.get(f.properties.code)
+  if (pronta) return pronta
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity
+  const andar = (c: unknown): void => {
+    if (Array.isArray(c) && typeof c[0] === 'number') {
+      const [x, y] = c as [number, number]
+      if (x < x0) x0 = x
+      if (x > x1) x1 = x
+      if (y < y0) y0 = y
+      if (y > y1) y1 = y
+    } else if (Array.isArray(c)) c.forEach(andar)
+  }
+  andar(f.geometry.coordinates)
+  const cx: [number, number, number, number] = [x0, y0, x1, y1]
+  CAIXAS.set(f.properties.code, cx)
+  return cx
+}
+
+/**
+ * The locator in a fixed frame (`quadro`): the unit in the theme's highlight colour among every municipality
+ * the window shows (light, white rules), the window centred on the unit and sized by it (so a long unit is
+ * never tiny), kept inside the UF on a border; an inset of Brazil in its own column; capital point and scale.
+ */
+function LocalizacaoQuadro({ codigo, alt, titulo, quadro, inset, capital, escala, className }: { codigo: string; alt: string; titulo?: string; quadro: { largura: number; altura: number }; inset: boolean; capital: boolean | string; escala: boolean; className?: string }) {
+  const { estilo, pb } = usePrint()
+  const W = r3(quadro.largura)
+  const H = r3(quadro.altura)
+  const todos = municipios()
+  const foco = todos.find((f) => f.properties.code === codigo)
+  if (!foco) throw new Error(`tympan-print: município ${codigo} não está na malha`)
+  const uf = ufDoMunicipio(codigo)
+  const IW = inset ? r3(Math.min(H, W * 0.22)) : 0
+  const mx0 = inset ? r3(IW + 1.2) : 0
+  const ar = (W - mx0) / H
+  const [x0, y0, x1, y1] = caixaPlana(foco)
+  let jx = (x0 + x1) / 2
+  let jy = (y0 + y1) / 2
+  const dy = Math.max((y1 - y0) * 0.85, ((x1 - x0) * 0.85) / ar, 0.12)
+  const dx = dy * ar
+  // On a border the window stays inside the UF (the mesh has only Brazil: no empty foreign land).
+  const doUf = todos.filter((f) => ufDoMunicipio(f.properties.code) === uf).map(caixaPlana)
+  const u = [Math.min(...doUf.map((b) => b[0])), Math.min(...doUf.map((b) => b[1])), Math.max(...doUf.map((b) => b[2])), Math.max(...doUf.map((b) => b[3]))]
+  const prender = (c: number, meia: number, a: number, b: number) => (b - a <= 2 * meia ? (a + b) / 2 : Math.min(Math.max(c, a + meia), b - meia))
+  jx = prender(jx, dx, u[0]!, u[2]!)
+  jy = prender(jy, dy, u[1]!, u[3]!)
+  // Clockwise ring (d3-geo is spherical: counter-clockwise would be the globe minus the window).
+  const janela = { type: 'Polygon' as const, coordinates: [[[jx - dx, jy - dy], [jx - dx, jy + dy], [jx + dx, jy + dy], [jx + dx, jy - dy], [jx - dx, jy - dy]]] }
+  const proj = geoConicEqualArea().parallels(ALBERS_BRASIL.paralelos).rotate([-ALBERS_BRASIL.meridiano, 0]).center([0, ALBERS_BRASIL.latitudeOrigem]).fitExtent([[mx0, 0], [W, H]], janela as never)
+  const path = caminho(proj)
+  const vis = todos.filter((f) => {
+    const [a, b, c, d] = caixaPlana(f)
+    return c >= jx - dx && a <= jx + dx && d >= jy - dy && b <= jy + dy
+  })
+  const id = `ty-print-loc-${codigo}`
+  const destaque = pb ? 'color-mix(in srgb, var(--ty-print-tinta) 72%, var(--ty-print-papel))' : 'var(--ty-print-destaque)'
+  const contexto = 'var(--ty-print-contexto-area, var(--ty-print-contexto))'
+  // Highlight too close to the context grey (ΔE2000 < 10): a hatch keeps the unit apart.
+  const cD = pb ? null : estilo.cor.destaque
+  const proximo = cD && cD.startsWith('#') && estilo.cor.contexto.startsWith('#') && deltaE2000(parseColor(cD), parseColor(estilo.cor.contexto)) < 10
+  const extras = extrasLocalizacao({ proj, codigo, uf, W, H, dx: 0, inset: false, capital, escala, pb })
+  const ufsF = ufs()
+  const pI = projecaoBrasil(ufsF, IW, IW, 0.4)
+  const pathI = caminho(pI).digits(1)
+  return (
+    <figure className={cx('ty-print-map', 'ty-print-locator', className)} data-codigo={codigo} data-quadro={`${W}x${H}`} data-areas={vis.length}>
+      {titulo ? (
+        <figcaption className="ty-print-figure-head">
+          <span className="ty-print-figure-title">{comColchetes(titulo)}</span>
+        </figcaption>
+      ) : null}
+      <svg className="ty-print-map-svg" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={alt} style={{ inlineSize: `${W}mm`, maxInlineSize: '100%', aspectRatio: `${W} / ${H}` }}>
+        <title>{alt}</title>
+        <defs>
+          <clipPath id={`${id}-c`}>
+            <rect x={mx0} width={r3(W - mx0)} height={H} />
+          </clipPath>
+          {proximo ? (
+            <pattern id={`${id}-h`} width={1} height={1} patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+              <rect width={1} height={1} style={{ fill: destaque }} />
+              <line x1={0} y1={0} x2={0} y2={1} style={{ stroke: textoSobre(cD!), strokeWidth: 0.2, strokeOpacity: 0.7 }} />
+            </pattern>
+          ) : null}
+        </defs>
+        <g clipPath={`url(#${id}-c)`}>
+          <path className="ty-print-locator-context" d={vis.filter((f) => f !== foco).map((f) => path(f) ?? '').join('')} style={{ fill: contexto, stroke: 'var(--ty-print-papel)', strokeWidth: 0.25 }} />
+          <path className="ty-print-locator-focus" data-code={codigo} d={path(foco) ?? ''} style={{ fill: proximo ? `url(#${id}-h)` : destaque, stroke: 'var(--ty-print-papel)', strokeWidth: 0.3 }} />
+          {extras}
+        </g>
+        {inset ? (
+          <g className="ty-print-locator-inset" data-uf={uf}>
+            <rect width={IW} height={IW} style={{ fill: 'var(--ty-print-papel)', stroke: 'var(--ty-print-linha)', strokeWidth: 0.2 }} />
+            {ufsF.map((f) => (
+              <path key={f.properties.code} d={pathI(f) ?? ''} style={{ fill: f.properties.code === uf ? destaque : contexto, stroke: 'var(--ty-print-papel)', strokeWidth: 0.12 }} />
+            ))}
+          </g>
+        ) : null}
+      </svg>
+    </figure>
+  )
 }

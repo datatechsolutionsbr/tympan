@@ -29,7 +29,7 @@ export function DuplaLivros() {
         </PrintArea>
         <PrintArea nome="a">
           <Panel letra="a" titulo="Onde fica" variante="pilha">
-            <PrintLocatorMap codigo="1400100" alt="Boa Vista e os municípios vizinhos (exemplo)." altura={34} />
+            <PrintLocatorMap codigo="1400704" alt="Uiramutã, na fronteira (exemplo)." quadro={{ largura: 50, altura: 22 }} inset capital escala />
           </Panel>
         </PrintArea>
         <PrintArea nome="b">
@@ -69,7 +69,7 @@ export function DuplaLivros() {
           <PrintFlag alt="Bandeira de Cantá" />
         </PrintArea>
         <PrintArea nome="a">
-          <PrintLocatorMap codigo="1400175" alt="Cantá, vizinho da capital (exemplo)." altura={30} inset capital escala />
+          <PrintLocatorMap codigo="1400175" alt="Cantá, vizinho da capital (exemplo)." quadro={{ largura: 50, altura: 22 }} inset capital escala />
         </PrintArea>
         <PrintArea nome="painel">
           <PanelGrid>
