@@ -66,10 +66,18 @@ export function Hemiciclo({ titulo, alt, bancadas, largura = 80, fileiras, maior
   const assentos = layoutHemiciclo(total, fileiras)
   const R = fileiras ?? Math.max(1, Math.min(16, Math.round(Math.sqrt(total / 4))))
   const W = largura
-  const raio = W / 2 - 1
-  const passo = R > 1 ? (raio * 0.6) / (R - 1) : raio * 0.2
-  const rp = r3(Math.min(passo * 0.42, (Math.PI * raio) / Math.max(1, assentos.filter((a) => a.fileira === R - 1).length) * 0.42))
-  const H = r3(raio + rp + 1)
+  const nFora = Math.max(1, assentos.filter((a) => a.fileira === R - 1).length)
+  // Spacing between neighbour seats (mm per unit of radius): along the outer row and between rows.
+  const espaco = (raio: number) => Math.min(nFora > 1 ? (Math.PI * raio) / (nFora - 1) : 2 * raio, R > 1 ? (raio * 0.6) / (R - 1) : Infinity)
+  // Seat radius: 42 % of the spacing, never above a legible maximum; with few seats the arc shrinks instead of
+  // the dots growing, and the drawing is centred.
+  const RP_MAX = 1.6
+  let raio = W / 2 - RP_MAX - 0.5
+  if (0.42 * espaco(raio) > RP_MAX) raio = (raio * RP_MAX) / (0.42 * espaco(raio))
+  const rp = r3(Math.min(RP_MAX, 0.42 * espaco(raio)))
+  raio = r3(Math.min(raio, W / 2 - rp - 0.5))
+  const H = r3(raio + 2 * rp + 1)
+  const base = r3(H - rp - 0.5)
   const cor = (i: number, b: Bancada) => (b.cor && !pb ? b.cor : `var(--ty-print-categorica-${(i % 8) + 1})`)
   let k = 0
   const pontos = bancadas.flatMap((b, i) =>
@@ -96,13 +104,13 @@ export function Hemiciclo({ titulo, alt, bancadas, largura = 80, fileiras, maior
               key={n}
               data-sigla={b.sigla}
               cx={r3(W / 2 + a.x * raio)}
-              cy={r3(H - 1 - a.y * raio)}
+              cy={r3(base - a.y * raio)}
               r={rp}
               style={vazado ? { fill: 'var(--ty-print-papel)', stroke: cor(i, b), strokeWidth: r3(rp * 0.45) } : { fill: cor(i, b) }}
             />
           )
         })}
-        {corte ? <line className="ty-print-parliament-majority" x1={W / 2} y1={r3(H - 1)} x2={r3(W / 2 + corte.x * (raio + rp))} y2={r3(H - 1 - corte.y * (raio + rp))} style={{ stroke: 'var(--ty-print-tinta)', strokeWidth: 0.2, strokeDasharray: '0.6 0.4' }} /> : null}
+        {corte ? <line className="ty-print-parliament-majority" x1={W / 2} y1={base} x2={r3(W / 2 + corte.x * (raio + rp))} y2={r3(base - corte.y * (raio + rp))} style={{ stroke: 'var(--ty-print-tinta)', strokeWidth: 0.2, strokeDasharray: '0.6 0.4' }} /> : null}
         <text className="ty-print-parliament-total" x={W / 2} y={r3(H - 2)} textAnchor="middle">
           {total}
         </text>

@@ -125,3 +125,23 @@ describe('accessibility for EPUB: every figure svg has a title', () => {
     }
   })
 })
+
+describe('Parliament geometry', () => {
+  for (const n of [3, 8, 81, 513]) {
+    it(`${n} seats: every dot inside the viewBox, legible radius, centred`, () => {
+      const h = html(<Parliament alt="c" bancadas={[{ sigla: 'A', assentos: Math.ceil(n / 2) }, { sigla: 'B', assentos: Math.floor(n / 2) }]} largura={80} />)
+      const [, W, H] = /viewBox="0 0 ([\d.]+) ([\d.]+)"/.exec(h)!.map(Number)
+      const dots = [...h.matchAll(/data-sigla="[AB]" cx="([\d.]+)" cy="([\d.]+)" r="([\d.]+)"/g)].map((m) => m.slice(1).map(Number) as [number, number, number])
+      expect(dots).toHaveLength(n)
+      for (const [x, y, r] of dots) {
+        expect(x - r).toBeGreaterThanOrEqual(0)
+        expect(x + r).toBeLessThanOrEqual(W! + 1e-6)
+        expect(y - r).toBeGreaterThanOrEqual(0)
+        expect(y + r).toBeLessThanOrEqual(H! + 1e-6)
+        expect(r).toBeLessThanOrEqual(1.6)
+      }
+      const xs = dots.map((d) => d[0])
+      expect(Math.abs((Math.min(...xs) + Math.max(...xs)) / 2 - W! / 2)).toBeLessThan(0.05)
+    })
+  }
+})
