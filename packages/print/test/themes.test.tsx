@@ -98,3 +98,14 @@ describe('estrutura.economiaTinta (bauhaus for 5,571 pages)', () => {
     expect(e).not.toContain('data-ty-print-fundo-painel')
   })
 })
+
+describe('theme weights and figures reach the page', () => {
+  it('PrintBook emits the per-role rules of the theme, scoped to the book', () => {
+    registerPrintTheme({ id: 'editora-exemplo', base: 'semanario', texto: { pesos: { titulo: 600, numero: 600 }, algarismos: { numero: 'tabular' } } })
+    const h = livro()
+    const escopo = /data-ty-print-livro="([^"]+)"/.exec(h)![1]
+    expect(h).toContain(`[data-ty-print-livro="${escopo}"] :is(h1, h2, h3, h4`)
+    expect(h).toMatch(/font-weight: 600; \}/)
+    expect(h).toContain('font-variant-numeric: tabular-nums lining-nums; }')
+  })
+})

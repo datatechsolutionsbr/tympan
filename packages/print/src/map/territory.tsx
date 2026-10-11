@@ -58,7 +58,7 @@ export function MapaLocalizacao({ codigo, alt, titulo, aneis = 1, largura, altur
   const inicio = chamada?.lado === 'inicio'
   const Wsvg = chamada ? Wtot : W
   const dx = chamada && inicio ? r3(Wtot - W) : 0
-  const destaque = pb ? 'var(--ty-print-tinta)' : 'var(--ty-print-destaque)'
+  const destaque = pb ? 'var(--ty-print-tinta)' : 'var(--ty-print-interesse, var(--ty-print-destaque))'
   const contexto = 'var(--ty-print-contexto-area, var(--ty-print-contexto))'
   const nomeFoco = foco.properties.name
   return (
@@ -154,7 +154,7 @@ export function MapaSimbolos({ titulo, alt, valores, recorte, unidade, raioMaxim
   const alvo = new Set(destaques ?? [])
   const ordenados = [...pontos].sort((x, y) => y.v - x.v || x.a.properties.code.localeCompare(y.a.properties.code))
   const refs = (referencias ?? [arredonda(max), arredonda(max / 4), arredonda(max / 16)]).map((v) => Math.min(v, max)).filter((v, i, all) => v > 0 && all.indexOf(v) === i)
-  const tinta = (k: boolean) => (k && !pb ? 'var(--ty-print-destaque)' : k ? 'var(--ty-print-tinta)' : 'var(--ty-print-contexto-area, var(--ty-print-contexto))')
+  const tinta = (k: boolean) => (k && !pb ? 'var(--ty-print-interesse, var(--ty-print-destaque))' : k ? 'var(--ty-print-tinta)' : 'var(--ty-print-contexto-area, var(--ty-print-contexto))')
   const legH = raioMaximo * 2 + 4.5
   return (
     <figure className={cx('ty-print-map', 'ty-print-symbols', className)} data-pontos={pontos.length}>

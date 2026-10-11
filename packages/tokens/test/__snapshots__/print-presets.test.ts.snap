@@ -38,6 +38,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #1c1a17;
   --ty-print-contexto-area: #8f877a;
   --ty-print-contexto-traco: #8f877a;
   --ty-print-divergente-1: #9a4f2a;
@@ -92,6 +93,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #1a1a1a;
   --ty-print-contexto-area: #888888;
   --ty-print-contexto-traco: #888888;
   --ty-print-divergente-1: #646464;
@@ -147,6 +149,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #c23b2e;
   --ty-print-contexto-area: #7a5a3e;
   --ty-print-contexto-traco: #7a5a3e;
   --ty-print-divergente-1: #c98a2b;
@@ -201,6 +204,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #3a3a3a;
   --ty-print-contexto-area: #606060;
   --ty-print-contexto-traco: #606060;
   --ty-print-divergente-1: #9a9a9a;
@@ -256,6 +260,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #3d3fa0;
   --ty-print-contexto-area: #9a958c;
   --ty-print-contexto-traco: #959087;
   --ty-print-divergente-1: #c9462b;
@@ -310,6 +315,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #1a1a1a;
   --ty-print-contexto-area: #959595;
   --ty-print-contexto-traco: #909090;
   --ty-print-divergente-1: #8a8a8a;
@@ -365,6 +371,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #2b2b2b;
   --ty-print-contexto-area: #6b665c;
   --ty-print-contexto-traco: #6b665c;
   --ty-print-divergente-1: #b8322a;
@@ -419,6 +426,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #2b2b2b;
   --ty-print-contexto-area: #666666;
   --ty-print-contexto-traco: #666666;
   --ty-print-divergente-1: #3a3a3a;
@@ -474,6 +482,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #1c1b19;
   --ty-print-contexto-area: #8a8577;
   --ty-print-contexto-traco: #8a8577;
   --ty-print-divergente-1: #c73a2c;
@@ -528,6 +537,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #1b1b1b;
   --ty-print-contexto-area: #858585;
   --ty-print-contexto-traco: #858585;
   --ty-print-divergente-1: #8c8c8c;
@@ -583,6 +593,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #15110d;
   --ty-print-contexto-area: #5a4632;
   --ty-print-contexto-traco: #5a4632;
   --ty-print-divergente-1: #15110d;
@@ -637,6 +648,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #121212;
   --ty-print-contexto-area: #4a4a4a;
   --ty-print-contexto-traco: #4a4a4a;
   --ty-print-divergente-1: #121212;
@@ -692,6 +704,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #3d3fa0;
   --ty-print-contexto-area: #9a8fc4;
   --ty-print-contexto-traco: #8f84b9;
   --ty-print-divergente-1: #ff48b0;
@@ -746,6 +759,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #1a1a1a;
   --ty-print-contexto-area: #969696;
   --ty-print-contexto-traco: #8b8b8b;
   --ty-print-divergente-1: #8a8a8a;
@@ -801,6 +815,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #c8431f;
   --ty-print-contexto-area: #b0b0b0;
   --ty-print-contexto-traco: #919191;
   --ty-print-divergente-1: #121212;
@@ -855,6 +870,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #121212;
   --ty-print-contexto-area: #b0b0b0;
   --ty-print-contexto-traco: #919191;
   --ty-print-divergente-1: #121212;
@@ -910,6 +926,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #f6f4ea;
   --ty-print-contexto-area: #c9c5b5;
   --ty-print-contexto-traco: #c9c5b5;
   --ty-print-divergente-1: #ece9dc;
@@ -964,6 +981,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #111111;
   --ty-print-contexto-area: #9a9a9a;
   --ty-print-contexto-traco: #949494;
   --ty-print-divergente-1: #444444;
@@ -1019,6 +1037,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #2e3192;
   --ty-print-contexto-area: #9aa3c4;
   --ty-print-contexto-traco: #858eae;
   --ty-print-divergente-1: #2e3192;
@@ -1073,6 +1092,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #1a1a1a;
   --ty-print-contexto-area: #a4a4a4;
   --ty-print-contexto-traco: #8f8f8f;
   --ty-print-divergente-1: #1a1a1a;
@@ -1128,6 +1148,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #5b5fa8;
   --ty-print-contexto-area: #b8ab98;
   --ty-print-contexto-traco: #9a8e7b;
   --ty-print-divergente-1: #cf8448;
@@ -1182,6 +1203,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #5a5a5a;
   --ty-print-contexto-area: #adadad;
   --ty-print-contexto-traco: #8e8e8e;
   --ty-print-divergente-1: #b0b0b0;
@@ -1237,6 +1259,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #a3261c;
   --ty-print-contexto-area: #a6a6a0;
   --ty-print-contexto-traco: #94948e;
   --ty-print-divergente-1: #111111;
@@ -1291,6 +1314,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #111111;
   --ty-print-contexto-area: #a6a6a6;
   --ty-print-contexto-traco: #949494;
   --ty-print-divergente-1: #111111;
@@ -1346,6 +1370,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #0d0d0d;
   --ty-print-contexto-area: #b5b5b0;
   --ty-print-contexto-traco: #91918d;
   --ty-print-divergente-1: #e0261b;
@@ -1400,6 +1425,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #0d0d0d;
   --ty-print-contexto-area: #b5b5b5;
   --ty-print-contexto-traco: #919191;
   --ty-print-divergente-1: #8a8a8a;
@@ -1455,6 +1481,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: lowercase;
   --ty-print-celula-caixa: lowercase;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #d7372a;
   --ty-print-contexto-area: #c9c3b6;
   --ty-print-contexto-traco: #8f8a7d;
   --ty-print-divergente-1: #3d3fa0;
@@ -1509,6 +1536,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: lowercase;
   --ty-print-celula-caixa: lowercase;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #141414;
   --ty-print-contexto-area: #c3c3c3;
   --ty-print-contexto-traco: #8a8a8a;
   --ty-print-divergente-1: #8a8a8a;
@@ -1564,6 +1592,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #3a4aa0;
   --ty-print-contexto-area: #b7c6cf;
   --ty-print-contexto-traco: #8997a0;
   --ty-print-divergente-1: #b0bee0;
@@ -1618,6 +1647,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #121212;
   --ty-print-contexto-area: #c4c4c4;
   --ty-print-contexto-traco: #949494;
   --ty-print-divergente-1: #9a9a9a;
@@ -1673,6 +1703,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #e0603f;
   --ty-print-contexto-area: #d4cab6;
   --ty-print-contexto-traco: #978d7b;
   --ty-print-divergente-1: #2b8a86;
@@ -1727,6 +1758,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #2a2a2a;
   --ty-print-contexto-area: #cbcbcb;
   --ty-print-contexto-traco: #8e8e8e;
   --ty-print-divergente-1: #8a8a8a;
@@ -1782,6 +1814,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: lowercase;
   --ty-print-celula-caixa: lowercase;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #c0512d;
   --ty-print-contexto-area: #cbc2ae;
   --ty-print-contexto-traco: #908774;
   --ty-print-divergente-1: #5a5f93;
@@ -1836,6 +1869,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: lowercase;
   --ty-print-celula-caixa: lowercase;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #2a2a2a;
   --ty-print-contexto-area: #c1c1c1;
   --ty-print-contexto-traco: #888888;
   --ty-print-divergente-1: #8a8a8a;
@@ -1891,6 +1925,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #3a4aa0;
   --ty-print-contexto-area: #c9bcb0;
   --ty-print-contexto-traco: #978b7f;
   --ty-print-divergente-1: #b0bee0;
@@ -1945,6 +1980,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #1a1a1a;
   --ty-print-contexto-area: #bebebe;
   --ty-print-contexto-traco: #949494;
   --ty-print-divergente-1: #a0a0a0;
@@ -2000,6 +2036,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #c4553a;
   --ty-print-contexto-area: #b5afa4;
   --ty-print-contexto-traco: #969086;
   --ty-print-divergente-1: #b5afa4;
@@ -2054,6 +2091,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #1f1e1c;
   --ty-print-contexto-area: #b0b0b0;
   --ty-print-contexto-traco: #919191;
   --ty-print-divergente-1: #b0b0b0;
@@ -2109,6 +2147,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #caa472;
   --ty-print-contexto-area: #b89d78;
   --ty-print-contexto-traco: #977d59;
   --ty-print-divergente-1: #3b2a1a;
@@ -2163,6 +2202,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #8a8a8a;
   --ty-print-contexto-area: #a1a1a1;
   --ty-print-contexto-traco: #818181;
   --ty-print-divergente-1: #2d2d2d;
@@ -2218,6 +2258,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #f0506e;
   --ty-print-contexto-area: #d3d3cf;
   --ty-print-contexto-traco: #949490;
   --ty-print-divergente-1: #7b5ea7;
@@ -2274,6 +2315,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #2b2b2b;
   --ty-print-contexto-area: #d1d1d1;
   --ty-print-contexto-traco: #949494;
   --ty-print-divergente-1: #9a9a9a;
@@ -2331,6 +2373,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #c8201e;
   --ty-print-contexto-area: #b9ad97;
   --ty-print-contexto-traco: #8e826d;
   --ty-print-divergente-1: #1a1714;
@@ -2387,6 +2430,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #6a6a6a;
   --ty-print-contexto-area: #aeaeae;
   --ty-print-contexto-traco: #838383;
   --ty-print-divergente-1: #171717;
@@ -2444,6 +2488,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: lowercase;
   --ty-print-celula-caixa: lowercase;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #d4372c;
   --ty-print-contexto-area: #cdc7bb;
   --ty-print-contexto-traco: #908b7f;
   --ty-print-divergente-1: #3a3f9e;
@@ -2500,6 +2545,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: lowercase;
   --ty-print-celula-caixa: lowercase;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #5a5a5a;
   --ty-print-contexto-area: #c7c7c7;
   --ty-print-contexto-traco: #8c8c8c;
   --ty-print-divergente-1: #a0a0a0;
@@ -2557,6 +2603,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #0d0d0d;
   --ty-print-contexto-area: #9a9994;
   --ty-print-contexto-traco: #868580;
   --ty-print-divergente-1: #0d0d0d;
@@ -2611,6 +2658,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #0d0d0d;
   --ty-print-contexto-area: #999999;
   --ty-print-contexto-traco: #858585;
   --ty-print-divergente-1: #0d0d0d;
@@ -2666,6 +2714,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #f58220;
   --ty-print-contexto-area: #d9d0c1;
   --ty-print-contexto-traco: #999183;
   --ty-print-divergente-1: #6a2c91;
@@ -2722,6 +2771,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #8a8a8a;
   --ty-print-contexto-area: #d1d1d1;
   --ty-print-contexto-traco: #929292;
   --ty-print-divergente-1: #2a2a2a;
@@ -2779,6 +2829,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #9a4b33;
   --ty-print-contexto-area: #d1c6b3;
   --ty-print-contexto-traco: #958b79;
   --ty-print-divergente-1: #2f5f45;
@@ -2835,6 +2886,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #5a5a5a;
   --ty-print-contexto-area: #c7c7c7;
   --ty-print-contexto-traco: #8c8c8c;
   --ty-print-divergente-1: #a0a0a0;
@@ -2892,6 +2944,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #121212;
   --ty-print-contexto-area: #9d9d9d;
   --ty-print-contexto-traco: #929292;
   --ty-print-divergente-1: #9d9d9d;
@@ -2948,6 +3001,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #121212;
   --ty-print-contexto-area: #9d9d9d;
   --ty-print-contexto-traco: #929292;
   --ty-print-divergente-1: #9d9d9d;
@@ -3005,6 +3059,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #f28c28;
   --ty-print-contexto-area: #b9bcc0;
   --ty-print-contexto-traco: #929599;
   --ty-print-divergente-1: #6b8e3a;
@@ -3061,6 +3116,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #8a8a8a;
   --ty-print-contexto-area: #bcbcbc;
   --ty-print-contexto-traco: #949494;
   --ty-print-divergente-1: #3a3a3a;
@@ -3118,6 +3174,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #ee352e;
   --ty-print-contexto-area: #a7a9ac;
   --ty-print-contexto-traco: #939598;
   --ty-print-divergente-1: #a7a9ac;
@@ -3174,6 +3231,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #4a4a4a;
   --ty-print-contexto-area: #a9a9a9;
   --ty-print-contexto-traco: #939393;
   --ty-print-divergente-1: #a9a9a9;
@@ -3231,6 +3289,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #111111;
   --ty-print-contexto-area: #a3a3a3;
   --ty-print-contexto-traco: #929292;
   --ty-print-divergente-1: #a3a3a3;
@@ -3285,6 +3344,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #111111;
   --ty-print-contexto-area: #a3a3a3;
   --ty-print-contexto-traco: #929292;
   --ty-print-divergente-1: #a3a3a3;
@@ -3340,6 +3400,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #3040b0;
   --ty-print-contexto-area: #aab3de;
   --ty-print-contexto-traco: #878fb9;
   --ty-print-divergente-1: #aab3de;
@@ -3396,6 +3457,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #3a3a3a;
   --ty-print-contexto-area: #b5b5b5;
   --ty-print-contexto-traco: #919191;
   --ty-print-divergente-1: #b0b0b0;
@@ -3453,6 +3515,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #5b2a86;
   --ty-print-contexto-area: #dac9af;
   --ty-print-contexto-traco: #9d8d75;
   --ty-print-divergente-1: #ee8a1c;
@@ -3507,6 +3570,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #2a2a2a;
   --ty-print-contexto-area: #cbcbcb;
   --ty-print-contexto-traco: #8f8f8f;
   --ty-print-divergente-1: #a0a0a0;
@@ -3562,6 +3626,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #8c5a2b;
   --ty-print-contexto-area: #d2cdb7;
   --ty-print-contexto-traco: #958f7b;
   --ty-print-divergente-1: #5c6b2f;
@@ -3616,6 +3681,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: uppercase;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #4a4a4a;
   --ty-print-contexto-area: #cbcbcb;
   --ty-print-contexto-traco: #909090;
   --ty-print-divergente-1: #7a7a7a;
@@ -3671,6 +3737,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: lowercase;
   --ty-print-celula-caixa: lowercase;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #111111;
   --ty-print-contexto-area: #d2d2d2;
   --ty-print-contexto-traco: #949494;
   --ty-print-divergente-1: #f04e23;
@@ -3727,6 +3794,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: lowercase;
   --ty-print-celula-caixa: lowercase;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #111111;
   --ty-print-contexto-area: #d2d2d2;
   --ty-print-contexto-traco: #949494;
   --ty-print-divergente-1: #9a9a9a;
@@ -3784,6 +3852,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #161616;
   --ty-print-contexto-area: #cdc0a5;
   --ty-print-contexto-traco: #91856c;
   --ty-print-divergente-1: #e8591a;
@@ -3838,6 +3907,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #161616;
   --ty-print-contexto-area: #c1c1c1;
   --ty-print-contexto-traco: #868686;
   --ty-print-divergente-1: #8a8a8a;
@@ -3893,6 +3963,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #2b44b8;
   --ty-print-contexto-area: #d4cfbf;
   --ty-print-contexto-traco: #989384;
   --ty-print-divergente-1: #e4252b;
@@ -3947,6 +4018,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #2a2a2a;
   --ty-print-contexto-area: #d1d1d1;
   --ty-print-contexto-traco: #929292;
   --ty-print-divergente-1: #8a8a8a;
@@ -4002,6 +4074,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #3b4aa8;
   --ty-print-contexto-area: #bdbdbd;
   --ty-print-contexto-traco: #939393;
   --ty-print-divergente-1: #d97a00;
@@ -4056,6 +4129,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #2a2a2a;
   --ty-print-contexto-area: #bdbdbd;
   --ty-print-contexto-traco: #939393;
   --ty-print-divergente-1: #9a9a9a;
@@ -4111,6 +4185,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #4a5a2a;
   --ty-print-contexto-area: #d1c3a0;
   --ty-print-contexto-traco: #968867;
   --ty-print-divergente-1: #b9832a;
@@ -4165,6 +4240,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #3a3a3a;
   --ty-print-contexto-area: #c4c4c4;
   --ty-print-contexto-traco: #888888;
   --ty-print-divergente-1: #a0a0a0;
@@ -4220,6 +4296,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #1fb5a8;
   --ty-print-contexto-area: #d3cdbd;
   --ty-print-contexto-traco: #969081;
   --ty-print-divergente-1: #f6ea00;
@@ -4276,6 +4353,7 @@ exports[`print presets > generates stable CSS for every preset 1`] = `
   --ty-print-sobretitulo-caixa: none;
   --ty-print-celula-caixa: none;
   --ty-print-tabela-numeros: tabular-nums lining-nums;
+  --ty-print-interesse: #5a5a5a;
   --ty-print-contexto-area: #cdcdcd;
   --ty-print-contexto-traco: #909090;
   --ty-print-divergente-1: #d0d0d0;

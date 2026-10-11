@@ -5,6 +5,7 @@ import {
   type FontManifest,
   paginaDoEstilo,
   papelEscuro,
+  printTextoRolesCss,
   printThemeById,
   printStyleToCss,
   resolvePrintStyle,
@@ -80,7 +81,7 @@ export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carr
   const varsGrafica = grafica ? `${seletor} { --ty-print-sangria: ${grafica.sangria}mm; --ty-print-folga: ${folga}mm; }` : ''
   const modo = modoFontes ?? (carregarFontes ? 'google' : 'nenhuma')
   const faces = modo === 'locais' ? fontesEmpacotadasCss(resolvido, manifestoFontes as unknown as FontManifest, baseFontes.endsWith('/') ? baseFontes : `${baseFontes}/`) : ''
-  const css = `${faces}\n${incluirCss ? PRINT_CSS : ''}\n${printStyleToCss(base, { pb, overrides: tokens, seletor })}${pagina}\n${varsGrafica}`
+  const css = `${faces}\n${incluirCss ? PRINT_CSS : ''}\n${printStyleToCss(base, { pb, overrides: tokens, seletor })}${pagina}\n${varsGrafica}\n${printTextoRolesCss(resolvido, seletor)}`
   const fontes = modo === 'google' ? googleFontsUrl(resolvido) : null
   const e = resolvido.estrutura
   return (

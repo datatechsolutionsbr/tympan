@@ -1,17 +1,40 @@
 {
   "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
-  "$description": "lakebrasil edições (semanário). Tema de livro do selo lakebrasil edições. Herda o preset tympan-print 'semanario' e sobrescreve só o que está aqui (formato PrintStyleOverrides; ver README.md).",
+  "$description": "lakebrasil edições. Tema de livro do selo lakebrasil edições, versão papel-claro do sistema dos vídeos Brasil Real. Herda 'semanario' e sobrescreve só o que está aqui (formato PrintStyleOverrides; ver README.md).",
   "$extensions": {
     "dev.tympan.print": {
       "name": "lakebrasil-editorial",
       "extends": "semanario",
       "formato": "PrintStyleOverrides",
-      "versao": "1"
+      "versao": "2",
+      "pesos": {
+        "titulo": 600,
+        "numero": 600,
+        "rotulo": 600,
+        "corpo": 400,
+        "anotacao": 400,
+        "mono": 400
+      },
+      "algarismos": "tabular-nums em numero e rotulo",
+      "dado": {
+        "interesse": "#1c1a17",
+        "contexto": "#d9d3c7",
+        "ganhou": "#5a5f9c",
+        "ganhouClaro": "#bcc0de",
+        "perdeu": "#a65a26",
+        "perdeuClaro": "#e8c4a8"
+      },
+      "regras": [
+        "série de interesse em tinta cheia, contexto em cinza",
+        "divergente azul × laranja",
+        "nenhuma cor de dado a menos de ΔE2000 10 das cores do logo",
+        "estado = palavra + borda + ícone, nunca só cor"
+      ]
     }
   },
   "label": {
     "$type": "string",
-    "$value": "lakebrasil edições (semanário)"
+    "$value": "lakebrasil edições"
   },
   "fontes": {
     "titulo": {
@@ -22,7 +45,7 @@
         "serif"
       ]
     },
-    "corpo": {
+    "numero": {
       "$type": "fontFamily",
       "$value": [
         "Source Serif 4",
@@ -30,107 +53,108 @@
         "serif"
       ]
     },
-    "numero": {
+    "corpo": {
       "$type": "fontFamily",
       "$value": [
-        "Fira Sans Condensed",
-        "Arial Narrow",
+        "IBM Plex Sans",
+        "system-ui",
         "sans-serif"
       ]
     },
     "rotulo": {
       "$type": "fontFamily",
       "$value": [
-        "Fira Sans Condensed",
-        "Arial Narrow",
+        "IBM Plex Sans",
+        "system-ui",
         "sans-serif"
       ]
     },
     "anotacao": {
       "$type": "fontFamily",
       "$value": [
-        "Fira Sans Condensed",
-        "Arial Narrow",
+        "IBM Plex Sans",
+        "system-ui",
         "sans-serif"
       ]
     },
     "mono": {
       "$type": "fontFamily",
       "$value": [
-        "Fira Sans Condensed",
-        "Arial Narrow",
-        "sans-serif"
+        "IBM Plex Mono",
+        "ui-monospace",
+        "monospace"
       ]
     }
   },
   "googleFonts": {
     "$type": "string[]",
     "$value": [
-      "Fira Sans Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400",
-      "Source Serif 4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400"
+      "Source Serif 4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400",
+      "IBM Plex Sans:ital,wght@0,400;0,500;0,600;0,700;1,400",
+      "IBM Plex Mono:wght@400"
     ]
   },
   "cor": {
     "papel": {
       "$type": "color",
-      "$value": "#ffffff"
+      "$value": "#f7f4ee"
     },
     "tinta": {
       "$type": "color",
-      "$value": "#18181b"
+      "$value": "#1c1a17"
     },
     "tinta2": {
       "$type": "color",
-      "$value": "#3f3f46"
+      "$value": "#3d3933"
     },
     "tinta3": {
       "$type": "color",
-      "$value": "#5f5f68"
+      "$value": "#655f56"
     },
     "linha": {
       "$type": "color",
-      "$value": "#c9ccd1"
+      "$value": "#ddd6ca"
     },
     "destaque": {
       "$type": "color",
-      "$value": "#6b3fa0"
+      "$value": "#435756"
     },
     "destaque2": {
       "$type": "color",
-      "$value": "#d9cdea"
+      "$value": "#d5dcd9"
     },
     "marcaTexto": {
       "$type": "color",
-      "$value": "#ece4f5"
+      "$value": "#efebe3"
     },
     "contexto": {
       "$type": "color",
-      "$value": "#c9ccd1"
+      "$value": "#d9d3c7"
     },
     "prova": {
       "sustentada": {
         "$type": "color",
-        "$value": "#1f5f8b"
+        "$value": "#3f6a35"
       },
       "refutada": {
         "$type": "color",
-        "$value": "#9a3412"
+        "$value": "#86423c"
       },
       "nao-da-para-afirmar": {
         "$type": "color",
-        "$value": "#5b4a8a"
+        "$value": "#655f56"
       },
       "pendente": {
         "$type": "color",
-        "$value": "#5f5f68"
+        "$value": "#8a5a0f"
       },
       "sem-dado": {
         "$type": "color",
-        "$value": "#5f5f68"
+        "$value": "#655f56"
       },
       "nao-testada": {
         "$type": "color",
-        "$value": "#5f5f68"
+        "$value": "#655f56"
       }
     }
   },
@@ -142,7 +166,7 @@
   },
   "marcaProva": {
     "$type": "string",
-    "$value": "barra"
+    "$value": "etiqueta"
   },
   "raio": {
     "$type": "number",
@@ -155,11 +179,11 @@
   "pb": {
     "destaque": {
       "$type": "color",
-      "$value": "#121212"
+      "$value": "#1c1a17"
     },
     "destaque2": {
       "$type": "color",
-      "$value": "#9a9a9a"
+      "$value": "#9a948a"
     }
   },
   "estrutura": {
@@ -169,7 +193,7 @@
     },
     "rotulo": {
       "$type": "string",
-      "$value": "quadrado"
+      "$value": "letra"
     },
     "figura": {
       "$type": "string",

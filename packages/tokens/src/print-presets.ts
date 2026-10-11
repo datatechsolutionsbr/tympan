@@ -52,6 +52,8 @@ export interface PrintCores {
   prova: Record<EstadoProva, string>
   /** Colours of page ornaments only (frames, tiles, waves); never data. Up to four. */
   ornamento?: string[]
+  /** The series of interest in maps and charts (default: `destaque`), when the accent of the page differs from the data ink. */
+  interesse?: string
   /** Data palette, diverging: the low and the high side (default destaque2 × destaque). */
   divergente?: [string, string]
   /** Data palette, qualitative (party, category: no implied order), up to eight (default: a colour-blind-safe set). */
@@ -234,6 +236,10 @@ export interface PrintTexto {
   nomesProprios?: 'estilo' | 'preservar'
   /** Figures in table cells: 'tabular' (default, lining and equal width, columns align) or 'proporcional'. */
   numerosTabela?: 'tabular' | 'proporcional'
+  /** Font weight per role (titles, key numbers, labels, body, notes, mono), e.g. { titulo: 600, numero: 600 }. */
+  pesos?: Partial<Record<keyof PrintFontes, number>>
+  /** Figures per role: 'tabular' (equal width, lining) or 'proporcional'. Tables follow `numerosTabela`. */
+  algarismos?: Partial<Record<'numero' | 'rotulo' | 'corpo', 'tabular' | 'proporcional'>>
 }
 
 // ---------------------------------------------------------------------------
@@ -1623,6 +1629,7 @@ export function printStyleCoresPb(style: PrintStyle): PrintCores {
     contexto: toGrey(g.contexto),
     prova: Object.fromEntries(ESTADOS_PROVA.map((e) => [e, toGrey(g.prova[e])])) as Record<EstadoProva, string>,
     ...(g.ornamento ? { ornamento: g.ornamento.map(toGrey) } : {}),
+    ...(g.interesse ? { interesse: toGrey(g.interesse) } : {}),
     ...(g.divergente ? { divergente: g.divergente.map(toGrey) as [string, string] } : {}),
     categorica: categoricaDoEstilo(style).map(toGrey),
   }
@@ -1650,7 +1657,7 @@ export function resolvePrintStyle(style: PrintStyle | PrintStyleId, options: Omi
   return { ...merged, cor: printStyleCoresPb(merged) }
 }
 
-const kebab: Record<Exclude<keyof PrintCores, 'prova' | 'ornamento' | 'divergente' | 'categorica'>, string> = {
+const kebab: Record<Exclude<keyof PrintCores, 'prova' | 'ornamento' | 'divergente' | 'categorica' | 'interesse'>, string> = {
   papel: 'papel',
   tinta: 'tinta',
   tinta2: 'tinta-2',
@@ -1679,6 +1686,32 @@ export function contrasteMinimo(cor: string, papel: string, min: number): string
     out = oklchToRgb(v)
   }
   return toHex(out)
+}
+
+const SELETORES_PAPEL: Record<keyof PrintFontes, string> = {
+  titulo: ':is(h1, h2, h3, h4, .ty-print-title, .ty-print-figure-title, [class*="-title"]:not(.ty-print-panel-title, .ty-print-block-title, .ty-print-margin-title))',
+  numero: ':is(.ty-print-number-value, .ty-print-table td[data-numerica], .ty-print-parliament-total, [class*="-numero"], [class*="-number"])',
+  rotulo: ':is(.ty-print-panel-title, .ty-print-block-title, .ty-print-margin-title, .ty-print-sobretitle, .ty-print-table th, .ty-print-map-legend, .ty-print-running-head, .ty-print-folio, .ty-print-letter)',
+  corpo: '',
+  anotacao: ':is(.ty-print-annotation, .ty-print-margin, .ty-print-callout-text)',
+  mono: ':is(code, pre, .ty-print-mono, .ty-print-table td[data-mono])',
+}
+
+/**
+ * Unlayered rules (they win over `@layer tympan-print`) for a theme's per-role font weights and figures,
+ * scoped to `seletor`; '' when the theme sets neither.
+ */
+export function printTextoRolesCss(style: Pick<PrintStyle, 'texto'>, seletor: string): string {
+  const out: string[] = []
+  for (const [papel, peso] of Object.entries(style.texto?.pesos ?? {}) as Array<[keyof PrintFontes, number]>) {
+    const s = SELETORES_PAPEL[papel]
+    out.push(`${seletor}${s ? ` ${s}` : ''} { font-weight: ${peso}; }`)
+  }
+  for (const [papel, a] of Object.entries(style.texto?.algarismos ?? {}) as Array<[keyof PrintFontes, string]>) {
+    const s = SELETORES_PAPEL[papel]
+    out.push(`${seletor}${s ? ` ${s}` : ''} { font-variant-numeric: ${a === 'tabular' ? 'tabular-nums lining-nums' : 'proportional-nums'}; }`)
+  }
+  return out.join('\n')
 }
 
 /** Qualitative palette (Okabe & Ito 2008, colour-blind safe) used when a style defines none. */
@@ -1714,6 +1747,7 @@ export function printStyleVariables(style: PrintStyle): Array<[string, string]> 
   vars.push(['--ty-print-sobretitulo-caixa', preservar ? 'none' : minusculas ? 'lowercase' : rc === 'alta' ? 'uppercase' : 'none'])
   vars.push(['--ty-print-celula-caixa', preservar ? 'none' : minusculas ? 'lowercase' : 'none'])
   vars.push(['--ty-print-tabela-numeros', style.texto?.numerosTabela === 'proporcional' ? 'proportional-nums lining-nums' : 'tabular-nums lining-nums'])
+  vars.push(['--ty-print-interesse', style.cor.interesse ?? style.cor.destaque])
   vars.push(['--ty-print-contexto-area', contrasteMinimo(style.cor.contexto, style.cor.papel, 1.5)])
   vars.push(['--ty-print-contexto-traco', contrasteMinimo(style.cor.contexto, style.cor.papel, 3)])
   const dv = style.cor.divergente ?? [style.cor.destaque2, style.cor.destaque]

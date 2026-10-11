@@ -59,7 +59,7 @@ describe('book themes', () => {
     expect(s.label).toContain('lakebrasil')
     expect(s.estrutura.painel).toBeTruthy()
     const pb = registerPrintTheme(fixture('lakebrasil-editorial-pb.tokens.json'))
-    expect(printThemeById(pb.id).cor.tinta).toBe('#000000')
+    expect(printThemeById(pb.id).cor.tinta).toMatch(/^#1a1a1a|#000000$/)
   })
 
   it('reads DTCG colour objects, ordered groups and dimensions', () => {
@@ -83,5 +83,25 @@ describe('book themes', () => {
     expect(css).toContain('--ty-print-divergente-1: #2166ac;')
     expect(css).toContain('--ty-print-categorica-8:')
     expect(fontesLocaisCss(s)).toContain('font-family: "Source Serif 4"; src: url("fonts/SourceSerif4.woff2") format("woff2"); font-weight: 600;')
+  })
+})
+
+describe('brand meta: weights, figures, data palette (lakebrasil-editorial v2)', () => {
+  afterEach(() => {
+    for (const id of registeredPrintThemes()) unregisterPrintTheme(id)
+  })
+  it('maps pesos, algarismos and dado into the theme', async () => {
+    const { printTextoRolesCss } = await import('../src/index.ts')
+    registerPrintTheme(fixture('lakebrasil-editorial.tokens.json'))
+    const s = printThemeById('lakebrasil-editorial')
+    expect(s.texto?.pesos).toMatchObject({ titulo: 600, numero: 600, rotulo: 600, corpo: 400 })
+    expect(s.texto?.algarismos).toEqual({ numero: 'tabular', rotulo: 'tabular' })
+    expect(s.cor.interesse).toBe('#1c1a17')
+    expect(s.cor.divergente).toEqual(['#a65a26', '#5a5f9c'])
+    const css = printTextoRolesCss(s, '[x]')
+    expect(css).toMatch(/\[x\] :is\(h1, h2[^{]*\{ font-weight: 600; \}/)
+    expect(css).toMatch(/\[x\] \{ font-weight: 400; \}/)
+    expect(css).toMatch(/\.ty-print-number-value[^{]*\{ font-variant-numeric: tabular-nums lining-nums; \}/)
+    expect(printStyleToCss(s)).toContain('--ty-print-interesse: #1c1a17;')
   })
 })

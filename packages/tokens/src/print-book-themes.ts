@@ -111,6 +111,16 @@ const GENERICAS = /^(serif|sans-serif|monospace|cursive|fantasy|system-ui|ui-[a-
 const pilhaDeFontes = (v: string[]) => v.map((x) => (GENERICAS.test(x) || /^["']/.test(x) ? x : `"${x}"`)).join(', ')
 const emMm = (v: { value: number; unit: string }) => (v.unit === 'px' ? (v.value * 25.4) / 96 : v.unit === 'pt' ? (v.value * 25.4) / 72 : v.unit === 'cm' ? v.value * 10 : v.value)
 
+/** Figures from the meta: an object by role, or a phrase such as "tabular-nums em numero e rotulo". */
+function lerAlgarismos(v: unknown): Record<string, 'tabular' | 'proporcional'> | undefined {
+  if (v && typeof v === 'object') return v as Record<string, 'tabular' | 'proporcional'>
+  if (typeof v !== 'string') return undefined
+  const tipo = /proporc|proportional/.test(v) ? 'proporcional' : /tabular/.test(v) ? 'tabular' : undefined
+  if (!tipo) return undefined
+  const papeis = ['numero', 'rotulo', 'corpo'].filter((p) => v.includes(p))
+  return Object.fromEntries((papeis.length ? papeis : ['numero']).map((p) => [p, tipo]))
+}
+
 /**
  * A theme from a DTCG (2025.10) tree. The tree mirrors PrintStyleOverrides: each group is a field
  * (`label`, `fontes.<role>`, `googleFonts`, `cor.<role>`, `cor.prova.<state>`, `cor.categorica.<n>`,
@@ -132,6 +142,20 @@ export function printThemeFromDtcg(tree: No | string): PrintBookTheme {
   const cor = corpo.cor as No | undefined
   for (const g of [cor, corpo.pb as No | undefined])
     if (g) for (const k of ['categorica', 'divergente', 'ornamento']) if (g[k] && typeof g[k] === 'object' && !Array.isArray(g[k])) g[k] = Object.entries(g[k] as No).sort(([a], [b]) => a.localeCompare(b, 'en', { numeric: true })).map(([, v]) => v)
+  // Brand-repo extras in the meta: per-role weights, figures and the data palette.
+  const texto = { ...(corpo.texto as No | undefined) }
+  if (meta.pesos && typeof meta.pesos === 'object') texto.pesos = { ...(meta.pesos as No), ...(texto.pesos as No | undefined) }
+  const alg = lerAlgarismos(meta.algarismos)
+  if (alg) texto.algarismos = { ...alg, ...(texto.algarismos as No | undefined) }
+  if (Object.keys(texto).length) corpo.texto = texto
+  const dado = meta.dado as Record<string, string> | undefined
+  if (dado) {
+    const c = { ...(corpo.cor as No | undefined) }
+    if (dado.interesse && c.interesse === undefined) c.interesse = dado.interesse
+    if (dado.contexto) c.contexto = dado.contexto
+    if (dado.perdeu && dado.ganhou && c.divergente === undefined) c.divergente = [dado.perdeu, dado.ganhou]
+    corpo.cor = c
+  }
   return printThemeFromJson({ ...corpo, id, base, ...(meta.referencia ? { referencia: meta.referencia as string } : {}) } as PrintBookThemeJson)
 }
 
