@@ -10,6 +10,7 @@ import {
   printPresets,
   printStyleToCss,
   printThemeById,
+  resolvePrintStyle,
   printThemeFromDtcg,
   registerPrintTheme,
   registeredPrintThemes,
@@ -103,5 +104,25 @@ describe('brand meta: weights, figures, data palette (lakebrasil-editorial v2)',
     expect(css).toMatch(/\[x\] \{ font-weight: 400; \}/)
     expect(css).toMatch(/\.ty-print-number-value[^{]*\{ font-variant-numeric: tabular-nums lining-nums; \}/)
     expect(printStyleToCss(s)).toContain('--ty-print-interesse: #1c1a17;')
+  })
+})
+
+describe('data-theme colours (cor.temas)', () => {
+  it('a theme with cor.temas registers and emits one var per theme', () => {
+    registerPrintTheme({ id: 'temas-x', base: 'jornal', cor: { temas: { economia: '#7a5c12', saude: '#9a3b2e' } } })
+    const css = printStyleToCss(printThemeById('temas-x'))
+    unregisterPrintTheme('temas-x')
+    expect(css).toContain('--ty-print-tema-economia: #7a5c12;')
+    expect(css).toContain('--ty-print-tema-saude: #9a3b2e;')
+  })
+})
+
+describe('P&B of a theme with pb overrides', () => {
+  it('stays grey: the theme pb adjustments do not bring the base colours back', () => {
+    registerPrintTheme({ id: 'pb-x', base: 'semanario', pb: { destaque: '#1c1a17' } })
+    const s = resolvePrintStyle(printThemeById('pb-x'), { pb: true })
+    unregisterPrintTheme('pb-x')
+    for (const c of [s.cor.linha, s.cor.contexto, s.cor.destaque2]) expect(c).toMatch(/^#([0-9a-f]{2})\1\1$/)
+    expect(s.cor.destaque).toBe('#1c1a17')
   })
 })

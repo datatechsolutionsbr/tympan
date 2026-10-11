@@ -62,6 +62,8 @@ export interface PrintCores {
   prova: Record<EstadoProva, string>
   /** Colours of page ornaments only (frames, tiles, waves); never data. Up to four. */
   ornamento?: string[]
+  /** Colours of data themes (blocks of a panel page: economia, saude…); --ty-print-tema-<id>. */
+  temas?: Record<string, string>
   /** The series of interest in maps and charts (default: `destaque`), when the accent of the page differs from the data ink. */
   interesse?: string
   /** Data palette, diverging: the low and the high side (default destaque2 × destaque). */
@@ -1587,7 +1589,8 @@ function mergeCores(base: PrintCores, over?: PrintCoresParciais): PrintCores {
   if (!over) return base
   const { prova, ...rest } = over
   const clean = Object.fromEntries(Object.entries(rest).filter(([, v]) => v !== undefined)) as Partial<PrintCores>
-  return { ...base, ...clean, prova: { ...base.prova, ...(prova ?? {}) } }
+  const temas = base.temas || clean.temas ? { temas: { ...base.temas, ...clean.temas } } : {}
+  return { ...base, ...clean, ...temas, prova: { ...base.prova, ...(prova ?? {}) } }
 }
 
 function mergeExtras(base: PrintTemaExtras, over: PrintTemaExtras): PrintTemaExtras {
@@ -1622,7 +1625,8 @@ export function mergePrintStyle(style: PrintStyle, overrides?: PrintStyleOverrid
     marcaProva: overrides.marcaProva ?? style.marcaProva,
     raio: overrides.raio ?? style.raio,
     caixaAlta: overrides.caixaAlta ?? style.caixaAlta,
-    pb: overrides.pb ? mergeCores({ ...style.cor, ...style.pb, prova: { ...style.cor.prova, ...style.pb.prova } }, overrides.pb) : style.pb,
+    // P&B adjustments stay partial: merging them over the full colour set would put colours back over the greys.
+    pb: overrides.pb ? { ...style.pb, ...overrides.pb, ...(style.pb.prova || overrides.pb.prova ? { prova: { ...style.pb.prova, ...overrides.pb.prova } } : {}) } : style.pb,
     estrutura: { ...style.estrutura, ...overrides.estrutura },
     logo: overrides.logo ?? style.logo,
     ...(overrides.texto || style.texto ? { texto: { ...style.texto, ...overrides.texto } } : {}),
@@ -1656,6 +1660,7 @@ export function printStyleCoresPb(style: PrintStyle): PrintCores {
     prova: Object.fromEntries(ESTADOS_PROVA.map((e) => [e, toGrey(g.prova[e])])) as Record<EstadoProva, string>,
     ...(g.ornamento ? { ornamento: g.ornamento.map(toGrey) } : {}),
     ...(g.interesse ? { interesse: toGrey(g.interesse) } : {}),
+    ...(g.temas ? { temas: Object.fromEntries(Object.entries(g.temas).map(([k, v]) => [k, toGrey(v)])) } : {}),
     ...(g.divergente ? { divergente: g.divergente.map(toGrey) as [string, string] } : {}),
     categorica: categoricaDoEstilo(style).map(toGrey),
   }
@@ -1683,7 +1688,7 @@ export function resolvePrintStyle(style: PrintStyle | PrintStyleId, options: Omi
   return { ...merged, cor: printStyleCoresPb(merged) }
 }
 
-const kebab: Record<Exclude<keyof PrintCores, 'prova' | 'ornamento' | 'divergente' | 'categorica' | 'interesse'>, string> = {
+const kebab: Record<Exclude<keyof PrintCores, 'prova' | 'ornamento' | 'divergente' | 'categorica' | 'interesse' | 'temas'>, string> = {
   papel: 'papel',
   tinta: 'tinta',
   tinta2: 'tinta-2',
@@ -1773,6 +1778,7 @@ export function printStyleVariables(style: PrintStyle): Array<[string, string]> 
   vars.push(['--ty-print-sobretitulo-caixa', preservar ? 'none' : minusculas ? 'lowercase' : rc === 'alta' ? 'uppercase' : 'none'])
   vars.push(['--ty-print-celula-caixa', preservar ? 'none' : minusculas ? 'lowercase' : 'none'])
   vars.push(['--ty-print-tabela-numeros', style.texto?.numerosTabela === 'proporcional' ? 'proportional-nums lining-nums' : 'tabular-nums lining-nums'])
+  for (const [k, v] of Object.entries(style.cor.temas ?? {})) vars.push([`--ty-print-tema-${k.replace(/[^a-z0-9-]/gi, '')}`, v])
   vars.push(['--ty-print-interesse', style.cor.interesse ?? style.cor.destaque])
   vars.push(['--ty-print-contexto-area', contrasteMinimo(style.cor.contexto, style.cor.papel, 1.5)])
   vars.push(['--ty-print-contexto-traco', contrasteMinimo(style.cor.contexto, style.cor.papel, 3)])
