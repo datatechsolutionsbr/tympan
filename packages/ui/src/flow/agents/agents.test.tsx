@@ -38,8 +38,10 @@ describe('AgentEditorDialog', () => {
   it('persists once with the new name after the idle delay', async () => {
     const { onPersist } = openEditor()
     const name = await screen.findByRole('textbox', { name: 'Agent name' })
-    await userEvent.clear(name)
-    await userEvent.type(name, 'reviewer')
+    // One edit (select all, paste): typing key by key let a loaded CI machine pause longer than the 250 ms
+    // idle delay between keystrokes, which persisted partial names and made the count flaky.
+    await userEvent.tripleClick(name)
+    await userEvent.paste('reviewer')
     await waitFor(() => expect(onPersist).toHaveBeenCalled())
     await new Promise((r) => setTimeout(r, 300))
     expect(onPersist).toHaveBeenCalledTimes(1)
