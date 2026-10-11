@@ -67,6 +67,14 @@ export interface SpecBarras extends Base {
   cores?: Record<string, string>
   /** Legend of the colours by key; default on when colours by key apply. */
   legenda?: boolean
+  /**
+   * Compact single-series bars: no axis, the value with its unit at the tip ("36,0%"), a fixed height per bar
+   * (`alturaBarra`, mm, default 3.4) so a list of parties never grows past its box.
+   */
+  compacto?: boolean
+  alturaBarra?: number
+  /** Decimals of the values, fixed (compact bars). */
+  casas?: number
   linhas?: LinhaPar[]
   rotuloA?: string
   rotuloB?: string

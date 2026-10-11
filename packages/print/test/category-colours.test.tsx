@@ -87,3 +87,15 @@ describe('categorical legend: counts, icons; section heading; optional title', (
     for (const r of regras) expect(r, r).not.toMatch(/ty-print-flag(?!\w)|\.ty-print-panel(?! image)|svg(?! image)/)
   })
 })
+
+describe('compact bars', () => {
+  it('no axis, value with unit and fixed decimals at the tip, fixed height per bar', () => {
+    const spec = { tipo: 'barras', titulo: 'V', escala: [0, 40], unidade: '%', casas: 1, compacto: true, alturaBarra: 3, barras: [{ rotulo: 'PL', valor: 36 }, { rotulo: 'PT', valor: 21.45 }], cores: { PL: '#1a3a8a', PT: '#c4122d' } }
+    const h = renderToStaticMarkup(<PrintBook estilo="jornal" incluirCss={false} carregarFontes={false}><MethodChartImport spec={spec} /></PrintBook>)
+    expect(h).toContain('>36,0%<')
+    expect(h).toContain('>21,5%<')
+    expect(h).not.toContain('ty-print-g-axis')
+    expect(h).toMatch(/viewBox="0 0 [\d.]+ 6\.4"/) // 2 bars × 3 mm + 0.4
+    expect(h).toMatch(/data-categoria="PL"[^>]*>.*?fill:#1a3a8a/)
+  })
+})

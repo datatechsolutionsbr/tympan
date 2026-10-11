@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { numeroLocal } from '../i18n.ts'
 import { Intervalo } from './interval.tsx'
 import { coresCategorias } from './categoryColours.ts'
 import { tx } from '../i18n.ts'
@@ -14,6 +15,7 @@ import {
   layoutHalteres,
   layoutSerie,
   linhasDe,
+  escalaLinear,
   larguraTexto,
   numeroBr,
   FOLGA_ANOTACAO,
@@ -184,6 +186,51 @@ function Halteres({ c, spec, largura }: { c: Ctx; spec: SpecHalteres; largura: n
       linhas: spec.linhas.map((l) => [l.nota ? `${l.rotulo} (${l.nota})` : l.rotulo, l.a, l.b]),
     },
     eixo: { x0: L.eixo.x0, x1: L.eixo.x1, d0: spec.escala[0], d1: spec.escala[1] },
+  }
+}
+
+function BarrasCompactas({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: number }) {
+  const pbAtual = usePrint().pb
+  const barras = spec.barras ?? []
+  const h = spec.alturaBarra ?? 3.4
+  const un = spec.unidade ?? ''
+  const fmt = (v: number) => `${spec.casas !== undefined ? numeroLocal(v, spec.casas, true) : numeroBr(v)}${un}`
+  const esq = n(Math.min(largura * 0.4, Math.max(0, ...barras.map((b) => larguraTexto(b.rotulo))) + 2))
+  const dir = n(Math.max(0, ...barras.map((b) => larguraTexto(fmt(b.valor)))) + 1.6)
+  const x = escalaLinear([Math.min(0, spec.escala[0]), spec.escala[1]], [esq, largura - dir])
+  const chaves = barras.map((b) => b.categoria ?? b.rotulo)
+  const porChave = spec.cores || Object.keys(c.estilo.cor.categorias ?? {}).some((k) => chaves.includes(k)) ? coresCategorias(chaves, c.estilo, pbAtual, spec.cores) : null
+  const alturaTotal = n(barras.length * h + 0.4)
+  return {
+    L: { largura, altura: alturaTotal },
+    corpo: (
+      <g className="ty-print-g-compact">
+        {barras.map((b, i) => {
+          const k = porChave?.[i]
+          const cor: CorDado = k ? (k.cor as CorDado) : corUnica(Boolean(b.destaque))
+          const y = n(i * h + 0.2)
+          const w = n(Math.max(0, x(b.valor) - esq))
+          const hb = n(h * 0.62)
+          return (
+            <g key={i} className="ty-print-g-line" data-linha={i} data-destaque={b.destaque ? '' : undefined}>
+              <text className="ty-print-g-label" x={n(esq - 1.2)} y={n(y + h * 0.68)} textAnchor="end">
+                {b.rotulo}
+              </text>
+              <g className="ty-print-bar" data-linha={i} data-valor={b.valor} data-categoria={k?.chave} transform={`translate(${esq} ${n(y + (h - hb) / 2)})`}>
+                {c.p.barra(c, { chave: `cb-${i}`, w, h: hb, cor, enchimento: 'cheio', valor: b.valor, mmPorUnidade: 1 })}
+                {k?.contorno ? <rect width={w} height={hb} style={{ fill: 'none', stroke: 'var(--ty-print-tinta-3)', strokeWidth: 0.12 }} /> : null}
+              </g>
+              <text className="ty-print-g-value" x={n(esq + w + 0.8)} y={n(y + h * 0.68)} data-cor={b.destaque ? 'destaque' : 'tinta'}>
+                {fmt(b.valor)}
+              </text>
+            </g>
+          )
+        })}
+      </g>
+    ),
+    tabela: { colunas: [tx('base'), { rotulo: un || tx('valor'), numerica: true }], linhas: barras.map((b) => [b.rotulo, fmt(b.valor)]) },
+    eixo: { x0: esq, x1: n(largura - dir), d0: spec.escala[0], d1: spec.escala[1] },
+    legendaCores: porChave && spec.legenda !== false ? porChave : undefined,
   }
 }
 
@@ -659,7 +706,9 @@ export function GraficoMetodo({ spec: specOriginal, renderizador, forma: formaPe
                 ? Fluxo({ c, spec, largura })
                 : forma === 'cartoes'
                   ? Cartoes({ c, spec, largura })
-                  : Barras({ c, spec, largura })
+                  : spec.compacto && spec.barras?.length
+                    ? BarrasCompactas({ c, spec, largura })
+                    : Barras({ c, spec, largura })
         : spec.tipo === 'contagem'
           ? Contagem({ c, spec, largura })
           : spec.tipo === 'serie'
