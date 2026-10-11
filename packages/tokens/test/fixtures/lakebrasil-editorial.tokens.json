@@ -1,0 +1,191 @@
+{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
+  "$description": "lakebrasil edições (semanário). Tema de livro do selo lakebrasil edições. Herda o preset tympan-print 'semanario' e sobrescreve só o que está aqui (formato PrintStyleOverrides; ver README.md).",
+  "$extensions": {
+    "dev.tympan.print": {
+      "name": "lakebrasil-editorial",
+      "extends": "semanario",
+      "formato": "PrintStyleOverrides",
+      "versao": "1"
+    }
+  },
+  "label": {
+    "$type": "string",
+    "$value": "lakebrasil edições (semanário)"
+  },
+  "fontes": {
+    "titulo": {
+      "$type": "fontFamily",
+      "$value": [
+        "Source Serif 4",
+        "Georgia",
+        "serif"
+      ]
+    },
+    "corpo": {
+      "$type": "fontFamily",
+      "$value": [
+        "Source Serif 4",
+        "Georgia",
+        "serif"
+      ]
+    },
+    "numero": {
+      "$type": "fontFamily",
+      "$value": [
+        "Fira Sans Condensed",
+        "Arial Narrow",
+        "sans-serif"
+      ]
+    },
+    "rotulo": {
+      "$type": "fontFamily",
+      "$value": [
+        "Fira Sans Condensed",
+        "Arial Narrow",
+        "sans-serif"
+      ]
+    },
+    "anotacao": {
+      "$type": "fontFamily",
+      "$value": [
+        "Fira Sans Condensed",
+        "Arial Narrow",
+        "sans-serif"
+      ]
+    },
+    "mono": {
+      "$type": "fontFamily",
+      "$value": [
+        "Fira Sans Condensed",
+        "Arial Narrow",
+        "sans-serif"
+      ]
+    }
+  },
+  "googleFonts": {
+    "$type": "string[]",
+    "$value": [
+      "Fira Sans Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400",
+      "Source Serif 4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400"
+    ]
+  },
+  "cor": {
+    "papel": {
+      "$type": "color",
+      "$value": "#ffffff"
+    },
+    "tinta": {
+      "$type": "color",
+      "$value": "#18181b"
+    },
+    "tinta2": {
+      "$type": "color",
+      "$value": "#3f3f46"
+    },
+    "tinta3": {
+      "$type": "color",
+      "$value": "#5f5f68"
+    },
+    "linha": {
+      "$type": "color",
+      "$value": "#c9ccd1"
+    },
+    "destaque": {
+      "$type": "color",
+      "$value": "#6b3fa0"
+    },
+    "destaque2": {
+      "$type": "color",
+      "$value": "#d9cdea"
+    },
+    "marcaTexto": {
+      "$type": "color",
+      "$value": "#ece4f5"
+    },
+    "contexto": {
+      "$type": "color",
+      "$value": "#c9ccd1"
+    },
+    "prova": {
+      "sustentada": {
+        "$type": "color",
+        "$value": "#1f5f8b"
+      },
+      "refutada": {
+        "$type": "color",
+        "$value": "#9a3412"
+      },
+      "nao-da-para-afirmar": {
+        "$type": "color",
+        "$value": "#5b4a8a"
+      },
+      "pendente": {
+        "$type": "color",
+        "$value": "#5f5f68"
+      },
+      "sem-dado": {
+        "$type": "color",
+        "$value": "#5f5f68"
+      },
+      "nao-testada": {
+        "$type": "color",
+        "$value": "#5f5f68"
+      }
+    }
+  },
+  "traco": {
+    "largura": {
+      "$type": "number",
+      "$value": 0.3
+    }
+  },
+  "marcaProva": {
+    "$type": "string",
+    "$value": "barra"
+  },
+  "raio": {
+    "$type": "number",
+    "$value": 0
+  },
+  "caixaAlta": {
+    "$type": "boolean",
+    "$value": false
+  },
+  "pb": {
+    "destaque": {
+      "$type": "color",
+      "$value": "#121212"
+    },
+    "destaque2": {
+      "$type": "color",
+      "$value": "#9a9a9a"
+    }
+  },
+  "estrutura": {
+    "painel": {
+      "$type": "string",
+      "$value": "fio"
+    },
+    "rotulo": {
+      "$type": "string",
+      "$value": "quadrado"
+    },
+    "figura": {
+      "$type": "string",
+      "$value": "barra-topo"
+    },
+    "notas": {
+      "$type": "string",
+      "$value": "dentro"
+    },
+    "multiplos": {
+      "$type": "string",
+      "$value": "lado-a-lado"
+    }
+  },
+  "logo": {
+    "$type": "string",
+    "$value": "cor"
+  }
+}

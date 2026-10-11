@@ -52,6 +52,10 @@ export interface PrintCores {
   prova: Record<EstadoProva, string>
   /** Colours of page ornaments only (frames, tiles, waves); never data. Up to four. */
   ornamento?: string[]
+  /** Data palette, diverging: the low and the high side (default destaque2 × destaque). */
+  divergente?: [string, string]
+  /** Data palette, qualitative (party, category: no implied order), up to eight (default: a colour-blind-safe set). */
+  categorica?: string[]
 }
 
 /** Partial colours: any role, and any subset of the proof states. */
@@ -176,7 +180,7 @@ export type Moldura =
   | 'formas' // triangle, square and circle (Bauhaus)
   | 'quartos' // quarter circles in the page corners (diagrama-modernista)
 
-export interface PrintStyle {
+export interface PrintStyle extends PrintTemaExtras {
   /** Stable id, e.g. 'jornal'. */
   name: string
   /** Human label, e.g. "Editorial de jornal". */
@@ -227,8 +231,63 @@ export interface PrintTexto {
   numerosTabela?: 'tabular' | 'proporcional'
 }
 
+// ---------------------------------------------------------------------------
+// Book-theme extras (see print-book-themes.ts)
+// ---------------------------------------------------------------------------
+
+/** A mark the theme prints (publisher logo, collection seal): an image URL (data: URIs work offline) and its text alternative. */
+export interface PrintMarca {
+  src: string
+  alt: string
+  /** Width in mm where the mark is placed (default 18 for the logo, 12 for the seal). */
+  largura?: number
+  /** Image used in black and white print (default: the same `src`, greyed by CSS). */
+  srcPb?: string
+}
+
+/** Page format and print finishing. */
+export interface PrintPagina {
+  /** Trim width in mm (default 170). */
+  largura?: number
+  /** Trim height in mm (default 240). */
+  altura?: number
+  /** Bleed in mm added around every page when the book prints for the press (default 3). */
+  sangria?: number
+  /** Crop marks in the slug, outside the bleed (default false). */
+  marcasCorte?: boolean
+}
+
+/** Running head and folio. */
+export interface PrintFolio {
+  /** Where the folio sits: outer corner (default) or centred. */
+  folio?: 'externo' | 'centro'
+  /** Where the running head sits: outer corner (default), centred, or not printed. */
+  cabeco?: 'externo' | 'centro' | 'nenhum'
+  /** Text before the folio number, e.g. "p. ". */
+  prefixoFolio?: string
+}
+
+/** A local font file (offline, deterministic builds and EPUB): one @font-face. */
+export interface PrintFonteLocal {
+  /** Family name as used in the theme's font stacks. */
+  familia: string
+  /** URL or path of the .woff2 (relative to the HTML, absolute, or a data: URI). */
+  src: string
+  peso?: number | string
+  estilo?: 'normal' | 'italic'
+}
+
+/** What a theme adds to a preset beyond the style tokens. */
+export interface PrintTemaExtras {
+  marcas?: { editora?: PrintMarca; selo?: PrintMarca }
+  pagina?: PrintPagina
+  folio?: PrintFolio
+  /** Local font files; with them PrintBook can run without network (`fontes="locais"`). */
+  fontesLocais?: PrintFonteLocal[]
+}
+
 /** Any token of a style may be overridden by the editor (partial, nested). */
-export interface PrintStyleOverrides {
+export interface PrintStyleOverrides extends PrintTemaExtras {
   label?: string
   fontes?: Partial<PrintFontes>
   googleFonts?: string[]
@@ -1498,6 +1557,19 @@ function mergeCores(base: PrintCores, over?: PrintCoresParciais): PrintCores {
   return { ...base, ...clean, prova: { ...base.prova, ...(prova ?? {}) } }
 }
 
+function mergeExtras(base: PrintTemaExtras, over: PrintTemaExtras): PrintTemaExtras {
+  const out: PrintTemaExtras = {}
+  const marcas = { ...base.marcas, ...over.marcas }
+  if (Object.keys(marcas).length) out.marcas = marcas
+  const pagina = { ...base.pagina, ...over.pagina }
+  if (Object.keys(pagina).length) out.pagina = pagina
+  const folio = { ...base.folio, ...over.folio }
+  if (Object.keys(folio).length) out.folio = folio
+  const fl = over.fontesLocais ?? base.fontesLocais
+  if (fl) out.fontesLocais = fl
+  return out
+}
+
 /** A style with the editor's overrides applied (nested, partial). */
 export function mergePrintStyle(style: PrintStyle, overrides?: PrintStyleOverrides): PrintStyle {
   if (!overrides) return style
@@ -1517,6 +1589,7 @@ export function mergePrintStyle(style: PrintStyle, overrides?: PrintStyleOverrid
     estrutura: { ...style.estrutura, ...overrides.estrutura },
     logo: overrides.logo ?? style.logo,
     ...(overrides.texto || style.texto ? { texto: { ...style.texto, ...overrides.texto } } : {}),
+    ...mergeExtras(style, overrides),
   }
 }
 
@@ -1545,6 +1618,8 @@ export function printStyleCoresPb(style: PrintStyle): PrintCores {
     contexto: toGrey(g.contexto),
     prova: Object.fromEntries(ESTADOS_PROVA.map((e) => [e, toGrey(g.prova[e])])) as Record<EstadoProva, string>,
     ...(g.ornamento ? { ornamento: g.ornamento.map(toGrey) } : {}),
+    ...(g.divergente ? { divergente: g.divergente.map(toGrey) as [string, string] } : {}),
+    categorica: categoricaDoEstilo(style).map(toGrey),
   }
   return mergeCores(grey, style.pb)
 }
@@ -1570,7 +1645,7 @@ export function resolvePrintStyle(style: PrintStyle | PrintStyleId, options: Omi
   return { ...merged, cor: printStyleCoresPb(merged) }
 }
 
-const kebab: Record<Exclude<keyof PrintCores, 'prova' | 'ornamento'>, string> = {
+const kebab: Record<Exclude<keyof PrintCores, 'prova' | 'ornamento' | 'divergente' | 'categorica'>, string> = {
   papel: 'papel',
   tinta: 'tinta',
   tinta2: 'tinta-2',
@@ -1583,6 +1658,15 @@ const kebab: Record<Exclude<keyof PrintCores, 'prova' | 'ornamento'>, string> = 
 }
 
 const num = (n: number) => String(Math.round(n * 1000) / 1000)
+
+/** Qualitative palette (Okabe & Ito 2008, colour-blind safe) used when a style defines none. */
+export const CATEGORICA_PADRAO = ['#0072b2', '#e69f00', '#009e73', '#cc79a7', '#56b4e9', '#d55e00', '#f0e442', '#555555'] as const
+
+/** The eight qualitative data colours of a style: its own `categorica`, completed by CATEGORICA_PADRAO. */
+export function categoricaDoEstilo(style: Pick<PrintStyle, 'cor'>): string[] {
+  const own = style.cor.categorica ?? []
+  return Array.from({ length: 8 }, (_, i) => own[i] ?? CATEGORICA_PADRAO[i]!)
+}
 
 /** Custom properties of a resolved style, in a stable order. */
 export function printStyleVariables(style: PrintStyle): Array<[string, string]> {
@@ -1601,11 +1685,18 @@ export function printStyleVariables(style: PrintStyle): Array<[string, string]> 
   vars.push(['--ty-print-rotulo-caixa', minusculas ? 'lowercase' : rc === 'alta' ? 'uppercase' : 'none'])
   vars.push(['--ty-print-rotulo-variante', rc === 'versalete' ? 'small-caps' : 'normal'])
   vars.push(['--ty-print-rotulo-espaco', rc === 'normal' ? 'normal' : '0.07em'])
+  vars.push(['--ty-print-pagina-largura', `${num(style.pagina?.largura ?? 170)}mm`])
+  vars.push(['--ty-print-pagina-altura', `${num(style.pagina?.altura ?? 240)}mm`])
   const preservar = style.texto?.nomesProprios === 'preservar'
   vars.push(['--ty-print-titulo1-caixa', preservar ? 'none' : style.caixaAlta ? 'uppercase' : minusculas ? 'lowercase' : 'none'])
   vars.push(['--ty-print-sobretitulo-caixa', preservar ? 'none' : minusculas ? 'lowercase' : rc === 'alta' ? 'uppercase' : 'none'])
   vars.push(['--ty-print-celula-caixa', preservar ? 'none' : minusculas ? 'lowercase' : 'none'])
   vars.push(['--ty-print-tabela-numeros', style.texto?.numerosTabela === 'proporcional' ? 'proportional-nums lining-nums' : 'tabular-nums lining-nums'])
+  const dv = style.cor.divergente ?? [style.cor.destaque2, style.cor.destaque]
+  vars.push(['--ty-print-divergente-1', dv[0]])
+  vars.push(['--ty-print-divergente-2', dv[1]])
+  const cat = categoricaDoEstilo(style)
+  cat.forEach((c, i) => vars.push([`--ty-print-categorica-${i + 1}`, c]))
   const orn = style.cor.ornamento ?? []
   const reserva = [style.cor.destaque, style.cor.destaque2, style.cor.tinta, style.cor.marcaTexto]
   for (let i = 0; i < 4; i++) vars.push([`--ty-print-ornamento-${i + 1}`, orn[i] ?? reserva[i]!])
