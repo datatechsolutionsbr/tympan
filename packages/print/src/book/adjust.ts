@@ -43,7 +43,9 @@ export function ajustarPaginas(raiz: ParentNode = document, opcoes: AjusteOpcoes
     const m = pg.querySelector<HTMLElement>(':scope > .ty-print-type-area')
     if (!m) continue
     const respiro = pg.hasAttribute('data-respiro') || pg.getAttribute('data-variante') === 'prancha'
-    const comMolde = pg.hasAttribute('data-molde')
+    const enche = m.hasAttribute('data-preencher')
+    // Fill-mode pages (dashboard) copyfit like templated pages: measured at content height, grown when sparse.
+    const comMolde = pg.hasAttribute('data-molde') || enche
     // Natural height: rows at content height (a molde's growing rows would otherwise always reach the foot).
     const natural = () => {
       if (comMolde) m.setAttribute('data-medindo', '')

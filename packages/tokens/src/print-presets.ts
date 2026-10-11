@@ -158,6 +158,11 @@ export interface PrintEstrutura {
    * panel as a rule instead of a filled box. The style's type, colours and frames stay.
    */
   economiaTinta?: boolean
+  /**
+   * Pages without a molde fill the type area: panels widen to close their row of the six columns and rows of
+   * panels share the free height (dashboard). A page can turn it on or off with `preencher`.
+   */
+  preencher?: boolean
   cabecaMultiplo?: 'titulo' | 'faixa' | 'faixa-escura' | 'faixa-cor' | 'caixa-cor'
 }
 
@@ -391,7 +396,7 @@ const dashboard: PrintStyle = {
   raio: 1.6,
   caixaAlta: false,
   pb: {},
-  estrutura: { painel: 'nenhum', rotulo: 'letra', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false },
+  estrutura: { painel: 'nenhum', rotulo: 'letra', rotuloCaixa: 'alta', notas: 'dentro', figura: 'simples', minusculas: false, preencher: true },
 }
 
 const graficos1900: PrintStyle = {

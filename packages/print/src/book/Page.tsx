@@ -1,9 +1,10 @@
-import { Children, isValidElement, type CSSProperties, type ReactNode } from 'react'
+import { Children, cloneElement, isValidElement, type CSSProperties, type ReactElement, type ReactNode } from 'react'
 import { contrastRatio, luminance, papelEscuro, parseColor, toGrey } from '@datatechsolutions/tympan-tokens'
 import { FundoEscuroProvider, LadoProvider, MoldeProvider, useDupla, usePrint } from '../context.tsx'
 import { cx } from '../utils.ts'
 import { tx } from '../i18n.ts'
 import { Area } from './Area.tsx'
+import { Painel } from '../panels/Panel.tsx'
 import { nomeArea, gradeDoMolde, linhasDoMolde, linhasUsadas, moldePorNome } from './templates.ts'
 import { Ornamento } from './Ornament.tsx'
 import { Textura } from './Texture.tsx'
@@ -25,6 +26,11 @@ export interface PaginaProps {
    * styles (logo 'mono' on light paper) print the volume's colour as their single ink on the paper instead.
    */
   campo?: string
+  /**
+   * Fill the type area (pages without a molde): each panel widens to close its row of six columns and rows of
+   * panels share the free height. Default: the style's `estrutura.preencher` (on in dashboard).
+   */
+  preencher?: boolean
   className?: string
   children?: ReactNode
 }
@@ -46,7 +52,7 @@ function coresCapa(campo: string, estilo: ReturnType<typeof usePrint>['estilo'],
   return { fundo: f, texto, escuro: luminance(parseColor(f)) < 0.2 }
 }
 
-export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero, molde, campo, className, children }: PaginaProps) {
+export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero, molde, campo, preencher, className, children }: PaginaProps) {
   const dupla = useDupla()
   const { estilo, pb, grafica } = usePrint()
   const semCabeco = variante !== 'normal' || estilo.folio?.cabeco === 'nenhum'
@@ -58,6 +64,9 @@ export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero
   const m = moldePorNome(nomeMolde)
   const grade = m ? gradeDoMolde(linhasUsadas(linhasDoMolde(m, lado, estilo), areasDosFilhos(children))) : null
   const estiloMancha: CSSProperties | undefined = grade ? { gridTemplateAreas: grade.areas, gridTemplateRows: grade.linhas } : undefined
+  const enche = !grade && variante === 'normal' && (preencher ?? estilo.estrutura.preencher ?? false)
+  const cheio = enche ? encherLinhas(children) : null
+  if (cheio) children = cheio.filhos
   const cc = variante === 'capa' && campo ? coresCapa(campo, estilo, pb) : null
   const corpo = variante === 'capa' ? <FundoEscuroProvider value={cc ? cc.escuro : !papelEscuro(estilo)}>{children}</FundoEscuroProvider> : children
   // The cover prints `--ty-print-tinta` as its field and `--ty-print-papel` as its type (base.css).
@@ -70,14 +79,14 @@ export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero
       data-molde={grade ? nomeMolde : undefined}
       data-respiro={m?.respiro ? '' : undefined}
       data-campo={cc ? '' : undefined}
-      data-maximo={m?.maximo}
+      data-maximo={m?.maximo ?? (cheio ? 1.5 : undefined)}
       style={estiloPagina}
       aria-label={textoFolio ? tx('pagina', { a: textoFolio }) : lado === 'par' ? tx('paginaPar') : tx('paginaImpar')}
     >
       <Textura lado={lado} />
       {variante !== 'prancha' ? <Ornamento lado={lado} /> : null}
       {textoCabeco ? <p className="ty-print-running-head">{textoCabeco}</p> : null}
-      <div className="ty-print-type-area" style={estiloMancha}>
+      <div className="ty-print-type-area" style={cheio ? { gridTemplateRows: cheio.linhas } : estiloMancha} data-preencher={cheio ? '' : undefined}>
         <LadoProvider value={lado}>{grade ? <MoldeProvider value={grade.info}>{corpo}</MoldeProvider> : corpo}</LadoProvider>
       </div>
       {mostrarFolio ? <p className="ty-print-folio">{`${estilo.folio?.prefixoFolio ?? ''}${textoFolio}`}</p> : null}
@@ -122,4 +131,46 @@ function areasDosFilhos(children: ReactNode): Set<string> | null {
     if (isValidElement<{ nome?: string }>(c) && c.type === Area && c.props.nome) nomes.add(nomeArea(c.props.nome))
   })
   return nomes.size ? nomes : null
+}
+
+/**
+ * Fill mode: panels in reading order are packed into rows of six columns (as the grid would place them), the
+ * last panel of each row widens to the row's end, and every row of panels takes a share of the free height
+ * (`minmax(min-content, 1fr)`); other blocks (titles, text) keep their height. Absolutely placed blocks (the
+ * foot source line) are left out of the rows.
+ */
+function encherLinhas(children: ReactNode): { filhos: ReactNode[]; linhas: string } {
+  const itens = Children.toArray(children)
+  const linhas: string[] = []
+  const saida: ReactNode[] = [...itens]
+  let soma = 0
+  let ultimo = -1
+  const fechar = () => {
+    if (ultimo >= 0) {
+      const el = saida[ultimo] as ReactElement<{ largura?: number }>
+      const w = Math.round(el.props.largura ?? 6)
+      if (soma < 6) saida[ultimo] = cloneElement(el, { largura: w + (6 - soma) })
+      linhas.push('minmax(min-content, 1fr)')
+    }
+    soma = 0
+    ultimo = -1
+  }
+  itens.forEach((c, i) => {
+    if (isValidElement<{ largura?: number; rodape?: boolean }>(c) && c.props.rodape) return
+    if (isValidElement<{ largura?: number }>(c) && c.type === Painel) {
+      const w = Math.max(1, Math.min(6, Math.round(c.props.largura ?? 6)))
+      if (soma + w > 6) fechar()
+      soma += w
+      ultimo = i
+      if (soma === 6) fechar()
+      return
+    }
+    fechar()
+    linhas.push('auto')
+  })
+  fechar()
+  // Rows keep their content height (copyfitting grows sparse pages); the last row of panels takes what is left,
+  // so the foot of the page is reached without opening gaps between rows.
+  const ultimaPainel = linhas.lastIndexOf('minmax(min-content, 1fr)')
+  return { filhos: saida, linhas: linhas.map((l, i) => (l === 'auto' || i === ultimaPainel ? l : 'auto')).join(' ') }
 }

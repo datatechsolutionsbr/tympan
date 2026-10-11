@@ -305,3 +305,31 @@
     }
   }
 }
+
+/* Fill mode (Page preencher / estrutura.preencher): rows packed in order, panels stretch to their row's
+   height, and a figure takes the panel's width and the height left under its title. */
+@layer tympan-print {
+  .ty-print-type-area[data-preencher] {
+    grid-auto-flow: row;
+    align-content: stretch;
+    inset-block-end: 15mm;
+  }
+
+  .ty-print-type-area[data-preencher] > .ty-print-panel {
+    display: flex;
+    flex-direction: column;
+    min-block-size: 0;
+  }
+
+  .ty-print-type-area[data-preencher] > .ty-print-panel > .ty-print-panel-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .ty-print-type-area[data-preencher] .ty-print-panel-body .ty-print-chart {
+    inline-size: 100% !important;
+    block-size: auto;
+  }
+}

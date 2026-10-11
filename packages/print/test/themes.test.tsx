@@ -128,3 +128,27 @@ describe('local fonts cover every family of the theme stacks', () => {
     expect(() => livro({ fontes: 'locais', fontesEstritas: true })).toThrow(/Fonte Inexistente/)
   })
 })
+
+describe('fill mode (dashboard)', () => {
+  it('widens the last panel of each row to six columns and gives panel rows the free height', async () => {
+    const { Panel, Text } = await import('../src/index.ts')
+    const h = renderToStaticMarkup(
+      <PrintBook estilo="dashboard" incluirCss={false} carregarFontes={false}>
+        <Spread numero="2-3">
+          <Page lado="par">
+            <Text titulo="T" nivel={1} />
+            <Panel letra="a" titulo="a" largura={2}>x</Panel>
+            <Panel letra="b" titulo="b" largura={2}>x</Panel>
+            <Panel letra="c" titulo="c" largura={4}>x</Panel>
+          </Page>
+        </Spread>
+      </PrintBook>,
+    )
+    expect(h).toContain('data-preencher=""')
+    expect(h).toContain('grid-template-rows:auto auto minmax(min-content, 1fr)')
+    const larguras = [...h.matchAll(/data-largura="(\d)"/g)].map((m) => Number(m[1]))
+    expect(larguras).toEqual([2, 4, 6])
+    const jornal = renderToStaticMarkup(<PrintBook estilo="jornal" incluirCss={false} carregarFontes={false}><Spread numero="2-3"><Page lado="par"><Panel letra="a" titulo="a" largura={2}>x</Panel></Page></Spread></PrintBook>)
+    expect(jornal).not.toContain('data-preencher')
+  })
+})

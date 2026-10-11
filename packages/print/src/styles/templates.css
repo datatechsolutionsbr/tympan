@@ -8,7 +8,8 @@
   }
 
   /* Measuring the natural height of a templated page (livro/ajuste.ts): rows at content height. */
-  .ty-print-page[data-molde] .ty-print-type-area[data-medindo] {
+  .ty-print-page[data-molde] .ty-print-type-area[data-medindo],
+  .ty-print-type-area[data-preencher][data-medindo] {
     grid-template-rows: none !important;
     grid-auto-rows: auto;
     align-content: start;
