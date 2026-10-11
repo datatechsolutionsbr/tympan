@@ -46,6 +46,16 @@ const cheia = (area: string, extra: Omit<LinhaMolde, 'areas'> = {}) => L([[area,
  * a chapter, pp. [22]–[23]).
  */
 export const MOLDES: Record<string, Molde> = {
+  // One page per territorial unit (municipality, district, state…), each page of the spread a unit: the head
+  // with the name (3 columns), a flag/coat-of-arms box in the title corner (1) and the locator map (2); b a
+  // strip of key numbers; c the main table, growing to the foot; d and e side by side; f a full-width table;
+  // the source at the foot. Same areas on both pages, so a book of 5,571 pages is one loop.
+  'unidade-territorial': {
+    maximo: 1.2,
+    descricao: 'Uma página por unidade territorial: título + bandeira + mapa de localização (a) | b números | c tabela (cresce) | d + e | f | fonte',
+    par: [L([['titulo', 3], ['bandeira', 1], ['a', 2]], { fixa: true }), cheia('b'), cheia('c', { cresce: true }), L([['d', 3], ['e', 3]]), cheia('f'), cheia('fonte', { pe: true })],
+    impar: [L([['titulo', 3], ['bandeira', 1], ['a', 2]], { fixa: true }), cheia('b'), cheia('c', { cresce: true }), L([['d', 3], ['e', 3]]), cheia('f'), cheia('fonte', { pe: true })],
+  },
   // Study pp. [22]–[23]: heading; a + b side by side; linking text; d (chart + data table) as large as the
   // page allows; source at the foot. Odd page: d′ "how to read" in two numbered columns; the verdict heading;
   // e with its claims and proof states; f and g side by side at the foot.
