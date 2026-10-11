@@ -1,0 +1,721 @@
+{
+ "id": "exemplo",
+ "duplas": [
+  {
+   "numero": "10-11",
+   "parte": "Parte de exemplo",
+   "capitulo": "Capítulo de exemplo",
+   "paginas": [
+    {
+     "lado": "par",
+     "paineis": [
+      {
+       "tipo": "Capa",
+       "props": {
+        "face": "quarta",
+        "eyebrow": "Texto de exemplo lorem lorem",
+        "chamada": "Texto de exemplo lorem lorem lorem lorem",
+        "paragrafos": [
+         "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem",
+         "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+        ],
+        "destaque": {
+         "eyebrow": "Texto de exemplo lorem",
+         "texto": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem",
+         "fonte": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+        },
+        "selo": [
+         "Texto de exemplo lorem lorem lorem lorem lorem lorem",
+         "lakebrasil.dev/livros",
+         "Texto de exemplo"
+        ],
+        "isbn": "[ISBN]",
+        "perguntas": [
+         "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem",
+         "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem",
+         "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+        ],
+        "leis": [
+         "Texto de exemplo",
+         "Texto de exemplo",
+         "Texto de exemplo",
+         "Texto de exemplo",
+         "Texto de exemplo",
+         "Texto de exemplo",
+         "Texto de exemplo",
+         "Pé-de-Meia",
+         "Texto de exemplo",
+         "Texto de exemplo",
+         "Texto de exemplo lorem",
+         "Texto de exemplo"
+        ],
+        "numeral": "0"
+       }
+      },
+      {
+       "tipo": "LogoLakebrasil",
+       "props": {
+        "variante": "cor",
+        "protecao": true
+       }
+      }
+     ]
+    },
+    {
+     "lado": "impar",
+     "paineis": [
+      {
+       "tipo": "LogoDatatech",
+       "props": {
+        "variante": "cor-fundo-escuro",
+        "largura": 25,
+        "rotulo": "Realização",
+        "protecao": true
+       }
+      },
+      {
+       "tipo": "Texto",
+       "area": "titulo",
+       "props": {
+        "eyebrow": "Texto de exemplo lorem",
+        "titulo": "Texto de exemplo lorem lorem lorem",
+        "nivel": 1,
+        "variante": "lead",
+        "paragrafos": [
+         "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "numero": "14-15",
+   "parte": "Parte de exemplo",
+   "capitulo": "Capítulo de exemplo",
+   "paginas": [
+    {
+     "lado": "par",
+     "paineis": [
+      {
+       "tipo": "ComoLer",
+       "area": "especime",
+       "props": {
+        "secao": "letras",
+        "letras": [
+         {
+          "letra": "a",
+          "titulo": "Texto de exemplo",
+          "miniatura": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem",
+          "texto": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+         },
+         {
+          "letra": "b",
+          "titulo": "Texto de exemplo",
+          "miniatura": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem",
+          "texto": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem"
+         },
+         {
+          "letra": "c",
+          "titulo": "Texto de exemplo",
+          "miniatura": "Texto de exemplo",
+          "texto": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+         },
+         {
+          "letra": "c′",
+          "titulo": "Legenda.",
+          "miniatura": "Texto de exemplo lorem",
+          "texto": "Texto de exemplo lorem lorem lorem lorem lorem"
+         },
+         {
+          "letra": "d",
+          "titulo": "Texto de exemplo",
+          "miniatura": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem",
+          "texto": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+         },
+         {
+          "letra": "e",
+          "titulo": "Texto de exemplo",
+          "miniatura": "Texto de exemplo lorem lorem lorem",
+          "texto": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem"
+         },
+         {
+          "letra": "f",
+          "titulo": "Texto de exemplo lorem lorem lorem",
+          "miniatura": "Texto de exemplo lorem lorem lorem",
+          "texto": "Texto de exemplo lorem lorem lorem lorem"
+         },
+         {
+          "letra": "g",
+          "titulo": "Texto de exemplo",
+          "miniatura": "Texto de exemplo lorem lorem lorem",
+          "texto": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+         },
+         {
+          "letra": "h",
+          "titulo": "Texto de exemplo",
+          "miniatura": "Texto de exemplo lorem lorem",
+          "texto": "Texto de exemplo lorem lorem lorem lorem lorem"
+         }
+        ]
+       }
+      },
+      {
+       "tipo": "LinhaDoTempo",
+       "area": "linha",
+       "props": {
+        "de": 1994,
+        "ate": 2009,
+        "alt": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem",
+        "volumes": [
+         {
+          "volume": "I",
+          "titulo": "Texto de exemplo",
+          "de": 1994,
+          "ate": 2002
+         },
+         {
+          "volume": "II",
+          "titulo": "Texto de exemplo",
+          "de": 2003,
+          "ate": 2010
+         }
+        ],
+        "eventos": [
+         {
+          "ano": 1994,
+          "norma": "Texto de exemplo lorem lorem",
+          "fio": null,
+          "onde": "Texto de exemplo",
+          "status": "outro-volume"
+         },
+         {
+          "ano": 1996,
+          "norma": "Texto de exemplo lorem lorem",
+          "fio": "I",
+          "onde": "Texto de exemplo lorem lorem",
+          "status": "medida-neste-volume"
+         },
+         {
+          "ano": 1996,
+          "norma": "Texto de exemplo lorem lorem",
+          "fio": "III",
+          "onde": "Texto de exemplo lorem lorem",
+          "status": "medida-neste-volume"
+         },
+         {
+          "ano": 1996,
+          "norma": "Texto de exemplo lorem",
+          "fio": "I",
+          "onde": "Texto de exemplo",
+          "status": "outro-volume"
+         },
+         {
+          "ano": 1997,
+          "norma": "Texto de exemplo lorem lorem lorem",
+          "fio": "I",
+          "onde": "Texto de exemplo lorem lorem lorem lorem lorem",
+          "status": "medida-neste-volume"
+         },
+         {
+          "ano": 1997,
+          "norma": "Texto de exemplo lorem",
+          "fio": "III",
+          "onde": "Texto de exemplo lorem lorem lorem lorem lorem",
+          "status": "quando-o-dado-chegar"
+         },
+         {
+          "ano": 2000,
+          "norma": "Texto de exemplo lorem",
+          "fio": "I",
+          "onde": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem",
+          "status": "outro-volume"
+         },
+         {
+          "ano": 2007,
+          "norma": "Texto de exemplo lorem lorem lorem",
+          "fio": "II",
+          "onde": "Texto de exemplo lorem lorem lorem lorem",
+          "status": "quando-o-dado-chegar"
+         },
+         {
+          "ano": 2007,
+          "norma": "Texto de exemplo lorem lorem lorem",
+          "fio": "II",
+          "onde": "Texto de exemplo lorem lorem lorem lorem",
+          "status": "quando-o-dado-chegar"
+         },
+         {
+          "ano": 2008,
+          "norma": "Texto de exemplo lorem",
+          "fio": "I",
+          "onde": "Texto de exemplo lorem lorem",
+          "status": "medida-neste-volume"
+         },
+         {
+          "ano": 2008,
+          "norma": "Texto de exemplo lorem lorem lorem",
+          "fio": "II",
+          "onde": "Texto de exemplo",
+          "status": "outro-volume"
+         },
+         {
+          "ano": 2009,
+          "norma": "Texto de exemplo lorem lorem lorem",
+          "fio": "I",
+          "onde": "Texto de exemplo lorem lorem",
+          "status": "medida-neste-volume"
+         },
+         {
+          "ano": 2009,
+          "norma": "Texto de exemplo lorem",
+          "fio": "III",
+          "onde": "Texto de exemplo lorem lorem lorem lorem",
+          "status": "medida-neste-volume"
+         }
+        ],
+        "herdadas": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+       }
+      }
+     ]
+    },
+    {
+     "lado": "impar",
+     "paineis": [
+      {
+       "tipo": "AberturaParte",
+       "area": "abertura",
+       "props": {
+        "numero": "I",
+        "titulo": "Texto de exemplo",
+        "pergunta": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem",
+        "partes": [
+         {
+          "numero": "I",
+          "titulo": "Texto de exemplo"
+         },
+         {
+          "numero": "II",
+          "titulo": "Texto de exemplo lorem"
+         },
+         {
+          "numero": "III",
+          "titulo": "Texto de exemplo"
+         }
+        ],
+        "nestaParte": [
+         {
+          "cap": "Texto de exemplo",
+          "titulo": "Texto de exemplo lorem lorem lorem lorem"
+         },
+         {
+          "cap": "Texto de exemplo",
+          "titulo": "Texto de exemplo lorem lorem lorem lorem lorem lorem"
+         },
+         {
+          "cap": "Texto de exemplo",
+          "titulo": "Texto de exemplo lorem lorem lorem"
+         },
+         {
+          "cap": "Texto de exemplo",
+          "titulo": "Texto de exemplo lorem"
+         }
+        ],
+        "ondeIssoVolta": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+       }
+      },
+      {
+       "tipo": "GraficoMetodo",
+       "area": "fig",
+       "props": {
+        "alt": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem",
+        "spec": {
+         "tipo": "halteres",
+         "titulo": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem",
+         "escala": [
+          0,
+          150
+         ],
+         "rotuloA": "Texto de exemplo",
+         "rotuloB": "Texto de exemplo",
+         "linhas": [
+          {
+           "rotulo": "Texto de exemplo lorem lorem lorem",
+           "nota": "Texto de exemplo",
+           "a": 36,
+           "b": 132,
+           "destaque": true
+          }
+         ]
+        },
+        "tabela": {
+         "colunas": [
+          "Base",
+          {
+           "rotulo": "Texto de exemplo",
+           "numerica": true
+          },
+          {
+           "rotulo": "Texto de exemplo",
+           "numerica": true
+          }
+         ],
+         "linhas": [
+          [
+           "Texto de exemplo lorem lorem",
+           36,
+           132
+          ]
+         ]
+        },
+        "altura": 150
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "numero": "18-19",
+   "parte": "Parte de exemplo",
+   "capitulo": "Capítulo de exemplo",
+   "paginas": [
+    {
+     "lado": "par",
+     "paineis": [
+      {
+       "tipo": "Fonte",
+       "area": "fonte",
+       "props": {
+        "texto": "Texto de exemplo lorem lorem lorem lorem lorem",
+        "versaoLake": "2026-09-25"
+       }
+      },
+      {
+       "tipo": "ManchetaIlustrativa",
+       "area": "manchete",
+       "props": {
+        "texto": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+       }
+      }
+     ]
+    },
+    {
+     "lado": "impar",
+     "paineis": [
+      {
+       "tipo": "Painel",
+       "area": "a",
+       "props": {
+        "letra": "a",
+        "titulo": "Texto de exemplo lorem",
+        "variante": "filete-forte",
+        "children": [
+         {
+          "tipo": "Promessa",
+          "props": {
+           "citacao": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem",
+           "norma": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem",
+           "data": "1981-08-27",
+           "urn": "Texto de exemplo",
+           "detalhes": [
+            {
+             "termo": "Texto de exemplo",
+             "definicao": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+            },
+            {
+             "termo": "Alcance",
+             "definicao": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+            }
+           ],
+           "genealogia": [
+            {
+             "ano": "1966",
+             "texto": "Texto de exemplo"
+            },
+            {
+             "ano": "1981",
+             "texto": "Texto de exemplo",
+             "atual": true
+            },
+            {
+             "ano": "[1989]",
+             "texto": "Texto de exemplo"
+            },
+            {
+             "ano": "2023",
+             "texto": "Texto de exemplo lorem"
+            }
+           ]
+          }
+         }
+        ]
+       }
+      },
+      {
+       "tipo": "Margem",
+       "area": "notas",
+       "props": {
+        "titulo": "Texto de exemplo lorem lorem lorem",
+        "texto": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "numero": "22-23",
+   "parte": "Parte de exemplo",
+   "capitulo": "Capítulo de exemplo",
+   "paginas": [
+    {
+     "lado": "par",
+     "paineis": [
+      {
+       "tipo": "QuandoODadoChegar",
+       "area": "q",
+       "props": {
+        "texto": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+       }
+      },
+      {
+       "tipo": "Veredito",
+       "area": "e",
+       "props": {
+        "promessa": "Texto de exemplo lorem lorem lorem lorem lorem lorem",
+        "estado": "nao-da-para-afirmar",
+        "texto": "Texto de exemplo",
+        "itens": [
+         {
+          "afirmacao": "Texto de exemplo lorem lorem lorem lorem lorem lorem",
+          "base": "Texto de exemplo",
+          "estado": "nao-da-para-afirmar"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "lado": "impar",
+     "paineis": [
+      {
+       "tipo": "ProximoCapitulo",
+       "area": "prox",
+       "props": {
+        "titulo": "Texto de exemplo",
+        "texto": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+       }
+      },
+      {
+       "tipo": "DesenhoPublicado",
+       "area": "desenho",
+       "props": {
+        "titulo": "Texto de exemplo lorem lorem lorem lorem lorem lorem",
+        "itens": [
+         {
+          "rotulo": "Promessa",
+          "texto": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+         },
+         {
+          "rotulo": "Resultado",
+          "texto": "Texto de exemplo lorem lorem lorem"
+         },
+         {
+          "rotulo": "Exposição",
+          "texto": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+         },
+         {
+          "rotulo": "Desenho",
+          "texto": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+         },
+         {
+          "rotulo": "Testes",
+          "texto": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem"
+         },
+         {
+          "rotulo": "Subgrupos",
+          "texto": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem"
+         },
+         {
+          "rotulo": "Texto de exemplo",
+          "texto": "Texto de exemplo lorem lorem lorem lorem"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "numero": "26-27",
+   "parte": "Parte de exemplo",
+   "capitulo": "Capítulo de exemplo",
+   "paginas": [
+    {
+     "lado": "par",
+     "paineis": [
+      {
+       "tipo": "Testes",
+       "area": "t1",
+       "props": {
+        "titulo": "Texto de exemplo lorem lorem",
+        "itens": [
+         {
+          "pergunta": "Texto de exemplo lorem lorem lorem",
+          "estado": "nao-testada",
+          "texto": "Texto de exemplo lorem lorem lorem lorem"
+         },
+         {
+          "pergunta": "Texto de exemplo lorem lorem lorem",
+          "estado": "nao-testada",
+          "texto": "Texto de exemplo lorem lorem lorem lorem lorem lorem"
+         }
+        ]
+       }
+      },
+      {
+       "tipo": "Mapa",
+       "area": "mapa",
+       "props": {
+        "titulo": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem",
+        "alt": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem",
+        "exemplo": true,
+        "sangria": true,
+        "legenda": [
+         "Texto de exemplo",
+         "Texto de exemplo lorem lorem lorem",
+         "Texto de exemplo lorem lorem lorem",
+         "Texto de exemplo lorem lorem lorem",
+         "Texto de exemplo lorem lorem lorem",
+         "Texto de exemplo lorem lorem lorem"
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "lado": "impar",
+     "paineis": [
+      {
+       "tipo": "TabelaDados",
+       "area": "tabela",
+       "props": {
+        "colunas": [
+         "Capítulo",
+         "Número",
+         {
+          "rotulo": "Consulta",
+          "mono": true
+         },
+         {
+          "rotulo": "sha256",
+          "mono": true
+         },
+         {
+          "rotulo": "Tabela",
+          "mono": true
+         }
+        ],
+        "linhas": [
+         [
+          "Texto de exemplo",
+          "Texto de exemplo lorem lorem",
+          "46-fpm-amontoamento.sql",
+          "d6e9215232af…",
+          "municipios"
+         ],
+         [
+          "Texto de exemplo",
+          "Texto de exemplo lorem",
+          "12-fpm-faixa-despesa.sql",
+          "12cbc9c7f8c4…",
+          "municipios"
+         ],
+         [
+          "Texto de exemplo",
+          "Texto de exemplo",
+          "46b-…-LOCAL.sql",
+          "5241be40550d…",
+          "Texto de exemplo"
+         ],
+         [
+          "Texto de exemplo",
+          "Texto de exemplo",
+          "Texto de exemplo",
+          "f190633e11f4…",
+          "comex_municipio"
+         ],
+         [
+          "Texto de exemplo",
+          "Texto de exemplo",
+          "Texto de exemplo",
+          "2dd4298ee46d…",
+          "indicadores_serie"
+         ],
+         [
+          "Texto de exemplo",
+          "Texto de exemplo",
+          "Texto de exemplo",
+          "b73713bfaa0f…",
+          "indicadores_serie"
+         ],
+         [
+          "Texto de exemplo",
+          "Texto de exemplo",
+          "20-prodes-escala.sql",
+          "0ed7ae9077af…",
+          "indicadores_serie"
+         ]
+        ]
+       }
+      },
+      {
+       "tipo": "Ficha",
+       "area": "ficha",
+       "props": {
+        "itens": [
+         {
+          "termo": "Direitos",
+          "definicao": "Texto de exemplo lorem lorem lorem lorem"
+         },
+         {
+          "termo": "ISBN",
+          "definicao": "Texto de exemplo lorem lorem"
+         },
+         {
+          "termo": "Texto de exemplo",
+          "definicao": "Texto de exemplo"
+         },
+         {
+          "termo": "Dados",
+          "definicao": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+         },
+         {
+          "termo": "Texto de exemplo",
+          "definicao": "Texto de exemplo"
+         },
+         {
+          "termo": "Tipografia",
+          "definicao": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+         },
+         {
+          "termo": "Editora",
+          "definicao": "Texto de exemplo lorem lorem lorem lorem lorem lorem lorem lorem lorem"
+         },
+         {
+          "termo": "Edição",
+          "definicao": "[AAAA-MM-DD]"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

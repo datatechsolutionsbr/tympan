@@ -1,0 +1,15 @@
+{
+ "titulo": "Livro de exemplo",
+ "colecao": "Exemplo",
+ "volume": 0,
+ "autora": "[AUTORA]",
+ "idioma": "pt-BR",
+ "versaoLake": "2026-01-01",
+ "estilo": "jornal",
+ "tokens": {},
+ "pb": false,
+ "capitulos": [
+  "exemplo"
+ ],
+ "sumario": []
+}

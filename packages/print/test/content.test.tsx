@@ -2,7 +2,7 @@
 // A real book's content folder (livro.json + capitulos/): every panel of every
 // chapter renders in every preset, and no prop of the JSON is ignored.
 // Set BRASIL_REAL_CONTEUDO to the absolute path of the content folder; the
-// suite is skipped without it (CI has no access to the book repository).
+// without it the suite runs on test/fixtures/conteudo (CI has no access to the book repository).
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { renderToStaticMarkup } from 'react-dom/server'
@@ -10,7 +10,9 @@ import { describe, expect, it } from 'vitest'
 import { PRINT_PRESET_NAMES } from '@datatechsolutions/tympan-tokens'
 import { CapituloConteudo, LivroConteudo, PrintBook, NoConteudo, propsDesconhecidas, type CapituloJson, type LivroJson, type NoJson } from '../src/index.ts'
 
-const pasta = process.env.BRASIL_REAL_CONTEUDO
+// Without the env var, a minimal versioned fixture (one node of each component the book uses, texts replaced
+// by placeholder words) keeps the suite running in CI.
+const pasta = process.env.BRASIL_REAL_CONTEUDO ?? join(__dirname, 'fixtures', 'conteudo')
 const disponivel = Boolean(pasta && existsSync(join(pasta, 'livro.json')))
 
 function carregar() {
