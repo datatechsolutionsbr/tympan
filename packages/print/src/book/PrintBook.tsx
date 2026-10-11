@@ -1,8 +1,10 @@
 import type { ReactNode } from 'react'
 import {
   googleFontsUrl,
+  fontesLocaisCss,
+  paginaDoEstilo,
   papelEscuro,
-  printPresetById,
+  printThemeById,
   printStyleToCss,
   resolvePrintStyle,
   type PrintStyle,
@@ -14,8 +16,11 @@ import { PRINT_CSS } from '../styles.generated.ts'
 import { cx, hashCurto } from '../utils.ts'
 
 export interface LivroPrintProps {
-  /** The book style: a preset object or its name (a deprecated id from PRINT_STYLE_ALIASES resolves to its new style). */
-  estilo: PrintStyle | PrintStyleId
+  /**
+   * The book style: a preset object, a preset name (a deprecated id from PRINT_STYLE_ALIASES resolves to its
+   * new style) or the id of a book theme registered with `registerPrintTheme`.
+   */
+  estilo: PrintStyle | PrintStyleId | (string & {})
   /** Editor overrides of any token (partial). */
   tokens?: PrintStyleOverrides
   /** Black and white print. */
@@ -24,6 +29,18 @@ export interface LivroPrintProps {
   incluirCss?: boolean
   /** Link the style's Google Fonts (turn off when the host loads fonts itself, e.g. embedded in an EPUB). */
   carregarFontes?: boolean
+  /**
+   * Where fonts come from: 'google' (link the style's Google Fonts; the default while `carregarFontes` is on),
+   * 'locais' (only the theme's `fontesLocais` as @font-face: no network, deterministic PDF and EPUB; families
+   * without a file fall back to the stack), or 'nenhuma' (the host loads them). Overrides `carregarFontes`.
+   */
+  fontes?: 'google' | 'locais' | 'nenhuma'
+  /**
+   * Print for the press: every page sits on a sheet with bleed (the page's background runs into it) and,
+   * optionally, crop marks in the slug; `@page` grows to trim + 2 × (bleed + slug). `true` takes the theme's
+   * `pagina.sangria` (default 3 mm) and `pagina.marcasCorte`. Off (default): the PDF is the trim size.
+   */
+  impressao?: boolean | { sangria?: number; marcasCorte?: boolean }
   lang?: string
   /**
    * Scope name of this book's custom properties and SVG ids. Defaults to a hash of the style, P&B and
@@ -35,18 +52,28 @@ export interface LivroPrintProps {
   children?: ReactNode
 }
 
+/** Slug around the bleed that carries the crop marks (mm). */
+const MARGEM_MARCAS = 6
+
 /**
  * Root of a printed book: sets the style (`data-ty-print-style`), injects the
- * preset's custom properties, the component CSS and `@page` (170 × 240 mm),
+ * preset's custom properties, the component CSS and `@page` (the theme's trim, 170 × 240 mm by default),
  * and provides the resolved style to every component below.
  */
-export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carregarFontes = true, lang = 'pt-BR', escopo: escopoProp, className, children }: LivroPrintProps) {
-  const base = typeof estilo === 'string' ? printPresetById(estilo) : estilo
+export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carregarFontes = true, fontes: modoFontes, impressao = false, lang = 'pt-BR', escopo: escopoProp, className, children }: LivroPrintProps) {
+  const base = typeof estilo === 'string' ? printThemeById(estilo) : estilo
   const resolvido = resolvePrintStyle(base, { pb, overrides: tokens })
   const escopo = `tpb-${(escopoProp ?? hashCurto(JSON.stringify([pb, resolvido]))).replace(/[^a-zA-Z0-9_-]/g, '')}`
   const seletor = `[data-ty-print-livro="${escopo}"]`
-  const css = `${incluirCss ? PRINT_CSS : ''}\n${printStyleToCss(base, { pb, overrides: tokens, seletor })}`
-  const fontes = carregarFontes ? googleFontsUrl(resolvido) : null
+  const pag = paginaDoEstilo(resolvido)
+  const grafica = impressao ? { sangria: (typeof impressao === 'object' ? impressao.sangria : undefined) ?? pag.sangria, marcasCorte: (typeof impressao === 'object' ? impressao.marcasCorte : undefined) ?? pag.marcasCorte } : null
+  const folga = grafica ? grafica.sangria + (grafica.marcasCorte ? MARGEM_MARCAS : 0) : 0
+  const pagina = `@page { size: ${pag.largura + 2 * folga}mm ${pag.altura + 2 * folga}mm; margin: 0; }`
+  const varsGrafica = grafica ? `${seletor} { --ty-print-sangria: ${grafica.sangria}mm; --ty-print-folga: ${folga}mm; }` : ''
+  const modo = modoFontes ?? (carregarFontes ? 'google' : 'nenhuma')
+  const faces = modo === 'locais' ? fontesLocaisCss(resolvido) : ''
+  const css = `${faces}\n${incluirCss ? PRINT_CSS : ''}\n${printStyleToCss(base, { pb, overrides: tokens, seletor })}${pagina}\n${varsGrafica}`
+  const fontes = modo === 'google' ? googleFontsUrl(resolvido) : null
   const e = resolvido.estrutura
   return (
     <div
@@ -73,12 +100,15 @@ export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carr
       data-ty-print-costura={e.costura}
       data-ty-print-manchete={e.manchete}
       data-ty-print-rastro={e.rastro && e.rastro !== 'lista' ? e.rastro : undefined}
+      data-ty-print-grafica={grafica ? '' : undefined}
+      data-ty-print-folio={resolvido.folio?.folio === 'centro' ? 'centro' : undefined}
+      data-ty-print-cabeco-pos={resolvido.folio?.cabeco === 'centro' ? 'centro' : undefined}
       data-ty-print-numeros-marcados={e.numerosMarcados ? '' : undefined}
     >
       {fontes ? <link rel="stylesheet" href={fontes} /> : null}
       <style dangerouslySetInnerHTML={{ __html: css }} />
       <EscopoLivroProvider value={escopo}>
-        <PrintContextoProvider value={{ estilo: resolvido, pb }}>{children}</PrintContextoProvider>
+        <PrintContextoProvider value={{ estilo: resolvido, pb, grafica: grafica ? { ...grafica, folga } : null }}>{children}</PrintContextoProvider>
       </EscopoLivroProvider>
     </div>
   )

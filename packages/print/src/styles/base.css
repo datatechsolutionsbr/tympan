@@ -1,10 +1,5 @@
 /* Book, spread, page and type area. */
 @layer tympan-print {
-  @page {
-    size: 170mm 240mm;
-    margin: 0;
-  }
-
   .ty-print-book {
     --ty-print-mesa: color-mix(in srgb, var(--ty-print-papel) 82%, var(--ty-print-tinta));
     --ty-print-sombra: color-mix(in srgb, var(--ty-print-tinta) 16%, transparent);
@@ -35,8 +30,8 @@
   /* Spread: two pages side by side on screen. */
   .ty-print-spread {
     display: flex;
-    inline-size: 340mm;
-    block-size: 240mm;
+    inline-size: max-content;
+    block-size: max-content;
     margin-block: 0 12mm;
     margin-inline: auto;
     box-shadow: 0 1mm 4mm var(--ty-print-sombra);
@@ -45,8 +40,8 @@
   .ty-print-page {
     position: relative;
     flex: none;
-    inline-size: 170mm;
-    block-size: 240mm;
+    inline-size: var(--ty-print-pagina-largura, 170mm);
+    block-size: var(--ty-print-pagina-altura, 240mm);
     overflow: hidden;
     background: var(--ty-print-papel);
     color: var(--ty-print-tinta);
@@ -77,6 +72,43 @@
 
   [dir='rtl'] .ty-print-page[data-lado='impar']::after {
     background: linear-gradient(to left, color-mix(in srgb, var(--ty-print-tinta) 7%, transparent), transparent);
+  }
+
+  /* Press output (PrintBook impressao): the page sits on a sheet of trim + 2 × (bleed + slug); its own
+     background runs into the bleed (box-shadow spread), crop marks live in the slug. */
+  .ty-print-sheet {
+    position: relative;
+    flex: none;
+    padding: var(--ty-print-folga, 0mm);
+    background: #fff;
+  }
+
+  .ty-print-sheet > .ty-print-page {
+    box-shadow: 0 0 0 var(--ty-print-sangria, 0mm) var(--ty-print-papel);
+  }
+
+  .ty-print-sheet > .ty-print-page[data-variante='capa'] {
+    box-shadow: 0 0 0 var(--ty-print-sangria, 0mm) var(--ty-print-tinta);
+  }
+
+  .ty-print-sheet > .ty-print-page > .ty-print-type-area,
+  .ty-print-sheet > .ty-print-page > :is(.ty-print-running-head, .ty-print-folio) {
+    z-index: 1;
+  }
+
+  .ty-print-crop-marks {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    pointer-events: none;
+  }
+
+  /* Folio and running head centred (book themes: folio.folio / folio.cabeco = 'centro'). */
+  .ty-print-book[data-ty-print-folio='centro'] .ty-print-page .ty-print-folio,
+  .ty-print-book[data-ty-print-cabeco-pos='centro'] .ty-print-page .ty-print-running-head {
+    inset-inline: 0;
+    text-align: center;
   }
 
   .ty-print-texture {
@@ -230,9 +262,14 @@
       display: contents;
     }
 
-    .ty-print-page {
+    .ty-print-page,
+    .ty-print-sheet {
       break-after: page;
       break-inside: avoid;
+    }
+
+    .ty-print-sheet > .ty-print-page {
+      break-after: auto;
     }
 
     .ty-print-page::after {
@@ -240,7 +277,7 @@
     }
 
     /* A chapter opens on an even page (the left page of a spread). */
-    .ty-print-spread[data-abre-capitulo] > .ty-print-page:first-child {
+    .ty-print-spread[data-abre-capitulo] > :is(.ty-print-page, .ty-print-sheet):first-child {
       break-before: left;
     }
   }

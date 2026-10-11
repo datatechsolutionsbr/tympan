@@ -47,10 +47,11 @@ function coresCapa(campo: string, estilo: ReturnType<typeof usePrint>['estilo'],
 
 export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero, molde, campo, className, children }: PaginaProps) {
   const dupla = useDupla()
-  const { estilo, pb } = usePrint()
-  const semCabeco = variante !== 'normal'
+  const { estilo, pb, grafica } = usePrint()
+  const semCabeco = variante !== 'normal' || estilo.folio?.cabeco === 'nenhum'
   const textoCabeco = semCabeco ? undefined : (cabeco ?? (lado === 'par' ? dupla?.parte : dupla?.capitulo))
-  const textoFolio = numero ?? (dupla ? dupla.folios[lado === 'par' ? 0 : 1] : '')
+  const numeroFolio = numero ?? (dupla ? dupla.folios[lado === 'par' ? 0 : 1] : '')
+  const textoFolio = numeroFolio
   const mostrarFolio = folio && variante !== 'capa' && Boolean(textoFolio)
   const nomeMolde = molde ?? dupla?.molde
   const m = moldePorNome(nomeMolde)
@@ -60,7 +61,7 @@ export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero
   const corpo = variante === 'capa' ? <FundoEscuroProvider value={cc ? cc.escuro : !papelEscuro(estilo)}>{children}</FundoEscuroProvider> : children
   // The cover prints `--ty-print-tinta` as its field and `--ty-print-papel` as its type (base.css).
   const estiloPagina = cc ? ({ '--ty-print-tinta': cc.fundo, '--ty-print-papel': cc.texto } as CSSProperties) : undefined
-  return (
+  const pagina = (
     <section
       className={cx('ty-print-page', className)}
       data-lado={lado}
@@ -78,11 +79,41 @@ export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero
       <div className="ty-print-type-area" style={estiloMancha}>
         <LadoProvider value={lado}>{grade ? <MoldeProvider value={grade.info}>{corpo}</MoldeProvider> : corpo}</LadoProvider>
       </div>
-      {mostrarFolio ? <p className="ty-print-folio">{textoFolio}</p> : null}
+      {mostrarFolio ? <p className="ty-print-folio">{`${estilo.folio?.prefixoFolio ?? ''}${textoFolio}`}</p> : null}
     </section>
+  )
+  if (!grafica) return pagina
+  // Press output: the page on a sheet of trim + bleed (+ slug with crop marks when asked).
+  return (
+    <div className="ty-print-sheet" data-lado={lado}>
+      {grafica.marcasCorte ? <MarcasCorte largura={estilo.pagina?.largura ?? 170} altura={estilo.pagina?.altura ?? 240} sangria={grafica.sangria} folga={grafica.folga} /> : null}
+      {pagina}
+    </div>
   )
 }
 
+/** Crop marks: two 5 mm hairlines at each trim corner, in the slug, starting 1 mm past the bleed. Registration black. */
+function MarcasCorte({ largura, altura, sangria, folga }: { largura: number; altura: number; sangria: number; folga: number }) {
+  const W = largura + 2 * folga
+  const H = altura + 2 * folga
+  const xs = [folga, folga + largura]
+  const ys = [folga, folga + altura]
+  const ini = sangria + 1
+  const linhas: Array<[number, number, number, number]> = []
+  for (const x of xs)
+    for (const y of ys) {
+      const dx = x === folga ? -1 : 1
+      const dy = y === folga ? -1 : 1
+      linhas.push([x + dx * ini, y, x + dx * (folga - 0.2), y], [x, y + dy * ini, x, y + dy * (folga - 0.2)])
+    }
+  return (
+    <svg className="ty-print-crop-marks" viewBox={`0 0 ${W} ${H}`} aria-hidden="true" focusable="false" data-marcas={linhas.length}>
+      {linhas.map(([x1, y1, x2, y2], i) => (
+        <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#000" strokeWidth={0.1} />
+      ))}
+    </svg>
+  )
+}
 /** Names of the Area children of a page (null when the page has none, e.g. hand-written pages without areas). */
 function areasDosFilhos(children: ReactNode): Set<string> | null {
   const nomes = new Set<string>()

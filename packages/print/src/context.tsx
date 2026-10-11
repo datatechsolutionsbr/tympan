@@ -5,6 +5,8 @@ export interface PrintContexto {
   /** The style as it prints: overrides applied and, for P&B, grey colours. */
   estilo: PrintStyle
   pb: boolean
+  /** Press output (PrintBook `impressao`): bleed and crop marks, or null for trim-size output. */
+  grafica?: { sangria: number; marcasCorte: boolean; folga: number } | null
 }
 
 const Contexto = createContext<PrintContexto>({ estilo: printPresets.jornal, pb: false })
