@@ -63,6 +63,8 @@ function semRealce<S extends GraficoSpec>(spec: S, estilo: PrintStyle): S {
   // Highlighting one row needs others to stand against: a figure whose rows are all highlighted keeps its series colours.
   const linhas: Array<{ destaque?: boolean }> = s.linhas ?? ('barras' in s ? s.barras : undefined) ?? ('grupos' in s ? s.grupos : undefined) ?? []
   if (estilo.estrutura.realce === 'linha' && linhas.some((l) => !l.destaque)) return spec
+  // A single series has no series colours to keep: its highlighted bar is the series of interest in every style.
+  if (s.tipo === 'barras' && s.barras?.length && !s.linhas?.length && linhas.some((l) => !l.destaque)) return spec
   return {
     ...s,
     linhas: s.linhas?.map((l) => ({ ...l, destaque: false })),

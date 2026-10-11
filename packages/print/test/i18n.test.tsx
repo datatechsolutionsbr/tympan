@@ -59,3 +59,11 @@ describe('i18n', () => {
     expect(h).not.toContain('sha256')
   })
 })
+
+describe('single-series bars keep their highlight in every style', () => {
+  it('dashboard: the highlighted bar is drawn as the series of interest, the rest as context', () => {
+    const h = livro('en')
+    expect(h).toMatch(/data-destaque=""/)
+    expect(h).toContain('var(--ty-print-contexto)')
+  })
+})
