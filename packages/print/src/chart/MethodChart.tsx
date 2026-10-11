@@ -28,6 +28,11 @@ import { Cartoes, EixoCentral, Fluxo, Ziguezague } from './shapes.tsx'
 
 export interface GraficoMetodoProps {
   spec: GraficoSpec
+  /**
+   * Shape of a comparison: overrides the style's (`estrutura.forma`). A dumbbell spec is always drawn as a
+   * dumbbell unless `forma` asks for another shape: the chart type the author chose wins over the preset.
+   */
+  forma?: FormaGrafico
   /** Renderer; defaults to the style's `chart`. */
   renderizador?: RenderizadorGrafico
   /** The finding in one sentence: the figure's accessible name (and the EPUB alt text). */
@@ -600,7 +605,7 @@ function Esquema({ c, spec, largura }: { c: Ctx; spec: SpecEsquema; largura: num
  * washed, grained, pictorial). Every figure has an accessible name that
  * states the finding and a data table (visible, or for assistive technology).
  */
-export function GraficoMetodo({ spec: specOriginal, renderizador, alt, tabela, local = false, largura: larguraProp, letra, altura, className }: GraficoMetodoProps) {
+export function GraficoMetodo({ spec: specOriginal, renderizador, forma: formaPedida, alt, tabela, local = false, largura: larguraProp, letra, altura, className }: GraficoMetodoProps) {
   const { estilo } = usePrint()
   const disponivel = useLarguraDisponivel()
   const largura = larguraProp ?? Math.min(132, disponivel ?? 128)
@@ -608,9 +613,9 @@ export function GraficoMetodo({ spec: specOriginal, renderizador, alt, tabela, l
   const nome = renderizador ?? estilo.grafico
   const p = PINCEIS[nome]
   const c: Ctx = { id, estilo, p }
-  const forma = formaDoEstilo(estilo)
-  // A dumbbell is drawn as such only by the style whose study draws dumbbells (forma 'halteres'); every other
-  // style redraws it in its own comparison shape, when nothing would be lost (zero-based axis, no references).
+  // The author's chart type wins: a dumbbell stays a dumbbell in every preset; the style's shape applies to bars,
+  // and a `forma` prop overrides both (redrawing a zero-based dumbbell in that shape, when nothing is lost).
+  const forma = formaPedida ?? (specOriginal.tipo === 'halteres' ? 'halteres' : formaDoEstilo(estilo))
   const spec: GraficoSpec = semRealce(
     specOriginal.tipo === 'halteres' && (forma !== 'halteres' || altura) && specOriginal.escala[0] === 0 && !specOriginal.referencias?.length && !specOriginal.eixoNaoComecaNoZero
       ? comoBarras(specOriginal)

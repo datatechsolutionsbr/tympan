@@ -143,10 +143,10 @@ describe('callouts inside the chart point at their value and stay in the figure'
 
 describe('a dumbbell takes the style shape only when nothing is lost', () => {
   const halteres = specsEstudo('halteres')[0] as SpecHalteres
-  it('converted when the style declares a shape and the axis starts at zero', () => {
+  it('converted only when the author asks (forma prop) and the axis starts at zero', () => {
     const { container } = render(
       <PrintBook estilo="jornal" tokens={{ estrutura: { forma: 'colunas' } }}>
-        <MethodChart spec={halteres} largura={120} />
+        <MethodChart spec={halteres} largura={120} forma="colunas" />
       </PrintBook>,
     )
     expect(container.querySelector('figure')!.getAttribute('data-tipo')).toBe('halteres')
@@ -180,4 +180,22 @@ describe('shapes render deterministically on the server', () => {
         expect(a).not.toMatch(/NaN|undefined|Infinity/)
       }
     })
+})
+
+describe('the chart type chosen by the author wins over the preset', () => {
+  it('a dumbbell is drawn as a dumbbell in every preset', async () => {
+    const halteres = specsEstudo('halteres')[0] as SpecHalteres
+    const { PRINT_PRESET_NAMES } = await import('@datatechsolutions/tympan-tokens')
+    for (const estilo of PRINT_PRESET_NAMES) {
+      const { container, unmount } = render(
+        <PrintBook estilo={estilo}>
+          <MethodChart spec={halteres} largura={120} />
+        </PrintBook>,
+      )
+      const fig = container.querySelector('figure')!
+      expect(fig.getAttribute('data-forma'), estilo).toBeNull()
+      expect(container.querySelector('.ty-print-bar'), estilo).toBeNull()
+      unmount()
+    }
+  })
 })
