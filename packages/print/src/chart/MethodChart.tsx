@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { Intervalo } from './interval.tsx'
 import { coresCategorias } from './categoryColours.ts'
 import { tx } from '../i18n.ts'
 import { useLarguraDisponivel, usePrint } from '../context.tsx'
@@ -662,6 +663,8 @@ export function GraficoMetodo({ spec: specOriginal, renderizador, forma: formaPe
           ? Contagem({ c, spec, largura })
           : spec.tipo === 'serie'
             ? Serie({ c, spec, largura, altura })
+            : spec.tipo === 'intervalo'
+              ? Intervalo({ c, spec, largura })
             : spec.tipo === 'dispersao'
               ? Dispersao({ c, spec, largura })
               : spec.tipo === 'simpson'

@@ -108,7 +108,32 @@ export interface SpecEsquema extends Base {
   rotulos?: string[]
 }
 
-export type GraficoSpec = SpecHalteres | SpecBarras | SpecSerie | SpecContagem | SpecEsquema | SpecCorrelacao
+/** Dot and whisker: an estimate and its interval per row (e.g. bootstrap 95% CI), optional groups and per-sample ticks. */
+export interface SpecIntervalo extends Base {
+  tipo: 'intervalo'
+  escala: [number, number]
+  unidade?: string
+  /** Decimals of the printed estimates (default 1). */
+  casas?: number
+  /** Column name of the interval in the data table (default "IC"). */
+  rotuloIntervalo?: string
+  linhas?: LinhaIntervalo[]
+  grupos?: Array<{ titulo?: string; nota?: string; linhas: LinhaIntervalo[] }>
+  /** Colours by key (`categoria` or the label). */
+  cores?: Record<string, string>
+}
+
+export interface LinhaIntervalo {
+  rotulo: string
+  valor: number
+  intervalo: [number, number]
+  destaque?: boolean
+  /** Per-sample (seed) values, drawn as small ticks over the row. */
+  amostras?: number[]
+  categoria?: string
+}
+
+export type GraficoSpec = SpecHalteres | SpecBarras | SpecSerie | SpecContagem | SpecEsquema | SpecCorrelacao | SpecIntervalo
 
 export type { SpecDispersao, SpecSimpson, SpecMatrizCorrelacao, SpecAntesDepoisControle, SpecCorrelacao, PontoMunicipio, EixoDispersao, DestaqueMunicipio } from './correlationTypes.ts'
 

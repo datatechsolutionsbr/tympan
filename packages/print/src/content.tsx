@@ -105,12 +105,14 @@ const SPEC: Record<string, string[]> = {
   serie: [...BASE_GRAFICO, 'escala', 'eixoX', 'unidade', 'interpolar', 'pontos', 'eventos', 'faixas'],
   contagem: [...BASE_GRAFICO, 'unidade', 'grupos', 'linhas', 'rotuloA', 'rotuloB', 'rotuloUnidade', 'icone'],
   esquema: [...BASE_GRAFICO, 'nome', 'rotulos'],
+  intervalo: [...BASE_GRAFICO, 'unidade', 'casas', 'rotuloIntervalo', 'linhas', 'grupos', 'cores'],
   ...SPEC_CORRELACAO,
 }
 const ITENS_SPEC: Record<string, string[]> = {
-  linhas: ['rotulo', 'nota', 'a', 'b', 'destaque', 'marca', 'local'],
-  barras: ['rotulo', 'valor', 'destaque', 'nota'],
-  grupos: ['rotulo', 'valor', 'destaque', 'nota'],
+  // linhas: pairs (halteres/barras) or intervals (intervalo: valor, intervalo, amostras, categoria).
+  linhas: ['rotulo', 'nota', 'a', 'b', 'destaque', 'marca', 'local', 'valor', 'intervalo', 'amostras', 'categoria'],
+  barras: ['rotulo', 'valor', 'destaque', 'nota', 'categoria'],
+  grupos: ['rotulo', 'valor', 'destaque', 'nota', 'titulo', 'linhas'],
   pontos: ['x', 'y', 'rotulo', 'chamada'],
   eventos: ['x', 'rotulo', 'nota'],
   faixas: ['de', 'ate', 'rotulo'],
