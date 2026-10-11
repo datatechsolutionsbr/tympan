@@ -349,12 +349,14 @@ export function Rastro({ referencia, numero, descricao, consulta, sha256, tabela
   const modo = assinatura === false ? 'nenhuma' : assinatura === true ? (estilo.marcas?.selo ? 'selo' : 'lakebrasil') : (estilo.rastro?.assinatura ?? 'nenhuma')
   const versaoLake = (seloLake ?? estilo.rastro?.seloLake ?? false) ? /(\d{4}-\d{2}-\d{2})/.exec(versao)?.[1] : undefined
   const selo = estilo.marcas?.selo
+  // Lake wording only when the theme (or the props) ask for the lake signature or seal.
+  const lake = modo === 'lakebrasil' || Boolean(versaoLake) || estilo.rastro?.assinatura === 'lakebrasil' || Boolean(estilo.rastro?.seloLake)
   const linhas: Array<[string, string, string | undefined, boolean]> = [
     [tx('rastro.numero'), numero, descricao, false],
     [tx('rastro.consulta'), consulta, sha256 ? `sha256 ${curtoSha(sha256)}` : undefined, true],
-    [tx('rastro.tabela'), tabela, cobertura, true],
-    [tx('rastro.fonteOficial'), fonteOficial, licenca ? tx('rastro.licenca', { a: licenca }) : undefined, false],
-    [tx('rastro.versao'), versao, edicao ? tx('rastro.edicao', { a: edicao }) : undefined, true],
+    [tx(lake ? 'rastro.lake.tabela' : 'rastro.tabela'), tabela, cobertura, true],
+    [tx(lake ? 'rastro.lake.fonteOficial' : 'rastro.fonteOficial'), fonteOficial, licenca ? tx('rastro.licenca', { a: licenca }) : undefined, false],
+    [tx(lake ? 'rastro.lake.versao' : 'rastro.versao'), versao, edicao ? tx('rastro.edicao', { a: edicao }) : undefined, true],
   ]
   return (
     <div className={cx('ty-print-trace-block', className)} data-ref={referencia}>

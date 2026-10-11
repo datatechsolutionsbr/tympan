@@ -79,3 +79,15 @@ describe('highlight in every preset and shape', () => {
     }
   })
 })
+
+describe('Rastro wording', () => {
+  it('neutral labels by default; lake labels only when the theme asks', () => {
+    const r = (tokens?: object, lang = 'pt-BR') => renderToStaticMarkup(<PrintBook estilo="jornal" lang={lang} tokens={tokens} incluirCss={false} carregarFontes={false}><Trace numero="1" consulta="q" tabela="t" fonteOficial="f" versao="v 2026-01-01" /></PrintBook>)
+    expect(r()).toContain('>Tabela de origem<')
+    expect(r()).not.toMatch(/lake/i)
+    expect(r(undefined, 'en')).toContain('>Source table<')
+    const lake = r({ rastro: { assinatura: 'lakebrasil', seloLake: true } })
+    expect(lake).toContain('>Tabela do lake<')
+    expect(lake).toContain('ty-print-trace-signs')
+  })
+})
