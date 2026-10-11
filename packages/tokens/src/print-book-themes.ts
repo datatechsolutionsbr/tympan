@@ -65,7 +65,7 @@ function normalizarCores(c: Record<string, unknown> | undefined): PrintCoresParc
   const cor = (v: unknown): string => (typeof v === 'string' ? v : toHex(fromDtcgColor(v as DtcgColor)))
   const out: Record<string, unknown> = {}
   for (const [k, v] of Object.entries(c)) {
-    if ((k === 'prova' || k === 'temas') && v && typeof v === 'object') out[k] = Object.fromEntries(Object.entries(v).map(([e, x]) => [e, cor(x)]))
+    if ((k === 'prova' || k === 'temas' || k === 'categorias') && v && typeof v === 'object') out[k] = Object.fromEntries(Object.entries(v).map(([e, x]) => [e, cor(x)]))
     else if ((k === 'ornamento' || k === 'categorica' || k === 'divergente') && Array.isArray(v)) out[k] = v.map(cor)
     else out[k] = cor(v)
   }

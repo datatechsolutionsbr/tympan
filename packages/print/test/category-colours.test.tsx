@@ -1,0 +1,49 @@
+// @vitest-environment node
+// Colours by category key (official party colours): near-identical colours get a hatch, text over a colour
+// is AA, very light colours get an outline, P&B is tone + hatch + label.
+import { renderToStaticMarkup } from 'react-dom/server'
+import { describe, expect, it } from 'vitest'
+import { contrastRatio, parseColor, printPresets } from '@datatechsolutions/tympan-tokens'
+import { coresCategorias } from '../src/chart/categoryColours.ts'
+import { Parliament, PrintBook, PrintMap, municipios } from '../src/index.ts'
+
+const AZUIS = { PSDB: '#0080c0', PODE: '#0a85c4', NOVO: '#0b7fbd' } // three near blues
+
+describe('coresCategorias', () => {
+  it('three near blues: the 2nd and 3rd get distinct hatches; text AA; light colour outlined', () => {
+    const c = coresCategorias(['PSDB', 'PODE', 'NOVO', 'X'], printPresets.jornal, false, { ...AZUIS, X: '#fdfbf0' })
+    expect(c[0]!.hachura).toBeNull()
+    expect(c[1]!.hachura).not.toBeNull()
+    expect(c[2]!.hachura).not.toBeNull()
+    expect(c[1]!.hachura).not.toBe(c[2]!.hachura)
+    expect(c[1]!.parecidaCom).toBe('PSDB')
+    for (const x of c.slice(0, 3)) expect(contrastRatio(parseColor(x.texto), parseColor(x.cor))).toBeGreaterThanOrEqual(4.5)
+    expect(c[3]!.contorno).toBe(true)
+    expect(c[3]!.texto).toBe('#000000')
+  })
+  it('theme cor.categorias is used when the book passes no colours; P&B: grey tone and a hatch for each', () => {
+    const estilo = { cor: { ...printPresets.jornal.cor, categorias: { PT: '#c4122d' } } }
+    expect(coresCategorias(['PT'], estilo, false)[0]!.cor).toBe('#c4122d')
+    const pb = coresCategorias(['PT', 'PL'], estilo, true, { PL: '#1a3a8a' })
+    expect(pb[0]!.cor).toMatch(/^#([0-9a-f]{2})\1\1$/)
+    expect(pb.map((x) => x.hachura)).toEqual([0, 1])
+  })
+})
+
+describe('components with official colours', () => {
+  const rr = municipios().filter((f) => f.properties.code.startsWith('14'))
+  const categorias = Object.fromEntries(rr.map((f, i) => [f.properties.code, ['PSDB', 'PODE', 'NOVO'][i % 3]!]))
+  const html = (el: React.ReactNode) => renderToStaticMarkup(<PrintBook estilo="jornal" incluirCss={false} carregarFontes={false}>{el}</PrintBook>)
+  it('categorical map: official fill for the first blue, hatch patterns over the other two', () => {
+    const h = html(<PrintMap titulo="t" alt="a" recorte={['RR']} escala="categorica" categorias={categorias} cores={AZUIS} ordemCategorias={["PSDB", "PODE", "NOVO"]} />)
+    expect(h).toMatch(/fill:#0080c0/)
+    const pats = [...h.matchAll(/<pattern [^>]*id="[^"]+-c(\d)"[^>]*>\s*<rect[^>]*fill:(#[0-9a-f]{6})/g)].map((m) => m[2])
+    expect(pats.sort()).toEqual(['#0a85c4', '#0b7fbd'])
+  })
+  it('parliament: party chips with AA text, near colours as rings', () => {
+    const h = html(<Parliament alt="c" bancadas={[{ sigla: 'PSDB', assentos: 10 }, { sigla: 'PODE', assentos: 8 }, { sigla: 'PT', assentos: 12 }]} cores={{ ...AZUIS, PT: '#c4122d' }} />)
+    expect(h).toContain('class="ty-print-category-chip" style="background:#c4122d;color:#ffffff"')
+    expect(h).toMatch(/data-sigla="PODE"[^>]*fill:var\(--ty-print-papel\);stroke:#0a85c4/)
+    expect(h).toMatch(/data-sigla="PSDB"[^>]*fill:#0080c0/)
+  })
+})

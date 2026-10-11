@@ -87,7 +87,7 @@ describe('Parliament', () => {
     expect((h.match(/data-sigla="A"/g) ?? []).length).toBe(300)
     expect((h.match(/data-sigla="B"/g) ?? []).length).toBe(213)
     expect(h).toContain('var(--ty-print-categorica-2)')
-    expect(h).toContain('A 300')
+    expect(h).toMatch(/>A<\/span> 300/)
     expect(h).toContain('ty-print-parliament-majority')
   })
 })

@@ -62,6 +62,8 @@ export interface PrintCores {
   prova: Record<EstadoProva, string>
   /** Colours of page ornaments only (frames, tiles, waves); never data. Up to four. */
   ornamento?: string[]
+  /** Colours by category key (official party colours…): used by categorical maps, parliament and bars. */
+  categorias?: Record<string, string>
   /** Colours of data themes (blocks of a panel page: economia, saude…); --ty-print-tema-<id>. */
   temas?: Record<string, string>
   /** The series of interest in maps and charts (default: `destaque`), when the accent of the page differs from the data ink. */
@@ -1591,7 +1593,8 @@ function mergeCores(base: PrintCores, over?: PrintCoresParciais): PrintCores {
   const { prova, ...rest } = over
   const clean = Object.fromEntries(Object.entries(rest).filter(([, v]) => v !== undefined)) as Partial<PrintCores>
   const temas = base.temas || clean.temas ? { temas: { ...base.temas, ...clean.temas } } : {}
-  return { ...base, ...clean, ...temas, prova: { ...base.prova, ...(prova ?? {}) } }
+  const categorias = base.categorias || clean.categorias ? { categorias: { ...base.categorias, ...clean.categorias } } : {}
+  return { ...base, ...clean, ...temas, ...categorias, prova: { ...base.prova, ...(prova ?? {}) } }
 }
 
 function mergeExtras(base: PrintTemaExtras, over: PrintTemaExtras): PrintTemaExtras {
@@ -1689,7 +1692,7 @@ export function resolvePrintStyle(style: PrintStyle | PrintStyleId, options: Omi
   return { ...merged, cor: printStyleCoresPb(merged) }
 }
 
-const kebab: Record<Exclude<keyof PrintCores, 'prova' | 'ornamento' | 'divergente' | 'categorica' | 'interesse' | 'temas'>, string> = {
+const kebab: Record<Exclude<keyof PrintCores, 'prova' | 'ornamento' | 'divergente' | 'categorica' | 'interesse' | 'temas' | 'categorias'>, string> = {
   papel: 'papel',
   tinta: 'tinta',
   tinta2: 'tinta-2',

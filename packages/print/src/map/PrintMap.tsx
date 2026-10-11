@@ -16,6 +16,7 @@ import { TabelaDados, type TabelaDadosProps } from '../panels/Method.tsx'
 import { semente, tracar } from '../rough.ts'
 import { cx, hashCurto, r3 } from '../utils.ts'
 import { classeDe, quantis, rotulosLimites } from './classes.ts'
+import { coresCategorias, type CorCategoria } from '../chart/categoryColours.ts'
 import {
   alturaPara,
   bordas,
@@ -54,6 +55,8 @@ export interface MapaProps {
   escala?: 'sequencial' | 'divergente' | 'categorica'
   /** Category by code (party, winner, type) for `escala="categorica"`; up to eight categories. */
   categorias?: Record<string, string | null>
+  /** Colours by category (official party colours…); else the theme's `cor.categorias`, else the qualitative palette. */
+  cores?: Record<string, string>
   /** Order of the categories in the legend and palette (default: most areas first, then alphabetical). */
   ordemCategorias?: string[]
   /** Municipalities (or UFs) to outline and name: IBGE code, "Nome/UF" or a unique name. */
@@ -234,6 +237,8 @@ type Modo = 'chapado' | 'hachura' | 'pontos'
 interface Tinta {
   /** CSS fill of class k (or of SEM_DADO). */
   fill(k: number): string
+  /** Class k needs a thin ink outline (a fill too light to show its edge). */
+  contorno?(k: number): boolean
   defs: ReactNode
 }
 
@@ -246,13 +251,13 @@ function posicao(k: number, n: number, escala: 'sequencial' | 'divergente' | 'ca
   return { t: Math.abs(d), lado: d < 0 ? -1 : d > 0 ? 1 : 0 }
 }
 
-function tintas(id: string, modo: Modo, n: number, escala: 'sequencial' | 'divergente' | 'categorica', pb: boolean, grossa: boolean): Tinta {
+function tintas(id: string, modo: Modo, n: number, escala: 'sequencial' | 'divergente' | 'categorica', pb: boolean, grossa: boolean, cats?: CorCategoria[]): Tinta {
   const div = escala === 'divergente'
   const cor = (lado: number) => (pb ? 'var(--ty-print-tinta)' : lado < 0 ? (div ? 'var(--ty-print-divergente-1)' : 'var(--ty-print-destaque-2)') : div ? 'var(--ty-print-divergente-2)' : 'var(--ty-print-destaque)')
   const papel = 'var(--ty-print-papel)'
   const padroes: ReactNode[] = []
   const fills: string[] = []
-  if (escala === 'categorica') return tintasCategoricas(id, modo, n)
+  if (escala === 'categorica') return tintasCategoricas(id, modo, n, cats)
   for (let k = 0; k < n; k++) {
     const { t, lado } = posicao(k, n, escala)
     const c = cor(lado)
@@ -318,14 +323,29 @@ function tintas(id: string, modo: Modo, n: number, escala: 'sequencial' | 'diver
  * Qualitative inks: flat colours from the style's categorical palette; in hatch mode (P&B, gravura) eight
  * patterns that differ in kind (direction, dots, crosses, solid), so neighbours never read as "more" or "less".
  */
-function tintasCategoricas(id: string, modo: Modo, n: number): Tinta {
+function tintasCategoricas(id: string, modo: Modo, n: number, cats?: CorCategoria[]): Tinta {
   const papel = 'var(--ty-print-papel)'
   const tinta = 'var(--ty-print-tinta)'
   const fills: string[] = []
   const padroes: ReactNode[] = []
   for (let k = 0; k < n; k++) {
-    if (modo === 'chapado') {
-      fills.push(`var(--ty-print-categorica-${(k % 8) + 1})`)
+    const c = cats?.[k]
+    if (modo === 'chapado' && (!c || c.hachura === null)) {
+      fills.push(c ? c.cor : `var(--ty-print-categorica-${(k % 8) + 1})`)
+      continue
+    }
+    if (modo === 'chapado' && c) {
+      // A colour too close to another visible one: its own fill plus a hatch in the readable text colour.
+      const pid = `${id}-c${k}`
+      fills.push(`url(#${pid})`)
+      const e = 1.2
+      const giro = [45, -45, 0, 90, 45, -45, 0, 90][c.hachura!] ?? 45
+      padroes.push(
+        <pattern key={pid} id={pid} width={e} height={e} patternUnits="userSpaceOnUse" patternTransform={`rotate(${giro})`}>
+          <rect width={e} height={e} style={{ fill: c.cor }} />
+          {c.hachura! >= 4 ? <circle cx={e / 2} cy={e / 2} r={0.22} style={{ fill: c.texto, fillOpacity: 0.55 }} /> : <line x1={0} y1={0} x2={0} y2={e} style={{ stroke: c.texto, strokeWidth: 0.18, strokeOpacity: 0.55 }} />}
+        </pattern>,
+      )
       continue
     }
     const pid = `${id}-c${k}`
@@ -357,7 +377,7 @@ function tintasCategoricas(id: string, modo: Modo, n: number): Tinta {
       <line x1={0.1} y1={0.35} x2={0.75} y2={0.35} style={{ stroke: 'var(--ty-print-contexto)', strokeWidth: 0.14 }} />
     </pattern>,
   )
-  return { fill: (k) => (k === SEM_DADO ? `url(#${sd})` : k === SEM_SERIE ? papel : (fills[k] ?? papel)), defs: padroes }
+  return { fill: (k) => (k === SEM_DADO ? `url(#${sd})` : k === SEM_SERIE ? papel : (fills[k] ?? papel)), defs: padroes, contorno: (k) => Boolean(cats?.[k]?.contorno) }
 }
 
 function modoDe(nome: RenderizadorGrafico, pb: boolean): Modo {
@@ -410,6 +430,7 @@ export function Mapa({
   unidade,
   escala = 'sequencial',
   categorias,
+  cores,
   ordemCategorias,
   destaques,
   recorte,
@@ -514,8 +535,9 @@ export function Mapa({
 
   // Pattern ids are content-addressed (book scope + what the patterns draw): two maps that share an id draw
   // the same patterns, so a duplicate id in one HTML (books rendered separately) can never borrow another's inks.
-  const id = `ty-print-map-${escopoLivro || 'solto'}-${hashCurto(`${modo}|${n}|${escala}|${pb}|${nome}`)}`
-  const tinta = tintas(id, modo, n, escala, pb, nome === 'gravura')
+  const id = `ty-print-map-${escopoLivro || 'solto'}-${hashCurto(`${modo}|${n}|${escala}|${pb}|${nome}|${nomesCategorias ? JSON.stringify([nomesCategorias, cores ?? null, estilo.cor.categorias ?? null]) : ''}`)}`
+  const cats = nomesCategorias ? coresCategorias(nomesCategorias, estilo, pb, cores) : undefined
+  const tinta = tintas(id, modo, n, escala, pb, nome === 'gravura', cats)
 
   // Borders: crisp, or trembled by rough.js (fixed seed) in hand-made styles.
   const lw = estilo.traco.largura * (itens.length > 1 ? 0.75 : 1)
@@ -550,7 +572,7 @@ export function Mapa({
             once per class, not once per municipality, which keeps print rasterisers fast. */}
         <g className="ty-print-map-areas" data-areas={g.areas.length}>
           {porClasse(g.areas, ks).map(([k, grupo]) => (
-            <path key={k} d={grupo.map((a) => a.d).join('')} data-classe={k} data-codes={grupo.map((a) => a.code).join(' ')} style={{ fill: tinta.fill(k) }} />
+            <path key={k} d={grupo.map((a) => a.d).join('')} data-classe={k} data-codes={grupo.map((a) => a.code).join(' ')} style={tinta.contorno?.(k) ? { fill: tinta.fill(k), stroke: 'var(--ty-print-tinta-3)', strokeWidth: 0.12 } : { fill: tinta.fill(k) }} />
           ))}
         </g>
         {g.municipais ? <path className="ty-print-map-municipalities" d={g.municipais} style={{ strokeWidth: c.g.areas.length > 2000 ? 0.05 : 0.08 }} /> : null}
@@ -615,7 +637,7 @@ export function Mapa({
           {rotulosClasses.map((l, k) => (
             <li key={k}>
               <svg viewBox="0 0 6 6" aria-hidden="true" focusable="false">
-                <rect width={6} height={6} className="ty-print-map-sample" style={{ fill: tinta.fill(k) }} />
+                <rect width={6} height={6} className="ty-print-map-sample" style={tinta.contorno?.(k) ? { fill: tinta.fill(k), stroke: 'var(--ty-print-tinta-3)', strokeWidth: 0.4 } : { fill: tinta.fill(k) }} />
               </svg>
               {comColchetes(l)}
             </li>

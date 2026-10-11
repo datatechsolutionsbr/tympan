@@ -9,6 +9,7 @@ import { usePrint } from '../context.tsx'
 import { comColchetes } from '../panels/common.tsx'
 import { TabelaDados } from '../panels/Method.tsx'
 import { cx, r3 } from '../utils.ts'
+import { coresCategorias } from './categoryColours.ts'
 
 export interface Bancada {
   sigla: string
@@ -27,6 +28,8 @@ export interface HemicicloProps {
   fileiras?: number
   /** Majority line (e.g. 257 of 513): a tick at the seat that reaches it. */
   maioria?: number
+  /** Colours by party (official colours); else `Bancada.cor`, the theme's `cor.categorias`, the qualitative palette. */
+  cores?: Record<string, string>
   className?: string
 }
 
@@ -61,8 +64,8 @@ export function layoutHemiciclo(total: number, fileiras?: number): Assento[] {
 }
 
 /** Parliament chart: one dot per seat, parties in order around the arc, with the seat count in the legend. */
-export function Hemiciclo({ titulo, alt, bancadas, largura = 80, fileiras, maioria, className }: HemicicloProps) {
-  const { pb } = usePrint()
+export function Hemiciclo({ titulo, alt, bancadas, largura = 80, fileiras, maioria, cores, className }: HemicicloProps) {
+  const { pb, estilo } = usePrint()
   const total = bancadas.reduce((t, b) => t + b.assentos, 0)
   const assentos = layoutHemiciclo(total, fileiras)
   const R = fileiras ?? Math.max(1, Math.min(16, Math.round(Math.sqrt(total / 4))))
@@ -79,7 +82,16 @@ export function Hemiciclo({ titulo, alt, bancadas, largura = 80, fileiras, maior
   raio = r3(Math.min(raio, W / 2 - rp - 0.5))
   const H = r3(raio + 2 * rp + 1)
   const base = r3(H - rp - 0.5)
-  const cor = (i: number, b: Bancada) => (b.cor && !pb ? b.cor : `var(--ty-print-categorica-${(i % 8) + 1})`)
+  const cats = coresCategorias(
+    bancadas.map((b) => b.sigla),
+    estilo,
+    pb,
+    { ...cores, ...Object.fromEntries(bancadas.filter((b) => b.cor).map((b) => [b.sigla, b.cor!])) },
+  )
+  const cor = (i: number, _b?: Bancada) => cats[i]!.cor
+  // A colour too close to another (ΔE2000 < 10) prints as a ring; P&B alternates disc and ring as before.
+  const anel = (i: number) => (pb ? i % 2 === 1 : cats[i]!.hachura !== null)
+  const traco = (i: number) => (cats[i]!.contorno ? { stroke: 'var(--ty-print-tinta-3)', strokeWidth: 0.12 } : {})
   let k = 0
   const pontos = bancadas.flatMap((b, i) =>
     Array.from({ length: b.assentos }, () => {
@@ -99,7 +111,7 @@ export function Hemiciclo({ titulo, alt, bancadas, largura = 80, fileiras, maior
         <title>{alt}</title>
         <desc>{bancadas.map((b) => `${b.sigla}: ${b.assentos}`).join('; ')}</desc>
         {pontos.map(({ a, b, i, n }) => {
-          const vazado = pb && i % 2 === 1
+          const vazado = anel(i)
           return (
             <circle
               key={n}
@@ -107,7 +119,7 @@ export function Hemiciclo({ titulo, alt, bancadas, largura = 80, fileiras, maior
               cx={r3(W / 2 + a.x * raio)}
               cy={r3(base - a.y * raio)}
               r={rp}
-              style={vazado ? { fill: 'var(--ty-print-papel)', stroke: cor(i, b), strokeWidth: r3(rp * 0.45) } : { fill: cor(i, b) }}
+              style={vazado ? { fill: 'var(--ty-print-papel)', stroke: cor(i, b), strokeWidth: r3(rp * 0.45) } : { fill: cor(i, b), ...traco(i) }}
             />
           )
         })}
@@ -120,9 +132,13 @@ export function Hemiciclo({ titulo, alt, bancadas, largura = 80, fileiras, maior
         {bancadas.map((b, i) => (
           <li key={b.sigla}>
             <svg viewBox="0 0 6 6" aria-hidden="true" focusable="false">
-              <circle cx={3} cy={3} r={pb && i % 2 === 1 ? 2.2 : 2.8} style={pb && i % 2 === 1 ? { fill: 'none', stroke: cor(i, b), strokeWidth: 1.2 } : { fill: cor(i, b) }} />
+              <circle cx={3} cy={3} r={anel(i) ? 2.2 : 2.8} style={anel(i) ? { fill: 'none', stroke: cor(i, b), strokeWidth: 1.2 } : { fill: cor(i, b), ...(cats[i]!.contorno ? { stroke: 'var(--ty-print-tinta-3)', strokeWidth: 0.4 } : {}) }} />
             </svg>
-            {b.sigla} {b.assentos}
+            {/* The party tag on its own colour, text in black or white for AA. */}
+            <span className="ty-print-category-chip" style={{ background: cor(i, b), color: cats[i]!.texto }} data-texto={cats[i]!.texto}>
+              {b.sigla}
+            </span>{' '}
+            {b.assentos}
           </li>
         ))}
       </ul>

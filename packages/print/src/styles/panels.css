@@ -1062,3 +1062,12 @@
     margin-block-start: 0;
   }
 }
+
+@layer tympan-print {
+  .ty-print-category-chip {
+    display: inline-block;
+    padding: 0 0.6mm;
+    border-radius: 0.4mm;
+    font-weight: 600;
+  }
+}

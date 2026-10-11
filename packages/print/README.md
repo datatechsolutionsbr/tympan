@@ -163,6 +163,7 @@ registerPrintTheme({
 | `PrintMap escala="categorica"` | `categorias` by code (≤ 8), qualitative palette; in P&B eight hatches that differ in kind |
 | `PrintSymbolMap` | proportional circles (area ∝ value) over the recorte outline, largest first, reference legend |
 | `Parliament` | hemicycle, one dot per seat, parties in order, optional `maioria` line; legend with seat counts |
+| colours by key | `PrintMap escala="categorica" cores={{ PT: '#c4122d' }}`, `Parliament cores` or the theme's `cor.categorias`: two visible categories closer than ΔE2000 10 get an extra hatch (a ring in the parliament); text over a colour is black or white for AA; very light colours get a thin outline; P&B prints a grey tone, a hatch of its own kind and the label |
 | `vizinhanca(code, aneis)` | neighbour codes from the mesh topology |
 
 | molde `unidade-territorial-painel` | head row + one growing area `painel` for a `PanelGrid` + `fonte` |
