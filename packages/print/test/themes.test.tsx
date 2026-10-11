@@ -49,4 +49,17 @@ describe('PrintBook with a registered theme', () => {
     expect(h).not.toContain('fonts.googleapis.com')
     expect(livro()).toContain('fonts.googleapis.com')
   })
+
+  it('fontes="locais" without fontesLocais uses the woff2 bundled in tympan-tokens', () => {
+    const h = renderToStaticMarkup(<PrintBook estilo="semanario" fontes="locais" baseFontes="/f" incluirCss={false} />)
+    expect(h).toMatch(/font-family: 'Fira Sans Condensed';[^}]*url\('\/f\/firasanscondensed\/[^']+\.woff2'\)/)
+    expect(h).toMatch(/font-family: 'Source Serif 4'/)
+    expect(h).not.toContain('fonts.googleapis.com')
+    // A theme's own file wins for its family.
+    registerPrintTheme({ id: 'editora-exemplo', base: 'semanario', fontesLocais: [{ familia: 'Source Serif 4', src: 'minha.woff2' }] })
+    const t = livro({ fontes: 'locais', baseFontes: '/f/' })
+    expect(t).not.toMatch(/'Source Serif 4';[^}]*\/f\/sourceserif4/)
+    expect(t).toContain('url("minha.woff2")')
+    expect(t).toMatch(/'Fira Sans Condensed'/)
+  })
 })

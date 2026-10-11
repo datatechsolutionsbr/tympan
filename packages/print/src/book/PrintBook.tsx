@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react'
 import {
   googleFontsUrl,
-  fontesLocaisCss,
+  fontesEmpacotadasCss,
+  type FontManifest,
   paginaDoEstilo,
   papelEscuro,
   printThemeById,
@@ -13,6 +14,7 @@ import {
 } from '@datatechsolutions/tympan-tokens'
 import { EscopoLivroProvider, PrintContextoProvider } from '../context.tsx'
 import { PRINT_CSS } from '../styles.generated.ts'
+import manifestoFontes from '@datatechsolutions/tympan-tokens/fonts/manifest.json'
 import { cx, hashCurto } from '../utils.ts'
 
 export interface LivroPrintProps {
@@ -31,10 +33,16 @@ export interface LivroPrintProps {
   carregarFontes?: boolean
   /**
    * Where fonts come from: 'google' (link the style's Google Fonts; the default while `carregarFontes` is on),
-   * 'locais' (only the theme's `fontesLocais` as @font-face: no network, deterministic PDF and EPUB; families
-   * without a file fall back to the stack), or 'nenhuma' (the host loads them). Overrides `carregarFontes`.
+   * 'locais' (@font-face for the woff2 files bundled in @datatechsolutions/tympan-tokens/fonts, found at
+   * `baseFontes`, plus the theme's `fontesLocais`, which win for their family: no network, deterministic PDF
+   * and EPUB), or 'nenhuma' (the host loads them). Overrides `carregarFontes`.
    */
   fontes?: 'google' | 'locais' | 'nenhuma'
+  /**
+   * Where the HTML finds the bundled fonts folder for `fontes="locais"` (default 'fonts/': copy or link
+   * `node_modules/@datatechsolutions/tympan-tokens/fonts` beside the HTML, or pass a file:// or http URL).
+   */
+  baseFontes?: string
   /**
    * Print for the press: every page sits on a sheet with bleed (the page's background runs into it) and,
    * optionally, crop marks in the slug; `@page` grows to trim + 2 × (bleed + slug). `true` takes the theme's
@@ -60,7 +68,7 @@ const MARGEM_MARCAS = 6
  * preset's custom properties, the component CSS and `@page` (the theme's trim, 170 × 240 mm by default),
  * and provides the resolved style to every component below.
  */
-export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carregarFontes = true, fontes: modoFontes, impressao = false, lang = 'pt-BR', escopo: escopoProp, className, children }: LivroPrintProps) {
+export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carregarFontes = true, fontes: modoFontes, baseFontes = 'fonts/', impressao = false, lang = 'pt-BR', escopo: escopoProp, className, children }: LivroPrintProps) {
   const base = typeof estilo === 'string' ? printThemeById(estilo) : estilo
   const resolvido = resolvePrintStyle(base, { pb, overrides: tokens })
   const escopo = `tpb-${(escopoProp ?? hashCurto(JSON.stringify([pb, resolvido]))).replace(/[^a-zA-Z0-9_-]/g, '')}`
@@ -71,7 +79,7 @@ export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carr
   const pagina = `@page { size: ${pag.largura + 2 * folga}mm ${pag.altura + 2 * folga}mm; margin: 0; }`
   const varsGrafica = grafica ? `${seletor} { --ty-print-sangria: ${grafica.sangria}mm; --ty-print-folga: ${folga}mm; }` : ''
   const modo = modoFontes ?? (carregarFontes ? 'google' : 'nenhuma')
-  const faces = modo === 'locais' ? fontesLocaisCss(resolvido) : ''
+  const faces = modo === 'locais' ? fontesEmpacotadasCss(resolvido, manifestoFontes as unknown as FontManifest, baseFontes.endsWith('/') ? baseFontes : `${baseFontes}/`) : ''
   const css = `${faces}\n${incluirCss ? PRINT_CSS : ''}\n${printStyleToCss(base, { pb, overrides: tokens, seletor })}${pagina}\n${varsGrafica}`
   const fontes = modo === 'google' ? googleFontsUrl(resolvido) : null
   const e = resolvido.estrutura

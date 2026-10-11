@@ -13,6 +13,7 @@
 
 import { fromDtcgColor, type DtcgColor } from './dtcg.ts'
 import { toHex } from './color.ts'
+import { fontFaceCss, type FontManifest } from './fonts.ts'
 import {
   mergePrintStyle,
   printPresetById,
@@ -183,3 +184,14 @@ export const TEMA_EXEMPLO_EDITORA: PrintBookTheme = {
   pagina: { largura: 160, altura: 230, sangria: 3 },
 }
 
+
+/**
+ * @font-face rules for a style from the fonts bundled in this package (`fonts/manifest.json`): every Google
+ * Fonts spec of the style that is bundled, with URLs `<base><file>` (`base` is where the HTML finds
+ * `@datatechsolutions/tympan-tokens/fonts/`), then the theme's own `fontesLocais`, which win for their family.
+ */
+export function fontesEmpacotadasCss(style: Pick<PrintStyle, 'googleFonts' | 'fontesLocais'>, manifest: FontManifest, base: string): string {
+  const proprias = new Set((style.fontesLocais ?? []).map((f) => f.familia))
+  const specs = style.googleFonts.filter((s) => manifest.specs[s] && !proprias.has(s.split(':')[0]!))
+  return [specs.length ? fontFaceCss(manifest, specs, base) : '', fontesLocaisCss(style)].filter(Boolean).join('\n')
+}

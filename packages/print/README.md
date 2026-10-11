@@ -119,8 +119,11 @@ registerPrintTheme({
   bleed (+ 6 mm slug with crop marks); `@page` grows to match. Print-on-demand services that want *no*
   bleed take the default output (PDF = trim size); offset printers and services that ask for bleed take
   `impressao` (default 3 mm). Page ornaments are drawn for 170 × 240 mm and scale to other trims.
-- **Fonts offline**: `fontes="locais"` emits `@font-face` from `fontesLocais` (woff2 path or data: URI)
-  and links nothing; families without a file fall back to their stack. No font files ship with tympan.
+- **Fonts offline**: `fontes="locais"` emits `@font-face` for the OFL woff2 files bundled in
+  `@datatechsolutions/tympan-tokens/fonts` (every family the presets name, incl. Source Serif 4, IBM Plex
+  Sans/Mono, Fira Sans Condensed; versions, licences and sha256 in `fonts/manifest.json`), found at
+  `baseFontes` (default `fonts/`: copy or link that folder beside the HTML, or pass a `file://` URL), and
+  links nothing. A theme's `fontesLocais` win for their family. Files load only when used (unicode-range).
 - **Typesetting**: `hyphens: auto` by the book's `lang`, widows/orphans 2, titles kept with what follows,
   table heads repeat and rows never split.
 
