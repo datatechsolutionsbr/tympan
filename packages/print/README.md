@@ -126,6 +126,8 @@ registerPrintTheme({
 // <PrintBook estilo="minha-editora" fontes="locais" impressao> … </PrintBook>
 ```
 
+- **Custom cover plate**: `<Cover>{art}</Cover>` replaces the cover layout with your own drawing, edge to
+  edge, and into the bleed when the book prints with `impressao` (crop marks still drawn).
 - **Marks**: `Cover logo` (true = `marcas.editora`, or a mark/element; 22 mm front, 26 mm back, 14 mm tall
   at most) and a running-foot mark on the inner side (`Page marca`, or the theme's `folio.marca: 'editora'`;
   height from the molde's `marcaRodape`, default 3.5 mm). `Mark` renders any of them (P&B: `srcPb` or grey).

@@ -40,6 +40,11 @@ export interface CapaProps {
    */
   logo?: MarcaEntrada
   /**
+   * A fully custom cover plate: the children replace the whole cover layout and fill the page edge to edge
+   * (into the bleed when PrintBook prints for the press). Crop marks and bleed still come from the book.
+   */
+  children?: ReactNode
+  /**
    * Cover system of the collection (board L6): the collection name, the volume numeral as the mark ("0", "I"…),
    * the period or "guia de leitura", and one illustration per volume, tone on tone. With `numeral`, the front
    * cover is laid out as L6 in the style's type, frames, renderer and title treatment.
@@ -121,7 +126,14 @@ function Grafismo({ cortes, legenda }: { cortes: number[]; legenda?: string }) {
 }
 
 /** Front or back cover, printed on the volume's colour field (or the ink colour), in the style. */
-export function Capa({ face = 'primeira', eyebrow, titulo, subtitulo, autora, chamada, paragrafos, destaque, cortes, legendaGrafismo, selo, isbn, editora = false, logo, colecao, numeral, rotulo, ilustracao, leis, perguntas, className }: CapaProps) {
+export function Capa({ face = 'primeira', eyebrow, titulo, subtitulo, autora, chamada, paragrafos, destaque, cortes, legendaGrafismo, selo, isbn, editora = false, logo, colecao, numeral, rotulo, ilustracao, leis, perguntas, className, children }: CapaProps) {
+  if (children) {
+    return (
+      <div className={cx('ty-print-capa', className)} data-face={face} data-prancha="">
+        {children}
+      </div>
+    )
+  }
   if (face === 'primeira' && numeral) {
     return (
       <div className={cx('ty-print-capa', className)} data-face={face} data-l6="">
