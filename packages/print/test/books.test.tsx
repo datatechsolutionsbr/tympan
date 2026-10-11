@@ -72,3 +72,15 @@ describe('texto: proper names and table figures', () => {
   })
 })
 
+
+describe('typesetting rules in the stylesheet', () => {
+  it('hyphenates body text, avoids widows, keeps titles with their text and table rows whole', async () => {
+    const { PRINT_CSS } = await import('../src/index.ts')
+    expect(PRINT_CSS).toMatch(/hyphens: auto/)
+    expect(PRINT_CSS).toMatch(/widows: 2/)
+    expect(PRINT_CSS).toMatch(/orphans: 2/)
+    expect(PRINT_CSS).toMatch(/break-after: avoid/)
+    expect(PRINT_CSS).toMatch(/display: table-header-group/)
+    expect(PRINT_CSS).toMatch(/:where\(tr, figure, \.ty-print-number\) \{\s*break-inside: avoid/)
+  })
+})

@@ -12,6 +12,29 @@
     text-rendering: geometricPrecision;
   }
 
+  /* Text: hyphenation by the book's lang (pt-BR by default), no widows or orphans, titles kept with what
+     follows, tables that never split a row and repeat their head on a new page or column. */
+  .ty-print-book :where(p, li, dd, td, blockquote, figcaption) {
+    hyphens: auto;
+    hyphenate-limit-chars: 6 3 2;
+    widows: 2;
+    orphans: 2;
+  }
+
+  .ty-print-book :where(h1, h2, h3, h4, .ty-print-title, .ty-print-panel-title, .ty-print-block-title, .ty-print-sobretitle) {
+    hyphens: manual;
+    break-after: avoid;
+    break-inside: avoid;
+  }
+
+  .ty-print-book :where(thead) {
+    display: table-header-group;
+  }
+
+  .ty-print-book :where(tr, figure, .ty-print-number) {
+    break-inside: avoid;
+  }
+
   .ty-print-book *,
   .ty-print-book *::before,
   .ty-print-book *::after {
