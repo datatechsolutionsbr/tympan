@@ -57,3 +57,13 @@ describe('bars with colours by key', () => {
     expect((h.match(/class="ty-print-bar-key"/g) ?? []).length).toBe(3) // PODE, NOVO hatched; X outlined
   })
 })
+
+describe('legend switches', () => {
+  it('Parliament legenda={false} and PrintMap mostrarLegenda={false} drop the legend; bars with cores get one', () => {
+    const html = (el: React.ReactNode) => renderToStaticMarkup(<PrintBook estilo="jornal" incluirCss={false} carregarFontes={false}>{el}</PrintBook>)
+    expect(html(<Parliament alt="c" bancadas={[{ sigla: 'A', assentos: 3 }]} legenda={false} />)).not.toContain('ty-print-map-legend')
+    expect(html(<PrintMap titulo="t" alt="a" recorte={['RR']} exemplo mostrarLegenda={false} />)).not.toContain('ty-print-map-legend')
+    const spec = { tipo: 'barras', titulo: 'V', escala: [0, 100], barras: [{ rotulo: 'PSDB', valor: 40 }], cores: AZUIS }
+    expect(html(<MethodChartImport spec={spec} />)).toContain('data-legenda-cores=""')
+  })
+})

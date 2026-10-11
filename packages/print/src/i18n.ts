@@ -219,10 +219,10 @@ export function localeNumerosAtual(): string {
 }
 
 /** A number in the current book locale with up to `casas` decimals. */
-export function numeroLocal(v: number, casas = 2): string {
-  const k = `${localeAtual}|${casas}`
+export function numeroLocal(v: number, casas = 2, fixas = false): string {
+  const k = `${localeAtual}|${casas}|${fixas}`
   let f = FMT.get(k)
-  if (!f) FMT.set(k, (f = new Intl.NumberFormat(localeAtual, { maximumFractionDigits: casas })))
+  if (!f) FMT.set(k, (f = new Intl.NumberFormat(localeAtual, { maximumFractionDigits: casas, ...(fixas ? { minimumFractionDigits: casas } : {}) })))
   return f.format(Object.is(v, -0) ? 0 : v)
 }
 

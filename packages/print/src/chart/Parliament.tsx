@@ -30,6 +30,8 @@ export interface HemicicloProps {
   maioria?: number
   /** Colours by party (official colours); else `Bancada.cor`, the theme's `cor.categorias`, the qualitative palette. */
   cores?: Record<string, string>
+  /** Print the legend (party, colour, seats); default true. */
+  legenda?: boolean
   className?: string
 }
 
@@ -64,7 +66,7 @@ export function layoutHemiciclo(total: number, fileiras?: number): Assento[] {
 }
 
 /** Parliament chart: one dot per seat, parties in order around the arc, with the seat count in the legend. */
-export function Hemiciclo({ titulo, alt, bancadas, largura = 80, fileiras, maioria, cores, className }: HemicicloProps) {
+export function Hemiciclo({ titulo, alt, bancadas, largura = 80, fileiras, maioria, cores, legenda = true, className }: HemicicloProps) {
   const { pb, estilo } = usePrint()
   const total = bancadas.reduce((t, b) => t + b.assentos, 0)
   const assentos = layoutHemiciclo(total, fileiras)
@@ -128,6 +130,7 @@ export function Hemiciclo({ titulo, alt, bancadas, largura = 80, fileiras, maior
           {total}
         </text>
       </svg>
+      {legenda ? (
       <ul className="ty-print-map-legend" data-escala="categorica">
         {bancadas.map((b, i) => (
           <li key={b.sigla}>
@@ -142,6 +145,7 @@ export function Hemiciclo({ titulo, alt, bancadas, largura = 80, fileiras, maior
           </li>
         ))}
       </ul>
+      ) : null}
       <div className="ty-print-sr">
         <TabelaDados titulo={titulo ? tx('dados', { a: titulo }) : tx('assentosPorPartido')} colunas={[tx('partido'), { rotulo: tx('assentos'), numerica: true }]} linhas={bancadas.map((b) => [b.sigla, b.assentos])} />
       </div>

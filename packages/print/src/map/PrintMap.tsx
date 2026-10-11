@@ -57,6 +57,8 @@ export interface MapaProps {
   categorias?: Record<string, string | null>
   /** Colours by category (official party colours…); else the theme's `cor.categorias`, else the qualitative palette. */
   cores?: Record<string, string>
+  /** Print the legend (default true; the classes or categories still go to the data table). */
+  mostrarLegenda?: boolean
   /** Order of the categories in the legend and palette (default: most areas first, then alphabetical). */
   ordemCategorias?: string[]
   /** Municipalities (or UFs) to outline and name: IBGE code, "Nome/UF" or a unique name. */
@@ -431,6 +433,7 @@ export function Mapa({
   escala = 'sequencial',
   categorias,
   cores,
+  mostrarLegenda = true,
   ordemCategorias,
   destaques,
   recorte,
@@ -632,7 +635,7 @@ export function Mapa({
           </g>
         ))}
       </svg>
-      {temSerie ? (
+      {temSerie && mostrarLegenda ? (
         <ul className="ty-print-map-legend" data-escala={escala}>
           {rotulosClasses.map((l, k) => (
             <li key={k}>

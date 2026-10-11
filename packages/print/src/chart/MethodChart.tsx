@@ -263,6 +263,7 @@ function Barras({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numbe
           linhas: linhasG.map((l) => [l.nota ? `${l.rotulo} (${l.nota})` : l.rotulo, l.valores[0]?.valor ?? '', l.valores[1]?.valor ?? '']),
         },
     eixo: { x0: L.eixo.x0, x1: L.eixo.x1, d0: spec.escala[0], d1: spec.escala[1] },
+    legendaCores: porChave && spec.legenda !== false ? porChave : undefined,
   }
 }
 
@@ -678,8 +679,10 @@ export function GraficoMetodo({ spec: specOriginal, renderizador, forma: formaPe
   const H = r.L.altura
   // Correlation charts write their finding from the coefficients they recompute from the points.
   const nomeAcessivel = alt ?? spec.achado ?? ('achado' in r ? r.achado : undefined) ?? spec.titulo
+  if (!nomeAcessivel) throw new Error('tympan-print GraficoMetodo: a figure without `titulo` needs `alt` (or `achado`): its accessible name')
   return (
     <figure className={cx('ty-print-figure', className)} data-tipo={specOriginal.tipo} data-forma={spec.tipo === 'barras' ? forma : undefined} data-renderizador={nome} data-local={local ? '' : undefined}>
+      {spec.titulo || spec.subtitulo || letra || local ? (
       <figcaption className="ty-print-figure-head">
         <span className="ty-print-figure-title">
           {letra ? (
@@ -687,11 +690,12 @@ export function GraficoMetodo({ spec: specOriginal, renderizador, forma: formaPe
               {letra}
             </span>
           ) : null}
-          {comColchetes(spec.titulo)}
+          {spec.titulo ? comColchetes(spec.titulo) : null}
         </span>
         {spec.subtitulo ? <span className="ty-print-figure-subtitle">{comColchetes(spec.subtitulo)}</span> : null}
         {local ? <span className="ty-print-badge-local">{tx('lakeLocal')}</span> : null}
       </figcaption>
+      ) : null}
       <svg
         className="ty-print-chart"
         role="img"
@@ -709,11 +713,26 @@ export function GraficoMetodo({ spec: specOriginal, renderizador, forma: formaPe
         <defs>{p.defs(c)}</defs>
         {r.corpo}
       </svg>
+      {'legendaCores' in r && r.legendaCores?.length ? (
+        <ul className="ty-print-map-legend" data-escala="categorica" data-legenda-cores="">
+          {r.legendaCores
+            .filter((k, i, all) => all.findIndex((o) => o.chave === k.chave) === i)
+            .map((k) => (
+              <li key={k.chave}>
+                <svg viewBox="0 0 6 6" aria-hidden="true" focusable="false">
+                  <rect width={6} height={6} style={{ fill: k.cor, ...(k.contorno ? { stroke: 'var(--ty-print-tinta-3)', strokeWidth: 0.4 } : {}) }} />
+                  {k.hachura !== null ? <line x1={0} y1={6} x2={6} y2={0} style={{ stroke: k.texto, strokeWidth: 0.6, strokeOpacity: 0.55 }} /> : null}
+                </svg>
+                {comColchetes(k.chave)}
+              </li>
+            ))}
+        </ul>
+      ) : null}
       {tabela ? (
         <TabelaDados {...tabela} />
       ) : r.tabela ? (
         <div className="ty-print-sr">
-          <TabelaDados titulo={tx('dados', { a: spec.titulo })} colunas={r.tabela.colunas} linhas={r.tabela.linhas as Array<Array<string | number>>} />
+          <TabelaDados titulo={tx('dados', { a: spec.titulo ?? nomeAcessivel ?? '' })} colunas={r.tabela.colunas} linhas={r.tabela.linhas as Array<Array<string | number>>} />
         </div>
       ) : null}
     </figure>

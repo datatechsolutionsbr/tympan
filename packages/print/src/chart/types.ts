@@ -28,7 +28,8 @@ export interface AnotacaoGrafico {
 }
 
 interface Base {
-  titulo: string
+  /** Figure title; optional (a figure inside a titled Panel needs none). The accessible name stays required via `alt` or `achado`. */
+  titulo?: string
   subtitulo?: string
   /** What the figure shows, in one sentence (GraficoMetodo's `alt` takes precedence). */
   achado?: string
@@ -64,6 +65,8 @@ export interface SpecBarras extends Base {
   barras?: Array<{ rotulo: string; valor: number; destaque?: boolean; nota?: string; categoria?: string }>
   /** Colours by category key (official party colours…) for single-series bars; else the theme's `cor.categorias`. */
   cores?: Record<string, string>
+  /** Legend of the colours by key; default on when colours by key apply. */
+  legenda?: boolean
   linhas?: LinhaPar[]
   rotuloA?: string
   rotuloB?: string
@@ -113,8 +116,10 @@ export interface SpecIntervalo extends Base {
   tipo: 'intervalo'
   escala: [number, number]
   unidade?: string
-  /** Decimals of the printed estimates (default 1). */
+  /** Decimals of the printed estimates and axis labels, fixed (trailing zeros kept: 51,0). Default 1. */
   casas?: number
+  /** Legend of the colours by key (`cores`); default on when `cores` is given. */
+  legenda?: boolean
   /** Column name of the interval in the data table (default "IC"). */
   rotuloIntervalo?: string
   linhas?: LinhaIntervalo[]
@@ -125,10 +130,12 @@ export interface SpecIntervalo extends Base {
 
 export interface LinhaIntervalo {
   rotulo: string
-  valor: number
-  intervalo: [number, number]
+  /** The estimate (a dot); optional in samples-only rows. */
+  valor?: number
+  /** The interval (whiskers); without it the row shows its samples as dots (samples-only mode). */
+  intervalo?: [number, number]
   destaque?: boolean
-  /** Per-sample (seed) values, drawn as small ticks over the row. */
+  /** Per-sample (seed) values: small ticks over the row, or dots when the row has no interval. */
   amostras?: number[]
   categoria?: string
 }
