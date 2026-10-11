@@ -151,7 +151,7 @@ await pool(faces, 16, async (f) => {
   const buf = await get(f.url, 'buffer')
   if (!buf) throw new Error(`missing ${f.url}`)
   writeFileSync(join(outOf(f.family), f.file), buf)
-  f.sha256 = createHash('sha256').update(buf).digest('hex').slice(0, 16)
+  f.sha256 = createHash('sha256').update(buf).digest('hex')
   f.bytes = buf.length
   families[f.family].bytes += buf.length
   if (++done % 200 === 0) console.log(`fetch-fonts: ${done}/${faces.length} files`)

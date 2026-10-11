@@ -16,8 +16,8 @@ import { SCRIPT_RULES } from './scripts.ts'
 
 /** Base stacks of every preset: Source Serif 4, IBM Plex Sans, IBM Plex Mono. */
 export const BASE_FONT_SPECS: readonly string[] = [
-  'Source Serif 4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400',
-  'IBM Plex Sans:ital,wght@0,400;0,500;0,600;0,700;1,400',
+  'Source Serif 4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600',
+  'IBM Plex Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600',
   'IBM Plex Mono:ital,wght@0,400;0,500;0,600;0,700;1,400',
 ]
 
