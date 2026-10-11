@@ -87,3 +87,14 @@ describe('page ornaments follow the theme trim', () => {
     }
   })
 })
+
+describe('estrutura.economiaTinta (bauhaus for 5,571 pages)', () => {
+  it('drops ornaments and panel fills, keeps the style', () => {
+    const r = (tokens?: object) => renderToStaticMarkup(<PrintBook estilo="bauhaus" tokens={tokens} incluirCss={false} carregarFontes={false}><Spread numero="2-3"><Page lado="par" /><Page lado="impar" /></Spread></PrintBook>)
+    expect(r()).toContain('class="ty-print-ornament"')
+    const e = r({ estrutura: { economiaTinta: true } })
+    expect(e).not.toContain('class="ty-print-ornament"')
+    expect(e).toContain('data-ty-print-economia=""')
+    expect(e).not.toContain('data-ty-print-fundo-painel')
+  })
+})

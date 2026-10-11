@@ -141,6 +141,11 @@ export interface PrintEstrutura {
    */
   realce?: 'serie' | 'linha'
   /** Head of each small multiple: plain title (default), a band in the highlighter colour with an arrow (Schiphol), a dark band (Vignelli), a band in the ornament colour (Aicher), each multiple on its own tinted card (Le Corbusier, Bayer). */
+  /**
+   * Long runs (one page per unit, thousands of pages): no page ornaments, no tinted panel fills, the 'bolso'
+   * panel as a rule instead of a filled box. The style's type, colours and frames stay.
+   */
+  economiaTinta?: boolean
   cabecaMultiplo?: 'titulo' | 'faixa' | 'faixa-escura' | 'faixa-cor' | 'caixa-cor'
 }
 

@@ -302,6 +302,12 @@
     background: color-mix(in srgb, var(--ty-print-marca-texto) 60%, var(--ty-print-papel));
   }
 
+  .ty-print-book[data-ty-print-economia] .ty-print-panel[data-variante='bolso'] {
+    background: none;
+    border-inline-start: 0.6mm solid var(--ty-print-destaque);
+    padding-inline-start: 2mm;
+  }
+
   .ty-print-book .ty-print-panel[data-variante='pilha'] {
     border: 0;
     outline: 0;

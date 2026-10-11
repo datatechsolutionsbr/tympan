@@ -200,7 +200,7 @@ export function Ornamento({ lado }: { lado: 'par' | 'impar' }) {
   const W = estilo.pagina?.largura ?? 170
   const H = estilo.pagina?.altura ?? 240
   const moldura = estilo.estrutura.moldura ?? 'nenhuma'
-  if (moldura === 'nenhuma') return null
+  if (moldura === 'nenhuma' || estilo.estrutura.economiaTinta) return null
   const m = margem(moldura, lado, H)
   const p = pagina(moldura, lado, W, H)
   if (!m && !p) return null

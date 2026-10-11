@@ -124,6 +124,8 @@ registerPrintTheme({
   Sans/Mono, Fira Sans Condensed; versions, licences and sha256 in `fonts/manifest.json`), found at
   `baseFontes` (default `fonts/`: copy or link that folder beside the HTML, or pass a `file://` URL), and
   links nothing. A theme's `fontesLocais` win for their family. Files load only when used (unicode-range).
+- **Long runs**: `estrutura.economiaTinta` drops page ornaments and tinted panel fills and turns the
+  'bolso' panel into a rule (bauhaus for thousands of unit pages, PLANO §9 items 3–4).
 - **Typesetting**: `hyphens: auto` by the book's `lang`, widows/orphans 2, titles kept with what follows,
   table heads repeat and rows never split.
 
