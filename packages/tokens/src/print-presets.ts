@@ -20,7 +20,17 @@ export type EstadoProva = 'sustentada' | 'refutada' | 'nao-da-para-afirmar' | 'p
 
 export const ESTADOS_PROVA: readonly EstadoProva[] = ['sustentada', 'refutada', 'nao-da-para-afirmar', 'pendente', 'sem-dado', 'nao-testada']
 
-/** The word printed for each proof state (always visible, whatever the mark's shape). */
+/** The word printed for each proof state in English (tympan-print picks by the book's `lang`). */
+export const ROTULOS_PROVA_EN: Record<EstadoProva, string> = {
+  sustentada: 'Supported',
+  refutada: 'Refuted',
+  'nao-da-para-afirmar': 'Cannot claim',
+  pendente: 'Pending',
+  'sem-dado': 'No data',
+  'nao-testada': 'Not tested',
+}
+
+/** The word printed for each proof state (always visible, whatever the mark's shape); pt-BR. */
 export const ROTULOS_PROVA: Record<EstadoProva, string> = {
   sustentada: 'Sustentada',
   refutada: 'Refutada',
@@ -295,6 +305,13 @@ export interface PrintTemaExtras {
   folio?: PrintFolio
   /** Local font files; with them PrintBook can run without network (`fontes="locais"`). */
   fontesLocais?: PrintFonteLocal[]
+  /**
+   * Trace of a number (Rastro): sign it with the theme's seal (`marcas.selo`) or the lakebrasil mark, and add
+   * the lake version seal when the version carries a date. Default: neutral (neither).
+   */
+  rastro?: { assinatura?: 'selo' | 'lakebrasil' | 'nenhuma'; seloLake?: boolean }
+  /** Texts the print components write by themselves, by key (see tympan-print i18n: TEXTOS_PT / TEXTOS_EN). */
+  textos?: Record<string, string>
 }
 
 /** Any token of a style may be overridden by the editor (partial, nested). */
@@ -1578,6 +1595,10 @@ function mergeExtras(base: PrintTemaExtras, over: PrintTemaExtras): PrintTemaExt
   if (Object.keys(folio).length) out.folio = folio
   const fl = over.fontesLocais ?? base.fontesLocais
   if (fl) out.fontesLocais = fl
+  const rs = { ...base.rastro, ...over.rastro }
+  if (Object.keys(rs).length) out.rastro = rs
+  const tx = { ...base.textos, ...over.textos }
+  if (Object.keys(tx).length) out.textos = tx
   return out
 }
 

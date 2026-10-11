@@ -80,6 +80,17 @@ places, so a hand-drawn style can tremble a contour but cannot move a point
 or stretch a bar (tested numerically in every renderer). Every figure has an
 accessible name that states the finding and a data table.
 
+## Language
+
+`PrintBook lang` (default `pt-BR`) sets the texts the components write by themselves (proof-state words,
+"Fonte:", trace labels, accessible names of pages and spreads, map and table captions, the CSS "Você sabia?")
+and the number format of tables, numbers strips, chart labels and axes (`Intl.NumberFormat`). Two
+dictionaries ship, `TEXTOS_PT` and `TEXTOS_EN` (`lang="en"`); override any key with the theme's `textos` or
+`PrintBook textos={{ fonte: 'Sources:' }}`. Component and prop names stay Portuguese (the content contract).
+The trace (`Trace`/Rastro) is neutral by default: no hash line unless `sha256` is given, and no mark or
+lake seal unless the theme sets `rastro: { assinatura: 'selo' | 'lakebrasil', seloLake: true }` (or the
+props `assinatura`/`seloLake`). Books that relied on the old signed default set it in their theme.
+
 ## Book themes
 
 A publisher or collection defines its own theme: inherit a preset (or another theme), override any token, add

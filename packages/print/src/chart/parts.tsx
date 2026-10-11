@@ -1,5 +1,6 @@
 // Pieces shared by the method charts (GraficoMetodo and the style shapes in formas.tsx): series colours,
 // numbered callouts, row labels, notes under the plot and the key.
+import { tx } from '../i18n.ts'
 import type { AnotacaoPosta } from './geometry.ts'
 import { TEXTO } from './geometry.ts'
 import type { CorDado, CtxPincel, Pincel } from './brushes.tsx'
@@ -30,7 +31,7 @@ export function Chamada({ x, y, texto }: { x: number; y: number; texto: string }
 }
 
 export function Rotulos({ y, rotulo, nota, local }: { y: number; rotulo: string; nota?: string; local?: boolean }) {
-  const extra = local ? (nota ? `${nota} · lake local` : 'lake local') : nota
+  const extra = local ? (nota ? `${nota} · ${tx('lakeLocalCurto')}` : tx('lakeLocalCurto')) : nota
   return (
     <>
       <text className="ty-print-g-label" x={0} y={n(y)}>

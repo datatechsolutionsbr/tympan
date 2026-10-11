@@ -1,4 +1,5 @@
 import { Children, cloneElement, isValidElement, type ReactElement, type ReactNode } from 'react'
+import { tx } from '../i18n.ts'
 import { LarguraProvider, useLarguraDisponivel, usePrint } from '../context.tsx'
 import { cx } from '../utils.ts'
 
@@ -43,7 +44,7 @@ export function Figuras({ arranjo = 'auto', pesos, manchete, className, children
               </Figuras>
             </LarguraProvider>
             <aside className="ty-print-read-this">
-              <p className="ty-print-read-this-title">Leia assim</p>
+              <p className="ty-print-read-this-title">{tx('leiaAssim')}</p>
               <ol>
                 {notas.map((n, i) => (
                   <li key={i}>

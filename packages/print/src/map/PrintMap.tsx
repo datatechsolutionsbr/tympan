@@ -6,6 +6,7 @@
 // reads in black and white, a dot screen) and how the borders are stroked
 // (crisp, or trembled by rough.js with a fixed seed). Server-rendered and
 // deterministic: d3-geo is used as pure functions, React writes the SVG.
+import { tx } from '../i18n.ts'
 import { geoCentroid } from 'd3-geo'
 import type { ReactNode } from 'react'
 import type { RenderizadorGrafico } from '@datatechsolutions/tympan-tokens'
@@ -414,7 +415,7 @@ export function Mapa({
   recorte,
   exemplo = false,
   legenda,
-  semDado = 'sem dado',
+  semDado = tx('semDado'),
   rotulos,
   comoLer,
   naoMostra,
@@ -539,7 +540,7 @@ export function Mapa({
     )
   }
   const mostrarRotulos = rotulos ?? (nivel === 'uf' && itens.length === 1)
-  const unidadeContagem = nivel === 'uf' ? 'UFs' : 'Municípios'
+  const unidadeContagem = nivel === 'uf' ? tx('ufs') : tx('municipios')
 
   const desenhar = (c: Celula) => {
     const { g, ks, alvo } = c
@@ -631,32 +632,32 @@ export function Mapa({
       ) : null}
       {comoLer ? (
         <p className="ty-print-map-note">
-          <span className="ty-print-margin-title">Como ler</span> {comColchetes(comoLer)}
+          <span className="ty-print-margin-title">{tx('comoLer')}</span> {comColchetes(comoLer)}
         </p>
       ) : null}
       {naoMostra ? (
         <p className="ty-print-map-note">
-          <span className="ty-print-margin-title">O que o mapa não mostra</span> {comColchetes(naoMostra)}
+          <span className="ty-print-margin-title">{tx('oQueOMapaNaoMostra')}</span> {comColchetes(naoMostra)}
         </p>
       ) : null}
-      {exemplo || itens.some((it) => it.exemplo) ? <p className="ty-print-badge-example">Dados de exemplo</p> : null}
+      {exemplo || itens.some((it) => it.exemplo) ? <p className="ty-print-badge-example">{tx('dadosDeExemplo')}</p> : null}
       {tabela ? (
         <TabelaDados {...tabela} />
       ) : temSerie ? (
         <div className="ty-print-sr">
           <TabelaDados
-            titulo={`Dados: ${titulo}`}
-            colunas={['Classe', ...(celulas.length > 1 ? celulas.map((c) => `${unidadeContagem}: ${c.titulo ?? ''}`) : [unidadeContagem])]}
+            titulo={tx('dados', { a: titulo })}
+            colunas={[tx('classe'), ...(celulas.length > 1 ? celulas.map((c) => `${unidadeContagem}: ${c.titulo ?? ''}`) : [unidadeContagem])]}
             linhas={[
               ...rotulosClasses.map((l, k) => [l, ...celulas.map((c) => conta(c, k))]),
               ...(semDadoN ? [[semDado, ...celulas.map((c) => conta(c, SEM_DADO))]] : []),
             ]}
-            nota={exemplo || itens.some((it) => it.exemplo) ? 'Dados de exemplo.' : undefined}
+            nota={exemplo || itens.some((it) => it.exemplo) ? `${tx('dadosDeExemplo')}.` : undefined}
           />
           {celulas.some((c) => c.alvo.length) ? (
             <TabelaDados
-              titulo="Em destaque"
-              colunas={[nivel === 'uf' ? 'UF' : 'Município', 'Classe']}
+              titulo={tx('emDestaque')}
+              colunas={[nivel === 'uf' ? 'UF' : tx('municipio'), tx('classe')]}
               linhas={celulas.flatMap((c) =>
                 c.alvo.map((a) => {
                   const k = c.ks[c.g.areas.indexOf(a)] as number

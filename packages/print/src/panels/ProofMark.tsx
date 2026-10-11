@@ -1,4 +1,5 @@
-import { ROTULOS_PROVA, type EstadoProva, type MarcaProva as FormaMarca } from '@datatechsolutions/tympan-tokens'
+import { type EstadoProva, type MarcaProva as FormaMarca } from '@datatechsolutions/tympan-tokens'
+import { tx } from '../i18n.ts'
 import type { ReactNode } from 'react'
 import { usePrint } from '../context.tsx'
 import { tracar } from '../rough.ts'
@@ -218,7 +219,7 @@ export function MarcaProva({ estado, grande = false, forma, className }: MarcaPr
     >
       {comIcone ? <Icone estado={estado} /> : null}
       {f === 'formas' || f === 'ponto' ? <Forma estado={estado} estilo={f} /> : null}
-      <span className="ty-print-proof-text">{ROTULOS_PROVA[estado]}</span>
+      <span className="ty-print-proof-text">{tx(`prova.${estado}`)}</span>
       {comContorno ? <Contorno forma={f} estado={estado} tremor={tremor} chave={`prova-${estado}-${grande ? 'g' : 'p'}`} /> : null}
     </span>
   )

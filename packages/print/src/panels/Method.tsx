@@ -2,6 +2,7 @@ import type { EstadoProva } from '@datatechsolutions/tympan-tokens'
 import { LogoLakebrasil, SeloLakebrasil } from '../brand/LogoLakebrasil.tsx'
 import { usePrint } from '../context.tsx'
 import { cx, formatarNumero } from '../utils.ts'
+import { tx } from '../i18n.ts'
 import { BordaMao, comColchetes } from './common.tsx'
 import { MOLDURAS_CAIXA } from './Panel.tsx'
 import { MarcaProva } from './ProofMark.tsx'
@@ -56,7 +57,7 @@ export function Promessa({ citacao, norma, data, resumo, urn, detalhes, genealog
       {urn ? <p className="ty-print-urn">{urn}</p> : null}
       {detalhes?.length ? <Ficha itens={detalhes} className="ty-print-promise-details" /> : null}
       {genealogia?.length ? (
-        <ol className="ty-print-genealogy" aria-label="Genealogia da regra">
+        <ol className="ty-print-genealogy" aria-label={tx('genealogia')}>
           {genealogia.map((g, i) => (
             <li key={i} data-atual={g.atual ? '' : undefined}>
               <span className="ty-print-genealogy-year">{comColchetes(g.ano)}</span>
@@ -98,7 +99,7 @@ const antes = (u?: string) => Boolean(u && /^(R\$|US\$|€|\$)/.test(u))
 export function Numeros({ itens, exemplo = false, className }: NumerosProps) {
   return (
     <div className={cx('ty-print-numbers-block', className)}>
-      {exemplo ? <p className="ty-print-badge-example">Dados de exemplo</p> : null}
+      {exemplo ? <p className="ty-print-badge-example">{tx('dadosDeExemplo')}</p> : null}
       <dl className="ty-print-numbers">
         {itens.map((it, i) => (
           <div key={i} className="ty-print-number">
@@ -113,7 +114,7 @@ export function Numeros({ itens, exemplo = false, className }: NumerosProps) {
               {it.unidade && !antes(it.unidade) ? <span className="ty-print-unit"> {it.unidade}</span> : null}
               {it.comparado !== undefined ? (
                 <>
-                  <span className="ty-print-vs" aria-label="contra">
+                  <span className="ty-print-vs" aria-label={tx('contra')}>
                     {' × '}
                   </span>
                   <span className="ty-print-compared">{comColchetes(formatarNumero(it.comparado))}</span>
@@ -226,10 +227,10 @@ export function Veredito({ promessa, texto, estado, itens, medicaoMarcada, propo
       ) : null}
       {medicaoMarcada ? (
         <p className="ty-print-reading-markda">
-          <span className="ty-print-reading-label">Medição marcada:</span> {comColchetes(medicaoMarcada)}
+          <span className="ty-print-reading-label">{tx('medicaoMarcada')}</span> {comColchetes(medicaoMarcada)}
         </p>
       ) : null}
-      {proposto ? <p className="ty-print-proposed">Estados propostos, a confirmar pela autora depois do teste formal.</p> : null}
+      {proposto ? <p className="ty-print-proposed">{tx('estadosPropostos')}</p> : null}
     </div>
   )
 }
@@ -251,7 +252,7 @@ export function Testes({ titulo, itens, className }: TestesProps) {
             <p className="ty-print-test-question">{comColchetes(it.pergunta)}</p>
             <MarcaProva estado={it.estado} />
             <p className="ty-print-test-text">{comColchetes(it.texto)}</p>
-            {it.proposto ? <p className="ty-print-proposed">estado proposto</p> : null}
+            {it.proposto ? <p className="ty-print-proposed">{tx('estadoProposto')}</p> : null}
           </li>
         ))}
       </ol>
@@ -290,7 +291,7 @@ export interface QuandoODadoChegarProps {
 export function QuandoODadoChegar({ texto, itens, className }: QuandoODadoChegarProps) {
   return (
     <aside className={cx('ty-print-when', className)}>
-      <p className="ty-print-block-title">Quando o dado chegar</p>
+      <p className="ty-print-block-title">{tx('quandoODadoChegar')}</p>
       {texto ? <p>{comColchetes(texto)}</p> : null}
       {itens?.length ? (
         <ul className="ty-print-when-items">
@@ -319,7 +320,8 @@ export interface RastroProps {
   /** What the number counts. */
   descricao?: string
   consulta: string
-  sha256: string
+  /** Hash of the query (optional; printed short under it). */
+  sha256?: string
   tabela: string
   /** Coverage of the table (e.g. "12 estações"). */
   cobertura?: string
@@ -329,22 +331,30 @@ export interface RastroProps {
   versao: string
   /** Edition date. */
   edicao?: string
-  /** Sign the trace with the lakebrasil mark above the seal, as in the style studies (default true). */
+  /**
+   * Sign the trace: `true` = the theme's seal (`marcas.selo`), else the lakebrasil mark; `false` = none.
+   * Default: the theme's `rastro.assinatura` (neutral when unset).
+   */
   assinatura?: boolean
+  /** Add the lake version seal when `versao` has a date (default: the theme's `rastro.seloLake`, off when unset). */
+  seloLake?: boolean
   className?: string
 }
 
 const curtoSha = (s: string) => (/^[0-9a-f]{16,}$/i.test(s) ? `${s.slice(0, 12)}…` : s)
 
 /** The number's trace: number → query → lake table → official source → version. */
-export function Rastro({ referencia, numero, descricao, consulta, sha256, tabela, cobertura, fonteOficial, licenca, versao, edicao, assinatura = true, className }: RastroProps) {
-  const versaoLake = /(\d{4}-\d{2}-\d{2})/.exec(versao)?.[1]
+export function Rastro({ referencia, numero, descricao, consulta, sha256, tabela, cobertura, fonteOficial, licenca, versao, edicao, assinatura, seloLake, className }: RastroProps) {
+  const { estilo } = usePrint()
+  const modo = assinatura === false ? 'nenhuma' : assinatura === true ? (estilo.marcas?.selo ? 'selo' : 'lakebrasil') : (estilo.rastro?.assinatura ?? 'nenhuma')
+  const versaoLake = (seloLake ?? estilo.rastro?.seloLake ?? false) ? /(\d{4}-\d{2}-\d{2})/.exec(versao)?.[1] : undefined
+  const selo = estilo.marcas?.selo
   const linhas: Array<[string, string, string | undefined, boolean]> = [
-    ['Número', numero, descricao, false],
-    ['Consulta', consulta, `sha256 ${curtoSha(sha256)}`, true],
-    ['Tabela do lake', tabela, cobertura, true],
-    ['Fonte oficial', fonteOficial, licenca ? `licença ${licenca}` : undefined, false],
-    ['Versão', versao, edicao ? `edição ${edicao}` : undefined, true],
+    [tx('rastro.numero'), numero, descricao, false],
+    [tx('rastro.consulta'), consulta, sha256 ? `sha256 ${curtoSha(sha256)}` : undefined, true],
+    [tx('rastro.tabela'), tabela, cobertura, true],
+    [tx('rastro.fonteOficial'), fonteOficial, licenca ? tx('rastro.licenca', { a: licenca }) : undefined, false],
+    [tx('rastro.versao'), versao, edicao ? tx('rastro.edicao', { a: edicao }) : undefined, true],
   ]
   return (
     <div className={cx('ty-print-trace-block', className)} data-ref={referencia}>
@@ -359,9 +369,10 @@ export function Rastro({ referencia, numero, descricao, consulta, sha256, tabela
           </div>
         ))}
       </dl>
-      {assinatura || versaoLake ? (
+      {modo !== 'nenhuma' || versaoLake ? (
         <div className="ty-print-trace-signs">
-          {assinatura ? <LogoLakebrasil largura={26} /> : null}
+          {modo === 'selo' && selo ? <img className="ty-print-trace-seal" src={selo.src} alt={selo.alt} style={{ inlineSize: `${selo.largura ?? 12}mm` }} /> : null}
+          {modo === 'lakebrasil' || (modo === 'selo' && !selo) ? <LogoLakebrasil largura={26} /> : null}
           {versaoLake ? <SeloLakebrasil versaoLake={versaoLake} /> : null}
         </div>
       ) : null}
@@ -381,7 +392,7 @@ export interface FonteProps {
 export function Fonte({ texto, versaoLake, rodape = false, className }: FonteProps) {
   return (
     <p className={cx('ty-print-source', className)} data-rodape={rodape ? '' : undefined}>
-      <b>Fonte:</b> {comColchetes(texto.replace(/^Fontes?:\s*/, ''))}
+      <b>{tx('fonte')}</b> {comColchetes(texto.replace(/^Fontes?:\s*/, ''))}
       {versaoLake ? (
         <>
           {' '}
@@ -461,7 +472,7 @@ export function NaSuaCidade({ titulo, campos, nota, url, versaoLake, className }
         {campos.map((c, i) => (
           <div key={i}>
             <dt>{comColchetes(c)}</dt>
-            <dd aria-label="a preencher" />
+            <dd aria-label={tx('aPreencher')} />
           </div>
         ))}
       </dl>
@@ -487,7 +498,7 @@ export function ManchetaIlustrativa({ texto, className }: ManchetaIlustrativaPro
     <figure className={cx('ty-print-headline', className)} data-mao={mao ? '' : undefined}>
       {mao ? <BordaMao chave={`manchete-${texto.slice(0, 24)}`} /> : null}
       <p className="ty-print-headline-text">{comColchetes(texto.replace(/^\[Manchete ilustrativa:\s*/i, '').replace(/\]$/, ''))}</p>
-      <figcaption className="ty-print-badge-example">Manchete ilustrativa</figcaption>
+      <figcaption className="ty-print-badge-example">{tx('mancheteIlustrativa')}</figcaption>
     </figure>
   )
 }
@@ -501,7 +512,7 @@ export interface ProximoCapituloProps {
 export function ProximoCapitulo({ titulo, texto, className }: ProximoCapituloProps) {
   return (
     <aside className={cx('ty-print-next', className)}>
-      <p className="ty-print-sobretitle">Próximo capítulo</p>
+      <p className="ty-print-sobretitle">{tx('proximoCapitulo')}</p>
       <p className="ty-print-next-title">{comColchetes(titulo)} →</p>
       <p>{comColchetes(texto)}</p>
     </aside>

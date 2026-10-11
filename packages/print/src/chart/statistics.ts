@@ -1,4 +1,5 @@
 // Statistics and scales for the correlation charts (dispersão, Simpson,
+import { localeNumerosAtual } from '../i18n.ts'
 // matriz, antes-depois-controle). Pure functions, no randomness: the same
 // points always give the same coefficient, line, bins and ticks.
 
@@ -163,14 +164,14 @@ export function marcasLog([d0, d1]: [number, number]): number[] {
 }
 
 // ---------------------------------------------------------------------------
-// Number formats (pt-BR)
+// Number formats (the book's locale; pt-BR by default)
 // ---------------------------------------------------------------------------
 
 const MENOS = '−'
 
 /** A coefficient with explicit sign and 3 decimals: "+0,056", "−0,278". */
 export function fmtCoef(v: number, casas = 3): string {
-  const a = Math.abs(v).toFixed(casas).replace('.', ',')
+  const a = new Intl.NumberFormat(localeNumerosAtual(), { minimumFractionDigits: casas, maximumFractionDigits: casas, useGrouping: false }).format(Math.abs(v))
   const zero = Number(Math.abs(v).toFixed(casas)) === 0
   return `${zero ? '' : v < 0 ? MENOS : '+'}${a}`
 }
@@ -180,11 +181,12 @@ export function fmtCompacto(v: number): string {
   const s = v < 0 ? MENOS : ''
   const a = Math.abs(v)
   // One decimal whenever the value has one (12.500 → "12,5 mil"): a tick label never rounds its own value.
-  const f = (n: number, suf: string) => `${s}${new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 }).format(n)}${suf}`
-  if (a >= 1e9) return f(a / 1e9, ' bi')
-  if (a >= 1e6) return f(a / 1e6, ' mi')
-  if (a >= 1e4) return f(a / 1e3, ' mil')
-  return `${s}${new Intl.NumberFormat('pt-BR', { maximumFractionDigits: a < 1 ? 3 : a < 10 ? 2 : a < 100 ? 1 : 0 }).format(a)}`
+  const f = (n: number, suf: string) => `${s}${new Intl.NumberFormat(localeNumerosAtual(), { maximumFractionDigits: 1 }).format(n)}${suf}`
+  const en = /^en/.test(localeNumerosAtual())
+  if (a >= 1e9) return f(a / 1e9, en ? ' bn' : ' bi')
+  if (a >= 1e6) return f(a / 1e6, en ? ' M' : ' mi')
+  if (a >= 1e4) return f(a / 1e3, en ? 'k' : ' mil')
+  return `${s}${new Intl.NumberFormat(localeNumerosAtual(), { maximumFractionDigits: a < 1 ? 3 : a < 10 ? 2 : a < 100 ? 1 : 0 }).format(a)}`
 }
 
 // ---------------------------------------------------------------------------

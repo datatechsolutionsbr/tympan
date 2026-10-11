@@ -198,7 +198,7 @@
   }
 
   .ty-print-book[data-ty-print-costura='selo'] :is(.ty-print-area[data-area='lead'], .ty-print-area[data-area='costura']) > .ty-print-text::before {
-    content: 'Você sabia?';
+    content: var(--ty-print-texto-voce-sabia, 'Você sabia?');
     grid-row: 1 / span 4;
     inline-size: 12mm;
     padding: 1mm 1.2mm;

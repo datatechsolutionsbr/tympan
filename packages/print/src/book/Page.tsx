@@ -2,6 +2,7 @@ import { Children, isValidElement, type CSSProperties, type ReactNode } from 're
 import { contrastRatio, luminance, papelEscuro, parseColor, toGrey } from '@datatechsolutions/tympan-tokens'
 import { FundoEscuroProvider, LadoProvider, MoldeProvider, useDupla, usePrint } from '../context.tsx'
 import { cx } from '../utils.ts'
+import { tx } from '../i18n.ts'
 import { Area } from './Area.tsx'
 import { nomeArea, gradeDoMolde, linhasDoMolde, linhasUsadas, moldePorNome } from './templates.ts'
 import { Ornamento } from './Ornament.tsx'
@@ -71,7 +72,7 @@ export function Pagina({ lado, variante = 'normal', cabeco, folio = true, numero
       data-campo={cc ? '' : undefined}
       data-maximo={m?.maximo}
       style={estiloPagina}
-      aria-label={textoFolio ? `Página ${textoFolio}` : lado === 'par' ? 'Página par' : 'Página ímpar'}
+      aria-label={textoFolio ? tx('pagina', { a: textoFolio }) : lado === 'par' ? tx('paginaPar') : tx('paginaImpar')}
     >
       <Textura lado={lado} />
       {variante !== 'prancha' ? <Ornamento lado={lado} /> : null}

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { tx } from '../i18n.ts'
 import { useLarguraDisponivel, usePrint } from '../context.tsx'
 import { TabelaDados, type TabelaDadosProps } from '../panels/Method.tsx'
 import { comColchetes } from '../panels/common.tsx'
@@ -169,7 +170,7 @@ function Halteres({ c, spec, largura }: { c: Ctx; spec: SpecHalteres; largura: n
       </>
     ),
     tabela: {
-      colunas: ['Base', { rotulo: spec.rotuloA, numerica: true }, { rotulo: spec.rotuloB, numerica: true }],
+      colunas: [tx('base'), { rotulo: spec.rotuloA, numerica: true }, { rotulo: spec.rotuloB, numerica: true }],
       linhas: spec.linhas.map((l) => [l.nota ? `${l.rotulo} (${l.nota})` : l.rotulo, l.a, l.b]),
     },
     eixo: { x0: L.eixo.x0, x1: L.eixo.x1, d0: spec.escala[0], d1: spec.escala[1] },
@@ -226,9 +227,9 @@ function Barras({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numbe
       </>
     ),
     tabela: unico
-      ? { colunas: ['Base', { rotulo: spec.unidade ?? 'valor', numerica: true }], linhas: linhasG.map((l) => [l.rotulo, l.valores[0]?.valor ?? '']) }
+      ? { colunas: [tx('base'), { rotulo: spec.unidade ?? tx('valor'), numerica: true }], linhas: linhasG.map((l) => [l.rotulo, l.valores[0]?.valor ?? '']) }
       : {
-          colunas: ['Base', { rotulo: spec.rotuloA ?? 'a', numerica: true }, { rotulo: spec.rotuloB ?? 'b', numerica: true }],
+          colunas: [tx('base'), { rotulo: spec.rotuloA ?? 'a', numerica: true }, { rotulo: spec.rotuloB ?? 'b', numerica: true }],
           linhas: linhasG.map((l) => [l.nota ? `${l.rotulo} (${l.nota})` : l.rotulo, l.valores[0]?.valor ?? '', l.valores[1]?.valor ?? '']),
         },
     eixo: { x0: L.eixo.x0, x1: L.eixo.x1, d0: spec.escala[0], d1: spec.escala[1] },
@@ -312,7 +313,7 @@ function Colunas({ c, spec, largura, altura }: { c: Ctx; spec: SpecBarras; largu
         </g>
         {L.grupos.map((g) => {
           const cor = coresLinha(g.destaque, algum)
-          const extra = g.local ? (g.nota ? `${g.nota} · lake local` : 'lake local') : g.nota
+          const extra = g.local ? (g.nota ? `${g.nota} · ${tx('lakeLocalCurto')}` : tx('lakeLocalCurto')) : g.nota
           return (
             <g key={g.i} className="ty-print-g-line" data-linha={g.i} data-destaque={g.destaque ? '' : undefined}>
               {corte && g.colunas.length > 1 ? (
@@ -362,9 +363,9 @@ function Colunas({ c, spec, largura, altura }: { c: Ctx; spec: SpecBarras; largu
       </>
     ),
     tabela: unico
-      ? { colunas: ['Base', { rotulo: spec.unidade ?? 'valor', numerica: true }], linhas: linhasG.map((l) => [l.rotulo, l.valores[0]?.valor ?? '']) }
+      ? { colunas: [tx('base'), { rotulo: spec.unidade ?? tx('valor'), numerica: true }], linhas: linhasG.map((l) => [l.rotulo, l.valores[0]?.valor ?? '']) }
       : {
-          colunas: ['Base', { rotulo: spec.rotuloA ?? 'a', numerica: true }, { rotulo: spec.rotuloB ?? 'b', numerica: true }],
+          colunas: [tx('base'), { rotulo: spec.rotuloA ?? 'a', numerica: true }, { rotulo: spec.rotuloB ?? 'b', numerica: true }],
           linhas: linhasG.map((l) => [l.nota ? `${l.rotulo} (${l.nota})` : l.rotulo, l.valores[0]?.valor ?? '', l.valores[1]?.valor ?? '']),
         },
     eixo: { x0: L.area.y1, x1: L.area.y0, d0: spec.escala[0], d1: spec.escala[1], vertical: true },
@@ -418,10 +419,10 @@ function Contagem({ c, spec, largura }: { c: Ctx; spec: SpecContagem; largura: n
     ),
     tabela: L.pares
       ? {
-          colunas: ['Base', { rotulo: spec.rotuloA ?? 'a', numerica: true }, { rotulo: spec.rotuloB ?? 'b', numerica: true }],
+          colunas: [tx('base'), { rotulo: spec.rotuloA ?? 'a', numerica: true }, { rotulo: spec.rotuloB ?? 'b', numerica: true }],
           linhas: linhasG.map((l) => [l.rotulo, l.valores[0]?.valor ?? '', l.valores[1]?.valor ?? '']),
         }
-      : { colunas: ['Base', { rotulo: spec.rotuloUnidade ?? 'valor', numerica: true }], linhas: linhasG.map((l) => [l.rotulo, l.valores[0]?.valor ?? '']) },
+      : { colunas: [tx('base'), { rotulo: spec.rotuloUnidade ?? tx('valor'), numerica: true }], linhas: linhasG.map((l) => [l.rotulo, l.valores[0]?.valor ?? '']) },
     eixo: null,
   }
 }
@@ -490,7 +491,7 @@ function Serie({ c, spec, largura, altura }: { c: Ctx; spec: SpecSerie; largura:
         <Anotacoes c={c} postas={L.anotacoes} marcas={spec.pontos.map((p) => (p.chamada !== undefined ? String(p.chamada) : undefined))} />
       </>
     ),
-    tabela: { colunas: ['Base', { rotulo: spec.unidade ?? 'valor', numerica: true }], linhas: spec.pontos.map((p) => [String(p.x), p.y]) },
+    tabela: { colunas: [tx('base'), { rotulo: spec.unidade ?? tx('valor'), numerica: true }], linhas: spec.pontos.map((p) => [String(p.x), p.y]) },
     eixo: { x0, x1, d0: spec.eixoX[0], d1: spec.eixoX[1] },
   }
 }
@@ -657,7 +658,7 @@ export function GraficoMetodo({ spec: specOriginal, renderizador, alt, tabela, l
           {comColchetes(spec.titulo)}
         </span>
         {spec.subtitulo ? <span className="ty-print-figure-subtitle">{comColchetes(spec.subtitulo)}</span> : null}
-        {local ? <span className="ty-print-badge-local">lake local, não publicado</span> : null}
+        {local ? <span className="ty-print-badge-local">{tx('lakeLocal')}</span> : null}
       </figcaption>
       <svg
         className="ty-print-chart"
@@ -680,7 +681,7 @@ export function GraficoMetodo({ spec: specOriginal, renderizador, alt, tabela, l
         <TabelaDados {...tabela} />
       ) : r.tabela ? (
         <div className="ty-print-sr">
-          <TabelaDados titulo={`Dados: ${spec.titulo}`} colunas={r.tabela.colunas} linhas={r.tabela.linhas as Array<Array<string | number>>} />
+          <TabelaDados titulo={tx('dados', { a: spec.titulo })} colunas={r.tabela.colunas} linhas={r.tabela.linhas as Array<Array<string | number>>} />
         </div>
       ) : null}
     </figure>

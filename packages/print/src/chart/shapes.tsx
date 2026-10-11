@@ -4,6 +4,7 @@
 // (fluxo-historico) and the cards (blocos-coloridos). Same rule as every method chart: one linear scale per
 // figure turns each value into a length, height or thickness; the renderer
 // only decides how the mark looks, so each shape works in all eight of them.
+import { tx } from '../i18n.ts'
 import type { ReactNode } from 'react'
 import {
   TEXTO,
@@ -35,10 +36,10 @@ function tabelaDe(spec: SpecBarras, linhas: LinhaGenerica[]): ResultadoForma['ta
   const pares = linhas.some((l) => l.valores.length > 1)
   return pares
     ? {
-        colunas: ['Base', { rotulo: spec.rotuloA ?? 'a', numerica: true }, { rotulo: spec.rotuloB ?? 'b', numerica: true }],
+        colunas: [tx('base'), { rotulo: spec.rotuloA ?? 'a', numerica: true }, { rotulo: spec.rotuloB ?? 'b', numerica: true }],
         linhas: linhas.map((l) => [l.nota ? `${l.rotulo} (${l.nota})` : l.rotulo, l.valores[0]?.valor ?? '', l.valores[1]?.valor ?? '']),
       }
-    : { colunas: ['Base', { rotulo: spec.unidade ?? 'valor', numerica: true }], linhas: linhas.map((l) => [l.rotulo, l.valores[0]?.valor ?? '']) }
+    : { colunas: [tx('base'), { rotulo: spec.unidade ?? tx('valor'), numerica: true }], linhas: linhas.map((l) => [l.rotulo, l.valores[0]?.valor ?? '']) }
 }
 
 function coresSerie(l: LinhaGenerica, algum: boolean, unico: boolean): Record<'a' | 'b', CorDado> {
@@ -478,7 +479,7 @@ export function Cartoes({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarras;
             })}
             {l.nota || l.local ? (
               <text className="ty-print-g-note" x={n(x + cw / 2)} y={n(yBase + 3.4)} textAnchor="middle" data-local={l.local ? '' : undefined}>
-                {l.local ? (l.nota ? `${l.nota} · lake local` : 'lake local') : l.nota}
+                {l.local ? (l.nota ? `${l.nota} · ${tx('lakeLocalCurto')}` : tx('lakeLocalCurto')) : l.nota}
               </text>
             ) : null}
           </g>

@@ -15,6 +15,7 @@ import {
   type PrintStyleOverrides,
 } from '@datatechsolutions/tympan-tokens'
 import { EscopoLivroProvider, PrintContextoProvider } from '../context.tsx'
+import { IdiomaProvider, criarIdioma, definirIdiomaAtual, idiomaAtualOuPadrao, type Idioma } from '../i18n.ts'
 import { PRINT_CSS } from '../styles.generated.ts'
 import manifestoFontes from '@datatechsolutions/tympan-tokens/fonts/manifest.json' with { type: 'json' }
 import { cx, hashCurto } from '../utils.ts'
@@ -53,7 +54,10 @@ export interface LivroPrintProps {
    * `pagina.sangria` (default 3 mm) and `pagina.marcasCorte`. Off (default): the PDF is the trim size.
    */
   impressao?: boolean | { sangria?: number; marcasCorte?: boolean }
+  /** Language of the book (BCP 47): texts the components print and number formatting follow it ('pt-BR', 'en'). */
   lang?: string
+  /** Overrides of the components' own texts by key (see TEXTOS_PT); merged over the theme's `textos`. */
+  textos?: Partial<Record<string, string>>
   /**
    * Scope name of this book's custom properties and SVG ids. Defaults to a hash of the style, P&B and
    * overrides, so books in different styles in one HTML never share tokens. Set it when several books
@@ -79,7 +83,7 @@ const MARGEM_MARCAS = 6
  * preset's custom properties, the component CSS and `@page` (the theme's trim, 170 × 240 mm by default),
  * and provides the resolved style to every component below.
  */
-export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carregarFontes = true, fontes: modoFontes, baseFontes = 'fonts/', fontesEstritas = false, impressao = false, lang = 'pt-BR', escopo: escopoProp, className, children }: LivroPrintProps) {
+export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carregarFontes = true, fontes: modoFontes, baseFontes = 'fonts/', fontesEstritas = false, impressao = false, lang = 'pt-BR', textos, escopo: escopoProp, className, children }: LivroPrintProps) {
   const base = typeof estilo === 'string' ? printThemeById(estilo) : estilo
   const resolvido = resolvePrintStyle(base, { pb, overrides: tokens })
   const escopo = `tpb-${(escopoProp ?? hashCurto(JSON.stringify([pb, resolvido]))).replace(/[^a-zA-Z0-9_-]/g, '')}`
@@ -102,6 +106,8 @@ export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carr
   const css = `${faces}\n${incluirCss ? PRINT_CSS : ''}\n${printStyleToCss(base, { pb, overrides: tokens, seletor })}${pagina}\n${varsGrafica}\n${printTextoRolesCss(resolvido, seletor)}`
   const fontes = modo === 'google' ? googleFontsUrl(resolvido) : null
   const e = resolvido.estrutura
+  const idioma = criarIdioma(lang, { ...resolvido.textos, ...textos })
+  const idiomaExterno = idiomaAtualOuPadrao()
   return (
     <div
       className={cx('ty-print-book', className)}
@@ -134,10 +140,22 @@ export function LivroPrint({ estilo, tokens, pb = false, incluirCss = true, carr
       data-ty-print-numeros-marcados={e.numerosMarcados ? '' : undefined}
     >
       {fontes ? <link rel="stylesheet" href={fontes} /> : null}
-      <style dangerouslySetInnerHTML={{ __html: css }} />
+      <style dangerouslySetInnerHTML={{ __html: `${css}\n${seletor} { --ty-print-texto-voce-sabia: ${JSON.stringify(idioma.t('voceSabia'))}; }` }} />
       <EscopoLivroProvider value={escopo}>
-        <PrintContextoProvider value={{ estilo: resolvido, pb, grafica: grafica ? { ...grafica, folga } : null }}>{children}</PrintContextoProvider>
+        <IdiomaProvider value={idioma}>
+          <PrintContextoProvider value={{ estilo: resolvido, pb, grafica: grafica ? { ...grafica, folga } : null }}>
+            <IdiomaAtual idioma={idioma} />
+            {children}
+            <IdiomaAtual idioma={idiomaExterno} />
+          </PrintContextoProvider>
+        </IdiomaProvider>
       </EscopoLivroProvider>
     </div>
   )
+}
+
+/** Sets the language of the pure render helpers at this point of the (depth-first) render. Renders nothing. */
+function IdiomaAtual({ idioma }: { idioma: Idioma }) {
+  definirIdiomaAtual(idioma)
+  return null
 }

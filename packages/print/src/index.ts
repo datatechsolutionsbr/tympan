@@ -95,3 +95,4 @@ export {
   type LivroConteudoProps,
 } from './content.tsx'
 export { PRINT_CSS } from './styles.generated.ts'
+export { TEXTOS_PT, TEXTOS_EN, criarIdioma, useIdioma, textosDe, type Textos, type ChaveTexto, type Idioma } from './i18n.ts'

@@ -4,6 +4,7 @@
 // (destaque = the unit of interest in full ink, contexto = the rest in grey)
 // and print no labels over the mesh; a callout, when asked, sits outside the
 // drawing with a leader line to the margin.
+import { tx } from '../i18n.ts'
 import { geoCentroid } from 'd3-geo'
 import type { ReactNode } from 'react'
 import { useLarguraDisponivel, usePrint } from '../context.tsx'
@@ -194,7 +195,7 @@ export function MapaSimbolos({ titulo, alt, valores, recorte, unidade, raioMaxim
         </g>
       </svg>
       <div className="ty-print-sr">
-        <TabelaDados titulo={`Dados: ${titulo}`} colunas={['Município', { rotulo: unidade ?? 'Valor', numerica: true }]} linhas={ordenados.slice(0, 20).map(({ a, v }) => [`${a.properties.name}/${ufDoMunicipio(a.properties.code)}`, formatarNumero(v)])} nota={pontos.length > 20 ? `Os 20 maiores de ${pontos.length}.` : undefined} />
+        <TabelaDados titulo={tx('dados', { a: titulo })} colunas={[tx('municipio'), { rotulo: unidade ?? 'Valor', numerica: true }]} linhas={ordenados.slice(0, 20).map(({ a, v }) => [`${a.properties.name}/${ufDoMunicipio(a.properties.code)}`, formatarNumero(v)])} nota={pontos.length > 20 ? `Os 20 maiores de ${pontos.length}.` : undefined} />
       </div>
     </figure>
   )
@@ -213,13 +214,13 @@ export interface BandeiraProps {
 }
 
 /** The flag or coat-of-arms box of the title corner; without an image, a dashed frame that says so (nothing invented). */
-export function Bandeira({ src, alt, semImagem = 'sem bandeira no acervo', proporcao = 10 / 7, className }: BandeiraProps) {
+export function Bandeira({ src, alt, semImagem, proporcao = 10 / 7, className }: BandeiraProps) {
   const style = { aspectRatio: String(r3(proporcao)) }
   return src ? (
     <img className={cx('ty-print-flag', className)} src={src} alt={alt} style={style} />
   ) : (
-    <div className={cx('ty-print-flag', className)} data-vazia="" role="img" aria-label={`${alt}: não consta no acervo`} style={style}>
-      {semImagem}
+    <div className={cx('ty-print-flag', className)} data-vazia="" role="img" aria-label={tx('naoConstaNoAcervo', { a: alt })} style={style}>
+      {semImagem ?? tx('semBandeira')}
     </div>
   )
 }

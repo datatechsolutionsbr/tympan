@@ -1,6 +1,7 @@
 // Pure chart geometry, in millimetres. Every position and length comes from
 // the data through a linear scale; renderers only decide how a mark is drawn
 // (crisp, rough, washed, pictorial), never where it goes or how long it is.
+import { numeroLocal } from '../i18n.ts'
 import type { LinhaPar, SpecBarras, SpecContagem, SpecHalteres, SpecSerie } from './types.ts'
 
 /** A row with one value (single series) or two (a, b). */
@@ -72,8 +73,8 @@ export function quebrar(texto: string, largura: number, tamanho = TEXTO): string
   return linhas
 }
 
-const fmtNum = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 })
-export const numeroBr = (v: number) => fmtNum.format(Object.is(v, -0) ? 0 : v)
+/** A number in the book's locale (the name is historical: pt-BR is only the default). */
+export const numeroBr = (v: number) => numeroLocal(v)
 
 export interface Eixo {
   y: number

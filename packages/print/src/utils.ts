@@ -1,5 +1,6 @@
 import { useId } from 'react'
 import { useEscopoLivro } from './context.tsx'
+import { numeroLocal } from './i18n.ts'
 
 /** A `useId` value usable in SVG `id` and `url(#…)` references (letters, digits, dashes). */
 export function useIdSeguro(prefixo = 'ty-print'): string {
@@ -18,11 +19,10 @@ export function hashCurto(chave: string): string {
   return (h >>> 0).toString(36)
 }
 
-const fmt = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 })
 
-/** Number in Brazilian Portuguese (thousands with a dot, decimals with a comma); strings pass through. */
+/** Number in the book's locale (pt-BR by default: thousands with a dot, decimals with a comma); strings pass through. */
 export function formatarNumero(v: number | string): string {
-  return typeof v === 'number' ? fmt.format(v) : v
+  return typeof v === 'number' ? numeroLocal(v) : v
 }
 
 /** Joins class names, skipping empty values. */

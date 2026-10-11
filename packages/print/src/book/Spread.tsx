@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { DuplaContextoProvider } from '../context.tsx'
 import { cx } from '../utils.ts'
+import { tx } from '../i18n.ts'
 
 export interface DuplaProps {
   /** Folios of the spread, "22-23" (even-odd), or "capa" for the open cover. */
@@ -25,7 +26,7 @@ export function Dupla({ numero, parte, capitulo, abreCapitulo = false, molde, cl
     <div
       className={cx('ty-print-spread', className)}
       role="group"
-      aria-label={capa ? 'Capa aberta' : `Páginas ${par} e ${impar}`}
+      aria-label={capa ? tx('capaAberta') : tx('paginas', { a: par, b: impar })}
       data-abre-capitulo={abreCapitulo ? '' : undefined}
       data-capa={capa ? '' : undefined}
       data-molde={molde}

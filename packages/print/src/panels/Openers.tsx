@@ -4,6 +4,7 @@ import { usePrint } from '../context.tsx'
 import { Emblema } from '../brand/Emblem.tsx'
 import { LogoDatatech } from '../brand/LogoDatatech.tsx'
 import { cx, formatarNumero, useIdSeguro } from '../utils.ts'
+import { tx } from '../i18n.ts'
 import { BordaMao, comColchetes, NumeroChamada } from './common.tsx'
 import { IlustracaoCapa, type MotivoCapa } from './IlustracaoCapa.tsx'
 import { MarcaProva } from './ProofMark.tsx'
@@ -92,8 +93,8 @@ function Grafismo({ cortes, legenda }: { cortes: number[]; legenda?: string }) {
   const ultimo = cortes[cortes.length - 1] ?? max
   return (
     <figure className="ty-print-graphic" aria-labelledby={legenda ? `${id}-l` : undefined}>
-      <svg viewBox={`0 0 ${w} ${h}`} role="img" aria-label={legenda ?? `${cortes.length} linhas de corte`}>
-        <title>{legenda ?? `${cortes.length} linhas de corte`}</title>
+      <svg viewBox={`0 0 ${w} ${h}`} role="img" aria-label={legenda ?? tx('linhasDeCorte', { n: cortes.length })}>
+        <title>{legenda ?? tx('linhasDeCorte', { n: cortes.length })}</title>
         {cortes.map((c, i) => (
           <line key={i} className="ty-print-graphic-line" x1={x(c)} x2={x(c)} y1={2} y2={h - 8} data-valor={c} />
         ))}
@@ -124,7 +125,7 @@ export function Capa({ face = 'primeira', eyebrow, titulo, subtitulo, autora, ch
             {rotulo ? <p className="ty-print-capa-rotulo">{comColchetes(rotulo)}</p> : null}
           </div>
           <Emblema escala={0.9} />
-          <p className="ty-print-capa-numeral" aria-label={`Volume ${numeral}`}>
+          <p className="ty-print-capa-numeral" aria-label={tx('volume', { a: numeral })}>
             {numeral}
           </p>
         </header>
@@ -160,7 +161,7 @@ export function Capa({ face = 'primeira', eyebrow, titulo, subtitulo, autora, ch
         ) : null}
         {perguntas?.length ? (
           <div className="ty-print-capa-perguntas">
-            <p className="ty-print-capa-sobre">Perguntas deste volume</p>
+            <p className="ty-print-capa-sobre">{tx('perguntasDoVolume')}</p>
             <ol>
               {perguntas.map((q, i) => (
                 <li key={i}>{comColchetes(q)}</li>
@@ -170,7 +171,7 @@ export function Capa({ face = 'primeira', eyebrow, titulo, subtitulo, autora, ch
         ) : null}
         {leis?.length ? (
           <p className="ty-print-capa-leis">
-            <span className="ty-print-capa-sobre">As leis: </span>
+            <span className="ty-print-capa-sobre">{tx('asLeis')}</span>
             {leis.map((l, i) => (
               <span key={i}>
                 {i ? ' · ' : ''}
@@ -263,7 +264,7 @@ export function AberturaParte({ numero, titulo, pergunta, partes, nestaParte, on
       <h1 className="ty-print-opener-title">{comColchetes(titulo)}</h1>
       <p className="ty-print-opener-question">{comColchetes(pergunta)}</p>
       {partes?.length ? (
-        <ol className="ty-print-opener-parts" aria-label="Partes do livro">
+        <ol className="ty-print-opener-parts" aria-label={tx('partesDoLivro')}>
           {partes.map((p) => (
             <li key={p.numero} data-atual={p.numero === numero ? '' : undefined} aria-current={p.numero === numero ? 'true' : undefined}>
               <span className="ty-print-opener-roman">{p.numero}</span> {comColchetes(p.titulo)}
@@ -273,7 +274,7 @@ export function AberturaParte({ numero, titulo, pergunta, partes, nestaParte, on
       ) : null}
       {nestaParte?.length ? (
         <div className="ty-print-opener-chapters">
-          <p className="ty-print-sobretitle">Nesta parte</p>
+          <p className="ty-print-sobretitle">{tx('nestaParte')}</p>
           <ol>
             {nestaParte.map((c, i) => (
               <li key={i}>
@@ -285,7 +286,7 @@ export function AberturaParte({ numero, titulo, pergunta, partes, nestaParte, on
       ) : null}
       {ondeIssoVolta ? (
         <p className="ty-print-opener-back">
-          <span className="ty-print-margin-title">Onde isso volta</span> {comColchetes(ondeIssoVolta)}
+          <span className="ty-print-margin-title">{tx('ondeIssoVolta')}</span> {comColchetes(ondeIssoVolta)}
         </p>
       ) : null}
     </header>
@@ -414,7 +415,7 @@ function MarcaStatus({ status }: { status: StatusLei }) {
 export function LinhaDoTempo({ titulo, de, ate, alt, volumes, eventos, herdadas, nota, className }: LinhaDoTempoProps) {
   const anos = [...new Set(eventos.filter((e) => e.ano >= de && e.ano <= ate).map((e) => e.ano))].sort((a, b) => a - b)
   return (
-    <section className={cx('ty-print-line-time', className)} aria-label={alt ?? titulo ?? `Linha do tempo, ${de} a ${ate}`}>
+    <section className={cx('ty-print-line-time', className)} aria-label={alt ?? titulo ?? tx('linhaDoTempo', { a: de, b: ate })}>
       {titulo ? <p className="ty-print-block-title">{comColchetes(titulo)}</p> : null}
       {volumes?.length ? (
         <ol className="ty-print-line-time-volumes">
@@ -440,7 +441,7 @@ export function LinhaDoTempo({ titulo, de, ate, alt, volumes, eventos, herdadas,
                     <MarcaStatus status={e.status} />
                     <span className="ty-print-line-time-norm">{comColchetes(e.norma)}</span>
                     <span className="ty-print-line-time-where">
-                      {e.fio ? `Parte ${e.fio} · ` : ''}
+                      {e.fio ? tx('parte', { a: e.fio }) : ''}
                       {comColchetes(e.onde)} <span className="ty-print-sr">({STATUS[e.status]})</span>
                     </span>
                   </li>
@@ -449,7 +450,7 @@ export function LinhaDoTempo({ titulo, de, ate, alt, volumes, eventos, herdadas,
           </li>
         ))}
       </ol>
-      <ul className="ty-print-line-time-legend" aria-label="Legenda">
+      <ul className="ty-print-line-time-legend" aria-label={tx('legenda')}>
         {(Object.keys(STATUS) as StatusLei[])
           .filter((s) => eventos.some((e) => e.status === s))
           .map((s) => (

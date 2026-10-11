@@ -4,6 +4,7 @@
 // (--ty-print-categorica-N) and in P&B each party alternates fill and outline
 // on top of its grey; the legend always prints the party and its seat count,
 // so state never rests on colour alone.
+import { tx } from '../i18n.ts'
 import { usePrint } from '../context.tsx'
 import { comColchetes } from '../panels/common.tsx'
 import { TabelaDados } from '../panels/Method.tsx'
@@ -126,7 +127,7 @@ export function Hemiciclo({ titulo, alt, bancadas, largura = 80, fileiras, maior
         ))}
       </ul>
       <div className="ty-print-sr">
-        <TabelaDados titulo={titulo ? `Dados: ${titulo}` : 'Assentos por partido'} colunas={['Partido', { rotulo: 'Assentos', numerica: true }]} linhas={bancadas.map((b) => [b.sigla, b.assentos])} />
+        <TabelaDados titulo={titulo ? tx('dados', { a: titulo }) : tx('assentosPorPartido')} colunas={[tx('partido'), { rotulo: tx('assentos'), numerica: true }]} linhas={bancadas.map((b) => [b.sigla, b.assentos])} />
       </div>
     </figure>
   )
