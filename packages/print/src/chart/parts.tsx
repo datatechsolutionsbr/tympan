@@ -1,5 +1,6 @@
 // Pieces shared by the method charts (GraficoMetodo and the style shapes in formas.tsx): series colours,
 // numbered callouts, row labels, notes under the plot and the key.
+import { deltaE2000, parseColor, type PrintStyle } from '@datatechsolutions/tympan-tokens'
 import { tx } from '../i18n.ts'
 import type { AnotacaoPosta } from './geometry.ts'
 import { TEXTO } from './geometry.ts'
@@ -24,6 +25,18 @@ export function coresLinha(destaque: boolean, _algumDestaque?: boolean): { a: Co
 /** Single series: a constant series ink; only a marked row is in the highlight colour. */
 export function corUnica(destaque: boolean): CorDado {
   return destaque ? 'destaque' : 'tinta-2'
+}
+
+/**
+ * The first series is hatched when the style asks for it, and also when its colour is too close to the second
+ * series' (ΔE2000 < 10 between `contexto` and `destaque-2`): two series must never rely on a colour difference
+ * the eye cannot see.
+ */
+export function hachuraSerieA(estilo: PrintStyle): boolean {
+  if (estilo.traco.hachura !== 'nenhuma') return true
+  const a = estilo.cor.contexto
+  const b = estilo.cor.destaque2
+  return a.startsWith('#') && b.startsWith('#') && deltaE2000(parseColor(a), parseColor(b)) < 10
 }
 
 /** Legend colours of the two series (constant: they do not change when a row is highlighted). */
@@ -77,7 +90,7 @@ export function Anotacoes({ c, postas, marcas }: { c: Ctx; postas: AnotacaoPosta
 }
 
 export function Legenda({ c, y: yBase, itens }: { c: Ctx; y: number; itens: Array<{ x: number; y?: number; texto: string; cor: CorDado; tipo: 'ponto-vazio' | 'ponto' | 'barra-a' | 'barra-b' }> }) {
-  const hachura = c.estilo.traco.hachura !== 'nenhuma'
+  const hachura = hachuraSerieA(c.estilo)
   return (
     <g className="ty-print-g-legend">
       {itens.map((it, k) => {

@@ -27,7 +27,7 @@ import type { FormaGrafico, PrintStyle } from '@datatechsolutions/tympan-tokens'
 import type { GraficoSpec, RenderizadorGrafico, SpecBarras, SpecContagem, SpecEsquema, SpecHalteres, SpecSerie } from './types.ts'
 import { AntesDepoisControle, Dispersao, MatrizCorrelacao, Simpson, corAchado } from './correlation.tsx'
 import { Chamadas, posicionarChamadas } from './kickers.tsx'
-import { Anotacoes, COR_SERIE, Chamada, Legenda, Rotulos, corUnica, coresLinha, larguraLegenda } from './parts.tsx'
+import { Anotacoes, COR_SERIE, hachuraSerieA, Chamada, Legenda, Rotulos, corUnica, coresLinha, larguraLegenda } from './parts.tsx'
 import { Cartoes, EixoCentral, Fluxo, Ziguezague } from './shapes.tsx'
 
 export interface GraficoMetodoProps {
@@ -238,7 +238,7 @@ function Barras({ c, spec, largura }: { c: Ctx; spec: SpecBarras; largura: numbe
   const L = layoutBarras(spec, largura)
   const linhasG = linhasDe(spec)
   const algum = linhasG.some((l) => l.destaque)
-  const hachura = c.estilo.traco.hachura !== 'nenhuma'
+  const hachura = hachuraSerieA(c.estilo)
   const unico = !L.legenda
   const u = c.p.nome === 'isotype' ? unidadeIsotype(L.mmPorUnidade) : 0
   // Colours by key (single series): the bar's category colour, safe-printed (hatch when two are too close,
@@ -353,7 +353,7 @@ function Colunas({ c, spec, largura, altura }: { c: Ctx; spec: SpecBarras; largu
   const notas = banda && estiloChamada ? posicionarChamadas(alvosDe(L), largura, estiloChamada).notas : []
   const linhasG = linhasDe(spec)
   const algum = linhasG.some((l) => l.destaque)
-  const hachura = c.estilo.traco.hachura !== 'nenhuma'
+  const hachura = hachuraSerieA(c.estilo)
   const unico = !L.legenda
   const { x0, x1, y1 } = L.area
   const u = c.p.nome === 'isotype' ? unidadeIsotype(L.mmPorUnidade) : 0

@@ -16,7 +16,7 @@ import {
   numeroBr,
   type LinhaGenerica,
 } from './geometry.ts'
-import { Anotacoes, COR_SERIE, Chamada, Legenda, Rotulos, corUnica, coresLinha, larguraLegenda, type CtxGrafico } from './parts.tsx'
+import { Anotacoes, COR_SERIE, hachuraSerieA, Chamada, Legenda, Rotulos, corUnica, coresLinha, larguraLegenda, type CtxGrafico } from './parts.tsx'
 import { cssCor, type CorDado } from './brushes.tsx'
 import type { SpecBarras } from './types.ts'
 
@@ -114,7 +114,7 @@ export function EixoCentral({ c, spec, largura }: { c: CtxGrafico; spec: SpecBar
   const linhas = linhasDe(spec)
   const pares = linhas.some((l) => l.valores.length > 1)
   const algum = linhas.some((l) => l.destaque)
-  const hachura = c.estilo.traco.hachura !== 'nenhuma'
+  const hachura = hachuraSerieA(c.estilo)
   const wRot = colunaRotulos(linhas, largura)
   const maxA = Math.max(0, ...linhas.map((l) => (pares ? l.valores[0]?.valor ?? 0 : 0)))
   // The side below the cut ends on a round value just past its largest bar; both sides share one scale.
@@ -219,7 +219,7 @@ export function Ziguezague({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarr
   const linhas = linhasDe(spec)
   const pares = linhas.some((l) => l.valores.length > 1)
   const algum = linhas.some((l) => l.destaque)
-  const hachura = c.estilo.traco.hachura !== 'nenhuma'
+  const hachura = hachuraSerieA(c.estilo)
   // A fixed label column (unless a label needs more), so figures of the same width share the ruler.
   const wRot = n(Math.max(colunaRotulos(linhas, largura), largura * 0.26))
   const D = spec.dobra && spec.dobra > 0 ? spec.dobra : dobraAutomatica(spec.escala[1], linhas.flatMap((l) => l.valores.map((v) => v.valor)))
@@ -313,7 +313,7 @@ export function Fluxo({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarras; l
   const linhas = linhasDe(spec)
   const pares = linhas.some((l) => l.valores.length > 1)
   const algum = linhas.some((l) => l.destaque)
-  const hachura = c.estilo.traco.hachura !== 'nenhuma'
+  const hachura = hachuraSerieA(c.estilo)
   const wRot = colunaRotulos(linhas, largura)
   const temMarca = linhas.some((l) => l.marca)
   const xL = n(wRot + (temMarca ? 5 : 1.6))
@@ -406,7 +406,7 @@ export function Cartoes({ c, spec, largura }: { c: CtxGrafico; spec: SpecBarras;
   const linhas = linhasDe(spec)
   const pares = linhas.some((l) => l.valores.length > 1)
   const algum = linhas.some((l) => l.destaque)
-  const hachura = c.estilo.traco.hachura !== 'nenhuma'
+  const hachura = hachuraSerieA(c.estilo)
   const marcasY = marcasEixo(spec.escala, 3)
   const wAx = n(Math.max(...marcasY.map((v) => larguraTexto(numeroBr(v), TEXTO_PEQUENO))) + 2)
   const vao = 1.6

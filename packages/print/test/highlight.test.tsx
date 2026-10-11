@@ -28,3 +28,12 @@ describe('highlight semantics', () => {
     expect(com).toContain('1b:destaque-2')
   })
 })
+
+describe('series colours too close', () => {
+  it('two-series bars hatch the first series when contexto and destaque-2 are within ΔE2000 10', () => {
+    const r = (tokens?: object) => renderToStaticMarkup(<PrintBook estilo="dashboard" tokens={tokens} incluirCss={false} carregarFontes={false}><MethodChart spec={barras(false) as never} alt="a" /></PrintBook>)
+    expect(r({ traco: { hachura: 'nenhuma' }, cor: { contexto: '#8f877a', destaque2: '#c4b8a8' } })).not.toMatch(/data-serie="a"[^>]*><[^>]*style="fill:url\(#/)
+    const h = r({ traco: { hachura: 'nenhuma' }, cor: { contexto: '#b0a89a', destaque2: '#b4ab9c' } })
+    expect(h).toMatch(/data-serie="a"[^>]*><[^>]*style="fill:url\(#/)
+  })
+})
