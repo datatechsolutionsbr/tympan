@@ -49,6 +49,8 @@ export interface SpecHalteres extends Base {
   eixoNaoComecaNoZero?: boolean
   /** Reference lines (e.g. "metade" at 50). */
   referencias?: Array<{ valor: number; rotulo: string }>
+  /** Value labels: 'auto' (default: a label that would hit the row labels goes above its point), 'dentro' (always above), 'fora' (always beside). */
+  rotuloValor?: 'auto' | 'dentro' | 'fora'
 }
 
 /**

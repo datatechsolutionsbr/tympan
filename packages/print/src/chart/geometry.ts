@@ -155,8 +155,8 @@ export interface LinhaHalteres {
   xa: number
   xb: number
   /** Value labels: position and anchor. */
-  rotA: { x: number; ancora: 'start' | 'end' }
-  rotB: { x: number; ancora: 'start' | 'end' }
+  rotA: { x: number; ancora: 'start' | 'end' | 'middle'; dy?: number }
+  rotB: { x: number; ancora: 'start' | 'end' | 'middle'; dy?: number }
   marca?: { texto: string; x: number }
   local: boolean
 }
@@ -187,8 +187,15 @@ export function layoutHalteres(spec: SpecHalteres, largura: number): LayoutHalte
     const xb = x(l.b)
     const aEsq = l.a <= l.b
     const off = raio + 0.9
-    const rotA = aEsq ? { x: r3(xa - off), ancora: 'end' as const } : { x: r3(xa + off), ancora: 'start' as const }
-    const rotB = aEsq ? { x: r3(xb + off), ancora: 'start' as const } : { x: r3(xb - off), ancora: 'end' as const }
+    let rotA: LinhaHalteres['rotA'] = aEsq ? { x: r3(xa - off), ancora: 'end' } : { x: r3(xa + off), ancora: 'start' }
+    let rotB: LinhaHalteres['rotB'] = aEsq ? { x: r3(xb + off), ancora: 'start' } : { x: r3(xb - off), ancora: 'end' }
+    // A label pointing left that would run into the row labels (a point near the start of the axis) goes
+    // above its point instead ('auto'); 'dentro' always puts value labels above the points, 'fora' never moves them.
+    const modo = spec.rotuloValor ?? 'auto'
+    const invade = (r: LinhaHalteres['rotA'], v: number) => r.ancora === 'end' && r.x - larguraTexto(numeroBr(v)) < x0 - 0.3
+    const acima = (xp: number): LinhaHalteres['rotA'] => ({ x: xp, ancora: 'middle', dy: -(raio + 1.3) })
+    if (modo === 'dentro' || (modo === 'auto' && invade(rotA, l.a))) rotA = acima(xa)
+    if (modo === 'dentro' || (modo === 'auto' && invade(rotB, l.b))) rotB = acima(xb)
     const direita = aEsq ? rotB.x + larguraTexto(numeroBr(l.b)) : rotA.x + larguraTexto(numeroBr(l.a))
     return {
       i,

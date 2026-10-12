@@ -168,10 +168,10 @@ function Halteres({ c, spec, largura }: { c: Ctx; spec: SpecHalteres; largura: n
               <g className="ty-print-point" data-linha={l.i} data-serie="b" data-valor={l.b} data-cx={l.xb} data-cy={l.y} transform={`translate(${l.xb} ${l.y})`}>
                 {c.p.ponto(c, { chave: `b-${l.i}`, r, cor: cor.b, cheio: true })}
               </g>
-              <text className="ty-print-g-value-a" x={l.rotA.x} y={n(l.y + 0.85)} textAnchor={l.rotA.ancora} data-cor={cor.texto}>
+              <text className="ty-print-g-value-a" x={l.rotA.x} y={n(l.y + 0.85 + (l.rotA.dy ?? 0))} textAnchor={l.rotA.ancora} data-cor={cor.texto}>
                 {numeroBr(l.a)}
               </text>
-              <text className="ty-print-g-value" x={l.rotB.x} y={n(l.y + 0.85)} textAnchor={l.rotB.ancora} data-cor={cor.texto}>
+              <text className="ty-print-g-value" x={l.rotB.x} y={n(l.y + 0.85 + (l.rotB.dy ?? 0))} textAnchor={l.rotB.ancora} data-cor={cor.texto}>
                 {numeroBr(l.b)}
               </text>
               {l.marca ? <Chamada x={l.marca.x} y={l.y} texto={l.marca.texto} /> : null}
