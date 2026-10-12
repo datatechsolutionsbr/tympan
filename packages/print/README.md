@@ -78,6 +78,7 @@ component would not read. `ref` in content (Rastro) maps to `referencia`.
 | `LivroPrint` | root: style, tokens, P&B, CSS, fonts |
 | `Dupla`, `Pagina` | spread and page (running head, folio, paper texture, six-column type area; `variante` normal, capa, prancha) |
 | `Painel` | lettered panel; frame follows the style (rule, box, hand-drawn box, drafting board, card, flat band) |
+| `MarginNotes` (`NotasMargem`) | a row of margin notes on the six-column grid (`itens: [{ titulo, texto, colunas? }]`) |
 | `Texto`, `Margem`, `Anotacao` | text (eyebrow, title, paragraphs, lists, code, quotation, rule of thumb), margin note, editorial note |
 | `Promessa`, `Numeros`, `TabelaDados` | the law's promise, the numbers strip, the data table |
 | `GraficoMetodo` | method chart: `halteres`, `barras`, `serie`, `contagem` (Isotype), `esquema`; renderers `limpo`, `mao` (rough.js, fixed seed), `isotype`, `gravura`, `prancheta`, `aquarela` (SVG filters), `riso`, `pontos` |
