@@ -34,7 +34,7 @@ import {
 } from './panels/Method.tsx'
 import { Figuras } from './panels/Figures.tsx'
 import { Painel } from './panels/Panel.tsx'
-import { Anotacao, Margem, Texto } from './panels/Text.tsx'
+import { Anotacao, Margem, NotasMargem, Texto } from './panels/Text.tsx'
 
 export interface NoJson {
   tipo: string
@@ -126,6 +126,7 @@ export const COMPONENTES: Record<string, Registro> = {
   Figuras: { componente: Figuras, props: ['arranjo', 'pesos', 'manchete', 'children', 'className'] },
   Texto: { componente: Texto, props: ['eyebrow', 'titulo', 'nivel', 'variante', 'paragrafos', 'lista', 'largura', 'className'] },
   Margem: { componente: Margem, props: ['titulo', 'texto', 'className'] },
+  NotasMargem: { componente: NotasMargem, props: ['itens', 'className'] },
   Anotacao: { componente: Anotacao, props: ['alvo', 'texto', 'className'] },
   Promessa: { componente: Promessa, props: ['citacao', 'norma', 'data', 'resumo', 'urn', 'detalhes', 'genealogia', 'className'] },
   Numeros: { componente: Numeros, props: ['itens', 'exemplo', 'className'] },

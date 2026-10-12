@@ -1115,3 +1115,13 @@
     border-radius: 2.1mm;
   }
 }
+
+@layer tympan-print {
+  .ty-print-margin-notes {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    column-gap: 5mm;
+    align-items: start;
+  }
+}

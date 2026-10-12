@@ -112,3 +112,40 @@ export function Anotacao({ alvo, texto, className }: AnotacaoProps) {
     </aside>
   )
 }
+
+export interface NotaMargem {
+  titulo: string
+  texto: string
+  /** Columns of the six-column grid this note spans (default: the row split evenly). */
+  colunas?: number
+}
+
+export interface NotasMargemProps {
+  itens: NotaMargem[]
+  className?: string
+}
+
+/**
+ * A row of margin notes across the type area, each on the page's six-column grid (spans add up to six; the
+ * last note takes what is left). Inside a molde area it takes the area's width; on a free page, the full row.
+ */
+export function NotasMargem({ itens, className }: NotasMargemProps) {
+  const n = Math.max(1, itens.length)
+  const base = Math.max(1, Math.floor(6 / n))
+  let usadas = 0
+  return (
+    <div className={cx('ty-print-margin-notes', className)}>
+      {itens.map((it, i) => {
+        const resto = 6 - usadas
+        const c = i === n - 1 ? Math.max(1, resto) : Math.max(1, Math.min(resto - (n - 1 - i), it.colunas ?? base))
+        usadas += c
+        return (
+          <aside key={i} className="ty-print-margin" style={{ gridColumn: `span ${c}` }} data-colunas={c}>
+            <p className="ty-print-margin-title">{comColchetes(it.titulo)}</p>
+            <p>{comColchetes(it.texto)}</p>
+          </aside>
+        )
+      })}
+    </div>
+  )
+}

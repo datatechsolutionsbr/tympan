@@ -10,6 +10,7 @@ export { Ornamento as Ornament } from './book/Ornament.tsx'
 export { Marca as Mark, type MarcaProps as MarkProps, type MarcaEntrada as MarkInput } from './brand/Marca.tsx'
 export { Painel as Panel, type PainelProps as PanelProps, type VariantePainel as PanelVariant } from './panels/Panel.tsx'
 export { Figuras as Figures, type FigurasProps as FiguresProps } from './panels/Figures.tsx'
+export { NotasMargem as MarginNotes, type NotasMargemProps as MarginNotesProps, type NotaMargem as MarginNote } from './panels/Text.tsx'
 export { Texto as Text, Margem as Margin, Anotacao as Annotation, type TextoProps as TextProps, type MargemProps as MarginProps, type AnotacaoProps as AnnotationProps, type VarianteTexto as TextVariant } from './panels/Text.tsx'
 export {
   Promessa as PromiseText,

@@ -41,11 +41,22 @@ describe('second series: a strong neutral, apart from the first', () => {
 })
 
 describe('panel letters with a prime', () => {
-  it("g' and d′ print the prime glyph in its own span, with the whole letter as accessible text", async () => {
+  it("g' and d′ print the prime glyph in its own span (text stays g′ for readers)", async () => {
     const { Panel } = await import('../src/index.ts')
     for (const estilo of ['dashboard', 'cartao-postal', 'isotype', 'riso']) {
       const h = renderToStaticMarkup(<PrintBook estilo={estilo} incluirCss={false} carregarFontes={false}><Panel letra="g'" titulo="t">x</Panel></PrintBook>)
-      expect(h, estilo).toContain('<span class="ty-print-letter" data-primo="" aria-label="g′"><span aria-hidden="true">g</span><span class="ty-print-letter-prime" aria-hidden="true">′</span></span>')
+      expect(h, estilo).toContain('<span class="ty-print-letter" data-primo="">g<span class="ty-print-letter-prime">′</span></span>')
     }
+  })
+})
+
+describe('MarginNotes', () => {
+  it('a row of notes on the six-column grid, spans adding up to six', async () => {
+    const { MarginNotes } = await import('../src/index.ts')
+    const h = renderToStaticMarkup(<PrintBook estilo="jornal" incluirCss={false} carregarFontes={false}><MarginNotes itens={[{ titulo: 'A', texto: 'a' }, { titulo: 'B', texto: 'b', colunas: 1 }, { titulo: 'C', texto: 'c' }]} /></PrintBook>)
+    const spans = [...h.matchAll(/data-colunas="(\d)"/g)].map((m) => Number(m[1]))
+    expect(spans).toEqual([2, 1, 3])
+    expect(spans.reduce((a, b) => a + b, 0)).toBe(6)
+    expect(h).toContain('class="ty-print-margin-notes"')
   })
 })
