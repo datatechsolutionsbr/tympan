@@ -1093,3 +1093,25 @@
     font-variant-numeric: tabular-nums;
   }
 }
+
+/* Panel letters with a prime (g′, d′): the prime glyph from a face that has it, raised and kerned. */
+@layer tympan-print {
+  .ty-print-letter-prime {
+    font-family: 'IBM Plex Sans', 'Source Serif 4', 'Noto Sans', system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 0.9em;
+    line-height: 1;
+    margin-inline-start: 0.05em;
+    position: relative;
+    inset-block-start: -0.18em;
+  }
+
+  .ty-print-letter[data-primo] {
+    padding-inline: 0.5mm;
+  }
+
+  .ty-print-book[data-ty-print-rotulo='circulo'] .ty-print-letter[data-primo] {
+    min-inline-size: 5.2mm;
+    border-radius: 2.1mm;
+  }
+}

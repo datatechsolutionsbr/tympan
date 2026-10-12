@@ -71,7 +71,7 @@ export function Painel({ letra, titulo, eyebrow, largura: larguraPedida, variant
       {eyebrow ? <p className="ty-print-sobretitle">{eyebrow}</p> : null}
       {temCabeca ? (
         <H className="ty-print-panel-title" id={`${id}-t`}>
-          {letra ? <span className="ty-print-letter">{letra}</span> : null}
+          {letra ? <LetraPainel letra={letra} /> : null}
           {titulo ? <span className="ty-print-panel-name">{titulo}</span> : null}
         </H>
       ) : null}
@@ -79,5 +79,24 @@ export function Painel({ letra, titulo, eyebrow, largura: larguraPedida, variant
         <LarguraProvider value={larguraUtil(largura, moldura, variante)}>{children}</LarguraProvider>
       </div>
     </section>
+  )
+}
+
+/**
+ * The panel letter. A prime ("g'", "g′", "d″") is set as the true prime glyph in a face that has it, raised
+ * and kerned against the letter, so it never falls back to a wide straight quote or a missing glyph in the
+ * label face; the letter box widens for it in square and circle styles.
+ */
+export function LetraPainel({ letra }: { letra: string }) {
+  const m = /^(.*?)(['′″‴]+|’)$/.exec(letra)
+  if (!m || !m[1]) return <span className="ty-print-letter">{letra}</span>
+  const primos = m[2]!.replace(/'/g, '′').replace(/’/g, '′')
+  return (
+    <span className="ty-print-letter" data-primo="" aria-label={`${m[1]}${primos}`}>
+      <span aria-hidden="true">{m[1]}</span>
+      <span className="ty-print-letter-prime" aria-hidden="true">
+        {primos}
+      </span>
+    </span>
   )
 }

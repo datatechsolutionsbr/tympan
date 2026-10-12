@@ -39,3 +39,13 @@ describe('second series: a strong neutral, apart from the first', () => {
       }
   })
 })
+
+describe('panel letters with a prime', () => {
+  it("g' and d′ print the prime glyph in its own span, with the whole letter as accessible text", async () => {
+    const { Panel } = await import('../src/index.ts')
+    for (const estilo of ['dashboard', 'cartao-postal', 'isotype', 'riso']) {
+      const h = renderToStaticMarkup(<PrintBook estilo={estilo} incluirCss={false} carregarFontes={false}><Panel letra="g'" titulo="t">x</Panel></PrintBook>)
+      expect(h, estilo).toContain('<span class="ty-print-letter" data-primo="" aria-label="g′"><span aria-hidden="true">g</span><span class="ty-print-letter-prime" aria-hidden="true">′</span></span>')
+    }
+  })
+})
