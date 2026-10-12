@@ -2,7 +2,7 @@
 // 0.5.5: dumbbell value labels near zero, second-series contrast, panel letters with a prime, margin notes row.
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
-import { contrastRatio, parseColor, printPresets, PRINT_PRESET_NAMES, resolvePrintStyle } from '@datatechsolutions/tympan-tokens'
+import { contrastRatio, parseColor, PRINT_PRESET_NAMES, resolvePrintStyle } from '@datatechsolutions/tympan-tokens'
 import { layoutHalteres } from '../src/chart/geometry.ts'
 import { MethodChart, PrintBook } from '../src/index.ts'
 
@@ -23,5 +23,19 @@ describe('dumbbell value labels near the start of the axis', () => {
   it('renders above the point in the chart', () => {
     const h = renderToStaticMarkup(<PrintBook estilo="jornal" incluirCss={false} carregarFontes={false}><MethodChart spec={halteres(0) as never} alt="a" /></PrintBook>)
     expect(h).toMatch(/class="ty-print-g-value-a"[^>]*text-anchor="middle"/)
+  })
+})
+
+describe('second series: a strong neutral, apart from the first', () => {
+  it('series B is tinta-2: AA on the paper in every preset and P&B; series A is hatched when the two are close', async () => {
+    const { hachuraSerieA, COR_SERIE } = await import('../src/chart/parts.tsx')
+    expect(COR_SERIE.b).toBe('tinta-2')
+    for (const n of PRINT_PRESET_NAMES)
+      for (const pb of [false, true]) {
+        const s = resolvePrintStyle(n, { pb })
+        expect(contrastRatio(parseColor(s.cor.tinta2), parseColor(s.cor.papel)), `${n} ${pb}`).toBeGreaterThanOrEqual(4.5)
+        const r = contrastRatio(parseColor(s.cor.tinta2), parseColor(s.cor.contexto))
+        if (r < 2) expect(hachuraSerieA(s), `${n} ${pb}`).toBe(true)
+      }
   })
 })

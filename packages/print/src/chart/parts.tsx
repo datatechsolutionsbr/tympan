@@ -1,6 +1,6 @@
 // Pieces shared by the method charts (GraficoMetodo and the style shapes in formas.tsx): series colours,
 // numbered callouts, row labels, notes under the plot and the key.
-import { deltaE2000, parseColor, type PrintStyle } from '@datatechsolutions/tympan-tokens'
+import { contrastRatio, deltaE2000, parseColor, type PrintStyle } from '@datatechsolutions/tympan-tokens'
 import { tx } from '../i18n.ts'
 import type { AnotacaoPosta } from './geometry.ts'
 import { TEXTO } from './geometry.ts'
@@ -16,10 +16,10 @@ const n = (v: number) => Math.round(v * 1000) / 1000
 /**
  * Colours of a row. The highlight colour means one thing only: the row(s) the author marked. Series keep
  * constant colours of their own, with or without a highlighted row: the first series in the context grey,
- * the second in `destaque-2`; a marked row draws its second series (and its label) in `destaque`.
+ * the second in the strong neutral `tinta-2` (readable on the paper and apart from the first); a marked row draws its second series (and its label) in `destaque`.
  */
 export function coresLinha(destaque: boolean, _algumDestaque?: boolean): { a: CorDado; b: CorDado; conector: CorDado; texto: 'destaque' | 'tinta' } {
-  return destaque ? { a: 'contexto', b: 'destaque', conector: 'destaque', texto: 'destaque' } : { a: 'contexto', b: 'destaque-2', conector: 'contexto', texto: 'tinta' }
+  return destaque ? { a: 'contexto', b: 'destaque', conector: 'destaque', texto: 'destaque' } : { a: 'contexto', b: 'tinta-2', conector: 'contexto', texto: 'tinta' }
 }
 
 /** Single series: a constant series ink; only a marked row is in the highlight colour. */
@@ -29,18 +29,19 @@ export function corUnica(destaque: boolean): CorDado {
 
 /**
  * The first series is hatched when the style asks for it, and also when its colour is too close to the second
- * series' (ΔE2000 < 10 between `contexto` and `destaque-2`): two series must never rely on a colour difference
+ * series' (ΔE2000 < 10 or contrast under 2:1 between `contexto` and `tinta-2`): two series must never rely on a colour difference
  * the eye cannot see.
  */
 export function hachuraSerieA(estilo: PrintStyle): boolean {
   if (estilo.traco.hachura !== 'nenhuma') return true
   const a = estilo.cor.contexto
-  const b = estilo.cor.destaque2
-  return a.startsWith('#') && b.startsWith('#') && deltaE2000(parseColor(a), parseColor(b)) < 10
+  const b = estilo.cor.tinta2
+  if (!a.startsWith('#') || !b.startsWith('#')) return false
+  return deltaE2000(parseColor(a), parseColor(b)) < 10 || contrastRatio(parseColor(a), parseColor(b)) < 2
 }
 
 /** Legend colours of the two series (constant: they do not change when a row is highlighted). */
-export const COR_SERIE = { a: 'contexto', b: 'destaque-2' } as const satisfies Record<'a' | 'b', CorDado>
+export const COR_SERIE = { a: 'contexto', b: 'tinta-2' } as const satisfies Record<'a' | 'b', CorDado>
 
 export function Chamada({ x, y, texto }: { x: number; y: number; texto: string }) {
   return (

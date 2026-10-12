@@ -13,10 +13,10 @@ const coresDasBarras = (h: string) => [...h.matchAll(/data-linha="(\d)" data-ser
 
 describe('highlight semantics', () => {
   it('series colours never change with or without a highlighted row', () => {
-    expect(coresLinha(false)).toMatchObject({ a: 'contexto', b: 'destaque-2' })
+    expect(coresLinha(false)).toMatchObject({ a: 'contexto', b: 'tinta-2' })
     expect(coresLinha(true)).toMatchObject({ a: 'contexto', b: 'destaque' })
     expect(corUnica(false)).toBe('tinta-2')
-    expect(COR_SERIE).toEqual({ a: 'contexto', b: 'destaque-2' })
+    expect(COR_SERIE).toEqual({ a: 'contexto', b: 'tinta-2' })
   })
   it('in the chart: without a marked row nothing is in destaque; with one, only that row', () => {
     const r = (d: boolean) => renderToStaticMarkup(<PrintBook estilo="dashboard" incluirCss={false} carregarFontes={false}><MethodChart spec={barras(d) as never} alt="a" /></PrintBook>)
@@ -25,15 +25,15 @@ describe('highlight semantics', () => {
     expect(sem.some((c) => c.endsWith(':destaque'))).toBe(false)
     const com = coresDasBarras(r(true))
     expect(com.filter((c) => c.endsWith(':destaque')).every((c) => c.startsWith('0'))).toBe(true)
-    expect(com).toContain('1b:destaque-2')
+    expect(com).toContain('1b:tinta-2')
   })
 })
 
 describe('series colours too close', () => {
-  it('two-series bars hatch the first series when contexto and destaque-2 are within ΔE2000 10', () => {
+  it('two-series bars hatch the first series when contexto and tinta-2 are too close', () => {
     const r = (tokens?: object) => renderToStaticMarkup(<PrintBook estilo="dashboard" tokens={tokens} incluirCss={false} carregarFontes={false}><MethodChart spec={barras(false) as never} alt="a" /></PrintBook>)
-    expect(r({ traco: { hachura: 'nenhuma' }, cor: { contexto: '#8f877a', destaque2: '#c4b8a8' } })).not.toMatch(/data-serie="a"[^>]*><[^>]*style="fill:url\(#/)
-    const h = r({ traco: { hachura: 'nenhuma' }, cor: { contexto: '#b0a89a', destaque2: '#b4ab9c' } })
+    expect(r({ traco: { hachura: 'nenhuma' }, cor: { contexto: '#c9c3b5', tinta2: '#3d3933' } })).not.toMatch(/data-serie="a"[^>]*><[^>]*style="fill:url\(#/)
+    const h = r({ traco: { hachura: 'nenhuma' }, cor: { contexto: '#b0a89a', tinta2: '#a8a092' } })
     expect(h).toMatch(/data-serie="a"[^>]*><[^>]*style="fill:url\(#/)
   })
 })
