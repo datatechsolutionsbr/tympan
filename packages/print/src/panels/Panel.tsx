@@ -92,11 +92,9 @@ export function LetraPainel({ letra }: { letra: string }) {
   if (!m || !m[1]) return <span className="ty-print-letter">{letra}</span>
   const primos = m[2]!.replace(/'/g, '′').replace(/’/g, '′')
   return (
-    <span className="ty-print-letter" data-primo="" aria-label={`${m[1]}${primos}`}>
-      <span aria-hidden="true">{m[1]}</span>
-      <span className="ty-print-letter-prime" aria-hidden="true">
-        {primos}
-      </span>
+    <span className="ty-print-letter" data-primo="">
+      {m[1]}
+      <span className="ty-print-letter-prime">{primos}</span>
     </span>
   )
 }
